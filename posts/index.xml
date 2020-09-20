@@ -1,27 +1,68 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Changsu</title>
+    <title>Posts on markruler</title>
     <link>https://markruler.github.io/posts/</link>
-    <description>Recent content in Posts on Changsu</description>
+    <description>Recent content in Posts on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Sun, 13 Sep 2020 20:58:08 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2020 06:58:08 +0900</lastBuildDate>
     
 	<atom:link href="https://markruler.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>[번역] 쿠버네티스 API 접근 제어</title>
+      <link>https://markruler.github.io/posts/kubernetes/controlling-access-api/</link>
+      <pubDate>Thu, 17 Sep 2020 06:58:08 +0900</pubDate>
+      
+      <guid>https://markruler.github.io/posts/kubernetes/controlling-access-api/</guid>
+      <description>원문  이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.
+사용자는kubectl, 클라이언트 라이브러리 또는 REST 요청을 통해 API에 접근한다. 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다. 요청이 API에 도달하면, 다음 다이어그램에 설명된 몇 가지 단계를 거친다.
+전송 보안 일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다. API 서버는 인증서를 제시한다. 이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 $USER/.kube/config은 API 서버의 인증서에 대한 루트 인증서를 포함하며, 시스템 기본 루트 인증서 대신 사용된다.</description>
+    </item>
+    
+    <item>
       <title>[번역] MEC 아키텍처 초심자 가이드</title>
-      <link>https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/</link>
+      <link>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/</link>
       <pubDate>Sun, 13 Sep 2020 20:58:08 +0900</pubDate>
       
-      <guid>https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/</guid>
-      <description>원문 링크 - Faisal Khan
- 처음에는 MEC가 Mobile Edge Computing의 줄임말이었습니다.
- MEC (Multi-access Edge Computing) 아키텍처 초심자 가이드 MEC 아키텍처 가이드에 오신 것을 환영합니다!
+      <guid>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/</guid>
+      <description>원문 링크
+  원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 여기에서 피드백 주시면 감사드립니다! 👍 처음에는 MEC가 Mobile Edge Computing 의 줄임말이었지만 현재는 Multi-access Edge Computing 입니다.   MEC 아키텍처 가이드에 오신 것을 환영합니다!
 MEC는 5G 저지연 서비스의 이점을 활용하려는 모바일 사업자들에 의해 차세대 투자를 이끌어 낼 것입니다. 즉, 소비자에게 더 가까운 서비스(무선 기지국, radio sites)를 운영하는 것입니다.
-서비스 사업자들에게 새로운 서비스 분야와 수익화 방법을 열어 줍니다. 예를 들어, 더 빠른 게임 경험, 증강/가상 현실, 커넥티드 카 등이 있습니다.</description>
+서비스 사업자들에게 새로운 분야와 수익화 방법을 열어 줍니다.</description>
+    </item>
+    
+    <item>
+      <title>ThymeLeaf 알게 된 것들</title>
+      <link>https://markruler.github.io/posts/spring/thymeleaf/</link>
+      <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+      
+      <guid>https://markruler.github.io/posts/spring/thymeleaf/</guid>
+      <description>Reference  Docs  java에서 반환된 객체 &amp;lt;div&amp;gt;[[${ model }]]&amp;lt;/div&amp;gt; 사용자가 로그인 인증을 하지 않았다면 : spring security &amp;lt;tag sec:authorize=&amp;#34;isAnonymous()&amp;#34;&amp;gt;&amp;lt;/tag&amp;gt; th:href &amp;lt;a sec:authorize=&amp;#34;isAnonymous()&amp;#34; th:href=&amp;#34;@{/login}&amp;#34; class=&amp;#34;btn&amp;#34;&amp;gt;Log in&amp;lt;/a&amp;gt; 날짜 포맷 &amp;lt;div class=&amp;#34;tt-col-value&amp;#34;&amp;gt;[[${ #temporals.format(board.createDate, &amp;#39;HH:mm&amp;#39;) }]]&amp;lt;/div&amp;gt; 3항 연산자 &amp;lt;span class=&amp;#34;tt-badge&amp;#34;&amp;gt; [[${ board.category } ? &amp;#39;common&amp;#39; : ${ board.category }]] &amp;lt;/span&amp;gt; 3항 연산자 &amp;lt;!-- 기본 표현법 --&amp;gt; &amp;lt;span class=&amp;#34;tt-badge&amp;#34;&amp;gt; [[${ board.category } ? ${ board.category } : &amp;#39;common&amp;#39;]] &amp;lt;/span&amp;gt; &amp;lt;!-- 단축 표현법 --&amp;gt; &amp;lt;span class=&amp;#34;tt-badge&amp;#34;&amp;gt; [[${ board.</description>
+    </item>
+    
+    <item>
+      <title>Web Socket 알게 된 것들</title>
+      <link>https://markruler.github.io/posts/spring/web-socket/</link>
+      <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+      
+      <guid>https://markruler.github.io/posts/spring/web-socket/</guid>
+      <description>목차 {:toc}   Refereces  Spring guide Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점 Spring websocket chatting server : Stateless 적용을 위한 JWT 도입 webSocket으로 개발하기 전에 알고 있어야 할 것들 웹 소켓을 활용한 쪽지 알람 기능 WebSocket과 STOMP 연동 Spring WebSocket 소개  1. 개념 출처: Oracle
+웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다.</description>
+    </item>
+    
+    <item>
+      <title>웹 게임을 만들며 배우는 React</title>
+      <link>https://markruler.github.io/posts/react/web-game-react/</link>
+      <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+      
+      <guid>https://markruler.github.io/posts/react/web-game-react/</guid>
+      <description>React.js  출처 인프런 강의   npm install
+ CDN npm install express --save express
+&amp;ndash;save 옵션을 통해 설치된 Node 모듈은 package.json 파일 내의 dependencies 목록에 추가됩니다. 이후 app 디렉토리에서 npm install을 실행하면 종속 항목 목록 내의 모듈이 자동으로 설치됩니다.\
+npm install -g nodemon mkdir web-game-react cd web-game-react npm init # app.js 만들고 react CDN 삽입, 구현 후 nodemon app react + webpack = 이걸로 구현 npm i react react-dom npm i webpack 웹팩 설치로👇</description>
     </item>
     
   </channel>

@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html><head>
+<title>[번역] 쿠버네티스 API 접근 제어</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="[번역] 쿠버네티스 API 접근 제어" />
+<meta property="og:description" content="원문  이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.
+사용자는kubectl, 클라이언트 라이브러리 또는 REST 요청을 통해 API에 접근한다. 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다. 요청이 API에 도달하면, 다음 다이어그램에 설명된 몇 가지 단계를 거친다.
+전송 보안 일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다. API 서버는 인증서를 제시한다. 이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 $USER/.kube/config은 API 서버의 인증서에 대한 루트 인증서를 포함하며, 시스템 기본 루트 인증서 대신 사용된다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/kubernetes/controlling-access-api/" />
+<meta property="article:published_time" content="2020-09-17T06:58:08+09:00" />
+<meta property="article:modified_time" content="2020-09-17T06:58:08+09:00" /><meta property="og:site_name" content="markruler" />
+
+
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="[번역] 쿠버네티스 API 접근 제어"/>
+<meta name="twitter:description" content="원문  이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.
+사용자는kubectl, 클라이언트 라이브러리 또는 REST 요청을 통해 API에 접근한다. 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다. 요청이 API에 도달하면, 다음 다이어그램에 설명된 몇 가지 단계를 거친다.
+전송 보안 일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다. API 서버는 인증서를 제시한다. 이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 $USER/.kube/config은 API 서버의 인증서에 대한 루트 인증서를 포함하며, 시스템 기본 루트 인증서 대신 사용된다."/>
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'Yv2aESurCxnvYjIGMhSNP7uUY06moAngyqS73wMcVQI', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+
+<link rel="stylesheet" href="https://markruler.github.io/scss/journal.min.c116bc90d171283f099f173854157ec8f183f9073b93443b2c8ad82899ee9025.css" integrity="sha256-wRa8kNFxKD8Jnxc4VBV&#43;yPGD&#43;Qc7k0Q7LIrYKJnukCU=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.552aae4638a84aa57cf0b195750a49ea9131d3bb621d1ed3ebc9b14b18166536.css" integrity="sha256-VSquRjioSqV88LGVdQpJ6pEx07tiHR7T68mxSxgWZTY=" media="screen">
+
+
+<script src="https://markruler.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+
+
+
+  
+    <script src="https://markruler.github.io//js/toc-collapse.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            markruler
+        </div>
+        
+        <div class="nav-subtitle">
+            Home
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 markruler
+	
+
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%86%a1-%eb%b3%b4%ec%95%88" onclick="onNavClick(`#전송-보안-nav`)" id="전송-보안-nav">
+									전송 보안
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b8%ec%a6%9d" onclick="onNavClick(`#인증-nav`)" id="인증-nav">
+									인증
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b8%ea%b0%80" onclick="onNavClick(`#인가-nav`)" id="인가-nav">
+									인가
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%8a%b9%ec%9d%b8-%ec%a0%9c%ec%96%b4" onclick="onNavClick(`#승인-제어-nav`)" id="승인-제어-nav">
+									승인 제어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#api-%ec%84%9c%eb%b2%84-%ed%8f%ac%ed%8a%b8%ec%99%80-ip" onclick="onNavClick(`#api-서버-포트와-ip-nav`)" id="api-서버-포트와-ip-nav">
+									API 서버 포트와 IP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%86%a1-%eb%b3%b4%ec%95%88" onclick="onNavClick(`#전송-보안-nav`)" id="전송-보안-nav">
+									전송 보안
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b8%ec%a6%9d" onclick="onNavClick(`#인증-nav`)" id="인증-nav">
+									인증
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b8%ea%b0%80" onclick="onNavClick(`#인가-nav`)" id="인가-nav">
+									인가
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%8a%b9%ec%9d%b8-%ec%a0%9c%ec%96%b4" onclick="onNavClick(`#승인-제어-nav`)" id="승인-제어-nav">
+									승인 제어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#api-%ec%84%9c%eb%b2%84-%ed%8f%ac%ed%8a%b8%ec%99%80-ip" onclick="onNavClick(`#api-서버-포트와-ip-nav`)" id="api-서버-포트와-ip-nav">
+									API 서버 포트와 IP
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            markruler
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">markruler</div>
+        
+        <div class="single-column-header-subtitle">Home</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/k8s/access-control-overview.svg')"
+                    
+                
+            >
+                <div class="post-title">
+                    [번역] 쿠버네티스 API 접근 제어
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-09-17 06:58
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[cloud]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/kubernetes">kubernetes</a>
+                                &nbsp;
+                            
+                                <a href="/tags/nfv">nfv</a>
+                                &nbsp;
+                            
+                                <a href="/tags/virtualization">virtualization</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cloud">cloud</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <ul>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/">원문</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<p>이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.</p>
+<!-- raw HTML omitted -->
+<p>사용자는<code>kubectl</code>, 클라이언트 라이브러리
+또는 REST 요청을 통해
+<a href="https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/">API에 접근한다</a>.
+사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
+요청이 API에 도달하면,
+다음 다이어그램에 설명된 몇 가지 단계를 거친다.</p>
+<p><img src="/images/k8s/access-control-overview.svg" alt="Diagram of request handling steps for Kubernetes API request"></p>
+<h2 id="전송-보안">전송 보안</h2>
+<p>일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다.
+API 서버는 인증서를 제시한다.
+이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 <code>$USER/.kube/config</code>은
+API 서버의 인증서에 대한 루트 인증서를 포함하며,
+시스템 기본 루트 인증서 대신 사용된다.
+<code>kube-up.sh</code>을 사용하여 클러스터를 직접 생성할 때
+이 인증서는 일반적으로 <code>$USER/.kube/config</code>에 자동으로 기록된다.
+클러스터에 여러 명의 사용자가 있는 경우, 작성자는 인증서를 다른 사용자와 공유해야 한다.</p>
+<h2 id="인증">인증</h2>
+<p>TLS가 설정되면 HTTP 요청이 인증 단계로 넘어간다.
+이는 다이어그램에 <strong>1</strong>단계로 표시되어 있다.
+클러스터 생성 스크립트 또는 클러스터 관리자는
+API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
+인증기는 <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/">여기</a>에서 더 자세히 서술한다.</p>
+<p>인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
+일반적으로 헤더 그리고/또는 클라이언트 인증서만 검사한다.</p>
+<p>인증 모듈은 클라이언트 인증서, 암호 및 일반 토큰, 부트스트랩 토큰,
+JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
+<p>여러 개의 인증 모듈을 지정할 수 있으며,
+이 경우 하나의 인증 모듈이 성공할 때까지 각 모듈을 순차적으로 시도한다.</p>
+<p>GCE에서는 클라이언트 인증서, 암호, 일반 토큰 및 JWT 토큰이 모두 사용 가능하다.</p>
+<p>요청을 인증할 수 없는 경우 HTTP 상태 코드 401과 함께 거부된다.
+이 외에는 사용자가 특정 <code>username</code>으로 인증되며,
+이 username은 다음 단계에서 사용자의 결정에 사용할 수 있다.
+일부 인증기는 사용자 그룹 관리 기능을 제공하는 반면,
+이외의 인증기는 그렇지 않다.</p>
+<p>쿠버네티스는 접근 제어 결정과 요청 기록 시 <code>usernames</code>를 사용하지만,
+<code>user</code> 오브젝트를 가지고 있지 않고 usernames 나 기타 사용자 정보를
+오브젝트 저장소에 저장하지도 않는다.</p>
+<h2 id="인가">인가</h2>
+<p>특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 <strong>2</strong>단계로 표시되어 있다.</p>
+<p>요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.</p>
+<p>예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 <code>projectCaribou</code> 네임스페이스에서만 파드를 읽을 수 있다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+    <span style="color:#8b008b;font-weight:bold">&#34;apiVersion&#34;</span>: <span style="color:#cd5555">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
+    <span style="color:#8b008b;font-weight:bold">&#34;kind&#34;</span>: <span style="color:#cd5555">&#34;Policy&#34;</span>,
+    <span style="color:#8b008b;font-weight:bold">&#34;spec&#34;</span>: {
+        <span style="color:#8b008b;font-weight:bold">&#34;user&#34;</span>: <span style="color:#cd5555">&#34;bob&#34;</span>,
+        <span style="color:#8b008b;font-weight:bold">&#34;namespace&#34;</span>: <span style="color:#cd5555">&#34;projectCaribou&#34;</span>,
+        <span style="color:#8b008b;font-weight:bold">&#34;resource&#34;</span>: <span style="color:#cd5555">&#34;pods&#34;</span>,
+        <span style="color:#8b008b;font-weight:bold">&#34;readonly&#34;</span>: <span style="color:#8b008b;font-weight:bold">true</span>
+    }
+}
+</code></pre></div><p>Bob이 다음과 같은 요청을 하면 &lsquo;projectCaribou&rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
+  <span style="color:#8b008b;font-weight:bold">&#34;apiVersion&#34;</span>: <span style="color:#cd5555">&#34;authorization.k8s.io/v1beta1&#34;</span>,
+  <span style="color:#8b008b;font-weight:bold">&#34;kind&#34;</span>: <span style="color:#cd5555">&#34;SubjectAccessReview&#34;</span>,
+  <span style="color:#8b008b;font-weight:bold">&#34;spec&#34;</span>: {
+    <span style="color:#8b008b;font-weight:bold">&#34;resourceAttributes&#34;</span>: {
+      <span style="color:#8b008b;font-weight:bold">&#34;namespace&#34;</span>: <span style="color:#cd5555">&#34;projectCaribou&#34;</span>,
+      <span style="color:#8b008b;font-weight:bold">&#34;verb&#34;</span>: <span style="color:#cd5555">&#34;get&#34;</span>,
+      <span style="color:#8b008b;font-weight:bold">&#34;group&#34;</span>: <span style="color:#cd5555">&#34;unicorn.example.org&#34;</span>,
+      <span style="color:#8b008b;font-weight:bold">&#34;resource&#34;</span>: <span style="color:#cd5555">&#34;pods&#34;</span>
+    }
+  }
+}
+</code></pre></div><p>Bob이 <code>projectCaribou</code> 네임스페이스에 있는 오브젝트에 쓰기(<code>create</code> 또는 <code>update</code>) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 <code>projectFish</code>처럼 다른 네임스페이스의 오브젝트 읽기(<code>get</code>) 요청을 하면 그의 인가는 거부된다.</p>
+<p>쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.</p>
+<p>쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).</p>
+<p>인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 <a href="https://kubernetes.io/docs/reference/access-authn-authz//authorization/">인가 개요</a>를 참조하십시오.</p>
+<h2 id="승인-제어">승인 제어</h2>
+<p>승인 제어 모듈은 요청을 수정하거나 거부할 수 있는 소프트웨어 모듈이다.
+인가 모듈에서 사용할 수 있는 속성 외에도
+승인 제어 모듈은 생성되거나 수정된 오브젝트 내용에 접근할 수 있다.</p>
+<p>어드미션 컨트롤러는 오브젝트를 생성, 수정, 삭제 또는 (프록시에) 연결하는 요청에 따라 작동한다.
+어드미션 컨트롤러는 단순히 객체를 읽는 요청에 작동하지 않는다.
+여러 개의 어드미션 컨트롤러가 구성되면 순서대로 호출된다.</p>
+<p>이는 다이어그램에 <strong>3</strong>단계로 표시되어 있다.</p>
+<p>인증 및 인가 모듈과 달리,
+승인 제어 모듈이 거부되면 요청은 즉시 거부된다.</p>
+<p>승인 제어 모듈은 오브젝트를 거부하는 것 외에도
+필드의 복잡한 기본값을 설정할 수 있다.</p>
+<p>사용 가능한 승인 제어 모듈은 <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/">여기</a>에 서술되어 있다.</p>
+<p>요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후
+오브젝트 저장소에 기록(<strong>4단계</strong>)된다.</p>
+<h2 id="api-서버-포트와-ip">API 서버 포트와 IP</h2>
+<p>이전의 논의는 (일반적인 경우) API 서버의 보안 포트로 전송되는 요청에 적용된다.
+API 서버는 실제로 다음과 같이 2개의 포트에서 서비스할 수 있다.</p>
+<p>기본적으로 쿠버네티스 API 서버는 2개의 포트에서 HTTP 서비스를 한다.</p>
+<ol>
+<li>
+<p><code>로컬호스트 포트</code>:</p>
+<ul>
+<li>테스트 및 부트스트랩을 하기 위한 것이며 마스터 노드의 다른 구성요소
+(스케줄러, 컨트롤러 매니저)가 API와 통신하기 위한 것이다.</li>
+<li>TLS가 없다.</li>
+<li>기본 포트는 8080이며, <code>--insecure-port</code> 플래그를 사용하여 변경한다.</li>
+<li>기본 IP는 로컬호스트(localhost)이며, <code>--insecure-bind-address</code> 플래그를 사용하여 변경한다.</li>
+<li>요청이 인증 및 인가 모듈을 <strong>우회한다</strong>.</li>
+<li>요청이 승인 제어 모듈(들)에 의해 처리된다.</li>
+<li>호스트 접근 요구로부터 보호를 받는다.</li>
+</ul>
+</li>
+<li>
+<p><code>보안 포트</code>:</p>
+<ul>
+<li>가능하면 언제나 사용하십시오.</li>
+<li>TLS를 사용하십시오. <code>--tls-cert-file</code> 플래그로 인증서를 지정하고 <code>--tls-private-key-file</code> 플래그로 키를 지정하십시오.</li>
+<li>기본 포트는 6443이며, <code>--secure-port</code> 플래그를 사용하여 변경한다.</li>
+<li>기본 IP는 로컬호스트가 아닌 첫 번째 네트워크 인터페이스이며, <code>--bind-address</code> 플래그를 사용하여 변경한다.</li>
+<li>요청이 인증 및 인가 모듈에 의해 처리된다.</li>
+<li>요청이 승인 제어 모듈(들)에 의해 처리된다.</li>
+<li>인증 및 인가 모듈을 실행한다.</li>
+</ul>
+</li>
+</ol>
+<p>GCE(구글 컴퓨트 엔진) 및 다른 클라우드 제공자에서 <code>kube-up.sh</code>로 클러스터를 생성하면
+API 서버는 포트 443에서 서비스한다.
+GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 방화벽 규칙이 구성된다.
+이외에 클러스터 설정 방법은 다양하다.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2020-09-17</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/">
+			Previous<br>[번역] MEC 아키텍처 초심자 가이드
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 markruler
+	
+</div>
+            </div>
+    <script>
+let app;
+
+app = new Vue({
+    el: '#app',
+    data: {
+        scrollY: 0,
+        navOpacity: 0,
+        isDrawerOpen: false,
+        mounted: false,
+        isDarkMode: false
+    },
+    methods: {
+            sgn(t, x) {
+                let k = 1. / (1. - 2 * t);
+                if (x <= t) return 0;
+                else if (x >= 1 - t) return 1;
+                else {
+                    return k * (x - t);
+                }
+            },
+            handleScroll() {
+                this.scrollY = window.scrollY;
+                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+
+                if (this.navOpacity >= 1) {
+                    navBackground.style.opacity = 1;
+                    navTitle.style.opacity = 1;
+                } else {
+                    navBackground.style.opacity = 0;
+                    navTitle.style.opacity = 0;
+                }
+            },
+            handleResize() {
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
+            },
+            navBarHeight() {
+                return this.$refs.navBar.offsetHeight;
+            },
+            pageHeadHeight() {
+                return this.$refs.pageHead.offsetHeight;
+            },
+            toggleDrawer() {
+                this.isDrawerOpen = !this.isDrawerOpen;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            closeDrawer() {
+                this.isDrawerOpen = false;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            toggleDarkMode() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode==true){
+                    document.cookie = "night=1;path=/";
+                    document.body.classList.add("night");
+                } else {
+                    document.cookie = "night=0;path=/";
+                    document.body.classList.remove("night");
+                }
+            }
+    },
+    created() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        window._nonDesktop = function () {
+            let check = false;
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        };
+        
+        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (night==""){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                
+            }
+        }else{
+            
+            if (night=="1") {
+                this.toggleDarkMode();
+            }
+        }
+    },
+    mounted() {
+        this.handleScroll();
+        this.handleResize();
+        this.mounted = true;
+
+        
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    }
+});
+</script>
+
+<script src="https://markruler.github.io//js/journal.js"></script>
+    </body>
+</html>

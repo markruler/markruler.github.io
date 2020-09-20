@@ -1,117 +1,507 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Changsu</title>
+    <title>markruler</title>
     <link>https://markruler.github.io/</link>
-    <description>Recent content on Changsu</description>
+    <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Sun, 13 Sep 2020 20:58:08 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2020 06:58:08 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
+        <title>[번역] 쿠버네티스 API 접근 제어</title>
+        <link>https://markruler.github.io/posts/kubernetes/controlling-access-api/</link>
+        <pubDate>Thu, 17 Sep 2020 06:58:08 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/kubernetes/controlling-access-api/</guid>
+        <description>markruler https://markruler.github.io/posts/kubernetes/controlling-access-api/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/&#34;&gt;원문&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;사용자는&lt;code&gt;kubectl&lt;/code&gt;, 클라이언트 라이브러리
+또는 REST 요청을 통해
+&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/&#34;&gt;API에 접근한다&lt;/a&gt;.
+사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
+요청이 API에 도달하면,
+다음 다이어그램에 설명된 몇 가지 단계를 거친다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/k8s/access-control-overview.svg&#34; alt=&#34;Diagram of request handling steps for Kubernetes API request&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;전송-보안&#34;&gt;전송 보안&lt;/h2&gt;
+&lt;p&gt;일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다.
+API 서버는 인증서를 제시한다.
+이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 &lt;code&gt;$USER/.kube/config&lt;/code&gt;은
+API 서버의 인증서에 대한 루트 인증서를 포함하며,
+시스템 기본 루트 인증서 대신 사용된다.
+&lt;code&gt;kube-up.sh&lt;/code&gt;을 사용하여 클러스터를 직접 생성할 때
+이 인증서는 일반적으로 &lt;code&gt;$USER/.kube/config&lt;/code&gt;에 자동으로 기록된다.
+클러스터에 여러 명의 사용자가 있는 경우, 작성자는 인증서를 다른 사용자와 공유해야 한다.&lt;/p&gt;
+&lt;h2 id=&#34;인증&#34;&gt;인증&lt;/h2&gt;
+&lt;p&gt;TLS가 설정되면 HTTP 요청이 인증 단계로 넘어간다.
+이는 다이어그램에 &lt;strong&gt;1&lt;/strong&gt;단계로 표시되어 있다.
+클러스터 생성 스크립트 또는 클러스터 관리자는
+API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
+인증기는 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/authentication/&#34;&gt;여기&lt;/a&gt;에서 더 자세히 서술한다.&lt;/p&gt;
+&lt;p&gt;인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
+일반적으로 헤더 그리고/또는 클라이언트 인증서만 검사한다.&lt;/p&gt;
+&lt;p&gt;인증 모듈은 클라이언트 인증서, 암호 및 일반 토큰, 부트스트랩 토큰,
+JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.&lt;/p&gt;
+&lt;p&gt;여러 개의 인증 모듈을 지정할 수 있으며,
+이 경우 하나의 인증 모듈이 성공할 때까지 각 모듈을 순차적으로 시도한다.&lt;/p&gt;
+&lt;p&gt;GCE에서는 클라이언트 인증서, 암호, 일반 토큰 및 JWT 토큰이 모두 사용 가능하다.&lt;/p&gt;
+&lt;p&gt;요청을 인증할 수 없는 경우 HTTP 상태 코드 401과 함께 거부된다.
+이 외에는 사용자가 특정 &lt;code&gt;username&lt;/code&gt;으로 인증되며,
+이 username은 다음 단계에서 사용자의 결정에 사용할 수 있다.
+일부 인증기는 사용자 그룹 관리 기능을 제공하는 반면,
+이외의 인증기는 그렇지 않다.&lt;/p&gt;
+&lt;p&gt;쿠버네티스는 접근 제어 결정과 요청 기록 시 &lt;code&gt;usernames&lt;/code&gt;를 사용하지만,
+&lt;code&gt;user&lt;/code&gt; 오브젝트를 가지고 있지 않고 usernames 나 기타 사용자 정보를
+오브젝트 저장소에 저장하지도 않는다.&lt;/p&gt;
+&lt;h2 id=&#34;인가&#34;&gt;인가&lt;/h2&gt;
+&lt;p&gt;특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 &lt;strong&gt;2&lt;/strong&gt;단계로 표시되어 있다.&lt;/p&gt;
+&lt;p&gt;요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.&lt;/p&gt;
+&lt;p&gt;예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에서만 파드를 읽을 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;apiVersion&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;abac.authorization.kubernetes.io/v1beta1&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;kind&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Policy&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;spec&amp;#34;&lt;/span&gt;: {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;bob&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;namespace&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;readonly&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 다음과 같은 요청을 하면 &amp;lsquo;projectCaribou&amp;rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;apiVersion&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;authorization.k8s.io/v1beta1&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;kind&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;SubjectAccessReview&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;spec&amp;#34;&lt;/span&gt;: {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;resourceAttributes&amp;#34;&lt;/span&gt;: {
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;namespace&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;verb&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;group&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;unicorn.example.org&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;resource&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;
+    }
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에 있는 오브젝트에 쓰기(&lt;code&gt;create&lt;/code&gt; 또는 &lt;code&gt;update&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 &lt;code&gt;projectFish&lt;/code&gt;처럼 다른 네임스페이스의 오브젝트 읽기(&lt;code&gt;get&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다.&lt;/p&gt;
+&lt;p&gt;쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.&lt;/p&gt;
+&lt;p&gt;쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).&lt;/p&gt;
+&lt;p&gt;인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz//authorization/&#34;&gt;인가 개요&lt;/a&gt;를 참조하십시오.&lt;/p&gt;
+&lt;h2 id=&#34;승인-제어&#34;&gt;승인 제어&lt;/h2&gt;
+&lt;p&gt;승인 제어 모듈은 요청을 수정하거나 거부할 수 있는 소프트웨어 모듈이다.
+인가 모듈에서 사용할 수 있는 속성 외에도
+승인 제어 모듈은 생성되거나 수정된 오브젝트 내용에 접근할 수 있다.&lt;/p&gt;
+&lt;p&gt;어드미션 컨트롤러는 오브젝트를 생성, 수정, 삭제 또는 (프록시에) 연결하는 요청에 따라 작동한다.
+어드미션 컨트롤러는 단순히 객체를 읽는 요청에 작동하지 않는다.
+여러 개의 어드미션 컨트롤러가 구성되면 순서대로 호출된다.&lt;/p&gt;
+&lt;p&gt;이는 다이어그램에 &lt;strong&gt;3&lt;/strong&gt;단계로 표시되어 있다.&lt;/p&gt;
+&lt;p&gt;인증 및 인가 모듈과 달리,
+승인 제어 모듈이 거부되면 요청은 즉시 거부된다.&lt;/p&gt;
+&lt;p&gt;승인 제어 모듈은 오브젝트를 거부하는 것 외에도
+필드의 복잡한 기본값을 설정할 수 있다.&lt;/p&gt;
+&lt;p&gt;사용 가능한 승인 제어 모듈은 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/&#34;&gt;여기&lt;/a&gt;에 서술되어 있다.&lt;/p&gt;
+&lt;p&gt;요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후
+오브젝트 저장소에 기록(&lt;strong&gt;4단계&lt;/strong&gt;)된다.&lt;/p&gt;
+&lt;h2 id=&#34;api-서버-포트와-ip&#34;&gt;API 서버 포트와 IP&lt;/h2&gt;
+&lt;p&gt;이전의 논의는 (일반적인 경우) API 서버의 보안 포트로 전송되는 요청에 적용된다.
+API 서버는 실제로 다음과 같이 2개의 포트에서 서비스할 수 있다.&lt;/p&gt;
+&lt;p&gt;기본적으로 쿠버네티스 API 서버는 2개의 포트에서 HTTP 서비스를 한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;로컬호스트 포트&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;테스트 및 부트스트랩을 하기 위한 것이며 마스터 노드의 다른 구성요소
+(스케줄러, 컨트롤러 매니저)가 API와 통신하기 위한 것이다.&lt;/li&gt;
+&lt;li&gt;TLS가 없다.&lt;/li&gt;
+&lt;li&gt;기본 포트는 8080이며, &lt;code&gt;--insecure-port&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
+&lt;li&gt;기본 IP는 로컬호스트(localhost)이며, &lt;code&gt;--insecure-bind-address&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
+&lt;li&gt;요청이 인증 및 인가 모듈을 &lt;strong&gt;우회한다&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;요청이 승인 제어 모듈(들)에 의해 처리된다.&lt;/li&gt;
+&lt;li&gt;호스트 접근 요구로부터 보호를 받는다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;보안 포트&lt;/code&gt;:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;가능하면 언제나 사용하십시오.&lt;/li&gt;
+&lt;li&gt;TLS를 사용하십시오. &lt;code&gt;--tls-cert-file&lt;/code&gt; 플래그로 인증서를 지정하고 &lt;code&gt;--tls-private-key-file&lt;/code&gt; 플래그로 키를 지정하십시오.&lt;/li&gt;
+&lt;li&gt;기본 포트는 6443이며, &lt;code&gt;--secure-port&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
+&lt;li&gt;기본 IP는 로컬호스트가 아닌 첫 번째 네트워크 인터페이스이며, &lt;code&gt;--bind-address&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
+&lt;li&gt;요청이 인증 및 인가 모듈에 의해 처리된다.&lt;/li&gt;
+&lt;li&gt;요청이 승인 제어 모듈(들)에 의해 처리된다.&lt;/li&gt;
+&lt;li&gt;인증 및 인가 모듈을 실행한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;GCE(구글 컴퓨트 엔진) 및 다른 클라우드 제공자에서 &lt;code&gt;kube-up.sh&lt;/code&gt;로 클러스터를 생성하면
+API 서버는 포트 443에서 서비스한다.
+GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 방화벽 규칙이 구성된다.
+이외에 클러스터 설정 방법은 다양하다.&lt;/p&gt;
+- https://markruler.github.io/posts/kubernetes/controlling-access-api/ - </description>
+        </item>
+    
+    
+    
+        <item>
         <title>[번역] MEC 아키텍처 초심자 가이드</title>
-        <link>https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/</link>
+        <link>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/</link>
         <pubDate>Sun, 13 Sep 2020 20:58:08 +0900</pubDate>
         
-        <guid>https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/</guid>
-        <description>Changsu https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/ -&lt;p&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;원문 링크 - Faisal Khan&lt;/a&gt;&lt;/p&gt;
+        <guid>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/</guid>
+        <description>markruler https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/ -&lt;p&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;원문 링크&lt;/a&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;Mobile Edge Computing&lt;/a&gt;의 줄임말이었습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
+&lt;li&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;Mobile Edge Computing&lt;/a&gt; 의 줄임말이었지만 현재는 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;Multi-access Edge Computing&lt;/a&gt; 입니다.&lt;/li&gt;
+&lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;h1 id=&#34;mec-multi-access-edge-computing-아키텍처-초심자-가이드&#34;&gt;MEC (Multi-access Edge Computing) 아키텍처 초심자 가이드&lt;/h1&gt;
 &lt;p&gt;MEC 아키텍처 가이드에 오신 것을 환영합니다!&lt;/p&gt;
-&lt;p&gt;MEC는 5G 저지연 서비스의 이점을 활용하려는 모바일 사업자들에 의해 차세대 투자를 이끌어 낼 것입니다. 즉, 소비자에게 더 가까운 서비스(무선 기지국, radio sites)를 운영하는 것입니다.&lt;/p&gt;
-&lt;p&gt;서비스 사업자들에게 새로운 서비스 분야와 수익화 방법을 열어 줍니다. 예를 들어, 더 빠른 게임 경험, 증강/가상 현실, 커넥티드 카 등이 있습니다.&lt;/p&gt;
-&lt;p&gt;잠재력이 있기 때문에 Azure, AWS, Google과 같은 웹 스케일러가 대세에 뛰어들어 갑자기 자신들의 MEC 플랫폼을 구축하기 시작했습니다.&lt;/p&gt;
-&lt;p&gt;MEC 아키텍처에 대한 본 가이드는 ETSI (MEC 표준 단체) 모델에 기반을 둡니다. 본 가이드는 MEC 아키텍처를 맨 처음부터 구축하며 사전 지식을 요구하지 않습니다.&lt;/p&gt;
+&lt;p&gt;MEC는 5G 저지연 서비스의 이점을 활용하려는 모바일 사업자들에 의해 차세대 투자를 이끌어 낼 것입니다.
+즉, 소비자에게 더 가까운 서비스(무선 기지국, radio sites)를 운영하는 것입니다.&lt;/p&gt;
+&lt;p&gt;서비스 사업자들에게 새로운 분야와 수익화 방법을 열어 줍니다.
+예를 들어 더 빠른 게임 경험, 증강/가상 현실, 커넥티드 카 등이 있습니다.&lt;/p&gt;
+&lt;p&gt;성장 가능성이 있기 때문에 Azure, AWS, Google 과 같은 웹 스케일러도 대세에 뛰어들어
+갑자기 자신들의 MEC 플랫폼을 구축하기 시작했습니다.&lt;/p&gt;
+&lt;p&gt;MEC 아키텍처에 대한 본 가이드는 ETSI (MEC 표준 단체) 모델에 기반을 둡니다.
+본 가이드는 MEC 아키텍처를 맨 처음부터 구축하며 사전 지식을 요구하지 않습니다.&lt;/p&gt;
 &lt;p&gt;MEC 아키텍처를 이해함으로써, 당신은&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;서비스 공급자로서, 표준 기반 MEC 플랫폼/아키텍처로 발전하는 방법을 알게 됩니다.&lt;/li&gt;
+&lt;li&gt;서비스 공급자로서, 표준 기반 MEC 플랫폼/아키텍처로 다듬는 방법을 알게 됩니다.&lt;/li&gt;
 &lt;li&gt;벤더/개발자로서는, 귀사의 솔루션이 ETSI MEC 모델에 얼마나 부합하는지 고객에게 알려줄 수 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;그러니 더 이상 언급하지 말고 바로 시작합시다!&lt;/p&gt;
+&lt;p&gt;그러니까 더 이상 고민하지 말고 바로 시작합시다!&lt;/p&gt;
 &lt;p&gt;밑바닥부터 블록 단위(block by block)로 MEC 아키텍처를 구축하겠습니다 🙂&lt;/p&gt;
 &lt;h2 id=&#34;1-mec-정의&#34;&gt;1. MEC 정의&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.etsi.org/technologies/multi-access-edge-computing&#34;&gt;ETSI&lt;/a&gt;에 따르면 MEC는 다음과 같이 정의됩니다.&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;멀티 액세스 에지 컴퓨팅(MEC)은 애플리케이션 개발자와 콘텐츠 제공업체에게 네트워크 가장자리(edge)에 있는 IT 서비스 환경과 클라우드 컴퓨팅 기능을 제공한다. 이 환경은 매우 짧은 대기 시간(초저지연)과 높은 대역폭은 물론, 애플리케이션에서 활용할 수 있는 무선 네트워크 정보에 대한 실시간 접근이 특징이다.&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;멀티 액세스 에지 컴퓨팅(MEC)은 애플리케이션 개발자와 콘텐츠 사업자에게 네트워크 에지(edge)에 있는
+IT 서비스 환경과 클라우드 컴퓨팅 기능을 제공한다. 이 환경은 매우 짧은 대기 시간(초저지연)과 높은
+대역폭은 물론, 애플리케이션에서 활용할 수 있는 무선 네트워크 정보에 대한 실시간 접근이 특징이다.&amp;rdquo;&lt;/p&gt;
 &lt;h2 id=&#34;2-etsi에-따른-mec-아키텍처&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/h2&gt;
 &lt;p&gt;아래 그림과 같이 완전한 MEC ETSI 아키텍처를 살펴보겠습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-architecture-according-to-etsi.jpg&#34; alt=&#34;mec-architecture-according-to-etsi&#34;&gt;&lt;/p&gt;
 &lt;p&gt;MEC 호스트, MEC 플랫폼 매니저, MEC 오케스트레이터라는 세 가지 블록(block)이 있습니다.&lt;/p&gt;
-&lt;p&gt;하지만 이 세 블록 전에 말이죠. 가상화 인프라 매니저(VIM, Virtualization Infrastructure Manager)라는 기본 블록부터 살펴보겠습니다.&lt;/p&gt;
-&lt;p&gt;모든 가상 네트워크에서 가상 머신(VMs)을 돌릴 수 있도록 서버가 있어야 하며 이러한 VM에는 관리 계층이 필요합니다.&lt;/p&gt;
+&lt;p&gt;하지만 이 세 블록 전에, 가상화 인프라 매니저라는 가장 기본적인 블록부터 살펴보겠습니다.&lt;/p&gt;
+&lt;p&gt;모든 가상 네트워크에서는 가상 머신(VM)을 돌릴 수 있도록 서버가 있어야 하며 이러한 VM에는 관리 계층이 필요합니다.&lt;/p&gt;
 &lt;h2 id=&#34;2-0-가상화-인프라-관리자-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 관리자 (VIM, Virtualization Infrastructure Manager)&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;NFV의 VIM&lt;/a&gt;과 유사한 기능을 가지고 있습니다. 물리적 인프라(컴퓨팅, 스토리지, 네트워킹)를 기반으로 가상 머신(VM)을 관리하는 것이 목적입니다. ‘가상화 인프라’의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다. 왼쪽에는 가상화된 인프라로 전환된 서버가 있고 오른쪽에는 이러한 서버 위에 가상 리소스를 관리하는 VIM이 있다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;NFV의 VIM&lt;/a&gt;과
+유사한 기능을 가지고 있습니다. 물리적 인프라(컴퓨팅, 스토리지, 네트워킹)를 기반으로 VM 을 관리하는
+것이 목적입니다. ‘가상화 인프라’의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다. 왼쪽에는 가상화된
+인프라로 전환된 서버가 있고 오른쪽에는 이러한 서버의 가상 리소스를 관리하는 VIM이 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/virtualization-infrastructure-manager.jpg&#34; alt=&#34;virtualization-infrastructure-manager&#34;&gt;&lt;/p&gt;
 &lt;p&gt;VIM 및 가상 리소스를 이해한 후 MEC 플랫폼 및 MEC 애플리케이션을 그 위에 구축하겠습니다.&lt;/p&gt;
 &lt;h2 id=&#34;2-1-mec-호스트&#34;&gt;2-1. MEC 호스트&lt;/h2&gt;
-&lt;p&gt;가상화 인프라, MEC 애플리케이션, MEC 플랫폼을 묶어 MEC 호스트라고 합니다.&lt;/p&gt;
+&lt;p&gt;가상화 인프라와 함께 MEC 애플리케이션 및 MEC 플랫폼을 묶어 MEC 호스트라고 합니다.&lt;/p&gt;
 &lt;p&gt;MEC 애플리케이션부터 시작하겠습니다.&lt;/p&gt;
 &lt;h3 id=&#34;2-1-1-mec-애플리케이션&#34;&gt;2-1-1. MEC 애플리케이션&lt;/h3&gt;
-&lt;p&gt;왜 우리가 MEC를 운영합니까? 응용프로그램을 실행하기 위해서요. 맞죠?&lt;/p&gt;
-&lt;p&gt;MEC에서 VM을 기반으로 실행되는 실제 애플리케이션입니다. 즉, MEC에서 실행되는 게임용 애플리케이션이나 가상 현실 또는 증강 현실 애플리케이션과 같은 실제 애플리케이션입니다.&lt;/p&gt;
-&lt;p&gt;아래 다이어그램은 가상화 인프라 내의 가상 머신 위에 MEC 애플리케이션을 실행하고 있음을 보여 줍니다.&lt;/p&gt;
+&lt;p&gt;우리는 왜 MEC를 운영할까요? 애플리케이션을 실행하기 위해서죠?&lt;/p&gt;
+&lt;p&gt;MEC 애플리케이션은 MEC에서 VM을 기반으로 실행되는 실제 애플리케이션입니다.
+즉, MEC에서 실행되는 게임용 애플리케이션이나 가상 현실 또는 증강 현실 애플리케이션과 같은 실제 애플리케이션입니다.&lt;/p&gt;
+&lt;p&gt;아래 다이어그램은 가상화 인프라의 가상 머신 위에 MEC 애플리케이션을 실행하고 있음을 보여 줍니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-application.jpg&#34; alt=&#34;mec-application&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;2-1-2-mec-플랫폼&#34;&gt;2-1-2. MEC 플랫폼&lt;/h3&gt;
-&lt;p&gt;앞으로 나아가 MEC 플랫폼을 우리의 빌딩 블록에 추가하겠습니다. MEC 플랫폼에는 여러 구성 요소가 있습니다. 그 중 가장 중요한 것이 MEC 서비스입니다.&lt;/p&gt;
+&lt;p&gt;더 나아가 MEC 플랫폼을 우리의 빌딩 블록에 추가하겠습니다. MEC 플랫폼에는 여러 구성 요소가 있습니다. 그 중 가장 중요한 것이 MEC 서비스입니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-platform.jpg&#34; alt=&#34;mec-platform&#34;&gt;&lt;/p&gt;
 &lt;h4 id=&#34;mec-서비스&#34;&gt;MEC 서비스&lt;/h4&gt;
-&lt;p&gt;&amp;lsquo;MEC 서비스&amp;rsquo;는 MEC에서 중요한 블록입니다. 네트워크 관련 API들은 MEC 서비스에서 참조점(Reference Point) Mp1을 통해 MEC 애플리케이션에 노출됩니다. 또한 MEC 플랫폼은 이러한 서비스를 사용할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;여전히 헷갈리나요?&lt;/p&gt;
-&lt;p&gt;MEC ETSI 아키텍처의 장점은 MEC 애플리케이션들이 네트워크 정보를 알고 있으며(MEC 애플리케이션들이 그에 기반한 조치를 취할 수 있도록), MEC 서비스가 API를 통해 네트워크 정보를 노출시켜 도움을 줄 수 있다는 점입니다.&lt;/p&gt;
+&lt;p&gt;&amp;lsquo;MEC 서비스&amp;rsquo;는 MEC에서 중요한 블록입니다. 네트워크 관련 API들은 MEC 서비스에서 참조점(Reference Point) Mp1을
+통해 MEC 애플리케이션에 노출됩니다. 또한 MEC 플랫폼은 이러한 서비스를 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;여전히 헷갈리시나요?&lt;/p&gt;
+&lt;p&gt;MEC ETSI 아키텍처의 장점은 MEC 애플리케이션들이 네트워크 정보를 알고 있으며(MEC 애플리케이션들이 그에 기반한
+조치를 취할 수 있도록), MEC 서비스가 API를 통해 네트워크 정보를 노출시켜 도움을 줄 수 있다는 점입니다.&lt;/p&gt;
 &lt;p&gt;ETSI에 따르면 &amp;lsquo;MEC 서비스&amp;rsquo;에 의해 적어도 세 가지 유형의 서비스를 노출시켜야 하며, 이러한 서비스 유형은 (서비스 레지스트리의 일부분으로)&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;무선 네트워크 상태&lt;/li&gt;
 &lt;li&gt;위치 정보 (예: UE의 위치)&lt;/li&gt;
-&lt;li&gt;대역폭 관리자 - 이 서비스를 사용하면 MEC 애플리케이션에(서) 라우팅된 특정 트래픽에 대역폭을 할당하고 우선 순위를 지정할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;대역폭 관리자 - 이 서비스를 사용하면 MEC 애플리케이션에(서) 라우팅 된 특정 트래픽에 대역폭을 할당하고 우선 순위를 지정할 수 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;(PS: UE는 사용자 장비(User Equipment)를 의미하며 여기서 휴대폰을 의미할 수 있습니다. 모바일 동글이 있는 노트북을 의미하기도 합니다.)&lt;/p&gt;
 &lt;p&gt;MEC 서비스에 대해 논의한 후, 우리는 MEC 플랫폼의 다른 두 가지 구성요소를 알아야 합니다.&lt;/p&gt;
 &lt;h4 id=&#34;트래픽-규칙-제어-traffic-rules-control&#34;&gt;트래픽 규칙 제어 (Traffic Rules Control)&lt;/h4&gt;
-&lt;p&gt;이것은 MEC 플랫폼의 중요한 부분입니다. MEC 플랫폼은 여러 애플리케이션을 동시에 서비스하므로 &amp;ldquo;트래픽 규칙 제어&amp;quot;를 통해 우선순위를 할당할 수 있어야 합니다.&lt;/p&gt;
+&lt;p&gt;이것은 MEC 플랫폼의 중요한 부분입니다. MEC 플랫폼은 여러 애플리케이션을 동시에 서비스하므로 &amp;ldquo;트래픽 규칙 제어&amp;rdquo; 를 통해 우선순위를 할당할 수 있어야 합니다.&lt;/p&gt;
 &lt;h4 id=&#34;dns-핸들링&#34;&gt;DNS 핸들링&lt;/h4&gt;
 &lt;p&gt;모바일 에지 플랫폼은 모든 UE에서 로컬 DNS 서버/프록시로 수신되는 모든 DNS 트래픽을 라우팅할 수 있는 기능을 제공해야 합니다.&lt;/p&gt;
-&lt;p&gt;이것이 왜 중요한가요? MEC의 이점은 많은 정보를 인터넷으로 보내지 않고 MEC에서 로컬로 처리하는 것입니다. 따라서 트래픽이 인터넷으로 전송되는 대신 로컬에서 처리되도록 로컬 DNS 서버에 DNS 리다이렉션을 처리할 수 있는 방법이 있어야 합니다.&lt;/p&gt;
+&lt;p&gt;이것이 왜 중요할까요? MEC의 이점은 많은 정보를 인터넷으로 보내지 않고 MEC에서 로컬로 처리하는 것입니다.
+따라서 트래픽이 인터넷으로 전송되는 대신 로컬에서 처리되도록 로컬 DNS 서버에 DNS 리다이렉션을 처리할 수 있는 방법이 있어야 합니다.&lt;/p&gt;
 &lt;h2 id=&#34;2-2-mec-플랫폼-관리자-mec-platform-manager&#34;&gt;2-2. MEC 플랫폼 관리자 (MEC Platform Manager)&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-platform-manager.jpg&#34; alt=&#34;mec-platform-manager&#34;&gt;&lt;/p&gt;
-&lt;p&gt;NFV의 VNFM에 대해 알고 있죠?&lt;/p&gt;
+&lt;p&gt;NFV의 VNFM에 대해 알고 있으시죠?&lt;/p&gt;
 &lt;p&gt;MEC 플랫폼 관리자는 VNFM보다 동일하거나 더 적은 기능을 수행합니다. 여기에는 다음 기능이 포함됩니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;MEC 애플리케이션의 라이프사이클 관리: VM에서 MEC 애플리케이션을 실행 (instantiating), 유지(maintaining), 해제(tearing down)합니다.&lt;/li&gt;
-&lt;li&gt;요소 관리: MEC 플랫폼용 FCAPS(장애 &lt;em&gt;Fault&lt;/em&gt;, 구성 &lt;em&gt;Configuration&lt;/em&gt;, 계정 &lt;em&gt;Accounting&lt;/em&gt;, 성능 &lt;em&gt;Performance&lt;/em&gt;, 보안 &lt;em&gt;Security&lt;/em&gt;) 관리입니다.&lt;/li&gt;
+&lt;li&gt;MEC 애플리케이션의 라이프사이클 관리: VM에서 MEC 애플리케이션을 실행(instantiating), 유지(maintaining), 해제(tearing down)&lt;/li&gt;
+&lt;li&gt;요소 관리: MEC 플랫폼용 FCAPS 관리&lt;/li&gt;
 &lt;li&gt;애플리케이션 규칙, 트래픽 규칙, DNS 구성을 관리합니다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;지금까지만 해도 MEC 플랫폼을 관리할 수 있지만 아직 끝나지 않았습니다. 여러 MEC 호스트가 있을 수 있으므로 MEC 플랫폼 관리자도 여러 개 있을 수 있습니다. 따라서 MEC 플랫폼 관리자 위에 서로 다른 MEC 플랫폼 관리자 간에 조정할 수 있는 계층(layer)이 있어야 합니다. 여기서 MEC 오케스트레이터가 등장하고 ETSI 아키텍처를 효과적으로 완성합니다.&lt;/p&gt;
+&lt;p&gt;(역주: &lt;a href=&#34;https://ko.wikipedia.org/wiki/FCAPS&#34;&gt;FCAPS&lt;/a&gt;: 장애 &lt;em&gt;Fault&lt;/em&gt;, 구성 &lt;em&gt;Configuration&lt;/em&gt;, 계정 &lt;em&gt;Accounting&lt;/em&gt;, 성능 &lt;em&gt;Performance&lt;/em&gt;, 보안 &lt;em&gt;Security&lt;/em&gt;)&lt;/p&gt;
+&lt;p&gt;여기까지 만으로도 MEC 플랫폼을 관리할 수 있겠지만 아직 끝나지 않았습니다.
+여러 MEC 호스트가 있을 수 있으므로 MEC 플랫폼 관리자도 여러 개 있을 수 있습니다.
+따라서 서로 다른 MEC 플랫폼 관리자 간 조정을 할 수 있는 MEC 플랫폼 관리자 위의 계층이 있어야 합니다.
+여기서 MEC 오케스트레이터가 등장하고 ETSI 아키텍처를 효과적으로 완성합니다.&lt;/p&gt;
 &lt;h2 id=&#34;2-3-멀티-액세스-에지-오케스트레이터-multi-access-edge-orchestrator&#34;&gt;2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)&lt;/h2&gt;
 &lt;p&gt;MEC 오케스트레이터에 대한 비유를 NFVO 오케스트레이터에 적용할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;다음과 같은 기능을 수행합니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;MEC 애플리케이션의 라이프사이클 관리(유사한 기능을 수행할 수 있는 MEC 플랫폼 관리자와 비교). 오케스트레이터는 MEC 플랫폼 관리자를 통해 애플리케이션과 대화하여 이 기능을 수행합니다.&lt;/li&gt;
+&lt;li&gt;MEC 애플리케이션의 라이프사이클 관리(유사한 기능을 수행할 수 있는 MEC 플랫폼 관리자와 비교해보세요).
+오케스트레이터는 MEC 플랫폼 관리자를 통해 애플리케이션과 통신하여 이 기능을 수행합니다.&lt;/li&gt;
 &lt;li&gt;패키지의 무결성(integrity) 및 신뢰성(authenticity) 검증 기능을 포함하는 애플리케이션 패키지 설치(on-boarding).&lt;/li&gt;
 &lt;li&gt;지연 시간, 사용 가능한 리소스, 사용 가능한 서비스와 같은 제약 조건을 기반으로 애플리케이션 생성(instantiation)에 적합한 MEC 호스트를 선택.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/multi-access-edge-orchestrator.jpg&#34; alt=&#34;multi-access-edge-orchestrator&#34;&gt;&lt;/p&gt;
-&lt;p&gt;마지막으로 몇 가지 언급해야 할 사항이 있습니다:&lt;/p&gt;
+&lt;p&gt;마지막으로 몇 가지 언급해야 할 것들이 있습니다:&lt;/p&gt;
 &lt;h2 id=&#34;cfs-portal&#34;&gt;CFS Portal&lt;/h2&gt;
 &lt;p&gt;모바일 사업자의 고객들(the mobile operators’ customers)은 CFS(Customer Facing Service, 고객 대면 서비스)를 통해 새로운 MEC 애플리케이션을 주문하거나 서비스 SLA(Service Level Agreement, 서비스 수준 협약)를 모니터링할 수 있다.&lt;/p&gt;
 &lt;h2 id=&#34;사용자-애플리케이션-수명-주기-관리-프록시-user-app-lcm-proxy&#34;&gt;사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)&lt;/h2&gt;
-&lt;p&gt;이것은 MEC 시스템의 선택적 기능입니다. 이를 위해 시스템은 &lt;code&gt;UserApps&lt;/code&gt;라는 기능을 지원해야 합니다.&lt;/p&gt;
-&lt;p&gt;모바일 에지 시스템이 &lt;code&gt;UserApps&lt;/code&gt; 기능을 지원할 때, 시스템은 (장치 &lt;code&gt;device&lt;/code&gt; 애플리케이션을 실행하는) UE와 모바일 에지 애플리케이션(ME App)의 특정 인스턴스 간의 연결 설정을 허용해야 합니다.&lt;/p&gt;
-&lt;p&gt;사용자 애플리케이션 LCM 프록시를 지원한다면 장치 애플리케이션이 설치(on-boarding), 생성(instantiation), 사용자 애플리케이션 종료(termination) 요청할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이것은 MEC 시스템의 선택 기능입니다. 이를 위해 시스템은 &lt;code&gt;UserApps&lt;/code&gt;라는 기능을 지원해야 합니다.&lt;/p&gt;
+&lt;p&gt;모바일 에지 시스템이 &lt;code&gt;UserApps&lt;/code&gt; 기능을 지원할 때, 시스템은 (디바이스 애플리케이션을 실행하는) UE와 모바일 에지 애플리케이션(ME App)의 특정 인스턴스 간의 연결 설정을 허용해야 합니다.&lt;/p&gt;
+&lt;p&gt;사용자 애플리케이션 LCM 프록시를 지원한다면 디바이스 애플리케이션이 설치(on-boarding), 생성(instantiation), 사용자 애플리케이션 종료(termination) 요청을 할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;간단히 말해, 이 기능이 MEC 시스템에서 지원되는 경우 사용자는 이제 자신의 장치에서 MEC 시스템의 특정 애플리케이션을 작동시킬 수 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;이제 저의 MEC 아키텍처에 대한 초심자 가이드를 완료했습니다. 이제 당신이 나에게 이 아키텍처에 대해 질문하실 차례입니다.
-&lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;원문으로 이동&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;저의 MEC 아키텍처 초심자 가이드가 끝났습니다. 이제 당신이 나에게 이 아키텍처에 대해 질문하실 차례입니다.
+&lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;(원문으로 이동 👉)&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;참조&#34;&gt;참조&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;ETSI GS MEC 002 V1.1.1 (2016-03)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;ETSI GS MEC 003 V2.1.1 (2019-01)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-- https://markruler.github.io/posts/2020-09-13-beginners-guide-to-mec-architecture-multi-access-edge-computing/ - </description>
+- https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture-multi-access-edge-computing/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>ThymeLeaf 알게 된 것들</title>
+        <link>https://markruler.github.io/posts/spring/thymeleaf/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/spring/thymeleaf/</guid>
+        <description>markruler https://markruler.github.io/posts/spring/thymeleaf/ -&lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.thymeleaf.org/documentation.html&#34;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java에서-반환된-객체&#34;&gt;java에서 반환된 객체&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;[[${ model }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;사용자가-로그인-인증을-하지-않았다면--spring-security&#34;&gt;사용자가 로그인 인증을 하지 않았다면 : spring security&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;tag&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;sec:authorize&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;isAnonymous()&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;tag&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;thhref&#34;&gt;th:href&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;sec:authorize&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;isAnonymous()&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/login}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;btn&amp;#34;&lt;/span&gt;&amp;gt;Log in&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;날짜-포맷&#34;&gt;날짜 포맷&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-col-value&amp;#34;&lt;/span&gt;&amp;gt;[[${ #temporals.format(board.createDate, &amp;#39;HH:mm&amp;#39;) }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;3항-연산자&#34;&gt;3항 연산자&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ? &amp;#39;common&amp;#39; : ${ board.category }]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;3항-연산자-1&#34;&gt;3항 연산자&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- 기본 표현법 --&amp;gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ? ${ board.category } : &amp;#39;common&amp;#39;]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+
+&lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- 단축 표현법 --&amp;gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ?: ${ board.category }]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment-import&#34;&gt;fragment import&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:replace&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fragments/navbar&amp;#34;&lt;/span&gt; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;반복문&#34;&gt;반복문&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-item&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;board : ${ list }&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${&amp;#39;/board/&amp;#39; + board.id }&amp;#34;&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;collection-사이즈&#34;&gt;Collection 사이즈&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-col-value&amp;#34;&lt;/span&gt;&amp;gt;[[${ #lists.size(board.comments) }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;form-태그에서-set-타입의-필드를-가지는-post-객체가-있다고-할-때&#34;&gt;form 태그에서 Set 타입의 필드를 가지는 Post 객체가 있다고 할 때,&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;form&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:object&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${post}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:action&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/post}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:method&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;post&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{title}&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{content}&amp;#34;&lt;/span&gt;&amp;gt;
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- Using select tag --&amp;gt;&lt;/span&gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;id&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tags&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{tags}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;size&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;multiple&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;multiple&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;option&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tag : ${tags}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:value&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:text&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt;&amp;gt;
+      Tag
+    &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;option&lt;/span&gt;&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;select&lt;/span&gt;&amp;gt;
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- Using checkbox tag --&amp;gt;&lt;/span&gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tag : ${tags}&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;checkbox&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:id&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:value&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{tags}&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;label&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:for&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:text&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt;&amp;gt;Tag&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;label&lt;/span&gt;&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;button&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;submit&amp;#34;&lt;/span&gt;&amp;gt;저장&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;button&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;form&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;링크-경로&#34;&gt;링크 경로&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{http://localhost:8080/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 절대 경로
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 상대 경로
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{~/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 무조건 &amp;#39;/&amp;#39; 루트 경로
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;레이아웃&#34;&gt;레이아웃&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;문서 참고&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;to-do&#34;&gt;To-Do&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring EL 과의 호환성?&lt;/li&gt;
+&lt;li&gt;$, #, @ 차이 알아보기&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/spring/thymeleaf/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Web Socket 알게 된 것들</title>
+        <link>https://markruler.github.io/posts/spring/web-socket/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/spring/web-socket/</guid>
+        <description>markruler https://markruler.github.io/posts/spring/web-socket/ -&lt;ul&gt;
+&lt;li&gt;목차
+{:toc}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;refereces&#34;&gt;Refereces&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://spring.io/guides/gs/messaging-stomp-websocket/&#34;&gt;Spring guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://postitforhooney.tistory.com/entry/SpringStomp-Spring-stomp%EC%99%80-Socjks%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%A5%EB%8B%A8%EC%A0%90&#34;&gt;Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://daddyprogrammer.org/post/4077/spring-websocket-chatting/&#34;&gt;Spring websocket chatting server&lt;/a&gt; : Stateless 적용을 위한 JWT 도입&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://adrenal.tistory.com/20&#34;&gt;webSocket으로 개발하기 전에 알고 있어야 할 것들&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://simsimjae.tistory.com/25&#34;&gt;웹 소켓을 활용한 쪽지 알람 기능&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wondongho.tistory.com/73&#34;&gt;WebSocket과 STOMP 연동&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://supawer0728.github.io/2018/03/30/spring-websocket/&#34;&gt;Spring WebSocket 소개&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1-개념&#34;&gt;1. 개념&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/websocket-schema.png&#34; alt=&#34;websocket-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html&#34;&gt;출처: Oracle&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.&lt;/p&gt;
+&lt;p&gt;웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/spring-stomp-schema.png&#34; alt=&#34;spring-stomp-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow&#34;&gt;출처: Spring&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2-네트워크-오버헤드-비교&#34;&gt;2. 네트워크 오버헤드 비교&lt;/h2&gt;
+&lt;hr&gt;
+&lt;p&gt;폴링(Polling) 방식&lt;/p&gt;
+&lt;p&gt;요청/응답 헤더 데이터 용량: (871 Byte)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1000명 *  헤더 데이터 용량  = 871,000  Byte&lt;/li&gt;
+&lt;li&gt;10000명 *  헤더 데이터 용량  = 8,710,000  Byte&lt;/li&gt;
+&lt;li&gt;100000명 *  헤더 데이터 용량  = 87,100,000 Byte&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;WebSocket 방식&lt;/p&gt;
+&lt;p&gt;메시지 데이터 용량: (2 Byte)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1000명 *   메시지 데이터 용량   = 2,000  Byte&lt;/li&gt;
+&lt;li&gt;10000명 *   메시지 데이터 용량   = 20,000  Byte&lt;/li&gt;
+&lt;li&gt;100000명 *   메시지 데이터 용량   = 200,000 Byte&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-socketio-sockjs-stomp&#34;&gt;3. Socket.io, SockJS, STOMP&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Socket.io : Node.js 모듈. 클라이언트, 서버 모두 JS로 개발.&lt;/li&gt;
+&lt;li&gt;WebSocket : 표준 웹소켓. IE10부터 적용.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;SockJS : IE8부터 적용.&lt;/li&gt;
+&lt;li&gt;STOMP : Topic 구독 방식. Spring 지원. 서버 부하 적음.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요없음&lt;/li&gt;
+&lt;li&gt;heart-beat&lt;/li&gt;
+&lt;li&gt;@MessageMapping&lt;/li&gt;
+&lt;li&gt;@SendTo&lt;/li&gt;
+&lt;li&gt;@SendToUser&lt;/li&gt;
+&lt;li&gt;SimpMessagingTemplate.convertAndSendToUser()&lt;/li&gt;
+&lt;li&gt;MessagesSupplier&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;to-do&#34;&gt;To-Do&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Interceptor 결합?&lt;/li&gt;
+&lt;li&gt;Handler와의 차이&lt;/li&gt;
+&lt;li&gt;Web Hook 개념&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/spring/web-socket/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>웹 게임을 만들며 배우는 React</title>
+        <link>https://markruler.github.io/posts/react/web-game-react/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/react/web-game-react/</guid>
+        <description>markruler https://markruler.github.io/posts/react/web-game-react/ -&lt;h1 id=&#34;reactjs&#34;&gt;React.&lt;em&gt;&lt;strong&gt;js&lt;/strong&gt;&lt;/em&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.inflearn.com/course/web-game-React&#34;&gt;출처 인프런 강의&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npm install&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;cdn&#34;&gt;CDN&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install express --save
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://expressjs.com/ko/starter/installing.html&#34;&gt;express&lt;/a&gt;&lt;br&gt;
+&amp;ndash;save 옵션을 통해 설치된 Node 모듈은 package.json 파일 내의 dependencies 목록에 추가됩니다. 이후 app 디렉토리에서 npm install을 실행하면 종속 항목 목록 내의 모듈이 자동으로 설치됩니다.\&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install -g nodemon
+mkdir web-game-react
+&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; web-game-react
+npm init
+&lt;span style=&#34;color:#228b22&#34;&gt;# app.js 만들고 react CDN 삽입, 구현 후&lt;/span&gt;
+nodemon app
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;react--webpack--이걸로-구현&#34;&gt;react + webpack = 이걸로 구현&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i react react-dom
+npm i webpack
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;#%EC%9B%B9%ED%8C%A9-web-pack&#34;&gt;웹팩 설치로👇&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader
+&lt;span style=&#34;color:#228b22&#34;&gt;# 바벨은 최신 문법을 브라우저에 맞게 자동으로 호환시킴&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-react-app&#34;&gt;create-react-app&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install create-react-app
+create-react-app {project-name}
+&lt;span style=&#34;color:#228b22&#34;&gt;# npm init, git init, react dependencty 설정까지 자동으로 함&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# 굉장히 무거운 듯..&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; {project-name}
+npm start / yarn start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scripts&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;start&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts start&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;build&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts build&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts test&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;eject&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts eject&amp;#34;&lt;/span&gt;
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;yarn install&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;웹팩-web-pack&#34;&gt;웹팩 (Web Pack)&lt;/h2&gt;
+&lt;h3 id=&#34;install&#34;&gt;install&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D webpack webpack-cli
+&lt;span style=&#34;color:#228b22&#34;&gt;# (-D : --save-dev(devDependencies) / i : install)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;webpack.config.js&lt;/li&gt;
+&lt;li&gt;client.jsx&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npx webpack &lt;span style=&#34;color:#228b22&#34;&gt;# global로 설치하지 않았을 경우 환경변수 없어도 실행&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;혹은 package.json에 script 지정&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;용도&#34;&gt;용도&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;여러 개의 모듈 js를 하나의 파일로 합쳐줌 : 전송 효율&lt;/li&gt;
+&lt;li&gt;console.log() 제거&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;사용법&#34;&gt;사용법&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;webpack : compile&lt;/li&gt;
+&lt;li&gt;npm run dev : package.json 에 스크립트 추가 (소스 참고)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;리액트-관련&#34;&gt;리액트 관련&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Class vs. Hooks&lt;/li&gt;
+&lt;li&gt;Component vs. PureComponent (shouldComponentUpdate) 혹은 memo() : 렌더링 최적화&lt;/li&gt;
+&lt;li&gt;배열에 push()는 immutable 때문에 불가&lt;/li&gt;
+&lt;/ol&gt;
+- https://markruler.github.io/posts/react/web-game-react/ - </description>
         </item>
     
     
