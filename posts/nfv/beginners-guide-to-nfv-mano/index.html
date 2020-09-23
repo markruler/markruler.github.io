@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html><head>
+<title>[번역] NFV MANO 초심자 가이드</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Faisal Khan">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="[번역] NFV MANO 초심자 가이드" />
+<meta property="og:description" content="Faisal Khan" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/" />
+<meta property="article:published_time" content="2020-09-23T00:58:08+09:00" />
+<meta property="article:modified_time" content="2020-09-23T00:58:08+09:00" /><meta property="og:site_name" content="markruler" />
+
+
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="[번역] NFV MANO 초심자 가이드"/>
+<meta name="twitter:description" content="Faisal Khan"/>
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'Yv2aESurCxnvYjIGMhSNP7uUY06moAngyqS73wMcVQI', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+
+<link rel="stylesheet" href="https://markruler.github.io/scss/journal.min.c116bc90d171283f099f173854157ec8f183f9073b93443b2c8ad82899ee9025.css" integrity="sha256-wRa8kNFxKD8Jnxc4VBV&#43;yPGD&#43;Qc7k0Q7LIrYKJnukCU=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.552aae4638a84aa57cf0b195750a49ea9131d3bb621d1ed3ebc9b14b18166536.css" integrity="sha256-VSquRjioSqV88LGVdQpJ6pEx07tiHR7T68mxSxgWZTY=" media="screen">
+
+
+<script src="https://markruler.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+
+
+
+  
+    <script src="https://markruler.github.io//js/toc-collapse.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            markruler
+        </div>
+        
+        <div class="nav-subtitle">
+            Home
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://amazingrise.net">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 markruler
+	
+
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>-  -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#nfv%ec%97%90%ec%84%9c-mano%eb%9e%80" onclick="onNavClick(`#nfv에서-mano란-nav`)" id="nfv에서-mano란-nav">
+									NFV에서 MANO란?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1-virtualized-infrastructure-manager-vim" onclick="onNavClick(`#1-virtualized-infrastructure-manager-vim-nav`)" id="1-virtualized-infrastructure-manager-vim-nav">
+									1. Virtualized Infrastructure Manager (VIM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-virtual-network-function-manager-vnfm" onclick="onNavClick(`#2-virtual-network-function-manager-vnfm-nav`)" id="2-virtual-network-function-manager-vnfm-nav">
+									2. Virtual Network Function Manager (VNFM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-nfv-orchestrator-nfvo" onclick="onNavClick(`#3-nfv-orchestrator-nfvo-nav`)" id="3-nfv-orchestrator-nfvo-nav">
+									3. NFV Orchestrator (NFVO)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ea%b3%bc%ec%a0%9c-1" onclick="onNavClick(`#과제-1-nav`)" id="과제-1-nav">
+									과제 1
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b3%bc%ec%a0%9c-2" onclick="onNavClick(`#과제-2-nav`)" id="과제-2-nav">
+									과제 2
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#resource-orchestration" onclick="onNavClick(`#resource-orchestration-nav`)" id="resource-orchestration-nav">
+									Resource Orchestration
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#service-orchestration" onclick="onNavClick(`#service-orchestration-nav`)" id="service-orchestration-nav">
+									Service Orchestration
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#4-repositories" onclick="onNavClick(`#4-repositories-nav`)" id="4-repositories-nav">
+									4. Repositories
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#vnf-catalog" onclick="onNavClick(`#vnf-catalog-nav`)" id="vnf-catalog-nav">
+									VNF Catalog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#network-services-ns-catalog" onclick="onNavClick(`#network-services-ns-catalog-nav`)" id="network-services-ns-catalog-nav">
+									Network Services (NS) Catalog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nfv-instances" onclick="onNavClick(`#nfv-instances-nav`)" id="nfv-instances-nav">
+									NFV Instances
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nfvi-resources" onclick="onNavClick(`#nfvi-resources-nav`)" id="nfvi-resources-nav">
+									NFVI Resources
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#5-element-management-em" onclick="onNavClick(`#5-element-management-em-nav`)" id="5-element-management-em-nav">
+									5. Element Management (EM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#6-ossbss" onclick="onNavClick(`#6-ossbss-nav`)" id="6-ossbss-nav">
+									6. OSS/BSS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#7-reference-points" onclick="onNavClick(`#7-reference-points-nav`)" id="7-reference-points-nav">
+									7. Reference Points
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>-  -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#nfv%ec%97%90%ec%84%9c-mano%eb%9e%80" onclick="onNavClick(`#nfv에서-mano란-nav`)" id="nfv에서-mano란-nav">
+									NFV에서 MANO란?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1-virtualized-infrastructure-manager-vim" onclick="onNavClick(`#1-virtualized-infrastructure-manager-vim-nav`)" id="1-virtualized-infrastructure-manager-vim-nav">
+									1. Virtualized Infrastructure Manager (VIM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-virtual-network-function-manager-vnfm" onclick="onNavClick(`#2-virtual-network-function-manager-vnfm-nav`)" id="2-virtual-network-function-manager-vnfm-nav">
+									2. Virtual Network Function Manager (VNFM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-nfv-orchestrator-nfvo" onclick="onNavClick(`#3-nfv-orchestrator-nfvo-nav`)" id="3-nfv-orchestrator-nfvo-nav">
+									3. NFV Orchestrator (NFVO)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ea%b3%bc%ec%a0%9c-1" onclick="onNavClick(`#과제-1-nav`)" id="과제-1-nav">
+									과제 1
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b3%bc%ec%a0%9c-2" onclick="onNavClick(`#과제-2-nav`)" id="과제-2-nav">
+									과제 2
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#resource-orchestration" onclick="onNavClick(`#resource-orchestration-nav`)" id="resource-orchestration-nav">
+									Resource Orchestration
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#service-orchestration" onclick="onNavClick(`#service-orchestration-nav`)" id="service-orchestration-nav">
+									Service Orchestration
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#4-repositories" onclick="onNavClick(`#4-repositories-nav`)" id="4-repositories-nav">
+									4. Repositories
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#vnf-catalog" onclick="onNavClick(`#vnf-catalog-nav`)" id="vnf-catalog-nav">
+									VNF Catalog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#network-services-ns-catalog" onclick="onNavClick(`#network-services-ns-catalog-nav`)" id="network-services-ns-catalog-nav">
+									Network Services (NS) Catalog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nfv-instances" onclick="onNavClick(`#nfv-instances-nav`)" id="nfv-instances-nav">
+									NFV Instances
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#nfvi-resources" onclick="onNavClick(`#nfvi-resources-nav`)" id="nfvi-resources-nav">
+									NFVI Resources
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#5-element-management-em" onclick="onNavClick(`#5-element-management-em-nav`)" id="5-element-management-em-nav">
+									5. Element Management (EM)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#6-ossbss" onclick="onNavClick(`#6-ossbss-nav`)" id="6-ossbss-nav">
+									6. OSS/BSS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#7-reference-points" onclick="onNavClick(`#7-reference-points-nav`)" id="7-reference-points-nav">
+									7. Reference Points
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            markruler
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">markruler</div>
+        
+        <div class="single-column-header-subtitle">Home</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/nfv/mano-in-nfv.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    [번역] NFV MANO 초심자 가이드
+                    
+                    <div class="post-subtitle">
+                        Faisal Khan
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[cloud]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/nfv">nfv</a>
+                                &nbsp;
+                            
+                                <a href="/tags/virtualization">virtualization</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cloud">cloud</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><a href="https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/">원문 링크</a></p>
+<blockquote>
+<ul>
+<li>원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 <a href="https://github.com/markruler/markruler.github.io/issues/new">여기</a>에서 피드백 주시면 감사드립니다! 👍</li>
+</ul>
+</blockquote>
+<p>NFV 여행의 초심자는 NFV Management &amp; Orchestration (NFV MANO)를 이해하려고 할 때 다음과 같은 두 가지 걸림돌이 있다.</p>
+<p>첫째로, 초심자는 이미 기존의 네트워크가 EMS, NMS, 또는 OSS가 대부분 지원해주는 하나의 관리 시스템만 필요하다고 알고 있습니다.
+반면에 NFV 네트워크는 VIM 관리자, VNF 관리자, 오케스트레이터와 같은 여러 관리자를 필요로 합니다.</p>
+<p>관리자가 충분하지 않다면 기존 EMS와 OSS/BSS도 있습니다.
+즉, 5개의 다른 관리 시스템입니다.
+이 정도면 NFV 초심자는 혼란스러울 것입니다.</p>
+<p>둘째, NFV MANO 모델을 단순하게 설명하는 정보가 부족합니다.
+예를 들어, 구글의 많은 기술들은 주로 벤더의 MANO 구현 방식을 설명합니다.</p>
+<p>그리고 ETSI 표준과 같이 MANO 아키텍처를 정의하는 표준 레퍼런스 문서가 있다면,
+초심자에게 그 문서들을 따라가기는 쉽지 않습니다.</p>
+<p>그러나 ETSI의 MANO 모델을 이해하는 것이 얼마나 중요한지 무시할 수 없습니다.
+우선, ETSI는 NFV 아키텍처와 프레임워크 정의에 상당한 작업을 한 개척자 및 유일한 표준 기관입니다.</p>
+<p>그렇기 때문에 ETSI 모델을 이해함으로써 MANO를 이해할 수 있습니다.</p>
+<p>이 글은 가능한 한 간단하게 ETSI MANO 모델을 보여주려는 조그만 시도입니다.</p>
+<p>그 전에 하나만 묻겠습니다!</p>
+<p>우선 NFV MANO에 대해 아는 것이 왜 중요할까요?</p>
+<p>왜냐하면 MANO는 NFV 아키텍처의 심장과 두뇌 역할을 하며
+MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것이기 때문입니다.</p>
+<p>둘째, ETSI 모델을 참조하여 모든 벤더의 NFV 솔루션을 이해하고 벤치마킹하는 데 도움이 될 것입니다.</p>
+<p>아니면 당신은 곧 RFP 작성을 끝내야하며 MANO 부분에 무엇을 포함해야 하는지 알고 싶을 수도 있습니다.</p>
+<blockquote>
+<p>역주: <a href="https://en.wikipedia.org/wiki/Request_for_proposal">RFP</a>? Request for Proposal. 제안요청서.</p>
+</blockquote>
+<p>목표가 무엇이든 간에 이 가이드로부터 무언가를 얻기를 바랍니다.</p>
+<p>(이 시점에 NFV 용어를 다시 상기해야 할 경우, <a href="../cheat-sheet-understanding-nfv-architecture/">NFV 아키텍처의 치트 시트</a>를 참조하세요)</p>
+<h2 id="nfv에서-mano란">NFV에서 MANO란?</h2>
+<p>MANO는 관리 및 오케스트레이션(Management and Orchestration)을 의미합니다.</p>
+<p>MANO는 아래 다이어그램에서 세 가지 관리자를 포함하는 회색 블록입니다.</p>
+<ol>
+<li>Virtualized Infrastructure Manager (VIM).</li>
+<li>VNF Manager (VNFM).</li>
+<li>NFV Orchestrator (VNFO).</li>
+</ol>
+<p>그리고 리포지토리 그룹까지(블록 4, 그 밑에 더 있음)</p>
+<p><img src="/images/nfv/mano-in-nfv.png" alt="mano-in-nfv"></p>
+<p>MANO 내부에 있는 4개의 블록 외에도, 외부에 기존의 요소 관리(EM)와 OSS/BSS라는 두 개의 블록이 있습니다.
+두 블록은 MANO에 직접 속하지 않지만 MANO와 정보를 교환하기 때문에, 초심자는 MANO 블록과 적절한 위치에 두어야 합니다.</p>
+<p>가상화 인프라 매니저(VIM)부터 6개 블록에 대해 설명드리겠습니다.</p>
+<h2 id="1-virtualized-infrastructure-manager-vim">1. Virtualized Infrastructure Manager (VIM)</h2>
+<p>VIM은 <code>하나의 도메인</code>에서 NFVI 리소스를 관리합니다.</p>
+<ul>
+<li>NFVI는 NFV 환경의 물리 자원(서버, 스토리지 등), 가상 자원(가상 머신), 소프트웨어 자원(하이퍼바이저)을 포함하는 NFV 인프라입니다.</li>
+</ul>
+<p>여기에서 <code>하나의 도메인</code>이라는 단어를 기억하세요.
+NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 있을 수 있습니다.
+오케스트레이터 섹션에서 다시 볼 것이므로 <code>multiple VIM</code>이라는 개념을 염두에 두세요.</p>
+<p>그렇다면 VIM이 처리하는 일반적인 태스크는 무엇일까요?</p>
+<p>다음과 같은 태스크를 처리합니다.</p>
+<ul>
+<li>NFVI 도메인에 있는 가상 자원의 라이프사이클 관리. 즉, NFVI 도메인의 물리 자원으로부터 VM(가상 머신)을 생성, 유지, 해제하는 것</li>
+<li>물리 자원과 연결된 가상 머신(VM) 목록 유지</li>
+<li>하드웨어, 소프트웨어, 가상 자원의 성능 및 장애 관리</li>
+<li>노스바운드 API를 유지하여 물리/가상 자원을 다른 관리 시스템에 노출</li>
+</ul>
+<h2 id="2-virtual-network-function-manager-vnfm">2. Virtual Network Function Manager (VNFM)</h2>
+<p>VIM이 NFVI을 위한 것이라면 VNFM은 VNF을 위한 것입니다.</p>
+<p>즉, VNFM은 VNF를 관리합니다.</p>
+<blockquote>
+<p>VNF는 라우터 VNF, 스위치 VNF 등과 같은 가상화된 네트워크 요소입니다.</p>
+</blockquote>
+<p>구체적으로 VNFM은 다음을 수행합니다.</p>
+<ul>
+<li>VNFM은 VNF의 라이프사이클을 관리. 즉, VNF 인스턴스를 생성, 유지, 종료(VIM이 생성하고 관리하는 VM에 설치됨)</li>
+<li>VNF의 FCAPS(즉, VNF의 오류, 구성, 회계, 성능, 보안) 관리</li>
+<li>VNF를 스케일 업/다운하여 CPU 사용량을 스케일 업/다운</li>
+</ul>
+<p>별도의 VNF를 관리하는 VNFM이 여러 개 있을 수도 있고,
+여러 VNF를 관리하는 하나의 VNFM이 있을 수도 있다.</p>
+<h2 id="3-nfv-orchestrator-nfvo">3. NFV Orchestrator (NFVO)</h2>
+<p>위의 섹션 1과 2를 살펴보셨다면 NFVO가 왜 필요한지 알 수 있을 것입니다.</p>
+<p>위의 섹션 1에서 보았듯이, 각각의 NFVI 도메인을 관리하는 VIM이 여러 개 있을 수 있습니다. 이것은 <code>과제 1</code>을 만듭니다.</p>
+<h4 id="과제-1">과제 1</h4>
+<p>동일한 또는 서로 다른 PoP(Point of Presence)에 여러 VIM이 있는 경우,
+누가 다른 VIM의 자원을 관리/조정할까요?</p>
+<p>섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 <code>과제 2</code>를 만듭니다.</p>
+<h4 id="과제-2">과제 2</h4>
+<p>서로 다른 VNFM 도메인의 VNF를 포함하는 종단 간(end-to-end) 서비스 생성을
+누가 관리/조정할까요?</p>
+<p>이러한 과제는 NFVO의 다음 두 가지 기능이 해결해 줍니다.</p>
+<h3 id="resource-orchestration">Resource Orchestration</h3>
+<p>NFVO는 서로 다른 PoP 간에 또는 하나의 PoP 내에서 NFVI 자원을 조정, 승인, 해제, 결합합니다.
+이는 NFVI 자원을 직접 사용하는 대신 노스바운드 API를 통해 VIM과 직접 연결함으로써 수행합니다.</p>
+<p>이 기능은 서로 다른 VIM의 자원 할당하는 <code>과제 1</code>을 직접 해결합니다.</p>
+<h3 id="service-orchestration">Service Orchestration</h3>
+<p>서비스 오케스트레이션은 서로 다른 VNF(다른 VNFM이 관리할 수 있는) 간에 종단 간 서비스를 생성하는 <code>과제 2</code>를 해결합니다.</p>
+<p>다음과 같은 방법으로 해결합니다.</p>
+<ul>
+<li>서비스 오케스트레이션은 VNF와 직접 통신할 필요가 없도록 각 VNFM과 조정하여 서로 다른 VNF 간에 종단 간 서비스를 생성합니다.
+예를 들면 한 벤더의 기지국 VNF와 다른 벤더의 중심 노드 VNF 사이에 서비스를 생성하는 것입니다.</li>
+<li>서비스 오케스트레이션은 해당되는 VNFM을 인스턴스화할 수 있습니다.</li>
+<li>네트워크 서비스 인스턴스의 토폴로지(<a href="https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html">VNF Forwarding Graph</a>, <code>VNFFG</code>라고도 함)도 관리합니다.</li>
+</ul>
+<p>NFVO가 서로 다른 기능을 결합하고 서로 다른 방법으로 분산된 NFV 환경에서 종단 간 서비스를 생성하며 자원을 조정하는,
+NFV의 접착제와 같다는 점을 알 수 있습니다.</p>
+<h2 id="4-repositories">4. Repositories</h2>
+<p>NFV MANO에서 서로 다른 정보를 저장하는 리포지토리(파일/목록)를 이해하는 것이 매우 중요하다.
+리포지토리에는 네 가지 유형이 있다.</p>
+<h3 id="vnf-catalog">VNF Catalog</h3>
+<p>VNF 카탈로그는 사용 가능한 모든 VNFD(VNF Descriptor)의 저장소다.</p>
+<p>VNFD는 VNF의 배포 및 동작 요구 사항 측면에서 VNF를 설명하는 배포 템플릿이다.
+주로 VNFM이 VNF 인스턴스화 및 VNF 인스턴스의 라이프사이클 관리 프로세스에서 사용한다.
+VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상화된 자원을 관리 및 조정하는데도 사용된다.</p>
+<blockquote>
+<ul>
+<li><a href="https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf">ETSI</a></li>
+<li><a href="https://docs.openstack.org/tacker/latest/contributor/vnfd_template_description.html">Openstack</a></li>
+</ul>
+</blockquote>
+<h3 id="network-services-ns-catalog">Network Services (NS) Catalog</h3>
+<p>사용 가능한 네트워크 서비스의 카탈로그(목록) 입니다.
+가상 링크를 통한 연결에 대한 설명과 VNF 측면에서 네트워크 서비스를 위한 배포 템플릿은 향후 사용을 위해 NS 카탈로그에 저장된다.</p>
+<h3 id="nfv-instances">NFV Instances</h3>
+<p>NFV 인스턴스 목록에는 네트워크 서비스 인스턴스 및 관련 VNF 인스턴스에 대한 모든 세부 정보가 들어 있다.</p>
+<h3 id="nfvi-resources">NFVI Resources</h3>
+<p>NFV 서비스 구축에 활용되는 NFVI 자원의 리포지토리다.</p>
+<p>다음 두 가지 관리 시스템은 NFV MANO에 속하지 않지만 NFVO MANO 기능 블록과 정보를 교환하기 때문에 설명한다.</p>
+<h2 id="5-element-management-em">5. Element Management (EM)</h2>
+<p>EM은 MANO에 속하지 않지만 중요한 역할을 한다.</p>
+<p>EM은 VNF의 기능 부분에 대한 FCAPS를 담당한다. VNFM은 VNF의 FCAPS도 하지만 가상 부분에서만 한다.</p>
+<p>명확히 하기 위해 예를 들면, 일반적으로 MANO는 가상과 물리적 세계의 델타에만 책임이 있다.
+VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행한다.
+장애 관리(fault management) 측면에서 VNF를 실행하는 데 문제가 있으면 VNFM이 보고하지만,
+기능과 관련된 장애인 경우(예: 모바일 코어에서 일부 신호 전달 문제) EM이 보고한다.</p>
+<blockquote>
+<p>델타(delta): 수학에서 <code>'차이'</code>, <code>'변화'</code>를 나타냄</p>
+</blockquote>
+<p>VNFM은 운영자가 모든 종류의 FCAPS(가상 + 기능)에 대해 단일 GUI를 사용하고자 하는 경우에 대비하여 EM에 인터페이스를 노출시킨다.</p>
+<h2 id="6-ossbss">6. OSS/BSS</h2>
+<p>OSS/BSS는 서비스 사업자가 사업을 운영하기 위해 사용하는 시스템/애플리케이션 모음을 포함한다.</p>
+<p>NFV는 OSS/BSS와 같이 동작해야 한다.</p>
+<p>원칙적으로는 VNF와 NFVI를 직접 관리하기 위해 기존 OSS/BSS의 기능을 확장할 수 있지만,
+그것은 벤더의 독점적 구현일 수 있다(적어도 현재까지는 ETSI가 EM과 VNF 간의 인터페이스는 정의하지 않았다).
+NFV는 개방형 플랫폼(open platform)이기 때문에 (MANO에서처럼)개방형 인터페이스를 통해 NFV 엔터티를 관리하는 것이 더 타당하다.</p>
+<p>그러나 기존의 OSS/BBS는 NFV MANO의 특정 구현으로 인해 지원되지 않는 경우,
+추가 기능을 제공함으로써 NFV MANO에 부가 가치를 만들 수 있다.
+이는 NFV MANO와 기존 OSS/BSS 사이의 개방형 참조점(Or-Ma-NFVO)을 통해 이루어진다.</p>
+<h2 id="7-reference-points">7. Reference Points</h2>
+<p>마지막으로 <code>참조점</code>에 대해 언급할 가치가 있습니다.</p>
+<p>MANO에는 그림과 같이 기능 블록 간의 상호 연결점으로 표시되는 여러 참조점이 있습니다.
+Or-Vi, NF-Vi, Or-Vnfm 등입니다.</p>
+<p>왜 MANO는 그들을 인터페이스가 아닌 참조점이라고 부르나요?</p>
+<p><code>인터페이스</code>가 엔터티 간의 양방향 통신을 허용하는 것과 관련이 있기 때문에 MANO는 참조점을 인터페이스라고 부르지 않습니다.
+참조점은 기능 블록의 외부 관점(external view)을 정의하고 노출하는 아키텍처 개념입니다.
+그리고 MANO는 기능 블록에 대해 이야기하기 때문에 <code>참조점</code>이라는 단어를 대신 사용합니다.</p>
+<p>이것이 NFV MANO에 대한 전부입니다.</p>
+<blockquote>
+<ul>
+<li><a href="https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/">원문 링크</a></li>
+</ul>
+</blockquote>
+<p>당신의 견해를 알려주세요. 최종 사용자라면 NFV의 여러 관리 시스템에 대해 어떻게 생각하시나요?
+그들이 당신에게 타당한가요? 기존 EMS/OSS와 어떻게 비교하시나요?</p>
+<p>벤더라면 NFV MANO에서 구현 중인 부분과 힘든점은 무엇인가요? 어떠한 견해라도 알려주세요.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;"></p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			<br>
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://markruler.github.io/posts/nfv/cheat-sheet-understanding-nfv-architecture/">
+			<br>[번역] &#34;NFV 아키텍처&#34; 이해를 위한 치트 시트
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://amazingrise.net">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 markruler
+	
+</div>
+            </div>
+    <script>
+let app;
+
+app = new Vue({
+    el: '#app',
+    data: {
+        scrollY: 0,
+        navOpacity: 0,
+        isDrawerOpen: false,
+        mounted: false,
+        isDarkMode: false
+    },
+    methods: {
+            sgn(t, x) {
+                let k = 1. / (1. - 2 * t);
+                if (x <= t) return 0;
+                else if (x >= 1 - t) return 1;
+                else {
+                    return k * (x - t);
+                }
+            },
+            handleScroll() {
+                this.scrollY = window.scrollY;
+                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+
+                if (this.navOpacity >= 1) {
+                    navBackground.style.opacity = 1;
+                    navTitle.style.opacity = 1;
+                } else {
+                    navBackground.style.opacity = 0;
+                    navTitle.style.opacity = 0;
+                }
+            },
+            handleResize() {
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
+            },
+            navBarHeight() {
+                return this.$refs.navBar.offsetHeight;
+            },
+            pageHeadHeight() {
+                return this.$refs.pageHead.offsetHeight;
+            },
+            toggleDrawer() {
+                this.isDrawerOpen = !this.isDrawerOpen;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            closeDrawer() {
+                this.isDrawerOpen = false;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            toggleDarkMode() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode==true){
+                    document.cookie = "night=1;path=/";
+                    document.body.classList.add("night");
+                } else {
+                    document.cookie = "night=0;path=/";
+                    document.body.classList.remove("night");
+                }
+            }
+    },
+    created() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        window._nonDesktop = function () {
+            let check = false;
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        };
+        
+        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (night==""){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                
+            }
+        }else{
+            
+            if (night=="1") {
+                this.toggleDarkMode();
+            }
+        }
+    },
+    mounted() {
+        this.handleScroll();
+        this.handleResize();
+        this.mounted = true;
+
+        
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    }
+});
+</script>
+
+<script src="https://markruler.github.io//js/journal.js"></script>
+    </body>
+</html>
