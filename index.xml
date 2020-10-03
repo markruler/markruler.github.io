@@ -5,9 +5,168 @@
     <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Wed, 23 Sep 2020 00:58:08 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 02 Oct 2020 16:24:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>마이크로서비스 기반 observability 용어 정리</title>
+        <link>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</link>
+        <pubDate>Fri, 02 Oct 2020 16:24:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</guid>
+        <description>markruler https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ -&lt;p&gt;observability 관련 용어를 명확히 설명하기 힘들어서 공부하는 중.&lt;/p&gt;
+&lt;h2 id=&#34;observability&#34;&gt;Observability&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;관측성&lt;/li&gt;
+&lt;li&gt;관찰성&lt;/li&gt;
+&lt;li&gt;관측 가능성&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;제어 이론에서 &amp;lsquo;observability&amp;rsquo;라는 용어는 시스템의 내부 상태와 그에 따른 행동을 시스템에 대한 입력과 출력만 보고 결정할 수 있다면 그 시스템이 관측 가능하다는 것을 나타낸다. - &amp;lt;마스터링 분산 추적&amp;gt; p6&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt; : &lt;a href=&#34;https://www.fluentd.org/&#34;&gt;Fluentd&lt;/a&gt;&lt;br&gt;
+&lt;a href=&#34;https://www.elastic.co/&#34;&gt;Elastic&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/kibana5-fluentd.png&#34; alt=&#34;kibana5-fluentd&#34;&gt;
+&lt;em&gt;Fluentd-Kibana&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다.
+하지만 각 로그 스트림은 한 서비스의 단일 인스턴스에 대해서만 알려주기 때문에 마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.&lt;/p&gt;
+&lt;h2 id=&#34;tracing&#34;&gt;Tracing&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt; : &lt;a href=&#34;https://www.jaegertracing.io/&#34;&gt;Jaeger&lt;/a&gt;, &lt;a href=&#34;https://opentracing.io/&#34;&gt;OpenTracing&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace&#34;&gt;Difference between Tracking and Tracing&lt;/a&gt;:&lt;br&gt;
+&lt;br&gt;
+To trace: follow the completed path backwards from its current point to where it began.&lt;br&gt;
+To track: follow the emerging path forwards from your starting point to wherever the thing currently is.&lt;br&gt;
+&lt;br&gt;
+When you &amp;ldquo;trace&amp;rdquo; a cellphone call, you try to determine its origin. This is the same whether done right now, or for a call made a month ago. You go backward to the starting point.&lt;br&gt;
+When you &amp;ldquo;track&amp;rdquo; a cellphone, you monitor its current location, right now, and follow it wherever it goes in the future.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png&#34; alt=&#34;jaeger-embed-trace-view&#34;&gt;
+&lt;em&gt;Jaeger&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
+리눅스에서 쓰이는 strace, 구글 크롬의 &lt;a href=&#34;https://developers.google.com/web/tools/chrome-devtools/network/&#34;&gt;Network log&lt;/a&gt; 등
+흔히 접하는 것들도 트레이싱 도구다.
+주로 서비스를 최적화하는 데 사용된다.
+예를 들어, 특정 서비스에 병목이 예상되는 경우
+트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있다.
+결국 트레이싱은 구조화된 형태의 로그 이벤트일 뿐이다.&lt;/p&gt;
+&lt;h3 id=&#34;distributed-tracing&#34;&gt;Distributed tracing&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;lt;마스터링 분산 추적&amp;gt; p58&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며, 분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다. 기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리 종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며, 이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.&lt;/p&gt;
+&lt;h2 id=&#34;monitoring&#34;&gt;Monitoring&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt; : &lt;a href=&#34;https://prometheus.io/&#34;&gt;Prometheus&lt;/a&gt;, &lt;a href=&#34;https://thanos.io/&#34;&gt;Thanos&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/grafana-visualize.jpg&#34; alt=&#34;grafana-visualize&#34;&gt;
+&lt;em&gt;Grafana&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;애플리케이션을 계측하고
+메트릭 수집(collect), 집계(aggregate), 분석(analyze)을 포함하는 시스템이다.
+진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 경고를 보낸다.&lt;/p&gt;
+&lt;h2 id=&#34;profiling&#34;&gt;Profiling&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.android.com/studio/profile&#34;&gt;Android Profiler&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/android-profiler-callouts.png&#34; alt=&#34;android-profiler-callouts&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;(Monitoring + Tracing)&lt;/del&gt;
+모니터링과 달리 벤치마킹에 주 목적이 있다.
+분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 통계에 쓰인다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;참조&#34;&gt;참조&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;lt;마스터링 분산 추적&amp;gt; - 유리 슈쿠로&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.bmc.com/blogs/monitoring-logging-tracing&#34;&gt;Tracing vs Logging vs Monitoring: What’s the Difference?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://winderresearch.com/logging-vs-tracing-vs-monitoring/&#34;&gt;Logging vs Tracing vs Monitoring&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://techbeacon.com/enterprise-it/monitoring-demystified-guide-logging-tracing-metrics&#34;&gt;Monitoring demystified: A guide for logging, tracing, metrics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://opentracing.io/docs/overview/what-is-tracing/&#34;&gt;What is Distributed Tracing? - OpenTracing&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>[번역] NFV의 컴퓨팅 도메인에 대한 오해!</title>
+        <link>https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</link>
+        <pubDate>Thu, 01 Oct 2020 22:23:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</guid>
+        <description>markruler https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ -&lt;p&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/&#34;&gt;원문 링크&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;NFV에 대해 생각해 보세요! 그리고 x86 프로세서를 생각해 보세요&amp;hellip; 둘은 뗄 수 없는 사이입니다. 그렇죠?&lt;/p&gt;
+&lt;p&gt;프로세서(컴퓨팅 파트)가 아무리 단순하게 들리더라도 NFV의 컴퓨팅 도메인(compute domain)이 노드의 컴퓨팅 프로세서(compute processor)가 같지 않다는 사실을 모르는 사람이 많을 것입니다. 사실&amp;hellip; 훨씬 더 많습니다.&lt;/p&gt;
+&lt;p&gt;NFV의 &amp;ldquo;Compute Domain&amp;quot;과 &amp;ldquo;Compute Node&amp;quot;는 ETSI 정의에 따르면 동일한 것을 의미하지 않습니다. 이를 잘 알고 있으면 NFV 기본 아키텍처를 이해하는 데 많은 혼란을 피할 수 있으며, 벤더 및 고객과 이 주제에 대해 소통하는 과정에서 오해를 피할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;물론 NFV의 뼈대를 제대로 세우고 싶을 겁니다. 그렇죠?&lt;/p&gt;
+&lt;p&gt;뿐만 아니라 끝까지 읽으신다면 COTs, NIC, 하드웨어 가속기와 같이 매일 듣는 서버의 필수 용어가 명확해질 것입니다.&lt;/p&gt;
+&lt;h1 id=&#34;우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요&#34;&gt;우선 ETSI의 용어로 &amp;ldquo;Compute Domain&amp;quot;과 &amp;ldquo;Compute Node&amp;quot;는 무엇일까요?&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/computer-domain-in-nfv.png&#34; alt=&#34;computer-domain-in-nfv&#34;&gt;&lt;/p&gt;
+&lt;p&gt;(NFV 아키텍처에 대한 자세한 내용을 보려면 &lt;a href=&#34;../beginners-guide-to-nfv-mano/&#34;&gt;NFV 아키텍처&lt;/a&gt; 또는 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture&#34;&gt;NFV MANO 치트 시트&lt;/a&gt;에 대한 글을 읽는 것이 좋습니다.)&lt;/p&gt;
+&lt;p&gt;위의 NFV Infrastructure (NFVI) 블록에 명확히 나와 있듯이 컴퓨팅 도메인에는 컴퓨팅 하드웨어와 스토리지 하드웨어가 포함됩니다. 컴퓨팅 도메인은 상위 집합이며, 그 중 컴퓨팅 하드에어와 노드는 한 부분에 불과합니다.&lt;/p&gt;
+&lt;p&gt;놀랍죠? 스토리지를 컴퓨팅 도메인의 일부로 생각하는 사람이 얼마나 되겠습니까?&lt;/p&gt;
+&lt;p&gt;이제 컴퓨팅 도메인에 무엇이 포함되는지 자세히 살펴보겠습니다.&lt;/p&gt;
+&lt;h1 id=&#34;컴퓨팅-도메인의-세-가지-부분&#34;&gt;컴퓨팅 도메인의 세 가지 부분&lt;/h1&gt;
+&lt;h2 id=&#34;1-컴퓨팅-노드-compute-node&#34;&gt;1. 컴퓨팅 노드 (Compute Node)&lt;/h2&gt;
+&lt;p&gt;상용 제품(COTS, Commercial Off-the-Shelf) 아키텍처에서 컴퓨팅 노드에는 멀티 코어 프로세서와 칩셋이 포함되어 있으며, 여기에는 다음과 같은 물리적 리소스가 포함될 수 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU 및 칩셋 (예: x86, ARM etc.)&lt;/li&gt;
+&lt;li&gt;메모리 하위 집합.&lt;/li&gt;
+&lt;li&gt;임의의 하드웨어 가속기 (예: co-processor)&lt;/li&gt;
+&lt;li&gt;NICs (임의의 가속기를 포함한 네트워크 인터페이스 카드)&lt;/li&gt;
+&lt;li&gt;블레이드 내부 스토리지 (비휘발성 메모리, 로컬 디스크 스토리지)&lt;/li&gt;
+&lt;li&gt;BIOS/부트 로더 (실행 환경의 일부)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;COTS 서버 블레이드는 컴퓨팅 노드의 한 가지 예입니다.&lt;/p&gt;
+&lt;h2 id=&#34;2-네트워크-인터페이스-카드-nic-및-io-가속기&#34;&gt;2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기&lt;/h2&gt;
+&lt;p&gt;이전 섹션에서 컴퓨팅 노드의 일부로 NIC를 언급했습니다. 이건 사실입니다.
+위의 경우 NIC 기능이 서버에 있기 때문입니다.
+그러나 최근 세분화된 모델(예: &lt;a href=&#34;http://www.opencompute.org/about/&#34;&gt;Open Compute Project, OCP&lt;/a&gt;) 트렌드가 있습니다.
+이 폼-팩터(form-factor)에서 CPU 블레이드/섀시는 NIC/가속기 섀시 및 스토리지 섀시와 분리됩니다.
+이 블레이드/섀시들 간의 상호 연결은 광섬유를 통해 이루어질 수 있습니다.
+이러한 이유로 NIC가 중요하기 때문에 별도로 설명합니다.&lt;/p&gt;
+&lt;p&gt;NIC의 주요 기능은 CPU에 네트워크 I/O 기능을 제공하는 것입니다.&lt;/p&gt;
+&lt;p&gt;NFV의 비전은 standard generic x86 서버에서 네트워크 기능을 실행하는 것입니다. 그러나 실제로 머신의 I/O 처리량을 향상시키기 위해 가속 기술을 요구하는 많은 I/O 집약적 애플리케이션(예: 가상 라우터)이 있습니다.&lt;/p&gt;
+&lt;p&gt;일부 하드웨어 가속 기술에는 다음이 포함됩니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;디지털 신호 처리(DSP, Digital Signal Processing), 패킷 헤더 처리, 패킷 버퍼링 및 스케줄링과 같은 하드웨어 가속.&lt;/li&gt;
+&lt;li&gt;캐시 관리 기능.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이외에 새로운 소프트웨어 가속 기능을 구현하는 명령어 집합 아키텍처(ISA, Instruction Set Architecture)(예: x86, ARMv8 등)가 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;3-스토리지-빌딩-블록&#34;&gt;3. 스토리지 빌딩 블록&lt;/h2&gt;
+&lt;p&gt;스토리지 인프라는 주요 드라이브 유형들을 포함합니다. 반드시 이해하고 넘어가야 하는 하드 디스크 드라이브(HDD), 솔리드 스테이트 디스크(SDD), 캐시 스토리지 등이 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;31-hard-disk-drives-hdd&#34;&gt;3.1 Hard Disk Drives (HDD)&lt;/h3&gt;
+&lt;p&gt;하드 디스크는 마그네틱 스토리지를 사용하여 마그네틱 재질로 코팅된 하나 이상의
+견고한 고속 회전 디스크(플래터)를 사용하여 디지털 정보를 저장하고 검색하는 데이터 저장 장치입니다.
+플래터는 표면에 데이터를 읽고 쓰는 자기 헤드(magnetic heads)와 쌍을 이룹니다.
+데이터는 랜덤 액세스 방식으로 접근하므로 어느 순서로도 데이터를 검색할 수 있다는 장점이 있습니다.
+HDD는 비휘발성 스토리지입니다. 즉, 전원이 꺼진 상태에서도 저장된 데이터를 유지할 수 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;32-solid-state-disks-ssd&#34;&gt;3.2 Solid State Disks (SSD)&lt;/h3&gt;
+&lt;p&gt;SSD는 HDD와 달리 움직이는 부품이 없습니다.
+따라서 HDD에 비해 SSD는 일반적으로 물리적 충격에 더 강하고,
+조용히 실행되며, 액세스 시간과 대기 시간이 짧습니다.
+따라서 SSD는 상당한 랜덤 액세스가 필요한 애플리케이션에서 사용하기 적합한 기술입니다.
+하지만 HDD에 비해 상대적으로 비쌉니다.&lt;/p&gt;
+&lt;h3 id=&#34;33-hybrid-disk-drive&#34;&gt;3.3 Hybrid Disk Drive&lt;/h3&gt;
+&lt;p&gt;점점 인기를 얻고 있는 하이브리드 하드 드라이브는 기존의 회전 플래터와
+소량의 고속 플래시 메모리를 단일 드라이브에 배치하여 SSD 속도의 HDD 기능을 제공합니다.
+그래서 SSD를 고속 캐시(또는 tier로 사용 가능)로 사용하고
+HDD를 영구 스토리지에 사용한다는 것이 장점입니다.&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;Compute Node&amp;rdquo;, &amp;ldquo;NIC&amp;rdquo; 및 &amp;ldquo;Storage&amp;rdquo; 세 부분을 이해하면 컴퓨팅 도메인의 그림이 완성되고
+완전한 NFV 아키텍처 서버를 만들기 때문에 정말 중요합니다.&lt;/p&gt;
+- https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ - </description>
+        </item>
     
     
     
@@ -23,12 +182,12 @@
 &lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;NFV 여행의 초심자는 NFV Management &amp;amp; Orchestration (NFV MANO)를 이해하려고 할 때 다음과 같은 두 가지 걸림돌이 있다.&lt;/p&gt;
+&lt;p&gt;NFV 여행의 초심자는 NFV Management &amp;amp; Orchestration (NFV MANO)를 이해하려고 할 때 다음과 같은 두 가지 걸림돌이 있습니다.&lt;/p&gt;
 &lt;p&gt;첫째로, 초심자는 이미 기존의 네트워크가 EMS, NMS, 또는 OSS가 대부분 지원해주는 하나의 관리 시스템만 필요하다고 알고 있습니다.
 반면에 NFV 네트워크는 VIM 관리자, VNF 관리자, 오케스트레이터와 같은 여러 관리자를 필요로 합니다.&lt;/p&gt;
 &lt;p&gt;관리자가 충분하지 않다면 기존 EMS와 OSS/BSS도 있습니다.
 즉, 5개의 다른 관리 시스템입니다.
-이 정도면 NFV 초심자는 혼란스러울 것입니다.&lt;/p&gt;
+이 정도만 해도 NFV 초심자는 힘들어합니다.&lt;/p&gt;
 &lt;p&gt;둘째, NFV MANO 모델을 단순하게 설명하는 정보가 부족합니다.
 예를 들어, 구글의 많은 기술들은 주로 벤더의 MANO 구현 방식을 설명합니다.&lt;/p&gt;
 &lt;p&gt;그리고 ETSI 표준과 같이 MANO 아키텍처를 정의하는 표준 레퍼런스 문서가 있다면,

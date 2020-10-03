@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>react</title>
+<title>마이크로서비스 기반 observability 용어 정리</title>
 
 
 
@@ -10,25 +10,26 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="">
+<meta name="description" content="observability">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="react" />
-<meta property="og:description" content="developer" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://markruler.github.io/tags/react/" />
-<meta property="og:updated_time" content="2020-03-01T10:58:10+09:00" /><meta property="og:site_name" content="markruler" />
+<meta property="og:title" content="마이크로서비스 기반 observability 용어 정리" />
+<meta property="og:description" content="observability" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/cloud/monitor-trace-log-metric/" />
+<meta property="article:published_time" content="2020-10-02T16:24:00+09:00" />
+<meta property="article:modified_time" content="2020-10-02T16:24:00+09:00" /><meta property="og:site_name" content="markruler" />
 
 
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="react"/>
-<meta name="twitter:description" content="developer"/>
+<meta name="twitter:title" content="마이크로서비스 기반 observability 용어 정리"/>
+<meta name="twitter:description" content="observability"/>
 
 
 
@@ -81,6 +82,10 @@ if (!doNotTrack) {
 
 
 
+  
+    <script src="https://markruler.github.io//js/toc-collapse.js"></script>
+  
+
 
 
 
@@ -122,9 +127,11 @@ if (!doNotTrack) {
             
             
             
+                
             
             
-            <a class="a-block nav-link-item false" href="/posts">
+            
+            <a class="a-block nav-link-item active" href="/posts">
                 Archive
             </a>
             
@@ -142,11 +149,9 @@ if (!doNotTrack) {
             
             
             
-                
             
             
-            
-            <a class="a-block nav-link-item active" href="/tags">
+            <a class="a-block nav-link-item false" href="/tags">
                 Tags
             </a>
             
@@ -182,6 +187,162 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div ref="extraContainer" class="extra-container">
     
     
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#observability" onclick="onNavClick(`#observability-nav`)" id="observability-nav">
+									Observability
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#logging" onclick="onNavClick(`#logging-nav`)" id="logging-nav">
+									Logging
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#tracing" onclick="onNavClick(`#tracing-nav`)" id="tracing-nav">
+									Tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#distributed-tracing" onclick="onNavClick(`#distributed-tracing-nav`)" id="distributed-tracing-nav">
+									Distributed tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#monitoring" onclick="onNavClick(`#monitoring-nav`)" id="monitoring-nav">
+									Monitoring
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#profiling" onclick="onNavClick(`#profiling-nav`)" id="profiling-nav">
+									Profiling
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -197,8 +358,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 brightness_7
             </i>
         </a>
-        
-        
         
         
     </div>
@@ -223,9 +382,11 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 
                 
+                    
                 
                 
-                <a class="a-block drawer-menu-item false" href="/posts">
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
                     Archive
                 </a>
                 
@@ -243,11 +404,9 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 
                 
-                    
                 
                 
-                
-                <a class="a-block drawer-menu-item active" href="/tags">
+                <a class="a-block drawer-menu-item false" href="/tags">
                     Tags
                 </a>
                 
@@ -262,6 +421,162 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 </a>
                 
             
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#observability" onclick="onNavClick(`#observability-nav`)" id="observability-nav">
+									Observability
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#logging" onclick="onNavClick(`#logging-nav`)" id="logging-nav">
+									Logging
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#tracing" onclick="onNavClick(`#tracing-nav`)" id="tracing-nav">
+									Tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#distributed-tracing" onclick="onNavClick(`#distributed-tracing-nav`)" id="distributed-tracing-nav">
+									Distributed tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#monitoring" onclick="onNavClick(`#monitoring-nav`)" id="monitoring-nav">
+									Monitoring
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#profiling" onclick="onNavClick(`#profiling-nav`)" id="profiling-nav">
+									Profiling
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
             
         </div>
     </div>
@@ -306,41 +621,167 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div id="content">
 <div ref="streamContainer" class="stream-container">
     <div class="post-list-container post-list-container-shadow">
-        <div class="post-item-wrapper post-item-wrapper-no-hover">
-            <div class="post-item post-item-no-gaps">
-                <div class="post-item-info-wrapper">
-                    <div class="post-item-title  post-item-title-small">
-                        <a href="https://markruler.github.io/">markruler</a> / react
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    마이크로서비스 기반 observability 용어 정리
+                    
+                    <div class="post-subtitle">
+                        observability
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020년 10월 02일 16시 24분
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[cloud]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/cloud">cloud</a>
+                                &nbsp;
+                            
+                        
+                        
                     </div>
                 </div>
             </div>
-        </div><a href="/posts/react/web-game-react/" class="a-block">
-            <div class="post-item-wrapper">
-                <div class="post-item post-item-no-gaps">
-                    <div class="post-item-info-wrapper">
-                        <div class="post-item-title">
-                            웹 게임을 만들며 배우는 React
-                        </div>
-                        <div class="post-item-meta">
-    2020-03-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>observability 관련 용어를 명확히 설명하기 힘들어서 공부하는 중.</p>
+<h2 id="observability">Observability</h2>
+<ul>
+<li>관측성</li>
+<li>관찰성</li>
+<li>관측 가능성</li>
+</ul>
+<blockquote>
+<p>제어 이론에서 &lsquo;observability&rsquo;라는 용어는 시스템의 내부 상태와 그에 따른 행동을 시스템에 대한 입력과 출력만 보고 결정할 수 있다면 그 시스템이 관측 가능하다는 것을 나타낸다. - &lt;마스터링 분산 추적&gt; p6</p>
+</blockquote>
+<h2 id="logging">Logging</h2>
+<blockquote>
+<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://www.fluentd.org/">Fluentd</a><br>
+<a href="https://www.elastic.co/">Elastic</a></p>
+</blockquote>
+<p><img src="/images/cloud/kibana5-fluentd.png" alt="kibana5-fluentd">
+<em>Fluentd-Kibana</em></p>
+<p>로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다.
+하지만 각 로그 스트림은 한 서비스의 단일 인스턴스에 대해서만 알려주기 때문에 마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.</p>
+<h2 id="tracing">Tracing</h2>
+<blockquote>
+<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://www.jaegertracing.io/">Jaeger</a>, <a href="https://opentracing.io/">OpenTracing</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace">Difference between Tracking and Tracing</a>:<br>
+<br>
+To trace: follow the completed path backwards from its current point to where it began.<br>
+To track: follow the emerging path forwards from your starting point to wherever the thing currently is.<br>
+<br>
+When you &ldquo;trace&rdquo; a cellphone call, you try to determine its origin. This is the same whether done right now, or for a call made a month ago. You go backward to the starting point.<br>
+When you &ldquo;track&rdquo; a cellphone, you monitor its current location, right now, and follow it wherever it goes in the future.</p>
+</blockquote>
+<p><img src="/images/cloud/jaeger-embed-trace-view.png" alt="jaeger-embed-trace-view">
+<em>Jaeger</em></p>
+<p>사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
+리눅스에서 쓰이는 strace, 구글 크롬의 <a href="https://developers.google.com/web/tools/chrome-devtools/network/">Network log</a> 등
+흔히 접하는 것들도 트레이싱 도구다.
+주로 서비스를 최적화하는 데 사용된다.
+예를 들어, 특정 서비스에 병목이 예상되는 경우
+트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있다.
+결국 트레이싱은 구조화된 형태의 로그 이벤트일 뿐이다.</p>
+<h3 id="distributed-tracing">Distributed tracing</h3>
+<blockquote>
+<p>&lt;마스터링 분산 추적&gt; p58</p>
+</blockquote>
+<p>분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며, 분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다. 기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리 종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며, 이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.</p>
+<h2 id="monitoring">Monitoring</h2>
+<blockquote>
+<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://prometheus.io/">Prometheus</a>, <a href="https://thanos.io/">Thanos</a></p>
+</blockquote>
+<p><img src="/images/cloud/grafana-visualize.jpg" alt="grafana-visualize">
+<em>Grafana</em></p>
+<p>애플리케이션을 계측하고
+메트릭 수집(collect), 집계(aggregate), 분석(analyze)을 포함하는 시스템이다.
+진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 경고를 보낸다.</p>
+<h2 id="profiling">Profiling</h2>
+<blockquote>
+<p><a href="https://developer.android.com/studio/profile">Android Profiler</a></p>
+</blockquote>
+<p><img src="/images/cloud/android-profiler-callouts.png" alt="android-profiler-callouts"></p>
+<p><del>(Monitoring + Tracing)</del>
+모니터링과 달리 벤치마킹에 주 목적이 있다.
+분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 통계에 쓰인다.</p>
+<hr>
+<h2 id="참조">참조</h2>
+<ul>
+<li>&lt;마스터링 분산 추적&gt; - 유리 슈쿠로</li>
+<li><a href="https://www.bmc.com/blogs/monitoring-logging-tracing">Tracing vs Logging vs Monitoring: What’s the Difference?</a></li>
+<li><a href="https://winderresearch.com/logging-vs-tracing-vs-monitoring/">Logging vs Tracing vs Monitoring</a></li>
+<li><a href="https://techbeacon.com/enterprise-it/monitoring-demystified-guide-logging-tracing-metrics">Monitoring demystified: A guide for logging, tracing, metrics</a></li>
+<li><a href="https://opentracing.io/docs/overview/what-is-tracing/">What is Distributed Tracing? - OpenTracing</a></li>
+</ul>
 
-                    </div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2020년 10월 02일</p>
+                    
                 </div>
             </div>
-        </a></div>
-</div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			다음 글<br>없음.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/">
+			이전 글<br>[번역] NFV의 컴퓨팅 도메인에 대한 오해!
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
 
             </div>
+        </div>
+    </div>
+</div>
 
-
-<div id="single-column-footer">
+            </div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

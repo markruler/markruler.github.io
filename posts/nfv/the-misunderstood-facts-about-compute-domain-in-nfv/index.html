@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Web Socket 알게 된 것들</title>
+<title>[번역] NFV의 컴퓨팅 도메인에 대한 오해!</title>
 
 
 
@@ -10,26 +10,26 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="Spring-STOMP">
+<meta name="description" content="Faisal Khan">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="Web Socket 알게 된 것들" />
-<meta property="og:description" content="Spring-STOMP" />
+<meta property="og:title" content="[번역] NFV의 컴퓨팅 도메인에 대한 오해!" />
+<meta property="og:description" content="Faisal Khan" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/spring/web-socket/" />
-<meta property="article:published_time" content="2020-03-01T10:58:10+09:00" />
-<meta property="article:modified_time" content="2020-03-01T10:58:10+09:00" /><meta property="og:site_name" content="markruler" />
+<meta property="og:url" content="https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/" />
+<meta property="article:published_time" content="2020-10-01T22:23:00+09:00" />
+<meta property="article:modified_time" content="2020-10-01T22:23:00+09:00" /><meta property="og:site_name" content="markruler" />
 
 
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Web Socket 알게 된 것들"/>
-<meta name="twitter:description" content="Spring-STOMP"/>
+<meta name="twitter:title" content="[번역] NFV의 컴퓨팅 도메인에 대한 오해!"/>
+<meta name="twitter:description" content="Faisal Khan"/>
 
 
 
@@ -207,14 +207,50 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
+						
+							<li>
+								<a href="#%ec%9a%b0%ec%84%a0-etsi%ec%9d%98-%ec%9a%a9%ec%96%b4%eb%a1%9c-compute-domain%ea%b3%bc-compute-node%eb%8a%94-%eb%ac%b4%ec%97%87%ec%9d%bc%ea%b9%8c%ec%9a%94" onclick="onNavClick(`#우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요-nav`)" id="우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요-nav">
+									우선 ETSI의 용어로 “Compute Domain&#34;과 “Compute Node&#34;는 무엇일까요?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%bb%b4%ed%93%a8%ed%8c%85-%eb%8f%84%eb%a9%94%ec%9d%b8%ec%9d%98-%ec%84%b8-%ea%b0%80%ec%a7%80-%eb%b6%80%eb%b6%84" onclick="onNavClick(`#컴퓨팅-도메인의-세-가지-부분-nav`)" id="컴퓨팅-도메인의-세-가지-부분-nav">
+									컴퓨팅 도메인의 세 가지 부분
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
 							
 								<ul class="collapse" data-toggle="collapse">
 							
 						
 						
 							<li>
-								<a href="#refereces" onclick="onNavClick(`#refereces-nav`)" id="refereces-nav">
-									Refereces
+								<a href="#1-%ec%bb%b4%ed%93%a8%ed%8c%85-%eb%85%b8%eb%93%9c-compute-node" onclick="onNavClick(`#1-컴퓨팅-노드-compute-node-nav`)" id="1-컴퓨팅-노드-compute-node-nav">
+									1. 컴퓨팅 노드 (Compute Node)
 								</a>
 							</li>
 						
@@ -231,8 +267,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#1-%ea%b0%9c%eb%85%90" onclick="onNavClick(`#1-개념-nav`)" id="1-개념-nav">
-									1. 개념
+								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%9d%b8%ed%84%b0%ed%8e%98%ec%9d%b4%ec%8a%a4-%ec%b9%b4%eb%93%9c-nic-%eb%b0%8f-io-%ea%b0%80%ec%86%8d%ea%b8%b0" onclick="onNavClick(`#2-네트워크-인터페이스-카드-nic-및-io-가속기-nav`)" id="2-네트워크-인터페이스-카드-nic-및-io-가속기-nav">
+									2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기
 								</a>
 							</li>
 						
@@ -249,8 +285,30 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%98%a4%eb%b2%84%ed%97%a4%eb%93%9c-%eb%b9%84%ea%b5%90" onclick="onNavClick(`#2-네트워크-오버헤드-비교-nav`)" id="2-네트워크-오버헤드-비교-nav">
-									2. 네트워크 오버헤드 비교
+								<a href="#3-%ec%8a%a4%ed%86%a0%eb%a6%ac%ec%a7%80-%eb%b9%8c%eb%94%a9-%eb%b8%94%eb%a1%9d" onclick="onNavClick(`#3-스토리지-빌딩-블록-nav`)" id="3-스토리지-빌딩-블록-nav">
+									3. 스토리지 빌딩 블록
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#31-hard-disk-drives-hdd" onclick="onNavClick(`#31-hard-disk-drives-hdd-nav`)" id="31-hard-disk-drives-hdd-nav">
+									3.1 Hard Disk Drives (HDD)
 								</a>
 							</li>
 						
@@ -267,8 +325,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#3-socketio-sockjs-stomp" onclick="onNavClick(`#3-socketio-sockjs-stomp-nav`)" id="3-socketio-sockjs-stomp-nav">
-									3. Socket.io, SockJS, STOMP
+								<a href="#32-solid-state-disks-ssd" onclick="onNavClick(`#32-solid-state-disks-ssd-nav`)" id="32-solid-state-disks-ssd-nav">
+									3.2 Solid State Disks (SSD)
 								</a>
 							</li>
 						
@@ -285,8 +343,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#to-do" onclick="onNavClick(`#to-do-nav`)" id="to-do-nav">
-									To-Do
+								<a href="#33-hybrid-disk-drive" onclick="onNavClick(`#33-hybrid-disk-drive-nav`)" id="33-hybrid-disk-drive-nav">
+									3.3 Hybrid Disk Drive
 								</a>
 							</li>
 						
@@ -398,14 +456,50 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
+						
+							<li>
+								<a href="#%ec%9a%b0%ec%84%a0-etsi%ec%9d%98-%ec%9a%a9%ec%96%b4%eb%a1%9c-compute-domain%ea%b3%bc-compute-node%eb%8a%94-%eb%ac%b4%ec%97%87%ec%9d%bc%ea%b9%8c%ec%9a%94" onclick="onNavClick(`#우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요-nav`)" id="우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요-nav">
+									우선 ETSI의 용어로 “Compute Domain&#34;과 “Compute Node&#34;는 무엇일까요?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%bb%b4%ed%93%a8%ed%8c%85-%eb%8f%84%eb%a9%94%ec%9d%b8%ec%9d%98-%ec%84%b8-%ea%b0%80%ec%a7%80-%eb%b6%80%eb%b6%84" onclick="onNavClick(`#컴퓨팅-도메인의-세-가지-부분-nav`)" id="컴퓨팅-도메인의-세-가지-부분-nav">
+									컴퓨팅 도메인의 세 가지 부분
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
 							
 								<ul class="collapse" data-toggle="collapse">
 							
 						
 						
 							<li>
-								<a href="#refereces" onclick="onNavClick(`#refereces-nav`)" id="refereces-nav">
-									Refereces
+								<a href="#1-%ec%bb%b4%ed%93%a8%ed%8c%85-%eb%85%b8%eb%93%9c-compute-node" onclick="onNavClick(`#1-컴퓨팅-노드-compute-node-nav`)" id="1-컴퓨팅-노드-compute-node-nav">
+									1. 컴퓨팅 노드 (Compute Node)
 								</a>
 							</li>
 						
@@ -422,8 +516,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#1-%ea%b0%9c%eb%85%90" onclick="onNavClick(`#1-개념-nav`)" id="1-개념-nav">
-									1. 개념
+								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%9d%b8%ed%84%b0%ed%8e%98%ec%9d%b4%ec%8a%a4-%ec%b9%b4%eb%93%9c-nic-%eb%b0%8f-io-%ea%b0%80%ec%86%8d%ea%b8%b0" onclick="onNavClick(`#2-네트워크-인터페이스-카드-nic-및-io-가속기-nav`)" id="2-네트워크-인터페이스-카드-nic-및-io-가속기-nav">
+									2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기
 								</a>
 							</li>
 						
@@ -440,8 +534,30 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%98%a4%eb%b2%84%ed%97%a4%eb%93%9c-%eb%b9%84%ea%b5%90" onclick="onNavClick(`#2-네트워크-오버헤드-비교-nav`)" id="2-네트워크-오버헤드-비교-nav">
-									2. 네트워크 오버헤드 비교
+								<a href="#3-%ec%8a%a4%ed%86%a0%eb%a6%ac%ec%a7%80-%eb%b9%8c%eb%94%a9-%eb%b8%94%eb%a1%9d" onclick="onNavClick(`#3-스토리지-빌딩-블록-nav`)" id="3-스토리지-빌딩-블록-nav">
+									3. 스토리지 빌딩 블록
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#31-hard-disk-drives-hdd" onclick="onNavClick(`#31-hard-disk-drives-hdd-nav`)" id="31-hard-disk-drives-hdd-nav">
+									3.1 Hard Disk Drives (HDD)
 								</a>
 							</li>
 						
@@ -458,8 +574,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#3-socketio-sockjs-stomp" onclick="onNavClick(`#3-socketio-sockjs-stomp-nav`)" id="3-socketio-sockjs-stomp-nav">
-									3. Socket.io, SockJS, STOMP
+								<a href="#32-solid-state-disks-ssd" onclick="onNavClick(`#32-solid-state-disks-ssd-nav`)" id="32-solid-state-disks-ssd-nav">
+									3.2 Solid State Disks (SSD)
 								</a>
 							</li>
 						
@@ -476,8 +592,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#to-do" onclick="onNavClick(`#to-do-nav`)" id="to-do-nav">
-									To-Do
+								<a href="#33-hybrid-disk-drive" onclick="onNavClick(`#33-hybrid-disk-drive-nav`)" id="33-hybrid-disk-drive-nav">
+									3.3 Hybrid Disk Drive
 								</a>
 							</li>
 						
@@ -544,34 +660,40 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                     
                     
-                    style="background-image: url('https://markruler.github.io/images/markruler-default.png')"
+                    style="background-image: url('https://markruler.github.io/images/nfv/computer-domain-in-nfv.png')"
                     
                 
             >
                 <div class="post-title">
-                    Web Socket 알게 된 것들
+                    [번역] NFV의 컴퓨팅 도메인에 대한 오해!
                     
                     <div class="post-subtitle">
-                        Spring-STOMP
+                        Faisal Khan
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2020년 03월 01일 10시 58분
+                            2020년 10월 01일 22시 23분
                         </time>
                         
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[spring javascript]</a>
+                                <a href="/categories/">[cloud]</a>
                                 &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
                             
-                                <a href="/tags/web-socket">web-socket</a>
+                                <a href="/tags/nfv">nfv</a>
+                                &nbsp;
+                            
+                                <a href="/tags/virtualization">virtualization</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cloud">cloud</a>
                                 &nbsp;
                             
                         
@@ -584,76 +706,75 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <ul>
-<li>목차
-{:toc}</li>
-</ul>
-<hr>
-<h2 id="refereces">Refereces</h2>
+                    <p><a href="https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/">원문 링크</a></p>
+<blockquote>
 <ul>
-<li><a href="https://spring.io/guides/gs/messaging-stomp-websocket/">Spring guide</a></li>
-<li><a href="https://postitforhooney.tistory.com/entry/SpringStomp-Spring-stomp%EC%99%80-Socjks%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%A5%EB%8B%A8%EC%A0%90">Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점</a></li>
-<li><a href="https://daddyprogrammer.org/post/4077/spring-websocket-chatting/">Spring websocket chatting server</a> : Stateless 적용을 위한 JWT 도입</li>
-<li><a href="https://adrenal.tistory.com/20">webSocket으로 개발하기 전에 알고 있어야 할 것들</a></li>
-<li><a href="https://simsimjae.tistory.com/25">웹 소켓을 활용한 쪽지 알람 기능</a></li>
-<li><a href="https://wondongho.tistory.com/73">WebSocket과 STOMP 연동</a></li>
-<li><a href="https://supawer0728.github.io/2018/03/30/spring-websocket/">Spring WebSocket 소개</a></li>
+<li>원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 <a href="https://github.com/markruler/markruler.github.io/issues/new">여기</a>에서 피드백 주시면 감사드립니다! 👍</li>
 </ul>
-<h2 id="1-개념">1. 개념</h2>
-<p><img src="/images/spring-websocket/websocket-schema.png" alt="websocket-schema"></p>
-<p><a href="https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html">출처: Oracle</a></p>
-<p>웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.</p>
-<p>웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.</p>
-<p><img src="/images/spring-websocket/spring-stomp-schema.png" alt="spring-stomp-schema"></p>
-<p><a href="https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow">출처: Spring</a></p>
-<h2 id="2-네트워크-오버헤드-비교">2. 네트워크 오버헤드 비교</h2>
-<hr>
-<p>폴링(Polling) 방식</p>
-<p>요청/응답 헤더 데이터 용량: (871 Byte)</p>
+</blockquote>
+<p>NFV에 대해 생각해 보세요! 그리고 x86 프로세서를 생각해 보세요&hellip; 둘은 뗄 수 없는 사이입니다. 그렇죠?</p>
+<p>프로세서(컴퓨팅 파트)가 아무리 단순하게 들리더라도 NFV의 컴퓨팅 도메인(compute domain)이 노드의 컴퓨팅 프로세서(compute processor)가 같지 않다는 사실을 모르는 사람이 많을 것입니다. 사실&hellip; 훨씬 더 많습니다.</p>
+<p>NFV의 &ldquo;Compute Domain&quot;과 &ldquo;Compute Node&quot;는 ETSI 정의에 따르면 동일한 것을 의미하지 않습니다. 이를 잘 알고 있으면 NFV 기본 아키텍처를 이해하는 데 많은 혼란을 피할 수 있으며, 벤더 및 고객과 이 주제에 대해 소통하는 과정에서 오해를 피할 수 있습니다.</p>
+<p>물론 NFV의 뼈대를 제대로 세우고 싶을 겁니다. 그렇죠?</p>
+<p>뿐만 아니라 끝까지 읽으신다면 COTs, NIC, 하드웨어 가속기와 같이 매일 듣는 서버의 필수 용어가 명확해질 것입니다.</p>
+<h1 id="우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요">우선 ETSI의 용어로 &ldquo;Compute Domain&quot;과 &ldquo;Compute Node&quot;는 무엇일까요?</h1>
+<p><img src="/images/nfv/computer-domain-in-nfv.png" alt="computer-domain-in-nfv"></p>
+<p>(NFV 아키텍처에 대한 자세한 내용을 보려면 <a href="../beginners-guide-to-nfv-mano/">NFV 아키텍처</a> 또는 <a href="../cheat-sheet-understanding-nfv-architecture">NFV MANO 치트 시트</a>에 대한 글을 읽는 것이 좋습니다.)</p>
+<p>위의 NFV Infrastructure (NFVI) 블록에 명확히 나와 있듯이 컴퓨팅 도메인에는 컴퓨팅 하드웨어와 스토리지 하드웨어가 포함됩니다. 컴퓨팅 도메인은 상위 집합이며, 그 중 컴퓨팅 하드에어와 노드는 한 부분에 불과합니다.</p>
+<p>놀랍죠? 스토리지를 컴퓨팅 도메인의 일부로 생각하는 사람이 얼마나 되겠습니까?</p>
+<p>이제 컴퓨팅 도메인에 무엇이 포함되는지 자세히 살펴보겠습니다.</p>
+<h1 id="컴퓨팅-도메인의-세-가지-부분">컴퓨팅 도메인의 세 가지 부분</h1>
+<h2 id="1-컴퓨팅-노드-compute-node">1. 컴퓨팅 노드 (Compute Node)</h2>
+<p>상용 제품(COTS, Commercial Off-the-Shelf) 아키텍처에서 컴퓨팅 노드에는 멀티 코어 프로세서와 칩셋이 포함되어 있으며, 여기에는 다음과 같은 물리적 리소스가 포함될 수 있습니다.</p>
 <ul>
-<li>1000명 *  헤더 데이터 용량  = 871,000  Byte</li>
-<li>10000명 *  헤더 데이터 용량  = 8,710,000  Byte</li>
-<li>100000명 *  헤더 데이터 용량  = 87,100,000 Byte</li>
+<li>CPU 및 칩셋 (예: x86, ARM etc.)</li>
+<li>메모리 하위 집합.</li>
+<li>임의의 하드웨어 가속기 (예: co-processor)</li>
+<li>NICs (임의의 가속기를 포함한 네트워크 인터페이스 카드)</li>
+<li>블레이드 내부 스토리지 (비휘발성 메모리, 로컬 디스크 스토리지)</li>
+<li>BIOS/부트 로더 (실행 환경의 일부)</li>
 </ul>
-<hr>
-<p>WebSocket 방식</p>
-<p>메시지 데이터 용량: (2 Byte)</p>
+<p>COTS 서버 블레이드는 컴퓨팅 노드의 한 가지 예입니다.</p>
+<h2 id="2-네트워크-인터페이스-카드-nic-및-io-가속기">2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기</h2>
+<p>이전 섹션에서 컴퓨팅 노드의 일부로 NIC를 언급했습니다. 이건 사실입니다.
+위의 경우 NIC 기능이 서버에 있기 때문입니다.
+그러나 최근 세분화된 모델(예: <a href="http://www.opencompute.org/about/">Open Compute Project, OCP</a>) 트렌드가 있습니다.
+이 폼-팩터(form-factor)에서 CPU 블레이드/섀시는 NIC/가속기 섀시 및 스토리지 섀시와 분리됩니다.
+이 블레이드/섀시들 간의 상호 연결은 광섬유를 통해 이루어질 수 있습니다.
+이러한 이유로 NIC가 중요하기 때문에 별도로 설명합니다.</p>
+<p>NIC의 주요 기능은 CPU에 네트워크 I/O 기능을 제공하는 것입니다.</p>
+<p>NFV의 비전은 standard generic x86 서버에서 네트워크 기능을 실행하는 것입니다. 그러나 실제로 머신의 I/O 처리량을 향상시키기 위해 가속 기술을 요구하는 많은 I/O 집약적 애플리케이션(예: 가상 라우터)이 있습니다.</p>
+<p>일부 하드웨어 가속 기술에는 다음이 포함됩니다.</p>
 <ul>
-<li>1000명 *   메시지 데이터 용량   = 2,000  Byte</li>
-<li>10000명 *   메시지 데이터 용량   = 20,000  Byte</li>
-<li>100000명 *   메시지 데이터 용량   = 200,000 Byte</li>
+<li>디지털 신호 처리(DSP, Digital Signal Processing), 패킷 헤더 처리, 패킷 버퍼링 및 스케줄링과 같은 하드웨어 가속.</li>
+<li>캐시 관리 기능.</li>
 </ul>
-<h2 id="3-socketio-sockjs-stomp">3. Socket.io, SockJS, STOMP</h2>
-<ol>
-<li>Socket.io : Node.js 모듈. 클라이언트, 서버 모두 JS로 개발.</li>
-<li>WebSocket : 표준 웹소켓. IE10부터 적용.</li>
-</ol>
-<ul>
-<li>TextWebSocketHandler / BinaryWebSocketHandler 구현 필요</li>
-</ul>
-<ol>
-<li>SockJS : IE8부터 적용.</li>
-<li>STOMP : Topic 구독 방식. Spring 지원. 서버 부하 적음.</li>
-</ol>
-<ul>
-<li>TextWebSocketHandler / BinaryWebSocketHandler 구현 필요없음</li>
-<li>heart-beat</li>
-<li>@MessageMapping</li>
-<li>@SendTo</li>
-<li>@SendToUser</li>
-<li>SimpMessagingTemplate.convertAndSendToUser()</li>
-<li>MessagesSupplier</li>
-</ul>
-<h2 id="to-do">To-Do</h2>
-<ul>
-<li>Interceptor 결합?</li>
-<li>Handler와의 차이</li>
-<li>Web Hook 개념</li>
-</ul>
+<p>이외에 새로운 소프트웨어 가속 기능을 구현하는 명령어 집합 아키텍처(ISA, Instruction Set Architecture)(예: x86, ARMv8 등)가 있습니다.</p>
+<h2 id="3-스토리지-빌딩-블록">3. 스토리지 빌딩 블록</h2>
+<p>스토리지 인프라는 주요 드라이브 유형들을 포함합니다. 반드시 이해하고 넘어가야 하는 하드 디스크 드라이브(HDD), 솔리드 스테이트 디스크(SDD), 캐시 스토리지 등이 있습니다.</p>
+<h3 id="31-hard-disk-drives-hdd">3.1 Hard Disk Drives (HDD)</h3>
+<p>하드 디스크는 마그네틱 스토리지를 사용하여 마그네틱 재질로 코팅된 하나 이상의
+견고한 고속 회전 디스크(플래터)를 사용하여 디지털 정보를 저장하고 검색하는 데이터 저장 장치입니다.
+플래터는 표면에 데이터를 읽고 쓰는 자기 헤드(magnetic heads)와 쌍을 이룹니다.
+데이터는 랜덤 액세스 방식으로 접근하므로 어느 순서로도 데이터를 검색할 수 있다는 장점이 있습니다.
+HDD는 비휘발성 스토리지입니다. 즉, 전원이 꺼진 상태에서도 저장된 데이터를 유지할 수 있습니다.</p>
+<h3 id="32-solid-state-disks-ssd">3.2 Solid State Disks (SSD)</h3>
+<p>SSD는 HDD와 달리 움직이는 부품이 없습니다.
+따라서 HDD에 비해 SSD는 일반적으로 물리적 충격에 더 강하고,
+조용히 실행되며, 액세스 시간과 대기 시간이 짧습니다.
+따라서 SSD는 상당한 랜덤 액세스가 필요한 애플리케이션에서 사용하기 적합한 기술입니다.
+하지만 HDD에 비해 상대적으로 비쌉니다.</p>
+<h3 id="33-hybrid-disk-drive">3.3 Hybrid Disk Drive</h3>
+<p>점점 인기를 얻고 있는 하이브리드 하드 드라이브는 기존의 회전 플래터와
+소량의 고속 플래시 메모리를 단일 드라이브에 배치하여 SSD 속도의 HDD 기능을 제공합니다.
+그래서 SSD를 고속 캐시(또는 tier로 사용 가능)로 사용하고
+HDD를 영구 스토리지에 사용한다는 것이 장점입니다.</p>
+<p>&ldquo;Compute Node&rdquo;, &ldquo;NIC&rdquo; 및 &ldquo;Storage&rdquo; 세 부분을 이해하면 컴퓨팅 도메인의 그림이 완성되고
+완전한 NFV 아키텍처 서버를 만들기 때문에 정말 중요합니다.</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2020년 03월 01일</p>
+		    <p style="color:#777;">최종 수정: 2020년 10월 01일</p>
                     
                 </div>
             </div>
@@ -662,14 +783,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://markruler.github.io/posts/spring/thymeleaf/">
-			다음 글<br>ThymeLeaf 알게 된 것들
+                <a class="newer-posts" href="https://markruler.github.io/posts/cloud/monitor-trace-log-metric/">
+			다음 글<br>마이크로서비스 기반 observability 용어 정리
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://markruler.github.io/posts/react/web-game-react/">
-			이전 글<br>웹 게임을 만들며 배우는 React
+                <a class="older-posts" href="https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/">
+			이전 글<br>[번역] NFV MANO 초심자 가이드
                 </a>
                 
             </nav>
