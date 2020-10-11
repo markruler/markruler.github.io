@@ -1,0 +1,96 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>markruler</title>
+    <link>https://markruler.github.io/</link>
+    <description>Recent content on markruler</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Sun, 11 Oct 2020 14:48:00 +0900</lastBuildDate>
+    
+        <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>웹 게임을 만들며 배우는 React</title>
+        <link>https://markruler.github.io/posts/react/web-game-react/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/react/web-game-react/</guid>
+        <description>markruler https://markruler.github.io/posts/react/web-game-react/ -&lt;h1 id=&#34;reactjs&#34;&gt;React.&lt;em&gt;&lt;strong&gt;js&lt;/strong&gt;&lt;/em&gt;&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.inflearn.com/course/web-game-React&#34;&gt;출처 인프런 강의&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;npm install&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;cdn&#34;&gt;CDN&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install express --save
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://expressjs.com/ko/starter/installing.html&#34;&gt;express&lt;/a&gt;&lt;br&gt;
+&amp;ndash;save 옵션을 통해 설치된 Node 모듈은 package.json 파일 내의 dependencies 목록에 추가됩니다. 이후 app 디렉토리에서 npm install을 실행하면 종속 항목 목록 내의 모듈이 자동으로 설치됩니다.\&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install -g nodemon
+mkdir web-game-react
+&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; web-game-react
+npm init
+&lt;span style=&#34;color:#228b22&#34;&gt;# app.js 만들고 react CDN 삽입, 구현 후&lt;/span&gt;
+nodemon app
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;react--webpack--이걸로-구현&#34;&gt;react + webpack = 이걸로 구현&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i react react-dom
+npm i webpack
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;#%EC%9B%B9%ED%8C%A9-web-pack&#34;&gt;웹팩 설치로👇&lt;/a&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader
+&lt;span style=&#34;color:#228b22&#34;&gt;# 바벨은 최신 문법을 브라우저에 맞게 자동으로 호환시킴&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-react-app&#34;&gt;create-react-app&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install create-react-app
+create-react-app {project-name}
+&lt;span style=&#34;color:#228b22&#34;&gt;# npm init, git init, react dependencty 설정까지 자동으로 함&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# 굉장히 무거운 듯..&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; {project-name}
+npm start / yarn start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scripts&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;:&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;start&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts start&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;build&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts build&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts test&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;eject&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts eject&amp;#34;&lt;/span&gt;
+  }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;yarn install&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;웹팩-web-pack&#34;&gt;웹팩 (Web Pack)&lt;/h2&gt;
+&lt;h3 id=&#34;install&#34;&gt;install&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D webpack webpack-cli
+&lt;span style=&#34;color:#228b22&#34;&gt;# (-D : --save-dev(devDependencies) / i : install)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;webpack.config.js&lt;/li&gt;
+&lt;li&gt;client.jsx&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npx webpack &lt;span style=&#34;color:#228b22&#34;&gt;# global로 설치하지 않았을 경우 환경변수 없어도 실행&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;혹은 package.json에 script 지정&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;용도&#34;&gt;용도&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;여러 개의 모듈 js를 하나의 파일로 합쳐줌 : 전송 효율&lt;/li&gt;
+&lt;li&gt;console.log() 제거&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;사용법&#34;&gt;사용법&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;webpack : compile&lt;/li&gt;
+&lt;li&gt;npm run dev : package.json 에 스크립트 추가 (소스 참고)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;리액트-관련&#34;&gt;리액트 관련&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Class vs. Hooks&lt;/li&gt;
+&lt;li&gt;Component vs. PureComponent (shouldComponentUpdate) 혹은 memo() : 렌더링 최적화&lt;/li&gt;
+&lt;li&gt;배열에 push()는 immutable 때문에 불가&lt;/li&gt;
+&lt;/ol&gt;
+- https://markruler.github.io/posts/react/web-game-react/ - </description>
+        </item>
+    
+    
+    
+    
+  </channel>
+</rss> 

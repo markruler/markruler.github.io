@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>[번역] 쿠버네티스 API 접근 제어</title>
+<title>[번역] NFV 도커 컨테이너 초심자 가이드</title>
 
 
 
@@ -10,26 +10,26 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="kubernetes.io">
+<meta name="description" content="Faisal Khan">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="[번역] 쿠버네티스 API 접근 제어" />
-<meta property="og:description" content="kubernetes.io" />
+<meta property="og:title" content="[번역] NFV 도커 컨테이너 초심자 가이드" />
+<meta property="og:description" content="Faisal Khan" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/kubernetes/controlling-access-api/" />
-<meta property="article:published_time" content="2020-09-17T06:58:08+09:00" />
-<meta property="article:modified_time" content="2020-09-17T06:58:08+09:00" /><meta property="og:site_name" content="markruler" />
+<meta property="og:url" content="https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/" />
+<meta property="article:published_time" content="2020-10-03T22:46:00+09:00" />
+<meta property="article:modified_time" content="2020-10-03T22:46:00+09:00" /><meta property="og:site_name" content="markruler" />
 
 
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="[번역] 쿠버네티스 API 접근 제어"/>
-<meta name="twitter:description" content="kubernetes.io"/>
+<meta name="twitter:title" content="[번역] NFV 도커 컨테이너 초심자 가이드"/>
+<meta name="twitter:description" content="Faisal Khan"/>
 
 
 
@@ -208,14 +208,50 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
+						
+							<li>
+								<a href="#what-is-a-container" onclick="onNavClick(`#what-is-a-container-nav`)" id="what-is-a-container-nav">
+									What is a container?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#what-is-a-docker-container" onclick="onNavClick(`#what-is-a-docker-container-nav`)" id="what-is-a-docker-container-nav">
+									What is a Docker container?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
 							
 								<ul class="collapse" data-toggle="collapse">
 							
 						
 						
 							<li>
-								<a href="#%ec%a0%84%ec%86%a1-%eb%b3%b4%ec%95%88" onclick="onNavClick(`#전송-보안-nav`)" id="전송-보안-nav">
-									전송 보안
+								<a href="#step-1-lets-start-with-the--hypervisor-in-nfv-architecture" onclick="onNavClick(`#step-1-lets-start-with-the--hypervisor-in-nfv-architecture-nav`)" id="step-1-lets-start-with-the--hypervisor-in-nfv-architecture-nav">
+									Step 1: Let’s start with the Hypervisor in NFV Architecture
 								</a>
 							</li>
 						
@@ -232,8 +268,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%9d%b8%ec%a6%9d" onclick="onNavClick(`#인증-nav`)" id="인증-nav">
-									인증
+								<a href="#step-2-lets-zoom-in-virtual-machines" onclick="onNavClick(`#step-2-lets-zoom-in-virtual-machines-nav`)" id="step-2-lets-zoom-in-virtual-machines-nav">
+									Step 2: Lets zoom in Virtual Machines
 								</a>
 							</li>
 						
@@ -250,8 +286,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%9d%b8%ea%b0%80" onclick="onNavClick(`#인가-nav`)" id="인가-nav">
-									인가
+								<a href="#step-3-remove-virtual-machines-and-introduce-containers" onclick="onNavClick(`#step-3-remove-virtual-machines-and-introduce-containers-nav`)" id="step-3-remove-virtual-machines-and-introduce-containers-nav">
+									Step 3. Remove virtual machines and introduce containers!
 								</a>
 							</li>
 						
@@ -268,8 +304,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%8a%b9%ec%9d%b8-%ec%a0%9c%ec%96%b4" onclick="onNavClick(`#승인-제어-nav`)" id="승인-제어-nav">
-									승인 제어
+								<a href="#what-have-we-achieved-with-containers" onclick="onNavClick(`#what-have-we-achieved-with-containers-nav`)" id="what-have-we-achieved-with-containers-nav">
+									What have we achieved with containers?
 								</a>
 							</li>
 						
@@ -286,8 +322,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#api-%ec%84%9c%eb%b2%84-%ed%8f%ac%ed%8a%b8%ec%99%80-ip" onclick="onNavClick(`#api-서버-포트와-ip-nav`)" id="api-서버-포트와-ip-nav">
-									API 서버 포트와 IP
+								<a href="#future-of-containers-for-nfv" onclick="onNavClick(`#future-of-containers-for-nfv-nav`)" id="future-of-containers-for-nfv-nav">
+									Future of containers for NFV
 								</a>
 							</li>
 						
@@ -399,14 +435,50 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 						
+						
+							<li>
+								<a href="#what-is-a-container" onclick="onNavClick(`#what-is-a-container-nav`)" id="what-is-a-container-nav">
+									What is a container?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#what-is-a-docker-container" onclick="onNavClick(`#what-is-a-docker-container-nav`)" id="what-is-a-docker-container-nav">
+									What is a Docker container?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
 							
 								<ul class="collapse" data-toggle="collapse">
 							
 						
 						
 							<li>
-								<a href="#%ec%a0%84%ec%86%a1-%eb%b3%b4%ec%95%88" onclick="onNavClick(`#전송-보안-nav`)" id="전송-보안-nav">
-									전송 보안
+								<a href="#step-1-lets-start-with-the--hypervisor-in-nfv-architecture" onclick="onNavClick(`#step-1-lets-start-with-the--hypervisor-in-nfv-architecture-nav`)" id="step-1-lets-start-with-the--hypervisor-in-nfv-architecture-nav">
+									Step 1: Let’s start with the Hypervisor in NFV Architecture
 								</a>
 							</li>
 						
@@ -423,8 +495,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%9d%b8%ec%a6%9d" onclick="onNavClick(`#인증-nav`)" id="인증-nav">
-									인증
+								<a href="#step-2-lets-zoom-in-virtual-machines" onclick="onNavClick(`#step-2-lets-zoom-in-virtual-machines-nav`)" id="step-2-lets-zoom-in-virtual-machines-nav">
+									Step 2: Lets zoom in Virtual Machines
 								</a>
 							</li>
 						
@@ -441,8 +513,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%9d%b8%ea%b0%80" onclick="onNavClick(`#인가-nav`)" id="인가-nav">
-									인가
+								<a href="#step-3-remove-virtual-machines-and-introduce-containers" onclick="onNavClick(`#step-3-remove-virtual-machines-and-introduce-containers-nav`)" id="step-3-remove-virtual-machines-and-introduce-containers-nav">
+									Step 3. Remove virtual machines and introduce containers!
 								</a>
 							</li>
 						
@@ -459,8 +531,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%ec%8a%b9%ec%9d%b8-%ec%a0%9c%ec%96%b4" onclick="onNavClick(`#승인-제어-nav`)" id="승인-제어-nav">
-									승인 제어
+								<a href="#what-have-we-achieved-with-containers" onclick="onNavClick(`#what-have-we-achieved-with-containers-nav`)" id="what-have-we-achieved-with-containers-nav">
+									What have we achieved with containers?
 								</a>
 							</li>
 						
@@ -477,8 +549,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#api-%ec%84%9c%eb%b2%84-%ed%8f%ac%ed%8a%b8%ec%99%80-ip" onclick="onNavClick(`#api-서버-포트와-ip-nav`)" id="api-서버-포트와-ip-nav">
-									API 서버 포트와 IP
+								<a href="#future-of-containers-for-nfv" onclick="onNavClick(`#future-of-containers-for-nfv-nav`)" id="future-of-containers-for-nfv-nav">
+									Future of containers for NFV
 								</a>
 							</li>
 						
@@ -545,21 +617,21 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                     
                     
-                    style="background-image: url('https://markruler.github.io/images/kubernetes/access-control-overview.svg')"
+                    style="background-image: url('https://markruler.github.io/images/nfv/vm-replaced-with-container.png')"
                     
                 
             >
                 <div class="post-title">
-                    [번역] 쿠버네티스 API 접근 제어
+                    [번역] NFV 도커 컨테이너 초심자 가이드
                     
                     <div class="post-subtitle">
-                        kubernetes.io
+                        Faisal Khan
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2020년 09월 17일 06시 58분
+                            2020년 10월 03일 22시 46분
                         </time>
                         
 
@@ -571,9 +643,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 
                         
                             <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/kubernetes">kubernetes</a>
-                                &nbsp;
                             
                                 <a href="/tags/nfv">nfv</a>
                                 &nbsp;
@@ -594,134 +663,85 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <ul>
-<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/">원문</a></li>
+                    <p><a href="https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/">원문 링크</a></p>
+<blockquote>
+<ul>
+<li>원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 <a href="https://github.com/markruler/markruler.github.io/issues/new">여기</a>에서 피드백 주시면 감사드립니다! 👍</li>
 </ul>
-<!-- raw HTML omitted -->
-<p>이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.</p>
-<!-- raw HTML omitted -->
-<p>사용자는<code>kubectl</code>, 클라이언트 라이브러리
-또는 REST 요청을 통해
-<a href="https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/">API에 접근한다</a>.
-사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
-요청이 API에 도달하면,
-다음 다이어그램에 설명된 몇 가지 단계를 거친다.</p>
-<p><img src="/images/kubernetes/access-control-overview.svg" alt="Diagram of request handling steps for Kubernetes API request"></p>
-<h2 id="전송-보안">전송 보안</h2>
-<p>일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다.
-API 서버는 인증서를 제시한다.
-이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 <code>$USER/.kube/config</code>은
-API 서버의 인증서에 대한 루트 인증서를 포함하며,
-시스템 기본 루트 인증서 대신 사용된다.
-<code>kube-up.sh</code>을 사용하여 클러스터를 직접 생성할 때
-이 인증서는 일반적으로 <code>$USER/.kube/config</code>에 자동으로 기록된다.
-클러스터에 여러 명의 사용자가 있는 경우, 작성자는 인증서를 다른 사용자와 공유해야 한다.</p>
-<h2 id="인증">인증</h2>
-<p>TLS가 설정되면 HTTP 요청이 인증 단계로 넘어간다.
-이는 다이어그램에 <strong>1</strong>단계로 표시되어 있다.
-클러스터 생성 스크립트 또는 클러스터 관리자는
-API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
-인증기는 <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/">여기</a>에서 더 자세히 서술한다.</p>
-<p>인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
-일반적으로 헤더 그리고/또는 클라이언트 인증서만 검사한다.</p>
-<p>인증 모듈은 클라이언트 인증서, 암호 및 일반 토큰, 부트스트랩 토큰,
-JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
-<p>여러 개의 인증 모듈을 지정할 수 있으며,
-이 경우 하나의 인증 모듈이 성공할 때까지 각 모듈을 순차적으로 시도한다.</p>
-<p>GCE에서는 클라이언트 인증서, 암호, 일반 토큰 및 JWT 토큰이 모두 사용 가능하다.</p>
-<p>요청을 인증할 수 없는 경우 HTTP 상태 코드 401과 함께 거부된다.
-이 외에는 사용자가 특정 <code>username</code>으로 인증되며,
-이 username은 다음 단계에서 사용자의 결정에 사용할 수 있다.
-일부 인증기는 사용자 그룹 관리 기능을 제공하는 반면,
-이외의 인증기는 그렇지 않다.</p>
-<p>쿠버네티스는 접근 제어 결정과 요청 기록 시 <code>usernames</code>를 사용하지만,
-<code>user</code> 오브젝트를 가지고 있지 않고 usernames 나 기타 사용자 정보를
-오브젝트 저장소에 저장하지도 않는다.</p>
-<h2 id="인가">인가</h2>
-<p>특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 <strong>2</strong>단계로 표시되어 있다.</p>
-<p>요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.</p>
-<p>예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 <code>projectCaribou</code> 네임스페이스에서만 파드를 읽을 수 있다.</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-    <span style="color:#8b008b;font-weight:bold">&#34;apiVersion&#34;</span>: <span style="color:#cd5555">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
-    <span style="color:#8b008b;font-weight:bold">&#34;kind&#34;</span>: <span style="color:#cd5555">&#34;Policy&#34;</span>,
-    <span style="color:#8b008b;font-weight:bold">&#34;spec&#34;</span>: {
-        <span style="color:#8b008b;font-weight:bold">&#34;user&#34;</span>: <span style="color:#cd5555">&#34;bob&#34;</span>,
-        <span style="color:#8b008b;font-weight:bold">&#34;namespace&#34;</span>: <span style="color:#cd5555">&#34;projectCaribou&#34;</span>,
-        <span style="color:#8b008b;font-weight:bold">&#34;resource&#34;</span>: <span style="color:#cd5555">&#34;pods&#34;</span>,
-        <span style="color:#8b008b;font-weight:bold">&#34;readonly&#34;</span>: <span style="color:#8b008b;font-weight:bold">true</span>
-    }
-}
-</code></pre></div><p>Bob이 다음과 같은 요청을 하면 &lsquo;projectCaribou&rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#8b008b;font-weight:bold">&#34;apiVersion&#34;</span>: <span style="color:#cd5555">&#34;authorization.k8s.io/v1beta1&#34;</span>,
-  <span style="color:#8b008b;font-weight:bold">&#34;kind&#34;</span>: <span style="color:#cd5555">&#34;SubjectAccessReview&#34;</span>,
-  <span style="color:#8b008b;font-weight:bold">&#34;spec&#34;</span>: {
-    <span style="color:#8b008b;font-weight:bold">&#34;resourceAttributes&#34;</span>: {
-      <span style="color:#8b008b;font-weight:bold">&#34;namespace&#34;</span>: <span style="color:#cd5555">&#34;projectCaribou&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;verb&#34;</span>: <span style="color:#cd5555">&#34;get&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;group&#34;</span>: <span style="color:#cd5555">&#34;unicorn.example.org&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;resource&#34;</span>: <span style="color:#cd5555">&#34;pods&#34;</span>
-    }
-  }
-}
-</code></pre></div><p>Bob이 <code>projectCaribou</code> 네임스페이스에 있는 오브젝트에 쓰기(<code>create</code> 또는 <code>update</code>) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 <code>projectFish</code>처럼 다른 네임스페이스의 오브젝트 읽기(<code>get</code>) 요청을 하면 그의 인가는 거부된다.</p>
-<p>쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.</p>
-<p>쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).</p>
-<p>인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 <a href="https://kubernetes.io/docs/reference/access-authn-authz//authorization/">인가 개요</a>를 참조하십시오.</p>
-<h2 id="승인-제어">승인 제어</h2>
-<p>승인 제어 모듈은 요청을 수정하거나 거부할 수 있는 소프트웨어 모듈이다.
-인가 모듈에서 사용할 수 있는 속성 외에도
-승인 제어 모듈은 생성되거나 수정된 오브젝트 내용에 접근할 수 있다.</p>
-<p>어드미션 컨트롤러는 오브젝트를 생성, 수정, 삭제 또는 (프록시에) 연결하는 요청에 따라 작동한다.
-어드미션 컨트롤러는 단순히 객체를 읽는 요청에 작동하지 않는다.
-여러 개의 어드미션 컨트롤러가 구성되면 순서대로 호출된다.</p>
-<p>이는 다이어그램에 <strong>3</strong>단계로 표시되어 있다.</p>
-<p>인증 및 인가 모듈과 달리,
-승인 제어 모듈이 거부되면 요청은 즉시 거부된다.</p>
-<p>승인 제어 모듈은 오브젝트를 거부하는 것 외에도
-필드의 복잡한 기본값을 설정할 수 있다.</p>
-<p>사용 가능한 승인 제어 모듈은 <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/">여기</a>에 서술되어 있다.</p>
-<p>요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후
-오브젝트 저장소에 기록(<strong>4단계</strong>)된다.</p>
-<h2 id="api-서버-포트와-ip">API 서버 포트와 IP</h2>
-<p>이전의 논의는 (일반적인 경우) API 서버의 보안 포트로 전송되는 요청에 적용된다.
-API 서버는 실제로 다음과 같이 2개의 포트에서 서비스할 수 있다.</p>
-<p>기본적으로 쿠버네티스 API 서버는 2개의 포트에서 HTTP 서비스를 한다.</p>
+</blockquote>
+<p>The emerging Docker containers have potential to revolutionalize NFV.</p>
+<p>After all, they are lightweight compared to virtual machines; they need less overhead and resources; and, they can provide application isolation running in the same operating system, they live in.</p>
+<p>That means,  if a Virtual Network function (VNF) in NFV can run in a Docker container with complete isolation, you may not need a virtual machine.</p>
+<p>But, is it that easy?</p>
+<p>And  what is the future of virtual machine, then?</p>
+<p>Infact, it is too early to say anything about the future of virtual machines as docker containers are still evolving  (and so is NFV 😊).</p>
+<p>However, if you stay till the end, you will  be able to find out, what makes Docker containers so special that everyone is talking about them now.</p>
+<p>The primary aim of this guide is to walk you step by step in understanding the architecture of Docker container. In the process, you will also understand the basics of the hypervisor and virtual machine.</p>
+<p>The concepts are explained, assuming zero prior knowledge about virtual machines and hypervisors.</p>
+<h1 id="what-is-a-container">What is a container?</h1>
+<p>Historically, containers emerged as  a way of running applications in a more flexible and agile way. Linux containers enabled running lightweight applications, within Linux OS directly. Without a need for the hypervisor and virtual machines, applications can run in isolation in the same operating system.</p>
+<h1 id="what-is-a-docker-container">What is a Docker container?</h1>
+<p>Google has been using Linux containers in  its data centers  since 2006. But, they became more popular with the arrival of docker containers in 2013. Which is a more simple and standard way to run containers compared to earlier version of containers.</p>
+<p>The Docker container also runs in Linux. But Docker is not the only way run containers. LXC is another way to run containers. Both LXC and Docker have roots in Linux.</p>
+<p>One of the reasons, the Docker container is more popular compared to competing containers such as LXC is its ability to load as “image” on host operating system in a simple and quick manner. Dockers are stored in the cloud as images and called upon for execution by users when needed in a simple way.</p>
+<p>Moving forward, I will use the word “container” and “Docker container” interchangeably  as the concepts apply to both.</p>
+<p>Step by Step guide to understanding  Docker containers in NFV</p>
+<p>Virtual machines are good, yet they have problems:</p>
+<p>You need  a dedicated operating system. And, you need a hypervisor to separate the virtual machine to achieve virtualization.</p>
+<p>More applications mean more software overhead, more expensive and a need to keep them updated.</p>
+<p>Yet, virtual machines are needed for NFV architecture, so let’s see the NFV architecture.</p>
+<h2 id="step-1-lets-start-with-the--hypervisor-in-nfv-architecture">Step 1: Let’s start with the  Hypervisor in NFV Architecture</h2>
+<p>In this diagram, I am showing the NFV architecture, you may have seen many times ( Need a refresher, <a href="../cheat-sheet-understanding-nfv-architecture/">visit here</a>).</p>
+<p><img src="/images/nfv/hypervisor-in-nfv.png" alt="hypervisor-in-nfv"></p>
+<p>For the purpose of this discussion, I will zoom only on the NFVI ( NFV Infrastructure) that has three distinct components:</p>
+<p>The Hypervisor domain, the Compute domain, and the Network Infrastructure domain.</p>
+<p>The virtualization layer  is actually the hypervisor, which is responsible for abstracting the hardware resources of a compute domain (physical/x86 servers). For example, you may have a single physical server ( physical memory and physical compute) but the hypervisor  can partition it into multiple virtual  memories and virtual computes in a way that each entity is independent.</p>
+<p>Together, the virtualization layer ( which we called hypervisor) with the virtual resources is called “Hypervisor domain”.</p>
+<h2 id="step-2-lets-zoom-in-virtual-machines">Step 2: Lets zoom in Virtual Machines</h2>
+<p>To understand virtual machines, I will now  expand the hypervisor domain to show what is inside this domain.</p>
+<p>Have a look at Fig 2 below:</p>
+<p>I am showing on the left the same Hypervisor domain as in Fig1 above. But in the figure to the right, I have expanded the Hypervisor domain to show the virtual machines. That is, the virtual resources of the hypervisor domain are now shown as virtual machines.</p>
+<p><img src="/images/nfv/hypervisor-domain-with-vm.png" alt="hypervisor-domain-with-vm"></p>
+<p>For simplicity, I have removed the virtual network/network blocks on the left, as they are not important for this discussion.</p>
+<p>The virtualization layer has become the resource/network manager. The virtual compute/memory has become virtual machine (VM)</p>
+<p>So what is a virtual machine?</p>
+<p>A virtual machine  provides an environment in which a VNF ( Virtual Network Function) runs.</p>
+<p>If you look at the diagram, each Virtual Machine is linked to a VNF .</p>
+<p>Let’s take an example to clarify. There is a VNF1 called Virtual CPE and another VNF2 called Virtual Firewall. From the example above, each then runs into its own virtual machine. They can then be chained and connected internally through a hypervisor domain.</p>
+<p>Also, note that virtual machines are logically separate from one another. This makes it possible to run independent operating systems on each virtual machine. For example, Guest Operating System OS1 can be Linux and Guest OS2 can be Solaris (as an example).</p>
+<p>And in addition to the Guest operating systems/OS, did you notice that  there is also a need for Host Operating System/OS, which is an environment in which the hypervisor runs.Keep this important point in mind, as I discuss containers in the next paragraph.</p>
+<p>Let’s take the journey forward and now remove the Virtual Machines.</p>
+<h2 id="step-3-remove-virtual-machines-and-introduce-containers">Step 3. Remove virtual machines and introduce containers!</h2>
+<p>Now instead of virtual machine, I introduce a totally new component Container</p>
+<p><img src="/images/nfv/vm-replaced-with-container.png" alt="vm-replaced-with-container"></p>
+<p>VNF1 now runs in container 1 and VNF2 runs in container 2 providing the same functionality as virtual machines.</p>
+<p>What we have achieved is the same functionality as a virtual machine but within the same OS, which is Linux here.</p>
+<p>Did you notice that there is no need for Guest OS now?</p>
+<p>Simple architecture;  isn’t it?</p>
+<h2 id="what-have-we-achieved-with-containers">What have we achieved with containers?</h2>
 <ol>
 <li>
-<p><code>로컬호스트 포트</code>:</p>
-<ul>
-<li>테스트 및 부트스트랩을 하기 위한 것이며 마스터 노드의 다른 구성요소
-(스케줄러, 컨트롤러 매니저)가 API와 통신하기 위한 것이다.</li>
-<li>TLS가 없다.</li>
-<li>기본 포트는 8080이며, <code>--insecure-port</code> 플래그를 사용하여 변경한다.</li>
-<li>기본 IP는 로컬호스트(localhost)이며, <code>--insecure-bind-address</code> 플래그를 사용하여 변경한다.</li>
-<li>요청이 인증 및 인가 모듈을 <strong>우회한다</strong>.</li>
-<li>요청이 승인 제어 모듈(들)에 의해 처리된다.</li>
-<li>호스트 접근 요구로부터 보호를 받는다.</li>
-</ul>
+<p>There is no need for Guest Operating System (OS) in the container environment as you can see that the Host OS is Linux. Therefore, they are lighter weight and need less overhead compared to virtual machines</p>
 </li>
 <li>
-<p><code>보안 포트</code>:</p>
-<ul>
-<li>가능하면 언제나 사용하십시오.</li>
-<li>TLS를 사용하십시오. <code>--tls-cert-file</code> 플래그로 인증서를 지정하고 <code>--tls-private-key-file</code> 플래그로 키를 지정하십시오.</li>
-<li>기본 포트는 6443이며, <code>--secure-port</code> 플래그를 사용하여 변경한다.</li>
-<li>기본 IP는 로컬호스트가 아닌 첫 번째 네트워크 인터페이스이며, <code>--bind-address</code> 플래그를 사용하여 변경한다.</li>
-<li>요청이 인증 및 인가 모듈에 의해 처리된다.</li>
-<li>요청이 승인 제어 모듈(들)에 의해 처리된다.</li>
-<li>인증 및 인가 모듈을 실행한다.</li>
-</ul>
+<p>Architecture is simplified by removing the hypervisor as now the containers can retain sufficient isolation at the OS level inside the same Host OS.</p>
+</li>
+<li>
+<p>Virtual Machine provides hardware level virtualization  meaning classic virtual machines take a host and partition it via hypervisor software. This essentially means that VMs are isolated from the OS of the host machine. You can run a windows Host over a Linux operating system.On the other hand, containers provide OS level virtualization. That is in the same OS, applications can keep themselves isolated. This is far less overhead compared to VM as the whole OS is not duplicated.</p>
 </li>
 </ol>
-<p>GCE(구글 컴퓨트 엔진) 및 다른 클라우드 제공자에서 <code>kube-up.sh</code>로 클러스터를 생성하면
-API 서버는 포트 443에서 서비스한다.
-GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 방화벽 규칙이 구성된다.
-이외에 클러스터 설정 방법은 다양하다.</p>
+<p>That’s it about the Containers.</p>
+<h2 id="future-of-containers-for-nfv">Future of containers for NFV</h2>
+<p>Let’s face it, the current NFV architecture and standards are based on the Virtual machines.</p>
+<p>Containers are still new to NFV. There are still a lot of development going on especially from a security point of view. As you can see that the Host OS is exposed to all containers so there could be potential multi-tenancy security issues.</p>
+<p>However, they do promise a good future considering the ease and simplicity of running the VNFs in such environments. Also, they can open a door to running microservices instead of running a complete VNF over a virtual machine.</p>
+<p>For example in the case of virtual CPE, a lot of its components can be decomposed into small containers and chained together. By decomposing the functions, this will provide an opportunity for small software vendors to develop small functions of a VNF easily with less overhead.</p>
+<p>Did this guide help you in understanding the containers in a simple way ?</p>
+<p>Share your views in the following comments section.</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2020년 09월 17일</p>
+		    <p style="color:#777;">최종 수정: 2020년 10월 03일</p>
                     
                 </div>
             </div>

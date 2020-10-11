@@ -26,8 +26,8 @@ var spy = function () {
   if (currentBottom >= pageBottom) {
     currentIndex = -1
   }
-  //console.log(currentIndex);
-  //Collapse them
+  // console.log(currentIndex);
+  // Collapse them
   collapseOthers(currentIndex);
 }
 
@@ -67,8 +67,8 @@ $().ready(function () {
 });
 
 
-//From https://github.com/lodash/lodash/blob/master/debounce.js
-// and https://github.com/lodash/lodash/blob/master/isObject.js
+// From https://github.com/lodash/lodash/blob/master/debounce.js
+//  and https://github.com/lodash/lodash/blob/master/isObject.js
 
 function debounce(func, wait, options) {
   let lastArgs,

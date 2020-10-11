@@ -5,9 +5,303 @@
     <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Fri, 02 Oct 2020 16:24:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 11 Oct 2020 14:48:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기</title>
+        <link>https://markruler.github.io/posts/kubernetes/local-build-kube/</link>
+        <pubDate>Sun, 11 Oct 2020 14:48:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/kubernetes/local-build-kube/</guid>
+        <description>markruler https://markruler.github.io/posts/kubernetes/local-build-kube/ -&lt;blockquote&gt;
+&lt;p&gt;직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/build/README.md&#34;&gt;kubernetes/build/README.md&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;사용할-명령어&#34;&gt;사용할 명령어&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# master 브랜치&lt;/span&gt;
+git clone --depth &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; https://github.com/kubernetes/kubernetes.git
+&lt;span style=&#34;color:#228b22&#34;&gt;# 특정 브랜치&lt;/span&gt;
+git clone --depth &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
+
+&lt;span style=&#34;color:#228b22&#34;&gt;# cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...&lt;/span&gt;
+make all &lt;span style=&#34;color:#00688b&#34;&gt;WHAT&lt;/span&gt;=cmd/kubectl &lt;span style=&#34;color:#00688b&#34;&gt;GOFLAGS&lt;/span&gt;=-v
+
+&lt;span style=&#34;color:#228b22&#34;&gt;# 그냥 간단히 go build 명령도 가능하다.&lt;/span&gt;
+go build -o k cmd/kubectl
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;빌드-실행-따라가기&#34;&gt;빌드 실행 따라가기&lt;/h2&gt;
+&lt;h3 id=&#34;makefile&#34;&gt;Makefile&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;build/root/Makefile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;실제로-빌드되는-makefile&#34;&gt;실제로 빌드되는 Makefile&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/build/root/Makefile&#34;&gt;build/root/Makefile&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# Build code.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# Args:
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   WHAT: Directory names to build.  If any of these directories has a &amp;#39;main&amp;#39;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#     package, the build will produce executable files under $(OUT_DIR)/bin.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#     If not specified, &amp;#34;everything&amp;#34; will be built.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   GOFLAGS: Extra flags to pass to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   GOLDFLAGS: Extra linking flags passed to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   GOGCFLAGS: Additional go compile flags passed to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# Example:
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   make
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   make all
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   make all WHAT=cmd/kubelet GOFLAGS=-v
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#   make all GOLDFLAGS=&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#           to &amp;#34;-s -w&amp;#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;#           are documented at https://golang.org/cmd/link/
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;endef&lt;/span&gt;
+&lt;span style=&#34;color:#008b45&#34;&gt;.PHONY&lt;/span&gt;: all
+&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;ifeq&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;PRINT_HELP&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;,y)&lt;/span&gt;
+&lt;span style=&#34;color:#008b45&#34;&gt;all&lt;/span&gt;:
+	@echo &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$$&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;ALL_HELP_INFO&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;else&lt;/span&gt;
+&lt;span style=&#34;color:#008b45&#34;&gt;all&lt;/span&gt;: generated_files
+	hack/make-rules/build.sh &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt;WHAT&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;endif&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;all-generated_files&#34;&gt;all: generated_files&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/hack/make-rules/build.sh&#34;&gt;hack/make-rules/build.sh&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# This script sets up a go workspace locally and builds all go components.&lt;/span&gt;
+
+&lt;span style=&#34;color:#658b00&#34;&gt;set&lt;/span&gt; -o errexit
+&lt;span style=&#34;color:#658b00&#34;&gt;set&lt;/span&gt; -o nounset
+&lt;span style=&#34;color:#658b00&#34;&gt;set&lt;/span&gt; -o pipefail
+
+&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_ROOT&lt;/span&gt;=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt;/../..
+&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_VERBOSE&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;source&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_ROOT&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;/hack/lib/init.sh&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#228b22&#34;&gt;# 👉 hack/lib/golang.sh&lt;/span&gt;
+kube::golang::build_binaries &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+kube::golang::place_bins
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubegolang&#34;&gt;kube::golang::&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/hack/lib/golang.sh&#34;&gt;hack/lib/golang.sh&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# Build binaries targets specified&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# Input:&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#   $@ - targets and go flags.  If no targets are set then all binaries targets&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#     are built.&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#     then just the host architecture is built.&lt;/span&gt;
+kube::golang::build_binaries() {
+  ...
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;# This will take binaries from $GOPATH/bin and copy them to the appropriate&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# place in ${KUBE_OUTPUT_BINDIR}&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# Ideally this wouldn&amp;#39;t be necessary and we could just set GOBIN to&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# KUBE_OUTPUT_BINDIR but that won&amp;#39;t work in the face of cross compilation.  &amp;#39;go&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# install&amp;#39; will place binaries that match the host platform directly in $GOBIN&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# while placing cross compiled binaries into `platform_arch` subdirs.  This&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# complicates pretty much everything else we do around packaging and such.&lt;/span&gt;
+kube::golang::place_bins() {
+  ...
+  &lt;span style=&#34;color:#228b22&#34;&gt;# V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}&lt;/span&gt;
+  &lt;span style=&#34;color:#228b22&#34;&gt;# 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.&lt;/span&gt;
+  &lt;span style=&#34;color:#228b22&#34;&gt;# &amp;gt; [%m%d %H:%M:%S] /home/markruler/kubernetes/_output/local/bin&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;로그-레벨&#34;&gt;로그 레벨&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/master/hack/lib/logging.sh&#34;&gt;hack/lib/logging.sh&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# This controls the verbosity of the build. Higher numbers mean more output.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_VERBOSE&lt;/span&gt; ?= &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# 👉 hack/lib/logging.sh
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;kube&lt;/span&gt;::log::status() {
+  &lt;span style=&#34;color:#658b00&#34;&gt;local&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;V&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; [[ &lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt; ]]; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;then&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fi&lt;/span&gt;
+
+  &lt;span style=&#34;color:#00688b&#34;&gt;timestamp&lt;/span&gt;=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt;date +&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;[%m%d %H:%M:%S]&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt;
+  &lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;+++ &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;timestamp&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#658b00&#34;&gt;shift&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; message; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;    &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;message&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;done&lt;/span&gt;
+&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cmdkubectl&#34;&gt;cmd/kubectl&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go&#34;&gt;kubectl.go&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+	goflag &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;flag&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;math/rand&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;github.com/spf13/pflag&amp;#34;&lt;/span&gt;
+
+	cliflag &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;k8s.io/component-base/cli/flag&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;k8s.io/kubectl/pkg/util/logs&amp;#34;&lt;/span&gt;
+	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;k8s.io/kubernetes/pkg/kubectl/cmd&amp;#34;&lt;/span&gt;
+
+	&lt;span style=&#34;color:#228b22&#34;&gt;// Import to initialize client auth plugins.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	_ &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;k8s.io/client-go/plugin/pkg/client/auth&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+	rand.&lt;span style=&#34;color:#008b45&#34;&gt;Seed&lt;/span&gt;(time.&lt;span style=&#34;color:#008b45&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#008b45&#34;&gt;UnixNano&lt;/span&gt;())
+
+	command := cmd.&lt;span style=&#34;color:#008b45&#34;&gt;NewDefaultKubectlCommand&lt;/span&gt;()
+
+	&lt;span style=&#34;color:#228b22&#34;&gt;// TODO: once we switch everything over to Cobra commands, we can go back to calling
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#228b22&#34;&gt;// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#228b22&#34;&gt;// normalize func and add the go flag set by hand.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#008b45&#34;&gt;SetNormalizeFunc&lt;/span&gt;(cliflag.WordSepNormalizeFunc)
+	pflag.CommandLine.&lt;span style=&#34;color:#008b45&#34;&gt;AddGoFlagSet&lt;/span&gt;(goflag.CommandLine)
+	&lt;span style=&#34;color:#228b22&#34;&gt;// cliflag.InitFlags()
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	logs.&lt;span style=&#34;color:#008b45&#34;&gt;InitLogs&lt;/span&gt;()
+	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;defer&lt;/span&gt; logs.&lt;span style=&#34;color:#008b45&#34;&gt;FlushLogs&lt;/span&gt;()
+
+	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err := command.&lt;span style=&#34;color:#008b45&#34;&gt;Execute&lt;/span&gt;(); err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+		os.&lt;span style=&#34;color:#008b45&#34;&gt;Exit&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmdhttpsgithubcommarkrulerkubernetesblobrelease-119pkgkubectlcmdcmdgo&#34;&gt;&lt;a href=&#34;https://github.com/markruler/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;&lt;/h3&gt;
+&lt;h2 id=&#34;디버깅&#34;&gt;디버깅&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/docs/editor/debugging&#34;&gt;launch.json&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;version&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0.2.0&amp;#34;&lt;/span&gt;,
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;configurations&amp;#34;&lt;/span&gt;: [
+    {
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;type&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;go&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;request&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;launch&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kubectl&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;program&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${workspaceFolder}/cmd/kubectl/kubectl.go&amp;#34;&lt;/span&gt;,
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;args&amp;#34;&lt;/span&gt;: [
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;config&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;view&amp;#34;&lt;/span&gt;
+      ]
+    }
+  ]
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/vscode-debugging-golang.png&#34; alt=&#34;vscode-debugging-golang&#34;&gt;&lt;/p&gt;
+- https://markruler.github.io/posts/kubernetes/local-build-kube/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>[번역] NFV 도커 컨테이너 초심자 가이드</title>
+        <link>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</link>
+        <pubDate>Sat, 03 Oct 2020 22:46:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</guid>
+        <description>markruler https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ -&lt;p&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/&#34;&gt;원문 링크&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;The emerging Docker containers have potential to revolutionalize NFV.&lt;/p&gt;
+&lt;p&gt;After all, they are lightweight compared to virtual machines; they need less overhead and resources; and, they can provide application isolation running in the same operating system, they live in.&lt;/p&gt;
+&lt;p&gt;That means,  if a Virtual Network function (VNF) in NFV can run in a Docker container with complete isolation, you may not need a virtual machine.&lt;/p&gt;
+&lt;p&gt;But, is it that easy?&lt;/p&gt;
+&lt;p&gt;And  what is the future of virtual machine, then?&lt;/p&gt;
+&lt;p&gt;Infact, it is too early to say anything about the future of virtual machines as docker containers are still evolving  (and so is NFV 😊).&lt;/p&gt;
+&lt;p&gt;However, if you stay till the end, you will  be able to find out, what makes Docker containers so special that everyone is talking about them now.&lt;/p&gt;
+&lt;p&gt;The primary aim of this guide is to walk you step by step in understanding the architecture of Docker container. In the process, you will also understand the basics of the hypervisor and virtual machine.&lt;/p&gt;
+&lt;p&gt;The concepts are explained, assuming zero prior knowledge about virtual machines and hypervisors.&lt;/p&gt;
+&lt;h1 id=&#34;what-is-a-container&#34;&gt;What is a container?&lt;/h1&gt;
+&lt;p&gt;Historically, containers emerged as  a way of running applications in a more flexible and agile way. Linux containers enabled running lightweight applications, within Linux OS directly. Without a need for the hypervisor and virtual machines, applications can run in isolation in the same operating system.&lt;/p&gt;
+&lt;h1 id=&#34;what-is-a-docker-container&#34;&gt;What is a Docker container?&lt;/h1&gt;
+&lt;p&gt;Google has been using Linux containers in  its data centers  since 2006. But, they became more popular with the arrival of docker containers in 2013. Which is a more simple and standard way to run containers compared to earlier version of containers.&lt;/p&gt;
+&lt;p&gt;The Docker container also runs in Linux. But Docker is not the only way run containers. LXC is another way to run containers. Both LXC and Docker have roots in Linux.&lt;/p&gt;
+&lt;p&gt;One of the reasons, the Docker container is more popular compared to competing containers such as LXC is its ability to load as “image” on host operating system in a simple and quick manner. Dockers are stored in the cloud as images and called upon for execution by users when needed in a simple way.&lt;/p&gt;
+&lt;p&gt;Moving forward, I will use the word “container” and “Docker container” interchangeably  as the concepts apply to both.&lt;/p&gt;
+&lt;p&gt;Step by Step guide to understanding  Docker containers in NFV&lt;/p&gt;
+&lt;p&gt;Virtual machines are good, yet they have problems:&lt;/p&gt;
+&lt;p&gt;You need  a dedicated operating system. And, you need a hypervisor to separate the virtual machine to achieve virtualization.&lt;/p&gt;
+&lt;p&gt;More applications mean more software overhead, more expensive and a need to keep them updated.&lt;/p&gt;
+&lt;p&gt;Yet, virtual machines are needed for NFV architecture, so let’s see the NFV architecture.&lt;/p&gt;
+&lt;h2 id=&#34;step-1-lets-start-with-the--hypervisor-in-nfv-architecture&#34;&gt;Step 1: Let’s start with the  Hypervisor in NFV Architecture&lt;/h2&gt;
+&lt;p&gt;In this diagram, I am showing the NFV architecture, you may have seen many times ( Need a refresher, &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;visit here&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-in-nfv.png&#34; alt=&#34;hypervisor-in-nfv&#34;&gt;&lt;/p&gt;
+&lt;p&gt;For the purpose of this discussion, I will zoom only on the NFVI ( NFV Infrastructure) that has three distinct components:&lt;/p&gt;
+&lt;p&gt;The Hypervisor domain, the Compute domain, and the Network Infrastructure domain.&lt;/p&gt;
+&lt;p&gt;The virtualization layer  is actually the hypervisor, which is responsible for abstracting the hardware resources of a compute domain (physical/x86 servers). For example, you may have a single physical server ( physical memory and physical compute) but the hypervisor  can partition it into multiple virtual  memories and virtual computes in a way that each entity is independent.&lt;/p&gt;
+&lt;p&gt;Together, the virtualization layer ( which we called hypervisor) with the virtual resources is called “Hypervisor domain”.&lt;/p&gt;
+&lt;h2 id=&#34;step-2-lets-zoom-in-virtual-machines&#34;&gt;Step 2: Lets zoom in Virtual Machines&lt;/h2&gt;
+&lt;p&gt;To understand virtual machines, I will now  expand the hypervisor domain to show what is inside this domain.&lt;/p&gt;
+&lt;p&gt;Have a look at Fig 2 below:&lt;/p&gt;
+&lt;p&gt;I am showing on the left the same Hypervisor domain as in Fig1 above. But in the figure to the right, I have expanded the Hypervisor domain to show the virtual machines. That is, the virtual resources of the hypervisor domain are now shown as virtual machines.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-domain-with-vm.png&#34; alt=&#34;hypervisor-domain-with-vm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;For simplicity, I have removed the virtual network/network blocks on the left, as they are not important for this discussion.&lt;/p&gt;
+&lt;p&gt;The virtualization layer has become the resource/network manager. The virtual compute/memory has become virtual machine (VM)&lt;/p&gt;
+&lt;p&gt;So what is a virtual machine?&lt;/p&gt;
+&lt;p&gt;A virtual machine  provides an environment in which a VNF ( Virtual Network Function) runs.&lt;/p&gt;
+&lt;p&gt;If you look at the diagram, each Virtual Machine is linked to a VNF .&lt;/p&gt;
+&lt;p&gt;Let’s take an example to clarify. There is a VNF1 called Virtual CPE and another VNF2 called Virtual Firewall. From the example above, each then runs into its own virtual machine. They can then be chained and connected internally through a hypervisor domain.&lt;/p&gt;
+&lt;p&gt;Also, note that virtual machines are logically separate from one another. This makes it possible to run independent operating systems on each virtual machine. For example, Guest Operating System OS1 can be Linux and Guest OS2 can be Solaris (as an example).&lt;/p&gt;
+&lt;p&gt;And in addition to the Guest operating systems/OS, did you notice that  there is also a need for Host Operating System/OS, which is an environment in which the hypervisor runs.Keep this important point in mind, as I discuss containers in the next paragraph.&lt;/p&gt;
+&lt;p&gt;Let’s take the journey forward and now remove the Virtual Machines.&lt;/p&gt;
+&lt;h2 id=&#34;step-3-remove-virtual-machines-and-introduce-containers&#34;&gt;Step 3. Remove virtual machines and introduce containers!&lt;/h2&gt;
+&lt;p&gt;Now instead of virtual machine, I introduce a totally new component Container&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/vm-replaced-with-container.png&#34; alt=&#34;vm-replaced-with-container&#34;&gt;&lt;/p&gt;
+&lt;p&gt;VNF1 now runs in container 1 and VNF2 runs in container 2 providing the same functionality as virtual machines.&lt;/p&gt;
+&lt;p&gt;What we have achieved is the same functionality as a virtual machine but within the same OS, which is Linux here.&lt;/p&gt;
+&lt;p&gt;Did you notice that there is no need for Guest OS now?&lt;/p&gt;
+&lt;p&gt;Simple architecture;  isn’t it?&lt;/p&gt;
+&lt;h2 id=&#34;what-have-we-achieved-with-containers&#34;&gt;What have we achieved with containers?&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;There is no need for Guest Operating System (OS) in the container environment as you can see that the Host OS is Linux. Therefore, they are lighter weight and need less overhead compared to virtual machines&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Architecture is simplified by removing the hypervisor as now the containers can retain sufficient isolation at the OS level inside the same Host OS.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Virtual Machine provides hardware level virtualization  meaning classic virtual machines take a host and partition it via hypervisor software. This essentially means that VMs are isolated from the OS of the host machine. You can run a windows Host over a Linux operating system.On the other hand, containers provide OS level virtualization. That is in the same OS, applications can keep themselves isolated. This is far less overhead compared to VM as the whole OS is not duplicated.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;That’s it about the Containers.&lt;/p&gt;
+&lt;h2 id=&#34;future-of-containers-for-nfv&#34;&gt;Future of containers for NFV&lt;/h2&gt;
+&lt;p&gt;Let’s face it, the current NFV architecture and standards are based on the Virtual machines.&lt;/p&gt;
+&lt;p&gt;Containers are still new to NFV. There are still a lot of development going on especially from a security point of view. As you can see that the Host OS is exposed to all containers so there could be potential multi-tenancy security issues.&lt;/p&gt;
+&lt;p&gt;However, they do promise a good future considering the ease and simplicity of running the VNFs in such environments. Also, they can open a door to running microservices instead of running a complete VNF over a virtual machine.&lt;/p&gt;
+&lt;p&gt;For example in the case of virtual CPE, a lot of its components can be decomposed into small containers and chained together. By decomposing the functions, this will provide an opportunity for small software vendors to develop small functions of a VNF easily with less overhead.&lt;/p&gt;
+&lt;p&gt;Did this guide help you in understanding the containers in a simple way ?&lt;/p&gt;
+&lt;p&gt;Share your views in the following comments section.&lt;/p&gt;
+- https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - </description>
+        </item>
     
     
     
@@ -446,7 +740,7 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
 요청이 API에 도달하면,
 다음 다이어그램에 설명된 몇 가지 단계를 거친다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/k8s/access-control-overview.svg&#34; alt=&#34;Diagram of request handling steps for Kubernetes API request&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/access-control-overview.svg&#34; alt=&#34;Diagram of request handling steps for Kubernetes API request&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;전송-보안&#34;&gt;전송 보안&lt;/h2&gt;
 &lt;p&gt;일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다.
 API 서버는 인증서를 제시한다.
@@ -842,88 +1136,6 @@ IT 서비스 환경과 클라우드 컴퓨팅 기능을 제공한다. 이 환경
 &lt;/ul&gt;
 - https://markruler.github.io/posts/spring/web-socket/ - </description>
         </item>
-    
-    
-    
-        <item>
-        <title>웹 게임을 만들며 배우는 React</title>
-        <link>https://markruler.github.io/posts/react/web-game-react/</link>
-        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
-        
-        <guid>https://markruler.github.io/posts/react/web-game-react/</guid>
-        <description>markruler https://markruler.github.io/posts/react/web-game-react/ -&lt;h1 id=&#34;reactjs&#34;&gt;React.&lt;em&gt;&lt;strong&gt;js&lt;/strong&gt;&lt;/em&gt;&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.inflearn.com/course/web-game-React&#34;&gt;출처 인프런 강의&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;npm install&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;cdn&#34;&gt;CDN&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install express --save
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://expressjs.com/ko/starter/installing.html&#34;&gt;express&lt;/a&gt;&lt;br&gt;
-&amp;ndash;save 옵션을 통해 설치된 Node 모듈은 package.json 파일 내의 dependencies 목록에 추가됩니다. 이후 app 디렉토리에서 npm install을 실행하면 종속 항목 목록 내의 모듈이 자동으로 설치됩니다.\&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install -g nodemon
-mkdir web-game-react
-&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; web-game-react
-npm init
-&lt;span style=&#34;color:#228b22&#34;&gt;# app.js 만들고 react CDN 삽입, 구현 후&lt;/span&gt;
-nodemon app
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;react--webpack--이걸로-구현&#34;&gt;react + webpack = 이걸로 구현&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i react react-dom
-npm i webpack
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;#%EC%9B%B9%ED%8C%A9-web-pack&#34;&gt;웹팩 설치로👇&lt;/a&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D @babel/core @babel/preset-env @babel/preset-react babel-loader
-&lt;span style=&#34;color:#228b22&#34;&gt;# 바벨은 최신 문법을 브라우저에 맞게 자동으로 호환시킴&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;create-react-app&#34;&gt;create-react-app&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm install create-react-app
-create-react-app {project-name}
-&lt;span style=&#34;color:#228b22&#34;&gt;# npm init, git init, react dependencty 설정까지 자동으로 함&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;# 굉장히 무거운 듯..&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; {project-name}
-npm start / yarn start
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scripts&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;:&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;start&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts start&amp;#34;&lt;/span&gt;,
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;build&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts build&amp;#34;&lt;/span&gt;,
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts test&amp;#34;&lt;/span&gt;,
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;#34;eject&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;react-scripts eject&amp;#34;&lt;/span&gt;
-  }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;yarn install&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;웹팩-web-pack&#34;&gt;웹팩 (Web Pack)&lt;/h2&gt;
-&lt;h3 id=&#34;install&#34;&gt;install&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npm i -D webpack webpack-cli
-&lt;span style=&#34;color:#228b22&#34;&gt;# (-D : --save-dev(devDependencies) / i : install)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;webpack.config.js&lt;/li&gt;
-&lt;li&gt;client.jsx&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;npx webpack &lt;span style=&#34;color:#228b22&#34;&gt;# global로 설치하지 않았을 경우 환경변수 없어도 실행&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;혹은 package.json에 script 지정&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;용도&#34;&gt;용도&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;여러 개의 모듈 js를 하나의 파일로 합쳐줌 : 전송 효율&lt;/li&gt;
-&lt;li&gt;console.log() 제거&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;사용법&#34;&gt;사용법&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;webpack : compile&lt;/li&gt;
-&lt;li&gt;npm run dev : package.json 에 스크립트 추가 (소스 참고)&lt;/li&gt;
-&lt;/ol&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;리액트-관련&#34;&gt;리액트 관련&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;Class vs. Hooks&lt;/li&gt;
-&lt;li&gt;Component vs. PureComponent (shouldComponentUpdate) 혹은 memo() : 렌더링 최적화&lt;/li&gt;
-&lt;li&gt;배열에 push()는 immutable 때문에 불가&lt;/li&gt;
-&lt;/ol&gt;
-- https://markruler.github.io/posts/react/web-game-react/ - </description>
-        </item>
-    
-    
     
     
   </channel>

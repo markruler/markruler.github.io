@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Web Socket 알게 된 것들</title>
+<title>Posts</title>
 
 
 
@@ -10,26 +10,25 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="Spring-STOMP">
+<meta name="description" content="">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="Web Socket 알게 된 것들" />
-<meta property="og:description" content="Spring-STOMP" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/spring/web-socket/" />
-<meta property="article:published_time" content="2020-03-01T10:58:10+09:00" />
-<meta property="article:modified_time" content="2020-03-01T10:58:10+09:00" /><meta property="og:site_name" content="markruler" />
+<meta property="og:title" content="Posts" />
+<meta property="og:description" content="developer" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://markruler.github.io/posts/" />
+<meta property="og:updated_time" content="2020-10-11T14:48:00+09:00" /><meta property="og:site_name" content="markruler" />
 
 
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Web Socket 알게 된 것들"/>
-<meta name="twitter:description" content="Spring-STOMP"/>
+<meta name="twitter:title" content="Posts"/>
+<meta name="twitter:description" content="developer"/>
 
 
 
@@ -81,10 +80,6 @@ if (!doNotTrack) {
 
 
 
-
-  
-    <script src="https://markruler.github.io//js/toc.js"></script>
-  
 
 
 
@@ -187,119 +182,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div ref="extraContainer" class="extra-container">
     
     
-    
-    <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- TOC -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#refereces" onclick="onNavClick(`#refereces-nav`)" id="refereces-nav">
-									Refereces
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#1-%ea%b0%9c%eb%85%90" onclick="onNavClick(`#1-개념-nav`)" id="1-개념-nav">
-									1. 개념
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%98%a4%eb%b2%84%ed%97%a4%eb%93%9c-%eb%b9%84%ea%b5%90" onclick="onNavClick(`#2-네트워크-오버헤드-비교-nav`)" id="2-네트워크-오버헤드-비교-nav">
-									2. 네트워크 오버헤드 비교
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#3-socketio-sockjs-stomp" onclick="onNavClick(`#3-socketio-sockjs-stomp-nav`)" id="3-socketio-sockjs-stomp-nav">
-									3. Socket.io, SockJS, STOMP
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#to-do" onclick="onNavClick(`#to-do-nav`)" id="to-do-nav">
-									To-Do
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -315,6 +197,24 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 brightness_7
             </i>
         </a>
+        
+        
+        
+            <div class="pagination-indicator">
+                <span style="text-align: center">
+                    2<br><div style="display: inline-block; transform: rotate(-28deg)">-</div><br>2
+                </span>
+            </div>
+            
+            
+            <a class="pagination-action" href="/posts/">
+                <i class="material-icons pagination-action-icon">
+                    chevron_left
+                </i>
+            </a>
+            
+
+            
         
         
     </div>
@@ -379,118 +279,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             
             
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- TOC -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#refereces" onclick="onNavClick(`#refereces-nav`)" id="refereces-nav">
-									Refereces
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#1-%ea%b0%9c%eb%85%90" onclick="onNavClick(`#1-개념-nav`)" id="1-개념-nav">
-									1. 개념
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#2-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ec%98%a4%eb%b2%84%ed%97%a4%eb%93%9c-%eb%b9%84%ea%b5%90" onclick="onNavClick(`#2-네트워크-오버헤드-비교-nav`)" id="2-네트워크-오버헤드-비교-nav">
-									2. 네트워크 오버헤드 비교
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#3-socketio-sockjs-stomp" onclick="onNavClick(`#3-socketio-sockjs-stomp-nav`)" id="3-socketio-sockjs-stomp-nav">
-									3. Socket.io, SockJS, STOMP
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#to-do" onclick="onNavClick(`#to-do-nav`)" id="to-do-nav">
-									To-Do
-								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
-</div>
-            
         </div>
     </div>
 </div>
@@ -534,150 +322,72 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <div id="content">
 <div ref="streamContainer" class="stream-container">
     <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-                
-            
-
-            <div class="post-head-wrapper"
-                
-                    
-                    
-                    style="background-image: url('https://markruler.github.io/images/markruler-default.png')"
-                    
-                
-            >
-                <div class="post-title">
-                    Web Socket 알게 된 것들
-                    
-                    <div class="post-subtitle">
-                        Spring-STOMP
-                    </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
-                            2020년 03월 01일 10시 58분
-                        </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[spring javascript]</a>
-                                &nbsp;
-                        
-
-                        
-                            <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/web-socket">web-socket</a>
-                                &nbsp;
-                            
-                        
-                        
+        
+            <a class="a-block">
+                <div class="post-item-wrapper post-item-wrapper-no-hover">
+                    <div class="post-item post-item-no-gaps">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title post-item-title-small year">
+                                2020
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </a>
             
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <ul>
-<li>목차
-{:toc}</li>
-</ul>
-<hr>
-<h2 id="refereces">Refereces</h2>
-<ul>
-<li><a href="https://spring.io/guides/gs/messaging-stomp-websocket/">Spring guide</a></li>
-<li><a href="https://postitforhooney.tistory.com/entry/SpringStomp-Spring-stomp%EC%99%80-Socjks%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%A5%EB%8B%A8%EC%A0%90">Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점</a></li>
-<li><a href="https://daddyprogrammer.org/post/4077/spring-websocket-chatting/">Spring websocket chatting server</a> : Stateless 적용을 위한 JWT 도입</li>
-<li><a href="https://adrenal.tistory.com/20">webSocket으로 개발하기 전에 알고 있어야 할 것들</a></li>
-<li><a href="https://simsimjae.tistory.com/25">웹 소켓을 활용한 쪽지 알람 기능</a></li>
-<li><a href="https://wondongho.tistory.com/73">WebSocket과 STOMP 연동</a></li>
-<li><a href="https://supawer0728.github.io/2018/03/30/spring-websocket/">Spring WebSocket 소개</a></li>
-</ul>
-<h2 id="1-개념">1. 개념</h2>
-<p><img src="/images/spring-websocket/websocket-schema.png" alt="websocket-schema"></p>
-<p><a href="https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html">출처: Oracle</a></p>
-<p>웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.</p>
-<p>웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.</p>
-<p><img src="/images/spring-websocket/spring-stomp-schema.png" alt="spring-stomp-schema"></p>
-<p><a href="https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow">출처: Spring</a></p>
-<h2 id="2-네트워크-오버헤드-비교">2. 네트워크 오버헤드 비교</h2>
-<hr>
-<p>폴링(Polling) 방식</p>
-<p>요청/응답 헤더 데이터 용량: (871 Byte)</p>
-<ul>
-<li>1000명 *  헤더 데이터 용량  = 871,000  Byte</li>
-<li>10000명 *  헤더 데이터 용량  = 8,710,000  Byte</li>
-<li>100000명 *  헤더 데이터 용량  = 87,100,000 Byte</li>
-</ul>
-<hr>
-<p>WebSocket 방식</p>
-<p>메시지 데이터 용량: (2 Byte)</p>
-<ul>
-<li>1000명 *   메시지 데이터 용량   = 2,000  Byte</li>
-<li>10000명 *   메시지 데이터 용량   = 20,000  Byte</li>
-<li>100000명 *   메시지 데이터 용량   = 200,000 Byte</li>
-</ul>
-<h2 id="3-socketio-sockjs-stomp">3. Socket.io, SockJS, STOMP</h2>
-<ol>
-<li>Socket.io : Node.js 모듈. 클라이언트, 서버 모두 JS로 개발.</li>
-<li>WebSocket : 표준 웹소켓. IE10부터 적용.</li>
-</ol>
-<ul>
-<li>TextWebSocketHandler / BinaryWebSocketHandler 구현 필요</li>
-</ul>
-<ol>
-<li>SockJS : IE8부터 적용.</li>
-<li>STOMP : Topic 구독 방식. Spring 지원. 서버 부하 적음.</li>
-</ol>
-<ul>
-<li>TextWebSocketHandler / BinaryWebSocketHandler 구현 필요없음</li>
-<li>heart-beat</li>
-<li>@MessageMapping</li>
-<li>@SendTo</li>
-<li>@SendToUser</li>
-<li>SimpMessagingTemplate.convertAndSendToUser()</li>
-<li>MessagesSupplier</li>
-</ul>
-<h2 id="to-do">To-Do</h2>
-<ul>
-<li>Interceptor 결합?</li>
-<li>Handler와의 차이</li>
-<li>Web Hook 개념</li>
-</ul>
+            <a href="/posts/react/web-game-react/" class="a-block">
+                <div class="post-item-wrapper">
+                    <div class="post-item post-item-no-gaps">
+                        <div class="post-item-info-wrapper">
+                            <div class="post-item-title">
+                                웹 게임을 만들며 배우는 React
+                            </div>
+                            <div class="post-item-meta">
+    2020-03-01
+    &emsp;
+    
+    
+    
+    &emsp;
+    
+</div>
 
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2020년 03월 01일</p>
-                    
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </a>
             
-            
-            <nav class="post-pagination">
-            
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-            </div>
-        </div>
+        
     </div>
 </div>
 
-            </div><div id="single-column-footer">
+
+            </div>
+
+<div class="pagination">
+    
+    <a class="pagination-action" href="/posts/" style="opacity:1">
+    
+        <i class="material-icons pagination-action-icon">
+            chevron_left
+        </i>
+    </a>
+
+        <div class="pagination-indicator">
+            <span>2/2</span>
+        </div>
+
+        
+            <a class="pagination-action" style="opacity:0">
+        
+                <i class="material-icons pagination-action-icon">
+                    chevron_right
+                </i>
+            </a>
+</div>
+
+
+<div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
