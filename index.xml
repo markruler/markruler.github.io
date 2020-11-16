@@ -5,9 +5,93 @@
     <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Sun, 11 Oct 2020 14:48:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 16 Nov 2020 22:40:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>[번역] NFV 도커 컨테이너 초심자 가이드</title>
+        <link>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</link>
+        <pubDate>Mon, 16 Nov 2020 22:40:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</guid>
+        <description>markruler https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ -&lt;p&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/&#34;&gt;원문 (2016년 3월 3일)&lt;/a&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;새롭게 등장한 도커(Docker) 컨테이너는 NFV를 혁신할 수 있는 잠재력을 가지고 있습니다.&lt;/p&gt;
+&lt;p&gt;무엇보다 도커 컨테이너는 가상 머신에 비해 가볍고, 적은 오버헤드와 리소스만을 요구하며, 동일한 운영 체제에서 실행되는 애플리케이션을 격리시킬 수 있습니다.&lt;/p&gt;
+&lt;p&gt;즉, NFV의 VNF(가상 네트워크 기능)를 완전히 격리시켜 도커 컨테이너에서 실행할 수 있다면 가상 머신이 필요 없을 지도 모릅니다.&lt;/p&gt;
+&lt;p&gt;하지만 그게 쉬울까요?&lt;/p&gt;
+&lt;p&gt;가상 머신의 미래는 어떨까요?&lt;/p&gt;
+&lt;p&gt;실제로 도커 컨테이너가 아직은 성장하는 단계에 있기 때문에 가상 머신의 미래에 대해 뭐라고 말하기에는 너무 이릅니다(NFV도 마찬가지입니다 😊).&lt;/p&gt;
+&lt;p&gt;하지만 여러분이 이 글을 끝까지 읽는다면 현재 모든 사람들이 이야기하는 무엇이 도커 컨테이너를 특별하게 만드는지 알 수 있습니다.&lt;/p&gt;
+&lt;p&gt;본 가이드의 주목적은 도커 컨테이너의 아키텍처를 이해하는 데 있어 단계별로 안내하는 것입니다. 이 과정에서 하이퍼바이저 및 가상 머신의 기초도 이해하게 됩니다.&lt;/p&gt;
+&lt;p&gt;이러한 개념들은 가상 머신 및 하이퍼바이저에 대한 사전 지식이 전혀 없다고 가정하여 설명됩니다.&lt;/p&gt;
+&lt;h1 id=&#34;컨테이너란-무엇인가요&#34;&gt;컨테이너란 무엇인가요?&lt;/h1&gt;
+&lt;p&gt;과거에는 보다 유연하고 민첩한 방식의 애플리케이션 실행 방법으로 컨테이너가 등장했습니다. 리눅스 컨테이너는 리눅스 운영체제 내에서 직접 경량 애플리케이션을 실행할 수 있도록 했습니다. 하이퍼바이저와 가상 머신이 없어도 동일한 운영 체제에서 애플리케이션을 격리하여 실행할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;도커-컨테이너란-무엇인가요&#34;&gt;도커 컨테이너란 무엇인가요?&lt;/h1&gt;
+&lt;p&gt;구글(Google)은 데이터 센터에서 2006년부터 리눅스(Linux) 컨테이너를 사용하고 있습니다. 하지만 컨테이너는 2013년에 도커 컨테이너가 나오면서 더 유명해졌습니다. 이는 이전 버전의 컨테이너에 비해 컨테이너를 보다 단순하고 표준적인 방식으로 실행할 수 있는 방법입니다.&lt;/p&gt;
+&lt;p&gt;도커 컨테이너는 리눅스에서도 실행됩니다. 하지만 도커만이 컨테이너를 운영하는 유일한 방법은 아닙니다. LXC는 컨테이너를 실행하는 또 다른 방법입니다. LXC와 도커는 모두 리눅스에 뿌리를 두고 있습니다.&lt;/p&gt;
+&lt;p&gt;도커 컨테이너가 LXC와 같은 경쟁 컨테이너에 비해 더 인기 있는 이유 중 하나는 호스트 운영 체제에서 간단하고 빠르게 &amp;ldquo;이미지&amp;quot;로 불러올 수 있기 때문입니다. 도커는 클라우드에 이미지로 저장되며, 필요한 경우 간단한 방법으로 사용자가 실행을 요청합니다.&lt;/p&gt;
+&lt;p&gt;앞으로 &amp;ldquo;컨테이너&amp;quot;와 &amp;ldquo;도커 컨테이너&amp;quot;라는 단어를 동일한 의미처럼 사용하겠습니다.&lt;/p&gt;
+&lt;p&gt;NFV에서의 도커 컨테이너를 이해하기 위해 단계별로 안내합니다.&lt;/p&gt;
+&lt;p&gt;가상 머신은 좋지만 다음과 같은 문제점이 있습니다.&lt;/p&gt;
+&lt;p&gt;전용 운영 체제가 필요합니다. 또한 가상화를 구현하려면 가상 머신을 분리하는 하이퍼바이저가 필요합니다.&lt;/p&gt;
+&lt;p&gt;애플리케이션이  많을수록 소프트웨어 오버헤드가 증가하고 비용이 많이 들며 업데이트 상태를 유지해야 합니다.&lt;/p&gt;
+&lt;p&gt;하지만 NFV 아키텍처에는 가상 머신이 필요합니다. NFV 아키텍처를 살펴보겠습니다.&lt;/p&gt;
+&lt;h2 id=&#34;1단계-nfv-아키텍처의-하이퍼바이저부터-살펴보겠습니다&#34;&gt;1단계: NFV 아키텍처의 하이퍼바이저부터 살펴보겠습니다.&lt;/h2&gt;
+&lt;p&gt;아래 다이어그램에서 NFV 아키텍처가 있는데, 아마 여러 번 보셨을 것입니다. (모르시는 분은 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;여기를 확인해주세요&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-in-nfv.png&#34; alt=&#34;hypervisor-in-nfv&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이 논의를 위해 세 가지 고유한 구성 요소가 있는 NFVI(NFV Infrastructure)만 살펴보겠습니다.&lt;/p&gt;
+&lt;p&gt;하이퍼바이저 도메인, 컴퓨팅 도메인 및 네트워크 인프라 도메인입니다.&lt;/p&gt;
+&lt;p&gt;가상화 계층은 실제로 컴퓨팅 도메인(물리적 서버 및 x86 서버)의 하드웨어 리소스 분리를 담당하는 하이퍼바이저입니다. 예를 들어 단일 물리 서버(물리 메모리 및 물리 컴퓨팅)가 있을 수 있지만 하이퍼바이저는 각 엔터티가 독립하는 방식으로 이를 여러 가상 메모리 및 가상 컴퓨팅으로 파티셔닝할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;가상 리소스와 함께 (하이퍼바이저라고 하는) 가상화 계층을 &amp;ldquo;하이퍼바이저 도메인&amp;quot;이라고 합니다.&lt;/p&gt;
+&lt;h2 id=&#34;2단계-가상-머신을-자세히-살펴보겠습니다&#34;&gt;2단계: 가상 머신을 자세히 살펴보겠습니다.&lt;/h2&gt;
+&lt;p&gt;이제 가상 머신을 이해하기 위해 하이퍼바이저 도메인을 확장하여 이 도메인 내에 무엇이 있는지 보여드리겠습니다.&lt;/p&gt;
+&lt;p&gt;아래 두 번째 그림을 확인하세요.&lt;/p&gt;
+&lt;p&gt;위의 첫 번째 그림과 동일한 하이퍼바이저 도메인이 왼쪽에 있습니다. 오른쪽 그림에는 하이퍼바이저 도메인을 확장하여 가상 머신이 있습니다. 즉, 하이퍼바이저 도메인의 가상 리소스가 이제 가상 머신으로 표시됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-domain-with-vm.png&#34; alt=&#34;hypervisor-domain-with-vm&#34;&gt;&lt;/p&gt;
+&lt;p&gt;간단하게 설명하기 위해 왼쪽의 가상 네트워크 블록 및 네트워크 블록을 제거했습니다. 이 블록들은 여기서 중요하지 않습니다.&lt;/p&gt;
+&lt;p&gt;가상화 계층이 리소스 관리자 및 네트워크 관리자가 되었습니다. 가상 컴퓨팅 및 가상 메모리가 가상 머신이 되었습니다.&lt;/p&gt;
+&lt;p&gt;그렇다면 가상 머신이란 무엇일까요?&lt;/p&gt;
+&lt;p&gt;가상 머신은 VNF(가상 네트워크 기능)가 실행되는 환경을 제공합니다.&lt;/p&gt;
+&lt;p&gt;다이어그램을 보면 각 가상 머신이 VNF에 연결됩니다.&lt;/p&gt;
+&lt;p&gt;명확하게 하기 위해 예를 들어 설명하겠습니다. Virtual CPE라는 VNF1과 Virtual Firewall이라는 VNF2가 있습니다. 위의 예에서 각각 고유한 가상 머신으로 실행됩니다. 그런 다음 하이퍼바이저 도메인을 통해 체인으로 연결하고 내부적으로 연결할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;또한 가상 머신은 논리적으로 서로 분리되어 있습니다. 따라서 각 가상 머신에서 독립적인 운영 체제를 실행할 수 있습니다. 예를 들어 게스트 운영 체제 OS1은 리눅스일 수 있고 게스트 OS2는 솔라리스일 수 있습니다.&lt;/p&gt;
+&lt;p&gt;또한 게스트 운영 체제 외에도 하이퍼바이저가 실행되는 환경인 호스트 운영 체제가 필요합니다. 다음 단락에서 컨테이너에 대해 논의할 때 이 중요한 점을 명심하세요.&lt;/p&gt;
+&lt;p&gt;이제 가상 머신을 제거해 보겠습니다.&lt;/p&gt;
+&lt;h2 id=&#34;3단계-가상-머신을-제거하고-컨테이너를-도입하세요&#34;&gt;3단계: 가상 머신을 제거하고 컨테이너를 도입하세요!&lt;/h2&gt;
+&lt;p&gt;이제 가상 머신 대신 완전히 새로운 구성 요소 컨테이너를 도입합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/vm-replaced-with-container.png&#34; alt=&#34;vm-replaced-with-container&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이제 VNF1은 컨테이너 1에서 실행되고 VNF2는 가상 머신과 동일한 기능을 제공하는 컨테이너 2에서 실행됩니다.&lt;/p&gt;
+&lt;p&gt;가상 머신과 동일한 기능을 제공하지만 동일한 OS (여기서는 리눅스) 내에서 제공합니다.&lt;/p&gt;
+&lt;p&gt;이제 게스트 OS가 필요하지 않다는 것을 알아차리셨나요?&lt;/p&gt;
+&lt;p&gt;단순한 아키텍처입니다. 그렇죠?&lt;/p&gt;
+&lt;h2 id=&#34;컨테이너로-무엇을-달성했나요&#34;&gt;컨테이너로 무엇을 달성했나요?&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;컨테이너 환경에서는 호스트 OS가 리눅스인 것을 알 수 있으므로 게스트 OS가 필요하지 않습니다. 따라서 가상 머신에 비해 가볍고 오버헤드가 적습니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;현재 컨테이너가 동일한 호스트 OS 내의 OS 수준에서 충분한 분리를 유지할 수 있으므로 하이퍼바이저를 제거하여 아키텍처를 단순화합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;가상 머신(VM)은 하드웨어 레벨 가상화를 제공하므로 기존의 가상 머신이 하이퍼바이저 소프트웨어를 통해 호스트를 가져오고 파티션을 분할합니다. 이는 기본적으로 VM이 호스트 머신의 OS에서 분리됨을 의미합니다. 리눅스 운영 체제에서 윈도우즈(Windows) 호스트를 실행할 수 있습니다. 반면에 컨테이너는 OS 수준 가상화를 제공합니다. 즉, 동일한 OS에서 애플리케이션은 자체적으로 격리될 수 있습니다. 이는 전체 OS가 중복되지 않기 때문에 VM에 비해 훨씬 적은 오버헤드입니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;컨테이너 얘기는 여기까지입니다.&lt;/p&gt;
+&lt;h2 id=&#34;nfv용-컨테이너의-미래&#34;&gt;NFV용 컨테이너의 미래&lt;/h2&gt;
+&lt;p&gt;현실을 보면 현재의 NFV 아키텍처와 표준은 가상 머신을 기반으로 합니다.&lt;/p&gt;
+&lt;p&gt;컨테이너는 아직 NFV에서 새로운 개념입니다. 특히 보안 측면에서 여전히 많은 개발이 진행되고 있습니다. 보시다시피 호스트 OS가 모든 컨테이너에 노출되어 있어 멀티 테넌시 보안 문제가 발생할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;그러나 컨테이너 환경에서 VNF를 쉽고 간단하게 실행할 수 있다는 것을 고려할 때 좋은 미래가 있을 것 같습니다. 또한 가상 머신에서 전체 VNF를 실행하는 대신 마이크로 서비스를 실행할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;예를 들어 가상 CPE(vCPE, Virtual Customer Premises Equipment)의 경우 많은 구성요소를 작은 컨테이너로 분해하여 체인으로 연결할 수 있습니다. 이 기능을 분해하면 소규모 소프트웨어 벤더가 적은 오버헤드로 VNF의 작은 기능을 쉽게 개발할 수 있습니다.&lt;/p&gt;
+- https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - </description>
+        </item>
     
     
     
@@ -215,92 +299,6 @@ kube::golang::place_bins() {
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/vscode-debugging-golang.png&#34; alt=&#34;vscode-debugging-golang&#34;&gt;&lt;/p&gt;
 - https://markruler.github.io/posts/kubernetes/local-build-kube/ - </description>
-        </item>
-    
-    
-    
-        <item>
-        <title>[번역] NFV 도커 컨테이너 초심자 가이드</title>
-        <link>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</link>
-        <pubDate>Sat, 03 Oct 2020 22:46:00 +0900</pubDate>
-        
-        <guid>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</guid>
-        <description>markruler https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ -&lt;p&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/&#34;&gt;원문 링크&lt;/a&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;원작자(Faisal Khan)의 허락을 받고 번역한 글입니다. 오타, 오역, 어색한 의역 등은 &lt;a href=&#34;https://github.com/markruler/markruler.github.io/issues/new&#34;&gt;여기&lt;/a&gt;에서 피드백 주시면 감사드립니다! 👍&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;The emerging Docker containers have potential to revolutionalize NFV.&lt;/p&gt;
-&lt;p&gt;After all, they are lightweight compared to virtual machines; they need less overhead and resources; and, they can provide application isolation running in the same operating system, they live in.&lt;/p&gt;
-&lt;p&gt;That means,  if a Virtual Network function (VNF) in NFV can run in a Docker container with complete isolation, you may not need a virtual machine.&lt;/p&gt;
-&lt;p&gt;But, is it that easy?&lt;/p&gt;
-&lt;p&gt;And  what is the future of virtual machine, then?&lt;/p&gt;
-&lt;p&gt;Infact, it is too early to say anything about the future of virtual machines as docker containers are still evolving  (and so is NFV 😊).&lt;/p&gt;
-&lt;p&gt;However, if you stay till the end, you will  be able to find out, what makes Docker containers so special that everyone is talking about them now.&lt;/p&gt;
-&lt;p&gt;The primary aim of this guide is to walk you step by step in understanding the architecture of Docker container. In the process, you will also understand the basics of the hypervisor and virtual machine.&lt;/p&gt;
-&lt;p&gt;The concepts are explained, assuming zero prior knowledge about virtual machines and hypervisors.&lt;/p&gt;
-&lt;h1 id=&#34;what-is-a-container&#34;&gt;What is a container?&lt;/h1&gt;
-&lt;p&gt;Historically, containers emerged as  a way of running applications in a more flexible and agile way. Linux containers enabled running lightweight applications, within Linux OS directly. Without a need for the hypervisor and virtual machines, applications can run in isolation in the same operating system.&lt;/p&gt;
-&lt;h1 id=&#34;what-is-a-docker-container&#34;&gt;What is a Docker container?&lt;/h1&gt;
-&lt;p&gt;Google has been using Linux containers in  its data centers  since 2006. But, they became more popular with the arrival of docker containers in 2013. Which is a more simple and standard way to run containers compared to earlier version of containers.&lt;/p&gt;
-&lt;p&gt;The Docker container also runs in Linux. But Docker is not the only way run containers. LXC is another way to run containers. Both LXC and Docker have roots in Linux.&lt;/p&gt;
-&lt;p&gt;One of the reasons, the Docker container is more popular compared to competing containers such as LXC is its ability to load as “image” on host operating system in a simple and quick manner. Dockers are stored in the cloud as images and called upon for execution by users when needed in a simple way.&lt;/p&gt;
-&lt;p&gt;Moving forward, I will use the word “container” and “Docker container” interchangeably  as the concepts apply to both.&lt;/p&gt;
-&lt;p&gt;Step by Step guide to understanding  Docker containers in NFV&lt;/p&gt;
-&lt;p&gt;Virtual machines are good, yet they have problems:&lt;/p&gt;
-&lt;p&gt;You need  a dedicated operating system. And, you need a hypervisor to separate the virtual machine to achieve virtualization.&lt;/p&gt;
-&lt;p&gt;More applications mean more software overhead, more expensive and a need to keep them updated.&lt;/p&gt;
-&lt;p&gt;Yet, virtual machines are needed for NFV architecture, so let’s see the NFV architecture.&lt;/p&gt;
-&lt;h2 id=&#34;step-1-lets-start-with-the--hypervisor-in-nfv-architecture&#34;&gt;Step 1: Let’s start with the  Hypervisor in NFV Architecture&lt;/h2&gt;
-&lt;p&gt;In this diagram, I am showing the NFV architecture, you may have seen many times ( Need a refresher, &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;visit here&lt;/a&gt;).&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-in-nfv.png&#34; alt=&#34;hypervisor-in-nfv&#34;&gt;&lt;/p&gt;
-&lt;p&gt;For the purpose of this discussion, I will zoom only on the NFVI ( NFV Infrastructure) that has three distinct components:&lt;/p&gt;
-&lt;p&gt;The Hypervisor domain, the Compute domain, and the Network Infrastructure domain.&lt;/p&gt;
-&lt;p&gt;The virtualization layer  is actually the hypervisor, which is responsible for abstracting the hardware resources of a compute domain (physical/x86 servers). For example, you may have a single physical server ( physical memory and physical compute) but the hypervisor  can partition it into multiple virtual  memories and virtual computes in a way that each entity is independent.&lt;/p&gt;
-&lt;p&gt;Together, the virtualization layer ( which we called hypervisor) with the virtual resources is called “Hypervisor domain”.&lt;/p&gt;
-&lt;h2 id=&#34;step-2-lets-zoom-in-virtual-machines&#34;&gt;Step 2: Lets zoom in Virtual Machines&lt;/h2&gt;
-&lt;p&gt;To understand virtual machines, I will now  expand the hypervisor domain to show what is inside this domain.&lt;/p&gt;
-&lt;p&gt;Have a look at Fig 2 below:&lt;/p&gt;
-&lt;p&gt;I am showing on the left the same Hypervisor domain as in Fig1 above. But in the figure to the right, I have expanded the Hypervisor domain to show the virtual machines. That is, the virtual resources of the hypervisor domain are now shown as virtual machines.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-domain-with-vm.png&#34; alt=&#34;hypervisor-domain-with-vm&#34;&gt;&lt;/p&gt;
-&lt;p&gt;For simplicity, I have removed the virtual network/network blocks on the left, as they are not important for this discussion.&lt;/p&gt;
-&lt;p&gt;The virtualization layer has become the resource/network manager. The virtual compute/memory has become virtual machine (VM)&lt;/p&gt;
-&lt;p&gt;So what is a virtual machine?&lt;/p&gt;
-&lt;p&gt;A virtual machine  provides an environment in which a VNF ( Virtual Network Function) runs.&lt;/p&gt;
-&lt;p&gt;If you look at the diagram, each Virtual Machine is linked to a VNF .&lt;/p&gt;
-&lt;p&gt;Let’s take an example to clarify. There is a VNF1 called Virtual CPE and another VNF2 called Virtual Firewall. From the example above, each then runs into its own virtual machine. They can then be chained and connected internally through a hypervisor domain.&lt;/p&gt;
-&lt;p&gt;Also, note that virtual machines are logically separate from one another. This makes it possible to run independent operating systems on each virtual machine. For example, Guest Operating System OS1 can be Linux and Guest OS2 can be Solaris (as an example).&lt;/p&gt;
-&lt;p&gt;And in addition to the Guest operating systems/OS, did you notice that  there is also a need for Host Operating System/OS, which is an environment in which the hypervisor runs.Keep this important point in mind, as I discuss containers in the next paragraph.&lt;/p&gt;
-&lt;p&gt;Let’s take the journey forward and now remove the Virtual Machines.&lt;/p&gt;
-&lt;h2 id=&#34;step-3-remove-virtual-machines-and-introduce-containers&#34;&gt;Step 3. Remove virtual machines and introduce containers!&lt;/h2&gt;
-&lt;p&gt;Now instead of virtual machine, I introduce a totally new component Container&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/vm-replaced-with-container.png&#34; alt=&#34;vm-replaced-with-container&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VNF1 now runs in container 1 and VNF2 runs in container 2 providing the same functionality as virtual machines.&lt;/p&gt;
-&lt;p&gt;What we have achieved is the same functionality as a virtual machine but within the same OS, which is Linux here.&lt;/p&gt;
-&lt;p&gt;Did you notice that there is no need for Guest OS now?&lt;/p&gt;
-&lt;p&gt;Simple architecture;  isn’t it?&lt;/p&gt;
-&lt;h2 id=&#34;what-have-we-achieved-with-containers&#34;&gt;What have we achieved with containers?&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;There is no need for Guest Operating System (OS) in the container environment as you can see that the Host OS is Linux. Therefore, they are lighter weight and need less overhead compared to virtual machines&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Architecture is simplified by removing the hypervisor as now the containers can retain sufficient isolation at the OS level inside the same Host OS.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Virtual Machine provides hardware level virtualization  meaning classic virtual machines take a host and partition it via hypervisor software. This essentially means that VMs are isolated from the OS of the host machine. You can run a windows Host over a Linux operating system.On the other hand, containers provide OS level virtualization. That is in the same OS, applications can keep themselves isolated. This is far less overhead compared to VM as the whole OS is not duplicated.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;That’s it about the Containers.&lt;/p&gt;
-&lt;h2 id=&#34;future-of-containers-for-nfv&#34;&gt;Future of containers for NFV&lt;/h2&gt;
-&lt;p&gt;Let’s face it, the current NFV architecture and standards are based on the Virtual machines.&lt;/p&gt;
-&lt;p&gt;Containers are still new to NFV. There are still a lot of development going on especially from a security point of view. As you can see that the Host OS is exposed to all containers so there could be potential multi-tenancy security issues.&lt;/p&gt;
-&lt;p&gt;However, they do promise a good future considering the ease and simplicity of running the VNFs in such environments. Also, they can open a door to running microservices instead of running a complete VNF over a virtual machine.&lt;/p&gt;
-&lt;p&gt;For example in the case of virtual CPE, a lot of its components can be decomposed into small containers and chained together. By decomposing the functions, this will provide an opportunity for small software vendors to develop small functions of a VNF easily with less overhead.&lt;/p&gt;
-&lt;p&gt;Did this guide help you in understanding the containers in a simple way ?&lt;/p&gt;
-&lt;p&gt;Share your views in the following comments section.&lt;/p&gt;
-- https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - </description>
         </item>
     
     

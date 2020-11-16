@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Add changes to git.
 git add .
 
