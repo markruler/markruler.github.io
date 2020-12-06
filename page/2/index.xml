@@ -5,9 +5,86 @@
     <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Mon, 16 Nov 2020 22:40:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2020 00:44:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Web Socket 알게 된 것들</title>
+        <link>https://markruler.github.io/posts/spring/web-socket/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/spring/web-socket/</guid>
+        <description>markruler https://markruler.github.io/posts/spring/web-socket/ -&lt;ul&gt;
+&lt;li&gt;목차
+{:toc}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;refereces&#34;&gt;Refereces&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://spring.io/guides/gs/messaging-stomp-websocket/&#34;&gt;Spring guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://postitforhooney.tistory.com/entry/SpringStomp-Spring-stomp%EC%99%80-Socjks%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%A5%EB%8B%A8%EC%A0%90&#34;&gt;Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://daddyprogrammer.org/post/4077/spring-websocket-chatting/&#34;&gt;Spring websocket chatting server&lt;/a&gt; : Stateless 적용을 위한 JWT 도입&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://adrenal.tistory.com/20&#34;&gt;webSocket으로 개발하기 전에 알고 있어야 할 것들&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://simsimjae.tistory.com/25&#34;&gt;웹 소켓을 활용한 쪽지 알람 기능&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wondongho.tistory.com/73&#34;&gt;WebSocket과 STOMP 연동&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://supawer0728.github.io/2018/03/30/spring-websocket/&#34;&gt;Spring WebSocket 소개&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1-개념&#34;&gt;1. 개념&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/websocket-schema.png&#34; alt=&#34;websocket-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html&#34;&gt;출처: Oracle&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.&lt;/p&gt;
+&lt;p&gt;웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/spring-stomp-schema.png&#34; alt=&#34;spring-stomp-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow&#34;&gt;출처: Spring&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;2-네트워크-오버헤드-비교&#34;&gt;2. 네트워크 오버헤드 비교&lt;/h2&gt;
+&lt;hr&gt;
+&lt;p&gt;폴링(Polling) 방식&lt;/p&gt;
+&lt;p&gt;요청/응답 헤더 데이터 용량: (871 Byte)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1000명 *  헤더 데이터 용량  = 871,000  Byte&lt;/li&gt;
+&lt;li&gt;10000명 *  헤더 데이터 용량  = 8,710,000  Byte&lt;/li&gt;
+&lt;li&gt;100000명 *  헤더 데이터 용량  = 87,100,000 Byte&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;WebSocket 방식&lt;/p&gt;
+&lt;p&gt;메시지 데이터 용량: (2 Byte)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;1000명 *   메시지 데이터 용량   = 2,000  Byte&lt;/li&gt;
+&lt;li&gt;10000명 *   메시지 데이터 용량   = 20,000  Byte&lt;/li&gt;
+&lt;li&gt;100000명 *   메시지 데이터 용량   = 200,000 Byte&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-socketio-sockjs-stomp&#34;&gt;3. Socket.io, SockJS, STOMP&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Socket.io : Node.js 모듈. 클라이언트, 서버 모두 JS로 개발.&lt;/li&gt;
+&lt;li&gt;WebSocket : 표준 웹소켓. IE10부터 적용.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;SockJS : IE8부터 적용.&lt;/li&gt;
+&lt;li&gt;STOMP : Topic 구독 방식. Spring 지원. 서버 부하 적음.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요없음&lt;/li&gt;
+&lt;li&gt;heart-beat&lt;/li&gt;
+&lt;li&gt;@MessageMapping&lt;/li&gt;
+&lt;li&gt;@SendTo&lt;/li&gt;
+&lt;li&gt;@SendToUser&lt;/li&gt;
+&lt;li&gt;SimpMessagingTemplate.convertAndSendToUser()&lt;/li&gt;
+&lt;li&gt;MessagesSupplier&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;to-do&#34;&gt;To-Do&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Interceptor 결합?&lt;/li&gt;
+&lt;li&gt;Handler와의 차이&lt;/li&gt;
+&lt;li&gt;Web Hook 개념&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/spring/web-socket/ - </description>
+        </item>
     
     
     

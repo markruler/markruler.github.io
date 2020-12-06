@@ -5,9 +5,132 @@
     <description>Recent content on markruler</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Mon, 16 Nov 2020 22:40:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 07 Dec 2020 00:44:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>VIM 에디터 delete 명령 정리</title>
+        <link>https://markruler.github.io/posts/common/vim-editor-shortcuts/</link>
+        <pubDate>Mon, 07 Dec 2020 00:44:00 +0900</pubDate>
+        
+        <guid>https://markruler.github.io/posts/common/vim-editor-shortcuts/</guid>
+        <description>markruler https://markruler.github.io/posts/common/vim-editor-shortcuts/ -&lt;blockquote&gt;
+&lt;p&gt;업무 중에 구성 파일을 편집하기 위해 VI 에디터를 사용할 일이 많은데, VI 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;homevimrc&#34;&gt;$HOME/.vimrc&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;quot; - comment&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;syntax on &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;구문강조 사용&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;colorscheme desert &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;color 폴더에 colorscheme 설치 필요&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set background=&lt;span style=&#34;color:#658b00&#34;&gt;dark&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;하이라이팅 lihgt / dark&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set autoindent&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set shiftwidth=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;autoindent width&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set ts=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;tabstop, width&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set softtabstop=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set cindent &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;C Language indent&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set nu &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;number&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set cul &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;Highlight current line&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set hls &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;hlsearch, 검색어 강조&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set incsearch &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;키워드 입력시 점진적 검색&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set ic &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;ignorecase, 검색시 대소문자 무시&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set expandtab &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;탭 대신 스페이스&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set laststatus=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;status line&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set nowrapscan &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;검색할 때 문서의 끝에서 처음으로 안돌아감&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set visualbell &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;키를 잘못눌렀을 때 화면 프레시&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set ruler &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;화면 우측 하단에 현재 커서의 위치(줄,칸) 표시&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set fileencoding=utf&lt;span style=&#34;color:#b452cd&#34;&gt;-8&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;파일저장인코딩&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set tenc=utf&lt;span style=&#34;color:#b452cd&#34;&gt;-8&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;터미널 인코딩&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set history=&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;&amp;#34;vi 편집기록 기억갯수 .viminfo에 기록&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&lt;/span&gt;set showbreak=+++\&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/common/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;모드별-명령어&#34;&gt;모드별 명령어&lt;/h2&gt;
+&lt;h3 id=&#34;command-mode&#34;&gt;Command mode&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;x - 한 글자 삭제&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;s - 한 글자 삭제 후 바로 입력 모드&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;y - 복사 (yank)&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;p - 붙여넣기&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;u - undo&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;control + r - redo&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;. - 이전 명령 다시 실행&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;v - visual mode로 전환해서 블록 지정 후 삭제 및 복사 등의 명령&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;이동&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;control + b - 이전 페이지로 이동&lt;/li&gt;
+&lt;li&gt;control + f - 다음 페이지로 이동&lt;/li&gt;
+&lt;li&gt;control + u - 이전 half page로 이동&lt;/li&gt;
+&lt;li&gt;control + d - 다음 half page로 이동&lt;/li&gt;
+&lt;li&gt;gg - 문서 맨 앞으로 이동&lt;/li&gt;
+&lt;li&gt;G - 문서 맨 뒤로 이동&lt;/li&gt;
+&lt;li&gt;^ - 문장 맨 앞으로 이동&lt;/li&gt;
+&lt;li&gt;$ - 문장 맨 뒤로 이동&lt;/li&gt;
+&lt;li&gt;0 - 현재 줄 끝으로 이동&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;입력 모드로 전환&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;i - 현재 커서에서 편집&lt;/li&gt;
+&lt;li&gt;a - 다음 칸으로 커서를 옮긴 후 편집&lt;/li&gt;
+&lt;li&gt;o - 다음 줄로 커서를 옮긴 후 편집&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;삭제 명령&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;dd - 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)&lt;/li&gt;
+&lt;li&gt;dgg - 현재 커서에서 첫 줄까지 삭제&lt;/li&gt;
+&lt;li&gt;dG - 현재 커서에서 마지막 줄까지 삭제&lt;/li&gt;
+&lt;li&gt;d$ - 현재 커서에서 현재 줄 마지막 단어까지 삭제&lt;/li&gt;
+&lt;li&gt;d^ - 현재 커서에서 현재 줄 첫 단어까지 삭제&lt;/li&gt;
+&lt;li&gt;워드(w, b)나 방향키(g,h,j,k) 등과 조합해 삭제할 수도 있다(dw, db, dg, dh, dj, dk, &amp;hellip;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;화면 분할&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;vs - vertical split&lt;/li&gt;
+&lt;li&gt;new - horizontal split&lt;/li&gt;
+&lt;li&gt;control + w - 분할된 창 간 이동&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;탭&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;last-line-mode-&#34;&gt;Last line mode (:)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;1,.d - 첫 번째 줄부터 현재 커서까지 삭제&lt;/li&gt;
+&lt;li&gt;5,10d - 5번 줄부터 10번 줄까지 삭제&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;search-mode--&#34;&gt;Search mode (/, ?)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;n - 다음 단어 (?는 반대)&lt;/li&gt;
+&lt;li&gt;N - 이전 단어 (?는 반대)&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/common/vim-editor-shortcuts/ - </description>
+        </item>
     
     
     
@@ -1056,83 +1179,6 @@ IT 서비스 환경과 클라우드 컴퓨팅 기능을 제공한다. 이 환경
 &lt;li&gt;$, #, @ 차이 알아보기&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/spring/thymeleaf/ - </description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Web Socket 알게 된 것들</title>
-        <link>https://markruler.github.io/posts/spring/web-socket/</link>
-        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
-        
-        <guid>https://markruler.github.io/posts/spring/web-socket/</guid>
-        <description>markruler https://markruler.github.io/posts/spring/web-socket/ -&lt;ul&gt;
-&lt;li&gt;목차
-{:toc}&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2 id=&#34;refereces&#34;&gt;Refereces&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://spring.io/guides/gs/messaging-stomp-websocket/&#34;&gt;Spring guide&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://postitforhooney.tistory.com/entry/SpringStomp-Spring-stomp%EC%99%80-Socjks%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9B%B9%EC%86%8C%EC%BC%93-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-%EA%B7%B8%EB%A6%AC%EA%B3%A0-%EC%9E%A5%EB%8B%A8%EC%A0%90&#34;&gt;Spring stomp와 SockJs를 통한 웹소켓 구현하기, 그리고 장,단점&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://daddyprogrammer.org/post/4077/spring-websocket-chatting/&#34;&gt;Spring websocket chatting server&lt;/a&gt; : Stateless 적용을 위한 JWT 도입&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://adrenal.tistory.com/20&#34;&gt;webSocket으로 개발하기 전에 알고 있어야 할 것들&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://simsimjae.tistory.com/25&#34;&gt;웹 소켓을 활용한 쪽지 알람 기능&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://wondongho.tistory.com/73&#34;&gt;WebSocket과 STOMP 연동&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://supawer0728.github.io/2018/03/30/spring-websocket/&#34;&gt;Spring WebSocket 소개&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;1-개념&#34;&gt;1. 개념&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/websocket-schema.png&#34; alt=&#34;websocket-schema&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html&#34;&gt;출처: Oracle&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.&lt;/p&gt;
-&lt;p&gt;웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/spring-stomp-schema.png&#34; alt=&#34;spring-stomp-schema&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow&#34;&gt;출처: Spring&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;2-네트워크-오버헤드-비교&#34;&gt;2. 네트워크 오버헤드 비교&lt;/h2&gt;
-&lt;hr&gt;
-&lt;p&gt;폴링(Polling) 방식&lt;/p&gt;
-&lt;p&gt;요청/응답 헤더 데이터 용량: (871 Byte)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;1000명 *  헤더 데이터 용량  = 871,000  Byte&lt;/li&gt;
-&lt;li&gt;10000명 *  헤더 데이터 용량  = 8,710,000  Byte&lt;/li&gt;
-&lt;li&gt;100000명 *  헤더 데이터 용량  = 87,100,000 Byte&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;p&gt;WebSocket 방식&lt;/p&gt;
-&lt;p&gt;메시지 데이터 용량: (2 Byte)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;1000명 *   메시지 데이터 용량   = 2,000  Byte&lt;/li&gt;
-&lt;li&gt;10000명 *   메시지 데이터 용량   = 20,000  Byte&lt;/li&gt;
-&lt;li&gt;100000명 *   메시지 데이터 용량   = 200,000 Byte&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;3-socketio-sockjs-stomp&#34;&gt;3. Socket.io, SockJS, STOMP&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;Socket.io : Node.js 모듈. 클라이언트, 서버 모두 JS로 개발.&lt;/li&gt;
-&lt;li&gt;WebSocket : 표준 웹소켓. IE10부터 적용.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요&lt;/li&gt;
-&lt;/ul&gt;
-&lt;ol&gt;
-&lt;li&gt;SockJS : IE8부터 적용.&lt;/li&gt;
-&lt;li&gt;STOMP : Topic 구독 방식. Spring 지원. 서버 부하 적음.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;TextWebSocketHandler / BinaryWebSocketHandler 구현 필요없음&lt;/li&gt;
-&lt;li&gt;heart-beat&lt;/li&gt;
-&lt;li&gt;@MessageMapping&lt;/li&gt;
-&lt;li&gt;@SendTo&lt;/li&gt;
-&lt;li&gt;@SendToUser&lt;/li&gt;
-&lt;li&gt;SimpMessagingTemplate.convertAndSendToUser()&lt;/li&gt;
-&lt;li&gt;MessagesSupplier&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;to-do&#34;&gt;To-Do&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Interceptor 결합?&lt;/li&gt;
-&lt;li&gt;Handler와의 차이&lt;/li&gt;
-&lt;li&gt;Web Hook 개념&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/spring/web-socket/ - </description>
         </item>
     
     
