@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html><head>
-	<meta name="generator" content="Hugo 0.79.0" />
-<title>Changsu</title>
+<title>쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기</title>
 
 
-
-  
 
 
 <meta charset="utf-8">
@@ -13,25 +10,26 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="developer">
+<meta name="description" content="Github/kubernetes">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="Changsu" />
-<meta property="og:description" content="developer" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://cxsu.github.io/" />
-<meta property="og:updated_time" content="2020-12-07T00:44:00+09:00" /><meta property="og:site_name" content="Changsu" />
+<meta property="og:title" content="쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기" />
+<meta property="og:description" content="Github/kubernetes" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://cxsu.github.io/posts/go/d/" />
+<meta property="article:published_time" content="2020-10-11T14:48:00+09:00" />
+<meta property="article:modified_time" content="2020-10-11T14:48:00+09:00" /><meta property="og:site_name" content="Changsu" />
 
 
 
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Changsu"/>
-<meta name="twitter:description" content="developer"/>
+<meta name="twitter:title" content="쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기"/>
+<meta name="twitter:description" content="Github/kubernetes"/>
 
 
 
@@ -84,6 +82,10 @@ if (!doNotTrack) {
 
 
 
+  
+    <script src="https://cxsu.github.io//js/toc.js"></script>
+  
+
 
 
 
@@ -97,7 +99,7 @@ if (!doNotTrack) {
 <body>
     	<div id="app"><div ref="sideContainer" class="side-container">
     
-    <a class="a-block nav-head active" href="https://cxsu.github.io/">
+    <a class="a-block nav-head false" href="https://cxsu.github.io/">
     
         <div class="nav-title">
             Changsu
@@ -125,9 +127,11 @@ if (!doNotTrack) {
             
             
             
+                
             
             
-            <a class="a-block nav-link-item false" href="/posts">
+            
+            <a class="a-block nav-link-item active" href="/posts">
                 Archive
             </a>
             
@@ -183,6 +187,105 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div><div ref="extraContainer" class="extra-container">
     
     
+    
+    <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ac%ec%9a%a9%ed%95%a0-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#사용할-명령어-nav`)" id="사용할-명령어-nav">
+									사용할 명령어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%8c%eb%93%9c-%ec%8b%a4%ed%96%89-%eb%94%b0%eb%9d%bc%ea%b0%80%ea%b8%b0" onclick="onNavClick(`#빌드-실행-따라가기-nav`)" id="빌드-실행-따라가기-nav">
+									빌드 실행 따라가기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#makefile" onclick="onNavClick(`#makefile-nav`)" id="makefile-nav">
+									Makefile
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
     <div class="pagination">
         <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
             <i class="material-icons pagination-action-icon">
@@ -198,24 +301,6 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 brightness_7
             </i>
         </a>
-        
-        
-        
-            <div class="pagination-indicator">
-                <span style="text-align: center">
-                    2<br><div style="display: inline-block; transform: rotate(-28deg)">-</div><br>2
-                </span>
-            </div>
-            
-            
-            <a class="pagination-action" href="/">
-                <i class="material-icons pagination-action-icon">
-                    chevron_left
-                </i>
-            </a>
-            
-
-            
         
         
     </div>
@@ -240,9 +325,11 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 
                 
+                    
                 
                 
-                <a class="a-block drawer-menu-item false" href="/posts">
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
                     Archive
                 </a>
                 
@@ -277,6 +364,104 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 </a>
                 
             
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#reference" onclick="onNavClick(`#reference-nav`)" id="reference-nav">
+									Reference
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ac%ec%9a%a9%ed%95%a0-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#사용할-명령어-nav`)" id="사용할-명령어-nav">
+									사용할 명령어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%8c%eb%93%9c-%ec%8b%a4%ed%96%89-%eb%94%b0%eb%9d%bc%ea%b0%80%ea%b8%b0" onclick="onNavClick(`#빌드-실행-따라가기-nav`)" id="빌드-실행-따라가기-nav">
+									빌드 실행 따라가기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#makefile" onclick="onNavClick(`#makefile-nav`)" id="makefile-nav">
+									Makefile
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
             
         </div>
     </div>
@@ -319,153 +504,111 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 </div>
 
             <div id="content">
-
 <div ref="streamContainer" class="stream-container">
-    <div class="post-list-container post-list-container-no-background">
-        
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
             
-            <a href="https://cxsu.github.io/posts/spring/thymeleaf/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                ThymeLeaf 알게 된 것들
-                            </div>
-                            <div class="post-item-summary">
-                                ThymeLeaf Documents
-                            </div>
-                            <div class="post-item-meta">
-    2020-03-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+            
+            
+                
+            
 
-                        </div>
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://cxsu.github.io/images/kubernetes/vscode-debugging-golang.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기
+                    
+                    <div class="post-subtitle">
+                        Github/kubernetes
+                    </div>
+                    
+                    <div class="post-meta">
                         
+                        <time itemprop="datePublished">
+                            2020년 10월 11일 14시 48분
+                        </time>
                         
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[cloud]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
                             
-                            <div class="post-item-image-wrapper">
-                            <div class="post-item-image"
+                                <a href="/tags/kubernetes">kubernetes</a>
+                                &nbsp;
                             
-                                 style="background-image: url('https://cxsu.github.io/images/cxsu-default.png')"
-                            
-                            ></div>
-                            </div>
+                        
                         
                     </div>
                 </div>
+            </div>
             
-        
-            
-            <a href="https://cxsu.github.io/posts/spring/web-socket/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                Web Socket 알게 된 것들
-                            </div>
-                            <div class="post-item-summary">
-                                Spring-STOMP
-                            </div>
-                            <div class="post-item-meta">
-    2020-03-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
+<p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p>
+</blockquote>
+<h2 id="reference">Reference</h2>
+<ul>
+<li><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md">kubernetes/build/README.md</a></li>
+</ul>
+<h2 id="사용할-명령어">사용할 명령어</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># master 브랜치</span>
+git clone --depth <span style="color:#b452cd">1</span> https://github.com/kubernetes/kubernetes.git
+<span style="color:#228b22"># 특정 브랜치</span>
+git clone --depth <span style="color:#b452cd">1</span> --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
 
-                        </div>
-                        
-                        
-                            
-                            <div class="post-item-image-wrapper">
-                            <div class="post-item-image"
-                            
-                                 style="background-image: url('https://cxsu.github.io/images/cxsu-default.png')"
-                            
-                            ></div>
-                            </div>
-                        
-                    </div>
-                </div>
-            
-        
-            
-            <a href="https://cxsu.github.io/posts/react/web-game-react/" class="a-block">
-                <div class="post-item-wrapper">
-                    <div class="post-item post-item-no-divider">
-                        <div class="post-item-info-wrapper">
-                            <div class="post-item-title">
-                                웹 게임을 만들며 배우는 React
-                            </div>
-                            <div class="post-item-summary">
-                                ZeroCho
-                            </div>
-                            <div class="post-item-meta">
-    2020-03-01
-    &emsp;
-    
-    
-    
-    &emsp;
-    
-</div>
+<span style="color:#228b22"># cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.</span>
+<span style="color:#228b22"># cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...</span>
+make all <span style="color:#00688b">WHAT</span>=cmd/kubectl <span style="color:#00688b">GOFLAGS</span>=-v
 
-                        </div>
-                        
-                        
-                            
-                            <div class="post-item-image-wrapper">
-                            <div class="post-item-image"
-                            
-                                 style="background-image: url('https://cxsu.github.io/images/cxsu-default.png')"
-                            
-                            ></div>
-                            </div>
-                        
-                    </div>
+<span style="color:#228b22"># 그냥 간단히 go build 명령도 가능하다.</span>
+go build -o k cmd/kubectl
+</code></pre></div><h2 id="빌드-실행-따라가기">빌드 실행 따라가기</h2>
+<h3 id="makefile">Makefile</h3>
+<ul>
+<li>make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">build/root/Makefile
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2020년 10월 11일</p>
+                    
                 </div>
+            </div>
             
-        
             
-        
-        </a>
+            <nav class="post-pagination">
+            
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+            </div>
+        </div>
     </div>
 </div>
 
-            </div>
-
-<div class="pagination">
-    
-    <a class="pagination-action" href="/" style="opacity:1">
-    
-        <i class="material-icons pagination-action-icon">
-            chevron_left
-        </i>
-    </a>
-
-        <div class="pagination-indicator">
-            <span>2/2</span>
-        </div>
-
-        
-            <a class="pagination-action" style="opacity:0">
-        
-                <i class="material-icons pagination-action-icon">
-                    chevron_right
-                </i>
-            </a>
-</div>
-
-
-<div id="single-column-footer">
+            </div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

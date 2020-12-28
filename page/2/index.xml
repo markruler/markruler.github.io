@@ -1,23 +1,101 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>markruler</title>
-    <link>https://markruler.github.io/</link>
-    <description>Recent content on markruler</description>
+    <title>Changsu</title>
+    <link>https://cxsu.github.io/</link>
+    <description>Recent content on Changsu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <lastBuildDate>Mon, 07 Dec 2020 00:44:00 +0900</lastBuildDate>
     
-        <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="https://cxsu.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>ThymeLeaf 알게 된 것들</title>
+        <link>https://cxsu.github.io/posts/spring/thymeleaf/</link>
+        <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
+        
+        <guid>https://cxsu.github.io/posts/spring/thymeleaf/</guid>
+        <description>Changsu https://cxsu.github.io/posts/spring/thymeleaf/ -&lt;h1 id=&#34;reference&#34;&gt;Reference&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.thymeleaf.org/documentation.html&#34;&gt;Docs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;java에서-반환된-객체&#34;&gt;java에서 반환된 객체&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;[[${ model }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;사용자가-로그인-인증을-하지-않았다면--spring-security&#34;&gt;사용자가 로그인 인증을 하지 않았다면 : spring security&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;tag&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;sec:authorize&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;isAnonymous()&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;tag&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;thhref&#34;&gt;th:href&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;sec:authorize&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;isAnonymous()&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/login}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;btn&amp;#34;&lt;/span&gt;&amp;gt;Log in&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;날짜-포맷&#34;&gt;날짜 포맷&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-col-value&amp;#34;&lt;/span&gt;&amp;gt;[[${ #temporals.format(board.createDate, &amp;#39;HH:mm&amp;#39;) }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;3항-연산자&#34;&gt;3항 연산자&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ? &amp;#39;common&amp;#39; : ${ board.category }]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;3항-연산자-1&#34;&gt;3항 연산자&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- 기본 표현법 --&amp;gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ? ${ board.category } : &amp;#39;common&amp;#39;]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+
+&lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- 단축 표현법 --&amp;gt;&lt;/span&gt;
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-badge&amp;#34;&lt;/span&gt;&amp;gt;
+  [[${ board.category } ?: ${ board.category }]]
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;span&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment-import&#34;&gt;fragment import&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:replace&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fragments/navbar&amp;#34;&lt;/span&gt; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;반복문&#34;&gt;반복문&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-item&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;board : ${ list }&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${&amp;#39;/board/&amp;#39; + board.id }&amp;#34;&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;collection-사이즈&#34;&gt;Collection 사이즈&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tt-col-value&amp;#34;&lt;/span&gt;&amp;gt;[[${ #lists.size(board.comments) }]]&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;form-태그에서-set-타입의-필드를-가지는-post-객체가-있다고-할-때&#34;&gt;form 태그에서 Set 타입의 필드를 가지는 Post 객체가 있다고 할 때,&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;form&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:object&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${post}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:action&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/post}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:method&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;post&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{title}&amp;#34;&lt;/span&gt;&amp;gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{content}&amp;#34;&lt;/span&gt;&amp;gt;
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- Using select tag --&amp;gt;&lt;/span&gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;select&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;id&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tags&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{tags}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;size&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;multiple&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;multiple&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;option&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tag : ${tags}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:value&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:text&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt;&amp;gt;
+      Tag
+    &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;option&lt;/span&gt;&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;select&lt;/span&gt;&amp;gt;
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;&amp;lt;!-- Using checkbox tag --&amp;gt;&lt;/span&gt;
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:each&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tag : ${tags}&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;input&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;checkbox&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:id&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:value&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:field&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;*{tags}&amp;#34;&lt;/span&gt;&amp;gt;
+    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;label&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:for&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:text&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;${tag}&amp;#34;&lt;/span&gt;&amp;gt;Tag&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;label&lt;/span&gt;&amp;gt;
+  &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+
+  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;button&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;submit&amp;#34;&lt;/span&gt;&amp;gt;저장&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;button&lt;/span&gt;&amp;gt;
+&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;form&lt;/span&gt;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;링크-경로&#34;&gt;링크 경로&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{http://localhost:8080/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 절대 경로
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 상대 경로
+&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;th:href&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@{~/sample}&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;a&lt;/span&gt;&amp;gt; // 무조건 &amp;#39;/&amp;#39; 루트 경로
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;레이아웃&#34;&gt;레이아웃&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;문서 참고&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;to-do&#34;&gt;To-Do&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Spring EL 과의 호환성?&lt;/li&gt;
+&lt;li&gt;$, #, @ 차이 알아보기&lt;/li&gt;
+&lt;/ul&gt;
+- https://cxsu.github.io/posts/spring/thymeleaf/ - </description>
+        </item>
     
     
     
         <item>
         <title>Web Socket 알게 된 것들</title>
-        <link>https://markruler.github.io/posts/spring/web-socket/</link>
+        <link>https://cxsu.github.io/posts/spring/web-socket/</link>
         <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
         
-        <guid>https://markruler.github.io/posts/spring/web-socket/</guid>
-        <description>markruler https://markruler.github.io/posts/spring/web-socket/ -&lt;ul&gt;
+        <guid>https://cxsu.github.io/posts/spring/web-socket/</guid>
+        <description>Changsu https://cxsu.github.io/posts/spring/web-socket/ -&lt;ul&gt;
 &lt;li&gt;목차
 {:toc}&lt;/li&gt;
 &lt;/ul&gt;
@@ -33,11 +111,11 @@
 &lt;li&gt;&lt;a href=&#34;https://supawer0728.github.io/2018/03/30/spring-websocket/&#34;&gt;Spring WebSocket 소개&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;1-개념&#34;&gt;1. 개념&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/websocket-schema.png&#34; alt=&#34;websocket-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/spring-websocket/websocket-schema.png&#34; alt=&#34;websocket-schema&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/cd/E55956_01/doc.11123/user_guide/content/general_websocket.html&#34;&gt;출처: Oracle&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;웹 소켓은 가장 성공적인 http 프로콜을 기반으로 하지만, http프로토콜과는 전혀 다른 프로콜이라고 생각하면 좋을것 같습니다. 특히, 기존 http프로콜은 연결-요청-응답-종료 반복된 작업을 계속 하는 문제가 발생됩니다. Websocket은 이를 해결하기 위해 나온 기술 중 하나이며, 2014년 표준으로 채택되어 HTML5에서 Websocket protocol이 추가가 되었습니다.&lt;/p&gt;
 &lt;p&gt;웹소켓은 http를 통해 연결요청을 전달합니다. 이러한 과정을 handshake라고 하며, http를 Websocket 프로토콜로 바꾸는 Protocol switching 작업을 진행합니다. 이 과정을 통해 새로운 소켓이 만들어지고, 이 소켓을 통해 양방향 통신이 가능하게 되는 것입니다. 기존의 연결되고, 종료되는 부분이 1번으로 줄어지게 되는 것이며, 그 연결하는 과정 속에서 전달되는 기본 Header(Encoding, charset, text, cookie 등)정보를 줄일 수 있는 장점이 생깁니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/spring-websocket/spring-stomp-schema.png&#34; alt=&#34;spring-stomp-schema&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/spring-websocket/spring-stomp-schema.png&#34; alt=&#34;spring-stomp-schema&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.spring.io/spring/docs/4.3.15.RELEASE/spring-framework-reference/html/websocket.html#websocket-stomp-message-flow&#34;&gt;출처: Spring&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;2-네트워크-오버헤드-비교&#34;&gt;2. 네트워크 오버헤드 비교&lt;/h2&gt;
 &lt;hr&gt;
@@ -83,18 +161,18 @@
 &lt;li&gt;Handler와의 차이&lt;/li&gt;
 &lt;li&gt;Web Hook 개념&lt;/li&gt;
 &lt;/ul&gt;
-- https://markruler.github.io/posts/spring/web-socket/ - </description>
+- https://cxsu.github.io/posts/spring/web-socket/ - </description>
         </item>
     
     
     
         <item>
         <title>웹 게임을 만들며 배우는 React</title>
-        <link>https://markruler.github.io/posts/react/web-game-react/</link>
+        <link>https://cxsu.github.io/posts/react/web-game-react/</link>
         <pubDate>Sun, 01 Mar 2020 10:58:10 +0900</pubDate>
         
-        <guid>https://markruler.github.io/posts/react/web-game-react/</guid>
-        <description>markruler https://markruler.github.io/posts/react/web-game-react/ -&lt;h1 id=&#34;reactjs&#34;&gt;React.&lt;em&gt;&lt;strong&gt;js&lt;/strong&gt;&lt;/em&gt;&lt;/h1&gt;
+        <guid>https://cxsu.github.io/posts/react/web-game-react/</guid>
+        <description>Changsu https://cxsu.github.io/posts/react/web-game-react/ -&lt;h1 id=&#34;reactjs&#34;&gt;React.&lt;em&gt;&lt;strong&gt;js&lt;/strong&gt;&lt;/em&gt;&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.inflearn.com/course/web-game-React&#34;&gt;출처 인프런 강의&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -163,7 +241,7 @@ npm start / yarn start
 &lt;li&gt;Component vs. PureComponent (shouldComponentUpdate) 혹은 memo() : 렌더링 최적화&lt;/li&gt;
 &lt;li&gt;배열에 push()는 immutable 때문에 불가&lt;/li&gt;
 &lt;/ol&gt;
-- https://markruler.github.io/posts/react/web-game-react/ - </description>
+- https://cxsu.github.io/posts/react/web-game-react/ - </description>
         </item>
     
     
