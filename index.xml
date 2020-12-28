@@ -5,9 +5,618 @@
     <description>Recent content on Changsu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
-    <lastBuildDate>Mon, 07 Dec 2020 00:44:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 28 Dec 2020 14:46:00 +0900</lastBuildDate>
     
         <atom:link href="https://cxsu.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Go로 밑바닥부터 만드는 BitTorrent 클라이언트</title>
+        <link>https://cxsu.github.io/posts/go/building-bittorrent-client/</link>
+        <pubDate>Mon, 28 Dec 2020 14:46:00 +0900</pubDate>
+        
+        <guid>https://cxsu.github.io/posts/go/building-bittorrent-client/</guid>
+        <description>Changsu https://cxsu.github.io/posts/go/building-bittorrent-client/ -&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.jse.li/posts/torrent/#putting-it-all-together&#34;&gt;Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)&lt;/a&gt;을 번역한 글입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;tl;dr:&lt;/strong&gt; The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 어떤 경로가 있는 것일까요?
+이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트(BitTorrent) 프로토콜을 구현할 것입니다.
+바로 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client/&#34;&gt;소스 코드&lt;/a&gt;를 보거나 &lt;a href=&#34;#%EB%AA%A8%EB%91%90-%ED%95%A9%EC%B9%98%EA%B8%B0&#34;&gt;마지막 부분&lt;/a&gt;으로 넘어가실 수 있습니다.&lt;/p&gt;
+&lt;p&gt;비트토렌트(BitTorrent)는 인터넷을 통해 파일을 다운로드하고 배포하기 위한 프로토콜입니다.
+다운로더가 중앙 서버와 연결하는 기존의 클라이언트/서버 관계 (예: 넷플릭스(Netflix)에서
+영화를 보거나 지금 읽고 있는 웹 페이지를 불러 오는 것)와 달리,
+&lt;strong&gt;피어(peer)&lt;/strong&gt; 라고 불리는 비트토렌트 네트워크 참여자들은 &lt;em&gt;서로에게서&lt;/em&gt; 파일 조각을 다운로드합니다.
+이것이 &lt;strong&gt;P2P(peer-to-peer)&lt;/strong&gt; 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/client-server-p2p.png&#34; alt=&#34;client-server-p2p&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이 프로토콜은 지난 20년 동안 진화했으며, 다양한 사람들과 조직들이 암호화(encryption),
+비공개 토렌트(private torrent), 새로운 피어 탐색법과 같은 기능들을 추가했습니다.
+우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 &lt;a href=&#34;https://www.bittorrent.org/beps/bep_0003.html&#34;&gt;2001년 규격&lt;/a&gt;을 구현할 것입니다.&lt;/p&gt;
+&lt;p&gt;저의 실험 재료(guinea pig)로 적당한 350MB의 &lt;a href=&#34;https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/#indexlist&#34;&gt;데비안 ISO&lt;/a&gt; 파일을 사용하겠습니다.
+널리 사용되는 리눅스(Linux) 배포판은 빠르고 협력적인 피어들이 많이 연결될 것입니다.
+그리고 불법 복제 콘텐츠 다운로드와 관련된 법적, 윤리적 문제를 피할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;피어-찾기&#34;&gt;피어 찾기&lt;/h1&gt;
+&lt;p&gt;다음과 같은 문제가 있습니다. 우리는 비트토렌트로 파일을 다운로드하려고 하지만 P2P 프로토콜이고 파일을 다운로드할 피어를 찾을 수 없습니다.
+이것은 마치 새로운 도시로 이사해서 친구를 사귀는 것과 같습니다. 어쩌면 우리가 동네 술집이나 밋업(meetup) 그룹에 가는 것처럼요!
+중앙 집중식 서버는 피어들이 서로를 알 수 있도록 알려주는 &lt;strong&gt;트래커(tracker)&lt;/strong&gt; 의 핵심입니다.
+이들은 HTTP* 웹 서버일 뿐이며, 데비안의 서버는 &lt;a href=&#34;http://bttracker.debian.org:6969/stat&#34;&gt;http://bttracker.debian.org:6969/stat&lt;/a&gt;에서 찾을 수 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;* 일부 트래커는 대역폭을 절약하기 위해 &lt;a href=&#34;http://bittorrent.org/beps/bep_0015.html&#34;&gt;[UDP]&lt;/a&gt; 바이너리 프로토콜을 사용합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/trackers.png&#34; alt=&#34;trackers&#34;&gt;&lt;/p&gt;
+&lt;p&gt;물론 이러한 중앙 서버는 피어들이 불법 컨텐츠를 교환할 수 있게 둔다면 정부의 단속을 받기 쉽습니다.
+여러분은 불법 컨텐츠로 인해 폐쇄된 TorrentSpy, Popcorn Time, 그리고 KickassTorrents 와 같은 트래커에 대해 읽었을 수 있습니다.
+오늘날에는 &lt;strong&gt;피어 탐색&lt;/strong&gt;도 분산 프로세스로 만들어 중간자를 생략했습니다 (역주: Trackerless Torrent).
+우리가 이것까지 구현하지는 않지만 만약 관심이 있다면 &lt;strong&gt;DHT(Distributed Hash Table)&lt;/strong&gt;, &lt;strong&gt;PEX(Peer exchange)&lt;/strong&gt;, 그리고 &lt;strong&gt;자석 링크(magnet link)&lt;/strong&gt; 같은 몇몇 용어들을 찾아보세요.&lt;/p&gt;
+&lt;h2 id=&#34;torrent-파일-파싱-parsing-구문-분석&#34;&gt;.torrent 파일 파싱 (parsing: 구문 분석)&lt;/h2&gt;
+&lt;p&gt;.torrent 파일에는 torrentable 파일의 내용 및 트래커 연결에 대한 정보가 포함됩니다.
+토렌트를 다운로드 하기 위해 필요한 것은 이것뿐입니다. 데비안의 .torrent 파일은 다음과 같습니다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;d8:announce41:http://bttracker.debian.org:6969/announce7:comment35:&amp;quot;Debian CD from cdimage.debian.org&amp;quot;13:creation datei1573903810e9:httpseedsl145:https://cdimage.debian.org/cdimage/release/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso145:https://cdimage.debian.org/cdimage/archive/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.isoe4:infod6:lengthi351272960e4:name31:debian-10.2.0-amd64-netinst.iso12:piece lengthi262144e6:pieces26800:�����PS�^�� (binary blob of the hashes of each piece)ee
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;&lt;strong&gt;B인코드(Bencode)&lt;/strong&gt; 형식으로 인코딩되어 있고, 우리는 이것을 디코딩해야 합니다.&lt;/p&gt;
+&lt;p&gt;B인코드는 JSON과 거의 동일한 유형(문자열, 정수, 리스트 및 딕셔너리)의 구조로 인코딩할 수 있습니다.
+B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것은 아니지만 바이너리 데이터를 효율적으로
+처리할 수 있으며 스트림에서 파싱하는 것이 매우 간단합니다.
+문자열은 길이 접두사가 붙으며 &lt;code&gt;4:spam&lt;/code&gt;와 같이 나타냅니다.
+정수는 마커로 시작하고 끝나기 때문에 &lt;code&gt;7&lt;/code&gt;의 경우 &lt;code&gt;i7e&lt;/code&gt;로 인코딩됩니다.
+리스트와 딕셔너리는 비슷한 방식으로 인코딩됩니다. &lt;code&gt;l4:spami7ee&lt;/code&gt;는 &lt;code&gt;[&#39;spam&#39;, 7]&lt;/code&gt;을, &lt;code&gt;d4:spami7ee&lt;/code&gt;는 &lt;code&gt;{spam: 7}&lt;/code&gt;을 나타냅니다.&lt;/p&gt;
+&lt;p&gt;.torrent 파일을 보기 쉽게 다듬으면 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;d
+  &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;:announce
+    &lt;span style=&#34;color:#b452cd&#34;&gt;41&lt;/span&gt;:http:&lt;span style=&#34;color:#228b22&#34;&gt;//bttracker.debian.org:6969/announce
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;:comment
+    &lt;span style=&#34;color:#b452cd&#34;&gt;35&lt;/span&gt;:&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Debian CD from cdimage.debian.org&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;:creation date
+    i1573903810e
+  &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:info
+    d
+      &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:length
+        i351272960e
+      &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:name
+        &lt;span style=&#34;color:#b452cd&#34;&gt;31&lt;/span&gt;:debian-&lt;span style=&#34;color:#b452cd&#34;&gt;10.2.0&lt;/span&gt;-amd64-netinst.iso
+      &lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;:piece length
+        i262144e
+      &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:pieces
+        &lt;span style=&#34;color:#b452cd&#34;&gt;26800&lt;/span&gt;:&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;�����&lt;/span&gt;PS&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;�&lt;/span&gt;^&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;��&lt;/span&gt; (binary blob of the hashes of each piece)
+    e
+e
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 파일에서는 트래커의 URL, 생성 날짜(유닉스 타임스탬프), 파일 이름 및 크기,
+다운로드하려는 파일의 모든 &lt;strong&gt;조각&lt;/strong&gt; 의 SHA-1 해시가 들어 있는 큰 바이너리 블롭을 찾을 수 있습니다.
+조각의 정확한 크기는 토렌트마다 다르지만 일반적으로 256KB에서 1MB 사이입니다.
+이것은 큰 파일이 수천 개의 조각으로 구성될 수 있다는 것을 의미합니다.
+피어들에게서 이 조각들을 다운로드해서 토렌트 파일에 있는 해시와 대조해 보고, 조립해 보고, 파일을 가지게 되는 겁니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/pieces.png&#34; alt=&#34;pieces&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이 메커니즘을 통해 각 조각의 무결성을 검증할 수 있습니다.
+비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 &lt;strong&gt;토렌트 포이즈닝&lt;/strong&gt;(&lt;a href=&#34;https://en.wikipedia.org/wiki/Torrent_poisoning&#34;&gt;torrent poisoning&lt;/a&gt;) 을 막을 수 있습니다.
+공격자가 역상 공격(&lt;a href=&#34;https://en.wikipedia.org/wiki/Preimage_attack&#34;&gt;preimage attack&lt;/a&gt;)을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.&lt;/p&gt;
+&lt;p&gt;B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목표가 아닙니다.
+이해하기 쉬운 Fredrik Lundh의 &lt;a href=&#34;https://effbot.org/zone/bencode.htm&#34;&gt;50줄짜리 파서&lt;/a&gt;를 찾았지만,
+이 프로젝트에서는 &lt;a href=&#34;https://github.com/jackpal/bencode-go&#34;&gt;github.com/jackpal/bencode-go&lt;/a&gt; 을 사용했습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;github.com/jackpal/bencode-go&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; bencodeInfo &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  Pieces      &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;pieces&amp;#34;`&lt;/span&gt;
+  PieceLength &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;piece length&amp;#34;`&lt;/span&gt;
+  Length      &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;length&amp;#34;`&lt;/span&gt;
+  Name        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;name&amp;#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; bencodeTorrent &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  Announce &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;      &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;announce&amp;#34;`&lt;/span&gt;
+  Info     bencodeInfo &lt;span style=&#34;color:#cd5555&#34;&gt;`bencode:&amp;#34;info&amp;#34;`&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Open 토렌트 파일을 파싱합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Open&lt;/span&gt;(r io.Reader) (*bencodeTorrent, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  bto := bencodeTorrent{}
+  err := bencode.&lt;span style=&#34;color:#008b45&#34;&gt;Unmarshal&lt;/span&gt;(r, &amp;amp;bto)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+  }
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &amp;amp;bto, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;저는 구조체를 상대적으로 평평하게 유지하는 것을 좋아하고
+애플리케이션 구조체를 직렬화 구조체와 분리하는 것을 좋아하기 때문에
+&lt;code&gt;TorrentFile&lt;/code&gt;이라는 다른 평탄한 구조체를 내보내고
+두 구조체 사이에서 변환할 몇 가지 헬퍼 함수를 작성했습니다.&lt;/p&gt;
+&lt;p&gt;특히 각각의 해시에 쉽게 접근할 수 있도록 &lt;code&gt;조각&lt;/code&gt;(이전의 문자열)을 해시 조각(각각 &lt;code&gt;[20]byte&lt;/code&gt;)으로 분할합니다.
+또한 (이름, 크기, 조각 해시를 포함한) B인코딩된 &lt;code&gt;info&lt;/code&gt; 딕셔너리의 SHA-1 해시를 계산했습니다.
+이것을 &lt;strong&gt;infohash&lt;/strong&gt;라고 하며 트래커 및 피어와 통신할 때 파일 식별자 역할을 합니다.
+이에 대해서는 나중에 더 살펴보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/info-hash.png&#34; alt=&#34;info-hash&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; TorrentFile &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  Announce    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;
+  InfoHash    [&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+  PieceHashes [][&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+  PieceLength &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+  Length      &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+  Name        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (bto bencodeTorrent) &lt;span style=&#34;color:#008b45&#34;&gt;toTorrentFile&lt;/span&gt;() (TorrentFile, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  &lt;span style=&#34;color:#228b22&#34;&gt;// …
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;트래커로부터-피어-찾기&#34;&gt;트래커로부터 피어 찾기&lt;/h2&gt;
+&lt;p&gt;이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 &lt;strong&gt;알리고&lt;/strong&gt; 다른 피어들의 목록을 검색해 보겠습니다.
+.torrent 파일에 제공된 &amp;lsquo;announce&amp;rsquo; URL에 몇 가지 쿼리 파라미터와 함께 GET 요청을 하면 됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (t *TorrentFile) &lt;span style=&#34;color:#008b45&#34;&gt;buildTrackerURL&lt;/span&gt;(peerID [&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, port &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;uint16&lt;/span&gt;) (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  base, err := url.&lt;span style=&#34;color:#008b45&#34;&gt;Parse&lt;/span&gt;(t.Announce)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, err
+  }
+  params := url.Values{
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;info_hash&amp;#34;&lt;/span&gt;:  []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#658b00&#34;&gt;string&lt;/span&gt;(t.InfoHash[:])},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;peer_id&amp;#34;&lt;/span&gt;:    []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#658b00&#34;&gt;string&lt;/span&gt;(peerID[:])},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;port&amp;#34;&lt;/span&gt;:       []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{strconv.&lt;span style=&#34;color:#008b45&#34;&gt;Itoa&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;int&lt;/span&gt;(Port))},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;uploaded&amp;#34;&lt;/span&gt;:   []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;downloaded&amp;#34;&lt;/span&gt;: []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;compact&amp;#34;&lt;/span&gt;:    []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;},
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;left&amp;#34;&lt;/span&gt;:       []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;{strconv.&lt;span style=&#34;color:#008b45&#34;&gt;Itoa&lt;/span&gt;(t.Length)},
+  }
+  base.RawQuery = params.&lt;span style=&#34;color:#008b45&#34;&gt;Encode&lt;/span&gt;()
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; base.&lt;span style=&#34;color:#008b45&#34;&gt;String&lt;/span&gt;(), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go#L19-L35&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;여기서 중요한 것은 다음과 같습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;info_hash&lt;/strong&gt;: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 &lt;code&gt;info&lt;/code&gt; 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;peer_id&lt;/strong&gt;: 트래커 및 피어에게 &lt;code&gt;우리&lt;/code&gt;를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 &lt;code&gt;-TR2940-k8hj0wgej6ch&lt;/code&gt;와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/info-hash-peer-id.png&#34; alt=&#34;info-hash-peer-id&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;트래커-응답-분석&#34;&gt;트래커 응답 분석&lt;/h2&gt;
+&lt;p&gt;다음과 같이 B인코딩된 응답을 받았습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;d
+  &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;:interval
+    i900e
+  &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:peers
+    &lt;span style=&#34;color:#b452cd&#34;&gt;252&lt;/span&gt;:(another &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;long&lt;/span&gt; binary blob)
+e
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Interval&lt;/code&gt;은 얼마나 자주 트래커에 다시 연결하여 피어 목록을 새로 고쳐야 하는지 알려줍니다.
+900이라는 값은 15분(900초)마다 다시 연결해야 함을 의미합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Peers&lt;/code&gt;는 각 피어의 IP 주소를 포함하는 또 다른 긴 바이너리 블롭입니다.
+&lt;code&gt;6바이트의 그룹들&lt;/code&gt;로 이루어져 있습니다.
+각 그룹의 처음 4바이트는 피어의 IP 주소를 나타냅니다. 각 1 바이트는 IP 숫자를 나타냅니다.
+마지막 2바이트는 포트 번호를 빅-엔디안 &lt;code&gt;uint16&lt;/code&gt;으로 나타냅니다.
+&lt;strong&gt;빅-엔디안&lt;/strong&gt; 또는 &lt;strong&gt;네트워크 바이트 순서&lt;/strong&gt;는 바이트 그룹을 왼쪽부터 담아 정수로 해석하는 것을 말합니다.
+예를 들어 &lt;code&gt;0x1A&lt;/code&gt;, &lt;code&gt;0xE1&lt;/code&gt; 바이트는 &lt;code&gt;0x1AE1&lt;/code&gt; 또는 십진수로 6881을 만듭니다.*&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;* 동일한 바이트를 &lt;strong&gt;little-endian&lt;/strong&gt; 순서로 해석하면 0xE11A = 57626이 됩니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;역주: network byte order: big-endian, host byte order: little-endian&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/address.png&#34; alt=&#34;address&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// Peer 피어의 연결 정보를 인코딩합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; Peer &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  IP   net.IP
+  Port &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;uint16&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Unmarshal&lt;/span&gt;(peersBin []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;) ([]Peer, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; peerSize = &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 4 for IP, 2 for port
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  numPeers := &lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(peersBin) / peerSize
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(peersBin)%peerSize != &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; {
+    err := fmt.&lt;span style=&#34;color:#008b45&#34;&gt;Errorf&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Received malformed peers&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+  }
+  peers := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]Peer, numPeers)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; i := &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; numPeers; i++ {
+    offset := i * peerSize
+    peers[i].IP = net.&lt;span style=&#34;color:#008b45&#34;&gt;IP&lt;/span&gt;(peersBin[offset : offset+&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;])
+    peers[i].Port = binary.BigEndian.&lt;span style=&#34;color:#008b45&#34;&gt;Uint16&lt;/span&gt;(peersBin[offset+&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt; : offset+&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;])
+  }
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; peers, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go&#34;&gt;github.com/veggiedefender/torrent-client/peers/peers.go&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;피어로부터-다운로드하기&#34;&gt;피어로부터 다운로드하기&lt;/h1&gt;
+&lt;p&gt;이제 피어 목록이 있습니다.
+피어와 연결하여 조각을 다운로드할 시간입니다!
+우리는 이 과정을 몇 단계로 나눌 수 있습니다.
+각 피어에 대해 다음을 수행하고자 합니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;피어와 TCP 연결을 시작합니다. 이것은 전화를 거는 것과 같습니다.&lt;/li&gt;
+&lt;li&gt;양방향 비트토렌트 &lt;strong&gt;핸드셰이크&lt;/strong&gt;를 완료합니다.. &lt;em&gt;&amp;ldquo;안녕?&amp;rdquo; &amp;ldquo;안녕.&amp;quot;&lt;/em&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;조각&lt;/strong&gt;을 다운로드 하기 위해 &lt;strong&gt;메시지&lt;/strong&gt;를 교환합니다. &lt;em&gt;&amp;ldquo;231번 조각 주세요.&amp;quot;&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;tcp-연결&#34;&gt;TCP 연결&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;conn, err := net.&lt;span style=&#34;color:#008b45&#34;&gt;DialTimeout&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tcp&amp;#34;&lt;/span&gt;, peer.&lt;span style=&#34;color:#008b45&#34;&gt;String&lt;/span&gt;(), &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;*time.Second)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go#L65-L69&#34;&gt;github.com/veggiedefender/torrent-client/client/client.go#L65-L69&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;연결할 수 없는 피어에 너무 많은 시간을 낭비하지 않도록 시간 제한을 설정했습니다.
+대부분의 경우 표준 TCP 연결입니다.&lt;/p&gt;
+&lt;h2 id=&#34;핸드셰이크-완료&#34;&gt;핸드셰이크 완료&lt;/h2&gt;
+&lt;p&gt;피어와의 연결을 설정했지만 다음과 같은 가정을 검증하기 위해 핸드셰이크를 수행하려고 합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;피어는 비트토렌트 프로토콜을 사용하여 통신할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;피어는 우리의 메시지를 이해하고 응답할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;피어는 우리가 원하는 파일을 가지고 있거나 적어도 우리가 무엇을 말하고 있는지 알고 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/handshake.png&#34; alt=&#34;handshake&#34;&gt;&lt;/p&gt;
+&lt;p&gt;아버지는 제게 악수(handshake)를 잘 하는 비결은 손을 단단히 잡고 눈을 마주치는 것이라고 말씀하셨습니다.
+좋은 비트토렌트 핸드셰이크의 비결은 다음과 같이 다섯 부분으로 구성됩니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;항상 19로 지정된 프로토콜 식별자의 길이. (16진수로는 0x13)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;pstr&lt;/strong&gt;이라 불리는 프로토콜 식별자는 항상 &lt;code&gt;비트토렌트 프로토콜&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;모두 0으로 지정된 &lt;strong&gt;8개의 예약된 바이트&lt;/strong&gt;. 그 중 일부를 1로 뒤집어서 특정 &lt;a href=&#34;http://www.bittorrent.org/beps/bep_0010.html&#34;&gt;확장 기능&lt;/a&gt;을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.&lt;/li&gt;
+&lt;li&gt;우리가 원하는 파일을 식별할 앞서 계산한 &lt;strong&gt;infohash&lt;/strong&gt;.&lt;/li&gt;
+&lt;li&gt;우리 스스로를 식별하기 위해 만든 &lt;strong&gt;Peer ID&lt;/strong&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;합치면 핸드셰이크 문자열은 다음과 같이 보일 수 있습니다.&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;\x13BitTorrent protocol\x00\x00\x00\x00\x00\x00\x00\x00\x86\xd4\xc8\x00\x24\xa4\x69\xbe\x4c\x50\xbc\x5a\x10\x2c\xf7\x17\x80\x31\x00\x74-TR2940-k8hj0wgej6ch
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;피어에게 핸드셰이크를 보낸 후 동일한 형식으로 핸드셰이크를 다시 받아야 합니다.
+받은 infohash는 보낸 정보와 일치해야 동일한 파일에 대해 말하고 있다는 것을 알 수 있습니다.
+모든 일이 계획대로 진행되면 다음 단계로 넘어갑니다.
+그렇지 않다면 뭔가 잘못되었기 때문에 연결을 끊을 수 있습니다.
+&lt;em&gt;&amp;ldquo;안녕?&amp;rdquo; &amp;ldquo;这是谁？ 你想要什么？&amp;rdquo; &amp;ldquo;알았어요, 와&amp;hellip;잘못 걸었어요..&amp;quot;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;코드에서 핸드셰이크를 나타내는 구조체를 만들고, 이것을 직렬화하고 읽는 몇 가지 메소드를 작성하겠습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; Handshake &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  Pstr     &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;
+  InfoHash [&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+  PeerID   [&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Serialize 핸드셰이크를 버퍼에 직렬화합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (h *Handshake) &lt;span style=&#34;color:#008b45&#34;&gt;Serialize&lt;/span&gt;() []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt; {
+  buf := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(h.Pstr)+&lt;span style=&#34;color:#b452cd&#34;&gt;49&lt;/span&gt;)
+  buf[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;] = &lt;span style=&#34;color:#658b00&#34;&gt;byte&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(h.Pstr))
+  curr := &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+  curr += &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[curr:], h.Pstr)
+  curr += &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[curr:], &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;)) &lt;span style=&#34;color:#228b22&#34;&gt;// 8 reserved bytes
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  curr += &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[curr:], h.InfoHash[:])
+  curr += &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[curr:], h.PeerID[:])
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; buf
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Read 스트림에서 핸드셰이크를 파싱합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Read&lt;/span&gt;(r io.Reader) (*Handshake, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  &lt;span style=&#34;color:#228b22&#34;&gt;// Do Serialize(), but backwards
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#228b22&#34;&gt;// ...
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go&#34;&gt;github.com/veggiedefender/torrent-client/handshake/handshake.go&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;메시지-주고-받기&#34;&gt;메시지 주고 받기&lt;/h2&gt;
+&lt;p&gt;첫 핸드셰이크를 마치면 &lt;code&gt;메시지&lt;/code&gt;를 주고받을 수 있습니다.
+하지만 나머지 피어들이 메시지를 받아들일 준비가 안 되어 있다면,
+모두가 준비가 되었다고 말하기 전에는 보낼 수 없습니다.
+이 상태에서는 나머지 피어들에게 &lt;code&gt;chocked&lt;/code&gt;를 당합니다.
+그들은 우리가 데이터를 요청해도 된다는 것을 알리기 위해 &lt;code&gt;unchoke&lt;/code&gt; 메시지를 보낼 것입니다.
+기본적으로 우리는 입증될 때까지 막힌다고 가정합니다.&lt;/p&gt;
+&lt;p&gt;unchoke 메시지를 받으면 우리는 조각에 대한 &lt;code&gt;요청&lt;/code&gt;을 보낼 수 있고,
+피어들은 조각이 담긴 메시지를 우리에게 보낼 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/choke.png&#34; alt=&#34;choke&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;메시지-해석&#34;&gt;메시지 해석&lt;/h3&gt;
+&lt;p&gt;메시지는 길이, &lt;code&gt;ID&lt;/code&gt;, &lt;code&gt;페이로드(payload)&lt;/code&gt;를 가집니다. 이것은 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/message.png&#34; alt=&#34;message&#34;&gt;&lt;/p&gt;
+&lt;p&gt;메시지는 메시지의 바이트 길이를 알려주는 길이 표시로 시작합니다.
+32비트 정수이므로 빅-엔디안 순서의 4바이트로 압축할 수 있습니다.
+다음 바이트인 &lt;strong&gt;ID&lt;/strong&gt;는 어떤 유형의 메시지를 수신하는지 알려줍니다.
+예를 들어 &lt;code&gt;2&lt;/code&gt;바이트는 &amp;ldquo;관심있음(interested)&amp;ldquo;을 의미합니다.
+마지막으로 선택값인 &lt;strong&gt;페이로드(payload)&lt;/strong&gt; 는 메시지의 남은 길이를 채웁니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; messageID &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;uint8&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; (
+  MsgChoke         messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+  MsgUnchoke       messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+  MsgInterested    messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+  MsgNotInterested messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+  MsgHave          messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;
+  MsgBitfield      messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;
+  MsgRequest       messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;
+  MsgPiece         messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;
+  MsgCancel        messageID = &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Message 메시지의 ID 및 페이로드를 저장합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; Message &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  ID      messageID
+  Payload []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// &amp;lt;길이 접두사&amp;gt;&amp;lt;메시지 ID&amp;gt;&amp;lt;페이로드&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// `nil`은 keep-live 메시지로 해석합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (m *Message) &lt;span style=&#34;color:#008b45&#34;&gt;Serialize&lt;/span&gt;() []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt; {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; m == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+  }
+  length := &lt;span style=&#34;color:#658b00&#34;&gt;uint32&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(m.Payload) + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// +1 for id
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  buf := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;+length)
+  binary.BigEndian.&lt;span style=&#34;color:#008b45&#34;&gt;PutUint32&lt;/span&gt;(buf[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;], length)
+  buf[&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;] = &lt;span style=&#34;color:#658b00&#34;&gt;byte&lt;/span&gt;(m.ID)
+  &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:], m.Payload)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; buf
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L90-L103&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L90-L103&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
+우리는 4바이트를 읽고 메시지의 &lt;strong&gt;길이&lt;/strong&gt;를 얻기 위해 &lt;code&gt;uint32&lt;/code&gt;로 해석합니다.
+그런 다음 &lt;strong&gt;ID&lt;/strong&gt;(처음 1바이트) 및 &lt;strong&gt;payload&lt;/strong&gt;(나머지 바이트)를 얻습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Read&lt;/span&gt;(r io.Reader) (*Message, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  lengthBuf := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+  _, err := io.&lt;span style=&#34;color:#008b45&#34;&gt;ReadFull&lt;/span&gt;(r, lengthBuf)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+  }
+  length := binary.BigEndian.&lt;span style=&#34;color:#008b45&#34;&gt;Uint32&lt;/span&gt;(lengthBuf)
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;// keep-alive 메시지
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; length == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+  }
+
+  messageBuf := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, length)
+  _, err = io.&lt;span style=&#34;color:#008b45&#34;&gt;ReadFull&lt;/span&gt;(r, messageBuf)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+  }
+
+  m := Message{
+    ID:      &lt;span style=&#34;color:#008b45&#34;&gt;messageID&lt;/span&gt;(messageBuf[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]),
+    Payload: messageBuf[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:],
+  }
+
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &amp;amp;m, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L105-L131&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L105-L131&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;비트-필드-bitfields&#34;&gt;비트 필드 (Bitfields)&lt;/h3&gt;
+&lt;p&gt;가장 흥미로운 유형의 메시지 중 하나는 &lt;strong&gt;비트 필드(bitfield)&lt;/strong&gt; 입니다.
+이 자료 구조는 피어들이 우리에게 보낼 수 있는 조각을 효율적으로 인코딩하는 데 사용됩니다.
+비트필드는 바이트 배열처럼 생겼고, 어떤 조각을 가지고 있는지 확인하기 위해서는 단지 1로 설정된 &lt;em&gt;비트&lt;/em&gt;의 위치를 보면 됩니다.
+이것을 커피숍 쿠폰에 비유할 수 있습니다.
+전부 &lt;code&gt;0&lt;/code&gt;인 카드부터 시작해서 하나씩 &lt;code&gt;1&lt;/code&gt;로 비트로 바꿔서 &amp;ldquo;도장&amp;rdquo; 찍듯이 표시합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/bitfield.png&#34; alt=&#34;bitfield&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;바이트&lt;/em&gt; 대신 &lt;em&gt;비트&lt;/em&gt;로 작업해서 비트필드 자료 구조는 크기가 매우 작습니다.
+한 바이트의 공간에 8개의 조각 정보(&lt;code&gt;bool&lt;/code&gt; 크기)를 채워 넣을 수 있습니다.
+단점은 값에 접근하는 것이 좀 더 까다로워진다는 것입니다.
+컴퓨터가 처리할 수 있는 가장 작은 메모리 단위는 바이트입니다.
+따라서 비트에 접근하려면 몇 가지 비트 조작(bitwise manipulation)을 수행해야 합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// Bitfield 피어가 가지고 있는 조각들을 나타냅니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; Bitfield []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (bf Bitfield) &lt;span style=&#34;color:#008b45&#34;&gt;HasPiece&lt;/span&gt;(index &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;) &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; {
+  byteIndex := index / &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;
+  offset := index % &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; bf[byteIndex]&amp;gt;&amp;gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;-offset)&amp;amp;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; != &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// SetPiece 비트 필드에 비트를 설정합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (bf Bitfield) &lt;span style=&#34;color:#008b45&#34;&gt;SetPiece&lt;/span&gt;(index &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;) {
+  byteIndex := index / &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;
+  offset := index % &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;
+  bf[byteIndex] |= &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; &amp;lt;&amp;lt; (&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt; - offset)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go&#34;&gt;github.com/veggiedefender/torrent-client/bitfield/bitfield.go&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&#34;모두-합치기&#34;&gt;모두 합치기&lt;/h2&gt;
+&lt;p&gt;이제 토렌트를 다운로드하는 데 필요한 모든 도구를 확보했습니다.
+트래커에서 얻은 피어 목록이 있으며, TCP로 연결하고 핸드셰이크를 하며,
+메시지를 주고받음으로써 피어들과 통신할 수 있습니다.
+마지막 큰 문제는 여러 피어와 동시에 통신하는 &lt;strong&gt;동시성(concurrency)&lt;/strong&gt; 을 처리하고
+상호 작용하는 피어들의 &lt;strong&gt;상태&lt;/strong&gt;를 관리하는 것입니다.
+둘 다 고전적으로 어려운 문제입니다.&lt;/p&gt;
+&lt;h3 id=&#34;동시성-관리-채널channel을-큐queue로&#34;&gt;동시성 관리: 채널(channel)을 큐(queue)로&lt;/h3&gt;
+&lt;p&gt;Go에서는 &lt;a href=&#34;https://blog.golang.org/share-memory-by-communicating&#34;&gt;통신을 통해 메모리를 공유&lt;/a&gt;하며
+Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;두 채널을 설정하여 동시적인 작업자들(concurrent workers)을 동기화합니다.
+하나는 피어 간에 작업(다운로드할 조각)을 분배하기 위한 채널이고,
+다른 하나는 다운로드한 조각들을 모으기 위한 채널입니다.
+다운로드된 조각들이 결과 채널을 통해 들어올 때,
+우리는 그것들을 버퍼에 복사해서 완전한 파일로 조립할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;workQueue := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;chan&lt;/span&gt; *pieceWork, &lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(t.PieceHashes))
+results := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;chan&lt;/span&gt; *pieceResult)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; index, hash := &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;range&lt;/span&gt; t.PieceHashes {
+  length := t.&lt;span style=&#34;color:#008b45&#34;&gt;calculatePieceSize&lt;/span&gt;(index)
+  workQueue &amp;lt;- &amp;amp;pieceWork{index, hash, length}
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// 작업을 시작합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; _, peer := &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;range&lt;/span&gt; t.Peers {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;go&lt;/span&gt; t.&lt;span style=&#34;color:#008b45&#34;&gt;startDownloadWorker&lt;/span&gt;(peer, workQueue, results)
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;buf := &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, t.Length)
+donePieces := &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; donePieces &amp;lt; &lt;span style=&#34;color:#658b00&#34;&gt;len&lt;/span&gt;(t.PieceHashes) {
+  res := &amp;lt;-results
+  begin, end := t.&lt;span style=&#34;color:#008b45&#34;&gt;calculateBoundsForPiece&lt;/span&gt;(res.index)
+  &lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(buf[begin:end], res.buf)
+  donePieces++
+}
+&lt;span style=&#34;color:#658b00&#34;&gt;close&lt;/span&gt;(workQueue)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L188-L214&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;트래커에서 받은 피어마다 작업자 고루틴을 생성합니다.
+피어와 연결하고 핸드셰이크한 다음 &lt;code&gt;workQueue&lt;/code&gt;에서 작업을 검색하여 다운로드를 시도하고,
+&lt;code&gt;results&lt;/code&gt; 채널을 통해 다운로드한 조각들을 다시 보냅니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/download.png&#34; alt=&#34;download&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (t *Torrent) &lt;span style=&#34;color:#008b45&#34;&gt;startDownloadWorker&lt;/span&gt;(peer peers.Peer, workQueue &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;chan&lt;/span&gt; *pieceWork, results &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;chan&lt;/span&gt; *pieceResult) {
+  c, err := client.&lt;span style=&#34;color:#008b45&#34;&gt;New&lt;/span&gt;(peer, t.PeerID, t.InfoHash)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+    log.&lt;span style=&#34;color:#008b45&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Could not handshake with %s. Disconnecting\n&amp;#34;&lt;/span&gt;, peer.IP)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+  }
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;defer&lt;/span&gt; c.Conn.&lt;span style=&#34;color:#008b45&#34;&gt;Close&lt;/span&gt;()
+  log.&lt;span style=&#34;color:#008b45&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Completed handshake with %s\n&amp;#34;&lt;/span&gt;, peer.IP)
+
+  c.&lt;span style=&#34;color:#008b45&#34;&gt;SendUnchoke&lt;/span&gt;()
+  c.&lt;span style=&#34;color:#008b45&#34;&gt;SendInterested&lt;/span&gt;()
+
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; pw := &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;range&lt;/span&gt; workQueue {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; !c.Bitfield.&lt;span style=&#34;color:#008b45&#34;&gt;HasPiece&lt;/span&gt;(pw.index) {
+      workQueue &amp;lt;- pw &lt;span style=&#34;color:#228b22&#34;&gt;// 큐에 조각을 다시 넣습니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;
+    }
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 조각 다운로드
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    buf, err := &lt;span style=&#34;color:#008b45&#34;&gt;attemptDownloadPiece&lt;/span&gt;(c, pw)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+      log.&lt;span style=&#34;color:#008b45&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Exiting&amp;#34;&lt;/span&gt;, err)
+      workQueue &amp;lt;- pw &lt;span style=&#34;color:#228b22&#34;&gt;// 큐에 조각을 다시 넣습니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+    }
+
+    err = &lt;span style=&#34;color:#008b45&#34;&gt;checkIntegrity&lt;/span&gt;(pw, buf)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+      log.&lt;span style=&#34;color:#008b45&#34;&gt;Printf&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Piece #%d failed integrity check\n&amp;#34;&lt;/span&gt;, pw.index)
+      workQueue &amp;lt;- pw &lt;span style=&#34;color:#228b22&#34;&gt;// 큐에 조각을 다시 넣습니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;
+    }
+
+    c.&lt;span style=&#34;color:#008b45&#34;&gt;SendHave&lt;/span&gt;(pw.index)
+    results &amp;lt;- &amp;amp;pieceResult{pw.index, buf}
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L133-L169&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;상태-관리&#34;&gt;상태 관리&lt;/h3&gt;
+&lt;p&gt;구조체에 있는 각 피어들을 추적하고 메시지를 읽을 때 해당 구조체를 수정합니다.
+피어에서 다운로드한 용량, 요청한 용량, 중단(choked) 여부 등의 데이터가 포함됩니다.
+만약 더 확장하기를 원한다면 이것을 유한 상태 기계(FSM)로 형식화할 수 있습니다.
+하지만 지금은 구조체와 스위치만으로 충분합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; pieceProgress &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+  index      &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+  client     *client.Client
+  buf        []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;
+  downloaded &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+  requested  &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+  backlog    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (state *pieceProgress) &lt;span style=&#34;color:#008b45&#34;&gt;readMessage&lt;/span&gt;() &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt; {
+  msg, err := state.client.&lt;span style=&#34;color:#008b45&#34;&gt;Read&lt;/span&gt;() &lt;span style=&#34;color:#228b22&#34;&gt;// this call blocks
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt; msg.ID {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; message.MsgUnchoke:
+    state.client.Choked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; message.MsgChoke:
+    state.client.Choked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; message.MsgHave:
+    index, err := message.&lt;span style=&#34;color:#008b45&#34;&gt;ParseHave&lt;/span&gt;(msg)
+    state.client.Bitfield.&lt;span style=&#34;color:#008b45&#34;&gt;SetPiece&lt;/span&gt;(index)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; message.MsgPiece:
+    n, err := message.&lt;span style=&#34;color:#008b45&#34;&gt;ParsePiece&lt;/span&gt;(state.index, state.buf, msg)
+    state.downloaded += n
+    state.backlog--
+  }
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L53-L83&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;요청을-보낼-시간입니다&#34;&gt;요청을 보낼 시간입니다!&lt;/h3&gt;
+&lt;p&gt;파일, 조각 및 조각 해시는 전부가 아닙니다. 조각을 &lt;strong&gt;블록&lt;/strong&gt;으로 세분하여 더 발전시킬 수 있습니다.
+블록은 조각의 일부입니다. 해당 블록이 속한 조각의 &lt;strong&gt;인덱스&lt;/strong&gt;,
+조각에서 블록의 바이트 &lt;strong&gt;오프셋&lt;/strong&gt; 및 블록의 &lt;strong&gt;길이&lt;/strong&gt;를 통해 블록을 정의할 수 있습니다.
+피어에서 데이터를 요청하면 실제로 블록을 요청합니다.
+블록의 크기는 일반적으로 16KB이므로 256KB 조각 하나에 실제로 16개의 요청이 필요할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;피어가 16KB보다 큰 블록에 대한 요청을 수신하는 경우 연결을 끊어야 합니다.
+제 경험에 비추어 볼 때 128KB까지 요청을 처리하는 경우가 많았습니다.
+하지만 규격보다 큰 크기의 블록을 요청할 때 전체 속도가 크게 향상되지는 않았으므로
+규격을 준수하는 것이 더 나을 수 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;파이프라이닝&#34;&gt;파이프라이닝&lt;/h3&gt;
+&lt;p&gt;네트워크 왕복 비용은 많이 들고, 각 블록을 하나씩 요청하면 다운로드 성능이 상당히 저하됩니다.
+따라서 처리되지 않은 일부 요청들을 지속적으로 모으기 위해 &lt;strong&gt;파이프라인(pipeline)으로&lt;/strong&gt; 연결하는 것이 중요합니다.
+이렇게 하면 연결 처리량을 상당히 증가시킬 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://cxsu.github.io/images/go/bit-torrent/pipelining.png&#34; alt=&#34;pipelining&#34;&gt;&lt;/p&gt;
+&lt;p&gt;일반적으로 비트토렌트 클라이언트는 5개의 파이프라인 요청 큐를 유지했으며, 이것이 제가 사용할 값입니다.
+파이프라인을 늘리면 다운로드 속도가 최대 두 배까지 빨라진다는 것을 알았습니다.&lt;/p&gt;
+&lt;p&gt;최신 클라이언트는 &lt;a href=&#34;https://luminarys.com/posts/writing-a-bittorrent-client.html&#34;&gt;적응형(adaptive)&lt;/a&gt; 큐 크기를
+사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
+이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// MaxBlockSize 요청할 수 있는 최대 바이트 수
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; MaxBlockSize = &lt;span style=&#34;color:#b452cd&#34;&gt;16384&lt;/span&gt;
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; MaxBacklog = &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;attemptDownloadPiece&lt;/span&gt;(c *client.Client, pw *pieceWork) ([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;error&lt;/span&gt;) {
+  state := pieceProgress{
+    index:  pw.index,
+    client: c,
+    buf:    &lt;span style=&#34;color:#658b00&#34;&gt;make&lt;/span&gt;([]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;byte&lt;/span&gt;, pw.length),
+  }
+
+  &lt;span style=&#34;color:#228b22&#34;&gt;// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#228b22&#34;&gt;// 262KB 조각을 다운로드하려면 30초가 충분합니다
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  c.Conn.&lt;span style=&#34;color:#008b45&#34;&gt;SetDeadline&lt;/span&gt;(time.&lt;span style=&#34;color:#008b45&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#008b45&#34;&gt;Add&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;30&lt;/span&gt; * time.Second))
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;defer&lt;/span&gt; c.Conn.&lt;span style=&#34;color:#008b45&#34;&gt;SetDeadline&lt;/span&gt;(time.Time{}) &lt;span style=&#34;color:#228b22&#34;&gt;// 데드라인 비활성화
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; state.downloaded &amp;lt; pw.length {
+    &lt;span style=&#34;color:#228b22&#34;&gt;// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; !state.client.Choked {
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; state.backlog &amp;lt; MaxBacklog &amp;amp;&amp;amp; state.requested &amp;lt; pw.length {
+        blockSize := MaxBlockSize
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 마지막 블록은 일반 블록보다 짧을 수 있습니다.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; pw.length-state.requested &amp;lt; blockSize {
+          blockSize = pw.length - state.requested
+        }
+
+        err := c.&lt;span style=&#34;color:#008b45&#34;&gt;SendRequest&lt;/span&gt;(pw.index, state.requested, blockSize)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+          &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+        }
+        state.backlog++
+        state.requested += blockSize
+      }
+    }
+
+    err := state.&lt;span style=&#34;color:#008b45&#34;&gt;readMessage&lt;/span&gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;, err
+    }
+  }
+
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; state.buf, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L85-L123&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;maingo&#34;&gt;main.go&lt;/h3&gt;
+&lt;p&gt;아주 간단합니다. 거의 다 왔어요.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; main
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;log&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;github.com/veggiedefender/torrent-client/torrentfile&amp;#34;&lt;/span&gt;
+)
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+  inPath := os.Args[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]
+  outPath := os.Args[&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;]
+
+  tf, err := torrentfile.&lt;span style=&#34;color:#008b45&#34;&gt;Open&lt;/span&gt;(inPath)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+      log.&lt;span style=&#34;color:#008b45&#34;&gt;Fatal&lt;/span&gt;(err)
+  }
+
+  err = tf.&lt;span style=&#34;color:#008b45&#34;&gt;DownloadToFile&lt;/span&gt;(outPath)
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+      log.&lt;span style=&#34;color:#008b45&#34;&gt;Fatal&lt;/span&gt;(err)
+  }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go&#34;&gt;github.com/veggiedefender/torrent-client/main.go&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL&#34;&gt;데모 영상&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;이것이-전부가-아닙니다&#34;&gt;이것이 전부가 아닙니다&lt;/h1&gt;
+&lt;p&gt;간결함을 위해 몇 가지 중요한 부분 코드만 포함시켰습니다.
+특히 글루 코드, 파싱, 유닛 테스트, 글자를 만드는 지루한 부분은 생략했습니다.
+관심 있으시다면 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client&#34;&gt;전체 소스 코드&lt;/a&gt;를 확인하세요.&lt;/p&gt;
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;역주: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# Go는 설치되어 있다고 가정합니다.&lt;/span&gt;
+git clone https://github.com/veggiedefender/torrent-client.git
+&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; torrent-client
+&lt;span style=&#34;color:#228b22&#34;&gt;# linux, darwin&lt;/span&gt;
+curl -L http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash=7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+&lt;span style=&#34;color:#228b22&#34;&gt;# windows&lt;/span&gt;
+wget http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash=7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+go run main.go debian.torrent debian.iso
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://cxsu.github.io/posts/go/building-bittorrent-client/ - </description>
+        </item>
     
     
     
@@ -18,7 +627,7 @@
         
         <guid>https://cxsu.github.io/posts/common/vim-editor-shortcuts/</guid>
         <description>Changsu https://cxsu.github.io/posts/common/vim-editor-shortcuts/ -&lt;blockquote&gt;
-&lt;p&gt;업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데, VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.&lt;/p&gt;
+&lt;p&gt;업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데, VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리합니다.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;homevimrc&#34;&gt;$HOME/.vimrc&lt;/h2&gt;
 &lt;ul&gt;
@@ -166,7 +775,7 @@
     
     
         <item>
-        <title>[번역] NFV 도커 컨테이너 초심자 가이드</title>
+        <title>NFV 도커 컨테이너 초심자 가이드</title>
         <link>https://cxsu.github.io/posts/nfv/beginners-guide-docker-container-nfv/</link>
         <pubDate>Mon, 16 Nov 2020 22:40:00 +0900</pubDate>
         
@@ -245,42 +854,6 @@
 &lt;p&gt;그러나 컨테이너 환경에서 VNF를 쉽고 간단하게 실행할 수 있다는 것을 고려할 때 좋은 미래가 있을 것 같습니다. 또한 가상 머신에서 전체 VNF를 실행하는 대신 마이크로 서비스를 실행할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;예를 들어 가상 CPE(vCPE, Virtual Customer Premises Equipment)의 경우 많은 구성요소를 작은 컨테이너로 분해하여 체인으로 연결할 수 있습니다. 이 기능을 분해하면 소규모 소프트웨어 벤더가 적은 오버헤드로 VNF의 작은 기능을 쉽게 개발할 수 있습니다.&lt;/p&gt;
 - https://cxsu.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - </description>
-        </item>
-    
-    
-    
-        <item>
-        <title>쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기</title>
-        <link>https://cxsu.github.io/posts/go/d/</link>
-        <pubDate>Sun, 11 Oct 2020 14:48:00 +0900</pubDate>
-        
-        <guid>https://cxsu.github.io/posts/go/d/</guid>
-        <description>Changsu https://cxsu.github.io/posts/go/d/ -&lt;blockquote&gt;
-&lt;p&gt;직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md&#34;&gt;kubernetes/build/README.md&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;사용할-명령어&#34;&gt;사용할 명령어&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# master 브랜치&lt;/span&gt;
-git clone --depth &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; https://github.com/kubernetes/kubernetes.git
-&lt;span style=&#34;color:#228b22&#34;&gt;# 특정 브랜치&lt;/span&gt;
-git clone --depth &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
-
-&lt;span style=&#34;color:#228b22&#34;&gt;# cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;# cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...&lt;/span&gt;
-make all &lt;span style=&#34;color:#00688b&#34;&gt;WHAT&lt;/span&gt;=cmd/kubectl &lt;span style=&#34;color:#00688b&#34;&gt;GOFLAGS&lt;/span&gt;=-v
-
-&lt;span style=&#34;color:#228b22&#34;&gt;# 그냥 간단히 go build 명령도 가능하다.&lt;/span&gt;
-go build -o k cmd/kubectl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;빌드-실행-따라가기&#34;&gt;빌드 실행 따라가기&lt;/h2&gt;
-&lt;h3 id=&#34;makefile&#34;&gt;Makefile&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;build/root/Makefile
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://cxsu.github.io/posts/go/d/ - </description>
         </item>
     
     
@@ -577,7 +1150,7 @@ When you &amp;ldquo;track&amp;rdquo; a cellphone, you monitor its current locati
     
     
         <item>
-        <title>[번역] NFV의 컴퓨팅 도메인에 대한 오해!</title>
+        <title>NFV의 컴퓨팅 도메인에 대한 오해!</title>
         <link>https://cxsu.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</link>
         <pubDate>Thu, 01 Oct 2020 22:23:00 +0900</pubDate>
         
@@ -653,7 +1226,7 @@ HDD를 영구 스토리지에 사용한다는 것이 장점입니다.&lt;/p&gt;
     
     
         <item>
-        <title>[번역] NFV MANO 초심자 가이드</title>
+        <title>NFV MANO 초심자 가이드</title>
         <link>https://cxsu.github.io/posts/nfv/beginners-guide-to-nfv-mano/</link>
         <pubDate>Wed, 23 Sep 2020 00:58:08 +0900</pubDate>
         
@@ -823,7 +1396,7 @@ Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
     
     
         <item>
-        <title>[번역] &#34;NFV 아키텍처&#34; 이해를 위한 치트 시트</title>
+        <title>&#34;NFV 아키텍처&#34; 이해를 위한 치트 시트</title>
         <link>https://cxsu.github.io/posts/nfv/cheat-sheet-understanding-nfv-architecture/</link>
         <pubDate>Tue, 22 Sep 2020 21:58:08 +0900</pubDate>
         
@@ -911,7 +1484,7 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
     
     
         <item>
-        <title>[번역] 쿠버네티스 API 접근 제어</title>
+        <title>쿠버네티스 API 접근 제어</title>
         <link>https://cxsu.github.io/posts/kubernetes/controlling-access-api/</link>
         <pubDate>Thu, 17 Sep 2020 06:58:08 +0900</pubDate>
         
@@ -1046,7 +1619,7 @@ GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 �
     
     
         <item>
-        <title>[번역] MEC 아키텍처 초심자 가이드</title>
+        <title>MEC 아키텍처 초심자 가이드</title>
         <link>https://cxsu.github.io/posts/mec/beginners-guide-to-mec-architecture/</link>
         <pubDate>Sun, 13 Sep 2020 20:58:08 +0900</pubDate>
         

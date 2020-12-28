@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html><head>
+<title>Go로 밑바닥부터 만드는 BitTorrent 클라이언트</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Jesse Li">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Go로 밑바닥부터 만드는 BitTorrent 클라이언트" />
+<meta property="og:description" content="Jesse Li" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://cxsu.github.io/posts/go/building-bittorrent-client/" />
+<meta property="article:published_time" content="2020-12-28T14:46:00+09:00" />
+<meta property="article:modified_time" content="2020-12-28T14:46:00+09:00" /><meta property="og:site_name" content="Changsu" />
+
+
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go로 밑바닥부터 만드는 BitTorrent 클라이언트"/>
+<meta name="twitter:description" content="Jesse Li"/>
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', '60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+<script src="/vendor/js/jquery.min.js" ></script>
+<script src="/vendor/js/popper.min.js" ></script>
+<script src="/vendor/js/bootstrap.min.js" ></script>
+<script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+<link rel="icon" href="https://cxsu.github.io/images/favicon.ico">
+
+
+
+
+<link rel="stylesheet" href="https://cxsu.github.io/scss/journal.min.c116bc90d171283f099f173854157ec8f183f9073b93443b2c8ad82899ee9025.css" integrity="sha256-wRa8kNFxKD8Jnxc4VBV&#43;yPGD&#43;Qc7k0Q7LIrYKJnukCU=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://cxsu.github.io/scss/dark-mode.min.552aae4638a84aa57cf0b195750a49ea9131d3bb621d1ed3ebc9b14b18166536.css" integrity="sha256-VSquRjioSqV88LGVdQpJ6pEx07tiHR7T68mxSxgWZTY=" media="screen">
+
+
+<script src="https://cxsu.github.io//js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+</script>
+
+
+
+
+  
+    <script src="https://cxsu.github.io//js/toc.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://cxsu.github.io/">
+    
+        <div class="nav-title">
+            Changsu
+        </div>
+        
+        <div class="nav-subtitle">
+            Home
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 Changsu
+	
+
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    
+    <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%94%bc%ec%96%b4-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#피어-찾기-nav`)" id="피어-찾기-nav">
+									피어 찾기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#torrent-%ed%8c%8c%ec%9d%bc-%ed%8c%8c%ec%8b%b1-parsing-%ea%b5%ac%eb%ac%b8-%eb%b6%84%ec%84%9d" onclick="onNavClick(`#torrent-파일-파싱-parsing-구문-분석-nav`)" id="torrent-파일-파싱-parsing-구문-분석-nav">
+									.torrent 파일 파싱 (parsing: 구문 분석)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%9e%98%ec%bb%a4%eb%a1%9c%eb%b6%80%ed%84%b0-%ed%94%bc%ec%96%b4-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#트래커로부터-피어-찾기-nav`)" id="트래커로부터-피어-찾기-nav">
+									트래커로부터 피어 찾기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%9e%98%ec%bb%a4-%ec%9d%91%eb%8b%b5-%eb%b6%84%ec%84%9d" onclick="onNavClick(`#트래커-응답-분석-nav`)" id="트래커-응답-분석-nav">
+									트래커 응답 분석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%94%bc%ec%96%b4%eb%a1%9c%eb%b6%80%ed%84%b0-%eb%8b%a4%ec%9a%b4%eb%a1%9c%eb%93%9c%ed%95%98%ea%b8%b0" onclick="onNavClick(`#피어로부터-다운로드하기-nav`)" id="피어로부터-다운로드하기-nav">
+									피어로부터 다운로드하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#tcp-%ec%97%b0%ea%b2%b0" onclick="onNavClick(`#tcp-연결-nav`)" id="tcp-연결-nav">
+									TCP 연결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b8%eb%93%9c%ec%85%b0%ec%9d%b4%ed%81%ac-%ec%99%84%eb%a3%8c" onclick="onNavClick(`#핸드셰이크-완료-nav`)" id="핸드셰이크-완료-nav">
+									핸드셰이크 완료
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a9%94%ec%8b%9c%ec%a7%80-%ec%a3%bc%ea%b3%a0-%eb%b0%9b%ea%b8%b0" onclick="onNavClick(`#메시지-주고-받기-nav`)" id="메시지-주고-받기-nav">
+									메시지 주고 받기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%eb%a9%94%ec%8b%9c%ec%a7%80-%ed%95%b4%ec%84%9d" onclick="onNavClick(`#메시지-해석-nav`)" id="메시지-해석-nav">
+									메시지 해석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ed%8a%b8-%ed%95%84%eb%93%9c-bitfields" onclick="onNavClick(`#비트-필드-bitfields-nav`)" id="비트-필드-bitfields-nav">
+									비트 필드 (Bitfields)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%aa%a8%eb%91%90-%ed%95%a9%ec%b9%98%ea%b8%b0" onclick="onNavClick(`#모두-합치기-nav`)" id="모두-합치기-nav">
+									모두 합치기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%eb%8f%99%ec%8b%9c%ec%84%b1-%ea%b4%80%eb%a6%ac-%ec%b1%84%eb%84%90channel%ec%9d%84-%ed%81%90queue%eb%a1%9c" onclick="onNavClick(`#동시성-관리-채널channel을-큐queue로-nav`)" id="동시성-관리-채널channel을-큐queue로-nav">
+									동시성 관리: 채널(channel)을 큐(queue)로
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%83%81%ed%83%9c-%ea%b4%80%eb%a6%ac" onclick="onNavClick(`#상태-관리-nav`)" id="상태-관리-nav">
+									상태 관리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9a%94%ec%b2%ad%ec%9d%84-%eb%b3%b4%eb%82%bc-%ec%8b%9c%ea%b0%84%ec%9e%85%eb%8b%88%eb%8b%a4" onclick="onNavClick(`#요청을-보낼-시간입니다-nav`)" id="요청을-보낼-시간입니다-nav">
+									요청을 보낼 시간입니다!
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%b4%ed%94%84%eb%9d%bc%ec%9d%b4%eb%8b%9d" onclick="onNavClick(`#파이프라이닝-nav`)" id="파이프라이닝-nav">
+									파이프라이닝
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#maingo" onclick="onNavClick(`#maingo-nav`)" id="maingo-nav">
+									main.go
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%ea%b2%83%ec%9d%b4-%ec%a0%84%eb%b6%80%ea%b0%80-%ec%95%84%eb%8b%99%eb%8b%88%eb%8b%a4" onclick="onNavClick(`#이것이-전부가-아닙니다-nav`)" id="이것이-전부가-아닙니다-nav">
+									이것이 전부가 아닙니다
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%94%bc%ec%96%b4-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#피어-찾기-nav`)" id="피어-찾기-nav">
+									피어 찾기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#torrent-%ed%8c%8c%ec%9d%bc-%ed%8c%8c%ec%8b%b1-parsing-%ea%b5%ac%eb%ac%b8-%eb%b6%84%ec%84%9d" onclick="onNavClick(`#torrent-파일-파싱-parsing-구문-분석-nav`)" id="torrent-파일-파싱-parsing-구문-분석-nav">
+									.torrent 파일 파싱 (parsing: 구문 분석)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%9e%98%ec%bb%a4%eb%a1%9c%eb%b6%80%ed%84%b0-%ed%94%bc%ec%96%b4-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#트래커로부터-피어-찾기-nav`)" id="트래커로부터-피어-찾기-nav">
+									트래커로부터 피어 찾기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%9e%98%ec%bb%a4-%ec%9d%91%eb%8b%b5-%eb%b6%84%ec%84%9d" onclick="onNavClick(`#트래커-응답-분석-nav`)" id="트래커-응답-분석-nav">
+									트래커 응답 분석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%94%bc%ec%96%b4%eb%a1%9c%eb%b6%80%ed%84%b0-%eb%8b%a4%ec%9a%b4%eb%a1%9c%eb%93%9c%ed%95%98%ea%b8%b0" onclick="onNavClick(`#피어로부터-다운로드하기-nav`)" id="피어로부터-다운로드하기-nav">
+									피어로부터 다운로드하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#tcp-%ec%97%b0%ea%b2%b0" onclick="onNavClick(`#tcp-연결-nav`)" id="tcp-연결-nav">
+									TCP 연결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b8%eb%93%9c%ec%85%b0%ec%9d%b4%ed%81%ac-%ec%99%84%eb%a3%8c" onclick="onNavClick(`#핸드셰이크-완료-nav`)" id="핸드셰이크-완료-nav">
+									핸드셰이크 완료
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a9%94%ec%8b%9c%ec%a7%80-%ec%a3%bc%ea%b3%a0-%eb%b0%9b%ea%b8%b0" onclick="onNavClick(`#메시지-주고-받기-nav`)" id="메시지-주고-받기-nav">
+									메시지 주고 받기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%eb%a9%94%ec%8b%9c%ec%a7%80-%ed%95%b4%ec%84%9d" onclick="onNavClick(`#메시지-해석-nav`)" id="메시지-해석-nav">
+									메시지 해석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ed%8a%b8-%ed%95%84%eb%93%9c-bitfields" onclick="onNavClick(`#비트-필드-bitfields-nav`)" id="비트-필드-bitfields-nav">
+									비트 필드 (Bitfields)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%aa%a8%eb%91%90-%ed%95%a9%ec%b9%98%ea%b8%b0" onclick="onNavClick(`#모두-합치기-nav`)" id="모두-합치기-nav">
+									모두 합치기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%eb%8f%99%ec%8b%9c%ec%84%b1-%ea%b4%80%eb%a6%ac-%ec%b1%84%eb%84%90channel%ec%9d%84-%ed%81%90queue%eb%a1%9c" onclick="onNavClick(`#동시성-관리-채널channel을-큐queue로-nav`)" id="동시성-관리-채널channel을-큐queue로-nav">
+									동시성 관리: 채널(channel)을 큐(queue)로
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%83%81%ed%83%9c-%ea%b4%80%eb%a6%ac" onclick="onNavClick(`#상태-관리-nav`)" id="상태-관리-nav">
+									상태 관리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9a%94%ec%b2%ad%ec%9d%84-%eb%b3%b4%eb%82%bc-%ec%8b%9c%ea%b0%84%ec%9e%85%eb%8b%88%eb%8b%a4" onclick="onNavClick(`#요청을-보낼-시간입니다-nav`)" id="요청을-보낼-시간입니다-nav">
+									요청을 보낼 시간입니다!
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%b4%ed%94%84%eb%9d%bc%ec%9d%b4%eb%8b%9d" onclick="onNavClick(`#파이프라이닝-nav`)" id="파이프라이닝-nav">
+									파이프라이닝
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#maingo" onclick="onNavClick(`#maingo-nav`)" id="maingo-nav">
+									main.go
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%ea%b2%83%ec%9d%b4-%ec%a0%84%eb%b6%80%ea%b0%80-%ec%95%84%eb%8b%99%eb%8b%88%eb%8b%a4" onclick="onNavClick(`#이것이-전부가-아닙니다-nav`)" id="이것이-전부가-아닙니다-nav">
+									이것이 전부가 아닙니다
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cxsu.github.io/">
+            Changsu
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cxsu.github.io/">
+        <div class="single-column-header-title">Changsu</div>
+        
+        <div class="single-column-header-subtitle">Home</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+<div ref="streamContainer" class="stream-container">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://cxsu.github.io/images/go/bit-torrent/2001-bit-torrent.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Go로 밑바닥부터 만드는 BitTorrent 클라이언트
+                    
+                    <div class="post-subtitle">
+                        Jesse Li
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020년 12월 28일 14시 46분
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[go]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/bittorrent">bittorrent</a>
+                                &nbsp;
+                            
+                                <a href="/tags/go">go</a>
+                                &nbsp;
+                            
+                                <a href="/tags/translate">translate</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
+<p><a href="https://blog.jse.li/posts/torrent/#putting-it-all-together">Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)</a>을 번역한 글입니다.</p>
+</blockquote>
+<p><strong>tl;dr:</strong> The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 어떤 경로가 있는 것일까요?
+이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트(BitTorrent) 프로토콜을 구현할 것입니다.
+바로 <a href="https://github.com/veggiedefender/torrent-client/">소스 코드</a>를 보거나 <a href="#%EB%AA%A8%EB%91%90-%ED%95%A9%EC%B9%98%EA%B8%B0">마지막 부분</a>으로 넘어가실 수 있습니다.</p>
+<p>비트토렌트(BitTorrent)는 인터넷을 통해 파일을 다운로드하고 배포하기 위한 프로토콜입니다.
+다운로더가 중앙 서버와 연결하는 기존의 클라이언트/서버 관계 (예: 넷플릭스(Netflix)에서
+영화를 보거나 지금 읽고 있는 웹 페이지를 불러 오는 것)와 달리,
+<strong>피어(peer)</strong> 라고 불리는 비트토렌트 네트워크 참여자들은 <em>서로에게서</em> 파일 조각을 다운로드합니다.
+이것이 <strong>P2P(peer-to-peer)</strong> 프로토콜입니다.</p>
+<p><img src="/images/go/bit-torrent/client-server-p2p.png" alt="client-server-p2p"></p>
+<p>이 프로토콜은 지난 20년 동안 진화했으며, 다양한 사람들과 조직들이 암호화(encryption),
+비공개 토렌트(private torrent), 새로운 피어 탐색법과 같은 기능들을 추가했습니다.
+우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 <a href="https://www.bittorrent.org/beps/bep_0003.html">2001년 규격</a>을 구현할 것입니다.</p>
+<p>저의 실험 재료(guinea pig)로 적당한 350MB의 <a href="https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/#indexlist">데비안 ISO</a> 파일을 사용하겠습니다.
+널리 사용되는 리눅스(Linux) 배포판은 빠르고 협력적인 피어들이 많이 연결될 것입니다.
+그리고 불법 복제 콘텐츠 다운로드와 관련된 법적, 윤리적 문제를 피할 수 있습니다.</p>
+<h1 id="피어-찾기">피어 찾기</h1>
+<p>다음과 같은 문제가 있습니다. 우리는 비트토렌트로 파일을 다운로드하려고 하지만 P2P 프로토콜이고 파일을 다운로드할 피어를 찾을 수 없습니다.
+이것은 마치 새로운 도시로 이사해서 친구를 사귀는 것과 같습니다. 어쩌면 우리가 동네 술집이나 밋업(meetup) 그룹에 가는 것처럼요!
+중앙 집중식 서버는 피어들이 서로를 알 수 있도록 알려주는 <strong>트래커(tracker)</strong> 의 핵심입니다.
+이들은 HTTP* 웹 서버일 뿐이며, 데비안의 서버는 <a href="http://bttracker.debian.org:6969/stat">http://bttracker.debian.org:6969/stat</a>에서 찾을 수 있습니다.</p>
+<blockquote>
+<p>* 일부 트래커는 대역폭을 절약하기 위해 <a href="http://bittorrent.org/beps/bep_0015.html">[UDP]</a> 바이너리 프로토콜을 사용합니다.</p>
+</blockquote>
+<p><img src="/images/go/bit-torrent/trackers.png" alt="trackers"></p>
+<p>물론 이러한 중앙 서버는 피어들이 불법 컨텐츠를 교환할 수 있게 둔다면 정부의 단속을 받기 쉽습니다.
+여러분은 불법 컨텐츠로 인해 폐쇄된 TorrentSpy, Popcorn Time, 그리고 KickassTorrents 와 같은 트래커에 대해 읽었을 수 있습니다.
+오늘날에는 <strong>피어 탐색</strong>도 분산 프로세스로 만들어 중간자를 생략했습니다 (역주: Trackerless Torrent).
+우리가 이것까지 구현하지는 않지만 만약 관심이 있다면 <strong>DHT(Distributed Hash Table)</strong>, <strong>PEX(Peer exchange)</strong>, 그리고 <strong>자석 링크(magnet link)</strong> 같은 몇몇 용어들을 찾아보세요.</p>
+<h2 id="torrent-파일-파싱-parsing-구문-분석">.torrent 파일 파싱 (parsing: 구문 분석)</h2>
+<p>.torrent 파일에는 torrentable 파일의 내용 및 트래커 연결에 대한 정보가 포함됩니다.
+토렌트를 다운로드 하기 위해 필요한 것은 이것뿐입니다. 데비안의 .torrent 파일은 다음과 같습니다.</p>
+<pre><code>d8:announce41:http://bttracker.debian.org:6969/announce7:comment35:&quot;Debian CD from cdimage.debian.org&quot;13:creation datei1573903810e9:httpseedsl145:https://cdimage.debian.org/cdimage/release/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso145:https://cdimage.debian.org/cdimage/archive/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.isoe4:infod6:lengthi351272960e4:name31:debian-10.2.0-amd64-netinst.iso12:piece lengthi262144e6:pieces26800:�����PS�^�� (binary blob of the hashes of each piece)ee
+</code></pre><p><strong>B인코드(Bencode)</strong> 형식으로 인코딩되어 있고, 우리는 이것을 디코딩해야 합니다.</p>
+<p>B인코드는 JSON과 거의 동일한 유형(문자열, 정수, 리스트 및 딕셔너리)의 구조로 인코딩할 수 있습니다.
+B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것은 아니지만 바이너리 데이터를 효율적으로
+처리할 수 있으며 스트림에서 파싱하는 것이 매우 간단합니다.
+문자열은 길이 접두사가 붙으며 <code>4:spam</code>와 같이 나타냅니다.
+정수는 마커로 시작하고 끝나기 때문에 <code>7</code>의 경우 <code>i7e</code>로 인코딩됩니다.
+리스트와 딕셔너리는 비슷한 방식으로 인코딩됩니다. <code>l4:spami7ee</code>는 <code>['spam', 7]</code>을, <code>d4:spami7ee</code>는 <code>{spam: 7}</code>을 나타냅니다.</p>
+<p>.torrent 파일을 보기 쉽게 다듬으면 다음과 같습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">d
+  <span style="color:#b452cd">8</span>:announce
+    <span style="color:#b452cd">41</span>:http:<span style="color:#228b22">//bttracker.debian.org:6969/announce
+</span><span style="color:#228b22"></span>  <span style="color:#b452cd">7</span>:comment
+    <span style="color:#b452cd">35</span>:<span style="color:#cd5555">&#34;Debian CD from cdimage.debian.org&#34;</span>
+  <span style="color:#b452cd">13</span>:creation date
+    i1573903810e
+  <span style="color:#b452cd">4</span>:info
+    d
+      <span style="color:#b452cd">6</span>:length
+        i351272960e
+      <span style="color:#b452cd">4</span>:name
+        <span style="color:#b452cd">31</span>:debian-<span style="color:#b452cd">10.2.0</span>-amd64-netinst.iso
+      <span style="color:#b452cd">12</span>:piece length
+        i262144e
+      <span style="color:#b452cd">6</span>:pieces
+        <span style="color:#b452cd">26800</span>:<span style="color:#a61717;background-color:#e3d2d2">�����</span>PS<span style="color:#a61717;background-color:#e3d2d2">�</span>^<span style="color:#a61717;background-color:#e3d2d2">��</span> (binary blob of the hashes of each piece)
+    e
+e
+</code></pre></div><p>이 파일에서는 트래커의 URL, 생성 날짜(유닉스 타임스탬프), 파일 이름 및 크기,
+다운로드하려는 파일의 모든 <strong>조각</strong> 의 SHA-1 해시가 들어 있는 큰 바이너리 블롭을 찾을 수 있습니다.
+조각의 정확한 크기는 토렌트마다 다르지만 일반적으로 256KB에서 1MB 사이입니다.
+이것은 큰 파일이 수천 개의 조각으로 구성될 수 있다는 것을 의미합니다.
+피어들에게서 이 조각들을 다운로드해서 토렌트 파일에 있는 해시와 대조해 보고, 조립해 보고, 파일을 가지게 되는 겁니다!</p>
+<p><img src="/images/go/bit-torrent/pieces.png" alt="pieces"></p>
+<p>이 메커니즘을 통해 각 조각의 무결성을 검증할 수 있습니다.
+비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 <strong>토렌트 포이즈닝</strong>(<a href="https://en.wikipedia.org/wiki/Torrent_poisoning">torrent poisoning</a>) 을 막을 수 있습니다.
+공격자가 역상 공격(<a href="https://en.wikipedia.org/wiki/Preimage_attack">preimage attack</a>)을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.</p>
+<p>B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목표가 아닙니다.
+이해하기 쉬운 Fredrik Lundh의 <a href="https://effbot.org/zone/bencode.htm">50줄짜리 파서</a>를 찾았지만,
+이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go">github.com/jackpal/bencode-go</a> 을 사용했습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">import</span> (
+  <span style="color:#cd5555">&#34;github.com/jackpal/bencode-go&#34;</span>
+)
+
+<span style="color:#8b008b;font-weight:bold">type</span> bencodeInfo <span style="color:#8b008b;font-weight:bold">struct</span> {
+  Pieces      <span style="color:#00688b;font-weight:bold">string</span> <span style="color:#cd5555">`bencode:&#34;pieces&#34;`</span>
+  PieceLength <span style="color:#00688b;font-weight:bold">int</span>    <span style="color:#cd5555">`bencode:&#34;piece length&#34;`</span>
+  Length      <span style="color:#00688b;font-weight:bold">int</span>    <span style="color:#cd5555">`bencode:&#34;length&#34;`</span>
+  Name        <span style="color:#00688b;font-weight:bold">string</span> <span style="color:#cd5555">`bencode:&#34;name&#34;`</span>
+}
+
+<span style="color:#8b008b;font-weight:bold">type</span> bencodeTorrent <span style="color:#8b008b;font-weight:bold">struct</span> {
+  Announce <span style="color:#00688b;font-weight:bold">string</span>      <span style="color:#cd5555">`bencode:&#34;announce&#34;`</span>
+  Info     bencodeInfo <span style="color:#cd5555">`bencode:&#34;info&#34;`</span>
+}
+
+<span style="color:#228b22">// Open 토렌트 파일을 파싱합니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">Open</span>(r io.Reader) (*bencodeTorrent, <span style="color:#00688b;font-weight:bold">error</span>) {
+  bto := bencodeTorrent{}
+  err := bencode.<span style="color:#008b45">Unmarshal</span>(r, &amp;bto)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+  }
+  <span style="color:#8b008b;font-weight:bold">return</span> &amp;bto, <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go</a></p>
+<p>저는 구조체를 상대적으로 평평하게 유지하는 것을 좋아하고
+애플리케이션 구조체를 직렬화 구조체와 분리하는 것을 좋아하기 때문에
+<code>TorrentFile</code>이라는 다른 평탄한 구조체를 내보내고
+두 구조체 사이에서 변환할 몇 가지 헬퍼 함수를 작성했습니다.</p>
+<p>특히 각각의 해시에 쉽게 접근할 수 있도록 <code>조각</code>(이전의 문자열)을 해시 조각(각각 <code>[20]byte</code>)으로 분할합니다.
+또한 (이름, 크기, 조각 해시를 포함한) B인코딩된 <code>info</code> 딕셔너리의 SHA-1 해시를 계산했습니다.
+이것을 <strong>infohash</strong>라고 하며 트래커 및 피어와 통신할 때 파일 식별자 역할을 합니다.
+이에 대해서는 나중에 더 살펴보겠습니다.</p>
+<p><img src="/images/go/bit-torrent/info-hash.png" alt="info-hash"></p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">type</span> TorrentFile <span style="color:#8b008b;font-weight:bold">struct</span> {
+  Announce    <span style="color:#00688b;font-weight:bold">string</span>
+  InfoHash    [<span style="color:#b452cd">20</span>]<span style="color:#00688b;font-weight:bold">byte</span>
+  PieceHashes [][<span style="color:#b452cd">20</span>]<span style="color:#00688b;font-weight:bold">byte</span>
+  PieceLength <span style="color:#00688b;font-weight:bold">int</span>
+  Length      <span style="color:#00688b;font-weight:bold">int</span>
+  Name        <span style="color:#00688b;font-weight:bold">string</span>
+}
+
+<span style="color:#8b008b;font-weight:bold">func</span> (bto bencodeTorrent) <span style="color:#008b45">toTorrentFile</span>() (TorrentFile, <span style="color:#00688b;font-weight:bold">error</span>) {
+  <span style="color:#228b22">// …
+</span><span style="color:#228b22"></span>}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a></p>
+<h2 id="트래커로부터-피어-찾기">트래커로부터 피어 찾기</h2>
+<p>이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 <strong>알리고</strong> 다른 피어들의 목록을 검색해 보겠습니다.
+.torrent 파일에 제공된 &lsquo;announce&rsquo; URL에 몇 가지 쿼리 파라미터와 함께 GET 요청을 하면 됩니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">func</span> (t *TorrentFile) <span style="color:#008b45">buildTrackerURL</span>(peerID [<span style="color:#b452cd">20</span>]<span style="color:#00688b;font-weight:bold">byte</span>, port <span style="color:#00688b;font-weight:bold">uint16</span>) (<span style="color:#00688b;font-weight:bold">string</span>, <span style="color:#00688b;font-weight:bold">error</span>) {
+  base, err := url.<span style="color:#008b45">Parse</span>(t.Announce)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#cd5555">&#34;&#34;</span>, err
+  }
+  params := url.Values{
+    <span style="color:#cd5555">&#34;info_hash&#34;</span>:  []<span style="color:#00688b;font-weight:bold">string</span>{<span style="color:#658b00">string</span>(t.InfoHash[:])},
+    <span style="color:#cd5555">&#34;peer_id&#34;</span>:    []<span style="color:#00688b;font-weight:bold">string</span>{<span style="color:#658b00">string</span>(peerID[:])},
+    <span style="color:#cd5555">&#34;port&#34;</span>:       []<span style="color:#00688b;font-weight:bold">string</span>{strconv.<span style="color:#008b45">Itoa</span>(<span style="color:#658b00">int</span>(Port))},
+    <span style="color:#cd5555">&#34;uploaded&#34;</span>:   []<span style="color:#00688b;font-weight:bold">string</span>{<span style="color:#cd5555">&#34;0&#34;</span>},
+    <span style="color:#cd5555">&#34;downloaded&#34;</span>: []<span style="color:#00688b;font-weight:bold">string</span>{<span style="color:#cd5555">&#34;0&#34;</span>},
+    <span style="color:#cd5555">&#34;compact&#34;</span>:    []<span style="color:#00688b;font-weight:bold">string</span>{<span style="color:#cd5555">&#34;1&#34;</span>},
+    <span style="color:#cd5555">&#34;left&#34;</span>:       []<span style="color:#00688b;font-weight:bold">string</span>{strconv.<span style="color:#008b45">Itoa</span>(t.Length)},
+  }
+  base.RawQuery = params.<span style="color:#008b45">Encode</span>()
+  <span style="color:#8b008b;font-weight:bold">return</span> base.<span style="color:#008b45">String</span>(), <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go#L19-L35">github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35</a></p>
+<p>여기서 중요한 것은 다음과 같습니다.</p>
+<ul>
+<li><strong>info_hash</strong>: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 <code>info</code> 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.</li>
+<li><strong>peer_id</strong>: 트래커 및 피어에게 <code>우리</code>를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 <code>-TR2940-k8hj0wgej6ch</code>와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다.</li>
+</ul>
+<p><img src="/images/go/bit-torrent/info-hash-peer-id.png" alt="info-hash-peer-id"></p>
+<h2 id="트래커-응답-분석">트래커 응답 분석</h2>
+<p>다음과 같이 B인코딩된 응답을 받았습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">d
+  <span style="color:#b452cd">8</span>:interval
+    i900e
+  <span style="color:#b452cd">5</span>:peers
+    <span style="color:#b452cd">252</span>:(another <span style="color:#00688b;font-weight:bold">long</span> binary blob)
+e
+</code></pre></div><p><code>Interval</code>은 얼마나 자주 트래커에 다시 연결하여 피어 목록을 새로 고쳐야 하는지 알려줍니다.
+900이라는 값은 15분(900초)마다 다시 연결해야 함을 의미합니다.</p>
+<p><code>Peers</code>는 각 피어의 IP 주소를 포함하는 또 다른 긴 바이너리 블롭입니다.
+<code>6바이트의 그룹들</code>로 이루어져 있습니다.
+각 그룹의 처음 4바이트는 피어의 IP 주소를 나타냅니다. 각 1 바이트는 IP 숫자를 나타냅니다.
+마지막 2바이트는 포트 번호를 빅-엔디안 <code>uint16</code>으로 나타냅니다.
+<strong>빅-엔디안</strong> 또는 <strong>네트워크 바이트 순서</strong>는 바이트 그룹을 왼쪽부터 담아 정수로 해석하는 것을 말합니다.
+예를 들어 <code>0x1A</code>, <code>0xE1</code> 바이트는 <code>0x1AE1</code> 또는 십진수로 6881을 만듭니다.*</p>
+<blockquote>
+<p>* 동일한 바이트를 <strong>little-endian</strong> 순서로 해석하면 0xE11A = 57626이 됩니다.</p>
+</blockquote>
+<blockquote>
+<p>역주: network byte order: big-endian, host byte order: little-endian</p>
+</blockquote>
+<p><img src="/images/go/bit-torrent/address.png" alt="address"></p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// Peer 피어의 연결 정보를 인코딩합니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">type</span> Peer <span style="color:#8b008b;font-weight:bold">struct</span> {
+  IP   net.IP
+  Port <span style="color:#00688b;font-weight:bold">uint16</span>
+}
+
+<span style="color:#228b22">// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">Unmarshal</span>(peersBin []<span style="color:#00688b;font-weight:bold">byte</span>) ([]Peer, <span style="color:#00688b;font-weight:bold">error</span>) {
+  <span style="color:#8b008b;font-weight:bold">const</span> peerSize = <span style="color:#b452cd">6</span> <span style="color:#228b22">// 4 for IP, 2 for port
+</span><span style="color:#228b22"></span>  numPeers := <span style="color:#658b00">len</span>(peersBin) / peerSize
+  <span style="color:#8b008b;font-weight:bold">if</span> <span style="color:#658b00">len</span>(peersBin)%peerSize != <span style="color:#b452cd">0</span> {
+    err := fmt.<span style="color:#008b45">Errorf</span>(<span style="color:#cd5555">&#34;Received malformed peers&#34;</span>)
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+  }
+  peers := <span style="color:#658b00">make</span>([]Peer, numPeers)
+  <span style="color:#8b008b;font-weight:bold">for</span> i := <span style="color:#b452cd">0</span>; i &lt; numPeers; i++ {
+    offset := i * peerSize
+    peers[i].IP = net.<span style="color:#008b45">IP</span>(peersBin[offset : offset+<span style="color:#b452cd">4</span>])
+    peers[i].Port = binary.BigEndian.<span style="color:#008b45">Uint16</span>(peersBin[offset+<span style="color:#b452cd">4</span> : offset+<span style="color:#b452cd">6</span>])
+  }
+  <span style="color:#8b008b;font-weight:bold">return</span> peers, <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go">github.com/veggiedefender/torrent-client/peers/peers.go</a></p>
+<h1 id="피어로부터-다운로드하기">피어로부터 다운로드하기</h1>
+<p>이제 피어 목록이 있습니다.
+피어와 연결하여 조각을 다운로드할 시간입니다!
+우리는 이 과정을 몇 단계로 나눌 수 있습니다.
+각 피어에 대해 다음을 수행하고자 합니다.</p>
+<ol>
+<li>피어와 TCP 연결을 시작합니다. 이것은 전화를 거는 것과 같습니다.</li>
+<li>양방향 비트토렌트 <strong>핸드셰이크</strong>를 완료합니다.. <em>&ldquo;안녕?&rdquo; &ldquo;안녕.&quot;</em></li>
+<li><strong>조각</strong>을 다운로드 하기 위해 <strong>메시지</strong>를 교환합니다. <em>&ldquo;231번 조각 주세요.&quot;</em></li>
+</ol>
+<h2 id="tcp-연결">TCP 연결</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">conn, err := net.<span style="color:#008b45">DialTimeout</span>(<span style="color:#cd5555">&#34;tcp&#34;</span>, peer.<span style="color:#008b45">String</span>(), <span style="color:#b452cd">3</span>*time.Second)
+<span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+  <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go#L65-L69">github.com/veggiedefender/torrent-client/client/client.go#L65-L69</a></p>
+<p>연결할 수 없는 피어에 너무 많은 시간을 낭비하지 않도록 시간 제한을 설정했습니다.
+대부분의 경우 표준 TCP 연결입니다.</p>
+<h2 id="핸드셰이크-완료">핸드셰이크 완료</h2>
+<p>피어와의 연결을 설정했지만 다음과 같은 가정을 검증하기 위해 핸드셰이크를 수행하려고 합니다.</p>
+<ul>
+<li>피어는 비트토렌트 프로토콜을 사용하여 통신할 수 있습니다.</li>
+<li>피어는 우리의 메시지를 이해하고 응답할 수 있습니다.</li>
+<li>피어는 우리가 원하는 파일을 가지고 있거나 적어도 우리가 무엇을 말하고 있는지 알고 있습니다.</li>
+</ul>
+<p><img src="/images/go/bit-torrent/handshake.png" alt="handshake"></p>
+<p>아버지는 제게 악수(handshake)를 잘 하는 비결은 손을 단단히 잡고 눈을 마주치는 것이라고 말씀하셨습니다.
+좋은 비트토렌트 핸드셰이크의 비결은 다음과 같이 다섯 부분으로 구성됩니다.</p>
+<ol>
+<li>항상 19로 지정된 프로토콜 식별자의 길이. (16진수로는 0x13)</li>
+<li><strong>pstr</strong>이라 불리는 프로토콜 식별자는 항상 <code>비트토렌트 프로토콜</code>.</li>
+<li>모두 0으로 지정된 <strong>8개의 예약된 바이트</strong>. 그 중 일부를 1로 뒤집어서 특정 <a href="http://www.bittorrent.org/beps/bep_0010.html">확장 기능</a>을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.</li>
+<li>우리가 원하는 파일을 식별할 앞서 계산한 <strong>infohash</strong>.</li>
+<li>우리 스스로를 식별하기 위해 만든 <strong>Peer ID</strong>.</li>
+</ol>
+<p>합치면 핸드셰이크 문자열은 다음과 같이 보일 수 있습니다.</p>
+<pre><code>\x13BitTorrent protocol\x00\x00\x00\x00\x00\x00\x00\x00\x86\xd4\xc8\x00\x24\xa4\x69\xbe\x4c\x50\xbc\x5a\x10\x2c\xf7\x17\x80\x31\x00\x74-TR2940-k8hj0wgej6ch
+</code></pre><p>피어에게 핸드셰이크를 보낸 후 동일한 형식으로 핸드셰이크를 다시 받아야 합니다.
+받은 infohash는 보낸 정보와 일치해야 동일한 파일에 대해 말하고 있다는 것을 알 수 있습니다.
+모든 일이 계획대로 진행되면 다음 단계로 넘어갑니다.
+그렇지 않다면 뭔가 잘못되었기 때문에 연결을 끊을 수 있습니다.
+<em>&ldquo;안녕?&rdquo; &ldquo;这是谁？ 你想要什么？&rdquo; &ldquo;알았어요, 와&hellip;잘못 걸었어요..&quot;</em></p>
+<p>코드에서 핸드셰이크를 나타내는 구조체를 만들고, 이것을 직렬화하고 읽는 몇 가지 메소드를 작성하겠습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">type</span> Handshake <span style="color:#8b008b;font-weight:bold">struct</span> {
+  Pstr     <span style="color:#00688b;font-weight:bold">string</span>
+  InfoHash [<span style="color:#b452cd">20</span>]<span style="color:#00688b;font-weight:bold">byte</span>
+  PeerID   [<span style="color:#b452cd">20</span>]<span style="color:#00688b;font-weight:bold">byte</span>
+}
+
+<span style="color:#228b22">// Serialize 핸드셰이크를 버퍼에 직렬화합니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> (h *Handshake) <span style="color:#008b45">Serialize</span>() []<span style="color:#00688b;font-weight:bold">byte</span> {
+  buf := <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#658b00">len</span>(h.Pstr)+<span style="color:#b452cd">49</span>)
+  buf[<span style="color:#b452cd">0</span>] = <span style="color:#658b00">byte</span>(<span style="color:#658b00">len</span>(h.Pstr))
+  curr := <span style="color:#b452cd">1</span>
+  curr += <span style="color:#658b00">copy</span>(buf[curr:], h.Pstr)
+  curr += <span style="color:#658b00">copy</span>(buf[curr:], <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#b452cd">8</span>)) <span style="color:#228b22">// 8 reserved bytes
+</span><span style="color:#228b22"></span>  curr += <span style="color:#658b00">copy</span>(buf[curr:], h.InfoHash[:])
+  curr += <span style="color:#658b00">copy</span>(buf[curr:], h.PeerID[:])
+  <span style="color:#8b008b;font-weight:bold">return</span> buf
+}
+
+<span style="color:#228b22">// Read 스트림에서 핸드셰이크를 파싱합니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">Read</span>(r io.Reader) (*Handshake, <span style="color:#00688b;font-weight:bold">error</span>) {
+  <span style="color:#228b22">// Do Serialize(), but backwards
+</span><span style="color:#228b22"></span>  <span style="color:#228b22">// ...
+</span><span style="color:#228b22"></span>}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go">github.com/veggiedefender/torrent-client/handshake/handshake.go</a></p>
+<h2 id="메시지-주고-받기">메시지 주고 받기</h2>
+<p>첫 핸드셰이크를 마치면 <code>메시지</code>를 주고받을 수 있습니다.
+하지만 나머지 피어들이 메시지를 받아들일 준비가 안 되어 있다면,
+모두가 준비가 되었다고 말하기 전에는 보낼 수 없습니다.
+이 상태에서는 나머지 피어들에게 <code>chocked</code>를 당합니다.
+그들은 우리가 데이터를 요청해도 된다는 것을 알리기 위해 <code>unchoke</code> 메시지를 보낼 것입니다.
+기본적으로 우리는 입증될 때까지 막힌다고 가정합니다.</p>
+<p>unchoke 메시지를 받으면 우리는 조각에 대한 <code>요청</code>을 보낼 수 있고,
+피어들은 조각이 담긴 메시지를 우리에게 보낼 수 있습니다.</p>
+<p><img src="/images/go/bit-torrent/choke.png" alt="choke"></p>
+<h3 id="메시지-해석">메시지 해석</h3>
+<p>메시지는 길이, <code>ID</code>, <code>페이로드(payload)</code>를 가집니다. 이것은 다음과 같습니다.</p>
+<p><img src="/images/go/bit-torrent/message.png" alt="message"></p>
+<p>메시지는 메시지의 바이트 길이를 알려주는 길이 표시로 시작합니다.
+32비트 정수이므로 빅-엔디안 순서의 4바이트로 압축할 수 있습니다.
+다음 바이트인 <strong>ID</strong>는 어떤 유형의 메시지를 수신하는지 알려줍니다.
+예를 들어 <code>2</code>바이트는 &ldquo;관심있음(interested)&ldquo;을 의미합니다.
+마지막으로 선택값인 <strong>페이로드(payload)</strong> 는 메시지의 남은 길이를 채웁니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">type</span> messageID <span style="color:#00688b;font-weight:bold">uint8</span>
+
+<span style="color:#8b008b;font-weight:bold">const</span> (
+  MsgChoke         messageID = <span style="color:#b452cd">0</span>
+  MsgUnchoke       messageID = <span style="color:#b452cd">1</span>
+  MsgInterested    messageID = <span style="color:#b452cd">2</span>
+  MsgNotInterested messageID = <span style="color:#b452cd">3</span>
+  MsgHave          messageID = <span style="color:#b452cd">4</span>
+  MsgBitfield      messageID = <span style="color:#b452cd">5</span>
+  MsgRequest       messageID = <span style="color:#b452cd">6</span>
+  MsgPiece         messageID = <span style="color:#b452cd">7</span>
+  MsgCancel        messageID = <span style="color:#b452cd">8</span>
+)
+
+<span style="color:#228b22">// Message 메시지의 ID 및 페이로드를 저장합니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">type</span> Message <span style="color:#8b008b;font-weight:bold">struct</span> {
+  ID      messageID
+  Payload []<span style="color:#00688b;font-weight:bold">byte</span>
+}
+
+<span style="color:#228b22">// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.
+</span><span style="color:#228b22">// &lt;길이 접두사&gt;&lt;메시지 ID&gt;&lt;페이로드&gt;
+</span><span style="color:#228b22">// `nil`은 keep-live 메시지로 해석합니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> (m *Message) <span style="color:#008b45">Serialize</span>() []<span style="color:#00688b;font-weight:bold">byte</span> {
+  <span style="color:#8b008b;font-weight:bold">if</span> m == <span style="color:#8b008b;font-weight:bold">nil</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#b452cd">4</span>)
+  }
+  length := <span style="color:#658b00">uint32</span>(<span style="color:#658b00">len</span>(m.Payload) + <span style="color:#b452cd">1</span>) <span style="color:#228b22">// +1 for id
+</span><span style="color:#228b22"></span>  buf := <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#b452cd">4</span>+length)
+  binary.BigEndian.<span style="color:#008b45">PutUint32</span>(buf[<span style="color:#b452cd">0</span>:<span style="color:#b452cd">4</span>], length)
+  buf[<span style="color:#b452cd">4</span>] = <span style="color:#658b00">byte</span>(m.ID)
+  <span style="color:#658b00">copy</span>(buf[<span style="color:#b452cd">5</span>:], m.Payload)
+  <span style="color:#8b008b;font-weight:bold">return</span> buf
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L90-L103">github.com/veggiedefender/torrent-client/message/message.go#L90-L103</a></p>
+<p>스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
+우리는 4바이트를 읽고 메시지의 <strong>길이</strong>를 얻기 위해 <code>uint32</code>로 해석합니다.
+그런 다음 <strong>ID</strong>(처음 1바이트) 및 <strong>payload</strong>(나머지 바이트)를 얻습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">Read</span>(r io.Reader) (*Message, <span style="color:#00688b;font-weight:bold">error</span>) {
+  lengthBuf := <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#b452cd">4</span>)
+  _, err := io.<span style="color:#008b45">ReadFull</span>(r, lengthBuf)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+  }
+  length := binary.BigEndian.<span style="color:#008b45">Uint32</span>(lengthBuf)
+
+  <span style="color:#228b22">// keep-alive 메시지
+</span><span style="color:#228b22"></span>  <span style="color:#8b008b;font-weight:bold">if</span> length == <span style="color:#b452cd">0</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, <span style="color:#8b008b;font-weight:bold">nil</span>
+  }
+
+  messageBuf := <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, length)
+  _, err = io.<span style="color:#008b45">ReadFull</span>(r, messageBuf)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+  }
+
+  m := Message{
+    ID:      <span style="color:#008b45">messageID</span>(messageBuf[<span style="color:#b452cd">0</span>]),
+    Payload: messageBuf[<span style="color:#b452cd">1</span>:],
+  }
+
+  <span style="color:#8b008b;font-weight:bold">return</span> &amp;m, <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L105-L131">github.com/veggiedefender/torrent-client/message/message.go#L105-L131</a></p>
+<h3 id="비트-필드-bitfields">비트 필드 (Bitfields)</h3>
+<p>가장 흥미로운 유형의 메시지 중 하나는 <strong>비트 필드(bitfield)</strong> 입니다.
+이 자료 구조는 피어들이 우리에게 보낼 수 있는 조각을 효율적으로 인코딩하는 데 사용됩니다.
+비트필드는 바이트 배열처럼 생겼고, 어떤 조각을 가지고 있는지 확인하기 위해서는 단지 1로 설정된 <em>비트</em>의 위치를 보면 됩니다.
+이것을 커피숍 쿠폰에 비유할 수 있습니다.
+전부 <code>0</code>인 카드부터 시작해서 하나씩 <code>1</code>로 비트로 바꿔서 &ldquo;도장&rdquo; 찍듯이 표시합니다.</p>
+<p><img src="/images/go/bit-torrent/bitfield.png" alt="bitfield"></p>
+<p><em>바이트</em> 대신 <em>비트</em>로 작업해서 비트필드 자료 구조는 크기가 매우 작습니다.
+한 바이트의 공간에 8개의 조각 정보(<code>bool</code> 크기)를 채워 넣을 수 있습니다.
+단점은 값에 접근하는 것이 좀 더 까다로워진다는 것입니다.
+컴퓨터가 처리할 수 있는 가장 작은 메모리 단위는 바이트입니다.
+따라서 비트에 접근하려면 몇 가지 비트 조작(bitwise manipulation)을 수행해야 합니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">type</span> Bitfield []<span style="color:#00688b;font-weight:bold">byte</span>
+
+<span style="color:#228b22">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> (bf Bitfield) <span style="color:#008b45">HasPiece</span>(index <span style="color:#00688b;font-weight:bold">int</span>) <span style="color:#00688b;font-weight:bold">bool</span> {
+  byteIndex := index / <span style="color:#b452cd">8</span>
+  offset := index % <span style="color:#b452cd">8</span>
+  <span style="color:#8b008b;font-weight:bold">return</span> bf[byteIndex]&gt;&gt;(<span style="color:#b452cd">7</span>-offset)&amp;<span style="color:#b452cd">1</span> != <span style="color:#b452cd">0</span>
+}
+
+<span style="color:#228b22">// SetPiece 비트 필드에 비트를 설정합니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">func</span> (bf Bitfield) <span style="color:#008b45">SetPiece</span>(index <span style="color:#00688b;font-weight:bold">int</span>) {
+  byteIndex := index / <span style="color:#b452cd">8</span>
+  offset := index % <span style="color:#b452cd">8</span>
+  bf[byteIndex] |= <span style="color:#b452cd">1</span> &lt;&lt; (<span style="color:#b452cd">7</span> - offset)
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go">github.com/veggiedefender/torrent-client/bitfield/bitfield.go</a></p>
+<h2 id="모두-합치기">모두 합치기</h2>
+<p>이제 토렌트를 다운로드하는 데 필요한 모든 도구를 확보했습니다.
+트래커에서 얻은 피어 목록이 있으며, TCP로 연결하고 핸드셰이크를 하며,
+메시지를 주고받음으로써 피어들과 통신할 수 있습니다.
+마지막 큰 문제는 여러 피어와 동시에 통신하는 <strong>동시성(concurrency)</strong> 을 처리하고
+상호 작용하는 피어들의 <strong>상태</strong>를 관리하는 것입니다.
+둘 다 고전적으로 어려운 문제입니다.</p>
+<h3 id="동시성-관리-채널channel을-큐queue로">동시성 관리: 채널(channel)을 큐(queue)로</h3>
+<p>Go에서는 <a href="https://blog.golang.org/share-memory-by-communicating">통신을 통해 메모리를 공유</a>하며
+Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습니다.</p>
+<p>두 채널을 설정하여 동시적인 작업자들(concurrent workers)을 동기화합니다.
+하나는 피어 간에 작업(다운로드할 조각)을 분배하기 위한 채널이고,
+다른 하나는 다운로드한 조각들을 모으기 위한 채널입니다.
+다운로드된 조각들이 결과 채널을 통해 들어올 때,
+우리는 그것들을 버퍼에 복사해서 완전한 파일로 조립할 수 있습니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다
+</span><span style="color:#228b22"></span>workQueue := <span style="color:#658b00">make</span>(<span style="color:#8b008b;font-weight:bold">chan</span> *pieceWork, <span style="color:#658b00">len</span>(t.PieceHashes))
+results := <span style="color:#658b00">make</span>(<span style="color:#8b008b;font-weight:bold">chan</span> *pieceResult)
+<span style="color:#8b008b;font-weight:bold">for</span> index, hash := <span style="color:#8b008b;font-weight:bold">range</span> t.PieceHashes {
+  length := t.<span style="color:#008b45">calculatePieceSize</span>(index)
+  workQueue &lt;- &amp;pieceWork{index, hash, length}
+}
+
+<span style="color:#228b22">// 작업을 시작합니다
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">for</span> _, peer := <span style="color:#8b008b;font-weight:bold">range</span> t.Peers {
+  <span style="color:#8b008b;font-weight:bold">go</span> t.<span style="color:#008b45">startDownloadWorker</span>(peer, workQueue, results)
+}
+
+<span style="color:#228b22">// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다
+</span><span style="color:#228b22"></span>buf := <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, t.Length)
+donePieces := <span style="color:#b452cd">0</span>
+<span style="color:#8b008b;font-weight:bold">for</span> donePieces &lt; <span style="color:#658b00">len</span>(t.PieceHashes) {
+  res := &lt;-results
+  begin, end := t.<span style="color:#008b45">calculateBoundsForPiece</span>(res.index)
+  <span style="color:#658b00">copy</span>(buf[begin:end], res.buf)
+  donePieces++
+}
+<span style="color:#658b00">close</span>(workQueue)
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L188-L214">github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214</a></p>
+<p>트래커에서 받은 피어마다 작업자 고루틴을 생성합니다.
+피어와 연결하고 핸드셰이크한 다음 <code>workQueue</code>에서 작업을 검색하여 다운로드를 시도하고,
+<code>results</code> 채널을 통해 다운로드한 조각들을 다시 보냅니다.</p>
+<p><img src="/images/go/bit-torrent/download.png" alt="download"></p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">func</span> (t *Torrent) <span style="color:#008b45">startDownloadWorker</span>(peer peers.Peer, workQueue <span style="color:#8b008b;font-weight:bold">chan</span> *pieceWork, results <span style="color:#8b008b;font-weight:bold">chan</span> *pieceResult) {
+  c, err := client.<span style="color:#008b45">New</span>(peer, t.PeerID, t.InfoHash)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+    log.<span style="color:#008b45">Printf</span>(<span style="color:#cd5555">&#34;Could not handshake with %s. Disconnecting\n&#34;</span>, peer.IP)
+    <span style="color:#8b008b;font-weight:bold">return</span>
+  }
+  <span style="color:#8b008b;font-weight:bold">defer</span> c.Conn.<span style="color:#008b45">Close</span>()
+  log.<span style="color:#008b45">Printf</span>(<span style="color:#cd5555">&#34;Completed handshake with %s\n&#34;</span>, peer.IP)
+
+  c.<span style="color:#008b45">SendUnchoke</span>()
+  c.<span style="color:#008b45">SendInterested</span>()
+
+  <span style="color:#8b008b;font-weight:bold">for</span> pw := <span style="color:#8b008b;font-weight:bold">range</span> workQueue {
+    <span style="color:#8b008b;font-weight:bold">if</span> !c.Bitfield.<span style="color:#008b45">HasPiece</span>(pw.index) {
+      workQueue &lt;- pw <span style="color:#228b22">// 큐에 조각을 다시 넣습니다
+</span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">continue</span>
+    }
+
+    <span style="color:#228b22">// 조각 다운로드
+</span><span style="color:#228b22"></span>    buf, err := <span style="color:#008b45">attemptDownloadPiece</span>(c, pw)
+    <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+      log.<span style="color:#008b45">Println</span>(<span style="color:#cd5555">&#34;Exiting&#34;</span>, err)
+      workQueue &lt;- pw <span style="color:#228b22">// 큐에 조각을 다시 넣습니다
+</span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">return</span>
+    }
+
+    err = <span style="color:#008b45">checkIntegrity</span>(pw, buf)
+    <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+      log.<span style="color:#008b45">Printf</span>(<span style="color:#cd5555">&#34;Piece #%d failed integrity check\n&#34;</span>, pw.index)
+      workQueue &lt;- pw <span style="color:#228b22">// 큐에 조각을 다시 넣습니다
+</span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">continue</span>
+    }
+
+    c.<span style="color:#008b45">SendHave</span>(pw.index)
+    results &lt;- &amp;pieceResult{pw.index, buf}
+  }
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L133-L169">github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169</a></p>
+<h3 id="상태-관리">상태 관리</h3>
+<p>구조체에 있는 각 피어들을 추적하고 메시지를 읽을 때 해당 구조체를 수정합니다.
+피어에서 다운로드한 용량, 요청한 용량, 중단(choked) 여부 등의 데이터가 포함됩니다.
+만약 더 확장하기를 원한다면 이것을 유한 상태 기계(FSM)로 형식화할 수 있습니다.
+하지만 지금은 구조체와 스위치만으로 충분합니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">type</span> pieceProgress <span style="color:#8b008b;font-weight:bold">struct</span> {
+  index      <span style="color:#00688b;font-weight:bold">int</span>
+  client     *client.Client
+  buf        []<span style="color:#00688b;font-weight:bold">byte</span>
+  downloaded <span style="color:#00688b;font-weight:bold">int</span>
+  requested  <span style="color:#00688b;font-weight:bold">int</span>
+  backlog    <span style="color:#00688b;font-weight:bold">int</span>
+}
+
+<span style="color:#8b008b;font-weight:bold">func</span> (state *pieceProgress) <span style="color:#008b45">readMessage</span>() <span style="color:#00688b;font-weight:bold">error</span> {
+  msg, err := state.client.<span style="color:#008b45">Read</span>() <span style="color:#228b22">// this call blocks
+</span><span style="color:#228b22"></span>  <span style="color:#8b008b;font-weight:bold">switch</span> msg.ID {
+  <span style="color:#8b008b;font-weight:bold">case</span> message.MsgUnchoke:
+    state.client.Choked = <span style="color:#8b008b;font-weight:bold">false</span>
+  <span style="color:#8b008b;font-weight:bold">case</span> message.MsgChoke:
+    state.client.Choked = <span style="color:#8b008b;font-weight:bold">true</span>
+  <span style="color:#8b008b;font-weight:bold">case</span> message.MsgHave:
+    index, err := message.<span style="color:#008b45">ParseHave</span>(msg)
+    state.client.Bitfield.<span style="color:#008b45">SetPiece</span>(index)
+  <span style="color:#8b008b;font-weight:bold">case</span> message.MsgPiece:
+    n, err := message.<span style="color:#008b45">ParsePiece</span>(state.index, state.buf, msg)
+    state.downloaded += n
+    state.backlog--
+  }
+  <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L53-L83">github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83</a></p>
+<h3 id="요청을-보낼-시간입니다">요청을 보낼 시간입니다!</h3>
+<p>파일, 조각 및 조각 해시는 전부가 아닙니다. 조각을 <strong>블록</strong>으로 세분하여 더 발전시킬 수 있습니다.
+블록은 조각의 일부입니다. 해당 블록이 속한 조각의 <strong>인덱스</strong>,
+조각에서 블록의 바이트 <strong>오프셋</strong> 및 블록의 <strong>길이</strong>를 통해 블록을 정의할 수 있습니다.
+피어에서 데이터를 요청하면 실제로 블록을 요청합니다.
+블록의 크기는 일반적으로 16KB이므로 256KB 조각 하나에 실제로 16개의 요청이 필요할 수 있습니다.</p>
+<p>피어가 16KB보다 큰 블록에 대한 요청을 수신하는 경우 연결을 끊어야 합니다.
+제 경험에 비추어 볼 때 128KB까지 요청을 처리하는 경우가 많았습니다.
+하지만 규격보다 큰 크기의 블록을 요청할 때 전체 속도가 크게 향상되지는 않았으므로
+규격을 준수하는 것이 더 나을 수 있습니다.</p>
+<h3 id="파이프라이닝">파이프라이닝</h3>
+<p>네트워크 왕복 비용은 많이 들고, 각 블록을 하나씩 요청하면 다운로드 성능이 상당히 저하됩니다.
+따라서 처리되지 않은 일부 요청들을 지속적으로 모으기 위해 <strong>파이프라인(pipeline)으로</strong> 연결하는 것이 중요합니다.
+이렇게 하면 연결 처리량을 상당히 증가시킬 수 있습니다.</p>
+<p><img src="/images/go/bit-torrent/pipelining.png" alt="pipelining"></p>
+<p>일반적으로 비트토렌트 클라이언트는 5개의 파이프라인 요청 큐를 유지했으며, 이것이 제가 사용할 값입니다.
+파이프라인을 늘리면 다운로드 속도가 최대 두 배까지 빨라진다는 것을 알았습니다.</p>
+<p>최신 클라이언트는 <a href="https://luminarys.com/posts/writing-a-bittorrent-client.html">적응형(adaptive)</a> 큐 크기를
+사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
+이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#228b22">// MaxBlockSize 요청할 수 있는 최대 바이트 수
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">const</span> MaxBlockSize = <span style="color:#b452cd">16384</span>
+
+<span style="color:#228b22">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">const</span> MaxBacklog = <span style="color:#b452cd">5</span>
+
+<span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">attemptDownloadPiece</span>(c *client.Client, pw *pieceWork) ([]<span style="color:#00688b;font-weight:bold">byte</span>, <span style="color:#00688b;font-weight:bold">error</span>) {
+  state := pieceProgress{
+    index:  pw.index,
+    client: c,
+    buf:    <span style="color:#658b00">make</span>([]<span style="color:#00688b;font-weight:bold">byte</span>, pw.length),
+  }
+
+  <span style="color:#228b22">// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다
+</span><span style="color:#228b22"></span>  <span style="color:#228b22">// 262KB 조각을 다운로드하려면 30초가 충분합니다
+</span><span style="color:#228b22"></span>  c.Conn.<span style="color:#008b45">SetDeadline</span>(time.<span style="color:#008b45">Now</span>().<span style="color:#008b45">Add</span>(<span style="color:#b452cd">30</span> * time.Second))
+  <span style="color:#8b008b;font-weight:bold">defer</span> c.Conn.<span style="color:#008b45">SetDeadline</span>(time.Time{}) <span style="color:#228b22">// 데드라인 비활성화
+</span><span style="color:#228b22"></span>
+  <span style="color:#8b008b;font-weight:bold">for</span> state.downloaded &lt; pw.length {
+    <span style="color:#228b22">// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">if</span> !state.client.Choked {
+      <span style="color:#8b008b;font-weight:bold">for</span> state.backlog &lt; MaxBacklog &amp;&amp; state.requested &lt; pw.length {
+        blockSize := MaxBlockSize
+        <span style="color:#228b22">// 마지막 블록은 일반 블록보다 짧을 수 있습니다.
+</span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">if</span> pw.length-state.requested &lt; blockSize {
+          blockSize = pw.length - state.requested
+        }
+
+        err := c.<span style="color:#008b45">SendRequest</span>(pw.index, state.requested, blockSize)
+        <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+          <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+        }
+        state.backlog++
+        state.requested += blockSize
+      }
+    }
+
+    err := state.<span style="color:#008b45">readMessage</span>()
+    <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+      <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">nil</span>, err
+    }
+  }
+
+  <span style="color:#8b008b;font-weight:bold">return</span> state.buf, <span style="color:#8b008b;font-weight:bold">nil</span>
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L85-L123">github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123</a></p>
+<h3 id="maingo">main.go</h3>
+<p>아주 간단합니다. 거의 다 왔어요.</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">package</span> main
+
+<span style="color:#8b008b;font-weight:bold">import</span> (
+    <span style="color:#cd5555">&#34;log&#34;</span>
+    <span style="color:#cd5555">&#34;os&#34;</span>
+
+    <span style="color:#cd5555">&#34;github.com/veggiedefender/torrent-client/torrentfile&#34;</span>
+)
+
+<span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">main</span>() {
+  inPath := os.Args[<span style="color:#b452cd">1</span>]
+  outPath := os.Args[<span style="color:#b452cd">2</span>]
+
+  tf, err := torrentfile.<span style="color:#008b45">Open</span>(inPath)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+      log.<span style="color:#008b45">Fatal</span>(err)
+  }
+
+  err = tf.<span style="color:#008b45">DownloadToFile</span>(outPath)
+  <span style="color:#8b008b;font-weight:bold">if</span> err != <span style="color:#8b008b;font-weight:bold">nil</span> {
+      log.<span style="color:#008b45">Fatal</span>(err)
+  }
+}
+</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go">github.com/veggiedefender/torrent-client/main.go</a></p>
+<p><a href="https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL">데모 영상</a></p>
+<h1 id="이것이-전부가-아닙니다">이것이 전부가 아닙니다</h1>
+<p>간결함을 위해 몇 가지 중요한 부분 코드만 포함시켰습니다.
+특히 글루 코드, 파싱, 유닛 테스트, 글자를 만드는 지루한 부분은 생략했습니다.
+관심 있으시다면 <a href="https://github.com/veggiedefender/torrent-client">전체 소스 코드</a>를 확인하세요.</p>
+<hr>
+<blockquote>
+<p>역주: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.</p>
+</blockquote>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># Go는 설치되어 있다고 가정합니다.</span>
+git clone https://github.com/veggiedefender/torrent-client.git
+<span style="color:#658b00">cd</span> torrent-client
+<span style="color:#228b22"># linux, darwin</span>
+curl -L http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash=7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+<span style="color:#228b22"># windows</span>
+wget http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash=7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+go run main.go debian.torrent debian.iso
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2020년 12월 28일</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+            
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 Changsu
+	
+</div>
+            </div>
+    <script>
+let app;
+
+app = new Vue({
+    el: '#app',
+    data: {
+        scrollY: 0,
+        navOpacity: 0,
+        isDrawerOpen: false,
+        mounted: false,
+        isDarkMode: false
+    },
+    methods: {
+            sgn(t, x) {
+                let k = 1. / (1. - 2 * t);
+                if (x <= t) return 0;
+                else if (x >= 1 - t) return 1;
+                else {
+                    return k * (x - t);
+                }
+            },
+            handleScroll() {
+                this.scrollY = window.scrollY;
+                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+
+                if (this.navOpacity >= 1) {
+                    navBackground.style.opacity = 1;
+                    navTitle.style.opacity = 1;
+                } else {
+                    navBackground.style.opacity = 0;
+                    navTitle.style.opacity = 0;
+                }
+            },
+            handleResize() {
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
+            },
+            navBarHeight() {
+                return this.$refs.navBar.offsetHeight;
+            },
+            pageHeadHeight() {
+                return this.$refs.pageHead.offsetHeight;
+            },
+            toggleDrawer() {
+                this.isDrawerOpen = !this.isDrawerOpen;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            closeDrawer() {
+                this.isDrawerOpen = false;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            toggleDarkMode() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode==true){
+                    document.cookie = "night=1;path=/";
+                    document.body.classList.add("night");
+                } else {
+                    document.cookie = "night=0;path=/";
+                    document.body.classList.remove("night");
+                }
+            }
+    },
+    created() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        window._nonDesktop = function () {
+            let check = false;
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        };
+        
+        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (night==""){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                
+            }
+        }else{
+            
+            if (night=="1") {
+                this.toggleDarkMode();
+            }
+        }
+    },
+    mounted() {
+        this.handleScroll();
+        this.handleResize();
+        this.mounted = true;
+
+        
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    }
+});
+</script>
+
+<script src="https://cxsu.github.io//js/journal.js"></script>
+    </body>
+</html>
