@@ -1141,7 +1141,7 @@ e
 <p>이 메커니즘을 통해 각 조각의 무결성을 검증할 수 있습니다.
 비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 <strong>토렌트 포이즈닝</strong>(<a href="https://en.wikipedia.org/wiki/Torrent_poisoning">torrent poisoning</a>) 을 막을 수 있습니다.
 공격자가 역상 공격(<a href="https://en.wikipedia.org/wiki/Preimage_attack">preimage attack</a>)을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.</p>
-<p>B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목표가 아닙니다.
+<p>B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목적이 아닙니다.
 이해하기 쉬운 Fredrik Lundh의 <a href="https://effbot.org/zone/bencode.htm">50줄짜리 파서</a>를 찾았지만,
 이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go">github.com/jackpal/bencode-go</a> 을 사용했습니다.</p>
 <div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">import</span> (
@@ -1216,7 +1216,7 @@ e
 <p>여기서 중요한 것은 다음과 같습니다.</p>
 <ul>
 <li><strong>info_hash</strong>: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 <code>info</code> 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.</li>
-<li><strong>peer_id</strong>: 트래커와 피어들에게 <code>우리</code>를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 <code>-TR2940-k8hj0wgej6ch</code>와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다.</li>
+<li><strong>peer_id</strong>: 트래커와 피어들에게 <code>우리</code>를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 <code>-TR2940-k8hj0wgej6ch</code>와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다. <a href="https://www.bittorrent.org/beps/bep_0020.html">(Peer ID Conventions)</a></li>
 </ul>
 <p><img src="/images/go/bit-torrent/info-hash-peer-id.png" alt="info-hash-peer-id"></p>
 <h2 id="트래커-응답-분석">트래커 응답 분석</h2>
@@ -1295,7 +1295,7 @@ e
 좋은 비트토렌트 핸드셰이크의 비결은 다음과 같이 다섯 부분으로 구성됩니다.</p>
 <ol>
 <li>항상 19로 지정된 프로토콜 식별자의 길이. (16진수로는 0x13)</li>
-<li><strong>pstr</strong>이라 불리는 프로토콜 식별자는 항상 <code>비트토렌트 프로토콜</code>.</li>
+<li><strong>pstr</strong>이라 불리는 프로토콜 식별자는 항상 <code>BitTorrent protocol</code>.</li>
 <li>모두 0으로 지정된 <strong>8개의 예약된 바이트</strong>. 그 중 일부를 1로 뒤집어서 특정 <a href="http://www.bittorrent.org/beps/bep_0010.html">확장 기능</a>을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.</li>
 <li>우리가 원하는 파일을 식별할 앞서 계산한 <strong>infohash</strong>.</li>
 <li>우리 스스로를 식별하기 위해 만든 <strong>Peer ID</strong>.</li>
@@ -1422,7 +1422,7 @@ e
 이 자료 구조는 피어들이 우리에게 보낼 수 있는 조각을 효율적으로 인코딩하는 데 사용됩니다.
 비트필드는 바이트 배열처럼 생겼고, 어떤 조각을 가지고 있는지 확인하기 위해서는 단지 1로 설정된 <em>비트</em>의 위치를 보면 됩니다.
 이것을 커피숍 쿠폰에 비유할 수 있습니다.
-전부 <code>0</code>인 카드부터 시작해서 하나씩 <code>1</code>로 비트로 바꿔서 &ldquo;도장&rdquo; 찍듯이 표시합니다.</p>
+비트가 전부 <code>0</code>인 카드부터 시작해서 하나씩 <code>1</code>로 바꿔서 &ldquo;도장&rdquo; 찍듯이 표시합니다.</p>
 <p><img src="/images/go/bit-torrent/bitfield.png" alt="bitfield"></p>
 <p><em>바이트</em> 대신 <em>비트</em>로 작업해서 비트필드 자료 구조는 크기가 매우 작습니다.
 한 바이트의 공간에 8개의 조각 정보(<code>bool</code> 크기)를 채워 넣을 수 있습니다.
