@@ -62,11 +62,9 @@
   
 
   
-  <link rel="stylesheet" href="https://cxsu.github.io/scss/journal.min.c116bc90d171283f099f173854157ec8f183f9073b93443b2c8ad82899ee9025.css" integrity="sha256-wRa8kNFxKD8Jnxc4VBV&#43;yPGD&#43;Qc7k0Q7LIrYKJnukCU=" media="screen">
-
   
   
-  <link rel="stylesheet" href="https://cxsu.github.io/scss/dark-mode.min.552aae4638a84aa57cf0b195750a49ea9131d3bb621d1ed3ebc9b14b18166536.css" integrity="sha256-VSquRjioSqV88LGVdQpJ6pEx07tiHR7T68mxSxgWZTY=" media="screen">
+  <link rel="stylesheet" href="https://cxsu.github.io/scss/dark-mode.min.3d4bf67c8dc5f62e0c0399ef070762a2676e0931138c79211fcafc08bda3953f.css" integrity="sha256-PUv2fI3F9i4MA5nvBwdiomduCTETjHkhH8r8CL2jlT8=" media="screen">
   
 
   <script src="https://cxsu.github.io//js/loadCSS.js"></script>
@@ -92,7 +90,7 @@
 
 </head>
 <body>
-    	<div id="app"><div ref="sideContainer" class="side-container">
+  <div id="app"><div ref="sideContainer" class="side-container">
     
     <a class="a-block nav-head false" href="https://cxsu.github.io/">
     
@@ -758,61 +756,56 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
     </a>
 </div>
 
-            <div id="content">
+    <div id="content">
 <div ref="streamContainer" class="stream-container">
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
+  <div class="post-list-container post-list-container-shadow">
+    <div class="post">
+      
+      
+      
+      
+      
+
+      <div class="post-head-wrapper"  
+        
+        style="background-image: url('https://cxsu.github.io/images/kubernetes/vscode-debugging-golang.png')"  >
+        <div class="post-title">
+          쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기
+          
+          <div class="post-subtitle">
+            Github/kubernetes
+          </div>
+          
+          <div class="post-meta">
             
-            
-            
-                
+            <time itemprop="datePublished">
+              2020년 10월 11일 14시 48분
+            </time>
             
 
-            <div class="post-head-wrapper"
-                
-                    
-                    
-                    style="background-image: url('https://cxsu.github.io/images/kubernetes/vscode-debugging-golang.png')"
-                    
-                
-            >
-                <div class="post-title">
-                    쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기
-                    
-                    <div class="post-subtitle">
-                        Github/kubernetes
-                    </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
-                            2020년 10월 11일 14시 48분
-                        </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[cloud]</a>
-                                &nbsp;
-                        
-
-                        
-                            <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/kubernetes">kubernetes</a>
-                                &nbsp;
-                            
-                        
-                        
-                    </div>
-                </div>
-            </div>
             
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <blockquote>
+            <i class="material-icons" style="">folder</i>
+            <a href="/%20/categories/">[cloud]</a>
+            &nbsp;
+            
+
+            
+            <i class="material-icons" style="">label</i>
+            
+            <a href="/%20/tags/kubernetes">kubernetes</a>
+            &nbsp;
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="post-body-wrapper">
+        
+          <div class="post-body" v-pre>
+            
+            <blockquote>
 <p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p>
 </blockquote>
 <h2 id="reference">Reference</h2>
@@ -820,23 +813,23 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <li><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md">kubernetes/build/README.md</a></li>
 </ul>
 <h2 id="사용할-명령어">사용할 명령어</h2>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># master 브랜치</span>
-git clone --depth <span style="color:#b452cd">1</span> https://github.com/kubernetes/kubernetes.git
-<span style="color:#228b22"># 특정 브랜치</span>
-git clone --depth <span style="color:#b452cd">1</span> --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># master 브랜치</span>
+git clone --depth <span style="color:#bd93f9">1</span> https://github.com/kubernetes/kubernetes.git
+<span style="color:#6272a4"># 특정 브랜치</span>
+git clone --depth <span style="color:#bd93f9">1</span> --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
 
-<span style="color:#228b22"># cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.</span>
-<span style="color:#228b22"># cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...</span>
-make all <span style="color:#00688b">WHAT</span>=cmd/kubectl <span style="color:#00688b">GOFLAGS</span>=-v
+<span style="color:#6272a4"># cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.</span>
+<span style="color:#6272a4"># cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...</span>
+make all <span style="color:#8be9fd;font-style:italic">WHAT</span><span style="color:#ff79c6">=</span>cmd/kubectl <span style="color:#8be9fd;font-style:italic">GOFLAGS</span><span style="color:#ff79c6">=</span>-v
 
-<span style="color:#228b22"># 그냥 간단히 go build 명령도 가능하다.</span>
+<span style="color:#6272a4"># 그냥 간단히 go build 명령도 가능하다.</span>
 go build -o k cmd/kubectl
 </code></pre></div><h2 id="빌드-실행-따라가기">빌드 실행 따라가기</h2>
 <h3 id="makefile">Makefile</h3>
 <ul>
 <li>make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.</li>
 </ul>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">build/root/Makefile
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">build/root/Makefile
 </code></pre></div><h3 id="실제로-빌드되는-makefile">실제로 빌드되는 Makefile</h3>
 <blockquote>
 <p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile">build/root/Makefile</a></p>
@@ -844,52 +837,52 @@ go build -o k cmd/kubectl
 <ul>
 <li>all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.</li>
 </ul>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-makefile" data-lang="makefile"><span style="color:#228b22"># Build code.
-</span><span style="color:#228b22">#
-</span><span style="color:#228b22"># Args:
-</span><span style="color:#228b22">#   WHAT: Directory names to build.  If any of these directories has a &#39;main&#39;
-</span><span style="color:#228b22">#     package, the build will produce executable files under $(OUT_DIR)/bin.
-</span><span style="color:#228b22">#     If not specified, &#34;everything&#34; will be built.
-</span><span style="color:#228b22">#   GOFLAGS: Extra flags to pass to &#39;go&#39; when building.
-</span><span style="color:#228b22">#   GOLDFLAGS: Extra linking flags passed to &#39;go&#39; when building.
-</span><span style="color:#228b22">#   GOGCFLAGS: Additional go compile flags passed to &#39;go&#39; when building.
-</span><span style="color:#228b22">#
-</span><span style="color:#228b22"># Example:
-</span><span style="color:#228b22">#   make
-</span><span style="color:#228b22">#   make all
-</span><span style="color:#228b22">#   make all WHAT=cmd/kubelet GOFLAGS=-v
-</span><span style="color:#228b22">#   make all GOLDFLAGS=&#34;&#34;
-</span><span style="color:#228b22">#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
-</span><span style="color:#228b22">#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
-</span><span style="color:#228b22">#           to &#34;-s -w&#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
-</span><span style="color:#228b22">#           are documented at https://golang.org/cmd/link/
-</span><span style="color:#228b22"></span><span style="color:#a61717;background-color:#e3d2d2">endef</span>
-<span style="color:#008b45">.PHONY</span>: all
-<span style="color:#a61717;background-color:#e3d2d2">ifeq</span> <span style="color:#a61717;background-color:#e3d2d2">(</span><span style="color:#8b008b;font-weight:bold">$(</span><span style="color:#00688b">PRINT_HELP</span><span style="color:#8b008b;font-weight:bold">)</span><span style="color:#a61717;background-color:#e3d2d2">,y)</span>
-<span style="color:#008b45">all</span>:
-	@echo <span style="color:#cd5555">&#34;</span><span style="color:#00688b">$$</span><span style="color:#cd5555">ALL_HELP_INFO&#34;</span>
-<span style="color:#a61717;background-color:#e3d2d2">else</span>
-<span style="color:#008b45">all</span>: generated_files
-	hack/make-rules/build.sh <span style="color:#8b008b;font-weight:bold">$(</span>WHAT<span style="color:#8b008b;font-weight:bold">)</span>
-<span style="color:#a61717;background-color:#e3d2d2">endif</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-makefile" data-lang="makefile"><span style="color:#6272a4"># Build code.
+</span><span style="color:#6272a4">#
+</span><span style="color:#6272a4"># Args:
+</span><span style="color:#6272a4">#   WHAT: Directory names to build.  If any of these directories has a &#39;main&#39;
+</span><span style="color:#6272a4">#     package, the build will produce executable files under $(OUT_DIR)/bin.
+</span><span style="color:#6272a4">#     If not specified, &#34;everything&#34; will be built.
+</span><span style="color:#6272a4">#   GOFLAGS: Extra flags to pass to &#39;go&#39; when building.
+</span><span style="color:#6272a4">#   GOLDFLAGS: Extra linking flags passed to &#39;go&#39; when building.
+</span><span style="color:#6272a4">#   GOGCFLAGS: Additional go compile flags passed to &#39;go&#39; when building.
+</span><span style="color:#6272a4">#
+</span><span style="color:#6272a4"># Example:
+</span><span style="color:#6272a4">#   make
+</span><span style="color:#6272a4">#   make all
+</span><span style="color:#6272a4">#   make all WHAT=cmd/kubelet GOFLAGS=-v
+</span><span style="color:#6272a4">#   make all GOLDFLAGS=&#34;&#34;
+</span><span style="color:#6272a4">#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
+</span><span style="color:#6272a4">#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
+</span><span style="color:#6272a4">#           to &#34;-s -w&#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
+</span><span style="color:#6272a4">#           are documented at https://golang.org/cmd/link/
+</span><span style="color:#6272a4"></span>endef
+<span style="color:#50fa7b">.PHONY</span><span style="color:#ff79c6">:</span> all
+ifeq (<span style="color:#ff79c6">$(</span><span style="color:#8be9fd;font-style:italic">PRINT_HELP</span><span style="color:#ff79c6">)</span>,y)
+<span style="color:#50fa7b">all</span><span style="color:#ff79c6">:</span>
+	@echo <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$$</span><span style="color:#f1fa8c">ALL_HELP_INFO&#34;</span>
+else
+<span style="color:#50fa7b">all</span><span style="color:#ff79c6">:</span> generated_files
+	hack/make-rules/build.sh <span style="color:#ff79c6">$(</span>WHAT<span style="color:#ff79c6">)</span>
+endif
 </code></pre></div><h3 id="all-generated_files">all: generated_files</h3>
 <blockquote>
 <p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh">hack/make-rules/build.sh</a></p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#1e889b">#!/usr/bin/env bash
-</span><span style="color:#1e889b"></span>
-<span style="color:#228b22"># This script sets up a go workspace locally and builds all go components.</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/usr/bin/env bash
+</span><span style="color:#ff79c6"></span>
+<span style="color:#6272a4"># This script sets up a go workspace locally and builds all go components.</span>
 
-<span style="color:#658b00">set</span> -o errexit
-<span style="color:#658b00">set</span> -o nounset
-<span style="color:#658b00">set</span> -o pipefail
+<span style="color:#8be9fd;font-style:italic">set</span> -o errexit
+<span style="color:#8be9fd;font-style:italic">set</span> -o nounset
+<span style="color:#8be9fd;font-style:italic">set</span> -o pipefail
 
-<span style="color:#00688b">KUBE_ROOT</span>=<span style="color:#8b008b;font-weight:bold">$(</span>dirname <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">BASH_SOURCE</span>[0]<span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span><span style="color:#8b008b;font-weight:bold">)</span>/../..
-<span style="color:#00688b">KUBE_VERBOSE</span>=<span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">KUBE_VERBOSE</span><span style="color:#8b008b;font-weight:bold">:-</span><span style="color:#00688b">1</span><span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span>
-<span style="color:#658b00">source</span> <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">KUBE_ROOT</span><span style="color:#cd5555">}</span><span style="color:#cd5555">/hack/lib/init.sh&#34;</span>
+<span style="color:#8be9fd;font-style:italic">KUBE_ROOT</span><span style="color:#ff79c6">=</span><span style="color:#ff79c6">$(</span>dirname <span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">BASH_SOURCE</span>[0]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">)</span>/../..
+<span style="color:#8be9fd;font-style:italic">KUBE_VERBOSE</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">KUBE_VERBOSE</span><span style="color:#ff79c6">:-</span><span style="color:#8be9fd;font-style:italic">1</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+<span style="color:#8be9fd;font-style:italic">source</span> <span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">KUBE_ROOT</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">/hack/lib/init.sh&#34;</span>
 
-<span style="color:#228b22"># 👉 hack/lib/golang.sh</span>
-kube::golang::build_binaries <span style="color:#cd5555">&#34;</span><span style="color:#00688b">$@</span><span style="color:#cd5555">&#34;</span>
+<span style="color:#6272a4"># 👉 hack/lib/golang.sh</span>
+kube::golang::build_binaries <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$@</span><span style="color:#f1fa8c">&#34;</span>
 kube::golang::place_bins
 </code></pre></div><h3 id="kubegolang">kube::golang::</h3>
 <blockquote>
@@ -898,91 +891,91 @@ kube::golang::place_bins
 <ul>
 <li>참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.</li>
 </ul>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># Build binaries targets specified</span>
-<span style="color:#228b22">#</span>
-<span style="color:#228b22"># Input:</span>
-<span style="color:#228b22">#   $@ - targets and go flags.  If no targets are set then all binaries targets</span>
-<span style="color:#228b22">#     are built.</span>
-<span style="color:#228b22">#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset</span>
-<span style="color:#228b22">#     then just the host architecture is built.</span>
-kube::golang::build_binaries() {
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Build binaries targets specified</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4"># Input:</span>
+<span style="color:#6272a4">#   $@ - targets and go flags.  If no targets are set then all binaries targets</span>
+<span style="color:#6272a4">#     are built.</span>
+<span style="color:#6272a4">#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset</span>
+<span style="color:#6272a4">#     then just the host architecture is built.</span>
+kube::golang::build_binaries<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
   ...
-}
+<span style="color:#ff79c6">}</span>
 
-<span style="color:#228b22"># This will take binaries from $GOPATH/bin and copy them to the appropriate</span>
-<span style="color:#228b22"># place in ${KUBE_OUTPUT_BINDIR}</span>
-<span style="color:#228b22">#</span>
-<span style="color:#228b22"># Ideally this wouldn&#39;t be necessary and we could just set GOBIN to</span>
-<span style="color:#228b22"># KUBE_OUTPUT_BINDIR but that won&#39;t work in the face of cross compilation.  &#39;go</span>
-<span style="color:#228b22"># install&#39; will place binaries that match the host platform directly in $GOBIN</span>
-<span style="color:#228b22"># while placing cross compiled binaries into `platform_arch` subdirs.  This</span>
-<span style="color:#228b22"># complicates pretty much everything else we do around packaging and such.</span>
-kube::golang::place_bins() {
+<span style="color:#6272a4"># This will take binaries from $GOPATH/bin and copy them to the appropriate</span>
+<span style="color:#6272a4"># place in ${KUBE_OUTPUT_BINDIR}</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4"># Ideally this wouldn&#39;t be necessary and we could just set GOBIN to</span>
+<span style="color:#6272a4"># KUBE_OUTPUT_BINDIR but that won&#39;t work in the face of cross compilation.  &#39;go</span>
+<span style="color:#6272a4"># install&#39; will place binaries that match the host platform directly in $GOBIN</span>
+<span style="color:#6272a4"># while placing cross compiled binaries into `platform_arch` subdirs.  This</span>
+<span style="color:#6272a4"># complicates pretty much everything else we do around packaging and such.</span>
+kube::golang::place_bins<span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
   ...
-  <span style="color:#228b22"># V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}</span>
-  <span style="color:#228b22"># 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.</span>
-  <span style="color:#228b22"># &gt; [%m%d %H:%M:%S] /home/kubernetes/kubernetes/_output/local/bin</span>
-}
+  <span style="color:#6272a4"># V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}</span>
+  <span style="color:#6272a4"># 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.</span>
+  <span style="color:#6272a4"># &gt; [%m%d %H:%M:%S] /home/kubernetes/kubernetes/_output/local/bin</span>
+<span style="color:#ff79c6">}</span>
 </code></pre></div><h3 id="로그-레벨">로그 레벨</h3>
 <blockquote>
 <p><a href="https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh">hack/lib/logging.sh</a></p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-makefile" data-lang="makefile"><span style="color:#228b22"># This controls the verbosity of the build. Higher numbers mean more output.
-</span><span style="color:#228b22"></span><span style="color:#00688b">KUBE_VERBOSE</span> ?= <span style="color:#b452cd">4</span>
-<span style="color:#228b22"># 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
-</span><span style="color:#228b22"></span>
-<span style="color:#228b22"># 👉 hack/lib/logging.sh
-</span><span style="color:#228b22"></span><span style="color:#008b45">kube</span>::log::status() {
-  <span style="color:#658b00">local</span> <span style="color:#00688b">V</span>=<span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">V</span><span style="color:#8b008b;font-weight:bold">:-</span><span style="color:#00688b">0</span><span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span>
-  <span style="color:#8b008b;font-weight:bold">if</span> [[ <span style="color:#cd5555">${</span><span style="color:#00688b">KUBE_VERBOSE</span><span style="color:#cd5555">}</span> &lt; <span style="color:#cd5555">${</span><span style="color:#00688b">V</span><span style="color:#cd5555">}</span> ]]; <span style="color:#8b008b;font-weight:bold">then</span>
-    <span style="color:#8b008b;font-weight:bold">return</span>
-  <span style="color:#8b008b;font-weight:bold">fi</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-makefile" data-lang="makefile"><span style="color:#6272a4"># This controls the verbosity of the build. Higher numbers mean more output.
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">KUBE_VERBOSE</span> <span style="color:#ff79c6">?=</span> <span style="color:#bd93f9">4</span>
+<span style="color:#6272a4"># 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
+</span><span style="color:#6272a4"></span>
+<span style="color:#6272a4"># 👉 hack/lib/logging.sh
+</span><span style="color:#6272a4"></span><span style="color:#50fa7b">kube</span><span style="color:#ff79c6">::</span>log::status() {
+  <span style="color:#8be9fd;font-style:italic">local</span> <span style="color:#8be9fd;font-style:italic">V</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">V</span><span style="color:#ff79c6">:-</span><span style="color:#8be9fd;font-style:italic">0</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+  <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">[[</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">KUBE_VERBOSE</span><span style="color:#f1fa8c">}</span> &lt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">V</span><span style="color:#f1fa8c">}</span> <span style="color:#ff79c6">]]</span>; <span style="color:#ff79c6">then</span>
+    <span style="color:#ff79c6">return</span>
+  <span style="color:#ff79c6">fi</span>
 
-  <span style="color:#00688b">timestamp</span>=<span style="color:#8b008b;font-weight:bold">$(</span>date +<span style="color:#cd5555">&#34;[%m%d %H:%M:%S]&#34;</span><span style="color:#8b008b;font-weight:bold">)</span>
-  <span style="color:#658b00">echo</span> <span style="color:#cd5555">&#34;+++ </span><span style="color:#cd5555">${</span><span style="color:#00688b">timestamp</span><span style="color:#cd5555">}</span><span style="color:#cd5555"> </span><span style="color:#cd5555">${</span><span style="color:#00688b">1</span><span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span>
-  <span style="color:#658b00">shift</span>
-  <span style="color:#8b008b;font-weight:bold">for</span> message; <span style="color:#8b008b;font-weight:bold">do</span>
-    <span style="color:#658b00">echo</span> <span style="color:#cd5555">&#34;    </span><span style="color:#cd5555">${</span><span style="color:#00688b">message</span><span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span>
-  <span style="color:#8b008b;font-weight:bold">done</span>
-<span style="color:#a61717;background-color:#e3d2d2">}</span>
+  <span style="color:#8be9fd;font-style:italic">timestamp</span><span style="color:#ff79c6">=</span><span style="color:#ff79c6">$(</span>date +<span style="color:#f1fa8c">&#34;[%m%d %H:%M:%S]&#34;</span><span style="color:#ff79c6">)</span>
+  <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;+++ </span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">timestamp</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c"> </span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">1</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+  <span style="color:#8be9fd;font-style:italic">shift</span>
+  <span style="color:#ff79c6">for</span> message; <span style="color:#ff79c6">do</span>
+    <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;    </span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">message</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+  <span style="color:#ff79c6">done</span>
+}
 </code></pre></div><h3 id="cmdkubectl">cmd/kubectl</h3>
 <blockquote>
 <p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go">kubectl.go</a></p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">package</span> main
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#ff79c6">package</span> main
 
-<span style="color:#8b008b;font-weight:bold">import</span> (
-	goflag <span style="color:#cd5555">&#34;flag&#34;</span>
-	<span style="color:#cd5555">&#34;math/rand&#34;</span>
-	<span style="color:#cd5555">&#34;os&#34;</span>
-	<span style="color:#cd5555">&#34;time&#34;</span>
+<span style="color:#ff79c6">import</span> (
+	goflag <span style="color:#f1fa8c">&#34;flag&#34;</span>
+	<span style="color:#f1fa8c">&#34;math/rand&#34;</span>
+	<span style="color:#f1fa8c">&#34;os&#34;</span>
+	<span style="color:#f1fa8c">&#34;time&#34;</span>
 
-	<span style="color:#cd5555">&#34;github.com/spf13/pflag&#34;</span>
+	<span style="color:#f1fa8c">&#34;github.com/spf13/pflag&#34;</span>
 
-	cliflag <span style="color:#cd5555">&#34;k8s.io/component-base/cli/flag&#34;</span>
-	<span style="color:#cd5555">&#34;k8s.io/kubectl/pkg/util/logs&#34;</span>
-	<span style="color:#cd5555">&#34;k8s.io/kubernetes/pkg/kubectl/cmd&#34;</span>
+	cliflag <span style="color:#f1fa8c">&#34;k8s.io/component-base/cli/flag&#34;</span>
+	<span style="color:#f1fa8c">&#34;k8s.io/kubectl/pkg/util/logs&#34;</span>
+	<span style="color:#f1fa8c">&#34;k8s.io/kubernetes/pkg/kubectl/cmd&#34;</span>
 
-	<span style="color:#228b22">// Import to initialize client auth plugins.
-</span><span style="color:#228b22"></span>	_ <span style="color:#cd5555">&#34;k8s.io/client-go/plugin/pkg/client/auth&#34;</span>
+	<span style="color:#6272a4">// Import to initialize client auth plugins.
+</span><span style="color:#6272a4"></span>	_ <span style="color:#f1fa8c">&#34;k8s.io/client-go/plugin/pkg/client/auth&#34;</span>
 )
 
-<span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">main</span>() {
-	rand.<span style="color:#008b45">Seed</span>(time.<span style="color:#008b45">Now</span>().<span style="color:#008b45">UnixNano</span>())
+<span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
+	rand.<span style="color:#50fa7b">Seed</span>(time.<span style="color:#50fa7b">Now</span>().<span style="color:#50fa7b">UnixNano</span>())
 
-	command := cmd.<span style="color:#008b45">NewDefaultKubectlCommand</span>()
+	command <span style="color:#ff79c6">:=</span> cmd.<span style="color:#50fa7b">NewDefaultKubectlCommand</span>()
 
-	<span style="color:#228b22">// TODO: once we switch everything over to Cobra commands, we can go back to calling
-</span><span style="color:#228b22"></span>	<span style="color:#228b22">// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
-</span><span style="color:#228b22"></span>	<span style="color:#228b22">// normalize func and add the go flag set by hand.
-</span><span style="color:#228b22"></span>	pflag.CommandLine.<span style="color:#008b45">SetNormalizeFunc</span>(cliflag.WordSepNormalizeFunc)
-	pflag.CommandLine.<span style="color:#008b45">AddGoFlagSet</span>(goflag.CommandLine)
-	<span style="color:#228b22">// cliflag.InitFlags()
-</span><span style="color:#228b22"></span>	logs.<span style="color:#008b45">InitLogs</span>()
-	<span style="color:#8b008b;font-weight:bold">defer</span> logs.<span style="color:#008b45">FlushLogs</span>()
+	<span style="color:#6272a4">// TODO: once we switch everything over to Cobra commands, we can go back to calling
+</span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
+</span><span style="color:#6272a4"></span>	<span style="color:#6272a4">// normalize func and add the go flag set by hand.
+</span><span style="color:#6272a4"></span>	pflag.CommandLine.<span style="color:#50fa7b">SetNormalizeFunc</span>(cliflag.WordSepNormalizeFunc)
+	pflag.CommandLine.<span style="color:#50fa7b">AddGoFlagSet</span>(goflag.CommandLine)
+	<span style="color:#6272a4">// cliflag.InitFlags()
+</span><span style="color:#6272a4"></span>	logs.<span style="color:#50fa7b">InitLogs</span>()
+	<span style="color:#ff79c6">defer</span> logs.<span style="color:#50fa7b">FlushLogs</span>()
 
-	<span style="color:#8b008b;font-weight:bold">if</span> err := command.<span style="color:#008b45">Execute</span>(); err != <span style="color:#8b008b;font-weight:bold">nil</span> {
-		os.<span style="color:#008b45">Exit</span>(<span style="color:#b452cd">1</span>)
+	<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">:=</span> command.<span style="color:#50fa7b">Execute</span>(); err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+		os.<span style="color:#50fa7b">Exit</span>(<span style="color:#bd93f9">1</span>)
 	}
 }
 </code></pre></div><h3 id="pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go">pkg/kubectl/cmd</a></h3>
@@ -993,49 +986,49 @@ kube::golang::place_bins() {
 <ul>
 <li><a href="https://code.visualstudio.com/docs/editor/debugging">launch.json</a></li>
 </ul>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-  <span style="color:#8b008b;font-weight:bold">&#34;version&#34;</span>: <span style="color:#cd5555">&#34;0.2.0&#34;</span>,
-  <span style="color:#8b008b;font-weight:bold">&#34;configurations&#34;</span>: [
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
+  <span style="color:#ff79c6">&#34;version&#34;</span>: <span style="color:#f1fa8c">&#34;0.2.0&#34;</span>,
+  <span style="color:#ff79c6">&#34;configurations&#34;</span>: [
     {
-      <span style="color:#8b008b;font-weight:bold">&#34;type&#34;</span>: <span style="color:#cd5555">&#34;go&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;request&#34;</span>: <span style="color:#cd5555">&#34;launch&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;name&#34;</span>: <span style="color:#cd5555">&#34;kubectl&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;program&#34;</span>: <span style="color:#cd5555">&#34;${workspaceFolder}/cmd/kubectl/kubectl.go&#34;</span>,
-      <span style="color:#8b008b;font-weight:bold">&#34;args&#34;</span>: [
-        <span style="color:#cd5555">&#34;config&#34;</span>,
-        <span style="color:#cd5555">&#34;view&#34;</span>
+      <span style="color:#ff79c6">&#34;type&#34;</span>: <span style="color:#f1fa8c">&#34;go&#34;</span>,
+      <span style="color:#ff79c6">&#34;request&#34;</span>: <span style="color:#f1fa8c">&#34;launch&#34;</span>,
+      <span style="color:#ff79c6">&#34;name&#34;</span>: <span style="color:#f1fa8c">&#34;kubectl&#34;</span>,
+      <span style="color:#ff79c6">&#34;program&#34;</span>: <span style="color:#f1fa8c">&#34;${workspaceFolder}/cmd/kubectl/kubectl.go&#34;</span>,
+      <span style="color:#ff79c6">&#34;args&#34;</span>: [
+        <span style="color:#f1fa8c">&#34;config&#34;</span>,
+        <span style="color:#f1fa8c">&#34;view&#34;</span>
       ]
     }
   ]
 }
 </code></pre></div><p><img src="/images/kubernetes/vscode-debugging-golang.png" alt="vscode-debugging-golang"></p>
 
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2020년 10월 11일</p>
-                    
-                </div>
-            </div>
             
+            <HR width="100%" id="EOF">
+            <p style="color:#777;">최종 수정: 2020년 10월 11일</p>
             
-            <nav class="post-pagination">
-            
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-            </div>
+          </div>
         </div>
-    </div>
-</div>
 
-            </div><div id="single-column-footer">
+
+        <nav class="post-pagination">
+          
+        </nav>
+        <div class="post-comment-wrapper">
+          
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    </div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
 <br>
 Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
@@ -1046,8 +1039,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 	2020 Changsu
 	
 </div>
-            </div>
-    <script>
+  </div>
+  <script>
 let app;
 
 app = new Vue({
@@ -1148,5 +1141,134 @@ app = new Vue({
 </script>
 
 <script src="https://cxsu.github.io//js/journal.js"></script>
-    </body>
+  
+
+<style>
+  #share-buttons {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  #share-buttons:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  #share-buttons>div {
+    position: relative;
+    text-align: left;
+    height: 36px;
+    width: 32px;
+    float: left;
+    text-align: center;
+  }
+
+  #share-buttons>div>svg {
+    height: 16px;
+    fill: #d5d5d5;
+    margin-top: 10px;
+  }
+
+  #share-buttons>div:hover {
+    cursor: pointer;
+  }
+
+  #share-buttons>div.facebook:hover>svg {
+    fill: #3B5998;
+  }
+
+  #share-buttons>div.twitter:hover>svg {
+    fill: #55ACEE;
+  }
+
+  #share-buttons>div.linkedin:hover>svg {
+    fill: #0077b5;
+  }
+
+  #share-buttons>div.pinterest:hover>svg {
+    fill: #CB2027;
+  }
+
+  #share-buttons>div.gplus:hover>svg {
+    fill: #dd4b39;
+  }
+
+  #share-buttons>div.mail:hover>svg {
+    fill: #7D7D7D;
+  }
+
+  #share-buttons>div.instagram:hover>svg {
+    fill: #C73B92;
+  }
+
+  #share-buttons>div.facebook>svg {
+    height: 18px;
+    margin-top: 9px;
+  }
+
+  #share-buttons>div.twitter>svg {
+    height: 20px;
+    margin-top: 8px;
+  }
+
+  #share-buttons>div.linkedin>svg {
+    height: 19px;
+    margin-top: 7px;
+  }
+
+  #share-buttons>div.pinterest>svg {
+    height: 20px;
+    margin-top: 9px;
+  }
+
+  #share-buttons>div.gplus>svg {
+    height: 17px;
+    margin-top: 9px;
+    position: relative;
+    left: 1px;
+  }
+
+  #share-buttons>div.mail>svg {
+    height: 14px;
+    margin-top: 11px;
+  }
+</style>
+
+<span style="color: silver;">Share on: </span>
+<div id="share-buttons">
+  <div class="facebook" title="Share this on Facebook"
+    onclick="window.open('http://www.facebook.com/share.php?u=https:\/\/cxsu.github.io\/posts\/kubernetes\/local-build-kube\/');"><svg viewBox="0 0 1792 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z" />
+    </svg></div>
+  <div class="twitter" title="Share this on Twitter"
+    onclick="window.open('http://twitter.com/home?status=https:\/\/cxsu.github.io\/posts\/kubernetes\/local-build-kube\/');"><svg viewBox="0 0 1792 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z" />
+    </svg></div>
+  <div class="linkedin" title="Share this on Linkedin"
+    onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=https:\/\/cxsu.github.io\/posts\/kubernetes\/local-build-kube\/&title=&summary=&source=');">
+    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z" />
+    </svg></div>
+  
+  <div class="gplus" title="Share this on Google Plus"
+    onclick="window.open('https://plus.google.com/share?url=https:\/\/cxsu.github.io\/posts\/kubernetes\/local-build-kube\/');"><svg viewBox="0 0 2304 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z" />
+    </svg></div>
+  <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=https:\/\/cxsu.github.io\/posts\/kubernetes\/local-build-kube\/');"><svg
+      viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z" />
+    </svg></div>
+</div>
+
+</body>
+
 </html>

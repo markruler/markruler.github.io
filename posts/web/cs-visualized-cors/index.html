@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html><head>
+  <title>CS Visualized: CORS</title>
+
+  
+  
+
+  <meta charset="utf-8">
+  <meta name="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta content="telephone=no" name="format-detection">
+  <meta name="description" content="Lydia Hallie">
+  <meta name="renderer" content="webkit">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  
+  <meta property="og:title" content="CS Visualized: CORS" />
+<meta property="og:description" content="Lydia Hallie" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://cxsu.github.io/posts/web/cs-visualized-cors/" />
+<meta property="article:published_time" content="2021-01-02T08:50:00+09:00" />
+<meta property="article:modified_time" content="2021-01-02T08:50:00+09:00" /><meta property="og:site_name" content="Changsu" />
+
+  
+
+  
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CS Visualized: CORS"/>
+<meta name="twitter:description" content="Lydia Hallie"/>
+
+  
+
+  
+  <meta name="google-site-verification" content="60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc" />
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-FFMDWZ27TN');
+  </script>
+
+  
+  
+
+  <script src="/vendor/js/jquery.min.js" ></script>
+  <script src="/vendor/js/popper.min.js" ></script>
+  <script src="/vendor/js/bootstrap.min.js" ></script>
+  <script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+  <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+  <script src="/vendor/js/vue.min.js" ></script>
+
+  
+
+  
+  <link rel="icon" href="https://cxsu.github.io/images/favicon.ico">
+  
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://cxsu.github.io/scss/dark-mode.min.3d4bf67c8dc5f62e0c0399ef070762a2676e0931138c79211fcafc08bda3953f.css" integrity="sha256-PUv2fI3F9i4MA5nvBwdiomduCTETjHkhH8r8CL2jlT8=" media="screen">
+  
+
+  <script src="https://cxsu.github.io//js/loadCSS.js"></script>
+  <script>
+    loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+  </script>
+
+  
+
+  
+  
+  <script src="https://cxsu.github.io//js/toc.js"></script>
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</head>
+<body>
+  <div id="app"><div ref="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://cxsu.github.io/">
+    
+        <div class="nav-title">
+            Changsu
+        </div>
+        
+        <div class="nav-subtitle">
+            Home
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 Changsu
+	
+
+    </div>
+    
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    
+    <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#-%ea%b0%99%ec%9d%80-%ec%b6%9c%ec%b2%98-%ec%a0%95%ec%b1%85-same-origin-policy" onclick="onNavClick(`#-같은-출처-정책-same-origin-policy-nav`)" id="-같은-출처-정책-same-origin-policy-nav">
+									✋🏼 같은 출처 정책 (Same-Origin Policy)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ed%81%b4%eb%9d%bc%ec%9d%b4%ec%96%b8%ed%8a%b8-%ec%b8%a1-cors" onclick="onNavClick(`#-클라이언트-측-cors-nav`)" id="-클라이언트-측-cors-nav">
+									🔥 클라이언트 측 CORS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%84%9c%eb%b2%84-%ec%b8%a1-cors" onclick="onNavClick(`#-서버-측-cors-nav`)" id="-서버-측-cors-nav">
+									💻 서버 측 CORS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%98%88%eb%b9%84-%ec%9a%94%ec%b2%ad-preflighted-requests" onclick="onNavClick(`#-예비-요청-preflighted-requests-nav`)" id="-예비-요청-preflighted-requests-nav">
+									🚀 예비 요청 (Preflighted Requests)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%9e%90%ea%b2%a9-%ec%a6%9d%eb%aa%85credentials" onclick="onNavClick(`#-자격-증명credentials-nav`)" id="-자격-증명credentials-nav">
+									🍪 자격 증명(Credentials)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#-%ea%b0%99%ec%9d%80-%ec%b6%9c%ec%b2%98-%ec%a0%95%ec%b1%85-same-origin-policy" onclick="onNavClick(`#-같은-출처-정책-same-origin-policy-nav`)" id="-같은-출처-정책-same-origin-policy-nav">
+									✋🏼 같은 출처 정책 (Same-Origin Policy)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ed%81%b4%eb%9d%bc%ec%9d%b4%ec%96%b8%ed%8a%b8-%ec%b8%a1-cors" onclick="onNavClick(`#-클라이언트-측-cors-nav`)" id="-클라이언트-측-cors-nav">
+									🔥 클라이언트 측 CORS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%84%9c%eb%b2%84-%ec%b8%a1-cors" onclick="onNavClick(`#-서버-측-cors-nav`)" id="-서버-측-cors-nav">
+									💻 서버 측 CORS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%98%88%eb%b9%84-%ec%9a%94%ec%b2%ad-preflighted-requests" onclick="onNavClick(`#-예비-요청-preflighted-requests-nav`)" id="-예비-요청-preflighted-requests-nav">
+									🚀 예비 요청 (Preflighted Requests)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#-%ec%9e%90%ea%b2%a9-%ec%a6%9d%eb%aa%85credentials" onclick="onNavClick(`#-자격-증명credentials-nav`)" id="-자격-증명credentials-nav">
+									🍪 자격 증명(Credentials)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://cxsu.github.io/">
+            Changsu
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://cxsu.github.io/">
+        <div class="single-column-header-title">Changsu</div>
+        
+        <div class="single-column-header-subtitle">Home</div>
+        
+
+    </a>
+</div>
+
+    <div id="content">
+<div ref="streamContainer" class="stream-container">
+  <div class="post-list-container post-list-container-shadow">
+    <div class="post">
+      
+      
+      
+      
+      
+
+      <div class="post-head-wrapper"  
+        
+        style="background-image: url('https://cxsu.github.io/images/web/lydia/cover-cors.jpg')"  >
+        <div class="post-title">
+          CS Visualized: CORS
+          
+          <div class="post-subtitle">
+            Lydia Hallie
+          </div>
+          
+          <div class="post-meta">
+            
+            <time itemprop="datePublished">
+              2021년 01월 02일 08시 50분
+            </time>
+            
+
+            
+            <i class="material-icons" style="">folder</i>
+            <a href="/%20/categories/">[web]</a>
+            &nbsp;
+            
+
+            
+            <i class="material-icons" style="">label</i>
+            
+            <a href="/%20/tags/web">web</a>
+            &nbsp;
+            
+            <a href="/%20/tags/security">security</a>
+            &nbsp;
+            
+            <a href="/%20/tags/lydia-hallie">Lydia-Hallie</a>
+            &nbsp;
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="post-body-wrapper">
+        
+          <div class="post-body" v-pre>
+            
+            <blockquote>
+<ul>
+<li>리디아 할리(<a href="https://twitter.com/lydiahallie">@Lydia Hallie</a>)의 <a href="https://dev.to/lydiahallie/cs-visualized-cors-5b8h">CS Visualized: CORS</a>를 번역한 글입니다.</li>
+<li>저자의 허락을 받고 번역한 글입니다.</li>
+</ul>
+</blockquote>
+<p>어쩌다 콘솔에서 &ldquo;fetch 접근이 CORS 정책에 의해 차단되었습니다&quot;라는
+커다란 빨간색 오류를 보면 모든 개발자가 분노를 느낍니다! 😬
+임시방편이 몇 가지 있긴 하지만 오늘은 그 어떤 것도 사용하지 않겠습니다!
+대신 CORS가 실제로 무엇을 하고 있는지 그리고 왜 우리의 친구인지
+알아보도록 하겠습니다. 👏🏼</p>
+<blockquote>
+<p>❗️ 이 블로그 포스트에서는 HTTP 기본에 대해 설명하지 않겠습니다.
+HTTP 요청과 응답에 대해 더 알고 싶으시다면, 얼마 전에
+<a href="https://www.lydiahallie.dev/blog/http11">작은 블로그 포스트</a>를
+작성했습니다. 🙂 제가 사용한 예시에서 HTTP/2 대신 HTTP/1.1을
+사용하지만, 이것이 CORS에 영향을 미치지는 않습니다.</p>
+</blockquote>
+<hr>
+<p>우리는 종종 프런트엔드에서 다른 곳에 있는 데이터를 표시하려고 합니다!
+그럴려면 먼저 브라우저는 해당 데이터를 가져오기 위해 서버에 요청을
+해야 합니다! 이 요청은 서버가 데이터를 클라이언트로 다시 보내기 위해
+필요로 하는 모든 정보를 포함합니다. 🙂</p>
+<p>예를 들어 <code>www.mywebsite.com</code> 웹사이트에서 <code>api.website.com</code> 서버에
+있는 사용자 정보를 가져오려고 합니다!</p>
+<p><img src="/images/web/lydia/request-same.gif" alt="request-same"></p>
+<p>Perfect! 😃 방금 서버로 HTTP 요청을 보냈습니다.
+그런 다음 서버는 우리가 요청했던 JSON 데이터를 응답했습니다.</p>
+<p><em>동일한</em> 요청을 <strong>다른 도메인</strong>에 시도해보겠습니다.
+<code>www.mywebsite.com</code>에서 요청을 하는 대신 <code>www.anotherdomain.com</code>에
+있는 웹사이트에서 요청을 하고 있습니다.</p>
+<p><img src="/images/web/lydia/request-another.gif" alt="request-another"></p>
+<p>잠깐, 뭐죠? 우리는 똑같은 요청을 보냈는데 이번에는 브라우저가 이상한 오류가 보여주죠?</p>
+<p>우리는 방금 CORS가 동작하는 것을 보았습니다! 💪🏼
+그럼 이 오류가 발생한 원인과 정확히 무엇을 뜻하는지 알아보겠습니다.</p>
+<h2 id="-같은-출처-정책-same-origin-policy">✋🏼 같은 출처 정책 (Same-Origin Policy)</h2>
+<p>웹은 <strong>같은 출처 정책</strong>이라는 것을 시행합니다. 기본적으로 우리는
+요청을 하는 곳과 <strong>같은 출처</strong>에 있는 자원만 접근할 수 있습니다! 💪🏼
+예를 들어 <code>https://mywebsite.com</code>에서 <code>https://mywebsite.com/image1.png</code>에
+있는 이미지를 불러 오는 것은 괜찮습니다.</p>
+<p>만약 자원이 다른 (하위)도메인 또는 다른 프로토콜, 다른 포트에 있는 경우
+다른 출처(cross-origin)에 있다고 말합니다!</p>
+<p><img src="/images/web/lydia/origin.png" alt="origin"></p>
+<p>좋아요, 그런데 왜 같은 출처 정책까지 있는 거죠?</p>
+<p>만약 같은 출처 정책이 없었고 이모가 페이스북에서 보낸
+수많은 바이러스 링크 중 하나를 실수로 클릭했다고 가정해 보세요.
+이 링크가 여러분을 &ldquo;유해 사이트&quot;로 리다이렉션 시킵니다.
+은행 사이트를 불러 오는 iframe이 내장된 웹사이트로요.
+그리고 설정되어 있던 쿠키를 통해 성공적으로 로그인합니다! 😬</p>
+<p>&ldquo;유해 사이트&quot;의 개발자들은 자신들의 계좌로 돈을 보내기 위해
+웹사이트가 이 iframe에 접근하고 은행 사이트의 DOM 콘텐츠에
+접근할 수 있게끔 만들었습니다!</p>
+<blockquote>
+<p>역주: 위 공격은 CSRF (Cross-Site Request Forgery) 공격에 해당되며
+XSS (Cross-Site Scripting)도 같은 출처 정책과 관련된 공격입니다.</p>
+</blockquote>
+<p><img src="/images/web/lydia/wo-same-origin-policy.gif" alt="wo-same-origin-policy"></p>
+<p>맞습니다&hellip; 이건 엄청난 보안 위험이에요! 우리는 그 누구도 접근하지 못하길 바랍니다. 😧</p>
+<p>운 좋게도 여기서 같은 출처 정책이 우리를 도와줍니다!
+이 정책은 <strong>같은 출처</strong>의 자원만 접근할 수 있도록 합니다.</p>
+<p><img src="/images/web/lydia/with-policy.gif" alt="with-policy"></p>
+<p>이 경우 <code>www.evilwebsite.com</code>은 다른 출처인 <code>www.bank.com</code>의 자원에
+접근하려고 했습니다! 같은 출처 정책은 이러한 일이 발생하지 않도록 접근을
+차단하고 유해 사이트 개발자가 우리의 은행 데이터에 접근할 수 없도록 만듭니다. 🥳</p>
+<p>좋아요, 그럼&hellip; 이것이 CORS와 무슨 관계가 있나요?</p>
+<hr>
+<h2 id="-클라이언트-측-cors">🔥 클라이언트 측 CORS</h2>
+<p>같은 출처 정책은 실제로 스크립트에만 적용되지만, 브라우저는 자바스크립트에서
+요청하는 것까지 이 정책을 &ldquo;확장&quot;시킵니다. 기본적으로 우리는 <strong>같은 출처</strong>에서
+가져온 자원만 접근할 수 있습니다!</p>
+<p><img src="/images/web/lydia/client-side-cors.gif" alt="client-side-cors"></p>
+<p>흠, 하지만&hellip; 때로는 다른 출처 자원에 접근해야만 합니다. 🤔
+프런트엔드가 데이터를 불러 오기 위해 백엔드 API를 호출해야 할 수도 있습니다.
+그래서 브라우저는 다른 출처 요청을 안전하게 만들기 위해 <strong>CORS</strong>라는
+메커니즘을 사용합니다! 🥳</p>
+<p>CORS는 <strong>다른 출처 자원 공유(Cross-Origin Resource Sharing)</strong> 를 말합니다.
+브라우저가 같은 출처가 아닌 자원에 접근할 수 없게 하지만, CORS를 사용하여
+이러한 보안 제한을 약간 바꿔서 다른 출처 자원에 안전하게 접근할 수 있습니다. 🎉</p>
+<p>사용자 에이전트(예: 브라우저)는 차단될 <strong>다른 출처 요청을 허용</strong>하기 위해
+HTTP 응답의 특정 CORS 헤더 값에 따라 CORS 메커니즘을 사용할 수 있습니다! ✅</p>
+<p>다른 출처 요청을 하면 클라이언트는 자동으로 HTTP 요청에
+<code>Origin</code> 헤더를 추가합니다. <code>Origin</code> 헤더의 값은 요청을 보낸 출처입니다!</p>
+<p><img src="/images/web/lydia/origin-header.gif" alt="origin-header"></p>
+<p>브라우저가 다른 출처 자원에 접근할 수 있도록 클라이언트의 <code>Origin</code> 헤더는
+해당 서버에게 다른 출처 요청 허용 여부를 명시한 응답 헤더를 요구하는 것입니다!</p>
+<hr>
+<h2 id="-서버-측-cors">💻 서버 측 CORS</h2>
+<p>서버 개발자는 HTTP 응답에 헤더를 추가하여 다른 출처 요청이 허용되는지
+확인시켜줄 수 있습니다. 이 헤더는 모두 <code>Access-Control-*</code>로 시작합니다. 🔥
+이 CORS 응답 헤더의 값에 따라 브라우저는 일반적으로 같은 출처
+정책에 의해 차단되는 특정 다른 출처 응답을 허용할 수 있습니다!</p>
+<p>사용할 수 있는 <a href="https://fetch.spec.whatwg.org/#http-responses">여러 CORS 헤더</a>가
+있지만 브라우저가 다른 출처 자원 접근을 허용하기 위해 필요한 헤더는 하나입니다.
+바로 <code>Access-Control-Allow-Origin</code>입니다! 🙂 이 헤더의 값은 서버의
+<strong>자원에 접근할 수 있는 출처</strong>를 지정합니다.</p>
+<p><code>https://mywebsite.com</code>에서 접근할 서버를 개발 중인 경우
+<code>Access-Control-Allow-Origin</code> 헤더에 해당 도메인을 추가할 수 있습니다!</p>
+<p><img src="/images/web/lydia/access-control-allow-origin.gif" alt="access-control-allow-origin"></p>
+<p>Awesome! 🎉 이제 서버가 클라이언트로 보내는 응답에 이 헤더가 추가됩니다.
+그럼 <code>https://mywebsite.com</code>에서 요청을 보내도 <code>https://api.mywebsite.com</code>
+<strong>자원을 가져가는 걸 같은 출처 정책이 더 이상 막지 않습니다</strong>!</p>
+<p><img src="/images/web/lydia/allowed-origins.gif" alt="allowed-origins"></p>
+<p>브라우저 내의 CORS 메커니즘은 <code>Access-Control-Allow-Origin</code> 헤더의 값이
+요청할 때 보낸 <code>Origin</code> 값과 동일한지 확인합니다. 🤚🏼</p>
+<p>이 경우 요청의 출처는 <code>https://www.mywebsite.com</code>으로
+응답 헤더 <code>Access-Control-Allow-Origin</code>에 실려 있습니다!</p>
+<p><img src="/images/web/lydia/response-header.gif" alt="response-header"></p>
+<p>Perfect! 🎉 다른 출처 자원을 성공적으로 받을 수 있습니다!
+그러면 <code>Access-Control-Allow-Origin</code> 헤더에 실려 있지 않은
+출처에서 다른 출처 자원에 접근하려고 하면 어떻게 될까요? 🤔</p>
+<p><img src="/images/web/lydia/cors-error.gif" alt="cors-error"></p>
+<p>맞아요. CORS는 때때로 악명 높은 에러를 던지죠!
+하지만 우리는 이제 이것이 오히려 이치에 맞다는 것을 알게 되었습니다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-text" data-lang="text">&#39;Access-Control-Allow-Origin&#39; 헤더의 값이
+제공된 출처(Origin)와 다른 &#39;https://www.mywebsite.com&#39;입니다.
+</code></pre></div><p>이 경우에 제공된 출처는 <code>https://www.anotherwebsite.com</code>입니다.
+그러나 서버의 <code>Access-Control-Allow-Origin</code> 헤더에는 해당 출처가
+없습니다! CORS가 요청을 차단했고 우리의 코드는 가져온 데이터에 접근할
+수 없습니다. 😃</p>
+<blockquote>
+<p>또한 CORS를 사용하면 허용되는 Origin 값으로 와일드카드 <code>*</code>를
+추가할 수 있습니다. 이것은 모든 출처가 요청된 자원에
+접근할 수 있다는 것이니 주의하세요!</p>
+</blockquote>
+<hr>
+<p><code>Access-Control-Allow-Origin</code>은 우리가 제공할 수 있는 수많은 CORS 헤더
+중 하나입니다. 서버 개발자는 특정 요청을 허용하거나 차단하기 위해 서버의
+CORS 정책을 수정할 수 있습니다! 💪🏼</p>
+<p>또 하나 자주 사용되는 헤더는 <code>Access-Control-Allow-Methods</code>입니다!
+CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.</p>
+<p><img src="/images/web/lydia/access-control-allow-methods.gif" alt="access-control-allow-methods"></p>
+<p>이 경우 <code>GET</code>, <code>POST</code>, <code>PUT</code> 메서드 요청만 허용됩니다!
+<code>PATCH</code> 또는 <code>DELETE</code>와 같은 다른 메서드들은 차단됩니다. ❌</p>
+<blockquote>
+<p>이 외의 CORS 헤더는 무엇이 있으며 어떤 용도로 사용되는지 궁금하다면
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers">이 목록을 확인해보세요</a>.</p>
+</blockquote>
+<p>CORS는 실제로 <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code> 요청에 대해서는
+다르게 처리합니다! 🙃 이렇게 &ldquo;<em>단순하지 않은</em>&rdquo; 요청은
+<strong>예비 요청</strong> 이라는 것을 만듭니다!</p>
+<hr>
+<h2 id="-예비-요청-preflighted-requests">🚀 예비 요청 (Preflighted Requests)</h2>
+<p>CORS에는 두 가지 유형의 요청, <strong>단순 요청</strong>과 <strong>예비 요청</strong>이 있습니다.
+요청이 단순 요청인지 예비 요청인지는 요청의 일부 값에 따라
+달라집니다(걱정하지 마세요. 이 내용을 외울 필요는 없습니다ㅋㅋㅋ).</p>
+<p>단순 요청은 <code>GET</code> 또는 <code>POST</code> 메서드이고 사용자 정의 헤더가 없는 경우입니다!
+예비 요청은 <code>PUT</code>, <code>PATCH</code> 또는 <code>DELETE</code> 메서드와 같은 다른 모든 요청입니다.</p>
+<blockquote>
+<p>단순 요청이 되기 위해 어떤 요구 사항을 충족해야 하는지 궁금하다면 MDN에
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests">유용한 목록</a>이 있습니다!</p>
+</blockquote>
+<p>알겠어요, 근데 &ldquo;예비 요청&quot;은 뭐고 왜 이런 일이 일어나는 건가요?</p>
+<hr>
+<p>실제 요청을 전송하기 전에 클라이언트는 예비 요청을 생성합니다!
+예비 요청에는 <code>Access-Control-Request-*</code> 헤더에 실제로 보내려는
+요청 정보가 포함되어 있습니다. 🔥</p>
+<p>이 헤더는 브라우저가 수행하려는 실제 요청 정보를 서버에 제공합니다.
+여기에는 요청 <strong>메서드</strong>, <strong>추가 헤더</strong> 등이 포함됩니다.</p>
+<p><img src="/images/web/lydia/preflighted-request.gif" alt="preflighted-request"></p>
+<p>서버는 이 예비 요청을 수신하고 서버의 CORS 헤더와 함께 텅 빈 HTTP 응답을 보냅니다!
+브라우저는 CORS 헤더 외에 아무 데이터가 없는 예비 응답을 수신하고
+해당 HTTP 요청이 허용되는지 여부를 확인합니다! ✅</p>
+<p><img src="/images/web/lydia/preflighted-response.gif" alt="preflighted-response"></p>
+<p>이런 경우 브라우저가 실제 요청을 서버로 보내면
+서버는 요청 받은 데이터를 응답합니다!</p>
+<p><img src="/images/web/lydia/actual-request.gif" alt="actual-request"></p>
+<p>하지만 허용되지 않을 경우에는 CORS가 예비 요청을 차단하고 실제 요청은
+절대 보내지지 않습니다. ✋🏼 예비 요청은 아직 CORS 정책이 적용되지 않은 서버의
+자원에 접근하거나 수정할 수 없도록 하는 좋은 방법입니다! 서버가 잠재적으로
+원하지 않는 다른 출처 요청으로부터 보호됩니다.😃</p>
+<blockquote>
+<p>💡 서버와의 통신 횟수를 줄이기 위해 CORS 요청에 <code>Access-Control-Max-Age</code>
+헤더를 추가하여 예비 요청에 대한 응답을 캐시할 수 있습니다!
+그럼 브라우저는 새로운 예비 요청을 보내는 대신 캐시된 응답을
+사용할 수 있습니다!</p>
+</blockquote>
+<hr>
+<h2 id="-자격-증명credentials">🍪 자격 증명(Credentials)</h2>
+<p>쿠키, 인가 헤더, TLS 인증서는 기본적으로 같은 출처 요청에서만 설정됩니다!
+그러나 이러한 자격 증명을 다른 출처 요청에 사용할 수도 있습니다.
+서버가 사용자를 식별하기 위해 사용하는 쿠키를 요청에 포함시킬 수도 있습니다!</p>
+<p>기본적으로 CORS에 자격 증명이 포함되어 있지 않지만
+CORS 헤더 <code>Access-Control-Allow-Credentials</code>를 추가할 수 있습니다! 🎉</p>
+<p>다른 출처 요청에 쿠키 및 기타 인가 헤더를 포함시키려면
+요청에 <code>withCredentials</code> 필드를 <code>true</code>로 설정하고
+응답에 <code>Access-Control-Allow-Credentials</code> 헤더를 추가해야 합니다.</p>
+<p><img src="/images/web/lydia/access-control-allow-credentials.gif" alt="access-control-allow-credentials"></p>
+<p>준비 끝! 이제 우리는 다른 출처 요청에 자격 증명을 포함시킬 수 있습니다. 🥳</p>
+<hr>
+<p>제가 생각하기엔 우리 모두 CORS 오류가 가끔 짜증나지만
+브라우저에서 다른 출처 요청을 안전하게 해준다는 것은 놀라울 거에요.
+(좀 더 많은 사랑을 받아야 합니다 ㅋㅋㅋ) ✨</p>
+<p>제가 이 블로그 포스트에서 다룰 수 있었던 것보다 더 많은 자료들이 있습니다!
+더 궁금하다면 운 좋게도
+<a href="https://livebook.manning.com/book/cors-in-action/part-1/">CORS in Action</a>이나
+<a href="https://www.w3.org/wiki/CORS_Enabled">W3 규격</a>과 같은 좋은 자료들이 있습니다. 💪🏼</p>
+<p>그리고 언제나 그랬듯이 저(Lydia Hallie)와 소통해요! 😊</p>
+<table>
+<thead>
+<tr>
+<th>✨</th>
+<th>👩🏽‍💻</th>
+<th>💻</th>
+<th>💡</th>
+<th>📷</th>
+<th>💌</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.twitter.com/lydiahallie">Twitter</a></td>
+<td><a href="https://www.instagram.com/theavocoder">Instagram</a></td>
+<td><a href="https://www.github.com/lydiahallie">GitHub</a></td>
+<td><a href="https://www.linkedin.com/in/lydia-hallie">LinkedIn</a></td>
+<td><a href="https://www.youtube.com/channel/UC4EWKIKdKiDtAscQ9BIXwUw">YouTube</a></td>
+<td><a href="mailto:lydiahallie.dev@gmail.com">Email</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+            
+            <HR width="100%" id="EOF">
+            <p style="color:#777;">최종 수정: 2021년 01월 02일</p>
+            
+          </div>
+        </div>
+
+
+        <nav class="post-pagination">
+          
+        </nav>
+        <div class="post-comment-wrapper">
+          
+
+
+
+
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	2020 Changsu
+	
+</div>
+  </div>
+  <script>
+let app;
+
+app = new Vue({
+    el: '#app',
+    data: {
+        scrollY: 0,
+        navOpacity: 0,
+        isDrawerOpen: false,
+        mounted: false,
+        isDarkMode: false
+    },
+    methods: {
+            sgn(t, x) {
+                let k = 1. / (1. - 2 * t);
+                if (x <= t) return 0;
+                else if (x >= 1 - t) return 1;
+                else {
+                    return k * (x - t);
+                }
+            },
+            handleScroll() {
+                this.scrollY = window.scrollY;
+                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+
+                if (this.navOpacity >= 1) {
+                    navBackground.style.opacity = 1;
+                    navTitle.style.opacity = 1;
+                } else {
+                    navBackground.style.opacity = 0;
+                    navTitle.style.opacity = 0;
+                }
+            },
+            handleResize() {
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
+            },
+            navBarHeight() {
+                return this.$refs.navBar.offsetHeight;
+            },
+            pageHeadHeight() {
+                return this.$refs.pageHead.offsetHeight;
+            },
+            toggleDrawer() {
+                this.isDrawerOpen = !this.isDrawerOpen;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            closeDrawer() {
+                this.isDrawerOpen = false;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            toggleDarkMode() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode==true){
+                    document.cookie = "night=1;path=/";
+                    document.body.classList.add("night");
+                } else {
+                    document.cookie = "night=0;path=/";
+                    document.body.classList.remove("night");
+                }
+            }
+    },
+    created() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        window._nonDesktop = function () {
+            let check = false;
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        };
+        
+        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (night==""){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                
+            }
+        }else{
+            
+            if (night=="1") {
+                this.toggleDarkMode();
+            }
+        }
+    },
+    mounted() {
+        this.handleScroll();
+        this.handleResize();
+        this.mounted = true;
+
+        
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    }
+});
+</script>
+
+<script src="https://cxsu.github.io//js/journal.js"></script>
+  
+
+<style>
+  #share-buttons {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  #share-buttons:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  #share-buttons>div {
+    position: relative;
+    text-align: left;
+    height: 36px;
+    width: 32px;
+    float: left;
+    text-align: center;
+  }
+
+  #share-buttons>div>svg {
+    height: 16px;
+    fill: #d5d5d5;
+    margin-top: 10px;
+  }
+
+  #share-buttons>div:hover {
+    cursor: pointer;
+  }
+
+  #share-buttons>div.facebook:hover>svg {
+    fill: #3B5998;
+  }
+
+  #share-buttons>div.twitter:hover>svg {
+    fill: #55ACEE;
+  }
+
+  #share-buttons>div.linkedin:hover>svg {
+    fill: #0077b5;
+  }
+
+  #share-buttons>div.pinterest:hover>svg {
+    fill: #CB2027;
+  }
+
+  #share-buttons>div.gplus:hover>svg {
+    fill: #dd4b39;
+  }
+
+  #share-buttons>div.mail:hover>svg {
+    fill: #7D7D7D;
+  }
+
+  #share-buttons>div.instagram:hover>svg {
+    fill: #C73B92;
+  }
+
+  #share-buttons>div.facebook>svg {
+    height: 18px;
+    margin-top: 9px;
+  }
+
+  #share-buttons>div.twitter>svg {
+    height: 20px;
+    margin-top: 8px;
+  }
+
+  #share-buttons>div.linkedin>svg {
+    height: 19px;
+    margin-top: 7px;
+  }
+
+  #share-buttons>div.pinterest>svg {
+    height: 20px;
+    margin-top: 9px;
+  }
+
+  #share-buttons>div.gplus>svg {
+    height: 17px;
+    margin-top: 9px;
+    position: relative;
+    left: 1px;
+  }
+
+  #share-buttons>div.mail>svg {
+    height: 14px;
+    margin-top: 11px;
+  }
+</style>
+
+<span style="color: silver;">Share on: </span>
+<div id="share-buttons">
+  <div class="facebook" title="Share this on Facebook"
+    onclick="window.open('http://www.facebook.com/share.php?u=https:\/\/cxsu.github.io\/posts\/web\/cs-visualized-cors\/');"><svg viewBox="0 0 1792 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1343 12v264h-157q-86 0-116 36t-30 108v189h293l-39 296h-254v759h-306v-759h-255v-296h255v-218q0-186 104-288.5t277-102.5q147 0 228 12z" />
+    </svg></div>
+  <div class="twitter" title="Share this on Twitter"
+    onclick="window.open('http://twitter.com/home?status=https:\/\/cxsu.github.io\/posts\/web\/cs-visualized-cors\/');"><svg viewBox="0 0 1792 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1684 408q-67 98-162 167 1 14 1 42 0 130-38 259.5t-115.5 248.5-184.5 210.5-258 146-323 54.5q-271 0-496-145 35 4 78 4 225 0 401-138-105-2-188-64.5t-114-159.5q33 5 61 5 43 0 85-11-112-23-185.5-111.5t-73.5-205.5v-4q68 38 146 41-66-44-105-115t-39-154q0-88 44-163 121 149 294.5 238.5t371.5 99.5q-8-38-8-74 0-134 94.5-228.5t228.5-94.5q140 0 236 102 109-21 205-78-37 115-142 178 93-10 186-50z" />
+    </svg></div>
+  <div class="linkedin" title="Share this on Linkedin"
+    onclick="window.open('https://www.linkedin.com/shareArticle?mini=true&url=https:\/\/cxsu.github.io\/posts\/web\/cs-visualized-cors\/&title=&summary=&source=');">
+    <svg viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M477 625v991h-330v-991h330zm21-306q1 73-50.5 122t-135.5 49h-2q-82 0-132-49t-50-122q0-74 51.5-122.5t134.5-48.5 133 48.5 51 122.5zm1166 729v568h-329v-530q0-105-40.5-164.5t-126.5-59.5q-63 0-105.5 34.5t-63.5 85.5q-11 30-11 81v553h-329q2-399 2-647t-1-296l-1-48h329v144h-2q20-32 41-56t56.5-52 87-43.5 114.5-15.5q171 0 275 113.5t104 332.5z" />
+    </svg></div>
+  
+  <div class="gplus" title="Share this on Google Plus"
+    onclick="window.open('https://plus.google.com/share?url=https:\/\/cxsu.github.io\/posts\/web\/cs-visualized-cors\/');"><svg viewBox="0 0 2304 1792"
+      xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1437 913q0 208-87 370.5t-248 254-369 91.5q-149 0-285-58t-234-156-156-234-58-285 58-285 156-234 234-156 285-58q286 0 491 192l-199 191q-117-113-292-113-123 0-227.5 62t-165.5 168.5-61 232.5 61 232.5 165.5 168.5 227.5 62q83 0 152.5-23t114.5-57.5 78.5-78.5 49-83 21.5-74h-416v-252h692q12 63 12 122zm867-122v210h-209v209h-210v-209h-209v-210h209v-209h210v209h209z" />
+    </svg></div>
+  <div class="mail" title="Share this through Email" onclick="window.open('mailto:?&body=https:\/\/cxsu.github.io\/posts\/web\/cs-visualized-cors\/');"><svg
+      viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M1792 710v794q0 66-47 113t-113 47h-1472q-66 0-113-47t-47-113v-794q44 49 101 87 362 246 497 345 57 42 92.5 65.5t94.5 48 110 24.5h2q51 0 110-24.5t94.5-48 92.5-65.5q170-123 498-345 57-39 100-87zm0-294q0 79-49 151t-122 123q-376 261-468 325-10 7-42.5 30.5t-54 38-52 32.5-57.5 27-50 9h-2q-23 0-50-9t-57.5-27-52-32.5-54-38-42.5-30.5q-91-64-262-182.5t-205-142.5q-62-42-117-115.5t-55-136.5q0-78 41.5-130t118.5-52h1472q65 0 112.5 47t47.5 113z" />
+    </svg></div>
+</div>
+
+</body>
+
+</html>
