@@ -21,14 +21,17 @@
 <meta property="og:description" content="kubernetes.io" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://cxsu.github.io/posts/kubernetes/controlling-access-api/" />
+<meta property="og:image" content="https://cxsu.github.io/images/changsu/2020-portrait.png"/>
 <meta property="article:published_time" content="2020-09-17T06:58:08+09:00" />
-<meta property="article:modified_time" content="2020-09-17T06:58:08+09:00" /><meta property="og:site_name" content="Changsu" />
+<meta property="article:modified_time" content="2020-09-17T06:58:08+09:00" /><meta property="og:site_name" content="임창수" />
 
   
 
   
   
-  <meta name="twitter:card" content="summary"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://cxsu.github.io/images/changsu/2020-portrait.png"/>
+
 <meta name="twitter:title" content="쿠버네티스 API 접근 제어"/>
 <meta name="twitter:description" content="kubernetes.io"/>
 
@@ -96,11 +99,11 @@
   <a class="a-block nav-head false" href="https://cxsu.github.io/">
 
   <div class="nav-title">
-    Changsu
+    임창수
   </div>
   
     <div class="nav-subtitle">
-      Home
+      Im Changsu
     </div>
   
   </a>
@@ -167,7 +170,7 @@
 
 &copy;
 	
-	2020 Changsu
+	2020 Im Changsu
 	
 
   </div>
@@ -494,7 +497,7 @@
             </i>
         </button>
         <a ref="navTitle" class="navbar-brand" href="https://cxsu.github.io/">
-            Changsu
+            
         </a>
         
         <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
@@ -511,9 +514,9 @@
 <div class="single-column-header-container" ref="pageHead"
      v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
     <a href="https://cxsu.github.io/">
-        <div class="single-column-header-title">Changsu</div>
+        <div class="single-column-header-title"></div>
         
-        <div class="single-column-header-subtitle">Home</div>
+        <div class="single-column-header-subtitle">Im Changsu</div>
         
 
     </a>
@@ -581,7 +584,7 @@
           <div class="post-body" v-pre>
             
             <ul>
-<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/">원문</a></li>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/">쿠버네티스 공식 문서</a>를 번역했습니다.</li>
 </ul>
 <!-- raw HTML omitted -->
 <p>이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.</p>
@@ -627,29 +630,29 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
 <p>특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 <strong>2</strong>단계로 표시되어 있다.</p>
 <p>요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.</p>
 <p>예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 <code>projectCaribou</code> 네임스페이스에서만 파드를 읽을 수 있다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
-    <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
-    <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;Policy&#34;</span>,
-    <span style="color:#ff79c6">&#34;spec&#34;</span>: {
-        <span style="color:#ff79c6">&#34;user&#34;</span>: <span style="color:#f1fa8c">&#34;bob&#34;</span>,
-        <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
-        <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>,
-        <span style="color:#ff79c6">&#34;readonly&#34;</span>: <span style="color:#ff79c6">true</span>
-    }
-}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>    <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>    <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;Policy&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>    <span style="color:#ff79c6">&#34;spec&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>        <span style="color:#ff79c6">&#34;user&#34;</span>: <span style="color:#f1fa8c">&#34;bob&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>        <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>        <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>        <span style="color:#ff79c6">&#34;readonly&#34;</span>: <span style="color:#ff79c6">true</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>}
 </code></pre></div><p>Bob이 다음과 같은 요청을 하면 &lsquo;projectCaribou&rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
-  <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;authorization.k8s.io/v1beta1&#34;</span>,
-  <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;SubjectAccessReview&#34;</span>,
-  <span style="color:#ff79c6">&#34;spec&#34;</span>: {
-    <span style="color:#ff79c6">&#34;resourceAttributes&#34;</span>: {
-      <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
-      <span style="color:#ff79c6">&#34;verb&#34;</span>: <span style="color:#f1fa8c">&#34;get&#34;</span>,
-      <span style="color:#ff79c6">&#34;group&#34;</span>: <span style="color:#f1fa8c">&#34;unicorn.example.org&#34;</span>,
-      <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>
-    }
-  }
-}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1</span>{
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2</span>  <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;authorization.k8s.io/v1beta1&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3</span>  <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;SubjectAccessReview&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4</span>  <span style="color:#ff79c6">&#34;spec&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5</span>    <span style="color:#ff79c6">&#34;resourceAttributes&#34;</span>: {
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6</span>      <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7</span>      <span style="color:#ff79c6">&#34;verb&#34;</span>: <span style="color:#f1fa8c">&#34;get&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8</span>      <span style="color:#ff79c6">&#34;group&#34;</span>: <span style="color:#f1fa8c">&#34;unicorn.example.org&#34;</span>,
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9</span>      <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10</span>    }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11</span>  }
+<span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12</span>}
 </code></pre></div><p>Bob이 <code>projectCaribou</code> 네임스페이스에 있는 오브젝트에 쓰기(<code>create</code> 또는 <code>update</code>) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 <code>projectFish</code>처럼 다른 네임스페이스의 오브젝트 읽기(<code>get</code>) 요청을 하면 그의 인가는 거부된다.</p>
 <p>쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.</p>
 <p>쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).</p>
@@ -806,7 +809,7 @@ GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 �
     
     
     <li>
-      <a href="mailto:?subject=Changsu - %ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20API%20%ec%a0%91%ea%b7%bc%20%ec%a0%9c%ec%96%b4.&amp;body=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20API%20%ec%a0%91%ea%b7%bc%20%ec%a0%9c%ec%96%b4%2c%20by%20Changsu%0akubernetes.io%0a%0ahttps%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2fcontrolling-access-api%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - %ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20API%20%ec%a0%91%ea%b7%bc%20%ec%a0%9c%ec%96%b4.&amp;body=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20API%20%ec%a0%91%ea%b7%bc%20%ec%a0%9c%ec%96%b4%2c%20by%20%0akubernetes.io%0a%0ahttps%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2fcontrolling-access-api%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -838,7 +841,7 @@ GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 �
 
 &copy;
 	
-	2020 Changsu
+	2020 Im Changsu
 	
 </div>
   </div>
