@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-  
-  <title>쿠버네티스 레벨 트리거링 및 조정 - 임창수</title>
-  
-  
+  <title>
+    
+    [번역] 쿠버네티스 레벨 트리거링 및 조정 - 임창수
+    
+  </title>
+
   
   
   
@@ -19,22 +21,13 @@
 
   
   
-  <meta property="og:title" content="쿠버네티스 레벨 트리거링 및 조정" />
-<meta property="og:description" content="James Bowes" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://cxsu.github.io/posts/kubernetes/level-triggering-and-reconciliation/" />
-<meta property="og:image" content="https://cxsu.github.io/images/kubernetes/k8s-triggering.png" />
-<meta property="article:published_time" content="2021-01-13T23:05:00+09:00" />
-<meta property="article:modified_time" content="2021-01-13T23:05:00+09:00" /><meta property="og:site_name" content="임창수" />
-
-  
 
   
   
   <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://cxsu.github.io/images/kubernetes/k8s-triggering.png"/>
 
-<meta name="twitter:title" content="쿠버네티스 레벨 트리거링 및 조정"/>
+<meta name="twitter:title" content="[번역] 쿠버네티스 레벨 트리거링 및 조정"/>
 <meta name="twitter:description" content="James Bowes"/>
 
   
@@ -722,7 +715,7 @@
         
         style="background-image: url('https://cxsu.github.io/images/kubernetes/k8s-triggering.png')"  >
         <div class="post-title">
-          쿠버네티스 레벨 트리거링 및 조정
+          [번역] 쿠버네티스 레벨 트리거링 및 조정
           
           <div class="post-subtitle">
             James Bowes
@@ -932,7 +925,7 @@
 
           
           <a class="older-posts" href="https://cxsu.github.io/posts/shell/cs-visualized-useful-git-commands/">
-            이전 글<br>CS Visualized: 유용한 깃(Git) 명령어
+            이전 글<br>[번역] CS Visualized: 유용한 깃(Git) 명령어
           </a>
           
         </nav>
@@ -961,7 +954,7 @@
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=DRY,dev&amp;url=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;text=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=DRY,dev&amp;url=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;text=%5b%eb%b2%88%ec%97%ad%5d%20%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -992,7 +985,7 @@
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;source=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;title=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95&amp;summary=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;source=https%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f&amp;title=%5b%eb%b2%88%ec%97%ad%5d%20%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95&amp;summary=%5b%eb%b2%88%ec%97%ad%5d%20%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -1016,7 +1009,7 @@
     
     
     <li>
-      <a href="mailto:?subject= - %ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95.&amp;body=%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95%2c%20by%20%0aJames%20Bowes%0a%0ahttps%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - %5b%eb%b2%88%ec%97%ad%5d%20%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95.&amp;body=%5b%eb%b2%88%ec%97%ad%5d%20%ec%bf%a0%eb%b2%84%eb%84%a4%ed%8b%b0%ec%8a%a4%20%eb%a0%88%eb%b2%a8%20%ed%8a%b8%eb%a6%ac%ea%b1%b0%eb%a7%81%20%eb%b0%8f%20%ec%a1%b0%ec%a0%95%2c%20by%20%0aJames%20Bowes%0a%0ahttps%3a%2f%2fcxsu.github.io%2fposts%2fkubernetes%2flevel-triggering-and-reconciliation%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
