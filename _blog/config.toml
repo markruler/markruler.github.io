@@ -1,0 +1,117 @@
+baseURL = "https://cxsu.github.io/"
+DefaultContentLanguage = "ko" # Theme's display language, supports: en, fr, zh, zh-hant
+languageCode = "ko-kr"
+copyright = "2020 Im Changsu"
+enableRobotsTXT = true
+# theme = "diary"
+# googleAnalytics = "60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc"
+
+[author]
+name = "Changsu"
+email = "imcxsu@gmail.com"
+
+# https://gohugo.io/content-management/taxonomies/
+# term = "value"
+[taxonomies]
+tag = "tags"
+category = "categories"
+series = "series"
+# If you do not want Hugo to create any taxonomies, set disableKinds in your site config to the following:
+# disableKinds = ["taxonomy", "term"]
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  # defaultMarkdownHandler = "blackFriday"
+[markup.tableOfContents]
+  ordered = false
+  startLevel = 2
+  endLevel = 4
+[markup.goldmark]
+  [markup.goldmark.extensions]
+    definitionList = true
+    footnote = true
+    linkify = true
+    strikethrough = true
+    table = true
+    taskList = true
+    typographer = true
+  [markup.goldmark.parser]
+    attribute = true
+    autoHeadingID = true
+    autoHeadingIDType = "github"
+  [markup.goldmark.renderer]
+    hardWraps = false
+    unsafe = false
+    xhtml = false
+[markup.blackFriday]
+  hrefTargetBlank = false
+[markup.highlight]
+  codeFences = true
+  guessSyntax = false
+  hl_lines = 0
+  lineNos = false
+  anchorLineNos = false
+  lineAnchors = 1
+  lineNoStart = 1
+  lineNumbersInTable = false
+  noClasses = true
+  # https://xyproto.github.io/splash/docs/longer/all.html
+  # style = "api"
+  style = "dracula" # 메서드명이 초록색이라서 기능을 빨리 파악할 수 있고, 주석과 뚜렷하게 구별되는 코드 색상 
+  # style = "fruity"
+  # style = "monokai"
+  # style = "native"
+  # style = "paraiso-dark"
+  # style = "rrt"
+  # style = "solarized-dark"
+  # style = "solarized-dark256"
+  # style = "vim"
+  tabWidth = 2
+
+[params]
+title = "임창수" # will set 'og:site_name'
+subtitle = "Im Changsu"
+description = "Don't Repeat Yourself!"  # will set 'og:description'
+favicon = "/images/favicon.ico"
+## comment
+comment = true
+enableGitalk = false
+## TOC
+enableTocAutoCollapse = false
+# Twitter Card and Open Graph settings
+enableOpenGraph = true
+enableTwitterCards = true
+images = ["/images/changsu/2020-portrait.png"]
+
+[params.gitalk]
+owner = "cxsu"
+repo = "cxsu.github.io"
+client_id = ""
+client_secret = ""
+
+[params.social.share]
+facebook = true
+twitter = true
+linkedin = true
+email = true
+
+[[menu.main]]
+url = "/about"
+name = "About"
+weight = 1
+[[menu.main]]
+url = "/posts"
+name = "Posts"
+weight = 2
+[[menu.main]]
+url = "/categories"
+name = "Categories"
+weight = 3
+[[menu.main]]
+url = "/tags"
+name = "Tags"
+weight = 4
+[[menu.main]]
+url = "/index.xml"
+name = "RSS Feed"
+weight = 10
