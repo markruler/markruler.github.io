@@ -17,7 +17,7 @@ categories:
 > - [Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)](https://blog.jse.li/posts/torrent/)를 번역한 글입니다.
 > - 저자의 허락을 받고 번역했습니다.
 
-**tl;dr:** The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요?
+**거두절미(tl;dr):** The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요?
 이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트 프로토콜을 구현할 것입니다.
 바로 [소스 코드](https://github.com/veggiedefender/torrent-client/)를 보거나 [마지막 부분](#모두-합치기)으로 넘어갈 수 있습니다.
 

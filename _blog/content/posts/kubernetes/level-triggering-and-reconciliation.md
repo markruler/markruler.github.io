@@ -16,6 +16,8 @@ Categories:
 > - James Bowes([@jrbowes](https://twitter.com/jrbowes))의 [Level Triggering and Reconciliation in Kubernetes](https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d)를 번역한 글입니다.
 > - 저자의 허락을 받고 번역했습니다.
 
+{{< youtube tCht7FvIDdY >}}
+
 # 시스템 프로그래밍 개념으로 보는 쿠버네티스가 클러스터를 관리하는 방법
 
 [쿠버네티스](https://kubernetes.io/)는 현재
