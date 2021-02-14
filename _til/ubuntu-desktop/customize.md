@@ -104,12 +104,19 @@ cat /etc/shells
 # /usr/bin/fish
 ```
 
+- 저의 경우엔 root 계정만 `fish`를 사용하고 일반 사용자 계정은 `bash`를 사용합니다.
+
 ```bash
 echo $SHELL
 # /bin/bash
-chsh --shell /usr/bin/fish
-cat /etc/passwd | grep `cd; pwd`
+# chsh --shell /usr/bin/fish
+
+grep <username> /etc/passwd
 # changsu:x:1000:1000:changsu,,,:/home/changsu:/usr/bin/fish
+
+sudo usermod --shell /bin/bash <username>
+grep <username> /etc/passwd
+# changsu:x:1000:1000:changsu,,,:/home/changsu:/bin/bash
 # >>> 리부트!
 ```
 
