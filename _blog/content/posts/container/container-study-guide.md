@@ -34,6 +34,7 @@ Categories:
   - [리눅스 컨테이너란?](https://www.44bits.io/ko/keyword/linux-container), Daegwon Nacyot Kim
   - [흔들리는 도커(Docker)의 위상: OCI와 CRI 중심으로 재편되는 컨테이너 생태계](https://www.samsungsds.com/kr/insights/docker.html), 김준석
   - [Podman and Buildah for Docker users](https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users/), Red Hat
+  - [Selecting a container runtime for use with Kubernetes](https://joejulian.name/post/kubernetes-container-engine-comparison/), Joe Julian
 - 컨테이너 오케스트레이션
   - [컨테이너 오케스트레이션이란?](https://www.redhat.com/ko/topics/containers/what-is-container-orchestration), Red Hat
 - 네임스페이스
