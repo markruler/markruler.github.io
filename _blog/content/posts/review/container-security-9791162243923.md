@@ -13,7 +13,7 @@ Categories:
   - cloud
 ---
 
-> - 한빛미디어의 지원을 받아 작성되었습니다.
+> 한빛미디어의 지원을 받아 작성되었습니다.
 
 # 거두절미
 
@@ -57,3 +57,10 @@ Categories:
 |controller|제어기|컨트롤러|
 |namespace|이름공간|네임스페이스|
 |multitenancy|다중 입주|멀티테넌시|
+
+# 더 읽을 거리
+
+책이 압축되어 있는 만큼 중간중간 별도의 링크를 남겨 더 읽을 거리를
+제공합니다. 저도 컨테이너 분야를 공부하면서
+[도움되었던 자료들](https://cxsu.github.io/posts/container/container-study-guide/)을
+모으며 번역하고 있습니다. 필요하신 분들에게 도움이 되었으면 좋겠습니다.
