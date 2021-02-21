@@ -2,13 +2,14 @@
 date: 2021-02-21T11:47:00+09:00
 title: "책 <컨테이너 보안>"
 description: "Liz Rice"
-featured_image: "/images/review/container-security.png"
-images: ["/images/review/container-security.png"]
+featured_image: "/images/review/container-security.jpeg"
+images: ["/images/review/container-security.jpeg"]
 socialshare: true
 tags:
   - container
   - kubernetes
   - docker
+  - review
 Categories:
   - cloud
 ---
