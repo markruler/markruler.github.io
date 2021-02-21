@@ -2,7 +2,8 @@
 date: 2020-12-07T00:44:00+09:00
 title: "VIM 에디터 명령어 정리"
 description: "VI/VIM"
-featured_image: "/images/common/vim.png"
+featured_image: "/images/shell/vim.png"
+images: ["/images/shell/vim.jpeg"]
 tags:
   - editor
   - vi
