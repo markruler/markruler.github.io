@@ -7,7 +7,6 @@ images: ["/images/kubernetes/k8s-triggering.png"]
 socialshare: true
 tags:
   - kubernetes
-  - James-Bowes
   - translate
 Categories:
   - cloud

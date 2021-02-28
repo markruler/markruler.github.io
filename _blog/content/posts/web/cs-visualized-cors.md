@@ -8,7 +8,6 @@ socialshare: true
 tags:
   - web
   - security
-  - Lydia-Hallie
   - translate
 Categories:
   - web

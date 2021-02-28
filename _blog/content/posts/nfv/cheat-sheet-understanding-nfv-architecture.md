@@ -8,7 +8,6 @@ tags:
   - virtualization
   - cloud
   - translate
-  - Faisal-Khan
 categories:
   - cloud
 ---

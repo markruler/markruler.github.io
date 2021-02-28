@@ -9,7 +9,6 @@ tags:
   - bittorrent
   - go
   - translate
-  - Jesse-Li
 categories:
   - go
 ---

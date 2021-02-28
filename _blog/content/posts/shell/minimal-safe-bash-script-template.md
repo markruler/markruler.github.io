@@ -7,7 +7,6 @@ images: ["/images/shell/minimal-safe-bash-script-template.png"]
 socialshare: true
 tags:
   - bash
-  - Maciej-Radzikowski
   - translate
 Categories:
   - shell

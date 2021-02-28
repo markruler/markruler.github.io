@@ -7,7 +7,6 @@ images: ["/images/shell/lydia/git-commands-visualized.png"]
 socialshare: true
 tags:
   - git
-  - Lydia-Hallie
   - translate
 Categories:
   - shell
