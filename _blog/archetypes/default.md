@@ -5,7 +5,7 @@ description: ""
 # images needed for showing Twitter Card
 images: []
 # featured_image needed for showing list
-featured_image: "/images/cxsu-default.png"
+featured_image: "/images/markruler-default.png"
 socialshare: true
 series: []
 categories: []

@@ -5,7 +5,7 @@
 # git init
 # git submodule add https://github.com/AmazingRise/hugo-theme-diary.git themes/diary
 # git submodule update # git submodule update --remote --merge
-# git remote add hub https://github.com/cxsu/cxsu.github.io.git
+# git remote add hub https://github.com/markruler/markruler.github.io.git
 
 # If a command fails then the deploy stops
 set -e

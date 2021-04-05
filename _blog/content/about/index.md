@@ -3,7 +3,7 @@
 ## Im Changsu
 
 - Email: imcxsu@gmail.com
-- GitHub: [cxsu](https://github.com/cxsu)
+- GitHub: [markruler](https://github.com/markruler)
 
 ![2020-portrait](/images/changsu/2020-portrait.png)
 
