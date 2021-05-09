@@ -1,4 +1,4 @@
-# 나만의 우분투 데스크탑 설정
+# 우분투 데스크탑 설정
 
 ```bash
 cat /etc/debian_verison
@@ -48,21 +48,19 @@ watch -d -n 1 nvidia-smi
 
 ## Background
 
-- https://unsplash.com/photos/k5Vj3gx4vHE
+- [Unsplash](https://unsplash.com/photos/k5Vj3gx4vHE)
 
 ## terminal 투명도 설정
 
-![terminal-transparent](../static/images/terminal-transparent.png)
+![terminal-transparent](../images/setup/terminal-transparent.png)
 
-## VS Code 설치
-
-> https://gist.github.com/philoskim/a79440bd51ae40f04a4d7cafa472caf1
+## VS Code [설치](https://gist.github.com/philoskim/a79440bd51ae40f04a4d7cafa472caf1)
 
 snap으로 설치할 경우 한글이 입력되지 않습니다.
 Slack 등 다른 애플리케이션도 snap으로 설치하면 마찬가지로 한영 전환(`Shift`+`Space`)이 안 됩니다.
 (저는 Slack을 우분투 소프트웨어 센터에서 설치했는데 snap을 통해 설치되나 보네요)
 
-![remove-slack](../static/images/remove-slack.png)
+![remove-slack](../images/setup/remove-slack.png)
 
 - Slack도 [홈페이지에서 직접 다운로드](https://slack.com/intl/en-kr/downloads/linux)하시면 됩니다.
 
@@ -120,7 +118,7 @@ grep <username> /etc/passwd
 # >>> 리부트!
 ```
 
-- zsh: 플러그인 설치(https://github.com/zsh-users/zsh-autosuggestions)
+- zsh: 플러그인 [설치](https://github.com/zsh-users/zsh-autosuggestions)
 
 ```bash
 sudo apt-get install zsh
@@ -172,7 +170,7 @@ gsettings set org.gnome.shell.extensions.dash-to-dock force-straight-corner fals
 dconf reset -f /org/gnome/shell/extensions/dash-to-dock/
 ```
 
-![bottom-dock](../static/images/bottom-dock.png)
+![bottom-dock](../images/setup/bottom-dock.png)
 
 - dock에 있는 앱들을 `Super`+`숫자` 조합으로 선택할 수 있습니다.
 
@@ -250,8 +248,7 @@ sudo nordvpn rate # Rate your last connection quality (1-5)
 
 ## 안전한 브라우징을 위한 Tor 브라우저 설치
 
-- TOR (The Onion Route)
-- https://www.torproject.org/download/
+- [TOR](https://www.torproject.org/download/) (The Onion Route)
 
 ```bash
 wget https://www.torproject.org/dist/torbrowser/10.0.10/tor-browser-linux64-10.0.10_en-US.tar.xz \
@@ -265,11 +262,11 @@ cd /tmp/tor/
 
 - `Super`를 눌러 애플리케이션 검색('tor') 후 실행합니다.
 
-![gnome-activities-search-tor](../static/images/gnome-activities-search-tor.png)
+![gnome-activities-search-tor](../images/setup/gnome-activities-search-tor.png)
 
 ## 무료로 음악을 들을 수 있는 Spotify
 
-- https://www.spotify.com/us/download/linux/
+- [다운로드](https://www.spotify.com/us/download/linux/)
 
 ## 블로깅을 위한 hugo 다운로드
 
@@ -279,8 +276,8 @@ sudo apt-get install hugo
 
 ## 윈도우 앱을 위한 `Wine`
 
-- https://www.winehq.org/
-- https://wine.htmlvalidator.com/install-wine-on-ubuntu-20.04.html
+- [홈페이지](https://www.winehq.org/)
+- [설치](https://wine.htmlvalidator.com/install-wine-on-ubuntu-20.04.html)
 
 ```bash
 dpkg --print-architecture
@@ -329,7 +326,7 @@ sudo apt install -y virtualbox
 
 ## provisioning 도구 Vagrant
 
-- https://www.vagrantup.com/downloads
+- [다운로드](https://www.vagrantup.com/downloads)
 
 ```bash
 cd /tmp
