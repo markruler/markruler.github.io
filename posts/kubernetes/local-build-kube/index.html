@@ -22,10 +22,10 @@
   <meta property="og:title" content="쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기" />
 <meta property="og:description" content="Github/kubernetes" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/kubernetes/local-build-kube/" /><meta property="og:image" content="https://markruler.github.io/images/changsu/2020-portrait.png"/><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-10-11T14:48:00&#43;09:00" />
-<meta property="article:modified_time" content="2020-10-11T14:48:00&#43;09:00" /><meta property="og:site_name" content="임창수 블로그" />
-
+<meta property="og:url" content="https://markruler.github.io/posts/kubernetes/local-build-kube/" />
+<meta property="og:image" content="https://markruler.github.io/images/changsu/2020-portrait.png"/>
+<meta property="article:published_time" content="2020-10-11T14:48:00+09:00" />
+<meta property="article:modified_time" content="2020-10-11T14:48:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
   
 
@@ -70,7 +70,7 @@
   
   
   
-  <link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.491e312aaad513b8dacdd57fede5af851fca9c882ef5aa52c0ff44e4d200ddbb.css" integrity="sha256-SR4xKqrVE7jazdV/7eWvhR/KnIgu9apSwP9E5NIA3bs=" media="screen">
+  <link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.4c4033ff4494b2f0a0c5e7c899105f5abe76b2f05e54a45b5044a3bf6016c74c.css" integrity="sha256-TEAz/0SUsvCgxefImRBfWr52svBeVKRbUESjv2AWx0w=" media="screen">
   
 
   <script src="https://markruler.github.io//js/loadCSS.js"></script>
@@ -892,7 +892,7 @@ kube::golang::place_bins
 <li>참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.</li>
 </ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Build binaries targets specified</span>
-<span style="color:#6272a4">#</span>
+#
 <span style="color:#6272a4"># Input:</span>
 <span style="color:#6272a4">#   $@ - targets and go flags.  If no targets are set then all binaries targets</span>
 <span style="color:#6272a4">#     are built.</span>
@@ -904,7 +904,7 @@ kube::golang::build_binaries<span style="color:#ff79c6">()</span> <span style="c
 
 <span style="color:#6272a4"># This will take binaries from $GOPATH/bin and copy them to the appropriate</span>
 <span style="color:#6272a4"># place in ${KUBE_OUTPUT_BINDIR}</span>
-<span style="color:#6272a4">#</span>
+#
 <span style="color:#6272a4"># Ideally this wouldn&#39;t be necessary and we could just set GOBIN to</span>
 <span style="color:#6272a4"># KUBE_OUTPUT_BINDIR but that won&#39;t work in the face of cross compilation.  &#39;go</span>
 <span style="color:#6272a4"># install&#39; will place binaries that match the host platform directly in $GOBIN</span>
