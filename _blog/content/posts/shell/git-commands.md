@@ -172,16 +172,16 @@ Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 upstream이라는 용어는 헷갈릴 수 있다.
 오픈 소스 프로젝트에서 보통 위와 같이 원본 저장소를 `upstream`이라고 부르고
 그것을 fork한 저장소를 `origin`,
-upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
+upstream에서 fetch한 로컬 환경을 `local`이라고 부른다.
 아래 명령어는 지정한 `upstream` 브랜치로 push하도록 한다.
-
-잠깐. fork한 `origin` 저장소가 아니라 `upstream`으로 push한다?
 
 ```bash
 $ git push --set-upstream origin feature/test-upstream
 # push 후
 Branch 'feature/test-upstream' set up to track remote branch 'feature/test-upstream' from 'origin'.
 ```
+
+잠깐. fork한 `origin` 저장소가 아니라 `upstream`으로 push한다?
 
 사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
 흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어다.
@@ -192,7 +192,7 @@ downstream은 그 반대이다.
 여기서 중요한 점은 Git에서 절대적인 upstream/downstream이 없다는 것이다.
 Git은 DVCS(Distributed Version Control System)다.
 다시 말해서 origin이 upstream일 수 있고, upstream은 또 다른 저장소의 downstream일 수 있다.
-Triangular Workflow는 하나의 효과적인 방식일 뿐이다.
+Triangular Workflow는 하나의 효과적인 방식이며, 해당 워크플로에서 `upstream`이라는 브랜치명을 사용하는 것뿐이다.
 
 ## branch
 
