@@ -15,6 +15,8 @@
 ```bash
 # Debian
 sudo apt-get install hugo
+# Fedora
+sudo dnf install hugo
 ```
 
 ### 실행
@@ -30,11 +32,15 @@ cd _blog
 ### Bash
 
 ```bash
-./bash.deploy.sh
+cd _blog
+
+./scripts/deploy.sh
 ```
 
 ### PowerShell
 
 ```ps1
-./windows.deploy.ps1
+cd _blog
+
+./scripts/windows.deploy.ps1
 ```
