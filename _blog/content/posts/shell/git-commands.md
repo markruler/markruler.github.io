@@ -120,13 +120,13 @@ $ git add src/
 
 ### refs (.git/)
 
-- [gitrevisions](https://git-scm.com/docs/gitrevisions) - git-scm
+- [gitrevisions](https://git-scm.com/docs/gitrevisions#_specifying_revisions) - git-scm
 - [Refs and the Reflog](https://www.atlassian.com/git/tutorials/refs-and-the-reflog) - Atlassian
 
 | 이름       | 설명                                          | 예시 파일 내용                                                                                                   |
 | ---------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| HEAD       | 현재 로컬 브랜치에 대한 포인터                | ref: refs/heads/main                                                                                             |
-| ORIG_HEAD  | HEAD의 이전 커밋을 백업                       | ec2a7f1e03bca5485627b8af6b76129aa3f49b8a                                                                         |
+| HEAD       | 현재 브랜치의 마지막 커밋 참조                | ref: refs/heads/main                                                                                             |
+| ORIG_HEAD  | HEAD의 직전 커밋을 백업 참조                       | ec2a7f1e03bca5485627b8af6b76129aa3f49b8a                                                                         |
 | FETCH_HEAD | 가장 최근에 fetch한 브랜치와 그 브랜치의 HEAD | 2a6464fe3e243a15ceeef19c32e930374481e87f not-for-merge branch 'main' of github.com:markruler/markruler.github.io |
 | MERGE_HEAD, CHERRY_PICK_HEAD, REVERT_HEAD, BISECT_HEAD, ...| - | - |
 
