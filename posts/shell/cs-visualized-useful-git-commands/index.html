@@ -950,18 +950,19 @@
 같다는 말도 공감할 거에요. 저는 항상 Git으로 작업할 때 어떤 일이 일어날지
 머릿속으로 그려보는 것이 꽤 유용하다는 것을 알았습니다. 특정 명령을 실행할
 때 브랜치는 어떻게 상호작용하고, 그것이 히스토리에 어떤 영향을 미칠까요?
-<code>master</code>에서 하드 리셋하고 <code>origin</code> 리포지터리로 <code>force push</code>한 후,
-<code>.git</code> 폴더를 <code>rimraf</code>하면 왜 동료가 아우성칠까요?</p>
-<p>저는 가장 많이 쓰이면서 유용한 명령을 시각화하는 것이 완벽한 유즈 케이스라고 생각했습니다! 🥳
-제가 다룰 명령어들은 동작을 바꾸기 위해 사용할 수 있는 전달 인자가 있습니다.
-여기 예시에서는 (수많은) 설정 옵션 없이 명령어의 기본 동작에 대해 설명하겠습니다. 😄</p>
+<code>master</code>에서 <code>reset --hard</code> 하고 <code>origin</code> 리포지터리로 <code>force push</code>한 후,
+<code>.git</code> 폴더를 <code>rimraf</code>하면 왜 저의 팀원은 소리를 지를까요?</p>
+<p>* <code>rimraf</code> == <code>rm -rf</code>: 묻지도 따지지도 않고 전부 지워버린다.</p>
+<p>저는 가장 많이 쓰이면서 유용한 명령어들을 시각화하는 것이 완벽한 유즈 케이스라고 생각했습니다! 🥳
+명령어들은 동작(behavior)을 바꾸기 위해 사용할 수 있는 전달 인자들(arguments)이 있지만,
+제가 다룰 예시에서는 (수많은) 설정 옵션 없이 명령어의 기본 동작에 대해 설명하겠습니다. 😄</p>
 <hr>
 <h1 id="병합-merge">병합 (Merge)</h1>
-<p>브랜치가 여러 개 있으면 분리된 수정 사항을 관리하기가 매우 편리합니다.
-그리고 승인되지 않았거나 잘못된 수정 사항을 실수로 운영 환경에 푸시하지
-않도록 하는 데에도 편리합니다. 수정 사항이 승인됐다면 운영 환경
+<p>브랜치가 여러 개 있으면 새로운 변경 사항들을 분리해서 관리하기 편합니다.
+승인되지 않았거나 잘못된 변경 사항을 실수로 운영 환경에 푸시하지
+않도록 하는 데에도 편합니다. 변경 사항이 승인됐다면 운영 환경
 브랜치에 적용해야 하죠!</p>
-<p>한 브랜치에서 다른 브랜치로 수정 사항을 옮기는 한 가지 방법은
+<p>한 브랜치에서 다른 브랜치로 변경 사항을 옮기는 한 가지 방법은
 <code>git merge</code>를 실행하는 것입니다! Git이 수행할 수 있는 병합에는
 <strong>fast-forward</strong>, <strong>no-fast-forward</strong>라는 두 가지 유형이 있습니다. 🐢</p>
 <p>지금 당장은 무슨 말인지 이해되지 않으실테니 차이점을 살펴보도록 하겠습니다!</p>
@@ -971,45 +972,43 @@
 옵션인 fast-forward부터 시도하려 할 것입니다! 이 방식은 새로운
 커밋을 생성하지 않고 병합하려는 브랜치의 커밋을 그대로 병합합니다. 🥳</p>
 <p><img src="/images/shell/lydia/merge-ff.gif" alt="merge-ff"></p>
-<p>Perfect! 우리는 이제 <code>dev</code> 브랜치에서 만든 모든 수정 사항을
+<p>Perfect! 우리는 이제 <code>dev</code> 브랜치에서 만든 모든 변경 사항들을
 <code>master</code> 브랜치에서도 접근할 수 있게 되었습니다. 그럼
 <strong>no-fast-forward</strong>는 뭘까요?</p>
 <h2 id="no-fast-foward---no-ff">No-fast-foward (<code>--no-ff</code>)</h2>
 <p>병합하려는 브랜치와 비교해 현재 브랜치에 추가 커밋이 없는 경우가 좋겠지만
-안타깝게도 그런 경우는 거의 없습니다! 병합할 브랜치에 없는 수정 사항을 현재 브랜치에 커밋한 경우
+안타깝게도 그런 경우는 거의 없습니다! 병합할 브랜치에 없는 변경 사항을 현재 브랜치에 커밋한 경우
 Git은 <em>no-fast-forward</em> 병합을 수행합니다.</p>
 <p>Git은 no-fast-forward을 사용해 현재 브랜치에 새로운 <em>병합 커밋</em>을 생성합니다.
 상위 커밋은 현재 브랜치와 병합하려는 브랜치 모두를 가리킵니다!</p>
 <p><img src="/images/shell/lydia/merge-no-ff.gif" alt="merge-no-ff"></p>
 <p>별 거 아니지만 완벽해요! 🎉
-이제 <code>master</code> 브랜치는 <code>dev</code> 브랜치에서 수정한 내용을 모두 포함합니다.</p>
+이제 <code>master</code> 브랜치는 <code>dev</code> 브랜치에서 변경한 내용을 모두 포함합니다.</p>
 <h2 id="병합-충돌-merge-conflicts">병합 충돌 (Merge conflicts)</h2>
-<p>어떻게 브랜치를 병합하고 파일에 수정 사항을 추가할지 Git이 잘 결정할테지만,
+<p>어떻게 브랜치를 병합하고 파일에 변경 사항을 추가할지 Git이 잘 결정할테지만,
 Git이 항상 혼자 결정할 수는 없습니다. 🙂 병합하려는 두 개의 브랜치가 똑같은
-파일, 똑같은 줄에 수정 사항이 있거나 한 브랜치가 다른 브랜치에서 수정한 파일을
-삭제하는 경우 등 문제가 발생할 수 있습니다.</p>
+파일, 똑같은 줄에 변경 사항이 있거나 한 브랜치가 다른 브랜치에서 변경한 파일을
+삭제하는 경우 등의 문제가 발생할 수 있습니다.</p>
 <p>이런 경우 Git이 두 가지 중 어떤 내용을 유지하고 싶은지 물어볼 것입니다!
 두 브랜치 모두에서 <code>README.md</code>의 첫번째 줄을 편집했다고 가정해 보겠습니다.</p>
 <p><img src="/images/shell/lydia/readme.png" alt="readme"></p>
 <p><code>dev</code>를 <code>master</code>로 병합하려는 경우 병합 충돌이 발생합니다.
 그럼 제목을 <code>Hello!</code> 또는 <code>Hey!</code> 중 어떤 걸로 지정하실래요?</p>
 <p>브랜치를 병합하려고 하면 Git은 충돌이 발생한 위치를 보여줄 겁니다.
-버리고 싶은 수정 사항을 수동으로 제거하고 저장한 후,
-수정된 파일을 다시 추가하면 커밋할 수 있게 됩니다. 🥳</p>
+버리고 싶은 변경 사항을 수동으로 제거하고 저장한 후,
+변경된 파일을 다시 추가하면 커밋할 수 있게 됩니다. 🥳</p>
 <p><img src="/images/shell/lydia/merge-conflict.gif" alt="merge-conflict"></p>
 <p>Yay! 병합 충돌은 정말 번거롭지만 꼭 필요한 과정입니다.
-Git은 단순히 우리가 유지하고자 하는 수정 사항을 <em>가정</em>해서는 안 됩니다.</p>
+Git은 단순히 우리가 유지하고자 하는 변경 사항을 <em>가정</em>해서는 안 됩니다.</p>
 <hr>
 <h1 id="리베이스-rebase">리베이스 (Rebase)</h1>
-<p>방금 <code>git merge</code>를 수행하여 한 브랜치에서 다른 브랜치로 수정 사항을 적용하는 방법을
+<p>방금 <code>git merge</code>를 수행하여 한 브랜치에서 다른 브랜치로 변경 사항을 적용하는 방법을
 보았습니다. 여기에 또 한 가지 방법이 있는데 바로 <code>git rebase</code>입니다.</p>
-<p><code>git rebase</code>는 현재 브랜치에서 커밋을 복사하고
-복사된 커밋을 지정한 브랜치 맨 위에 놓습니다.</p>
+<p><code>git rebase</code>는 현재 브랜치에서 커밋을 복사하고 복사된 커밋을 지정한 브랜치 맨 위에 놓습니다.</p>
 <p><img src="/images/shell/lydia/rebase.gif" alt="rebase"></p>
-<p>Perfect! 이제 <code>master</code> 브랜치의 모든 수정 사항을
-<code>dev</code> 브랜치에서도 사용할 수 있게 되었습니다! 🎊</p>
+<p>Perfect! 이제 <code>master</code> 브랜치의 모든 변경 사항을 <code>dev</code> 브랜치에서도 사용할 수 있게 되었습니다! 🎊</p>
 <p><code>git merge</code>와 비교할 때 큰 차이점은 Git이 유지할 파일과 유지하지 않을 파일을 물어보지
-않았는다는 거에요. 리베이스 하는 브랜치에는 항상 최근 수정 사항이 적용됩니다!
+않았는다는 거에요. 리베이스 하는 브랜치에는 항상 최근 변경 사항이 적용됩니다!
 이러한 방식으로 병합 충돌은 발생하지 않고 Git 히스토리를 선형으로 유지하죠.</p>
 <p>이 예에서는 <code>master</code> 브랜치에 대한 리베이스를 보여 줍니다.
 그러나 더 큰 프로젝트에서는 대개 이렇게 하고 싶지 않을 거에요.
@@ -1038,53 +1037,53 @@ Git은 단순히 우리가 유지하고자 하는 수정 사항을 <em>가정</e
 현재 작업 중인 브랜치라도 말이죠!</p>
 <hr>
 <h1 id="리셋-reset">리셋 (Reset)</h1>
-<p>나중에 원치 않는 수정 사항을 커밋할 수도 있어요.
+<p>나중에 원치 않는 변경 사항을 커밋할 수도 있습니다.
 <code>WIP</code><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 커밋이거나 버그가 발견된 커밋일 수도 있죠! 🐛
 그런 경우에 <code>git reset</code> 명령어를 사용할 수 있습니다.</p>
 <p><code>git reset</code>은 스테이징<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>된 파일을 제거하거나
 <code>HEAD</code>가 가리키는 곳을 제어할 수 있습니다.</p>
 <h2 id="소프트-리셋---soft">소프트 리셋 (<code>--soft</code>)</h2>
 <p><em>소프트 리셋</em>은 <code>HEAD</code>를 지정된 커밋으로 옮기거나 해당 커밋의 인덱스를 <code>HEAD</code>와 비교합니다.
-나중에 커밋된 수정 사항들을 제거하지 않고서 말이죠!</p>
+나중에 커밋된 변경 사항들을 제거하지 않고서 말이죠!</p>
 <p><code>style.css</code> 파일을 추가한 <code>9e78i</code> 커밋과
 <code>index.js</code> 파일을 추가한 <code>035cc</code> 커밋을 유지하고 싶지 않다고 가정해 보겠습니다.
 하지만 새로 추가된 <code>style.css</code>와 <code>index.js</code> 파일은 유지하고 싶어요!
 그럼 소프트 리셋을 위한 완벽한 유즈 케이스입니다.</p>
 <p><img src="/images/shell/lydia/reset-soft.gif" alt="reset-soft"></p>
-<p><code>git status</code>를 입력하면 아직 이전 커밋에서 수정한 모든 내용에 접근할 수 있다는 것을 알 수 있습니다.
-이렇게 파일의 내용을 수정하고 또 다시 커밋할 수 있으니 좋은 방법입니다!</p>
+<p><code>git status</code>를 입력하면 아직 이전 커밋에서 변경한 모든 내용에 접근할 수 있다는 것을 알 수 있습니다.
+이렇게 파일의 내용을 변경하고 또 다시 커밋할 수 있으니 좋은 방법입니다!</p>
 <h2 id="하드-리셋---hard">하드 리셋 (<code>--hard</code>)</h2>
-<p>때로는 특정 커밋에 의해 반영된 수정 사항을 유지하고 싶지 않을 겁니다.
-그럼 소프트 리셋과 달리 더 이상 수정 사항에 접근할 필요가 없겠죠.
+<p>때로는 특정 커밋에 의해 반영된 변경 사항을 유지하고 싶지 않을 겁니다.
+그럼 소프트 리셋과 달리 더 이상 변경 사항에 접근할 필요가 없겠죠.
 Git은 지정된 커밋의 상태로 간단하게 리셋합니다.
-여기에는 워킹 디렉토리와 스테이징된 파일의 수정 사항도 포함됩니다! 💣</p>
+여기에는 워킹 디렉토리와 스테이징된 파일의 변경 사항도 포함됩니다! 💣</p>
 <p><img src="/images/shell/lydia/reset-hard.gif" alt="reset-hard"></p>
-<p>Git은 <code>9e78i</code>와 <code>035cc</code> 커밋에 반영된 수정 사항을 버리고
+<p>Git은 <code>9e78i</code>와 <code>035cc</code> 커밋에 반영된 변경 사항을 버리고
 <code>ec5be</code>커밋으로 다시 상태를 리셋했습니다.</p>
 <hr>
 <h1 id="리버트-revert">리버트 (Revert)</h1>
-<p>수정 사항을 되돌리는 또 다른 방법은 <code>git revert</code> 하는 것입니다.
-특정 커밋을 리버트하면 <em>새로운 커밋</em>이 생성되고 여기에는 리버트된 수정 사항이 포함됩니다!</p>
+<p>변경 사항을 되돌리는 또 다른 방법은 <code>git revert</code> 하는 것입니다.
+특정 커밋을 리버트하면 <em>새로운 커밋</em>이 생성되고 여기에는 리버트된 변경 사항이 포함됩니다!</p>
 <p><code>ec5be</code> 커밋으로 <code>index.js</code> 파일이 추가됐다고 가정해 보겠습니다.
-그리고 나중에서야 이 수정 사항이 더 이상 필요없다는 것을 느끼죠!
+그리고 나중에서야 이 변경 사항이 더 이상 필요없다는 것을 느끼죠!
 이제 <code>ec5be</code> 커밋을 되돌려보겠습니다.</p>
 <p><img src="/images/shell/lydia/revert.gif" alt="revert"></p>
-<p>Perfect! <code>9e78i</code> 커밋은 <code>ec5be</code> 커밋에 반영된 수정 사항을 제거했습니다.
+<p>Perfect! <code>9e78i</code> 커밋은 <code>ec5be</code> 커밋에 반영된 변경 사항을 제거했습니다.
 <code>git revert</code>를 실행하면 브랜치의 히스토리를 수정하지 않고 특정 커밋을 되돌릴 수 있습니다.</p>
 <hr>
 <h1 id="체리-피킹-cherry-pick">체리 피킹 (Cherry-pick)</h1>
-<p>특정 브랜치에 우리에게 필요한 수정 사항을 가진 커밋이 있다면,
+<p>특정 브랜치에 우리에게 필요한 변경 사항을 가진 커밋이 있다면,
 <code>cherry-pick</code> 명령어를 사용할 수 있습니다! 커밋을 <code>cherry-pick</code>하면
-<code>cherry-pick</code> 커밋에 담긴 수정 사항을 포함해 현재 브랜치에 새로운 커밋을 만듭니다.</p>
-<p><code>dev</code> 브랜치의 <code>76d12</code> 커밋이 <code>master</code> 브랜치에서 원하는 수정 사항을
+<code>cherry-pick</code> 커밋에 담긴 변경 사항을 포함해 현재 브랜치에 새로운 커밋을 만듭니다.</p>
+<p><code>dev</code> 브랜치의 <code>76d12</code> 커밋이 <code>master</code> 브랜치에서 원하는 변경 사항을
 <code>index.js</code> 파일에 추가했다고 가정해 보세요. 그럼 <em>다른 커밋</em>들은 필요없고
 단 한 가지 커밋만 있으면 됩니다!</p>
 <p><img src="/images/shell/lydia/cherry-pick.gif" alt="cherry-pick"></p>
 <hr>
 <h1 id="페치-fetch">페치 (Fetch)</h1>
 <p>현재 브랜치에 없는 커밋이 원격 브랜치에 생길 수 있습니다!
-예를 들어 다른 브랜치가 병합된다거나 동료가 빠르게 수정 사항을 푸시하는 경우 등이 있죠.</p>
-<p><code>git fetch</code>를 실행해서 원격 브랜치의 수정 사항을 로컬로 가져올 수 있습니다!
+예를 들어 다른 브랜치가 병합된다거나 동료가 빠르게 변경 사항을 푸시하는 경우 등이 있죠.</p>
+<p><code>git fetch</code>를 실행해서 원격 브랜치의 변경 사항을 로컬로 가져올 수 있습니다!
 <code>fetch</code>는 단순히 새로운 데이터를 다운로드 하는 것일 뿐이지, 로컬 브랜치에 영향을 끼치지는
 않습니다.</p>
 <p><img src="/images/shell/lydia/git-fetch.gif" alt="git-fetch"></p>
@@ -1092,16 +1091,16 @@ Git은 지정된 커밋의 상태로 간단하게 리셋합니다.
 <h1 id="풀-pull">풀 (Pull)</h1>
 <p>브랜치의 원격 데이터를 가져오기 위해서는 <code>git fetch</code>도 유용하지만 <code>git pull</code>도 좋습니다.
 <code>git pull</code>은 <code>git fetch</code>와 <code>git merge</code> 두 가지 명령을 합친 것입니다.
-<code>origin</code> 저장소에서 수정 사항을 풀(pull)할 때 먼저 <code>git fetch</code> 명령처럼
-모든 데이터를 가져온 후 최신 수정 사항을 자동으로 로컬 브랜치에 병합합니다.</p>
+<code>origin</code> 저장소에서 변경 사항을 풀(pull)할 때 먼저 <code>git fetch</code> 명령처럼
+모든 데이터를 가져온 후 최신 변경 사항을 자동으로 로컬 브랜치에 병합합니다.</p>
 <p><img src="/images/shell/lydia/git-pull.gif" alt="git-pull"></p>
-<p>Awesome! 이제 원격 브랜치와 완전히 동기화되었고 최신 수정 사항이 모두 반영되었습니다! 🤩</p>
+<p>Awesome! 이제 원격 브랜치와 완전히 동기화되었고 최신 변경 사항이 모두 반영되었습니다! 🤩</p>
 <hr>
 <h1 id="레프-로그-reflog">레프-로그 (Reflog)</h1>
 <p>모든 사람은 실수를 합니다. 지극히 정상이에요!
 때로는 Git 저장소를 망쳐버려서 완전히 삭제하고 싶은 충동을 느낄 수도 있습니다.</p>
 <p><code>git reflog</code>는 실행된 작업 로그를 모두 표시하는 데 정말 유용한 명령입니다!
-여기에는 병합, 리셋, 리버트 등 기본적으로 브랜치에 대한 모든 수정 사항이 포함됩니다.</p>
+여기에는 병합, 리셋, 리버트 등 기본적으로 브랜치에 대한 모든 변경 사항이 포함됩니다.</p>
 <p><img src="/images/shell/lydia/git-reflog.gif" alt="git-reflog"></p>
 <p>실수를 했다면 <code>reflog</code>가 주는 정보를 바탕으로 <code>HEAD</code>를 리셋해서 쉽게 되돌릴 수 있습니다!</p>
 <p><code>origin</code> 저장소의 브랜치를 병합하지 않고 싶다고 가정해보세요.

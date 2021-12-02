@@ -160,7 +160,7 @@ Branch 'test-rebase' set up to track remote branch 'test-rebase' from 'origin'.
 # 3. rebase
 $ git rebase
 First, rewinding head to replay your work on top of it...
-Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
+Fast-forwarded test-rebase to refs/remotes/origin/test-rebase.
 ```
 
 ### upstream
