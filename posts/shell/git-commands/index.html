@@ -857,6 +857,32 @@
 						
 						
 						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#squash%ec%99%80-fixup" onclick="onNavClick(`#squash와-fixup-nav`)" id="squash와-fixup-nav">
+									squash와 fixup
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
 						
 							<li>
 								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
@@ -2282,6 +2308,32 @@
 						
 						
 						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#squash%ec%99%80-fixup" onclick="onNavClick(`#squash와-fixup-nav`)" id="squash와-fixup-nav">
+									squash와 fixup
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
 						
 							<li>
 								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
@@ -3091,7 +3143,11 @@
 <li><a href="#commit-1">commit</a></li>
 <li><a href="#merge">merge</a></li>
 <li><a href="#pull">pull</a></li>
-<li><a href="#rebase">rebase</a></li>
+<li><a href="#rebase">rebase</a>
+<ul>
+<li><a href="#squash%EC%99%80-fixup">squash와 fixup</a></li>
+</ul>
+</li>
 <li><a href="#cherry-pick">cherry-pick</a></li>
 <li><a href="#stash">stash</a>
 <ul>
@@ -3358,7 +3414,7 @@ tree 객체 하나는 항목을 여러 개 가질 수 있다.
 그리고 그 항목에는 blob 객체나 하위 tree 객체를 가리키는 SHA-1 포인터, 파일 모드, 객체 타입, 파일 이름이 들어 있다. <code>write-tree</code> 명령으로 생성한다.</p>
 <h3 id="blob-binary-large-object">blob (binary large object)</h3>
 <p>blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
-blob은 파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.</p>
+파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
 <span style="color:#bd93f9">100644</span> blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
 </code></pre></div><p>여기서 blob의 파일 모드는 보통의 파일을 나타내는 <code>100644</code>,
@@ -3385,33 +3441,36 @@ config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 <ul>
 <li>macOS에서는 Local 설정보다 Keychain이 우선하나? TODO</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># $HOME/.gitconfig</span>
-[user]
-  email = imcxsu@gmail.com
-  name = Changsu Im
-[core]
-  editor = vim
-[diff]
-  tool = vimdiff
-[difftool]
-  prompt = <span style="color:#ff79c6">false</span>
-  <span style="color:#6272a4"># Be able to abort all diffs with `:cq` or `:qa!`</span>
-  <span style="color:#6272a4"># `:cq` to quit without saving and make Vim return non-zero error (i.e. exit with error)</span>
-  <span style="color:#6272a4"># `:qa` to quit all (short for :quitall)</span>
-  trustExitCode = <span style="color:#ff79c6">true</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-ini" data-lang="ini"><span style="color:#6272a4"># $HOME/.gitconfig</span>
+<span style="color:#ff79c6">[user]</span>
+  <span style="color:#50fa7b">email</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">imcxsu@gmail.com
+</span><span style="color:#f1fa8c">  name = Changsu Im</span>
+<span style="color:#ff79c6">[core]</span>
+  <span style="color:#50fa7b">editor</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">vim</span>
+<span style="color:#ff79c6">[diff]</span>
+  <span style="color:#50fa7b">tool</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">vimdiff</span>
+<span style="color:#ff79c6">[difftool]</span>
+  <span style="color:#50fa7b">prompt</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">false
+</span><span style="color:#f1fa8c">  # Be able to abort all diffs with `:cq` or `:qa!`
+</span><span style="color:#f1fa8c">  # `:cq` to quit without saving and make Vim return non-zero error (i.e. exit with error)
+</span><span style="color:#f1fa8c">  # `:qa` to quit all (short for :quitall)
+</span><span style="color:#f1fa8c">  trustExitCode = true</span>
+<span style="color:#ff79c6">[alias]</span>
+  <span style="color:#50fa7b">fix</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;!git commit --fixup $(git log -n 20 --pretty=format:&#39;%Cred%h - %s&#39; --graph --abbrev-commit | fzf --reverse | awk &#39;{print $2}&#39;)&#34;
+</span><span style="color:#f1fa8c">  lg = log --graph --format=format:&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)    +++ %d%C(reset)%n&#39;L&#39;          %C(white)%s %C(dim white)- %an&#39; --all</span>
 
 <span style="color:#6272a4"># .git/config</span>
-[core]
-  repositoryformatversion = <span style="color:#bd93f9">0</span>
-  filemode = <span style="color:#ff79c6">true</span>
-  bare = <span style="color:#ff79c6">false</span>
-  logallrefupdates = <span style="color:#ff79c6">true</span>
-[remote <span style="color:#f1fa8c">&#34;origin&#34;</span>]
-  url = git@github.com:okbut/corporate-library-api.git
-  fetch = +refs/heads/<span style="color:#ff79c6">*:refs/remotes/origin/*</span>
-[branch <span style="color:#f1fa8c">&#34;main&#34;</span>]
-  remote = origin
-  merge = refs/heads/main
+<span style="color:#ff79c6">[core]</span>
+  <span style="color:#50fa7b">repositoryformatversion</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">0
+</span><span style="color:#f1fa8c">  filemode = true
+</span><span style="color:#f1fa8c">  bare = false
+</span><span style="color:#f1fa8c">  logallrefupdates = true</span>
+<span style="color:#ff79c6">[remote &#34;origin&#34;]</span>
+  <span style="color:#50fa7b">url</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">git@github.com:okbut/corporate-library-api.git
+</span><span style="color:#f1fa8c">  fetch = +refs/heads/*:refs/remotes/origin/*</span>
+<span style="color:#ff79c6">[branch &#34;main&#34;]</span>
+  <span style="color:#50fa7b">remote</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">origin
+</span><span style="color:#f1fa8c">  merge = refs/heads/main</span>
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git config --global user.name Changsu Im
 $ git config --global user.email imcxsu@gmail.com
 
@@ -3796,6 +3855,74 @@ $ git rebase --interactive &lt;commit&gt;^
 <span style="color:#6272a4"># .       create a merge commit using the original merge commit&#39;s</span>
 <span style="color:#6272a4"># .       message (or the oneline, if no original merge commit was</span>
 <span style="color:#6272a4"># .       specified). Use -c &lt;commit&gt; to reword the commit message.</span>
+</code></pre></div><h3 id="squash와-fixup">squash와 fixup</h3>
+<p>squash는 <strong>커밋 메시지를 확인하고 편집한 후</strong> squash and merge한다.
+대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git --no-pager log --oneline
+399e2ef <span style="color:#ff79c6">(</span>HEAD -&gt; squash<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">3</span>
+ea37b52 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+
+<span style="color:#6272a4"># 지금 staged 파일들을 squash 커밋으로 만든다.</span>
+$ git commit --squash ea37b52
+
+<span style="color:#6272a4"># squash 커밋은 대상 커밋 메시지 앞에 &#34;squash!&#34;이 붙는다.</span>
+$ git --no-pager log --oneline
+d927a64 <span style="color:#ff79c6">(</span>HEAD -&gt; squash<span style="color:#ff79c6">)</span> squash! <span style="color:#bd93f9">2</span>
+399e2ef <span style="color:#bd93f9">3</span>
+ea37b52 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+
+<span style="color:#6272a4"># squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.</span>
+$ git rebase -i --autosquash main
+pick ea37b52 <span style="color:#bd93f9">2</span>
+squash d927a64 squash! <span style="color:#bd93f9">2</span>
+pick 399e2ef <span style="color:#bd93f9">3</span>
+
+<span style="color:#ff79c6">[</span>detached HEAD 6f530b5<span style="color:#ff79c6">]</span> <span style="color:#bd93f9">2</span>
+ Date: Mon Jan <span style="color:#bd93f9">17</span> 02:05:58 <span style="color:#bd93f9">2022</span> +0900
+ <span style="color:#bd93f9">2</span> files changed, <span style="color:#bd93f9">0</span> insertions<span style="color:#ff79c6">(</span>+<span style="color:#ff79c6">)</span>, <span style="color:#bd93f9">0</span> deletions<span style="color:#ff79c6">(</span>-<span style="color:#ff79c6">)</span>
+ create mode <span style="color:#bd93f9">100644</span> b
+ create mode <span style="color:#bd93f9">100644</span> d
+Successfully rebased and updated refs/heads/squash.
+
+$ git --no-pager log --oneline
+ea3b05e <span style="color:#ff79c6">(</span>HEAD -&gt; squash<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">3</span> <span style="color:#6272a4"># 이후의 커밋들도 다시 저장한다.</span>
+6f530b5 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+</code></pre></div><p>fixup은 squash와 결과가 동일하지만,
+original 커밋 메시지만 남기고 fixup 커밋의 메시지들은 <strong>자동으로 버린다</strong>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git --no-pager log --oneline
+ffdc929 <span style="color:#ff79c6">(</span>HEAD -&gt; fixup<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">3</span>
+ea53497 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+
+<span style="color:#6272a4"># 지금 staged 파일들을 fixup 커밋으로 만든다.</span>
+$ git commit --fixup ea53497
+
+<span style="color:#6272a4"># fixup 커밋은 대상 커밋 메시지 앞에 &#34;fixup!&#34;이 붙는다.</span>
+$ git --no-pager log --oneline
+202953c <span style="color:#ff79c6">(</span>HEAD -&gt; fixup<span style="color:#ff79c6">)</span> fixup! <span style="color:#bd93f9">2</span>
+ffdc929 <span style="color:#bd93f9">3</span>
+ea53497 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+
+<span style="color:#6272a4"># fixup 커밋들은 자동으로 squash and merge가 된다.</span>
+$ git rebase -i --autosquash main
+pick ea53497 <span style="color:#bd93f9">2</span>
+fixup 202953c fixup! <span style="color:#bd93f9">2</span>
+pick ffdc929 <span style="color:#bd93f9">3</span>
+
+<span style="color:#6272a4"># fixup 커밋의 메시지들은 자동으로 버린다.</span>
+Successfully rebased and updated refs/heads/fixup.
+
+$ git --no-pager log --oneline
+449ed00 <span style="color:#ff79c6">(</span>HEAD -&gt; fixup<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">3</span>
+000a709 <span style="color:#bd93f9">2</span>
+7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-ini" data-lang="ini"><span style="color:#6272a4"># $HOME/.gitconfig</span>
+<span style="color:#ff79c6">[alias]</span>
+  <span style="color:#50fa7b">fix</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;!git commit --fixup $(git log -n 20 --pretty=format:&#39;%Cred%h - %s&#39; --graph --abbrev-commit | fzf --reverse | awk &#39;{print $2}&#39;)&#34;</span>
 </code></pre></div><h2 id="cherry-pick">cherry-pick</h2>
 <p>어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
 <strong>커밋 체크섬은 달라진다</strong>는 것에 유의한다.</p>

@@ -45,6 +45,7 @@ Categories:
   - [merge](#merge)
   - [pull](#pull)
   - [rebase](#rebase)
+    - [squash와 fixup](#squash와-fixup)
   - [cherry-pick](#cherry-pick)
   - [stash](#stash)
     - [How git stash works](#how-git-stash-works)
@@ -307,7 +308,7 @@ tree 객체 하나는 항목을 여러 개 가질 수 있다.
 ### blob (binary large object)
 
 blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
-blob은 파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.
+파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.
 
 ```bash
 $ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
@@ -350,7 +351,7 @@ config 파일은 INI file(`.ini`) 형식이다.
 
 - macOS에서는 Local 설정보다 Keychain이 우선하나? TODO
 
-```yaml
+```ini
 # $HOME/.gitconfig
 [user]
   email = imcxsu@gmail.com
@@ -365,6 +366,9 @@ config 파일은 INI file(`.ini`) 형식이다.
   # `:cq` to quit without saving and make Vim return non-zero error (i.e. exit with error)
   # `:qa` to quit all (short for :quitall)
   trustExitCode = true
+[alias]
+  fix = "!git commit --fixup $(git log -n 20 --pretty=format:'%Cred%h - %s' --graph --abbrev-commit | fzf --reverse | awk '{print $2}')"
+  lg = log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)    +++ %d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all
 
 # .git/config
 [core]
@@ -878,6 +882,86 @@ $ git rebase --interactive <commit>^
 # .       create a merge commit using the original merge commit's
 # .       message (or the oneline, if no original merge commit was
 # .       specified). Use -c <commit> to reword the commit message.
+```
+
+### squash와 fixup
+
+squash는 **커밋 메시지를 확인하고 편집한 후** squash and merge한다.
+대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.
+
+```bash
+$ git --no-pager log --oneline
+399e2ef (HEAD -> squash) 3
+ea37b52 2
+7f1a625 (main) 1
+
+# 지금 staged 파일들을 squash 커밋으로 만든다.
+$ git commit --squash ea37b52
+
+# squash 커밋은 대상 커밋 메시지 앞에 "squash!"이 붙는다.
+$ git --no-pager log --oneline
+d927a64 (HEAD -> squash) squash! 2
+399e2ef 3
+ea37b52 2
+7f1a625 (main) 1
+
+# squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.
+$ git rebase -i --autosquash main
+pick ea37b52 2
+squash d927a64 squash! 2
+pick 399e2ef 3
+
+[detached HEAD 6f530b5] 2
+ Date: Mon Jan 17 02:05:58 2022 +0900
+ 2 files changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 b
+ create mode 100644 d
+Successfully rebased and updated refs/heads/squash.
+
+$ git --no-pager log --oneline
+ea3b05e (HEAD -> squash) 3 # 이후의 커밋들도 다시 저장한다.
+6f530b5 2
+7f1a625 (main) 1
+```
+
+fixup은 squash와 결과가 동일하지만,
+original 커밋 메시지만 남기고 fixup 커밋의 메시지들은 **자동으로 버린다**.
+
+```bash
+$ git --no-pager log --oneline
+ffdc929 (HEAD -> fixup) 3
+ea53497 2
+7f1a625 (main) 1
+
+# 지금 staged 파일들을 fixup 커밋으로 만든다.
+$ git commit --fixup ea53497
+
+# fixup 커밋은 대상 커밋 메시지 앞에 "fixup!"이 붙는다.
+$ git --no-pager log --oneline
+202953c (HEAD -> fixup) fixup! 2
+ffdc929 3
+ea53497 2
+7f1a625 (main) 1
+
+# fixup 커밋들은 자동으로 squash and merge가 된다.
+$ git rebase -i --autosquash main
+pick ea53497 2
+fixup 202953c fixup! 2
+pick ffdc929 3
+
+# fixup 커밋의 메시지들은 자동으로 버린다.
+Successfully rebased and updated refs/heads/fixup.
+
+$ git --no-pager log --oneline
+449ed00 (HEAD -> fixup) 3
+000a709 2
+7f1a625 (main) 1
+```
+
+```ini
+# $HOME/.gitconfig
+[alias]
+  fix = "!git commit --fixup $(git log -n 20 --pretty=format:'%Cred%h - %s' --graph --abbrev-commit | fzf --reverse | awk '{print $2}')"
 ```
 
 ## cherry-pick
