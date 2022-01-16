@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
   
-  <title>Git똥찬 소스 코드 버전 관리 - 임창수 블로그</title>
+  <title>CLI 환경에서 소스 코드 버전 관리하기 - 임창수 블로그</title>
   
   
   
@@ -13,14 +13,14 @@
   <meta name="google-site-verification" content="">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta content="telephone=no" name="format-detection">
-  <meta name="description" content="CLI 환경에서 Git 활용하기">
+  <meta name="description" content="Git CLI">
   <meta name="renderer" content="webkit">
   <meta name="theme-color" content="#ffffff">
 
   
   
-  <meta property="og:title" content="Git똥찬 소스 코드 버전 관리" />
-<meta property="og:description" content="CLI 환경에서 Git 활용하기" />
+  <meta property="og:title" content="CLI 환경에서 소스 코드 버전 관리하기" />
+<meta property="og:description" content="Git CLI" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/shell/git-commands/" />
 <meta property="og:image" content="https://markruler.github.io/images/shell/git-logo-2color.png" />
@@ -34,8 +34,8 @@
   <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://markruler.github.io/images/shell/git-logo-2color.png"/>
 
-<meta name="twitter:title" content="Git똥찬 소스 코드 버전 관리"/>
-<meta name="twitter:description" content="CLI 환경에서 Git 활용하기"/>
+<meta name="twitter:title" content="CLI 환경에서 소스 코드 버전 관리하기"/>
+<meta name="twitter:description" content="Git CLI"/>
 
   
 
@@ -203,8 +203,8 @@
 						
 						
 							<li>
-								<a href="#%ec%b0%b8%ea%b3%a0" onclick="onNavClick(`#참고-nav`)" id="참고-nav">
-									참고
+								<a href="#git-internal" onclick="onNavClick(`#git-internal-nav`)" id="git-internal-nav">
+									Git Internal
 								</a>
 							</li>
 						
@@ -217,6 +217,300 @@
 					
 						
 						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ec%b0%a8%ec%9d%b4%ea%b0%80-%ec%95%84%eb%8b%88%eb%9d%bc-%ec%8a%a4%eb%83%85%ec%83%b7httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs" onclick="onNavClick(`#차이가-아니라-스냅샷httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs-nav`)" id="차이가-아니라-스냅샷httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs-nav">
+									차이가 아니라 스냅샷
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%b0%ec%9d%b4%ed%84%b0%ec%9d%98-%eb%ac%b4%ea%b2%b0%ec%84%b1" onclick="onNavClick(`#데이터의-무결성-nav`)" id="데이터의-무결성-nav">
+									데이터의 무결성
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git-%ed%94%84%eb%a1%9c%ec%a0%9d%ed%8a%b8%ec%9d%98-%ec%84%b8-%ea%b0%80%ec%a7%80-%eb%8b%a8%ea%b3%84" onclick="onNavClick(`#git-프로젝트의-세-가지-단계-nav`)" id="git-프로젝트의-세-가지-단계-nav">
+									Git 프로젝트의 세 가지 단계
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#git-directory" onclick="onNavClick(`#git-directory-nav`)" id="git-directory-nav">
+									Git directory
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#head" onclick="onNavClick(`#head-nav`)" id="head-nav">
+									HEAD
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#refs" onclick="onNavClick(`#refs-nav`)" id="refs-nav">
+									refs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#info" onclick="onNavClick(`#info-nav`)" id="info-nav">
+									info
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4" onclick="onNavClick(`#objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4-nav`)" id="objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4-nav">
+									objects
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#tree" onclick="onNavClick(`#tree-nav`)" id="tree-nav">
+									tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#blob-binary-large-object" onclick="onNavClick(`#blob-binary-large-object-nav`)" id="blob-binary-large-object-nav">
+									blob (binary large object)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#commit" onclick="onNavClick(`#commit-nav`)" id="commit-nav">
+									commit
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#tag" onclick="onNavClick(`#tag-nav`)" id="tag-nav">
+									tag
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#index" onclick="onNavClick(`#index-nav`)" id="index-nav">
+									index
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-functionhttpsgit-scmcomdocshash-function-transition" onclick="onNavClick(`#hash-functionhttpsgit-scmcomdocshash-function-transition-nav`)" id="hash-functionhttpsgit-scmcomdocshash-function-transition-nav">
+									Hash Function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#confighttpsgit-scmcomdocsgit-config" onclick="onNavClick(`#confighttpsgit-scmcomdocsgit-config-nav`)" id="confighttpsgit-scmcomdocsgit-config-nav">
+									config
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
 						
 						
 						
@@ -237,50 +531,10 @@
 						
 						
 						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
 						
 							<li>
-								<a href="#config" onclick="onNavClick(`#config-nav`)" id="config-nav">
-									config
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#clone-%ed%95%98%ea%b3%a0-submodule-%ea%b0%80%ec%a0%b8%ec%98%a4%ea%b8%b0" onclick="onNavClick(`#clone-하고-submodule-가져오기-nav`)" id="clone-하고-submodule-가져오기-nav">
-									clone 하고 submodule 가져오기
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#add" onclick="onNavClick(`#add-nav`)" id="add-nav">
-									add
+								<a href="#%ed%8f%ac%ec%85%80%eb%a6%b0porcelain-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#포셀린porcelain-명령어-nav`)" id="포셀린porcelain-명령어-nav">
+									포셀린(Porcelain) 명령어
 								</a>
 							</li>
 						
@@ -301,8 +555,8 @@
 						
 						
 							<li>
-								<a href="#refs-git" onclick="onNavClick(`#refs-git-nav`)" id="refs-git-nav">
-									refs (.git/)
+								<a href="#init" onclick="onNavClick(`#init-nav`)" id="init-nav">
+									init
 								</a>
 							</li>
 						
@@ -315,16 +569,12 @@
 					
 						
 						
-						
-							
-								</ul>
-							
 						
 						
 						
 							<li>
-								<a href="#switch" onclick="onNavClick(`#switch-nav`)" id="switch-nav">
-									switch
+								<a href="#clone" onclick="onNavClick(`#clone-nav`)" id="clone-nav">
+									clone
 								</a>
 							</li>
 						
@@ -338,15 +588,11 @@
 						
 						
 						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
 						
 						
 							<li>
-								<a href="#upstream" onclick="onNavClick(`#upstream-nav`)" id="upstream-nav">
-									upstream
+								<a href="#submodulehttpswwwatlassiancomgittutorialsgit-submodule" onclick="onNavClick(`#submodulehttpswwwatlassiancomgittutorialsgit-submodule-nav`)" id="submodulehttpswwwatlassiancomgittutorialsgit-submodule-nav">
+									submodule
 								</a>
 							</li>
 						
@@ -360,9 +606,23 @@
 						
 						
 						
-							
-								</ul>
-							
+						
+						
+							<li>
+								<a href="#subtreehttpswwwatlassiancomgittutorialsgit-subtree" onclick="onNavClick(`#subtreehttpswwwatlassiancomgittutorialsgit-subtree-nav`)" id="subtreehttpswwwatlassiancomgittutorialsgit-subtree-nav">
+									subtree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
@@ -411,6 +671,104 @@
 						
 						
 							<li>
+								<a href="#taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8" onclick="onNavClick(`#taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8-nav`)" id="taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8-nav">
+									tag
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#switch" onclick="onNavClick(`#switch-nav`)" id="switch-nav">
+									switch
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#upstream" onclick="onNavClick(`#upstream-nav`)" id="upstream-nav">
+									upstream
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#status" onclick="onNavClick(`#status-nav`)" id="status-nav">
+									status
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#add" onclick="onNavClick(`#add-nav`)" id="add-nav">
+									add
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
 								<a href="#fetch" onclick="onNavClick(`#fetch-nav`)" id="fetch-nav">
 									fetch
 								</a>
@@ -429,26 +787,8 @@
 						
 						
 							<li>
-								<a href="#commit" onclick="onNavClick(`#commit-nav`)" id="commit-nav">
+								<a href="#commit-1" onclick="onNavClick(`#commit-1-nav`)" id="commit-1-nav">
 									commit
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#rebase" onclick="onNavClick(`#rebase-nav`)" id="rebase-nav">
-									rebase
 								</a>
 							</li>
 						
@@ -483,8 +823,124 @@
 						
 						
 							<li>
+								<a href="#pull" onclick="onNavClick(`#pull-nav`)" id="pull-nav">
+									pull
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0" onclick="onNavClick(`#rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0-nav`)" id="rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0-nav">
+									rebase
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
+									cherry-pick
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stash" onclick="onNavClick(`#stash-nav`)" id="stash-nav">
+									stash
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works" onclick="onNavClick(`#how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works-nav`)" id="how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works-nav">
+									How git stash works
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
 								<a href="#reset" onclick="onNavClick(`#reset-nav`)" id="reset-nav">
 									reset
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#restore" onclick="onNavClick(`#restore-nav`)" id="restore-nav">
+									restore
 								</a>
 							</li>
 						
@@ -519,8 +975,8 @@
 						
 						
 							<li>
-								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm-nav">
-									Git으로 버그 찾기 - git-scm
+								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav">
+									Git으로 버그 찾기
 								</a>
 							</li>
 						
@@ -581,8 +1037,26 @@
 						
 						
 							<li>
-								<a href="#log-%ea%b7%b8%eb%9e%98%ed%94%84" onclick="onNavClick(`#log-그래프-nav`)" id="log-그래프-nav">
-									log 그래프
+								<a href="#show" onclick="onNavClick(`#show-nav`)" id="show-nav">
+									show
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#log" onclick="onNavClick(`#log-nav`)" id="log-nav">
+									log
 								</a>
 							</li>
 						
@@ -603,8 +1077,8 @@
 						
 						
 							<li>
-								<a href="#git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias" onclick="onNavClick(`#git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias-nav`)" id="git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias-nav">
-									Git Alias
+								<a href="#triple-dot" onclick="onNavClick(`#triple-dot-nav`)" id="triple-dot-nav">
+									Triple Dot(…)
 								</a>
 							</li>
 						
@@ -621,6 +1095,24 @@
 							
 								</ul>
 							
+						
+						
+						
+							<li>
+								<a href="#refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs" onclick="onNavClick(`#refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs-nav`)" id="refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs-nav">
+									reflog: Reference logs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
@@ -643,44 +1135,196 @@
 						
 						
 							<li>
-								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
-									cherry-pick
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#stash" onclick="onNavClick(`#stash-nav`)" id="stash-nav">
-									stash
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
 								<a href="#push" onclick="onNavClick(`#push-nav`)" id="push-nav">
 									push
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%94%8c%eb%9f%ac%eb%b0%8dplumbing-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#플러밍plumbing-명령어-nav`)" id="플러밍plumbing-명령어-nav">
+									플러밍(Plumbing) 명령어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#rev-parse" onclick="onNavClick(`#rev-parse-nav`)" id="rev-parse-nav">
+									rev-parse
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-object" onclick="onNavClick(`#hash-object-nav`)" id="hash-object-nav">
+									hash-object
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ls-tree" onclick="onNavClick(`#ls-tree-nav`)" id="ls-tree-nav">
+									ls-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ls-files" onclick="onNavClick(`#ls-files-nav`)" id="ls-files-nav">
+									ls-files
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cat-file" onclick="onNavClick(`#cat-file-nav`)" id="cat-file-nav">
+									cat-file
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#write-tree" onclick="onNavClick(`#write-tree-nav`)" id="write-tree-nav">
+									write-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#commit-tree" onclick="onNavClick(`#commit-tree-nav`)" id="commit-tree-nav">
+									commit-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#read-tree" onclick="onNavClick(`#read-tree-nav`)" id="read-tree-nav">
+									read-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#update-index" onclick="onNavClick(`#update-index-nav`)" id="update-index-nav">
+									update-index
 								</a>
 							</li>
 						
@@ -738,6 +1382,86 @@
 						
 						
 						
+						
+						
+							<li>
+								<a href="#garbage-collection" onclick="onNavClick(`#garbage-collection-nav`)" id="garbage-collection-nav">
+									Garbage Collection
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#packfileshttpsgit-scmcombookenv2git-internals-packfiles" onclick="onNavClick(`#packfileshttpsgit-scmcombookenv2git-internals-packfiles-nav`)" id="packfileshttpsgit-scmcombookenv2git-internals-packfiles-nav">
+									Packfiles
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gchttpswwwatlassiancomgittutorialsgit-gc" onclick="onNavClick(`#gchttpswwwatlassiancomgittutorialsgit-gc-nav`)" id="gchttpswwwatlassiancomgittutorialsgit-gc-nav">
+									gc
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#prunehttpswwwatlassiancomgittutorialsgit-prune" onclick="onNavClick(`#prunehttpswwwatlassiancomgittutorialsgit-prune-nav`)" id="prunehttpswwwatlassiancomgittutorialsgit-prune-nav">
+									prune
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
 							
 								</ul>
 							
@@ -769,6 +1493,28 @@
 							<li>
 								<a href="#branch-protection-rules" onclick="onNavClick(`#branch-protection-rules-nav`)" id="branch-protection-rules-nav">
 									Branch protection rules
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ea%b3%a0" onclick="onNavClick(`#참고-nav`)" id="참고-nav">
+									참고
 								</a>
 							</li>
 						
@@ -882,8 +1628,8 @@
 						
 						
 							<li>
-								<a href="#%ec%b0%b8%ea%b3%a0" onclick="onNavClick(`#참고-nav`)" id="참고-nav">
-									참고
+								<a href="#git-internal" onclick="onNavClick(`#git-internal-nav`)" id="git-internal-nav">
+									Git Internal
 								</a>
 							</li>
 						
@@ -896,6 +1642,300 @@
 					
 						
 						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ec%b0%a8%ec%9d%b4%ea%b0%80-%ec%95%84%eb%8b%88%eb%9d%bc-%ec%8a%a4%eb%83%85%ec%83%b7httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs" onclick="onNavClick(`#차이가-아니라-스냅샷httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs-nav`)" id="차이가-아니라-스냅샷httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs-nav">
+									차이가 아니라 스냅샷
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%b0%ec%9d%b4%ed%84%b0%ec%9d%98-%eb%ac%b4%ea%b2%b0%ec%84%b1" onclick="onNavClick(`#데이터의-무결성-nav`)" id="데이터의-무결성-nav">
+									데이터의 무결성
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git-%ed%94%84%eb%a1%9c%ec%a0%9d%ed%8a%b8%ec%9d%98-%ec%84%b8-%ea%b0%80%ec%a7%80-%eb%8b%a8%ea%b3%84" onclick="onNavClick(`#git-프로젝트의-세-가지-단계-nav`)" id="git-프로젝트의-세-가지-단계-nav">
+									Git 프로젝트의 세 가지 단계
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#git-directory" onclick="onNavClick(`#git-directory-nav`)" id="git-directory-nav">
+									Git directory
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#head" onclick="onNavClick(`#head-nav`)" id="head-nav">
+									HEAD
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#refs" onclick="onNavClick(`#refs-nav`)" id="refs-nav">
+									refs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#info" onclick="onNavClick(`#info-nav`)" id="info-nav">
+									info
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4" onclick="onNavClick(`#objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4-nav`)" id="objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4-nav">
+									objects
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#tree" onclick="onNavClick(`#tree-nav`)" id="tree-nav">
+									tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#blob-binary-large-object" onclick="onNavClick(`#blob-binary-large-object-nav`)" id="blob-binary-large-object-nav">
+									blob (binary large object)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#commit" onclick="onNavClick(`#commit-nav`)" id="commit-nav">
+									commit
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#tag" onclick="onNavClick(`#tag-nav`)" id="tag-nav">
+									tag
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#index" onclick="onNavClick(`#index-nav`)" id="index-nav">
+									index
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-functionhttpsgit-scmcomdocshash-function-transition" onclick="onNavClick(`#hash-functionhttpsgit-scmcomdocshash-function-transition-nav`)" id="hash-functionhttpsgit-scmcomdocshash-function-transition-nav">
+									Hash Function
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#confighttpsgit-scmcomdocsgit-config" onclick="onNavClick(`#confighttpsgit-scmcomdocsgit-config-nav`)" id="confighttpsgit-scmcomdocsgit-config-nav">
+									config
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
 						
 						
 						
@@ -916,50 +1956,10 @@
 						
 						
 						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
 						
 							<li>
-								<a href="#config" onclick="onNavClick(`#config-nav`)" id="config-nav">
-									config
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#clone-%ed%95%98%ea%b3%a0-submodule-%ea%b0%80%ec%a0%b8%ec%98%a4%ea%b8%b0" onclick="onNavClick(`#clone-하고-submodule-가져오기-nav`)" id="clone-하고-submodule-가져오기-nav">
-									clone 하고 submodule 가져오기
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#add" onclick="onNavClick(`#add-nav`)" id="add-nav">
-									add
+								<a href="#%ed%8f%ac%ec%85%80%eb%a6%b0porcelain-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#포셀린porcelain-명령어-nav`)" id="포셀린porcelain-명령어-nav">
+									포셀린(Porcelain) 명령어
 								</a>
 							</li>
 						
@@ -980,8 +1980,8 @@
 						
 						
 							<li>
-								<a href="#refs-git" onclick="onNavClick(`#refs-git-nav`)" id="refs-git-nav">
-									refs (.git/)
+								<a href="#init" onclick="onNavClick(`#init-nav`)" id="init-nav">
+									init
 								</a>
 							</li>
 						
@@ -994,16 +1994,12 @@
 					
 						
 						
-						
-							
-								</ul>
-							
 						
 						
 						
 							<li>
-								<a href="#switch" onclick="onNavClick(`#switch-nav`)" id="switch-nav">
-									switch
+								<a href="#clone" onclick="onNavClick(`#clone-nav`)" id="clone-nav">
+									clone
 								</a>
 							</li>
 						
@@ -1017,15 +2013,11 @@
 						
 						
 						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
 						
 						
 							<li>
-								<a href="#upstream" onclick="onNavClick(`#upstream-nav`)" id="upstream-nav">
-									upstream
+								<a href="#submodulehttpswwwatlassiancomgittutorialsgit-submodule" onclick="onNavClick(`#submodulehttpswwwatlassiancomgittutorialsgit-submodule-nav`)" id="submodulehttpswwwatlassiancomgittutorialsgit-submodule-nav">
+									submodule
 								</a>
 							</li>
 						
@@ -1039,9 +2031,23 @@
 						
 						
 						
-							
-								</ul>
-							
+						
+						
+							<li>
+								<a href="#subtreehttpswwwatlassiancomgittutorialsgit-subtree" onclick="onNavClick(`#subtreehttpswwwatlassiancomgittutorialsgit-subtree-nav`)" id="subtreehttpswwwatlassiancomgittutorialsgit-subtree-nav">
+									subtree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
@@ -1090,6 +2096,104 @@
 						
 						
 							<li>
+								<a href="#taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8" onclick="onNavClick(`#taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8-nav`)" id="taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8-nav">
+									tag
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#switch" onclick="onNavClick(`#switch-nav`)" id="switch-nav">
+									switch
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#upstream" onclick="onNavClick(`#upstream-nav`)" id="upstream-nav">
+									upstream
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#status" onclick="onNavClick(`#status-nav`)" id="status-nav">
+									status
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#add" onclick="onNavClick(`#add-nav`)" id="add-nav">
+									add
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
 								<a href="#fetch" onclick="onNavClick(`#fetch-nav`)" id="fetch-nav">
 									fetch
 								</a>
@@ -1108,26 +2212,8 @@
 						
 						
 							<li>
-								<a href="#commit" onclick="onNavClick(`#commit-nav`)" id="commit-nav">
+								<a href="#commit-1" onclick="onNavClick(`#commit-1-nav`)" id="commit-1-nav">
 									commit
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#rebase" onclick="onNavClick(`#rebase-nav`)" id="rebase-nav">
-									rebase
 								</a>
 							</li>
 						
@@ -1162,8 +2248,124 @@
 						
 						
 							<li>
+								<a href="#pull" onclick="onNavClick(`#pull-nav`)" id="pull-nav">
+									pull
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0" onclick="onNavClick(`#rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0-nav`)" id="rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0-nav">
+									rebase
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
+									cherry-pick
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#stash" onclick="onNavClick(`#stash-nav`)" id="stash-nav">
+									stash
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works" onclick="onNavClick(`#how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works-nav`)" id="how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works-nav">
+									How git stash works
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
 								<a href="#reset" onclick="onNavClick(`#reset-nav`)" id="reset-nav">
 									reset
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#restore" onclick="onNavClick(`#restore-nav`)" id="restore-nav">
+									restore
 								</a>
 							</li>
 						
@@ -1198,8 +2400,8 @@
 						
 						
 							<li>
-								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm-nav">
-									Git으로 버그 찾기 - git-scm
+								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav">
+									Git으로 버그 찾기
 								</a>
 							</li>
 						
@@ -1260,8 +2462,26 @@
 						
 						
 							<li>
-								<a href="#log-%ea%b7%b8%eb%9e%98%ed%94%84" onclick="onNavClick(`#log-그래프-nav`)" id="log-그래프-nav">
-									log 그래프
+								<a href="#show" onclick="onNavClick(`#show-nav`)" id="show-nav">
+									show
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#log" onclick="onNavClick(`#log-nav`)" id="log-nav">
+									log
 								</a>
 							</li>
 						
@@ -1282,8 +2502,8 @@
 						
 						
 							<li>
-								<a href="#git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias" onclick="onNavClick(`#git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias-nav`)" id="git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias-nav">
-									Git Alias
+								<a href="#triple-dot" onclick="onNavClick(`#triple-dot-nav`)" id="triple-dot-nav">
+									Triple Dot(…)
 								</a>
 							</li>
 						
@@ -1300,6 +2520,24 @@
 							
 								</ul>
 							
+						
+						
+						
+							<li>
+								<a href="#refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs" onclick="onNavClick(`#refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs-nav`)" id="refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs-nav">
+									reflog: Reference logs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
@@ -1322,44 +2560,196 @@
 						
 						
 							<li>
-								<a href="#cherry-pick" onclick="onNavClick(`#cherry-pick-nav`)" id="cherry-pick-nav">
-									cherry-pick
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#stash" onclick="onNavClick(`#stash-nav`)" id="stash-nav">
-									stash
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
 								<a href="#push" onclick="onNavClick(`#push-nav`)" id="push-nav">
 									push
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%94%8c%eb%9f%ac%eb%b0%8dplumbing-%eb%aa%85%eb%a0%b9%ec%96%b4" onclick="onNavClick(`#플러밍plumbing-명령어-nav`)" id="플러밍plumbing-명령어-nav">
+									플러밍(Plumbing) 명령어
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#rev-parse" onclick="onNavClick(`#rev-parse-nav`)" id="rev-parse-nav">
+									rev-parse
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#hash-object" onclick="onNavClick(`#hash-object-nav`)" id="hash-object-nav">
+									hash-object
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ls-tree" onclick="onNavClick(`#ls-tree-nav`)" id="ls-tree-nav">
+									ls-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ls-files" onclick="onNavClick(`#ls-files-nav`)" id="ls-files-nav">
+									ls-files
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cat-file" onclick="onNavClick(`#cat-file-nav`)" id="cat-file-nav">
+									cat-file
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#write-tree" onclick="onNavClick(`#write-tree-nav`)" id="write-tree-nav">
+									write-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#commit-tree" onclick="onNavClick(`#commit-tree-nav`)" id="commit-tree-nav">
+									commit-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#read-tree" onclick="onNavClick(`#read-tree-nav`)" id="read-tree-nav">
+									read-tree
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#update-index" onclick="onNavClick(`#update-index-nav`)" id="update-index-nav">
+									update-index
 								</a>
 							</li>
 						
@@ -1417,6 +2807,86 @@
 						
 						
 						
+						
+						
+							<li>
+								<a href="#garbage-collection" onclick="onNavClick(`#garbage-collection-nav`)" id="garbage-collection-nav">
+									Garbage Collection
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#packfileshttpsgit-scmcombookenv2git-internals-packfiles" onclick="onNavClick(`#packfileshttpsgit-scmcombookenv2git-internals-packfiles-nav`)" id="packfileshttpsgit-scmcombookenv2git-internals-packfiles-nav">
+									Packfiles
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gchttpswwwatlassiancomgittutorialsgit-gc" onclick="onNavClick(`#gchttpswwwatlassiancomgittutorialsgit-gc-nav`)" id="gchttpswwwatlassiancomgittutorialsgit-gc-nav">
+									gc
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#prunehttpswwwatlassiancomgittutorialsgit-prune" onclick="onNavClick(`#prunehttpswwwatlassiancomgittutorialsgit-prune-nav`)" id="prunehttpswwwatlassiancomgittutorialsgit-prune-nav">
+									prune
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
 							
 								</ul>
 							
@@ -1448,6 +2918,28 @@
 							<li>
 								<a href="#branch-protection-rules" onclick="onNavClick(`#branch-protection-rules-nav`)" id="branch-protection-rules-nav">
 									Branch protection rules
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ea%b3%a0" onclick="onNavClick(`#참고-nav`)" id="참고-nav">
+									참고
 								</a>
 							</li>
 						
@@ -1514,10 +3006,10 @@
         
         style="background-image: url('https://markruler.github.io/images/shell/git-logo-2color.png')"  >
         <div class="post-title">
-          Git똥찬 소스 코드 버전 관리
+          CLI 환경에서 소스 코드 버전 관리하기
           
           <div class="post-subtitle">
-            CLI 환경에서 Git 활용하기
+            Git CLI
           </div>
           
           <div class="post-meta">
@@ -1550,52 +3042,105 @@
           <div class="post-body" v-pre>
             
             <ul>
-<li><a href="#%EC%B0%B8%EA%B3%A0">참고</a></li>
-<li><a href="#%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a>
+<li><a href="#git-internal">Git Internal</a>
 <ul>
+<li><a href="#%EC%B0%A8%EC%9D%B4%EA%B0%80-%EC%95%84%EB%8B%88%EB%9D%BC-%EC%8A%A4%EB%83%85%EC%83%B7">차이가 아니라 스냅샷</a></li>
+<li><a href="#%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%9D%98-%EB%AC%B4%EA%B2%B0%EC%84%B1">데이터의 무결성</a></li>
+<li><a href="#git-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%9D%98-%EC%84%B8-%EA%B0%80%EC%A7%80-%EB%8B%A8%EA%B3%84">Git 프로젝트의 세 가지 단계</a></li>
+</ul>
+</li>
+<li><a href="#git-directory">Git directory</a>
+<ul>
+<li><a href="#head">HEAD</a></li>
+<li><a href="#refs">refs</a></li>
+<li><a href="#info">info</a></li>
+<li><a href="#objects">objects</a>
+<ul>
+<li><a href="#tree">tree</a></li>
+<li><a href="#blob-binary-large-object">blob (binary large object)</a></li>
+<li><a href="#commit">commit</a></li>
+<li><a href="#tag">tag</a></li>
+</ul>
+</li>
+<li><a href="#index">index</a></li>
+<li><a href="#hash-function">Hash Function</a></li>
 <li><a href="#config">config</a></li>
-<li><a href="#clone-%ED%95%98%EA%B3%A0-submodule-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0">clone 하고 submodule 가져오기</a></li>
-<li><a href="#add">add</a>
-<ul>
-<li><a href="#refs-git">refs (.git/)</a></li>
 </ul>
 </li>
-<li><a href="#switch">switch</a>
+<li><a href="#%EB%AA%85%EB%A0%B9%EC%96%B4">명령어</a></li>
+<li><a href="#%ED%8F%AC%EC%85%80%EB%A6%B0porcelain-%EB%AA%85%EB%A0%B9%EC%96%B4">포셀린(Porcelain) 명령어</a>
 <ul>
-<li><a href="#upstream">upstream</a></li>
-</ul>
-</li>
+<li><a href="#init">init</a></li>
+<li><a href="#clone">clone</a></li>
+<li><a href="#submodule">submodule</a></li>
+<li><a href="#subtree">subtree</a></li>
 <li><a href="#branch">branch</a>
 <ul>
 <li><a href="#xargs">xargs</a></li>
 </ul>
 </li>
+<li><a href="#tag-1">tag</a></li>
+<li><a href="#switch">switch</a>
+<ul>
+<li><a href="#upstream">upstream</a></li>
+</ul>
+</li>
+<li><a href="#status">status</a></li>
+<li><a href="#add">add</a></li>
 <li><a href="#fetch">fetch</a></li>
-<li><a href="#commit">commit</a></li>
-<li><a href="#rebase">rebase</a></li>
+<li><a href="#commit-1">commit</a></li>
 <li><a href="#merge">merge</a></li>
+<li><a href="#pull">pull</a></li>
+<li><a href="#rebase">rebase</a></li>
+<li><a href="#cherry-pick">cherry-pick</a></li>
+<li><a href="#stash">stash</a>
+<ul>
+<li><a href="#how-git-stash-works">How git stash works</a></li>
+</ul>
+</li>
 <li><a href="#reset">reset</a></li>
+<li><a href="#restore">restore</a></li>
 <li><a href="#revert">revert</a></li>
-<li><a href="#git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0---git-scm">Git으로 버그 찾기 - git-scm</a>
+<li><a href="#git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0">Git으로 버그 찾기</a>
 <ul>
 <li><a href="#blame">blame</a></li>
 <li><a href="#bisect">bisect</a></li>
 </ul>
 </li>
-<li><a href="#log-%EA%B7%B8%EB%9E%98%ED%94%84">log 그래프</a>
+<li><a href="#show">show</a></li>
+<li><a href="#log">log</a>
 <ul>
-<li><a href="#git-alias">Git Alias</a></li>
+<li><a href="#triple-dot">Triple Dot(&hellip;)</a></li>
 </ul>
 </li>
+<li><a href="#reflog-reference-logs">reflog: Reference logs</a></li>
 <li><a href="#diff">diff</a></li>
-<li><a href="#cherry-pick">cherry-pick</a></li>
-<li><a href="#stash">stash</a></li>
 <li><a href="#push">push</a></li>
+</ul>
+</li>
+<li><a href="#%ED%94%8C%EB%9F%AC%EB%B0%8Dplumbing-%EB%AA%85%EB%A0%B9%EC%96%B4">플러밍(Plumbing) 명령어</a>
+<ul>
+<li><a href="#rev-parse">rev-parse</a></li>
+<li><a href="#hash-object">hash-object</a></li>
+<li><a href="#ls-tree">ls-tree</a></li>
+<li><a href="#ls-files">ls-files</a></li>
+<li><a href="#cat-file">cat-file</a></li>
+<li><a href="#write-tree">write-tree</a></li>
+<li><a href="#commit-tree">commit-tree</a></li>
+<li><a href="#read-tree">read-tree</a></li>
+<li><a href="#update-index">update-index</a></li>
 </ul>
 </li>
 <li><a href="#advanced">Advanced</a>
 <ul>
 <li><a href="#git-hooks">Git Hooks</a></li>
+<li><a href="#garbage-collection">Garbage Collection</a>
+<ul>
+<li><a href="#packfiles">Packfiles</a></li>
+<li><a href="#gc">gc</a></li>
+</ul>
+</li>
+<li><a href="#prune">prune</a></li>
 </ul>
 </li>
 <li><a href="#git-%EC%84%9C%EB%B2%84">Git 서버</a>
@@ -1603,84 +3148,181 @@
 <li><a href="#branch-protection-rules">Branch protection rules</a></li>
 </ul>
 </li>
+<li><a href="#%EC%B0%B8%EA%B3%A0">참고</a></li>
 </ul>
-<h1 id="참고">참고</h1>
-<ul>
-<li><a href="https://git-scm.com/book/en/v2">Pro Git</a> - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials">Git Tutorials</a> - Atlassian</li>
-</ul>
-<h1 id="명령어">명령어</h1>
-<p>명령어들을 확인하기 전 <a href="https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/">[번역] CS Visualized: 유용한 깃(Git) 명령어</a>를 먼저 읽는다.</p>
-<h2 id="config">config</h2>
-<p>git 설정을 편집하거나 확인한다.
-설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용된다.</p>
-<ul>
-<li>Local (<code>.git/config</code>)</li>
-<li>Global (<code>$HOME/.gitconfig</code>)</li>
-<li>System (<code>/etc/gitconfig</code>)</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-toml" data-lang="toml"><span style="color:#6272a4"># $HOME/.gitconfig</span>
-[user]
-  email = imcxsu@gmail.com
-  name = Changsu Im
-[core]
-  editor = vim
+<blockquote>
+<p>Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
+GUI 프로그램의 대부분은 Git 기능 중 일부만 구현하기 때문에 비교적 단순하다.
+CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하지 않는다. -
+&lt;<a href="https://git-scm.com/book/en/v2">Pro Git</a>&gt; Scott Chacon, Ben Straub</p>
+</blockquote>
+<h1 id="git-internal">Git Internal</h1>
+<h2 id="차이가-아니라-스냅샷httpsgithubblog2020-12-17-commits-are-snapshots-not-diffs"><a href="https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/">차이가 아니라 스냅샷</a></h2>
+<p>CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리한다.</p>
+<p><img src="/images/shell/git/storing-data-as-changes.png" alt="Storing data as changes to a base version of each file"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Storing data as changes to a base version of each file</a></em></p>
+<p>Git은 데이터를 스냅샷의 스트림처럼 취급한다. 파일이 달라지지 않았으면 이전 상태의 파일에 대한 링크만 저장한다.</p>
+<p><img src="/images/shell/git/storing-data-as-snapshots.png" alt="Storing data as snapshots of the project over time"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F">Storing data as snapshots of the project over time</a></em></p>
+<h2 id="데이터의-무결성">데이터의 무결성</h2>
+<p>Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash function을 사용해서 체크섬을 계산하는 것이다.
+그리고 이 체크섬으로 데이터를 관리한다.</p>
+<p>왜 데이터의 무결성을 검사해야 할까?
+<a href="https://www.youtube.com/watch?v=4XpnKHJAok8&amp;t=56m25s">데이터를 신뢰하기 위해서다</a>.
+예를 들어 내가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 된다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;test&#34;</span> &gt; test.txt
+$ git hash-object test.txt
+9daeafb9864cf43055ae93beb0afd6c7d144bfa4
 
-<span style="color:#6272a4"># .git/config</span>
-[core]
-  repositoryformatversion = <span style="color:#bd93f9">0</span>
-  filemode = <span style="color:#ff79c6">true</span>
-  bare = <span style="color:#ff79c6">false</span>
-  logallrefupdates = <span style="color:#ff79c6">true</span>
-[remote <span style="color:#f1fa8c">&#34;origin&#34;</span>]
-  url = git@github.com:markruler/markruler.github.io.git
-  fetch = +refs/heads/*:refs/remotes/origin/*
-[branch <span style="color:#f1fa8c">&#34;main&#34;</span>]
-  remote = origin
-  merge = refs/heads/main
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git config --global user.name Changsu Im
-$ git config --global user.email imcxsu@gmail.com
+<span style="color:#6272a4"># 파일명을 변경하더라도 체크섬은 바뀌지 않는다.</span>
+$ mv test.txt test2.md
+$ git hash-object test2.md
+9daeafb9864cf43055ae93beb0afd6c7d144bfa4
 
-<span style="color:#6272a4"># config 목록 출력</span>
-$ git config --list
-$ git config --list --global
-</code></pre></div><h2 id="clone-하고-submodule-가져오기">clone 하고 submodule 가져오기</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git clone <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">origin</span><span style="color:#f1fa8c">}</span>
-$ git submodule update --init --recursive
-</code></pre></div><h2 id="add">add</h2>
-<p>working directory의 변경 사항들을 staging area에 포함시킨다. <code>stage</code>라는 용어는 두루 쓰이기 때문에 한번 생각해 볼 만하다. stage는 &ldquo;과정이나 발전, 성장 등의 단계&quot;라는 뜻을 가지고 있다. 그래서 &ldquo;목표로 하는 것의 직전 단계&quot;라고 생각하면 쉽다. Git에서의 staging area는 저장소에 커밋되기 직전 단계이고, 배포 환경에서의 staging 서버는 production 서버에 배포하기 직전 단계에 있는 서버다.</p>
-<p><img src="/images/shell/git-sections.png" alt="git-sections"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states">the three main sections of a Git project</a></em></p>
-<p><img src="/images/shell/git-states.png" alt="git-states"></p>
+<span style="color:#6272a4"># 내용을 변경하면 체크섬은 바뀐다.</span>
+$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34; &#34;</span> &gt;&gt; test2.md
+$ git hash-object test2.md
+d698e83c7a0b75a29e815371e584973062b4cab9
+</code></pre></div><p>Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
+만든 체크섬은 40자 길이의 16진수 문자열이다.
+파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구한다.</p>
+<blockquote>
+<p><em><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0">Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
+정말 그렇게 되면 어떤 일이 벌어질까?</a></em></p>
+</blockquote>
+<p>이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용한다.
+그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 된다.</p>
+<p>그러나 해시 값이 중복되는 일은 일어나기 어렵다.
+SHA-1 값의 크기는 20 Bytes(160 Bits)다.
+해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80이다.</p>
+<p>(<a href="https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/">2018년부터 SHA-256으로 전환하고 있고</a>, Git 2.29부터 지원하고 있다)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.</span>
+$ git ls-tree ee85
+
+<span style="color:#6272a4"># 앞부분이 중복된다면 아래와 같은 에러가 발생한다.</span>
+ferror: short object ID ee85 is ambiguous
+hint: The candidates are:
+hint:   ee8597496 commit 2022-01-12 - 제가 작성한 커밋 메시지입니다
+hint:   ee85c50d6 tree
+hint:   ee8574581 blob
+fatal: Not a valid object name ee85
+
+<span style="color:#6272a4"># 몇 글자를 더 입력해주면 정상적으로 동작한다.</span>
+$ git ls-tree ee859
+</code></pre></div><h2 id="git-프로젝트의-세-가지-단계">Git 프로젝트의 세 가지 단계</h2>
+<p>Git은 파일을 세 가지 상태로 관리한다.</p>
+<p><img src="/images/shell/git/lifecycle-file-status.png" alt="The lifecycle of the status of your files"></p>
 <p><em><a href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository">The lifecycle of the status of your files</a></em></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 모든 변경 사항을 staging area에 추가</span>
-$ git add -A
-
-<span style="color:#6272a4"># 특정 변경 사항만 추가</span>
-$ git add <span style="color:#f1fa8c">&#39;*Detail.java&#39;</span>
-$ git add src/
-</code></pre></div><h3 id="refs-git">refs (.git/)</h3>
 <ul>
-<li><a href="https://git-scm.com/docs/gitrevisions#_specifying_revisions">gitrevisions</a> - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/refs-and-the-reflog">Refs and the Reflog</a> - Atlassian</li>
+<li>Modified - 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 것을 말한다.</li>
+<li>Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태를 의미한다.
+파일을 Stage하면 Git 저장소에 파일을 Blob으로 저장하고 Staging Area에 해당 파일의 체크섬을 저장한다.
+<ul>
+<li>Tracked - 관리 대상에 있는 파일이다. 이미 스냅샷에 포함되어 있던 파일이다.</li>
+<li>Untracked - Unmodified, Modified, Staged 상태가 아닌 나머지 파일은 모두 Untracked 파일이다.
+다시 말해서 Staging Area(index)에도 포함되지 않았고 스냅샷으로 저장되어 있지 않은 파일이다.</li>
 </ul>
-<table>
+</li>
+<li>Committed - 데이터가 로컬 데이터베이스에 안전하게 저장됐다는 것을 의미한다.
+루트 디렉토리와 각 하위 디렉토리의 트리 객체(Object)를 체크섬과 함께 저장소에 저장한다.
+그 후 커밋 객체를 만들고 메타데이터와 루트 디렉터리 트리 객체를 가리키는 포인터 정보를 커밋 객체에 넣어 저장한다.
+그래서 필요하면 언제든지 스냅샷을 다시 만들 수 있다.</li>
+<li>아래는 커밋의 객체들을 나타낸다.</li>
+</ul>
+<p><img src="/images/shell/git/commit-and-its-tree.png" alt="A commit and its tree"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">A commit and its tree</a></em></p>
+<ul>
+<li>아래는 커밋과 이전 커밋들을 나타낸다.</li>
+</ul>
+<p><img src="/images/shell/git/commit-and-its-parent.png" alt="Commits and their parents"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell">Commits and their parents</a></em></p>
+<p>파일의 세 가지 상태는 Git 프로젝트의 세 가지 단계와 연결된다.</p>
+<p><img src="/images/shell/git/git-three-step.png" alt="Working tree, staging area, and Git directory"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states">Working tree, staging area, and Git directory</a></em></p>
+<ul>
+<li>Working Tree - 프로젝트의 특정 버전을 Checkout 한 것이다.
+Git Directory 안에 압축된 DB에서 파일을 가져와 워킹 트리를 만든다.</li>
+<li>Staging Area - 곧 커밋할 파일에 대한 정보를 담고 있으며 Git Directory 안(<code>.git/index</code>)에 저장된다.
+Index라고도 불리지만 Staging Area가 거의 표준이다.
+<ul>
+<li><code>stage</code>라는 용어는 두루 쓰이기 때문에 한번 생각해 볼 만하다.
+stage는 &ldquo;과정이나 발전, 성장 등의 단계&quot;라는 뜻을 가지고 있다.
+그래서 &ldquo;목표로 하는 것의 직전 단계&quot;라고 생각하면 쉽다.
+Git에서의 staging area는 저장소에 커밋되기 직전 단계이고,
+배포 환경에서의 staging 서버는 production 서버에 배포하기 직전 단계에 있는 서버다.</li>
+</ul>
+</li>
+</ul>
+<p>Git으로 하는 일은 기본적으로 아래와 같다.</p>
+<ol>
+<li>Working Tree에서 파일을 수정한다.</li>
+<li>Staging Area에 파일을 Stage 해서 커밋할 스냅샷을 만든다.</li>
+<li>Staging Area에 있는 파일들을 커밋해서 Git Direcoty에 영구적인 스냅샷으로 저장한다.</li>
+</ol>
+<h1 id="git-directory">Git directory</h1>
+<p><code>.git/</code></p>
+<p>Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳을 말한다.
+description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ tree -L <span style="color:#bd93f9">2</span> .git
+
+.git
+├── branches
+├── COMMIT_EDITMSG
+├── config
+├── description
+├── FETCH_HEAD
+├── HEAD
+├── hooks
+│   ├── commit-msg.sample
+│   ├── prepare-commit-msg.sample
+│   ├── pre-push.sample
+│   ├── ...
+├── index
+├── info
+│   └── exclude
+├── logs
+│   ├── HEAD
+│   └── refs
+├── objects
+│   ├── <span style="color:#bd93f9">00</span>
+│   ├── <span style="color:#bd93f9">01</span>
+│   ├── <span style="color:#bd93f9">02</span>
+│   ├── <span style="color:#bd93f9">03</span>
+│   ├── <span style="color:#bd93f9">04</span>
+│   ├── <span style="color:#bd93f9">05</span>
+│   ├── ...
+│   ├── info
+│   └── pack
+├── ORIG_HEAD
+├── packed-refs
+└── refs
+    ├── heads
+    ├── remotes
+    ├── stash
+    └── tags
+</code></pre></div><h2 id="head">HEAD</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ cat HEAD
+ref: refs/heads/main
+
+$ cat refs/heads/main
+4436e4b582c7a8c942f11746d54cf4338325442c
+</code></pre></div><table>
 <thead>
 <tr>
 <th>이름</th>
 <th>설명</th>
-<th>예시 파일 내용</th>
+<th>파일 내용</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>HEAD</td>
-<td>현재 브랜치의 마지막 커밋 참조</td>
+<td>지금 작업하고 있는 로컬 브랜치를 가리키는 포인터</td>
 <td>ref: refs/heads/main</td>
 </tr>
 <tr>
 <td>ORIG_HEAD</td>
-<td>HEAD의 직전 커밋을 백업 참조</td>
+<td>HEAD의 이전 커밋을 백업</td>
 <td>ec2a7f1e03bca5485627b8af6b76129aa3f49b8a</td>
 </tr>
 <tr>
@@ -1695,12 +3337,211 @@ $ git add src/
 </tr>
 </tbody>
 </table>
-<h2 id="switch">switch</h2>
+<h2 id="refs">refs</h2>
+<p>commit 객체의 포인터를 저장한다.</p>
+<h2 id="info">info</h2>
+<p>저장소에 관한 추가 정보들은 이 디렉터리 안에 저장된다.
+<code>.gitignore</code> 파일처럼 무시할 파일의 패턴을 적어둘 수 있다.
+다만 <code>.git/info/exclude</code>은 <code>.git</code> 디렉토리 안에 있기 때문에 동료와 공유할 수 없다.</p>
+<h2 id="objectshttpsgit-scmcombookkov2gitec9d98-eb82b4ebb680-git-eab09cecb2b4"><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4">objects</a></h2>
+<p>다른 VCS의 저장소처럼 Git의 저장소는 파일에 대한 유지, 복제, 수정 등의 이력을 관리하는데 필요한 모든 데이터를 포함하는 데이터베이스다.
+하지만 Git의 이런 작업을 처리하는 방식은 다른 VCS들과 차별화되어 있다.</p>
+<p>Git은 유입되는 모든 것을 객체로 간주한다.
+주요 객체 유형으로 blob, tree, commit, tag가 있다.</p>
+<p><img src="/images/shell/git/simple-git-data-model.png" alt="Simple version of the Git data model"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Simple version of the Git data model</a></em></p>
+<h3 id="tree">tree</h3>
+<p>Git은 유닉스 파일 시스템과 비슷한 방법으로 저장하지만 좀 더 단순하다.
+모든 것을 tree와 blob 객체로 저장한다.
+tree는 유닉스의 디렉토리에 대응되고 blob은 inode나 일반 파일에 대응된다.
+tree 객체 하나는 항목을 여러 개 가질 수 있다.
+그리고 그 항목에는 blob 객체나 하위 tree 객체를 가리키는 SHA-1 포인터, 파일 모드, 객체 타입, 파일 이름이 들어 있다. <code>write-tree</code> 명령으로 생성한다.</p>
+<h3 id="blob-binary-large-object">blob (binary large object)</h3>
+<p>blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
+blob은 파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+<span style="color:#bd93f9">100644</span> blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
+</code></pre></div><p>여기서 blob의 파일 모드는 보통의 파일을 나타내는 <code>100644</code>,
+실행파일을 나타내는 <code>100755</code>,
+심볼릭 링크를 나타내는 <code>120000</code> 세 가지만 사용한다.</p>
+<h3 id="commit">commit</h3>
+<p>스냅샷에 관한 모든 메타 데이터를 보유하는 객체다.
+메타 데이터는 스냅샷을 누가, 언제, 왜 저장했는지에 대한 정보를 포함한다.
+<code>commit-tree</code> 명령으로 생성한다.</p>
+<p><img src="/images/shell/git/reachable-objects.png" alt="All the reachable objects in your Git directory"></p>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">All the reachable objects in your Git directory</a></em></p>
+<h3 id="tag">tag</h3>
+<p>커밋 객체를 쉽게 참조할 수 있도록 도와주는 labeling 객체다.</p>
+<h2 id="index">index</h2>
+<p>Staging Area에 관한 정보가 저장되어 있다.
+즉, 저장소에 커밋할 파일을 보관하는 장소다.</p>
+<h2 id="hash-functionhttpsgit-scmcomdocshash-function-transition"><a href="https://git-scm.com/docs/hash-function-transition/">Hash Function</a></h2>
+<p>체크섬을 구하는 기능이다.</p>
+<h2 id="confighttpsgit-scmcomdocsgit-config"><a href="https://git-scm.com/docs/git-config">config</a></h2>
+<p>git 설정을 저장한다.
+설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용된다.
+Local (<code>.git/config</code>) &gt; Global (<code>$HOME/.gitconfig</code>) &gt; System (<code>/etc/gitconfig</code>) 순서다.
+config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 <ul>
-<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61">git@v2.23.0</a> 부터 <code>git-checkout</code> 명령어는 <code>git-switch</code>와 <code>git-restore</code>로 분리되었다. 이유는 checkout이 하는 기능이 많았기 때문이다.
+<li>macOS에서는 Local 설정보다 Keychain이 우선하나? TODO</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># $HOME/.gitconfig</span>
+[user]
+  email = imcxsu@gmail.com
+  name = Changsu Im
+[core]
+  editor = vim
+[diff]
+  tool = vimdiff
+[difftool]
+  prompt = <span style="color:#ff79c6">false</span>
+  <span style="color:#6272a4"># Be able to abort all diffs with `:cq` or `:qa!`</span>
+  <span style="color:#6272a4"># `:cq` to quit without saving and make Vim return non-zero error (i.e. exit with error)</span>
+  <span style="color:#6272a4"># `:qa` to quit all (short for :quitall)</span>
+  trustExitCode = <span style="color:#ff79c6">true</span>
+
+<span style="color:#6272a4"># .git/config</span>
+[core]
+  repositoryformatversion = <span style="color:#bd93f9">0</span>
+  filemode = <span style="color:#ff79c6">true</span>
+  bare = <span style="color:#ff79c6">false</span>
+  logallrefupdates = <span style="color:#ff79c6">true</span>
+[remote <span style="color:#f1fa8c">&#34;origin&#34;</span>]
+  url = git@github.com:okbut/corporate-library-api.git
+  fetch = +refs/heads/<span style="color:#ff79c6">*:refs/remotes/origin/*</span>
+[branch <span style="color:#f1fa8c">&#34;main&#34;</span>]
+  remote = origin
+  merge = refs/heads/main
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git config --global user.name Changsu Im
+$ git config --global user.email imcxsu@gmail.com
+
+<span style="color:#6272a4"># config 목록 출력</span>
+$ git config --list
+$ git config --list --global
+</code></pre></div><h1 id="명령어">명령어</h1>
+<ul>
+<li>포셀린(Porcelain) 명령어는 사용자에게 이해하기 쉬운 명령어를 말한다.</li>
+<li>플러밍(Plumbing) 명령어는 저수준 명령어를 말한다.</li>
+</ul>
+<h1 id="포셀린porcelain-명령어">포셀린(Porcelain) 명령어</h1>
+<p>명령어들을 확인하기 전 <a href="https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/">[번역] CS Visualized: 유용한 깃(Git) 명령어</a>를 먼저 읽는다.</p>
+<h2 id="init">init</h2>
+<p>현재 디렉토리에 <code>.git</code> 디렉터리를 생성하고 Git 프로젝트로 초기화한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git init
+Initialized empty Git repository in /home/markruler/toy/.git/
+</code></pre></div><h2 id="clone">clone</h2>
+<p>origin 저장소의 설정 정보를 제외한 모든 데이터를 가져온다. 그 과정은 다음과 같다.</p>
+<ol>
+<li>대상 디렉토리가 존재하지 않는다면 생성하고, 대상 디렉토리를 GIt 디렉토리로 초기화한다.</li>
+<li>대상 디렉토리 안에 소스 저장소의 브랜치와 동일한 추적 브랜치들을 설정한다. (git remote)</li>
+<li><code>.git</code> 디렉토리 내부에 objects와 references를 연결한다.</li>
+<li>최신 버전을 checkout한다.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git clone <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">origin</span><span style="color:#f1fa8c">}</span>
+Cloning into <span style="color:#f1fa8c">&#39;my-origin-repo&#39;</span>...
+remote: Enumerating objects: 22940, <span style="color:#ff79c6">done</span>.
+remote: Counting objects: 100% <span style="color:#ff79c6">(</span>1929/1929<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+remote: Compressing objects: 100% <span style="color:#ff79c6">(</span>780/780<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+remote: Total <span style="color:#bd93f9">22940</span> <span style="color:#ff79c6">(</span>delta 1277<span style="color:#ff79c6">)</span>, reused <span style="color:#bd93f9">1675</span> <span style="color:#ff79c6">(</span>delta 1131<span style="color:#ff79c6">)</span>, pack-reused <span style="color:#bd93f9">21011</span>
+Receiving objects: 100% <span style="color:#ff79c6">(</span>22940/22940<span style="color:#ff79c6">)</span>, 41.19 MiB | 9.49 MiB/s, <span style="color:#ff79c6">done</span>.
+Resolving deltas: 100% <span style="color:#ff79c6">(</span>16109/16109<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+</code></pre></div><h2 id="submodulehttpswwwatlassiancomgittutorialsgit-submodule"><a href="https://www.atlassian.com/git/tutorials/git-submodule">submodule</a></h2>
+<p>submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
+submodule을 추가하면 <code>.gitmodules</code> 파일이 생성된다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># submodule을 새로 추가하는 경우</span>
+$ git submodule add https://github.com/markruler/repository
+
+<span style="color:#6272a4"># 의존하는 submodule 리포지터리를 clone한다</span>
+$ git submodule update --init --recursive
+</code></pre></div><h2 id="subtreehttpswwwatlassiancomgittutorialsgit-subtree"><a href="https://www.atlassian.com/git/tutorials/git-subtree">subtree</a></h2>
+<p>submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 <code>.gitmodule</code>과 같은 메타 데이터없이 데이터를 그대로 복제한다.</p>
+<ul>
+<li>왜 submodule 대신 subtree를 사용해야 할까?
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/git-subtree">Git subtree: the alternative to Git submodule</a> - Atlassian</li>
+<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/">Why your company shouldn’t use Git submodules</a> - Amber</li>
+</ul>
+</li>
+</ul>
+<p><img src="/images/shell/git/tree-subtree-concept.png" alt="tree-subtree-concept"></p>
+<p><em><a href="https://opensource.com/article/20/5/git-submodules-subtrees">일반적인 Tree 개념</a></em></p>
+<h2 id="branch">branch</h2>
+<p>브랜치(branch)는 나뭇가지나 지점, 분기를 뜻한다. Git의 브랜치는 커밋 사이를 가볍게 이동할 수 있는 포인터 같은 것이다. 흔히 말하는 master, main 브랜치는 트렁크(trunk, 줄기) 브랜치라고 불리는데 소스 코드 통합의 중심이 되는 브랜치이기 때문이다.</p>
+<p>branch 명령을 실행하면 다음의 단계를 수행한다.</p>
+<ol>
+<li><code>.git/refs/heads/</code>에서 모든 브랜치명을 수집한다.</li>
+<li><code>.git/HEAD</code>에 위치한 HEAD를 참조해 현재 작업 중인 브랜치를 찾는다.</li>
+<li>모든 브랜치를 오름차순으로 정렬하고, 현재 작업 중인 브랜치에 별표(*)를 표시한다.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git branch
+* feature
+  master
+</code></pre></div><h3 id="xargs">xargs</h3>
+<p>eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용하다.</p>
+<ul>
+<li><a href="https://www.baeldung.com/linux/xargs">When to Use xargs</a> - Baeldung</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#ff79c6">{</span>0..9<span style="color:#ff79c6">}</span> | xargs -n <span style="color:#bd93f9">2</span>
+<span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span>
+<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
+<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
+<span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span>
+<span style="color:#bd93f9">8</span> <span style="color:#bd93f9">9</span>
+</code></pre></div><p>branch 명령과 xargs 명령을 파이프(<code>|</code>)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># master, stable, main, 현재 브랜치 외 모든 브랜치 삭제</span>
+$ git branch | grep -v <span style="color:#f1fa8c">&#34;master\|stable\|main\|\*&#34;</span> | xargs git branch -D
+
+<span style="color:#6272a4"># 현재 브랜치 제외하고 삭제</span>
+$ git branch | grep -v <span style="color:#f1fa8c">&#34;\*&#34;</span> | xargs git branch -D
+
+<span style="color:#6272a4"># 모두 삭제</span>
+$ git branch | grep -v <span style="color:#f1fa8c">&#39;^*&#39;</span> | xargs git branch -D
+
+<span style="color:#6272a4"># 정규표현식으로 특정 브랜치 삭제</span>
+$ git branch | grep -Eo <span style="color:#f1fa8c">&#39;feature/.*&#39;</span> | xargs git branch -D
+</code></pre></div><h2 id="taghttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-ed839ceab7b8"><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8">tag</a></h2>
+<p>커밋을 참조하기 쉽도록 꼬리표(tag)를 붙인다. Lightweight 태그와 Annotated 태그 두 종류가 있다.</p>
+<ul>
+<li>Lightweight 태그는 단순히 특정 커밋에 대한 포인터일 뿐이다.</li>
+<li>Annotated 태그는 Git 데이터베이스에 태그를 만든 사람의 이름, 이메일과 태그를 만든 날짜, 그리고 태그 메시지도 저장한다.
+GPG(GNU Privacy Guard)로 서명할 수도 있다.
+일반적으로 Annotated 태그를 만들어 이 모든 정보를 사용할 수 있도록 하는 것이 좋다.
+하지만 임시로 생성하는 태그거나 이러한 정보를 유지할 필요가 없는 경우에는 Lightweight 태그를 사용할 수도 있다.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Annotated tag</span>
+$ git tag -a 1.0.0 -m <span style="color:#f1fa8c">&#34;test tag&#34;</span>
+
+<span style="color:#6272a4"># tag 목록</span>
+$ git tag
+1.0.0
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># tag 내용 확인</span>
+$ git show 1.0.0
+tag 1.0.0
+Tagger: Changsu Im &lt;imcxsu@gmail.com&gt;
+Date:   Sat Jan <span style="color:#bd93f9">15</span> 20:38:46 <span style="color:#bd93f9">2022</span> +0900
+
+<span style="color:#8be9fd;font-style:italic">test</span> tag
+
+commit 49ef168385a2fe63f6e47055c1da79a0465039dc <span style="color:#ff79c6">(</span>HEAD -&gt; master, tag: 1.0.0<span style="color:#ff79c6">)</span>
+...
+
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git show-ref --tags
+02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
+</code></pre></div><p>tag 명령어를 실행하면 다음과 같은 단계를 수행한다.</p>
+<ol>
+<li>커밋이 참조하고 있는 체크섬을 가져온다.</li>
+<li>존재하는 태그명들 중 주어진 태그명을 검증한다.</li>
+<li>새로운 태그명이라면 naming convention을 검증한다.</li>
+<li>태그 객체가 생성된다. (<code>.git/refs/tags/</code>)</li>
+</ol>
+<h2 id="switch">switch</h2>
+<p>브랜치를 변경한다.</p>
+<ul>
+<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61">git@v2.23.0</a> 부터 <code>checkout</code> 명령어는 <code>git-switch</code>와 <code>git-restore</code>로 분리되었다.
+이유는 checkout이 하는 기능이 많기 때문이다.
 <ul>
 <li><a href="https://github.blog/2019-08-16-highlights-from-git-2-23/">Highlights from Git 2.23</a> - GitHub Blog</li>
-<li><a href="https://www.infoq.com/news/2019/08/git-2-23-switch-restore/">Git 2.23 Adds Switch and Restore Commands</a> - InfoQ</li>
+<li><a href="https://www.infoq.com/news/2019/08/git-2-23-switch-restore/">Git 2.23 Adds Switch and Restore Commands</a> - Sergio De Simone</li>
 </ul>
 </li>
 </ul>
@@ -1724,197 +3565,617 @@ Branch <span style="color:#f1fa8c">&#39;test-rebase&#39;</span> <span style="col
 <span style="color:#6272a4"># 3. rebase</span>
 $ git rebase
 First, rewinding head to replay your work on top of it...
-Fast-forwarded test-rebase to refs/remotes/origin/test-rebase.
+Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 </code></pre></div><h3 id="upstream">upstream</h3>
-<p><img src="/images/shell/triangular-workflow.png" alt="Triangular Workflow"></p>
-<p><em><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/">Triangular Workflow</a></em></p>
+<p><img src="/images/shell/git/triangular-workflow.png" alt="Triangular Workflow"></p>
+<p><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/">Triangular Workflow</a></p>
 <p>upstream이라는 용어는 헷갈릴 수 있다.
 오픈 소스 프로젝트에서 보통 위와 같이 원본 저장소를 <code>upstream</code>이라고 부르고
 그것을 fork한 저장소를 <code>origin</code>,
-upstream에서 fetch한 로컬 환경을 <code>local</code>이라고 부른다.
+upstream에서 fetch한 나의 로컬 환경을 <code>local</code>이라고 부른다.
 아래 명령어는 지정한 <code>upstream</code> 브랜치로 push하도록 한다.</p>
+<p>잠깐. fork한 <code>origin</code> 저장소가 아니라 <code>upstream</code>으로 push한다?</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git push --set-upstream origin feature/test-upstream
 <span style="color:#6272a4"># push 후</span>
 Branch <span style="color:#f1fa8c">&#39;feature/test-upstream&#39;</span> <span style="color:#8be9fd;font-style:italic">set</span> up to track remote branch <span style="color:#f1fa8c">&#39;feature/test-upstream&#39;</span> from <span style="color:#f1fa8c">&#39;origin&#39;</span>.
-</code></pre></div><p>잠깐. fork한 <code>origin</code> 저장소가 아니라 <code>upstream</code>으로 push한다?</p>
-<p>사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
+</code></pre></div><p>사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
 흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어다.
-예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고,
-downstream은 그 반대이다.
+예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고, downstream은 그 반대다.
 즉, upload/download의 방향을 말하며 Git에서 upstream은 push하려는 방향을 말한다.</p>
 <p>여기서 중요한 점은 Git에서 절대적인 upstream/downstream이 없다는 것이다.
 Git은 DVCS(Distributed Version Control System)다.
 다시 말해서 origin이 upstream일 수 있고, upstream은 또 다른 저장소의 downstream일 수 있다.
-Triangular Workflow는 하나의 효과적인 방식이며, 해당 워크플로에서 <code>upstream</code>이라는 브랜치명을 사용하는 것뿐이다.</p>
-<h2 id="branch">branch</h2>
-<p>브랜치(branch)는 나뭇가지나 지점을 뜻한다.
-흔히 말하는 master, main 브랜치는 줄기(trunk) 브랜치라고 불리는데
-소스 코드 통합의 중심이 되는 브랜치이기 때문이다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># master, stable, main, 현재 브랜치 외 모든 브랜치 삭제</span>
-$ git branch | grep -v <span style="color:#f1fa8c">&#34;master\|stable\|main\|\*&#34;</span> | xargs git branch -D
+Triangular Workflow는 하나의 효과적인 방식일 뿐이다.</p>
+<h2 id="status">status</h2>
+<p>index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git status -sb
+<span style="color:#6272a4">## feature...master [ahead 2, behind 1]</span>
+D  README.md
+D  a.c
+D  c.c
+?? README.md
+?? a-1.c
+?? <span style="color:#8be9fd;font-style:italic">test</span>
+</code></pre></div><h2 id="add">add</h2>
+<p>Working Directory의 변경 사항들을 Staging Area에 포함시킨다.
+index를 갱신하고 다음 커밋에 대한 컨테츠를 준비한다. 그 과정은 다음과 같다.</p>
+<ol>
+<li>컨텐츠에 대한 SHA-1 체크섬을 계산한다.</li>
+<li>기존의 blob 객체에 새로운 컨텐츠나 링크를 만들지 여부를 결정한다.</li>
+<li>실제로 생성하거나 blob에 연결한다.</li>
+<li>컨텐츠에 위치를 추적할 tree 객체를 생성한다.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 모든 변경 사항을 staging area에 추가</span>
+$ git add -A
 
-<span style="color:#6272a4"># 현재 브랜치 제외하고 삭제</span>
-$ git branch | grep -v <span style="color:#f1fa8c">&#34;\*&#34;</span> | xargs git branch -D
+<span style="color:#6272a4"># 현재 디렉토리의 변경 사항을 staging area에 추가</span>
+$ git add .
 
-<span style="color:#6272a4"># 모두 삭제</span>
-$ git branch | grep -v <span style="color:#f1fa8c">&#39;^*&#39;</span> | xargs git branch -D
-
-<span style="color:#6272a4"># 정규표현식으로 특정 브랜치 삭제</span>
-$ git branch | grep -Eo <span style="color:#f1fa8c">&#39;feature/.*&#39;</span> | xargs git branch -D
-</code></pre></div><h3 id="xargs">xargs</h3>
-<p>eXtended ARGuments</p>
-<ul>
-<li><a href="https://www.baeldung.com/linux/xargs">When to Use xargs</a> - Baeldung</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#ff79c6">{</span>0..9<span style="color:#ff79c6">}</span> | xargs -n <span style="color:#bd93f9">2</span>
-<span style="color:#bd93f9">0</span> <span style="color:#bd93f9">1</span>
-<span style="color:#bd93f9">2</span> <span style="color:#bd93f9">3</span>
-<span style="color:#bd93f9">4</span> <span style="color:#bd93f9">5</span>
-<span style="color:#bd93f9">6</span> <span style="color:#bd93f9">7</span>
-<span style="color:#bd93f9">8</span> <span style="color:#bd93f9">9</span>
+<span style="color:#6272a4"># 특정 변경 사항만 추가</span>
+$ git add <span style="color:#f1fa8c">&#39;*Detail.java&#39;</span>
+$ git add src/
 </code></pre></div><h2 id="fetch">fetch</h2>
 <p>커밋, 파일 및 참조를 원격 저장소에서 로컬 저장소로 다운로드한다.
-fetch는 다른 사람들이 작업한 것을 보고 싶을 때 실행한다.</p>
-<ul>
-<li><a href="https://git-scm.com/docs/git-fetch">git-fetch</a> - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-fetch">git fetch</a> - Atlassian</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git fetch --all <span style="color:#6272a4"># Fetch all remotes.</span>
-$ git fetch &lt;branch&gt;
+다른 사람들이 작업한 것을 보고 싶을 때 사용할 수 있다.
+다음과 같은 단계를 수행한다.</p>
+<ol>
+<li>URL이나 원격 저장소 이름을 검증하고, 지정된 저장소에 대한 유효성을 확인한다.</li>
+<li>정의된 것이 없다면 설정 파일을 읽어서 기본 설정된 원격 저장소를 찾는다.</li>
+<li>찾았다면 원격 저장소로부터 이름이 지정된 참조(heads와 tags)와 관련된 객체들까지 가져온다.</li>
+<li>복구 가능한 참조들은 나중에 병합이 가능하도록 <code>.git/FETCH_HEAD</code>에 저장한다.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git fetch &lt;branch&gt;
+$ git fetch --all <span style="color:#6272a4"># Fetch all remotes.</span>
+Fetching origin
 
 $ git merge &lt;origin/branch&gt; &lt;commit&gt;
 $ git merge FETCH_HEAD
-</code></pre></div><h2 id="commit">commit</h2>
-<p>tracking 되고 있는 변경 사항들을 HEAD에 반영한다.
-즉, staging area에 있는 변경 사항들을 local repository에 반영한다.</p>
+</code></pre></div><h2 id="commit-1">commit</h2>
+<p>관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영한다.
+즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
+그렇다고 working tree나 staging area의 내용들을 지우지 않는다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git commit
 $ git commit -m <span style="color:#f1fa8c">&#34;commit message&#34;</span>
 
-<span style="color:#6272a4"># 커밋 author 변경</span>
+<span style="color:#6272a4"># 마지막 커밋의 author를 변경할 수 있다.</span>
 $ git commit --amend --author<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Changsu Im &lt;imcxsu@gmail.com&gt;&#34;</span>
-</code></pre></div><h2 id="rebase">rebase</h2>
-<blockquote>
-<p>TODO: 정리</p>
-</blockquote>
-<ul>
-<li><a href="https://www.facebook.com/photo?fbid=4291246567585200">rebase는 Git의 꽃이다.</a> - 이규원</li>
-<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing">Rebasing</a> - git-scm</li>
-</ul>
-<h2 id="merge">merge</h2>
-<p>소스 코드를 <a href="https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge">3-way-merge</a> 방식을 통해 병합한다.</p>
-<ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">Basic Branching and Merging</a> - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging vs. Rebasing</a> - Atlassian</li>
-<li><a href="https://youtu.be/J0W-WA0aYJI">3 way merge - 지옥에서 온 Git</a> - 생활코딩</li>
-<li><a href="https://blog.plasticscm.com/2016/02/three-way-merging-look-under-hood.html">Three-way merging: A look under the hood</a> - Plastic SCM</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># hotfix 브랜치를 main으로 병합</span>
-$ git switch main
-$ git merge hotfix
+<span style="color:#6272a4"># 특정 커밋의 author를 변경하고 싶다면 rebase를 사용한다.</span>
+</code></pre></div><h2 id="merge">merge</h2>
+<p>소스 코드를 병합한다.
+다음과 같은 단계를 수행한다.</p>
+<ol>
+<li>지정된 파라미터를 기반으로 <code>.git/refs/heads</code> 디렉토리로부터 병합 후보들을 식별한다.</li>
+<li>모든 heads의 공통된 조상을 찾아 메모리에 있는 모든 대상 객체들을 로드한다.</li>
+<li>공통 조상과 HEAD 사이의 차이를 판별한다.</li>
+<li>두 head를 비교한다.</li>
+<li>head 사이의 공통된 영역에서 변경 사항이 있다면 마커를 통해 충돌을 표시하고 사용자에게 안내한다.</li>
+<li>충돌한 곳이 없다면, 콘텐츠를 병합하고, 병합을 기술한 메타데이터를 커밋한다.</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># feature 브랜치에서 main 브랜치`를` 병합한다.</span>
+$ git switch feature
+$ git merge main
 
-<span style="color:#6272a4"># fast-forward</span>
-<span style="color:#6272a4"># 새로운 커밋을 생성하지 않고 병합하려는 브랜치의 커밋을 그대로 병합한다.</span>
+<span style="color:#6272a4"># 위 명령어들은 한 줄로 실행할 수 있다.</span>
+$ git merge feature main
+
+<span style="color:#6272a4"># merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.</span>
+$ git merge --abort
+</code></pre></div><p><img src="/images/shell/git/merging-main-into-the-feature-branch.png" alt="Merging main into the feature branch"></p>
+<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging main into the feature branch</a></em></p>
+<p>병합은 두 가지 방식이 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># fast-forward</span>
 $ git merge --ff
-
-<span style="color:#6272a4"># no-fast-forward</span>
-<span style="color:#6272a4"># 현재 브랜치에 새로운 병합 커밋을 생성하고,</span>
-<span style="color:#6272a4"># 현재 브랜치와 병합하려는 브랜치 모두를 참조한다.</span>
+</code></pre></div><p>먼저 Fast Forward 방식이다.
+현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
+별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># no-fast-forward</span>
 $ git merge --no-ff
+</code></pre></div><p>두 번째는 <a href="https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge">3-way-merge</a> 방식을 사용한 No Fast Forward 방식이다.
+현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합한다.
+단순히 브랜치 포인터를 최신 커밋으로 옮기는 게 아니라 3-way-merge의 결과를
+별도의 <strong>Merge 커밋</strong>으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킨다.
+이 Merge 커밋은 부모 커밋을 2개 가진다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">*   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
+|<span style="color:#f1fa8c">\ </span> Merge: be1dacb bf50160 <span style="color:#6272a4"># 부모 커밋이 2개</span>
+| | Author: Changsu &lt;imcxsu@gmail.com&gt;
+| | Date:   Wed Dec <span style="color:#bd93f9">15</span> 05:46:44 <span style="color:#bd93f9">2021</span> +0900
+| |
+| |     Merge pull request <span style="color:#6272a4">#16 from markruler/test-merge-branch</span>
+| |
+| |     Testing merge commit
+| |
+| * commit bf50160af864cab37ba8eca54c97c6e448886b62 <span style="color:#ff79c6">(</span>test-merge-branch<span style="color:#ff79c6">)</span>
+</code></pre></div><p>만약 병합하는 두 브랜치에서 같은 파일의 같은 부분을 동시에 수정하고 병합하면 GIt은 해당 부분을 병합하지 못한다.
+3-way-merge가 실패하고 충돌(Conflict)이 발생한다.
+<code>git mergetool</code>을 활용하면 간편하게 충돌을 해결할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git mergetool
+
+This message is displayed because <span style="color:#f1fa8c">&#39;merge.tool&#39;</span> is not configured.
+See <span style="color:#f1fa8c">&#39;git mergetool --tool-help&#39;</span> or <span style="color:#f1fa8c">&#39;git help config&#39;</span> <span style="color:#ff79c6">for</span> more details.
+<span style="color:#f1fa8c">&#39;git mergetool&#39;</span> will now attempt to use one of the following tools:
+opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare smerge emerge vimdiff nvimdiff
+No files need merging
+
+$ git mergetool --tool-help
+
+<span style="color:#f1fa8c">&#39;git mergetool --tool=&lt;tool&gt;&#39;</span> may be <span style="color:#8be9fd;font-style:italic">set</span> to one of the following:
+    vimdiff
+    vimdiff2
+    vimdiff3
+
+The following tools are valid, but not currently available:
+    araxis
+    bc
+    bc3
+    codecompare
+    deltawalker
+    diffmerge
+    diffuse
+    ecmerge
+    emerge
+    examdiff
+    guiffy
+    gvimdiff
+    gvimdiff2
+    gvimdiff3
+    kdiff3
+    meld
+    opendiff
+    p4merge
+    smerge
+    tkdiff
+    tortoisemerge
+    winmerge
+    xxdiff
+
+Some of the tools listed above only work in a windowed
+environment. If run in a terminal-only session, they will fail.
+</code></pre></div><h2 id="pull">pull</h2>
+<p>해당 명령은 내부적으로 다음의 과정을 수행한다.</p>
+<ol>
+<li>주어진 파라미터를 가지고 <code>git fetch</code>를 수행한다.</li>
+<li><code>git merge</code>를 호출해 현재 브랜치의 HEAD와 지정한 브랜치의 HEAD를 병합한다.</li>
+</ol>
+<p>Git 서버의 Pull Request는 협업 과정에서 &ldquo;제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~&quot;라고 하는 것과 같다.</p>
+<h2 id="rebasehttpsgit-scmcombookkov2git-ebb88ceb9e9cecb998-rebase-ed9598eab8b0"><a href="https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-Rebase-%ED%95%98%EA%B8%B0">rebase</a></h2>
+<blockquote>
+<p><a href="https://www.facebook.com/photo?fbid=4291246567585200">rebase는 Git의 꽃이다.</a> - 이규원</p>
+</blockquote>
+<p>merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive 명령이다.
+반면 rebase는 내용은 같지만 새로운 commit 객체를 생성해서 HEAD에 배치한다.
+그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없다.</p>
+<p>rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다르다.
+보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># oldBase 브랜치에서 newBase 브랜치로 rebase한다.</span>
+$ git rebase &lt;newBase&gt; &lt;oldBase&gt;
+
+<span style="color:#6272a4"># feature 브랜치에서 main 브랜치`로` 재배치(rebase)한다.</span>
+$ git switch feature
+
+       A---B---C feature
+      /
+ D---E---F---G main
+
+$ git rebase main
+$ git rebase main feature
+
+               A<span style="color:#f1fa8c">&#39;--B&#39;</span>--C&#39; feature
+              /
+ D---E---F---G main
+</code></pre></div><p><img src="/images/shell/git/rebasing-the-feature-branch-onto-main.png" alt="Rebasing the feature branch onto main"></p>
+<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Rebasing the feature branch onto main</a></em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">o---o---o---o---o  main
+        <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>         o---o---o---o---o  featureA
+              <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>               o---o---o  featureB
+
+$ git rebase --onto main featureA featureB
+
+                      o---o---o  featureB
+                     /
+    o---o---o---o---o  main
+     <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>      o---o---o---o---o  featureA
+</code></pre></div><p>interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git rebase -i &lt;commit&gt;^
+$ git rebase --interactive &lt;commit&gt;^
+</code></pre></div><p>아래와 같은 하위 명령어들이 있다.
+나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># p, pick &lt;commit&gt; = use commit</span>
+<span style="color:#6272a4"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span>
+<span style="color:#6272a4"># e, edit &lt;commit&gt; = use commit, but stop for amending</span>
+<span style="color:#6272a4"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span>
+<span style="color:#6272a4"># f, fixup &lt;commit&gt; = like &#34;squash&#34;, but discard this commit&#39;s log message</span>
+<span style="color:#6272a4"># x, exec &lt;command&gt; = run command (the rest of the line) using shell</span>
+<span style="color:#6272a4"># b, break = stop here (continue rebase later with &#39;git rebase --continue&#39;)</span>
+<span style="color:#6272a4"># d, drop &lt;commit&gt; = remove commit</span>
+<span style="color:#6272a4"># l, label &lt;label&gt; = label current HEAD with a name</span>
+<span style="color:#6272a4"># t, reset &lt;label&gt; = reset HEAD to a label</span>
+<span style="color:#6272a4"># m, merge [-C &lt;commit&gt; | -c &lt;commit&gt;] &lt;label&gt; [# &lt;oneline&gt;]</span>
+<span style="color:#6272a4"># .       create a merge commit using the original merge commit&#39;s</span>
+<span style="color:#6272a4"># .       message (or the oneline, if no original merge commit was</span>
+<span style="color:#6272a4"># .       specified). Use -c &lt;commit&gt; to reword the commit message.</span>
+</code></pre></div><h2 id="cherry-pick">cherry-pick</h2>
+<p>어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
+<strong>커밋 체크섬은 달라진다</strong>는 것에 유의한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git cherry-pick &lt;commit&gt;
+
+<span style="color:#6272a4"># --no-commit 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않는다.</span>
+$ git cherry-pick &lt;commit&gt; --no-commit
+</code></pre></div><h2 id="stash">stash</h2>
+<p>stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있다.
+stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해준다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 변경 사항을 Stack에 저장한다. 아무런 하위 명령어를 입력하지 않으면 default.</span>
+$ git stash push
+
+<span style="color:#6272a4"># Stack이기 때문에 stash@{0}부터 작업 데이터를 꺼낸 후 drop한다.</span>
+$ git stash pop
+
+<span style="color:#6272a4"># pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않는다.</span>
+$ git stash apply
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># stash@{0}을 제거한다.</span>
+$ git stash drop
+
+<span style="color:#6272a4"># 모든 stash 데이터를 제거한다.</span>
+$ git stash clear
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># stash 목록을 보여준다.</span>
+$ git stash list
+
+<span style="color:#6272a4"># stash@{0}과 HEAD의 diff를 보여준다.</span>
+$ git stash show
+
+<span style="color:#6272a4"># stash@{2}와 HEAD의 diff를 보여준다.</span>
+$ git stash show -p<span style="color:#ff79c6">[</span>--patch<span style="color:#ff79c6">]</span> <span style="color:#bd93f9">2</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 현재 상태를 저장한다.</span>
+$ git stash save &lt;message&gt;
+$ git stash save <span style="color:#f1fa8c">&#34;haha&#34;</span>
+Saved working directory and index state On master: haha
+
+$ git stash list
+stash@<span style="color:#ff79c6">{</span>0<span style="color:#ff79c6">}</span>: On master: haha
+</code></pre></div><p>기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있다.</p>
+<p><img src="/images/shell/git/git-stash-options.png" alt="git stash options"></p>
+<p><em><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash">git stash options</a></em></p>
+<h3 id="how-git-stash-workshttpswwwatlassiancomgittutorialssaving-changesgit-stashhow-git-stash-works"><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash#how-git-stash-works">How git stash works</a></h3>
+<p>stash된 상태는 실제로 로컬 저장소에 커밋 객체처럼 인코딩되어 저장됩니다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline --graph stash@<span style="color:#ff79c6">{</span>0<span style="color:#ff79c6">}</span>
+*   3bd5af8 <span style="color:#ff79c6">(</span>refs/stash<span style="color:#ff79c6">)</span> On master: haha
+|<span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>| * 09162cd index on master: 49ef168 <span style="color:#8be9fd;font-style:italic">test</span>
+|/
+* 49ef168 <span style="color:#ff79c6">(</span>HEAD -&gt; master<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ cat .git/refs/stash
+3bd5af85bcbfaf7b031972dc41b016c4eb463028
 </code></pre></div><h2 id="reset">reset</h2>
+<p>HEAD를 특정 상태로 되돌린다.
+다양한 mode 옵션이 있다.</p>
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things">Undoing Things</a> - git-scm</li>
+<li>
+<p><code>--soft</code> – 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.</p>
+</li>
+<li>
+<p><code>--mixed</code> – default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo <code>add</code>)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git reset HEAD^
+$ git reset --mixed HEAD^
+Unstaged changes after reset:
+M package-lock.json
+M package.json
+</code></pre></div></li>
+<li>
+<p><code>--hard</code> – 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git reset --hard HEAD^
+HEAD is now at 955b01b7 chore: renew mac certificates <span style="color:#ff79c6">(</span><span style="color:#6272a4">#12)</span>
+</code></pre></div></li>
+<li>
+<p><code>--merge</code> — 워킹 트리에서 merge를 undo 할 수 있다. (Undo <code>merge</code>/<code>pull</code>)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git pull
+ Auto-merging nitfol
+ Merge made by recursive.
+  nitfol                |   <span style="color:#bd93f9">20</span> +++++----
+  ...
+
+$ git reset --merge ORIG_HEAD
+</code></pre></div></li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 현재 커밋에서 변경된 파일을 유지한 채 이전 커밋 지점으로만 이동한다.</span>
-<span style="color:#6272a4"># 변경된 파일은 unstaged 상태가 된다.</span>
-$ git reset HEAD^
-
-<span style="color:#6272a4"># 현재 커밋을 삭제하고 이전 커밋으로 HEAD를 옮긴다.</span>
-<span style="color:#6272a4"># staged된 변경 사항은 제거되고, 아니면 유지된다.</span>
-$ git reset --hard HEAD^
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># stage 파일을 unstage 상태로 변경하면서 변경 내용을 지운다.</span>
-$ git reset <span style="color:#ff79c6">[</span>--mixed<span style="color:#ff79c6">]</span> HEAD
-<span style="color:#6272a4"># checkout에서 나뉜 restore가 같은 명령을 수행한다.</span>
-$ git restore --staged *
-
-<span style="color:#6272a4"># 특정 파일을 변경된 부분까지 초기화하고 되돌린다.</span>
-<span style="color:#6272a4"># git checkout -- ${file_name}</span>
-$ git restore --staged <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">file_name</span><span style="color:#f1fa8c">}</span>
+<h2 id="restore">restore</h2>
+<p>워킹 트리를 복구한다. <code>--staged</code> 옵션을 지정하면 스테이징된 스냅샷도 되돌릴 수 있다.</p>
+<ul>
+<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61">git@v2.23.0</a> 부터 <code>checkout</code> 명령어에서 분리되었다.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># git checkout -- ${file_name}</span>
+<span style="color:#6272a4"># git restore --staged ${file_name}</span>
+$ git restore --staged * <span style="color:#6272a4"># git reset --mixed HEAD</span>
 </code></pre></div><h2 id="revert">revert</h2>
-<p><code>reset</code>처럼 변경 사항을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.</p>
+<p><code>reset</code>처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git revert &lt;commit&gt;
 
-Revert <span style="color:#f1fa8c">&#34;이것은 4ea42dbe 커밋 메시지입니다.&#34;</span>
+Revert <span style="color:#f1fa8c">&#34;4ea42dbe의 커밋 메시지&#34;</span>
 
 This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
-</code></pre></div><h2 id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0---git-scm"><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0">Git으로 버그 찾기</a> - git-scm</h2>
+</code></pre></div><h2 id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0"><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0">Git으로 버그 찾기</a></h2>
 <h3 id="blame">blame</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git blame -L 69,82 README.md
+<p>파일의 라인마다 마지막 수정 정보를 확인할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git blame README.md
+0f6d7dc1 <span style="color:#ff79c6">(</span>Changsu Im 2021-12-01 23:47:58 +0900 32<span style="color:#ff79c6">)</span> <span style="color:#6272a4">### Bash</span>
+dd2a98b2 <span style="color:#ff79c6">(</span>cxsu       2020-12-28 14:27:42 +0900 33<span style="color:#ff79c6">)</span> 
+dd2a98b2 <span style="color:#ff79c6">(</span>cxsu       2020-12-28 14:27:42 +0900 34<span style="color:#ff79c6">)</span> <span style="color:#f1fa8c">```</span>bash
+
+$ git blame -L 69,82 README.md
 $ git blame -L <span style="color:#bd93f9">69</span> README.md
 </code></pre></div><h3 id="bisect">bisect</h3>
+<p>이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git bisect start
 $ git bisect bad
 $ git bisect good v1.0
-</code></pre></div><h2 id="log-그래프">log 그래프</h2>
+Bisecting: <span style="color:#bd93f9">5</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">2</span> steps<span style="color:#ff79c6">)</span>
+...
+$ git bisect reset
+</code></pre></div><h2 id="show">show</h2>
+<p>Git Object를 확인한다. (blob, tree, tag, commit)</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># git show ${object}</span>
+
+<span style="color:#6272a4"># tag</span>
+$ git show v1.0.0
+
+<span style="color:#6272a4"># tree</span>
+$ git show v1.0.0^<span style="color:#ff79c6">{</span>tree<span style="color:#ff79c6">}</span>
+$ git show v1.0.0^<span style="color:#ff79c6">{</span>tree<span style="color:#ff79c6">}</span>
+
+<span style="color:#6272a4"># commit, blob, tree 등의 체크섬</span>
+$ git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
+
+<span style="color:#6272a4"># 어떤 커밋이 브랜치의 가장 최신 커밋이라면 간단히 브랜치 이름으로 커밋을 가리킬 수 있다.</span>
+$ git show master:README.md
+</code></pre></div><h2 id="log">log</h2>
+<p>커밋 이력을 조회한다.</p>
+<ul>
+<li><a href="https://git-scm.com/docs/git-log#_pretty_formats">pretty formats</a>을 사용해서 출력 형식을 정할 수 있다.</li>
+<li><code>--abbrev-commit</code> — 짧고 중복되지 않는 해시 값을 보여준다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여준다.</li>
+</ul>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline --graph
 
-$ git config --global alias.lg <span style="color:#f1fa8c">&#34;log --graph --format=format:&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n&#39;&#39;          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)&#39; --all&#34;</span>
+<span style="color:#6272a4"># 날짜 출력</span>
+$ git log --graph --pretty<span style="color:#ff79c6">=</span>format:<span style="color:#f1fa8c">&#39;%C(auto)%h%d (%cr) %cn &lt;%ce&gt; %s&#39;</span>
+
+<span style="color:#6272a4"># 모든 브랜치 로그 출력</span>
+$ git log --graph --format<span style="color:#ff79c6">=</span>format:<span style="color:#f1fa8c">&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;</span>L<span style="color:#f1fa8c">&#39;          %C(white)%s %C(dim white)- %an&#39;</span> --all
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># alias 지정</span>
+$ git config --global alias.lg <span style="color:#f1fa8c">&#34;log --graph --format=format:&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;L&#39;          %C(white)%s %C(dim white)- %an&#39; --all&#34;</span>
 $ git lg
-</code></pre></div><h3 id="git-aliashttpsgit-scmcombookkov2gitec9d98-eab8b0ecb488-git-alias"><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-Git-Alias">Git Alias</a></h3>
+</code></pre></div><h3 id="triple-dot">Triple Dot(&hellip;)</h3>
+<p>Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여준다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log master...feature --oneline --left-right
+&gt; 2fe25f7 <span style="color:#ff79c6">(</span>HEAD -&gt; feature<span style="color:#ff79c6">)</span> q
+&gt; a611f28 feature commit message
+&lt; 106047f <span style="color:#ff79c6">(</span>master<span style="color:#ff79c6">)</span> first
+</code></pre></div><h2 id="refloghttpsgit-scmcombookkov2git-eb8f84eab5ac-eba6acebb984eca084-eca1b0ed9a8ced9598eab8b0_git_reflog-reference-logs"><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0#_git_reflog">reflog</a>: Reference logs</h2>
+<p>Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 <code>reflog</code>라고 부른다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># git reflog show HEAD@{0}</span>
+<span style="color:#6272a4"># git reflog show HEAD</span>
+$ git reflog
+734713b HEAD@<span style="color:#ff79c6">{</span>0<span style="color:#ff79c6">}</span>: commit: fixed refs handling, added gc auto, updated
+d921970 HEAD@<span style="color:#ff79c6">{</span>1<span style="color:#ff79c6">}</span>: merge phedders/rdocs: Merge made by the <span style="color:#f1fa8c">&#39;recursive&#39;</span> strategy.
+1c002dd HEAD@<span style="color:#ff79c6">{</span>2<span style="color:#ff79c6">}</span>: commit: added some blame and merge stuff
+1c36188 HEAD@<span style="color:#ff79c6">{</span>3<span style="color:#ff79c6">}</span>: rebase -i <span style="color:#ff79c6">(</span>squash<span style="color:#ff79c6">)</span>: updating HEAD
+95df984 HEAD@<span style="color:#ff79c6">{</span>4<span style="color:#ff79c6">}</span>: commit: <span style="color:#6272a4"># This is a combination of two commits.</span>
+1c36188 HEAD@<span style="color:#ff79c6">{</span>5<span style="color:#ff79c6">}</span>: rebase -i <span style="color:#ff79c6">(</span>squash<span style="color:#ff79c6">)</span>: updating HEAD
+7e05da5 HEAD@<span style="color:#ff79c6">{</span>6<span style="color:#ff79c6">}</span>: rebase -i <span style="color:#ff79c6">(</span>pick<span style="color:#ff79c6">)</span>: updating HEAD
+</code></pre></div><p>특정 브랜치의 reflog만 확인할 수도 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># git reflog show main@{0}</span>
+<span style="color:#6272a4"># git reflog show main</span>
+$ git reflog main
+</code></pre></div><p>Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장한다.
+그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있다.
+<code>@{n}</code> 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git show HEAD@<span style="color:#ff79c6">{</span>5<span style="color:#ff79c6">}</span>
+
+commit a66e752aa1fccaefe115460dc761c0411d578ed5
+Author: Changsu Im &lt;imcxsu@gmail.com&gt;
+Date:   Wed Dec <span style="color:#bd93f9">1</span> 23:51:01 <span style="color:#bd93f9">2021</span> +0900
+...
+</code></pre></div><p>순서뿐 아니라 시간도 사용할 수 있다. 어제 날짜의 <code>master</code> 브랜치를 보고 싶으면 아래와 같이 한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git show main@<span style="color:#ff79c6">{</span>1.minute.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>1.hour.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>1.day.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>yesterday<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>1.week.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>1.month.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>1.year.ago<span style="color:#ff79c6">}</span>
+$ git show main@<span style="color:#ff79c6">{</span>2021-12-02.23:00:00<span style="color:#ff79c6">}</span>
+
+commit c23bcca5542f7eefa939dc47e3f843bb3b5b70f6 <span style="color:#ff79c6">(</span>HEAD -&gt; main, origin/main, origin/HEAD<span style="color:#ff79c6">)</span>
+Author: Changsu Im &lt;imcxsu@gmail.com&gt;
+Date:   Thu Dec <span style="color:#bd93f9">2</span> 21:27:17 <span style="color:#bd93f9">2021</span> +0900
+...
+</code></pre></div><p>이 명령은 특정 시간에 <code>main</code> 브랜치가 가리키고 있던 것이 무엇인지 보여준다.
+reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 커밋은 조회할 수 없다.</p>
+<table>
+<thead>
+<tr>
+<th>tilde</th>
+<th>caret</th>
+<th>at-sign (reflog)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HEAD</td>
+<td>HEAD~0</td>
+<td>HEAD@{0}</td>
+</tr>
+<tr>
+<td>HEAD^</td>
+<td>HEAD~1</td>
+<td>HEAD@{1}</td>
+</tr>
+<tr>
+<td>HEAD^^</td>
+<td>HEAD~2</td>
+<td>HEAD@{4}</td>
+</tr>
+</tbody>
+</table>
 <h2 id="diff">diff</h2>
 <p>변경 사항을 비교한다.</p>
-<ul>
-<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-diff">Git diff</a> - Atlassian</li>
-<li><a href="https://git-scm.com/docs/git-diff">git-diff</a> - git-scm</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 마지막 커밋과 그 전 커밋 비교</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git diff &lt;before&gt; &lt;after&gt;
+
+<span style="color:#6272a4"># 마지막 커밋과 그 전 커밋을 비교한다.</span>
 $ git diff HEAD~1 HEAD~0
 
-<span style="color:#6272a4"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교</span>
+<span style="color:#6272a4"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.</span>
 $ git diff HEAD^
 
-<span style="color:#6272a4"># 전전 커밋과 local 비교</span>
-$ git diff HEAD~2
-
-<span style="color:#6272a4"># 특정 커밋 수정 확인하기</span>
+<span style="color:#6272a4"># 직전 커밋과 비교해서 변경 사항을 확인한다.</span>
 $ git diff &lt;commit&gt;~ &lt;commit&gt;
-</code></pre></div><h2 id="cherry-pick">cherry-pick</h2>
-<ul>
-<li><a href="https://www.atlassian.com/git/tutorials/cherry-pick">Git Cherry Pick</a> - Atlassian</li>
-<li><a href="https://git-scm.com/docs/git-cherry-pick">git-cherry-pick</a> - git-scm</li>
-</ul>
-<p>브랜치 상관없이 특정 커밋의 변경 사항들을 현재 HEAD에 반영한다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git cherry-pick &lt;commit&gt;
-</code></pre></div><h2 id="stash">stash</h2>
-<p>stash는 숨겨둔다는 뜻으로 local에서 수정한 부분들을 잠시 저장해둘 수 있다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git stash list <span style="color:#6272a4"># List the stash entries that you currently have.</span>
-$ git stash show <span style="color:#6272a4"># Show the changes recorded in the stash entry as a diff between the stashed contents and the commit back when the stash entry was first created.</span>
-$ git stash drop <span style="color:#6272a4"># Remove a single stash entry from the list of stash entries.</span>
-$ git stash push <span style="color:#6272a4"># Save your local modifications</span>
-$ git stash pop <span style="color:#6272a4"># Remove a single stashed state from the stash list and apply it on top of the current working tree state.</span>
-$ git stash apply <span style="color:#6272a4"># Like pop, but do not remove the state from the stash list.</span>
-$ git stash clear <span style="color:#6272a4"># Remove all stash entries</span>
-$ git stash create &lt;message&gt;
-$ git stash store
 </code></pre></div><h2 id="push">push</h2>
-<p>local 저장소의 내용을 remote 저장소에 반영한다.</p>
-<ul>
-<li><a href="https://git-scm.com/docs/git-push">git-push</a> - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-push">git push</a> - Atlassian</li>
-</ul>
+<p>local 저장소의 내용을 remote 저장소에 반영한다.
+히스토리가 일치하지 않으면 push할 수 없다.
+rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
+다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git push origin main
-
 $ git push --set-upstream origin feature/test-upstream
 $ git push
-</code></pre></div><h1 id="advanced">Advanced</h1>
+</code></pre></div><p>push 명령을 실행하면 다음 과정을 수행한다.</p>
+<ol>
+<li>현재 브랜치를 확인한다.</li>
+<li>설정 파일에 기본 원격 저장소가 존재하는지 탐색한다.</li>
+<li>알고 있는 원격 저장소 URL과 추적 중인 heads(브랜치)를 가져온다.</li>
+<li>원격지의 변화가 생긴 마지막 시간 이후에 변경된 내용이 있는지 확인한다.
+<ol>
+<li>원격 저장소로부터 reference 목록을 가져온다(<code>git ls-remote</code>).</li>
+<li>로컬 저장소와 원격 저장소의 커밋 이력(history)을 확인한다. 만약 다르다면 fetch 혹은 pull을 수행한다.</li>
+</ol>
+</li>
+</ol>
+<p>remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git push
+fatal: The upstream branch of your current branch does not match
+the name of your current branch.  To push to the upstream branch
+on the remote, use
+
+    git push origin HEAD:main
+
+To push to the branch of the same name on the remote, use
+
+    git push origin HEAD
+
+To choose either option permanently, see push.default in <span style="color:#f1fa8c">&#39;git help config&#39;</span>.
+
+$ git push origin branch-name
+</code></pre></div><h1 id="플러밍plumbing-명령어">플러밍(Plumbing) 명령어</h1>
+<h2 id="rev-parse">rev-parse</h2>
+<p>Git 데이터베이스에 있는 Object의 체크섬을 조회한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline -n <span style="color:#bd93f9">1</span>
+2fe25f7 <span style="color:#ff79c6">(</span>HEAD -&gt; feature<span style="color:#ff79c6">)</span> commit-msg
+
+$ git rev-parse feature
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77
+</code></pre></div><h2 id="hash-object">hash-object</h2>
+<p>데이터를 <code>.git</code> 디렉토리에 저장하고 체크섬을 계산한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git hash-object -w READM.me
+76e579ae4c9106f3b62fb9203ec5b49d8014d87c
+</code></pre></div><h2 id="ls-tree">ls-tree</h2>
+<p>tree 객체의 내용들을 보여준다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># commit hash: ee85974962b9645d757bc71dd773effb67d3594f</span>
+$ git ls-tree ee85
+<span style="color:#bd93f9">100644</span> blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore
+<span style="color:#bd93f9">040000</span> tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent
+<span style="color:#bd93f9">040000</span> tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__
+<span style="color:#bd93f9">100644</span> blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json
+<span style="color:#bd93f9">100644</span> blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml
+<span style="color:#bd93f9">040000</span> tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src
+</code></pre></div><h2 id="ls-files">ls-files</h2>
+<p>index(스테이징된 파일)의 내용들을 체크섬과 함께 보여준다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git ls-files -s                                                                                           ✭ ✱
+<span style="color:#bd93f9">100644</span> 396865b39e3f04c5ca6369999fd886dbae7441d0 <span style="color:#bd93f9">0</span> .gitignore
+...
+<span style="color:#bd93f9">100644</span> dcdb07b5dfb81d995509aecad3bf202ee3a1d690 <span style="color:#bd93f9">0</span> __test__/price.test.js
+<span style="color:#bd93f9">100644</span> a823b374191cec985963bb821803a78a13ff89f2 <span style="color:#bd93f9">0</span> jest.config.json
+<span style="color:#bd93f9">100644</span> f496d9afc494b5312dd6efd73f43b5b5e40e5e63 <span style="color:#bd93f9">0</span> pom.xml
+<span style="color:#bd93f9">100644</span> e148a4810619ea951091909d82ef0955fe3e0e8f <span style="color:#bd93f9">0</span> src/main/resources-dev/logback.xml
+<span style="color:#6272a4"># 모든 파일 출력</span>
+</code></pre></div><h2 id="cat-file">cat-file</h2>
+<p>저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 해당 체크섬을 가진 객체의 타입을 알려준다.</span>
+$ git cat-file -t &lt;checksum&gt;
+blob
+
+<span style="color:#6272a4"># 해당 체크섬을 가진 객체의 사이즈를 알려준다.</span>
+$ git cat-file -s &lt;checksum&gt;
+<span style="color:#bd93f9">13</span> <span style="color:#6272a4"># bytes</span>
+
+<span style="color:#6272a4"># 객체의 타입을 알고 있다면 파일의 내용을 표시해준다.</span>
+$ git cat-file &lt;type&gt; &lt;checksum&gt;
+이것은 내용입니다.
+</code></pre></div><h2 id="write-tree">write-tree</h2>
+<p>현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git write-tree
+174592b10bb329e6f4664cbc03fd2c4869d12cdc
+
+$ git ls-tree <span style="color:#bd93f9">17459</span>
+<span style="color:#bd93f9">100644</span> blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a
+</code></pre></div><h2 id="commit-tree">commit-tree</h2>
+<p>특정 tree 객체로 새로운 커밋을 만든다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git commit-tree HEAD^<span style="color:#ff79c6">{</span>tree<span style="color:#ff79c6">}</span> -p main -m <span style="color:#f1fa8c">&#34;test commit&#34;</span>
+d5fc19ea68a8556383d46a79177395b563a8a483
+
+$ git show d5fc
+commit d5fc19ea68a8556383d46a79177395b563a8a483
+Author: Changsu Im &lt;imcxsu@gmail.com&gt;
+Date:   Sat Jan <span style="color:#bd93f9">15</span> 22:59:25 <span style="color:#bd93f9">2022</span> +0900
+
+    <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ git merge --ff-only d5fc
+Updating 5fe0db6..d5fc19e
+Fast-forward
+</code></pre></div><h2 id="read-tree">read-tree</h2>
+<p>특정 tree 객체를 index에 포함시킨다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git read-tree HEAD^
+$ git status
+Changes to be committed:
+...
+
+$ git read-tree HEAD
+$ git status
+nothing to commit, working tree clean
+</code></pre></div><h2 id="update-index">update-index</h2>
+<p>woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트합니다.</p>
+<ul>
+<li>
+<p><code>update-ref</code></p>
+<ul>
+<li>master 브랜치를 지정한 커밋 객체로 업데이트한다.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git update-ref refs/heads/master <span style="color:#bd93f9">992379</span>
+</code></pre></div></li>
+<li>
+<p><code>symbolic-ref</code></p>
+<ul>
+<li>또 다른 reference를 가리키도록 reference(일반적으로 HEAD)를 업데이트한다.</li>
+</ul>
+</li>
+<li>
+<p><code>ls-remote</code></p>
+<ul>
+<li>원격 저장소의 references를 나열한다.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git ls-remote
+From .
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature
+106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master
+</code></pre></div></li>
+</ul>
+<h1 id="advanced">Advanced</h1>
 <h2 id="git-hooks">Git Hooks</h2>
 <p>Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행되는 스크립트다.
 스크립트들은 기본적으로 <code>.git/hooks/*</code> 에 위치한다.</p>
-<ul>
-<li><a href="https://www.atlassian.com/git/tutorials/git-hooks">Git Hooks</a> - Atlassian</li>
-<li><a href="https://git-scm.com/docs/githooks">githooks</a> - git-scm</li>
-</ul>
-<p>예를 들어, 아래와 같은 <code>pre-push</code> hook은 <code>git push</code> 명령어를 실행시켰을 때
-<code>push</code> 가 실행되기 전 <code>gradle test</code> 명령어가 먼저 실행된다.</p>
+<p><img src="/images/shell/git/hook-symlink-script.png" alt="Maintaining a hook using a symlink to version-controlled script"></p>
+<p><em><a href="https://www.atlassian.com/git/tutorials/git-hooks">Maintaining a hook using a symlink to version-controlled script</a></em></p>
+<p>예를 들어, 아래와 같은 <code>pre-push</code> hook은 <code>git push</code> 명령어를 실행시켰을 때 <code>push</code> 가 실행되기 전 <code>gradle test</code> 명령어가 먼저 실행된다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/usr/bin/env bash
 </span><span style="color:#ff79c6"></span>
 <span style="color:#6272a4"># 해당 스크립트의 실행 권한을 부여한다.</span>
@@ -1925,9 +4186,169 @@ $ git push
 
 <span style="color:#6272a4"># `pre-push` hook은 `git push` 전 항상 실행되는 스크립트다.</span>
 gradle <span style="color:#8be9fd;font-style:italic">test</span>
+</code></pre></div><h2 id="garbage-collection">Garbage Collection</h2>
+<h3 id="packfileshttpsgit-scmcombookenv2git-internals-packfiles"><a href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles">Packfiles</a></h3>
+<p>Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
+여러 개의 loose objects를 Packfile(<code>./git/objects/pack/*</code>)이라 불리는 단일 바이너리 내에 압축(pack)한다.
+Packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.</p>
+<table>
+<thead>
+<tr>
+<th>구현 측면</th>
+<th>프로세스 호출</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Server</td>
+<td>Upload-pack</td>
+<td>git fetch-pack에 의해 호출되며, 다른 측면에 없는 객체를 확인해 압축한 후 전송한다.</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>Fetch-pack</td>
+<td>다른 저장소로부터 소실된 패키지를 능동적으로 받는다. 이 명령은 일반적으로 최종 사용자에 의해 호출되지 않고 이 명령을 상위 수준으로 감싼 git fetch가 실행된다.</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>Receive-pack</td>
+<td>git send-pack에 의해 호출되며, 저장소 안에 push된 것들을 받는다.</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>Send-pack</td>
+<td>다른 저장소에 대해 git 프로토콜을 이용해 객체들을 push한다. 이 명령은 일반적으로 최종 사용자에 의해 직접 호출되지 않고, 이 명령을 상위 수준으로 감싼 git push가 대신 실행된다.</td>
+</tr>
+</tbody>
+</table>
+<p>Packfile을 열어 압축한 내용을 확인해볼 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
+...
+.git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
+</code></pre></div><h3 id="gchttpswwwatlassiancomgittutorialsgit-gc"><a href="https://www.atlassian.com/git/tutorials/git-gc">gc</a></h3>
+<p>Garbage Collection을 실행한다.
+Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
+예를 들어 orphan 브랜치, 어떤 커밋에도 추가되지 않은 dangling 객체, 어떤 커밋도 가리키지 않고 압축되지 않은 blob 객체 등이다.
+<code>git prune</code>, <code>git repack</code>, <code>git pack</code>, <code>git rerere</code> 등 다른 내부 하위 명령어를 같이 실행한다.
+<code>git gc</code> 명령으로도 실행할 수 있지만 push, pull, merge, rebase, commit 명령에서 자동으로 실행된다.</p>
+<p>Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># touch test and git add</span>
+$ git commit -m <span style="color:#f1fa8c">&#34;test&#34;</span>
+<span style="color:#ff79c6">[</span>master <span style="color:#ff79c6">(</span>root-commit<span style="color:#ff79c6">)</span> fd5e183<span style="color:#ff79c6">]</span> <span style="color:#8be9fd;font-style:italic">test</span>
+
+<span style="color:#6272a4"># touch test2 and git add</span>
+$ git commit -m <span style="color:#f1fa8c">&#34;test2&#34;</span>
+<span style="color:#ff79c6">[</span>master <span style="color:#ff79c6">(</span>root-commit<span style="color:#ff79c6">)</span> 291b5c6<span style="color:#ff79c6">]</span> <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ git log --oneline
+291b5c6 <span style="color:#ff79c6">(</span>HEAD -&gt; master<span style="color:#ff79c6">)</span> test2
+fd5e183 <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ git reset --hard HEAD^
+HEAD is now at fd5e183 <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ git gc
+
+$ git fsck --lost-found
+Checking object directories: 100% <span style="color:#ff79c6">(</span>256/256<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4
+
+$ git merge 291b5c6
+Updating fd5e183..291b5c6
+Fast-forward
+ test2 | <span style="color:#bd93f9">0</span>
+ <span style="color:#bd93f9">1</span> file changed, <span style="color:#bd93f9">0</span> insertions<span style="color:#ff79c6">(</span>+<span style="color:#ff79c6">)</span>, <span style="color:#bd93f9">0</span> deletions<span style="color:#ff79c6">(</span>-<span style="color:#ff79c6">)</span>
+ create mode <span style="color:#bd93f9">100644</span> test2
+
+$ git log --oneline
+291b5c6 <span style="color:#ff79c6">(</span>HEAD -&gt; master<span style="color:#ff79c6">)</span> test2
+fd5e183 <span style="color:#8be9fd;font-style:italic">test</span>
+</code></pre></div><p>orphan 브랜치를 직접 만들어보자</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ touch <span style="color:#8be9fd;font-style:italic">test</span>
+$ git add .
+$ git commit -m <span style="color:#f1fa8c">&#34;test&#34;</span>
+<span style="color:#ff79c6">[</span>master <span style="color:#ff79c6">(</span>root-commit<span style="color:#ff79c6">)</span> c2864f0<span style="color:#ff79c6">]</span> <span style="color:#8be9fd;font-style:italic">test</span>
+
+$ git switch --orphan empty
+Switched to a new branch <span style="color:#f1fa8c">&#39;empty&#39;</span>
+
+$ git log
+fatal: your current branch <span style="color:#f1fa8c">&#39;empty&#39;</span> does not have any commits yet
+
+$ git log --oneline --all
+c2864f0 <span style="color:#ff79c6">(</span>master<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">test</span>
+
+<span style="color:#6272a4"># git rm --cached -r .</span>
+<span style="color:#6272a4"># git clean -f</span>
+
+$ git commit --allow-empty -m <span style="color:#f1fa8c">&#34;empty commit&#34;</span>
+<span style="color:#ff79c6">[</span>empty <span style="color:#ff79c6">(</span>root-commit<span style="color:#ff79c6">)</span> 02116ce<span style="color:#ff79c6">]</span> empty commit
+</code></pre></div><h2 id="prunehttpswwwatlassiancomgittutorialsgit-prune"><a href="https://www.atlassian.com/git/tutorials/git-prune">prune</a></h2>
+<p>연결할 수 없는 orphan 객체를 제거한다.
+일반적으로 직접 실행되지 않고 <code>gc</code>의 하위 명령으로 gc의 기준에 따라 사용된다.</p>
+<p><code>fsck</code> 명령으로 dangling 객체를 확인할 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git fsck
+Checking object directories: 100% <span style="color:#ff79c6">(</span>256/256<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+Checking objects: 100% <span style="color:#ff79c6">(</span>573/573<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+dangling blob c319a9963957cb51e3cb692ac44a4831ea529992
+dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92
+dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99
+dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6
+dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814
+dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c
+dangling blob bcfc949b6572079aa54db963abc59b48232813ed
+dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8
+dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f
+dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796
+dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957
+dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e
+dangling blob 002f663c650d708e29d75524630bc5cf97403039
+</code></pre></div><p><code>--dry-run</code> 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 한다.
+확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git prune --dry-run --verbose
+
+002f663c650d708e29d75524630bc5cf97403039 blob
+091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob
+0a56b32d98fea47ca5228e3b62ee1fc189408796 blob
+0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob
+4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob
+524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob
+5ca654e778f2cceb0207dc9311c8961107caa17e blob
+7f3ced9d3dad92439949d98ad2d92125be07764c blob
+879b261622ca54bd28f8fa2be6330fe9ebfba814 blob
+bcfc949b6572079aa54db963abc59b48232813ed blob
+c319a9963957cb51e3cb692ac44a4831ea529992 blob
+e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob
+f16c37ff355844ac388d101e5bba46e698a4deb8 blob
+f4d5466af82d891b81ad792b0e74e2341e46312f blob
+</code></pre></div><p><code>GIT_TRACE=true</code> 환경 변수와 함께 <code>gc</code>를 실행하면 <code>prune</code> 명령이 실행된다는 것을 알 수 있다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ <span style="color:#8be9fd;font-style:italic">GIT_TRACE</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">true</span> git gc
+21:48:42.368350 git.c:439               trace: built-in: git gc
+21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune
+21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune
+21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all
+21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all
+21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable<span style="color:#ff79c6">=</span>2.weeks.ago
+21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable<span style="color:#ff79c6">=</span>2.weeks.ago
+21:48:42.384316 run-command.c:663       trace: run_command: <span style="color:#8be9fd;font-style:italic">GIT_REF_PARANOIA</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">1</span> git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable<span style="color:#ff79c6">=</span>2.weeks.ago
+21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable<span style="color:#ff79c6">=</span>2.weeks.ago
+Enumerating objects: 573, <span style="color:#ff79c6">done</span>.
+Counting objects: 100% <span style="color:#ff79c6">(</span>573/573<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+Delta compression using up to <span style="color:#bd93f9">12</span> threads
+Compressing objects: 100% <span style="color:#ff79c6">(</span>256/256<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+Writing objects: 100% <span style="color:#ff79c6">(</span>573/573<span style="color:#ff79c6">)</span>, <span style="color:#ff79c6">done</span>.
+Total <span style="color:#bd93f9">573</span> <span style="color:#ff79c6">(</span>delta 133<span style="color:#ff79c6">)</span>, reused <span style="color:#bd93f9">573</span> <span style="color:#ff79c6">(</span>delta 133<span style="color:#ff79c6">)</span>
+21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago
+21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago
+21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago
+21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago
+21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc
+21:48:42.409708 git.c:439               trace: built-in: git rerere gc
 </code></pre></div><h1 id="git-서버">Git 서버</h1>
 <h2 id="branch-protection-rules">Branch protection rules</h2>
-<p>Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 아래와 같은 메시지를 확인할 수 있다.</p>
+<p>Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">git --no-optional-locks -c color.branch<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.diff<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.status<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c diff.mnemonicprefix<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c core.quotepath<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c credential.helper<span style="color:#ff79c6">=</span>sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
 Pushing to https://bitbucket.markruler.com/scm/mark/test-pr.git
 POST git-receive-pack <span style="color:#ff79c6">(</span><span style="color:#bd93f9">990</span> bytes<span style="color:#ff79c6">)</span>
@@ -1974,7 +4395,141 @@ remote:
 To https://bitbucket.markruler.com/scm/mark/test-pr.git ! <span style="color:#ff79c6">[</span>remote rejected<span style="color:#ff79c6">]</span> develop -&gt; develop <span style="color:#ff79c6">(</span>pre-receive hook declined<span style="color:#ff79c6">)</span>
 error: failed to push some refs to <span style="color:#f1fa8c">&#39;https://bitbucket.markruler.com/scm/mark/test-pr.git&#39;</span>
 Completed with errors, see above
-</code></pre></div>
+</code></pre></div><h1 id="참고">참고</h1>
+<ul>
+<li>Books
+<ul>
+<li><a href="https://git-scm.com/book/en/v2">Pro Git</a> (2/e) - Scott Chacon, Ben Straub</li>
+<li><a href="https://www.atlassian.com/git/tutorials">Git Tutorials</a> - Atlassian</li>
+<li><a href="https://github.com/git-guides/">Git Guide</a> - GitHub</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960775473">Git을 이용한 버전 관리</a> - 라비산카 소마순다람</li>
+</ul>
+</li>
+<li>Git Internal
+<ul>
+<li><a href="https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/">CS Visualized: 유용한 깃(Git) 명령어</a> - Lydia Hallie</li>
+<li><a href="https://www.udemy.com/course/git-and-github-complete-guide/">The Complete Git Guide: Understand and master Git and GitHub</a> - Bogdan Stashchuk</li>
+<li><a href="https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037">A Visualized Intro to Git Internals — Objects and Branches</a> - Omer Rosenbaum</li>
+<li><a href="https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c">Getting Hardcore — Creating a Repo From Scratch</a> - Omer Rosenbaum</li>
+<li><a href="https://swimm.io/blog/a-hands-on-intro-to-git-internals-creating-a-repo-from-scratch/">A Hands-On Intro to Git Internals: Creating a Repo From Scratch</a> - swimm</li>
+</ul>
+</li>
+<li>refs
+<ul>
+<li><a href="https://git-scm.com/docs/gitrevisions">gitrevisions</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/refs-and-the-reflog">Refs and the Reflog</a> - Atlassian</li>
+</ul>
+</li>
+<li>index
+<ul>
+<li><a href="https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/">Make your monorepo feel small with Git’s sparse index</a> - Derrick Stolee</li>
+<li><a href="https://mincong.io/2018/04/28/git-index/">Git: Understanding the Index File</a> - Mincong Huang</li>
+<li><a href="https://shafiul.github.io//gitbook/7_the_git_index.html">The Git Index</a></li>
+</ul>
+</li>
+<li>Commands
+<ul>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/git.c#L487">struct cmd_struct commands[]</a></li>
+</ul>
+</li>
+<li>submodule &amp; subtree
+<ul>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88">git-submodule</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/git-subtree">Git subtree: the alternative to Git submodule</a> - Atlassian</li>
+<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/">Why your company shouldn’t use Git submodules</a> - Amber</li>
+<li><a href="https://openclassrooms.com/en/courses/5671626-manage-your-code-project-with-git-github/6152286-use-subtrees-and-submodules-to-add-a-public-repo-to-your-project">Use subtrees and submodules to add a public repo to your project</a> - OpenClassrooms</li>
+<li><a href="https://blog.developer.atlassian.com/the-power-of-git-subtree/">The power of Git subtree</a> - Atlassian</li>
+<li><a href="https://blog.rhostem.com/posts/2020-01-03-code-sharing-with-git-subtree">Git subtree를 활용한 코드 공유</a> - rhostem</li>
+<li><a href="https://www.three-snakes.com/git/git-subtree">Subtree 사용법</a> - ThreeSnakes</li>
+<li><a href="https://homoefficio.github.io/2015/07/18/git-subtree/">git subtree - 프로젝트 안의 또 다른 프로젝트</a> - HomoEfficio</li>
+</ul>
+</li>
+<li>status
+<ul>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/commit.c#L1475">int cmd_status(int argc, const char **argv, const char *prefix)</a></li>
+<li><a href="https://github.com/git/git/blob/master/wt-status.c#L807">wt_status_collect(struct wt_status *s)</a></li>
+<li><a href="https://kwoncheol.me/posts/git-rename-inference">git은 폴더경로가 변경된 것을 어떻게 알 수 있을까?</a> - kwoncheol</li>
+</ul>
+</li>
+<li>fetch
+<ul>
+<li><a href="https://git-scm.com/docs/git-fetch">git-fetch</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-fetch">git fetch</a> - Atlassian</li>
+</ul>
+</li>
+<li>add
+<ul>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/add.c#L491">int cmd_add(int argc, const char **argv, const char *prefix)</a></li>
+</ul>
+</li>
+<li>merge
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging">Basic Branching and Merging</a> - git-scm</li>
+<li><a href="https://youtu.be/J0W-WA0aYJI">3 way merge - 지옥에서 온 Git</a> - 생활코딩</li>
+<li><a href="https://blog.plasticscm.com/2016/02/three-way-merging-look-under-hood.html">Three-way merging: A look under the hood</a> - Plastic SCM</li>
+<li><a href="https://blog.npcode.com/2012/09/29/3-way-merge-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EC%97%90-%EB%8C%80%ED%95%B4/">3-way merge 알고리즘에 대해</a> - 이응준</li>
+</ul>
+</li>
+<li>rebase
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing">Rebasing</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging vs. Rebasing</a> - Atlassian</li>
+</ul>
+</li>
+<li>stash
+<ul>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1769">int cmd_stash(int argc, const char **argv, const char *prefix)</a></li>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1082">static int check_changes(const struct pathspec *ps, int include_untracked, struct strbuf *untracked_files)</a></li>
+</ul>
+</li>
+<li>reset
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things">Undoing Things</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting">Resetting, Checking Out &amp; Reverting</a> - Atlassian</li>
+</ul>
+</li>
+<li>reflog
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog">git reflog</a> - Atlassian</li>
+</ul>
+</li>
+<li>diff
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-diff">Git diff</a> - Atlassian</li>
+<li><a href="https://git-scm.com/docs/git-diff">git-diff</a> - git-scm</li>
+</ul>
+</li>
+<li>cherry-pick
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/cherry-pick">Git Cherry Pick</a> - Atlassian</li>
+<li><a href="https://git-scm.com/docs/git-cherry-pick">git-cherry-pick</a> - git-scm</li>
+</ul>
+</li>
+<li>push
+<ul>
+<li><a href="https://git-scm.com/docs/git-push">git-push</a> - git-scm</li>
+<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-push">git push</a> - Atlassian</li>
+</ul>
+</li>
+<li>hooks
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/git-hooks">Git Hooks</a> - Atlassian</li>
+<li><a href="https://git-scm.com/docs/githooks">githooks</a> - git-scm</li>
+</ul>
+</li>
+<li>packfile
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles">Packfiles</a> - Pro Git</li>
+<li><a href="http://shafiul.github.io/gitbook/7_the_packfile.html">The Packfile</a> - Git Community Book</li>
+</ul>
+</li>
+<li>orphan
+<ul>
+<li><a href="https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/">Git 저장소에서 빈 고아 브랜치를 만드는 방법</a> - LainyZine</li>
+</ul>
+</li>
+</ul>
+
             
             
             
@@ -2021,7 +4576,7 @@ Completed with errors, see above
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=DRY,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;text=Git%eb%98%a5%ec%b0%ac%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=DRY,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;text=CLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -2052,7 +4607,7 @@ Completed with errors, see above
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;title=Git%eb%98%a5%ec%b0%ac%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac&amp;summary=Git%eb%98%a5%ec%b0%ac%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f&amp;title=CLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%ed%95%98%ea%b8%b0&amp;summary=CLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -2076,7 +4631,7 @@ Completed with errors, see above
     
     
     <li>
-      <a href="mailto:?subject= - Git%eb%98%a5%ec%b0%ac%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac.&amp;body=Git%eb%98%a5%ec%b0%ac%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%2c%20by%20%0aCLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20Git%20%ed%99%9c%ec%9a%a9%ed%95%98%ea%b8%b0%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - CLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%ed%95%98%ea%b8%b0.&amp;body=CLI%20%ed%99%98%ea%b2%bd%ec%97%90%ec%84%9c%20%ec%86%8c%ec%8a%a4%20%ec%bd%94%eb%93%9c%20%eb%b2%84%ec%a0%84%20%ea%b4%80%eb%a6%ac%ed%95%98%ea%b8%b0%2c%20by%20%0aGit%20CLI%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fgit-commands%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
