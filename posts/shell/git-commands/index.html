@@ -3920,9 +3920,6 @@ $ git --no-pager log --oneline
 449ed00 <span style="color:#ff79c6">(</span>HEAD -&gt; fixup<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">3</span>
 000a709 <span style="color:#bd93f9">2</span>
 7f1a625 <span style="color:#ff79c6">(</span>main<span style="color:#ff79c6">)</span> <span style="color:#bd93f9">1</span>
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-ini" data-lang="ini"><span style="color:#6272a4"># $HOME/.gitconfig</span>
-<span style="color:#ff79c6">[alias]</span>
-  <span style="color:#50fa7b">fix</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;!git commit --fixup $(git log -n 20 --pretty=format:&#39;%Cred%h - %s&#39; --graph --abbrev-commit | fzf --reverse | awk &#39;{print $2}&#39;)&#34;</span>
 </code></pre></div><h2 id="cherry-pick">cherry-pick</h2>
 <p>어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
 <strong>커밋 체크섬은 달라진다</strong>는 것에 유의한다.</p>
@@ -4317,7 +4314,11 @@ gradle <span style="color:#8be9fd;font-style:italic">test</span>
 <h3 id="packfileshttpsgit-scmcombookenv2git-internals-packfiles"><a href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles">Packfiles</a></h3>
 <p>Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
 여러 개의 loose objects를 Packfile(<code>./git/objects/pack/*</code>)이라 불리는 단일 바이너리 내에 압축(pack)한다.
-Packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.</p>
+<code>git gc</code> 명령을 실행하면 <code>git repack</code>을 실행하고 <code>git pack-objects</code> 명령을 실행한다.
+<a href="https://git-scm.com/docs/git-pack-objects">pack-objects 명령</a>은 default로
+zlib을 사용해서 packfile(<code>.pack</code>)과 pack의 index 파일(<code>.idx</code>)을 생성한다.
+packfile은 객체들을 효율적으로 주고받고, 빠르게 읽기 위해 사용한다.
+packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.</p>
 <table>
 <thead>
 <tr>

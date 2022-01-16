@@ -958,12 +958,6 @@ $ git --no-pager log --oneline
 7f1a625 (main) 1
 ```
 
-```ini
-# $HOME/.gitconfig
-[alias]
-  fix = "!git commit --fixup $(git log -n 20 --pretty=format:'%Cred%h - %s' --graph --abbrev-commit | fzf --reverse | awk '{print $2}')"
-```
-
 ## cherry-pick
 
 어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
@@ -1483,7 +1477,11 @@ gradle test
 
 Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
 여러 개의 loose objects를 Packfile(`./git/objects/pack/*`)이라 불리는 단일 바이너리 내에 압축(pack)한다.
-Packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.
+`git gc` 명령을 실행하면 `git repack`을 실행하고 `git pack-objects` 명령을 실행한다.
+[pack-objects 명령](https://git-scm.com/docs/git-pack-objects)은 default로
+zlib을 사용해서 packfile(`.pack`)과 pack의 index 파일(`.idx`)을 생성한다.
+packfile은 객체들을 효율적으로 주고받고, 빠르게 읽기 위해 사용한다.
+packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.
 
 | 구현 측면 | 프로세스 호출 | 설명                                                                                                                                                  |
 | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
