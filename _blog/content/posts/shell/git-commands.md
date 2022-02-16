@@ -1207,8 +1207,8 @@ Bisecting: 3 revisions left to test after this (roughly 2 steps)
 
 이제부터 버그를 찾아나선다.
 Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-여기에서 테스트해보고 만약 버그가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고, 버그가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
-버그를 발견하지 못하면 `git bisect good` 으로 버그가 아직 없음을 알리고 계속 진행한다.
+현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 `bad`로 기록하고 `good` 커밋 방향으로 범위를 좁힌다.
+버그가 없으면 `good`으로 기록하고 `bad` 커밋 방향으로 범위를 좁힌다.
 
 ```bash
 # 히스토리 확인
@@ -1220,6 +1220,14 @@ c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third
 ...
 
 # 버그가 없다면 good 기록
+$ cat test.txt
+row
+row
+row
+your
+boat
+gently
+
 $ git bisect good
 Bisecting: 1 revision left to test after this (roughly 1 step)
 [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word 'down'
@@ -1241,9 +1249,13 @@ c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third
 ```bash
 # 버그를 발견했다면 bad 기록
 $ cat test.txt
-...
-bug
-...
+row
+row
+row
+your
+bug # 버그다!!!
+gently
+down
 
 $ git bisect bad
 Bisecting: 0 revisions left to test after this (roughly 0 steps)

@@ -4142,8 +4142,8 @@ Bisecting: <span style="color:#bd93f9">3</span> revisions left to <span style="c
 <p><em><a href="https://www.datree.io/resources/git-bisect-debugging-with-git">Git bisect - debugging with git, Noaa Barki</a></em></p>
 <p>이제부터 버그를 찾아나선다.
 Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-여기에서 테스트해보고 만약 버그가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고, 버그가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
-버그를 발견하지 못하면 <code>git bisect good</code> 으로 버그가 아직 없음을 알리고 계속 진행한다.</p>
+현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 <code>bad</code>로 기록하고 <code>good</code> 커밋 방향으로 범위를 좁힌다.
+버그가 없으면 <code>good</code>으로 기록하고 <code>bad</code> 커밋 방향으로 범위를 좁힌다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 히스토리 확인</span>
 $ git log --oneline
 759ea63 <span style="color:#ff79c6">(</span>HEAD<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
@@ -4153,6 +4153,14 @@ c608f80 <span style="color:#ff79c6">(</span>refs/bisect/good-c608f8011e4bfa3d1f1
 ...
 
 <span style="color:#6272a4"># 버그가 없다면 good 기록</span>
+$ cat test.txt
+row
+row
+row
+your
+boat
+gently
+
 $ git bisect good
 Bisecting: <span style="color:#bd93f9">1</span> revision left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">1</span> step<span style="color:#ff79c6">)</span>
 <span style="color:#ff79c6">[</span>9a120127fabd58d0f54786cf015528f77d9a9f17<span style="color:#ff79c6">]</span> Adding the word <span style="color:#f1fa8c">&#39;down&#39;</span>
@@ -4167,9 +4175,13 @@ c608f80 <span style="color:#ff79c6">(</span>refs/bisect/good-c608f8011e4bfa3d1f1
 ...
 </code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 버그를 발견했다면 bad 기록</span>
 $ cat test.txt
-...
-bug
-...
+row
+row
+row
+your
+bug <span style="color:#6272a4"># 버그다!!!</span>
+gently
+down
 
 $ git bisect bad
 Bisecting: <span style="color:#bd93f9">0</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">0</span> steps<span style="color:#ff79c6">)</span>
