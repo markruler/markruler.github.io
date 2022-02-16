@@ -1,7 +1,7 @@
 ---
 date: 2021-12-01T23:28:00+09:00
-title: "CLI 환경에서 소스 코드 버전 관리하기"
-description: "Git CLI"
+title: "CLI 환경에서 소스 코드 관리하기"
+description: "자주 쓰는 Git 명령어"
 featured_image: "/images/shell/git-logo-2color.png"
 images: ["/images/shell/git-logo-2color.png"]
 socialshare: true
@@ -27,7 +27,7 @@ Categories:
   - [index](#index)
   - [Hash Function](#hash-function)
   - [config](#config)
-- [명령어](#명령어)
+- [SCM: Source Code Management](#scm-source-code-management)
 - [포셀린(Porcelain) 명령어](#포셀린porcelain-명령어)
   - [init](#init)
   - [clone](#clone)
@@ -77,7 +77,8 @@ Categories:
     - [Packfiles](#packfiles)
     - [gc](#gc)
   - [prune](#prune)
-- [Git 서버](#git-서버)
+- [Git Server](#git-server)
+  - [Fork](#fork)
   - [Branch protection rules](#branch-protection-rules)
 - [참고](#참고)
 
@@ -88,7 +89,9 @@ Categories:
 
 # Git Internal
 
-## [차이가 아니라 스냅샷](https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/)
+## 차이가 아니라 스냅샷
+
+- [Commits are snapshots, not diffs](https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/)
 
 CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리한다.
 
@@ -167,13 +170,13 @@ Git은 파일을 세 가지 상태로 관리한다.
 
 *[The lifecycle of the status of your files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository)*
 
-- Modified - 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 것을 말한다.
-- Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태를 의미한다.
+- Modified - 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 상태다.
+- Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태다.
   파일을 Stage하면 Git 저장소에 파일을 Blob으로 저장하고 Staging Area에 해당 파일의 체크섬을 저장한다.
   - Tracked - 관리 대상에 있는 파일이다. 이미 스냅샷에 포함되어 있던 파일이다.
   - Untracked - Unmodified, Modified, Staged 상태가 아닌 나머지 파일은 모두 Untracked 파일이다.
     다시 말해서 Staging Area(index)에도 포함되지 않았고 스냅샷으로 저장되어 있지 않은 파일이다.
-- Committed - 데이터가 로컬 데이터베이스에 안전하게 저장됐다는 것을 의미한다.
+- Committed - 데이터가 로컬 데이터베이스에 안전하게 저장된 상태다.
   루트 디렉토리와 각 하위 디렉토리의 트리 객체(Object)를 체크섬과 함께 저장소에 저장한다.
   그 후 커밋 객체를 만들고 메타데이터와 루트 디렉터리 트리 객체를 가리키는 포인터 정보를 커밋 객체에 넣어 저장한다.
   그래서 필요하면 언제든지 스냅샷을 다시 만들 수 있다.
@@ -215,7 +218,7 @@ Git으로 하는 일은 기본적으로 아래와 같다.
 
 `.git/`
 
-Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳을 말한다.
+Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳이다.
 description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.
 
 ```bash
@@ -268,11 +271,11 @@ $ cat refs/heads/main
 4436e4b582c7a8c942f11746d54cf4338325442c
 ```
 
-| 이름                                                        | 설명                                             | 파일 내용                                                                                                        |
+| 이름                                                        | 설명                                                | 파일 내용                                                                                                        |
 | ----------------------------------------------------------- | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| HEAD                                                        | 지금 작업하고 있는 로컬 브랜치를 가리키는 포인터 | ref: refs/heads/main                                                                                             |
-| ORIG_HEAD                                                   | HEAD의 이전 커밋을 백업                          | ec2a7f1e03bca5485627b8af6b76129aa3f49b8a                                                                         |
-| FETCH_HEAD                                                  | 가장 최근에 fetch한 브랜치와 그 브랜치의 HEAD    | 2a6464fe3e243a15ceeef19c32e930374481e87f not-for-merge branch 'main' of github.com:markruler/markruler.github.io |
+| HEAD                                                        | 지금 작업하고 있는 로컬 브랜치를 가리키는 포인터. 로컬 브랜치는 해당 브랜치의 마지막 커밋을 가리킨다. | ref: refs/heads/main                                                                                             |
+| ORIG_HEAD                                                   | HEAD의 이전 커밋을 백업                              | ec2a7f1e03bca5485627b8af6b76129aa3f49b8a                                                                         |
+| FETCH_HEAD                                                  | 가장 최근에 fetch한 브랜치와 그 브랜치의 HEAD            | 2a6464fe3e243a15ceeef19c32e930374481e87f not-for-merge branch 'main' of github.com:markruler/markruler.github.io |
 | MERGE_HEAD, CHERRY_PICK_HEAD, REVERT_HEAD, BISECT_HEAD, ... | -                                                | -                                                                                                                |
 
 ## refs
@@ -285,13 +288,13 @@ commit 객체의 포인터를 저장한다.
 `.gitignore` 파일처럼 무시할 파일의 패턴을 적어둘 수 있다.
 다만 `.git/info/exclude`은 `.git` 디렉토리 안에 있기 때문에 동료와 공유할 수 없다.
 
-## [objects](https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4)
+## objects
 
 다른 VCS의 저장소처럼 Git의 저장소는 파일에 대한 유지, 복제, 수정 등의 이력을 관리하는데 필요한 모든 데이터를 포함하는 데이터베이스다.
-하지만 Git의 이런 작업을 처리하는 방식은 다른 VCS들과 차별화되어 있다.
+하지만 Git의 이런 작업들을 처리하는 방식은 다른 VCS들과 차별화되어 있다.
 
-Git은 유입되는 모든 것을 객체로 간주한다.
-주요 객체 유형으로 blob, tree, commit, tag가 있다.
+Git은 유입되는 모든 것을 Object로 간주한다.
+주요 Object 유형으로 blob, tree, commit, tag가 있다.
 
 ![Simple version of the Git data model](/images/shell/git/simple-git-data-model.png)
 
@@ -338,11 +341,11 @@ $ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
 Staging Area에 관한 정보가 저장되어 있다.
 즉, 저장소에 커밋할 파일을 보관하는 장소다.
 
-## [Hash Function](https://git-scm.com/docs/hash-function-transition/)
+## Hash Function
 
-체크섬을 구하는 기능이다.
+체크섬을 계산한다.
 
-## [config](https://git-scm.com/docs/git-config)
+## config
 
 git 설정을 저장한다.
 설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용된다.
@@ -393,14 +396,18 @@ $ git config --list
 $ git config --list --global
 ```
 
-# 명령어
+# SCM: Source Code Management
 
-- 포셀린(Porcelain) 명령어는 사용자에게 이해하기 쉬운 명령어를 말한다.
-- 플러밍(Plumbing) 명령어는 저수준 명령어를 말한다.
+- [Source code management](https://www.atlassian.com/git/tutorials/source-code-management) - Atlassian
+- What? 코드 변경 사항을 추적하고 관리하는 방법이다. 'Version Control System'으로도 불린다.
+- Why? 팀의 커뮤니케이션 오버헤드를 줄이고 릴리스 속도를 높일 수 있다.
+- How? Git Commands
+  - 포셀린(Porcelain) 명령어는 사용자에게 이해하기 쉬운 명령어다.
+  - 플러밍(Plumbing) 명령어는 저수준 명령어다.
 
 # 포셀린(Porcelain) 명령어
 
-명령어들을 확인하기 전 [[번역] CS Visualized: 유용한 깃(Git) 명령어](https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/)를 먼저 읽는다.
+['CS Visualized: 유용한 깃(Git) 명령어'](https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/)를 함께 읽는다.
 
 ## init
 
@@ -431,7 +438,7 @@ Receiving objects: 100% (22940/22940), 41.19 MiB | 9.49 MiB/s, done.
 Resolving deltas: 100% (16109/16109), done.
 ```
 
-## [submodule](https://www.atlassian.com/git/tutorials/git-submodule)
+## submodule
 
 submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
 submodule을 추가하면 `.gitmodules` 파일이 생성된다.
@@ -444,7 +451,7 @@ $ git submodule add https://github.com/markruler/repository
 $ git submodule update --init --recursive
 ```
 
-## [subtree](https://www.atlassian.com/git/tutorials/git-subtree)
+## subtree
 
 submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 `.gitmodule`과 같은 메타 데이터없이 데이터를 그대로 복제한다.
 
@@ -503,7 +510,7 @@ $ git branch | grep -v '^*' | xargs git branch -D
 $ git branch | grep -Eo 'feature/.*' | xargs git branch -D
 ```
 
-## [tag](https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8)
+## tag
 
 커밋을 참조하기 쉽도록 꼬리표(tag)를 붙인다. Lightweight 태그와 Annotated 태그 두 종류가 있다.
 
@@ -591,7 +598,7 @@ Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 [Triangular Workflow](https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/)
 
 upstream이라는 용어는 헷갈릴 수 있다.
-오픈 소스 프로젝트에서 보통 위와 같이 원본 저장소를 `upstream`이라고 부르고
+협업 프로젝트에서 보통 위와 같은 원본 저장소를 `upstream`이라고 부르고
 그것을 fork한 저장소를 `origin`,
 upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
 아래 명령어는 지정한 `upstream` 브랜치로 push하도록 한다.
@@ -632,7 +639,7 @@ D  c.c
 ## add
 
 Working Directory의 변경 사항들을 Staging Area에 포함시킨다.
-index를 갱신하고 다음 커밋에 대한 컨테츠를 준비한다. 그 과정은 다음과 같다.
+index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과정은 다음과 같다.
 
 1. 컨텐츠에 대한 SHA-1 체크섬을 계산한다.
 2. 기존의 blob 객체에 새로운 컨텐츠나 링크를 만들지 여부를 결정한다.
@@ -807,7 +814,7 @@ environment. If run in a terminal-only session, they will fail.
 
 Git 서버의 Pull Request는 협업 과정에서 "제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~"라고 하는 것과 같다.
 
-## [rebase](https://git-scm.com/book/ko/v2/Git-%EB%B8%8C%EB%9E%9C%EC%B9%98-Rebase-%ED%95%98%EA%B8%B0)
+## rebase
 
 > [rebase는 Git의 꽃이다.](https://www.facebook.com/photo?fbid=4291246567585200) - 이규원
 
@@ -1021,7 +1028,7 @@ stash@{0}: On master: haha
 
 *[git stash options](https://www.atlassian.com/git/tutorials/saving-changes/git-stash)*
 
-### [How git stash works](https://www.atlassian.com/git/tutorials/saving-changes/git-stash#how-git-stash-works)
+### How git stash works
 
 stash된 상태는 실제로 로컬 저장소에 커밋 객체처럼 인코딩되어 저장됩니다.
 
@@ -1115,14 +1122,92 @@ $ git blame -L 69 README.md
 ### bisect
 
 이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
+운영 서버에 버그가 발생했는데 작업 브랜치를 받아보면 아무 문제가 없어서 어디서부터 잘못된 건지 모를 때가 있다.
+이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.
 
 ```bash
+# bisect 시작
 $ git bisect start
+
+# 버그가 있는 현재 커밋 기록
 $ git bisect bad
-$ git bisect good v1.0
-Bisecting: 5 revisions left to test after this (roughly 2 steps)
+
+# 버그가 없던 정상적인 커밋이나 태그 기록
+$ git bisect good <commit_checksum>
+$ git bisect good <tag>
+Bisecting: 5 revisions left to test after this (roughly 3 steps)
 ...
+```
+
+이제부터 버그를 찾아나선다.
+Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
+여기에서 테스트해보고 만약 이슈가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고 이슈가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
+이슈를 발견하지 못하면 git bisect good 으로 이슈가 아직 없음을 알리고 계속 진행한다.
+
+```bash
+# 현재 위치 확인
+$ git log --oneline
+c4fd54445 (HEAD, origin/HEAD, master, refs/bisect/good-c4fd5444594abd46afe7b2c80b2d4531421cbc93) Commit message
+ec56cd854 (origin/second-branch, refs/bisect/good-ec56cd85413bfc1ec5aacc4399d92351b5f667e5) Commit message
+ab7fafd4b (refs/bisect/good-ab7fafd4bf7db8bceca347720c751810724f2598) Commit message
+28a218e39 (origin/first-branch) Commit message
+
+# 문제가 없다면 good 기록
+$ git bisect good
+Bisecting: 5 revisions left to test after this (roughly 1 steps) # 이진 탐색: 3 step -> 1 step
+...
+
+# 문제를 발견했다면 bad 기록
+$ git bisect bad
+```
+
+탐색이 끝나면 첫 bad 커밋을 표시한다.
+
+```bash
+93e7d8ee6184285b9870bf3c0ca85b9dac1ac952 is the first bad commit
+...
+```
+
+`.git` 디렉토리에 bisect를 위한 파일들이 생성된다.
+
+```bash
+$ cat .git/BISECT_ANCESTORS_OK
+
+$ cat .git/BISECT_EXPECTED_REV
+93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
+
+$ cat .git/BISECT_LOG
+# good: [7bbc4bfba6196e382384f987569f198aad04b453] Commit message
+git bisect good 7bbc4bfba6196e382384f987569f198aad04b453
+# bad: [9142cccf52b80e4df5b107c9b6b49002616f34c6] Commit message
+git bisect bad 9142cccf52b80e4df5b107c9b6b49002616f34c6
+# good: [4868a3449578237d4f1c478245903255e88ad49c] Commit message
+git bisect good 4868a3449578237d4f1c478245903255e88ad49c
+# good: [4734cad3558e6b62ad41c0c39855c1c29952ada4] Commit message
+git bisect good 4734cad3558e6b62ad41c0c39855c1c29952ada4
+# bad: [2782d533eeddf55d1d034fc4dfe117887dbe0239] Commit message
+git bisect bad 2782d533eeddf55d1d034fc4dfe117887dbe0239
+# bad: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message
+git bisect bad 93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
+# first bad commit: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message
+
+$ cat .git/BISECT_NAMES
+
+$ cat .git/BISECT_START
+master
+
+$ cat .git/BISECT_TERMS
+bad
+good
+```
+
+bisect를 끝낼 때는 `.git/BISECT_START`로 다시 checkout 한다.
+
+```bash
 $ git bisect reset
+Previous HEAD position was 93e7d8ee6 Commit message
+Switched to branch 'master'
+Your branch is up to date with 'origin/master'.
 ```
 
 ## show
@@ -1180,7 +1265,7 @@ $ git log master...feature --oneline --left-right
 < 106047f (master) first
 ```
 
-## [reflog](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0#_git_reflog): Reference logs
+## reflog: Reference logs
 
 Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 `reflog`라고 부른다.
 
@@ -1473,7 +1558,7 @@ gradle test
 
 ## Garbage Collection
 
-### [Packfiles](https://git-scm.com/book/en/v2/Git-Internals-Packfiles)
+### Packfiles
 
 Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
 여러 개의 loose objects를 Packfile(`./git/objects/pack/*`)이라 불리는 단일 바이너리 내에 압축(pack)한다.
@@ -1498,7 +1583,7 @@ $ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06
 .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
 ```
 
-### [gc](https://www.atlassian.com/git/tutorials/git-gc)
+### gc
 
 Garbage Collection을 실행한다.
 Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
@@ -1566,7 +1651,7 @@ $ git commit --allow-empty -m "empty commit"
 [empty (root-commit) 02116ce] empty commit
 ```
 
-## [prune](https://www.atlassian.com/git/tutorials/git-prune)
+## prune
 
 연결할 수 없는 orphan 객체를 제거한다.
 일반적으로 직접 실행되지 않고 `gc`의 하위 명령으로 gc의 기준에 따라 사용된다.
@@ -1642,7 +1727,11 @@ Total 573 (delta 133), reused 573 (delta 133)
 21:48:42.409708 git.c:439               trace: built-in: git rerere gc
 ```
 
-# Git 서버
+# Git Server
+
+## Fork
+
+포크를 사용하면 원래 리포지토리에 영향을 주지 않고 프로젝트를 변경할 수 있다.
 
 ## Branch protection rules
 
@@ -1710,6 +1799,8 @@ Completed with errors, see above
   - [A Visualized Intro to Git Internals — Objects and Branches](https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037) - Omer Rosenbaum
   - [Getting Hardcore — Creating a Repo From Scratch](https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c) - Omer Rosenbaum
   - [A Hands-On Intro to Git Internals: Creating a Repo From Scratch](https://swimm.io/blog/a-hands-on-intro-to-git-internals-creating-a-repo-from-scratch/) - swimm
+  - [Hash Function](https://git-scm.com/docs/hash-function-transition/) - git-scm
+  - [objects](https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4) - git-scm
 - refs
   - [gitrevisions](https://git-scm.com/docs/gitrevisions) - git-scm
   - [Refs and the Reflog](https://www.atlassian.com/git/tutorials/refs-and-the-reflog) - Atlassian
@@ -1717,9 +1808,15 @@ Completed with errors, see above
   - [Make your monorepo feel small with Git’s sparse index](https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/) - Derrick Stolee
   - [Git: Understanding the Index File](https://mincong.io/2018/04/28/git-index/) - Mincong Huang
   - [The Git Index](https://shafiul.github.io//gitbook/7_the_git_index.html)
+- config
+  - [git-scm](https://git-scm.com/docs/git-config) - git-scm
+- tag
+  - [tag](https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8) - git-scm
 - Commands
   - [struct cmd_struct commands[]](https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/git.c#L487)
 - submodule & subtree
+  - [submodule](https://www.atlassian.com/git/tutorials/git-submodule) - Atlassian
+  - [subtree](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
   - [git-submodule](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88) - git-scm
   - [Git subtree: the alternative to Git submodule](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
   - [Why your company shouldn’t use Git submodules](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/) - Amber
@@ -1746,6 +1843,7 @@ Completed with errors, see above
   - [Rebasing](https://git-scm.com/book/en/v2/Git-Branching-Rebasing) - git-scm
   - [Merging vs. Rebasing](https://www.atlassian.com/git/tutorials/merging-vs-rebasing) - Atlassian
 - stash
+  - [git stash](https://www.atlassian.com/git/tutorials/saving-changes/git-stash#how-git-stash-works) - Atlassian
   - [int cmd_stash(int argc, const char \**argv, const char *prefix)](https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1769)
   - [static int check_changes(const struct pathspec *ps, int include_untracked, struct strbuf *untracked_files)](https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1082)
 - reset
@@ -1753,6 +1851,7 @@ Completed with errors, see above
   - [Resetting, Checking Out & Reverting](https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting) - Atlassian
 - reflog
   - [git reflog](https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog) - Atlassian
+  - [Revision Selection](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0#_git_reflog)
 - diff
   - [Git diff](https://www.atlassian.com/git/tutorials/saving-changes/git-diff) - Atlassian
   - [git-diff](https://git-scm.com/docs/git-diff) - git-scm
@@ -1768,5 +1867,8 @@ Completed with errors, see above
 - packfile
   - [Packfiles](https://git-scm.com/book/en/v2/Git-Internals-Packfiles) - Pro Git
   - [The Packfile](http://shafiul.github.io/gitbook/7_the_packfile.html) - Git Community Book
+- gc
+  - [git gc](https://www.atlassian.com/git/tutorials/git-gc) - Atlassian
+  - [git prune](https://www.atlassian.com/git/tutorials/git-prune) - Atlassian
 - orphan
   - [Git 저장소에서 빈 고아 브랜치를 만드는 방법](https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/) - LainyZine
