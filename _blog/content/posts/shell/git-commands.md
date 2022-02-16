@@ -1860,6 +1860,8 @@ Fork는 서버에 저장소의 복사본을 만든다.
 
 ![fork-repository](/images/shell/git/fork-repository.svg)
 
+*[Distributed version control and forking workflow](https://coderefinery.github.io/git-collaborative/03-distributed/)*
+
 - fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
   - fork 리포지토리에서 `push --force`를 하든 말든 상관없다.
   - remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있다.
