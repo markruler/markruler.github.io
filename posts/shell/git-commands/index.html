@@ -1001,7 +1001,7 @@
 						
 						
 							<li>
-								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav">
+								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#git으로-버그-찾기-nav`)" id="git으로-버그-찾기-nav">
 									Git으로 버그 찾기
 								</a>
 							</li>
@@ -2470,7 +2470,7 @@
 						
 						
 							<li>
-								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0" onclick="onNavClick(`#git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav`)" id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0-nav">
+								<a href="#git%ec%9c%bc%eb%a1%9c-%eb%b2%84%ea%b7%b8-%ec%b0%be%ea%b8%b0" onclick="onNavClick(`#git으로-버그-찾기-nav`)" id="git으로-버그-찾기-nav">
 									Git으로 버그 찾기
 								</a>
 							</li>
@@ -3536,7 +3536,7 @@ $ git config --list --global
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git init
 Initialized empty Git repository in /home/markruler/toy/.git/
 </code></pre></div><h2 id="clone">clone</h2>
-<p>origin 저장소의 설정 정보를 제외한 모든 데이터를 가져온다. 그 과정은 다음과 같다.</p>
+<p>remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제한다. 그 과정은 다음과 같다.</p>
 <ol>
 <li>대상 디렉토리가 존재하지 않는다면 생성하고, 대상 디렉토리를 GIt 디렉토리로 초기화한다.</li>
 <li>대상 디렉토리 안에 소스 저장소의 브랜치와 동일한 추적 브랜치들을 설정한다. (git remote)</li>
@@ -3677,7 +3677,7 @@ Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 <p><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/">Triangular Workflow</a></p>
 <p>upstream이라는 용어는 헷갈릴 수 있다.
 협업 프로젝트에서 보통 위와 같은 원본 저장소를 <code>upstream</code>이라고 부르고
-그것을 fork한 저장소를 <code>origin</code>,
+그것을 <a href="#fork">fork</a>한 저장소를 <code>origin</code>,
 upstream에서 fetch한 나의 로컬 환경을 <code>local</code>이라고 부른다.
 아래 명령어는 지정한 <code>upstream</code> 브랜치로 push하도록 한다.</p>
 <p>잠깐. fork한 <code>origin</code> 저장소가 아니라 <code>upstream</code>으로 push한다?</p>
@@ -4065,7 +4065,7 @@ $ git restore --staged * <span style="color:#6272a4"># git reset --mixed HEAD</s
 Revert <span style="color:#f1fa8c">&#34;4ea42dbe의 커밋 메시지&#34;</span>
 
 This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
-</code></pre></div><h2 id="git으로-버그-찾기httpsgit-scmcombookkov2git-eb8f84eab5ac-gitec9cbceba19c-ebb284eab7b8-ecb0beeab8b0"><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0">Git으로 버그 찾기</a></h2>
+</code></pre></div><h2 id="git으로-버그-찾기">Git으로 버그 찾기</h2>
 <h3 id="blame">blame</h3>
 <p>파일의 라인마다 마지막 수정 정보를 확인할 수 있다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git blame README.md
@@ -4683,7 +4683,20 @@ Total <span style="color:#bd93f9">573</span> <span style="color:#ff79c6">(</span
 21:48:42.409708 git.c:439               trace: built-in: git rerere gc
 </code></pre></div><h1 id="git-server">Git Server</h1>
 <h2 id="fork">Fork</h2>
-<p>포크를 사용하면 원래 리포지토리에 영향을 주지 않고 프로젝트를 변경할 수 있다.</p>
+<p>Fork는 서버에 저장소의 복사본을 만든다.</p>
+<p><img src="/images/shell/git/fork-repository.svg" alt="fork-repository"></p>
+<ul>
+<li>fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
+<ul>
+<li>fork 리포지토리에서 <code>push --force</code>를 하든 말든 상관없다.</li>
+<li>remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있다.</li>
+<li>공유지의 비극을 피할 수 있다.</li>
+</ul>
+</li>
+<li>upstream 리포지토리의 메인테이너를 제한할 수 있다.</li>
+<li>upstream 리포지토리의 안 쓰는 브랜치들을 따로 정리할 필요가 없다.</li>
+<li>진정한 의미의 DVCS</li>
+</ul>
 <h2 id="branch-protection-rules">Branch protection rules</h2>
 <p>Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">git --no-optional-locks -c color.branch<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.diff<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.status<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c diff.mnemonicprefix<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c core.quotepath<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c credential.helper<span style="color:#ff79c6">=</span>sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
@@ -4840,6 +4853,7 @@ Completed with errors, see above
 <li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting">Resetting, Checking Out &amp; Reverting</a> - Atlassian</li>
 </ul>
 </li>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0">Git으로 버그 찾기</a></li>
 <li>reflog
 <ul>
 <li><a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog">git reflog</a> - Atlassian</li>
@@ -4885,6 +4899,13 @@ Completed with errors, see above
 <li>orphan
 <ul>
 <li><a href="https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/">Git 저장소에서 빈 고아 브랜치를 만드는 방법</a> - LainyZine</li>
+</ul>
+</li>
+<li>fork
+<ul>
+<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow">Forking Workflow</a></li>
+<li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks">About forks</a></li>
+<li><a href="https://blog.outsider.ne.kr/865">Github를 이용하는 전체 흐름 이해하기 #1</a> - 아웃사이더</li>
 </ul>
 </li>
 </ul>

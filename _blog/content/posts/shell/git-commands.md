@@ -420,7 +420,7 @@ Initialized empty Git repository in /home/markruler/toy/.git/
 
 ## clone
 
-origin 저장소의 설정 정보를 제외한 모든 데이터를 가져온다. 그 과정은 다음과 같다.
+remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제한다. 그 과정은 다음과 같다.
 
 1. 대상 디렉토리가 존재하지 않는다면 생성하고, 대상 디렉토리를 GIt 디렉토리로 초기화한다.
 2. 대상 디렉토리 안에 소스 저장소의 브랜치와 동일한 추적 브랜치들을 설정한다. (git remote)
@@ -599,7 +599,7 @@ Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 
 upstream이라는 용어는 헷갈릴 수 있다.
 협업 프로젝트에서 보통 위와 같은 원본 저장소를 `upstream`이라고 부르고
-그것을 fork한 저장소를 `origin`,
+그것을 [fork](#fork)한 저장소를 `origin`,
 upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
 아래 명령어는 지정한 `upstream` 브랜치로 push하도록 한다.
 
@@ -1103,7 +1103,7 @@ Revert "4ea42dbe의 커밋 메시지"
 This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 ```
 
-## [Git으로 버그 찾기](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0)
+## Git으로 버그 찾기
 
 ### blame
 
@@ -1856,7 +1856,17 @@ Total 573 (delta 133), reused 573 (delta 133)
 
 ## Fork
 
-포크를 사용하면 원래 리포지토리에 영향을 주지 않고 프로젝트를 변경할 수 있다.
+Fork는 서버에 저장소의 복사본을 만든다.
+
+![fork-repository](/images/shell/git/fork-repository.svg)
+
+- fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
+  - fork 리포지토리에서 `push --force`를 하든 말든 상관없다.
+  - remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있다.
+  - 공유지의 비극을 피할 수 있다.
+- upstream 리포지토리의 메인테이너를 제한할 수 있다.
+- upstream 리포지토리의 안 쓰는 브랜치들을 따로 정리할 필요가 없다.
+- 진정한 의미의 DVCS
 
 ## Branch protection rules
 
@@ -1974,6 +1984,7 @@ Completed with errors, see above
 - reset
   - [Undoing Things](https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things) - git-scm
   - [Resetting, Checking Out & Reverting](https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting) - Atlassian
+- [Git으로 버그 찾기](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0)
 - reflog
   - [git reflog](https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog) - Atlassian
   - [Revision Selection](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0#_git_reflog)
@@ -1997,3 +2008,7 @@ Completed with errors, see above
   - [git prune](https://www.atlassian.com/git/tutorials/git-prune) - Atlassian
 - orphan
   - [Git 저장소에서 빈 고아 브랜치를 만드는 방법](https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/) - LainyZine
+- fork
+  - [Forking Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow)
+  - [About forks](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks)
+  - [Github를 이용하는 전체 흐름 이해하기 #1](https://blog.outsider.ne.kr/865) - 아웃사이더
