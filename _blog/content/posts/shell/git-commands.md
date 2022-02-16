@@ -1355,9 +1355,14 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.
 
 ```bash
+# origin 저장소의 main 브랜치로 push
 $ git push origin main
+
+# 현재 HEAD와 같은 브랜치로 push
+$ git push origin HEAD
+
+# 현재 브랜치의 upstream 브랜치 지정 및 push
 $ git push --set-upstream origin feature/test-upstream
-$ git push
 ```
 
 push 명령을 실행하면 다음 과정을 수행한다.

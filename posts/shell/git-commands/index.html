@@ -4267,9 +4267,14 @@ $ git diff &lt;commit&gt;~ &lt;commit&gt;
 히스토리가 일치하지 않으면 push할 수 없다.
 rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
 다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git push origin main
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># origin 저장소의 main 브랜치로 push</span>
+$ git push origin main
+
+<span style="color:#6272a4"># 현재 HEAD와 같은 브랜치로 push</span>
+$ git push origin HEAD
+
+<span style="color:#6272a4"># 현재 브랜치의 upstream 브랜치 지정 및 push</span>
 $ git push --set-upstream origin feature/test-upstream
-$ git push
 </code></pre></div><p>push 명령을 실행하면 다음 과정을 수행한다.</p>
 <ol>
 <li>현재 브랜치를 확인한다.</li>
@@ -4585,7 +4590,7 @@ Total <span style="color:#bd93f9">573</span> <span style="color:#ff79c6">(</span
 21:48:42.409708 git.c:439               trace: built-in: git rerere gc
 </code></pre></div><h1 id="git-server">Git Server</h1>
 <h2 id="fork">Fork</h2>
-<p>포크를 사용하면 원래 리포지토리에 영향을 주지 않고 프로젝트를 변경할 수 있습니다.</p>
+<p>포크를 사용하면 원래 리포지토리에 영향을 주지 않고 프로젝트를 변경할 수 있다.</p>
 <h2 id="branch-protection-rules">Branch protection rules</h2>
 <p>Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">git --no-optional-locks -c color.branch<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.diff<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c color.status<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c diff.mnemonicprefix<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c core.quotepath<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> -c credential.helper<span style="color:#ff79c6">=</span>sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
