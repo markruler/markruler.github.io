@@ -4076,61 +4076,143 @@ dd2a98b2 <span style="color:#ff79c6">(</span>cxsu       2020-12-28 14:27:42 +090
 $ git blame -L 69,82 README.md
 $ git blame -L <span style="color:#bd93f9">69</span> README.md
 </code></pre></div><h3 id="bisect">bisect</h3>
+<ul>
+<li><a href="https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination">A beginner&rsquo;s guide to GIT BISECT</a> - Tony Rost</li>
+</ul>
 <p>이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
-운영 서버에 버그가 발생했는데 작업 브랜치를 받아보면 아무 문제가 없어서 어디서부터 잘못된 건지 모를 때가 있다.
+운영 서버에 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있다.
 이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># bisect 시작</span>
-$ git bisect start
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 테스트 프로젝트 생성</span>
+mkdir git-bisect-tests
+<span style="color:#8be9fd;font-style:italic">cd</span> git-bisect-tests
+git init
 
-<span style="color:#6272a4"># 버그가 있는 현재 커밋 기록</span>
-$ git bisect bad
+<span style="color:#8be9fd;font-style:italic">echo</span> row &gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding first row&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> row &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding second row&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> row &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding third row&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> your &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;your&#39;&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> boat &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;boat&#39;&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> gently &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;gently&#39;&#34;</span>
+sed -i -e <span style="color:#f1fa8c">&#39;s/boat/bug/g&#39;</span> test.txt 
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Changing the word &#39;boat&#39; to &#39;bug&#39;&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> down &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;down&#39;&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> the &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;the&#39;&#34;</span>
+<span style="color:#8be9fd;font-style:italic">echo</span> stream &gt;&gt; test.txt
+git add -A <span style="color:#ff79c6">&amp;&amp;</span> git commit -m <span style="color:#f1fa8c">&#34;Adding the word &#39;stream&#39;&#34;</span>
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ cat test.txt
+row
+row
+row
+your
+bug <span style="color:#6272a4"># bug를 찾을 것이다.</span>
+gently
+down
+the
+stream
+</code></pre></div><p>bisect를 시작한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git bisect start
+</code></pre></div><p>버그가 있는 현재 커밋을 기록한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git bisect bad
+</code></pre></div><p>버그 없이 멀쩡했던 커밋을 기록한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline
+d4a701f <span style="color:#ff79c6">(</span>HEAD -&gt; master, refs/bisect/bad<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;stream&#39;</span>
+eedf347 Adding the word <span style="color:#f1fa8c">&#39;the&#39;</span>
+9a12012 Adding the word <span style="color:#f1fa8c">&#39;down&#39;</span>
+f937601 Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
+759ea63 Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
+850323e Adding the word <span style="color:#f1fa8c">&#39;boat&#39;</span>
+222f64a Adding the word <span style="color:#f1fa8c">&#39;your&#39;</span>
+c608f80 Adding third row
+60532d0 Adding second row
+106eb10 Adding first row
 
-<span style="color:#6272a4"># 버그가 없던 정상적인 커밋이나 태그 기록</span>
-$ git bisect good &lt;commit_checksum&gt;
-$ git bisect good &lt;tag&gt;
-Bisecting: <span style="color:#bd93f9">5</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">3</span> steps<span style="color:#ff79c6">)</span>
+$ git bisect good c608f80
+Bisecting: <span style="color:#bd93f9">3</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">2</span> steps<span style="color:#ff79c6">)</span>
+<span style="color:#ff79c6">[</span>759ea6356258b687ad8b12178b2934ab5ad830bf<span style="color:#ff79c6">]</span> Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
 ...
-</code></pre></div><p>이제부터 버그를 찾아나선다.
+</code></pre></div><p><img src="/images/shell/git/git-bisect.png" alt="git-bisect"></p>
+<p><em><a href="https://www.datree.io/resources/git-bisect-debugging-with-git">Git bisect - debugging with git, Noaa Barki</a></em></p>
+<p>이제부터 버그를 찾아나선다.
 Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-여기에서 테스트해보고 만약 이슈가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고 이슈가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
-이슈를 발견하지 못하면 git bisect good 으로 이슈가 아직 없음을 알리고 계속 진행한다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 현재 위치 확인</span>
+여기에서 테스트해보고 만약 버그가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고, 버그가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
+버그를 발견하지 못하면 <code>git bisect good</code> 으로 버그가 아직 없음을 알리고 계속 진행한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 히스토리 확인</span>
 $ git log --oneline
-c4fd54445 <span style="color:#ff79c6">(</span>HEAD, origin/HEAD, master, refs/bisect/good-c4fd5444594abd46afe7b2c80b2d4531421cbc93<span style="color:#ff79c6">)</span> Commit message
-ec56cd854 <span style="color:#ff79c6">(</span>origin/second-branch, refs/bisect/good-ec56cd85413bfc1ec5aacc4399d92351b5f667e5<span style="color:#ff79c6">)</span> Commit message
-ab7fafd4b <span style="color:#ff79c6">(</span>refs/bisect/good-ab7fafd4bf7db8bceca347720c751810724f2598<span style="color:#ff79c6">)</span> Commit message
-28a218e39 <span style="color:#ff79c6">(</span>origin/first-branch<span style="color:#ff79c6">)</span> Commit message
+759ea63 <span style="color:#ff79c6">(</span>HEAD<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
+850323e Adding the word <span style="color:#f1fa8c">&#39;boat&#39;</span>
+222f64a Adding the word <span style="color:#f1fa8c">&#39;your&#39;</span>
+c608f80 <span style="color:#ff79c6">(</span>refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669<span style="color:#ff79c6">)</span> Adding third row
+...
 
-<span style="color:#6272a4"># 문제가 없다면 good 기록</span>
+<span style="color:#6272a4"># 버그가 없다면 good 기록</span>
 $ git bisect good
-Bisecting: <span style="color:#bd93f9">5</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">1</span> steps<span style="color:#ff79c6">)</span> <span style="color:#6272a4"># 이진 탐색: 3 step -&gt; 1 step</span>
+Bisecting: <span style="color:#bd93f9">1</span> revision left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">1</span> step<span style="color:#ff79c6">)</span>
+<span style="color:#ff79c6">[</span>9a120127fabd58d0f54786cf015528f77d9a9f17<span style="color:#ff79c6">]</span> Adding the word <span style="color:#f1fa8c">&#39;down&#39;</span>
+</code></pre></div><p><code>good</code>으로 기록하면 <code>bad</code> 커밋 방향으로 이진탐색한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline
+9a12012 <span style="color:#ff79c6">(</span>HEAD<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;down&#39;</span>
+f937601 Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
+759ea63 <span style="color:#ff79c6">(</span>refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
+850323e Adding the word <span style="color:#f1fa8c">&#39;boat&#39;</span>
+222f64a Adding the word <span style="color:#f1fa8c">&#39;your&#39;</span>
+c608f80 <span style="color:#ff79c6">(</span>refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669<span style="color:#ff79c6">)</span> Adding third row
+...
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 버그를 발견했다면 bad 기록</span>
+$ cat test.txt
+...
+bug
 ...
 
-<span style="color:#6272a4"># 문제를 발견했다면 bad 기록</span>
 $ git bisect bad
-</code></pre></div><p>탐색이 끝나면 첫 bad 커밋을 표시한다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">93e7d8ee6184285b9870bf3c0ca85b9dac1ac952 is the first bad commit
-...
-</code></pre></div><p><code>.git</code> 디렉토리에 bisect를 위한 파일들이 생성된다.</p>
+Bisecting: <span style="color:#bd93f9">0</span> revisions left to <span style="color:#8be9fd;font-style:italic">test</span> after this <span style="color:#ff79c6">(</span>roughly <span style="color:#bd93f9">0</span> steps<span style="color:#ff79c6">)</span>
+<span style="color:#ff79c6">[</span>f9376015d4721390c942c0cd0064467b51495094<span style="color:#ff79c6">]</span> Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
+</code></pre></div><p><code>bad</code>로 기록하면 <code>good</code> 커밋 방향으로 이진탐색한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git log --oneline
+f937601 <span style="color:#ff79c6">(</span>HEAD<span style="color:#ff79c6">)</span> Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
+759ea63 <span style="color:#ff79c6">(</span>refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf<span style="color:#ff79c6">)</span> Adding the word <span style="color:#f1fa8c">&#39;gently&#39;</span>
+850323e Adding the word <span style="color:#f1fa8c">&#39;boat&#39;</span>
+222f64a Adding the word <span style="color:#f1fa8c">&#39;your&#39;</span>
+c608f80 <span style="color:#ff79c6">(</span>refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669<span style="color:#ff79c6">)</span> Adding third row
+</code></pre></div><p>그 다음 커밋도 <code>bad</code>로 기록하고
+<code>good</code> 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
+해당 <code>bad</code> 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git bisect bad
+f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
+commit f9376015d4721390c942c0cd0064467b51495094
+Author: Changsu Im &lt;imcxsu@gmail.com&gt;
+Date:   Thu Feb <span style="color:#bd93f9">17</span> 03:21:28 <span style="color:#bd93f9">2022</span> +0900
+
+    Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
+
+ test.txt | <span style="color:#bd93f9">2</span> +-
+ <span style="color:#bd93f9">1</span> file changed, <span style="color:#bd93f9">1</span> insertion<span style="color:#ff79c6">(</span>+<span style="color:#ff79c6">)</span>, <span style="color:#bd93f9">1</span> deletion<span style="color:#ff79c6">(</span>-<span style="color:#ff79c6">)</span>
+</code></pre></div><p>이진탐색하는 동안 <code>.git</code> 디렉토리에 bisect를 위한 파일들이 생성된다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ cat .git/BISECT_ANCESTORS_OK
 
 $ cat .git/BISECT_EXPECTED_REV
-93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
+f9376015d4721390c942c0cd0064467b51495094
 
 $ cat .git/BISECT_LOG
-<span style="color:#6272a4"># good: [7bbc4bfba6196e382384f987569f198aad04b453] Commit message</span>
-git bisect good 7bbc4bfba6196e382384f987569f198aad04b453
-<span style="color:#6272a4"># bad: [9142cccf52b80e4df5b107c9b6b49002616f34c6] Commit message</span>
-git bisect bad 9142cccf52b80e4df5b107c9b6b49002616f34c6
-<span style="color:#6272a4"># good: [4868a3449578237d4f1c478245903255e88ad49c] Commit message</span>
-git bisect good 4868a3449578237d4f1c478245903255e88ad49c
-<span style="color:#6272a4"># good: [4734cad3558e6b62ad41c0c39855c1c29952ada4] Commit message</span>
-git bisect good 4734cad3558e6b62ad41c0c39855c1c29952ada4
-<span style="color:#6272a4"># bad: [2782d533eeddf55d1d034fc4dfe117887dbe0239] Commit message</span>
-git bisect bad 2782d533eeddf55d1d034fc4dfe117887dbe0239
-<span style="color:#6272a4"># bad: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message</span>
-git bisect bad 93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
-<span style="color:#6272a4"># first bad commit: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message</span>
+git bisect start
+<span style="color:#6272a4"># bad: [d4a701f370a2489c8976eb0ce9f7ccbc358e640d] Adding the word &#39;stream&#39;</span>
+git bisect bad d4a701f370a2489c8976eb0ce9f7ccbc358e640d
+<span style="color:#6272a4"># good: [c608f8011e4bfa3d1f1e9f537cc148769f158669] Adding third row</span>
+git bisect good c608f8011e4bfa3d1f1e9f537cc148769f158669
+<span style="color:#6272a4"># good: [759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word &#39;gently&#39;</span>
+git bisect good 759ea6356258b687ad8b12178b2934ab5ad830bf
+<span style="color:#6272a4"># bad: [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word &#39;down&#39;</span>
+git bisect bad 9a120127fabd58d0f54786cf015528f77d9a9f17
+<span style="color:#6272a4"># bad: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
+git bisect bad f9376015d4721390c942c0cd0064467b51495094
+<span style="color:#6272a4"># first bad commit: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
 
 $ cat .git/BISECT_NAMES
 
@@ -4142,9 +4224,8 @@ bad
 good
 </code></pre></div><p>bisect를 끝낼 때는 <code>.git/BISECT_START</code>로 다시 checkout 한다.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">$ git bisect reset
-Previous HEAD position was 93e7d8ee6 Commit message
+Previous HEAD position was f937601 Changing the word <span style="color:#f1fa8c">&#39;boat&#39;</span> to <span style="color:#f1fa8c">&#39;bug&#39;</span>
 Switched to branch <span style="color:#f1fa8c">&#39;master&#39;</span>
-Your branch is up to date with <span style="color:#f1fa8c">&#39;origin/master&#39;</span>.
 </code></pre></div><h2 id="show">show</h2>
 <p>Git Object를 확인한다. (blob, tree, tag, commit)</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># git show ${object}</span>

@@ -1121,75 +1121,184 @@ $ git blame -L 69 README.md
 
 ### bisect
 
+- [A beginner's guide to GIT BISECT](https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination) - Tony Rost
+
 이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
-운영 서버에 버그가 발생했는데 작업 브랜치를 받아보면 아무 문제가 없어서 어디서부터 잘못된 건지 모를 때가 있다.
+운영 서버에 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있다.
 이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.
 
 ```bash
-# bisect 시작
+# 테스트 프로젝트 생성
+mkdir git-bisect-tests
+cd git-bisect-tests
+git init
+
+echo row > test.txt
+git add -A && git commit -m "Adding first row"
+echo row >> test.txt
+git add -A && git commit -m "Adding second row"
+echo row >> test.txt
+git add -A && git commit -m "Adding third row"
+echo your >> test.txt
+git add -A && git commit -m "Adding the word 'your'"
+echo boat >> test.txt
+git add -A && git commit -m "Adding the word 'boat'"
+echo gently >> test.txt
+git add -A && git commit -m "Adding the word 'gently'"
+sed -i -e 's/boat/bug/g' test.txt 
+git add -A && git commit -m "Changing the word 'boat' to 'bug'"
+echo down >> test.txt
+git add -A && git commit -m "Adding the word 'down'"
+echo the >> test.txt
+git add -A && git commit -m "Adding the word 'the'"
+echo stream >> test.txt
+git add -A && git commit -m "Adding the word 'stream'"
+```
+
+```bash
+$ cat test.txt
+row
+row
+row
+your
+bug # bug를 찾을 것이다.
+gently
+down
+the
+stream
+```
+
+bisect를 시작한다.
+
+```bash
 $ git bisect start
+```
 
-# 버그가 있는 현재 커밋 기록
+버그가 있는 현재 커밋을 기록한다.
+
+```bash
 $ git bisect bad
+```
 
-# 버그가 없던 정상적인 커밋이나 태그 기록
-$ git bisect good <commit_checksum>
-$ git bisect good <tag>
-Bisecting: 5 revisions left to test after this (roughly 3 steps)
+버그 없이 멀쩡했던 커밋을 기록한다.
+
+```bash
+$ git log --oneline
+d4a701f (HEAD -> master, refs/bisect/bad) Adding the word 'stream'
+eedf347 Adding the word 'the'
+9a12012 Adding the word 'down'
+f937601 Changing the word 'boat' to 'bug'
+759ea63 Adding the word 'gently'
+850323e Adding the word 'boat'
+222f64a Adding the word 'your'
+c608f80 Adding third row
+60532d0 Adding second row
+106eb10 Adding first row
+
+$ git bisect good c608f80
+Bisecting: 3 revisions left to test after this (roughly 2 steps)
+[759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word 'gently'
 ...
 ```
+
+![git-bisect](/images/shell/git/git-bisect.png)
+
+*[Git bisect - debugging with git, Noaa Barki](https://www.datree.io/resources/git-bisect-debugging-with-git)*
 
 이제부터 버그를 찾아나선다.
 Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-여기에서 테스트해보고 만약 이슈가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고 이슈가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
-이슈를 발견하지 못하면 git bisect good 으로 이슈가 아직 없음을 알리고 계속 진행한다.
+여기에서 테스트해보고 만약 버그가 다시 발생하면 그 중간 커밋 이전으로 범위를 좁히고, 버그가 없으면 그 중간 커밋 이후로 범위를 좁힌다.
+버그를 발견하지 못하면 `git bisect good` 으로 버그가 아직 없음을 알리고 계속 진행한다.
 
 ```bash
-# 현재 위치 확인
+# 히스토리 확인
 $ git log --oneline
-c4fd54445 (HEAD, origin/HEAD, master, refs/bisect/good-c4fd5444594abd46afe7b2c80b2d4531421cbc93) Commit message
-ec56cd854 (origin/second-branch, refs/bisect/good-ec56cd85413bfc1ec5aacc4399d92351b5f667e5) Commit message
-ab7fafd4b (refs/bisect/good-ab7fafd4bf7db8bceca347720c751810724f2598) Commit message
-28a218e39 (origin/first-branch) Commit message
-
-# 문제가 없다면 good 기록
-$ git bisect good
-Bisecting: 5 revisions left to test after this (roughly 1 steps) # 이진 탐색: 3 step -> 1 step
+759ea63 (HEAD) Adding the word 'gently'
+850323e Adding the word 'boat'
+222f64a Adding the word 'your'
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 ...
 
-# 문제를 발견했다면 bad 기록
-$ git bisect bad
+# 버그가 없다면 good 기록
+$ git bisect good
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word 'down'
 ```
 
-탐색이 끝나면 첫 bad 커밋을 표시한다.
+`good`으로 기록하면 `bad` 커밋 방향으로 이진탐색한다.
 
 ```bash
-93e7d8ee6184285b9870bf3c0ca85b9dac1ac952 is the first bad commit
+$ git log --oneline
+9a12012 (HEAD) Adding the word 'down'
+f937601 Changing the word 'boat' to 'bug'
+759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word 'gently'
+850323e Adding the word 'boat'
+222f64a Adding the word 'your'
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 ...
 ```
 
-`.git` 디렉토리에 bisect를 위한 파일들이 생성된다.
+```bash
+# 버그를 발견했다면 bad 기록
+$ cat test.txt
+...
+bug
+...
+
+$ git bisect bad
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
+```
+
+`bad`로 기록하면 `good` 커밋 방향으로 이진탐색한다.
+
+```bash
+$ git log --oneline
+f937601 (HEAD) Changing the word 'boat' to 'bug'
+759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word 'gently'
+850323e Adding the word 'boat'
+222f64a Adding the word 'your'
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+```
+
+그 다음 커밋도 `bad`로 기록하고
+`good` 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
+해당 `bad` 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.
+
+```bash
+$ git bisect bad
+f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
+commit f9376015d4721390c942c0cd0064467b51495094
+Author: Changsu Im <imcxsu@gmail.com>
+Date:   Thu Feb 17 03:21:28 2022 +0900
+
+    Changing the word 'boat' to 'bug'
+
+ test.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
+
+이진탐색하는 동안 `.git` 디렉토리에 bisect를 위한 파일들이 생성된다.
 
 ```bash
 $ cat .git/BISECT_ANCESTORS_OK
 
 $ cat .git/BISECT_EXPECTED_REV
-93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
+f9376015d4721390c942c0cd0064467b51495094
 
 $ cat .git/BISECT_LOG
-# good: [7bbc4bfba6196e382384f987569f198aad04b453] Commit message
-git bisect good 7bbc4bfba6196e382384f987569f198aad04b453
-# bad: [9142cccf52b80e4df5b107c9b6b49002616f34c6] Commit message
-git bisect bad 9142cccf52b80e4df5b107c9b6b49002616f34c6
-# good: [4868a3449578237d4f1c478245903255e88ad49c] Commit message
-git bisect good 4868a3449578237d4f1c478245903255e88ad49c
-# good: [4734cad3558e6b62ad41c0c39855c1c29952ada4] Commit message
-git bisect good 4734cad3558e6b62ad41c0c39855c1c29952ada4
-# bad: [2782d533eeddf55d1d034fc4dfe117887dbe0239] Commit message
-git bisect bad 2782d533eeddf55d1d034fc4dfe117887dbe0239
-# bad: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message
-git bisect bad 93e7d8ee6184285b9870bf3c0ca85b9dac1ac952
-# first bad commit: [93e7d8ee6184285b9870bf3c0ca85b9dac1ac952] Commit message
+git bisect start
+# bad: [d4a701f370a2489c8976eb0ce9f7ccbc358e640d] Adding the word 'stream'
+git bisect bad d4a701f370a2489c8976eb0ce9f7ccbc358e640d
+# good: [c608f8011e4bfa3d1f1e9f537cc148769f158669] Adding third row
+git bisect good c608f8011e4bfa3d1f1e9f537cc148769f158669
+# good: [759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word 'gently'
+git bisect good 759ea6356258b687ad8b12178b2934ab5ad830bf
+# bad: [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word 'down'
+git bisect bad 9a120127fabd58d0f54786cf015528f77d9a9f17
+# bad: [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
+git bisect bad f9376015d4721390c942c0cd0064467b51495094
+# first bad commit: [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
 
 $ cat .git/BISECT_NAMES
 
@@ -1205,9 +1314,8 @@ bisect를 끝낼 때는 `.git/BISECT_START`로 다시 checkout 한다.
 
 ```bash
 $ git bisect reset
-Previous HEAD position was 93e7d8ee6 Commit message
+Previous HEAD position was f937601 Changing the word 'boat' to 'bug'
 Switched to branch 'master'
-Your branch is up to date with 'origin/master'.
 ```
 
 ## show
