@@ -22,10 +22,10 @@
   <meta property="og:title" content="Go로 밑바닥부터 만드는 BitTorrent 클라이언트" />
 <meta property="og:description" content="Jesse Li" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/go/building-bittorrent-client/" />
-<meta property="og:image" content="https://markruler.github.io/images/go/bit-torrent/2001-bit-torrent.png" />
+<meta property="og:url" content="https://markruler.github.io/posts/go/building-bittorrent-client/" /><meta property="og:image" content="https://markruler.github.io/images/go/bit-torrent/2001-bit-torrent.png" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-12-28T14:46:00+09:00" />
 <meta property="article:modified_time" content="2020-12-28T14:46:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
+
 
   
 
@@ -105,7 +105,7 @@
   </div>
   
     <div class="nav-subtitle">
-      Don&#39;t Repeat Yourself!
+      What, Why, How.
     </div>
   
   </a>
@@ -172,7 +172,7 @@
 
 &copy;
 	
-	Im Changsu 2020 - 2021
+	Im Changsu 2020 - 2022
 	
 
   </div>
@@ -1097,7 +1097,7 @@
 <h2 id="torrent-파일-파싱-parsing-구문-분석">.torrent 파일 파싱 (parsing: 구문 분석)</h2>
 <p>.torrent 파일에는 토렌트를 통해 다운로드할 수 있는(torrentable) 파일의 내용 및 트래커 연결에 대한 정보가 포함됩니다.
 토렌트를 다운로드 하기 위해 필요한 것은 이것뿐입니다. 데비안의 .torrent 파일은 다음과 같습니다.</p>
-<pre><code>d8:announce41:http://bttracker.debian.org:6969/announce7:comment35:&quot;Debian CD from cdimage.debian.org&quot;13:creation datei1573903810e9:httpseedsl145:https://cdimage.debian.org/cdimage/release/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso145:https://cdimage.debian.org/cdimage/archive/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.isoe4:infod6:lengthi351272960e4:name31:debian-10.2.0-amd64-netinst.iso12:piece lengthi262144e6:pieces26800:�����PS�^�� (binary blob of the hashes of each piece)ee
+<pre tabindex="0"><code>d8:announce41:http://bttracker.debian.org:6969/announce7:comment35:&#34;Debian CD from cdimage.debian.org&#34;13:creation datei1573903810e9:httpseedsl145:https://cdimage.debian.org/cdimage/release/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.iso145:https://cdimage.debian.org/cdimage/archive/10.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-10.2.0-amd64-netinst.isoe4:infod6:lengthi351272960e4:name31:debian-10.2.0-amd64-netinst.iso12:piece lengthi262144e6:pieces26800:�����PS�^�� (binary blob of the hashes of each piece)ee
 </code></pre><p><strong>B인코드(Bencode)</strong> 형식으로 인코딩되어 있고, 우리는 이것을 디코딩해야 합니다.</p>
 <p>B인코드는 JSON과 거의 동일한 유형(문자열, 정수, 리스트 및 딕셔너리)의 구조로 인코딩할 수 있습니다.
 B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것은 아니지만 바이너리 데이터를 효율적으로
@@ -1106,26 +1106,26 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 정수는 마커로 시작하고 끝나기 때문에 <code>7</code>의 경우 <code>i7e</code>로 인코딩됩니다.
 리스트와 딕셔너리는 비슷한 방식으로 인코딩됩니다. <code>l4:spami7ee</code>는 <code>['spam', 7]</code>을, <code>d4:spami7ee</code>는 <code>{spam: 7}</code>을 나타냅니다.</p>
 <p>.torrent 파일을 보기 쉽게 다듬으면 다음과 같습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c">d
-  <span style="color:#bd93f9">8</span><span style="color:#ff79c6">:</span>announce
-    <span style="color:#bd93f9">41</span><span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">http</span>:<span style="color:#6272a4">//bttracker.debian.org:6969/announce
-</span><span style="color:#6272a4"></span>  <span style="color:#bd93f9">7</span><span style="color:#ff79c6">:</span>comment
-    <span style="color:#bd93f9">35</span><span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#34;Debian CD from cdimage.debian.org&#34;</span>
-  <span style="color:#bd93f9">13</span><span style="color:#ff79c6">:</span>creation date
-    i1573903810e
-  <span style="color:#bd93f9">4</span><span style="color:#ff79c6">:</span>info
-    d
-      <span style="color:#bd93f9">6</span><span style="color:#ff79c6">:</span>length
-        i351272960e
-      <span style="color:#bd93f9">4</span><span style="color:#ff79c6">:</span>name
-        <span style="color:#bd93f9">31</span><span style="color:#ff79c6">:</span>debian<span style="color:#ff79c6">-</span><span style="color:#bd93f9">10.2.0</span><span style="color:#ff79c6">-</span>amd64<span style="color:#ff79c6">-</span>netinst.iso
-      <span style="color:#bd93f9">12</span><span style="color:#ff79c6">:</span>piece length
-        i262144e
-      <span style="color:#bd93f9">6</span><span style="color:#ff79c6">:</span>pieces
-        <span style="color:#bd93f9">26800</span><span style="color:#ff79c6">:</span>�����PS�<span style="color:#ff79c6">^</span>�� (binary blob of the hashes of each piece)
-    e
-e
-</code></pre></div><p>이 파일에서는 트래커의 URL, 생성 날짜(유닉스 타임스탬프), 파일 이름 및 크기,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
+</span></span><span style="display:flex;"><span>  <span style="color:#bd93f9">8</span><span style="color:#ff79c6">:</span>announce
+</span></span><span style="display:flex;"><span>    <span style="color:#bd93f9">41</span><span style="color:#ff79c6">:</span><span style="color:#8be9fd;font-style:italic">http</span>:<span style="color:#6272a4">//bttracker.debian.org:6969/announce
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#bd93f9">7</span><span style="color:#ff79c6">:</span>comment
+</span></span><span style="display:flex;"><span>    <span style="color:#bd93f9">35</span><span style="color:#ff79c6">:</span><span style="color:#f1fa8c">&#34;Debian CD from cdimage.debian.org&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#bd93f9">13</span><span style="color:#ff79c6">:</span>creation date
+</span></span><span style="display:flex;"><span>    i1573903810e
+</span></span><span style="display:flex;"><span>  <span style="color:#bd93f9">4</span><span style="color:#ff79c6">:</span>info
+</span></span><span style="display:flex;"><span>    d
+</span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">6</span><span style="color:#ff79c6">:</span>length
+</span></span><span style="display:flex;"><span>        i351272960e
+</span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">4</span><span style="color:#ff79c6">:</span>name
+</span></span><span style="display:flex;"><span>        <span style="color:#bd93f9">31</span><span style="color:#ff79c6">:</span>debian<span style="color:#ff79c6">-</span><span style="color:#bd93f9">10.2.0</span><span style="color:#ff79c6">-</span>amd64<span style="color:#ff79c6">-</span>netinst.iso
+</span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">12</span><span style="color:#ff79c6">:</span>piece length
+</span></span><span style="display:flex;"><span>        i262144e
+</span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">6</span><span style="color:#ff79c6">:</span>pieces
+</span></span><span style="display:flex;"><span>        <span style="color:#bd93f9">26800</span><span style="color:#ff79c6">:</span>�����PS�<span style="color:#ff79c6">^</span>�� (binary blob of the hashes of each piece)
+</span></span><span style="display:flex;"><span>    e
+</span></span><span style="display:flex;"><span>e
+</span></span></code></pre></div><p>이 파일에서는 트래커의 URL, 생성 날짜(유닉스 타임스탬프), 파일 이름 및 크기,
 다운로드하려는 파일 <strong>조각</strong> 의 SHA-1 해시가 들어 있는 큰 바이너리 블롭을 찾을 수 있습니다.
 조각의 정확한 크기는 토렌트마다 다르지만 일반적으로 256KB에서 1MB 사이입니다.
 이것은 큰 파일이 수천 개의 조각으로 구성될 수 있다는 것을 의미합니다.
@@ -1137,32 +1137,32 @@ e
 <p>B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목적이 아닙니다.
 이해하기 쉬운 Fredrik Lundh의 <a href="https://effbot.org/zone/bencode.htm">50줄짜리 파서</a>를 찾았지만,
 이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go">github.com/jackpal/bencode-go</a> 을 사용했습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#ff79c6">import</span> (
-  <span style="color:#f1fa8c">&#34;github.com/jackpal/bencode-go&#34;</span>
-)
-
-<span style="color:#8be9fd;font-style:italic">type</span> bencodeInfo <span style="color:#8be9fd;font-style:italic">struct</span> {
-  Pieces      <span style="color:#8be9fd">string</span> <span style="color:#f1fa8c">`bencode:&#34;pieces&#34;`</span>
-  PieceLength <span style="color:#8be9fd">int</span>    <span style="color:#f1fa8c">`bencode:&#34;piece length&#34;`</span>
-  Length      <span style="color:#8be9fd">int</span>    <span style="color:#f1fa8c">`bencode:&#34;length&#34;`</span>
-  Name        <span style="color:#8be9fd">string</span> <span style="color:#f1fa8c">`bencode:&#34;name&#34;`</span>
-}
-
-<span style="color:#8be9fd;font-style:italic">type</span> bencodeTorrent <span style="color:#8be9fd;font-style:italic">struct</span> {
-  Announce <span style="color:#8be9fd">string</span>      <span style="color:#f1fa8c">`bencode:&#34;announce&#34;`</span>
-  Info     bencodeInfo <span style="color:#f1fa8c">`bencode:&#34;info&#34;`</span>
-}
-
-<span style="color:#6272a4">// Open 토렌트 파일을 파싱합니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Open</span>(r io.Reader) (<span style="color:#ff79c6">*</span>bencodeTorrent, <span style="color:#8be9fd">error</span>) {
-  bto <span style="color:#ff79c6">:=</span> bencodeTorrent{}
-  err <span style="color:#ff79c6">:=</span> bencode.<span style="color:#50fa7b">Unmarshal</span>(r, <span style="color:#ff79c6">&amp;</span>bto)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-  }
-  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&amp;</span>bto, <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#f1fa8c">&#34;github.com/jackpal/bencode-go&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> bencodeInfo <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  Pieces      <span style="color:#8be9fd">string</span> <span style="color:#f1fa8c">`bencode:&#34;pieces&#34;`</span>
+</span></span><span style="display:flex;"><span>  PieceLength <span style="color:#8be9fd">int</span>    <span style="color:#f1fa8c">`bencode:&#34;piece length&#34;`</span>
+</span></span><span style="display:flex;"><span>  Length      <span style="color:#8be9fd">int</span>    <span style="color:#f1fa8c">`bencode:&#34;length&#34;`</span>
+</span></span><span style="display:flex;"><span>  Name        <span style="color:#8be9fd">string</span> <span style="color:#f1fa8c">`bencode:&#34;name&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> bencodeTorrent <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  Announce <span style="color:#8be9fd">string</span>      <span style="color:#f1fa8c">`bencode:&#34;announce&#34;`</span>
+</span></span><span style="display:flex;"><span>  Info     bencodeInfo <span style="color:#f1fa8c">`bencode:&#34;info&#34;`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Open 토렌트 파일을 파싱합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Open</span>(r io.Reader) (<span style="color:#ff79c6">*</span>bencodeTorrent, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  bto <span style="color:#ff79c6">:=</span> bencodeTorrent{}
+</span></span><span style="display:flex;"><span>  err <span style="color:#ff79c6">:=</span> bencode.<span style="color:#50fa7b">Unmarshal</span>(r, <span style="color:#ff79c6">&amp;</span>bto)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&amp;</span>bto, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go</a></p>
 <p>저는 구조체를 상대적으로 평평하게 유지하는 것을 좋아하고
 애플리케이션 구조체를 직렬화 구조체와 분리하는 것을 좋아하기 때문에
 <code>TorrentFile</code>이라는 다른 평탄한 구조체를 내보내고
@@ -1172,40 +1172,40 @@ e
 이것을 <strong>infohash</strong>라고 하며 트래커 및 피어와 통신할 때 파일 식별자 역할을 합니다.
 이에 대해서는 나중에 더 살펴보겠습니다.</p>
 <p><img src="/images/go/bit-torrent/info-hash.png" alt="info-hash"></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">type</span> TorrentFile <span style="color:#8be9fd;font-style:italic">struct</span> {
-  Announce    <span style="color:#8be9fd">string</span>
-  InfoHash    [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
-  PieceHashes [][<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
-  PieceLength <span style="color:#8be9fd">int</span>
-  Length      <span style="color:#8be9fd">int</span>
-  Name        <span style="color:#8be9fd">string</span>
-}
-
-<span style="color:#8be9fd;font-style:italic">func</span> (bto bencodeTorrent) <span style="color:#50fa7b">toTorrentFile</span>() (TorrentFile, <span style="color:#8be9fd">error</span>) {
-  <span style="color:#6272a4">// …
-</span><span style="color:#6272a4"></span>}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> TorrentFile <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  Announce    <span style="color:#8be9fd">string</span>
+</span></span><span style="display:flex;"><span>  InfoHash    [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>  PieceHashes [][<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>  PieceLength <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>  Length      <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>  Name        <span style="color:#8be9fd">string</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> (bto bencodeTorrent) <span style="color:#50fa7b">toTorrentFile</span>() (TorrentFile, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// …
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a></p>
 <h2 id="트래커로부터-피어-찾기">트래커로부터 피어 찾기</h2>
 <p>이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 <strong>알리고</strong> 다른 피어들의 목록을 검색해 보겠습니다.
 .torrent 파일에 제공된 &lsquo;announce&rsquo; URL에 몇 가지 쿼리 파라미터와 함께 GET 요청을 하면 됩니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">func</span> (t <span style="color:#ff79c6">*</span>TorrentFile) <span style="color:#50fa7b">buildTrackerURL</span>(peerID [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>, port <span style="color:#8be9fd">uint16</span>) (<span style="color:#8be9fd">string</span>, <span style="color:#8be9fd">error</span>) {
-  base, err <span style="color:#ff79c6">:=</span> url.<span style="color:#50fa7b">Parse</span>(t.Announce)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span>, err
-  }
-  params <span style="color:#ff79c6">:=</span> url.Values{
-    <span style="color:#f1fa8c">&#34;info_hash&#34;</span>:  []<span style="color:#8be9fd">string</span>{<span style="color:#8be9fd;font-style:italic">string</span>(t.InfoHash[:])},
-    <span style="color:#f1fa8c">&#34;peer_id&#34;</span>:    []<span style="color:#8be9fd">string</span>{<span style="color:#8be9fd;font-style:italic">string</span>(peerID[:])},
-    <span style="color:#f1fa8c">&#34;port&#34;</span>:       []<span style="color:#8be9fd">string</span>{strconv.<span style="color:#50fa7b">Itoa</span>(<span style="color:#8be9fd;font-style:italic">int</span>(Port))},
-    <span style="color:#f1fa8c">&#34;uploaded&#34;</span>:   []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;0&#34;</span>},
-    <span style="color:#f1fa8c">&#34;downloaded&#34;</span>: []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;0&#34;</span>},
-    <span style="color:#f1fa8c">&#34;compact&#34;</span>:    []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;1&#34;</span>},
-    <span style="color:#f1fa8c">&#34;left&#34;</span>:       []<span style="color:#8be9fd">string</span>{strconv.<span style="color:#50fa7b">Itoa</span>(t.Length)},
-  }
-  base.RawQuery = params.<span style="color:#50fa7b">Encode</span>()
-  <span style="color:#ff79c6">return</span> base.<span style="color:#50fa7b">String</span>(), <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go#L19-L35">github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> (t <span style="color:#ff79c6">*</span>TorrentFile) <span style="color:#50fa7b">buildTrackerURL</span>(peerID [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>, port <span style="color:#8be9fd">uint16</span>) (<span style="color:#8be9fd">string</span>, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  base, err <span style="color:#ff79c6">:=</span> url.<span style="color:#50fa7b">Parse</span>(t.Announce)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">&#34;&#34;</span>, err
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  params <span style="color:#ff79c6">:=</span> url.Values{
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;info_hash&#34;</span>:  []<span style="color:#8be9fd">string</span>{<span style="color:#8be9fd;font-style:italic">string</span>(t.InfoHash[:])},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;peer_id&#34;</span>:    []<span style="color:#8be9fd">string</span>{<span style="color:#8be9fd;font-style:italic">string</span>(peerID[:])},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;port&#34;</span>:       []<span style="color:#8be9fd">string</span>{strconv.<span style="color:#50fa7b">Itoa</span>(<span style="color:#8be9fd;font-style:italic">int</span>(Port))},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;uploaded&#34;</span>:   []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;0&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;downloaded&#34;</span>: []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;0&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;compact&#34;</span>:    []<span style="color:#8be9fd">string</span>{<span style="color:#f1fa8c">&#34;1&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;left&#34;</span>:       []<span style="color:#8be9fd">string</span>{strconv.<span style="color:#50fa7b">Itoa</span>(t.Length)},
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  base.RawQuery = params.<span style="color:#50fa7b">Encode</span>()
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> base.<span style="color:#50fa7b">String</span>(), <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go#L19-L35">github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35</a></p>
 <p>여기서 중요한 것은 다음과 같습니다.</p>
 <ul>
 <li><strong>info_hash</strong>: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 <code>info</code> 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.</li>
@@ -1214,13 +1214,13 @@ e
 <p><img src="/images/go/bit-torrent/info-hash-peer-id.png" alt="info-hash-peer-id"></p>
 <h2 id="트래커-응답-분석">트래커 응답 분석</h2>
 <p>다음과 같이 B인코딩된 응답을 받았습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c">d
-  <span style="color:#bd93f9">8</span><span style="color:#ff79c6">:</span>interval
-    i900e
-  <span style="color:#bd93f9">5</span><span style="color:#ff79c6">:</span>peers
-    <span style="color:#bd93f9">252</span><span style="color:#ff79c6">:</span>(another <span style="color:#8be9fd">long</span> binary blob)
-e
-</code></pre></div><p><code>Interval</code>은 얼마나 자주 트래커에 다시 연결하여 피어 목록을 새로 고쳐야 하는지 알려줍니다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
+</span></span><span style="display:flex;"><span>  <span style="color:#bd93f9">8</span><span style="color:#ff79c6">:</span>interval
+</span></span><span style="display:flex;"><span>    i900e
+</span></span><span style="display:flex;"><span>  <span style="color:#bd93f9">5</span><span style="color:#ff79c6">:</span>peers
+</span></span><span style="display:flex;"><span>    <span style="color:#bd93f9">252</span><span style="color:#ff79c6">:</span>(another <span style="color:#8be9fd">long</span> binary blob)
+</span></span><span style="display:flex;"><span>e
+</span></span></code></pre></div><p><code>Interval</code>은 얼마나 자주 트래커에 다시 연결하여 피어 목록을 새로 고쳐야 하는지 알려줍니다.
 900이라는 값은 15분(900초)마다 다시 연결해야 함을 의미합니다.</p>
 <p><code>Peers</code>는 각 피어의 IP 주소를 포함하는 또 다른 긴 바이너리 블롭입니다.
 <code>6바이트의 그룹들</code>로 이루어져 있습니다.
@@ -1229,29 +1229,29 @@ e
 <strong>빅-엔디안</strong> 또는 <strong>네트워크 바이트 순서</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>는 바이트 그룹을 왼쪽부터 담아 정수로 해석하는 것을 말합니다.
 예를 들어 <code>0x1A</code>, <code>0xE1</code> 바이트는 <code>0x1AE1</code> 또는 십진수로 6881을 만듭니다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
 <p><img src="/images/go/bit-torrent/address.png" alt="address"></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// Peer 피어의 연결 정보를 인코딩합니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Peer <span style="color:#8be9fd;font-style:italic">struct</span> {
-  IP   net.IP
-  Port <span style="color:#8be9fd">uint16</span>
-}
-
-<span style="color:#6272a4">// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Unmarshal</span>(peersBin []<span style="color:#8be9fd">byte</span>) ([]Peer, <span style="color:#8be9fd">error</span>) {
-  <span style="color:#8be9fd;font-style:italic">const</span> peerSize = <span style="color:#bd93f9">6</span> <span style="color:#6272a4">// 4 for IP, 2 for port
-</span><span style="color:#6272a4"></span>  numPeers <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">len</span>(peersBin) <span style="color:#ff79c6">/</span> peerSize
-  <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(peersBin)<span style="color:#ff79c6">%</span>peerSize <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
-    err <span style="color:#ff79c6">:=</span> fmt.<span style="color:#50fa7b">Errorf</span>(<span style="color:#f1fa8c">&#34;Received malformed peers&#34;</span>)
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-  }
-  peers <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]Peer, numPeers)
-  <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>; i &lt; numPeers; i<span style="color:#ff79c6">++</span> {
-    offset <span style="color:#ff79c6">:=</span> i <span style="color:#ff79c6">*</span> peerSize
-    peers[i].IP = net.<span style="color:#50fa7b">IP</span>(peersBin[offset : offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">4</span>])
-    peers[i].Port = binary.BigEndian.<span style="color:#50fa7b">Uint16</span>(peersBin[offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">4</span> : offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">6</span>])
-  }
-  <span style="color:#ff79c6">return</span> peers, <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go">github.com/veggiedefender/torrent-client/peers/peers.go</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Peer 피어의 연결 정보를 인코딩합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Peer <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  IP   net.IP
+</span></span><span style="display:flex;"><span>  Port <span style="color:#8be9fd">uint16</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Unmarshal</span>(peersBin []<span style="color:#8be9fd">byte</span>) ([]Peer, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">const</span> peerSize = <span style="color:#bd93f9">6</span> <span style="color:#6272a4">// 4 for IP, 2 for port
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  numPeers <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">len</span>(peersBin) <span style="color:#ff79c6">/</span> peerSize
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> <span style="color:#8be9fd;font-style:italic">len</span>(peersBin)<span style="color:#ff79c6">%</span>peerSize <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>    err <span style="color:#ff79c6">:=</span> fmt.<span style="color:#50fa7b">Errorf</span>(<span style="color:#f1fa8c">&#34;Received malformed peers&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  peers <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]Peer, numPeers)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">for</span> i <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>; i &lt; numPeers; i<span style="color:#ff79c6">++</span> {
+</span></span><span style="display:flex;"><span>    offset <span style="color:#ff79c6">:=</span> i <span style="color:#ff79c6">*</span> peerSize
+</span></span><span style="display:flex;"><span>    peers[i].IP = net.<span style="color:#50fa7b">IP</span>(peersBin[offset : offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">4</span>])
+</span></span><span style="display:flex;"><span>    peers[i].Port = binary.BigEndian.<span style="color:#50fa7b">Uint16</span>(peersBin[offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">4</span> : offset<span style="color:#ff79c6">+</span><span style="color:#bd93f9">6</span>])
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> peers, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go">github.com/veggiedefender/torrent-client/peers/peers.go</a></p>
 <h1 id="피어로부터-다운로드하기">피어로부터 다운로드하기</h1>
 <p>이제 피어 목록이 있습니다.
 피어와 연결하여 조각을 다운로드할 시간입니다!
@@ -1259,15 +1259,15 @@ e
 각 피어에 대해 다음을 수행하고자 합니다.</p>
 <ol>
 <li>피어와 TCP 연결을 시작합니다. 이것은 전화를 거는 것과 같습니다.</li>
-<li>양방향 비트토렌트 <strong>핸드셰이크</strong>를 완료합니다.. <em>&ldquo;안녕?&rdquo; &ldquo;안녕.&quot;</em></li>
-<li><strong>조각</strong>을 다운로드 하기 위해 <strong>메시지</strong>를 교환합니다. <em>&ldquo;231번 조각 주세요.&quot;</em></li>
+<li>양방향 비트토렌트 <strong>핸드셰이크</strong>를 완료합니다.. <em>&ldquo;안녕?&rdquo; &ldquo;안녕.&rdquo;</em></li>
+<li><strong>조각</strong>을 다운로드 하기 위해 <strong>메시지</strong>를 교환합니다. <em>&ldquo;231번 조각 주세요.&rdquo;</em></li>
 </ol>
 <h2 id="tcp-연결">TCP 연결</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go">conn, err <span style="color:#ff79c6">:=</span> net.<span style="color:#50fa7b">DialTimeout</span>(<span style="color:#f1fa8c">&#34;tcp&#34;</span>, peer.<span style="color:#50fa7b">String</span>(), <span style="color:#bd93f9">3</span><span style="color:#ff79c6">*</span>time.Second)
-<span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go#L65-L69">github.com/veggiedefender/torrent-client/client/client.go#L65-L69</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>conn, err <span style="color:#ff79c6">:=</span> net.<span style="color:#50fa7b">DialTimeout</span>(<span style="color:#f1fa8c">&#34;tcp&#34;</span>, peer.<span style="color:#50fa7b">String</span>(), <span style="color:#bd93f9">3</span><span style="color:#ff79c6">*</span>time.Second)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go#L65-L69">github.com/veggiedefender/torrent-client/client/client.go#L65-L69</a></p>
 <p>연결할 수 없는 피어에 너무 많은 시간을 낭비하지 않도록 시간 제한을 설정했습니다.
 대부분의 경우 표준 TCP 연결입니다.</p>
 <h2 id="핸드셰이크-완료">핸드셰이크 완료</h2>
@@ -1288,38 +1288,38 @@ e
 <li>우리 스스로를 식별하기 위해 만든 <strong>Peer ID</strong>.</li>
 </ol>
 <p>합치면 핸드셰이크 문자열은 다음과 같이 보일 수 있습니다.</p>
-<pre><code>\x13BitTorrent protocol\x00\x00\x00\x00\x00\x00\x00\x00\x86\xd4\xc8\x00\x24\xa4\x69\xbe\x4c\x50\xbc\x5a\x10\x2c\xf7\x17\x80\x31\x00\x74-TR2940-k8hj0wgej6ch
+<pre tabindex="0"><code>\x13BitTorrent protocol\x00\x00\x00\x00\x00\x00\x00\x00\x86\xd4\xc8\x00\x24\xa4\x69\xbe\x4c\x50\xbc\x5a\x10\x2c\xf7\x17\x80\x31\x00\x74-TR2940-k8hj0wgej6ch
 </code></pre><p>피어에게 핸드셰이크를 보낸 후 동일한 형식으로 핸드셰이크를 다시 받아야 합니다.
 받은 infohash는 보낸 정보와 일치해야 동일한 파일에 대해 말하고 있다는 것을 알 수 있습니다.
 모든 일이 계획대로 진행되면 다음 단계로 넘어갑니다.
 그렇지 않다면 뭔가 잘못되었기 때문에 연결을 끊을 수 있습니다.
-<em>&ldquo;안녕?&rdquo; &ldquo;这是谁？ 你想要什么？&rdquo; &ldquo;알았어요, 와&hellip;잘못 걸었어요..&quot;</em></p>
+<em>&ldquo;안녕?&rdquo; &ldquo;这是谁？ 你想要什么？&rdquo; &ldquo;알았어요, 와&hellip;잘못 걸었어요..&rdquo;</em></p>
 <p>코드에서 핸드셰이크를 나타내는 구조체를 만들고, 이것을 직렬화하고 읽는 몇 가지 메소드를 작성하겠습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Handshake <span style="color:#8be9fd;font-style:italic">struct</span> {
-  Pstr     <span style="color:#8be9fd">string</span>
-  InfoHash [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
-  PeerID   [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
-}
-
-<span style="color:#6272a4">// Serialize 핸드셰이크를 버퍼에 직렬화합니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (h <span style="color:#ff79c6">*</span>Handshake) <span style="color:#50fa7b">Serialize</span>() []<span style="color:#8be9fd">byte</span> {
-  buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd;font-style:italic">len</span>(h.Pstr)<span style="color:#ff79c6">+</span><span style="color:#bd93f9">49</span>)
-  buf[<span style="color:#bd93f9">0</span>] = <span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#8be9fd;font-style:italic">len</span>(h.Pstr))
-  curr <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">1</span>
-  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.Pstr)
-  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">8</span>)) <span style="color:#6272a4">// 8 reserved bytes
-</span><span style="color:#6272a4"></span>  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.InfoHash[:])
-  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.PeerID[:])
-  <span style="color:#ff79c6">return</span> buf
-}
-
-<span style="color:#6272a4">// Read 스트림에서 핸드셰이크를 파싱합니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Read</span>(r io.Reader) (<span style="color:#ff79c6">*</span>Handshake, <span style="color:#8be9fd">error</span>) {
-  <span style="color:#6272a4">// 역직렬화 수행
-</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// ...
-</span><span style="color:#6272a4"></span>}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go">github.com/veggiedefender/torrent-client/handshake/handshake.go</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Handshake <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  Pstr     <span style="color:#8be9fd">string</span>
+</span></span><span style="display:flex;"><span>  InfoHash [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>  PeerID   [<span style="color:#bd93f9">20</span>]<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Serialize 핸드셰이크를 버퍼에 직렬화합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (h <span style="color:#ff79c6">*</span>Handshake) <span style="color:#50fa7b">Serialize</span>() []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>  buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd;font-style:italic">len</span>(h.Pstr)<span style="color:#ff79c6">+</span><span style="color:#bd93f9">49</span>)
+</span></span><span style="display:flex;"><span>  buf[<span style="color:#bd93f9">0</span>] = <span style="color:#8be9fd;font-style:italic">byte</span>(<span style="color:#8be9fd;font-style:italic">len</span>(h.Pstr))
+</span></span><span style="display:flex;"><span>  curr <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.Pstr)
+</span></span><span style="display:flex;"><span>  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">8</span>)) <span style="color:#6272a4">// 8 reserved bytes
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.InfoHash[:])
+</span></span><span style="display:flex;"><span>  curr <span style="color:#ff79c6">+=</span> <span style="color:#8be9fd;font-style:italic">copy</span>(buf[curr:], h.PeerID[:])
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> buf
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Read 스트림에서 핸드셰이크를 파싱합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Read</span>(r io.Reader) (<span style="color:#ff79c6">*</span>Handshake, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 역직렬화 수행
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go">github.com/veggiedefender/torrent-client/handshake/handshake.go</a></p>
 <h2 id="메시지-주고-받기">메시지 주고 받기</h2>
 <p>첫 핸드셰이크를 마치면 <code>메시지</code>를 주고받을 수 있습니다.
 하지만 나머지 피어들이 메시지를 받아들일 준비가 안 되어 있다면,
@@ -1338,72 +1338,72 @@ e
 다음 바이트인 <strong>ID</strong>는 어떤 유형의 메시지를 수신하는지 알려줍니다.
 예를 들어 <code>2</code>바이트는 &ldquo;관심있음(interested)&ldquo;을 의미합니다.
 마지막으로 선택값인 <strong>페이로드(payload)</strong> 는 메시지의 남은 길이를 채웁니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">type</span> messageID <span style="color:#8be9fd">uint8</span>
-
-<span style="color:#8be9fd;font-style:italic">const</span> (
-  MsgChoke         messageID = <span style="color:#bd93f9">0</span>
-  MsgUnchoke       messageID = <span style="color:#bd93f9">1</span>
-  MsgInterested    messageID = <span style="color:#bd93f9">2</span>
-  MsgNotInterested messageID = <span style="color:#bd93f9">3</span>
-  MsgHave          messageID = <span style="color:#bd93f9">4</span>
-  MsgBitfield      messageID = <span style="color:#bd93f9">5</span>
-  MsgRequest       messageID = <span style="color:#bd93f9">6</span>
-  MsgPiece         messageID = <span style="color:#bd93f9">7</span>
-  MsgCancel        messageID = <span style="color:#bd93f9">8</span>
-)
-
-<span style="color:#6272a4">// Message 메시지의 ID 및 페이로드를 저장합니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Message <span style="color:#8be9fd;font-style:italic">struct</span> {
-  ID      messageID
-  Payload []<span style="color:#8be9fd">byte</span>
-}
-
-<span style="color:#6272a4">// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.
-</span><span style="color:#6272a4">// &lt;길이 접두사&gt;&lt;메시지 ID&gt;&lt;페이로드&gt;
-</span><span style="color:#6272a4">// `nil`은 keep-live 메시지로 해석합니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (m <span style="color:#ff79c6">*</span>Message) <span style="color:#50fa7b">Serialize</span>() []<span style="color:#8be9fd">byte</span> {
-  <span style="color:#ff79c6">if</span> m <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span>)
-  }
-  length <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">uint32</span>(<span style="color:#8be9fd;font-style:italic">len</span>(m.Payload) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>) <span style="color:#6272a4">// +1 for id
-</span><span style="color:#6272a4"></span>  buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span><span style="color:#ff79c6">+</span>length)
-  binary.BigEndian.<span style="color:#50fa7b">PutUint32</span>(buf[<span style="color:#bd93f9">0</span>:<span style="color:#bd93f9">4</span>], length)
-  buf[<span style="color:#bd93f9">4</span>] = <span style="color:#8be9fd;font-style:italic">byte</span>(m.ID)
-  <span style="color:#8be9fd;font-style:italic">copy</span>(buf[<span style="color:#bd93f9">5</span>:], m.Payload)
-  <span style="color:#ff79c6">return</span> buf
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L90-L103">github.com/veggiedefender/torrent-client/message/message.go#L90-L103</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> messageID <span style="color:#8be9fd">uint8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">const</span> (
+</span></span><span style="display:flex;"><span>  MsgChoke         messageID = <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>  MsgUnchoke       messageID = <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>  MsgInterested    messageID = <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>  MsgNotInterested messageID = <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span>  MsgHave          messageID = <span style="color:#bd93f9">4</span>
+</span></span><span style="display:flex;"><span>  MsgBitfield      messageID = <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span>  MsgRequest       messageID = <span style="color:#bd93f9">6</span>
+</span></span><span style="display:flex;"><span>  MsgPiece         messageID = <span style="color:#bd93f9">7</span>
+</span></span><span style="display:flex;"><span>  MsgCancel        messageID = <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Message 메시지의 ID 및 페이로드를 저장합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Message <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  ID      messageID
+</span></span><span style="display:flex;"><span>  Payload []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// &lt;길이 접두사&gt;&lt;메시지 ID&gt;&lt;페이로드&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">// `nil`은 keep-live 메시지로 해석합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (m <span style="color:#ff79c6">*</span>Message) <span style="color:#50fa7b">Serialize</span>() []<span style="color:#8be9fd">byte</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> m <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  length <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">uint32</span>(<span style="color:#8be9fd;font-style:italic">len</span>(m.Payload) <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>) <span style="color:#6272a4">// +1 for id
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span><span style="color:#ff79c6">+</span>length)
+</span></span><span style="display:flex;"><span>  binary.BigEndian.<span style="color:#50fa7b">PutUint32</span>(buf[<span style="color:#bd93f9">0</span>:<span style="color:#bd93f9">4</span>], length)
+</span></span><span style="display:flex;"><span>  buf[<span style="color:#bd93f9">4</span>] = <span style="color:#8be9fd;font-style:italic">byte</span>(m.ID)
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">copy</span>(buf[<span style="color:#bd93f9">5</span>:], m.Payload)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> buf
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L90-L103">github.com/veggiedefender/torrent-client/message/message.go#L90-L103</a></p>
 <p>스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
 우리는 4바이트를 읽고 메시지의 <strong>길이</strong>를 얻기 위해 <code>uint32</code>로 해석합니다.
 그런 다음 <strong>ID</strong>(처음 1바이트) 및 <strong>payload</strong>(나머지 바이트)를 얻습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Read</span>(r io.Reader) (<span style="color:#ff79c6">*</span>Message, <span style="color:#8be9fd">error</span>) {
-  lengthBuf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span>)
-  _, err <span style="color:#ff79c6">:=</span> io.<span style="color:#50fa7b">ReadFull</span>(r, lengthBuf)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-  }
-  length <span style="color:#ff79c6">:=</span> binary.BigEndian.<span style="color:#50fa7b">Uint32</span>(lengthBuf)
-
-  <span style="color:#6272a4">// keep-alive 메시지
-</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> length <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, <span style="color:#ff79c6">nil</span>
-  }
-
-  messageBuf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, length)
-  _, err = io.<span style="color:#50fa7b">ReadFull</span>(r, messageBuf)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-  }
-
-  m <span style="color:#ff79c6">:=</span> Message{
-    ID:      <span style="color:#50fa7b">messageID</span>(messageBuf[<span style="color:#bd93f9">0</span>]),
-    Payload: messageBuf[<span style="color:#bd93f9">1</span>:],
-  }
-
-  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L105-L131">github.com/veggiedefender/torrent-client/message/message.go#L105-L131</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">Read</span>(r io.Reader) (<span style="color:#ff79c6">*</span>Message, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  lengthBuf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, <span style="color:#bd93f9">4</span>)
+</span></span><span style="display:flex;"><span>  _, err <span style="color:#ff79c6">:=</span> io.<span style="color:#50fa7b">ReadFull</span>(r, lengthBuf)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  length <span style="color:#ff79c6">:=</span> binary.BigEndian.<span style="color:#50fa7b">Uint32</span>(lengthBuf)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// keep-alive 메시지
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">if</span> length <span style="color:#ff79c6">==</span> <span style="color:#bd93f9">0</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  messageBuf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, length)
+</span></span><span style="display:flex;"><span>  _, err = io.<span style="color:#50fa7b">ReadFull</span>(r, messageBuf)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  m <span style="color:#ff79c6">:=</span> Message{
+</span></span><span style="display:flex;"><span>    ID:      <span style="color:#50fa7b">messageID</span>(messageBuf[<span style="color:#bd93f9">0</span>]),
+</span></span><span style="display:flex;"><span>    Payload: messageBuf[<span style="color:#bd93f9">1</span>:],
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">&amp;</span>m, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L105-L131">github.com/veggiedefender/torrent-client/message/message.go#L105-L131</a></p>
 <h3 id="비트-필드-bitfields">비트 필드 (Bitfields)</h3>
 <p>가장 흥미로운 유형의 메시지 중 하나는 <strong>비트 필드(bitfield)</strong> 입니다.
 이 자료 구조는 피어들이 우리에게 보낼 수 있는 조각을 효율적으로 인코딩하는 데 사용됩니다.
@@ -1416,23 +1416,23 @@ e
 단점은 값에 접근하는 것이 좀 더 까다로워진다는 것입니다.
 컴퓨터가 처리할 수 있는 가장 작은 메모리 단위는 바이트입니다.
 따라서 비트에 접근하려면 몇 가지 비트 조작(bitwise manipulation)을 수행해야 합니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Bitfield []<span style="color:#8be9fd">byte</span>
-
-<span style="color:#6272a4">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (bf Bitfield) <span style="color:#50fa7b">HasPiece</span>(index <span style="color:#8be9fd">int</span>) <span style="color:#8be9fd">bool</span> {
-  byteIndex <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">8</span>
-  offset <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">8</span>
-  <span style="color:#ff79c6">return</span> bf[byteIndex]<span style="color:#ff79c6">&gt;&gt;</span>(<span style="color:#bd93f9">7</span><span style="color:#ff79c6">-</span>offset)<span style="color:#ff79c6">&amp;</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
-}
-
-<span style="color:#6272a4">// SetPiece 비트 필드에 비트를 설정합니다
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (bf Bitfield) <span style="color:#50fa7b">SetPiece</span>(index <span style="color:#8be9fd">int</span>) {
-  byteIndex <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">8</span>
-  offset <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">8</span>
-  bf[byteIndex] <span style="color:#ff79c6">|=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&lt;&lt;</span> (<span style="color:#bd93f9">7</span> <span style="color:#ff79c6">-</span> offset)
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go">github.com/veggiedefender/torrent-client/bitfield/bitfield.go</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">type</span> Bitfield []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (bf Bitfield) <span style="color:#50fa7b">HasPiece</span>(index <span style="color:#8be9fd">int</span>) <span style="color:#8be9fd">bool</span> {
+</span></span><span style="display:flex;"><span>  byteIndex <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>  offset <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> bf[byteIndex]<span style="color:#ff79c6">&gt;&gt;</span>(<span style="color:#bd93f9">7</span><span style="color:#ff79c6">-</span>offset)<span style="color:#ff79c6">&amp;</span><span style="color:#bd93f9">1</span> <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// SetPiece 비트 필드에 비트를 설정합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">func</span> (bf Bitfield) <span style="color:#50fa7b">SetPiece</span>(index <span style="color:#8be9fd">int</span>) {
+</span></span><span style="display:flex;"><span>  byteIndex <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>  offset <span style="color:#ff79c6">:=</span> index <span style="color:#ff79c6">%</span> <span style="color:#bd93f9">8</span>
+</span></span><span style="display:flex;"><span>  bf[byteIndex] <span style="color:#ff79c6">|=</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">&lt;&lt;</span> (<span style="color:#bd93f9">7</span> <span style="color:#ff79c6">-</span> offset)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go">github.com/veggiedefender/torrent-client/bitfield/bitfield.go</a></p>
 <h2 id="모두-합치기">모두 합치기</h2>
 <p>이제 토렌트를 다운로드하는 데 필요한 모든 도구를 확보했습니다.
 트래커에서 얻은 피어 목록이 있으며, TCP로 연결하고 핸드셰이크를 하며,
@@ -1448,104 +1448,104 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 다른 하나는 다운로드한 조각들을 모으기 위한 채널입니다.
 다운로드된 조각들이 결과 채널을 통해 들어올 때,
 우리는 그것들을 버퍼에 복사해서 완전한 파일로 조립할 수 있습니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다
-</span><span style="color:#6272a4"></span>workQueue <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceWork, <span style="color:#8be9fd;font-style:italic">len</span>(t.PieceHashes))
-results <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceResult)
-<span style="color:#ff79c6">for</span> index, hash <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> t.PieceHashes {
-  length <span style="color:#ff79c6">:=</span> t.<span style="color:#50fa7b">calculatePieceSize</span>(index)
-  workQueue <span style="color:#ff79c6">&lt;-</span> <span style="color:#ff79c6">&amp;</span>pieceWork{index, hash, length}
-}
-
-<span style="color:#6272a4">// 작업을 시작합니다
-</span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> _, peer <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> t.Peers {
-  <span style="color:#ff79c6">go</span> t.<span style="color:#50fa7b">startDownloadWorker</span>(peer, workQueue, results)
-}
-
-<span style="color:#6272a4">// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다
-</span><span style="color:#6272a4"></span>buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, t.Length)
-donePieces <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>
-<span style="color:#ff79c6">for</span> donePieces &lt; <span style="color:#8be9fd;font-style:italic">len</span>(t.PieceHashes) {
-  res <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">&lt;-</span>results
-  begin, end <span style="color:#ff79c6">:=</span> t.<span style="color:#50fa7b">calculateBoundsForPiece</span>(res.index)
-  <span style="color:#8be9fd;font-style:italic">copy</span>(buf[begin:end], res.buf)
-  donePieces<span style="color:#ff79c6">++</span>
-}
-<span style="color:#8be9fd;font-style:italic">close</span>(workQueue)
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L188-L214">github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>workQueue <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceWork, <span style="color:#8be9fd;font-style:italic">len</span>(t.PieceHashes))
+</span></span><span style="display:flex;"><span>results <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>(<span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceResult)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> index, hash <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> t.PieceHashes {
+</span></span><span style="display:flex;"><span>  length <span style="color:#ff79c6">:=</span> t.<span style="color:#50fa7b">calculatePieceSize</span>(index)
+</span></span><span style="display:flex;"><span>  workQueue <span style="color:#ff79c6">&lt;-</span> <span style="color:#ff79c6">&amp;</span>pieceWork{index, hash, length}
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 작업을 시작합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">for</span> _, peer <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> t.Peers {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">go</span> t.<span style="color:#50fa7b">startDownloadWorker</span>(peer, workQueue, results)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>buf <span style="color:#ff79c6">:=</span> <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, t.Length)
+</span></span><span style="display:flex;"><span>donePieces <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">for</span> donePieces &lt; <span style="color:#8be9fd;font-style:italic">len</span>(t.PieceHashes) {
+</span></span><span style="display:flex;"><span>  res <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">&lt;-</span>results
+</span></span><span style="display:flex;"><span>  begin, end <span style="color:#ff79c6">:=</span> t.<span style="color:#50fa7b">calculateBoundsForPiece</span>(res.index)
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">copy</span>(buf[begin:end], res.buf)
+</span></span><span style="display:flex;"><span>  donePieces<span style="color:#ff79c6">++</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">close</span>(workQueue)
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L188-L214">github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214</a></p>
 <p>트래커에서 받은 피어마다 작업자 고루틴을 생성합니다.
 피어와 연결하고 핸드셰이크한 다음 <code>workQueue</code>에서 작업을 검색하여 다운로드를 시도하고,
 <code>results</code> 채널을 통해 다운로드한 조각들을 다시 보냅니다.</p>
 <p><img src="/images/go/bit-torrent/download.png" alt="download"></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">func</span> (t <span style="color:#ff79c6">*</span>Torrent) <span style="color:#50fa7b">startDownloadWorker</span>(peer peers.Peer, workQueue <span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceWork, results <span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceResult) {
-  c, err <span style="color:#ff79c6">:=</span> client.<span style="color:#50fa7b">New</span>(peer, t.PeerID, t.InfoHash)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Could not handshake with %s. Disconnecting\n&#34;</span>, peer.IP)
-    <span style="color:#ff79c6">return</span>
-  }
-  <span style="color:#ff79c6">defer</span> c.Conn.<span style="color:#50fa7b">Close</span>()
-  log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Completed handshake with %s\n&#34;</span>, peer.IP)
-
-  c.<span style="color:#50fa7b">SendUnchoke</span>()
-  c.<span style="color:#50fa7b">SendInterested</span>()
-
-  <span style="color:#ff79c6">for</span> pw <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> workQueue {
-    <span style="color:#ff79c6">if</span> !c.Bitfield.<span style="color:#50fa7b">HasPiece</span>(pw.index) {
-      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
-</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">continue</span>
-    }
-
-    <span style="color:#6272a4">// 조각 다운로드
-</span><span style="color:#6272a4"></span>    buf, err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">attemptDownloadPiece</span>(c, pw)
-    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-      log.<span style="color:#50fa7b">Println</span>(<span style="color:#f1fa8c">&#34;Exiting&#34;</span>, err)
-      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
-</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">return</span>
-    }
-
-    err = <span style="color:#50fa7b">checkIntegrity</span>(pw, buf)
-    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-      log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Piece #%d failed integrity check\n&#34;</span>, pw.index)
-      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
-</span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">continue</span>
-    }
-
-    c.<span style="color:#50fa7b">SendHave</span>(pw.index)
-    results <span style="color:#ff79c6">&lt;-</span> <span style="color:#ff79c6">&amp;</span>pieceResult{pw.index, buf}
-  }
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L133-L169">github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> (t <span style="color:#ff79c6">*</span>Torrent) <span style="color:#50fa7b">startDownloadWorker</span>(peer peers.Peer, workQueue <span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceWork, results <span style="color:#8be9fd;font-style:italic">chan</span> <span style="color:#ff79c6">*</span>pieceResult) {
+</span></span><span style="display:flex;"><span>  c, err <span style="color:#ff79c6">:=</span> client.<span style="color:#50fa7b">New</span>(peer, t.PeerID, t.InfoHash)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Could not handshake with %s. Disconnecting\n&#34;</span>, peer.IP)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">defer</span> c.Conn.<span style="color:#50fa7b">Close</span>()
+</span></span><span style="display:flex;"><span>  log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Completed handshake with %s\n&#34;</span>, peer.IP)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  c.<span style="color:#50fa7b">SendUnchoke</span>()
+</span></span><span style="display:flex;"><span>  c.<span style="color:#50fa7b">SendInterested</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">for</span> pw <span style="color:#ff79c6">:=</span> <span style="color:#ff79c6">range</span> workQueue {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> !c.Bitfield.<span style="color:#50fa7b">HasPiece</span>(pw.index) {
+</span></span><span style="display:flex;"><span>      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">continue</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// 조각 다운로드
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    buf, err <span style="color:#ff79c6">:=</span> <span style="color:#50fa7b">attemptDownloadPiece</span>(c, pw)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#50fa7b">Println</span>(<span style="color:#f1fa8c">&#34;Exiting&#34;</span>, err)
+</span></span><span style="display:flex;"><span>      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">return</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    err = <span style="color:#50fa7b">checkIntegrity</span>(pw, buf)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#50fa7b">Printf</span>(<span style="color:#f1fa8c">&#34;Piece #%d failed integrity check\n&#34;</span>, pw.index)
+</span></span><span style="display:flex;"><span>      workQueue <span style="color:#ff79c6">&lt;-</span> pw <span style="color:#6272a4">// 큐에 조각을 다시 넣습니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>      <span style="color:#ff79c6">continue</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    c.<span style="color:#50fa7b">SendHave</span>(pw.index)
+</span></span><span style="display:flex;"><span>    results <span style="color:#ff79c6">&lt;-</span> <span style="color:#ff79c6">&amp;</span>pieceResult{pw.index, buf}
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L133-L169">github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169</a></p>
 <h3 id="상태-관리">상태 관리</h3>
 <p>구조체에 있는 각 피어들을 추적하고 메시지를 읽을 때 해당 구조체의 필드값을 수정합니다.
 피어에서 다운로드한 용량, 요청한 용량, 중단(choked) 여부 등의 데이터가 포함됩니다.
 만약 더 확장하기를 원한다면 이것을 유한 상태 기계(FSM)로 형식화할 수 있습니다.
 하지만 지금은 구조체와 스위치만으로 충분합니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#8be9fd;font-style:italic">type</span> pieceProgress <span style="color:#8be9fd;font-style:italic">struct</span> {
-  index      <span style="color:#8be9fd">int</span>
-  client     <span style="color:#ff79c6">*</span>client.Client
-  buf        []<span style="color:#8be9fd">byte</span>
-  downloaded <span style="color:#8be9fd">int</span>
-  requested  <span style="color:#8be9fd">int</span>
-  backlog    <span style="color:#8be9fd">int</span>
-}
-
-<span style="color:#8be9fd;font-style:italic">func</span> (state <span style="color:#ff79c6">*</span>pieceProgress) <span style="color:#50fa7b">readMessage</span>() <span style="color:#8be9fd">error</span> {
-  msg, err <span style="color:#ff79c6">:=</span> state.client.<span style="color:#50fa7b">Read</span>() <span style="color:#6272a4">// this call blocks
-</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">switch</span> msg.ID {
-  <span style="color:#ff79c6">case</span> message.MsgUnchoke:
-    state.client.Choked = <span style="color:#ff79c6">false</span>
-  <span style="color:#ff79c6">case</span> message.MsgChoke:
-    state.client.Choked = <span style="color:#ff79c6">true</span>
-  <span style="color:#ff79c6">case</span> message.MsgHave:
-    index, err <span style="color:#ff79c6">:=</span> message.<span style="color:#50fa7b">ParseHave</span>(msg)
-    state.client.Bitfield.<span style="color:#50fa7b">SetPiece</span>(index)
-  <span style="color:#ff79c6">case</span> message.MsgPiece:
-    n, err <span style="color:#ff79c6">:=</span> message.<span style="color:#50fa7b">ParsePiece</span>(state.index, state.buf, msg)
-    state.downloaded <span style="color:#ff79c6">+=</span> n
-    state.backlog<span style="color:#ff79c6">--</span>
-  }
-  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L53-L83">github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">type</span> pieceProgress <span style="color:#8be9fd;font-style:italic">struct</span> {
+</span></span><span style="display:flex;"><span>  index      <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>  client     <span style="color:#ff79c6">*</span>client.Client
+</span></span><span style="display:flex;"><span>  buf        []<span style="color:#8be9fd">byte</span>
+</span></span><span style="display:flex;"><span>  downloaded <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>  requested  <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>  backlog    <span style="color:#8be9fd">int</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> (state <span style="color:#ff79c6">*</span>pieceProgress) <span style="color:#50fa7b">readMessage</span>() <span style="color:#8be9fd">error</span> {
+</span></span><span style="display:flex;"><span>  msg, err <span style="color:#ff79c6">:=</span> state.client.<span style="color:#50fa7b">Read</span>() <span style="color:#6272a4">// this call blocks
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">switch</span> msg.ID {
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">case</span> message.MsgUnchoke:
+</span></span><span style="display:flex;"><span>    state.client.Choked = <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">case</span> message.MsgChoke:
+</span></span><span style="display:flex;"><span>    state.client.Choked = <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">case</span> message.MsgHave:
+</span></span><span style="display:flex;"><span>    index, err <span style="color:#ff79c6">:=</span> message.<span style="color:#50fa7b">ParseHave</span>(msg)
+</span></span><span style="display:flex;"><span>    state.client.Bitfield.<span style="color:#50fa7b">SetPiece</span>(index)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">case</span> message.MsgPiece:
+</span></span><span style="display:flex;"><span>    n, err <span style="color:#ff79c6">:=</span> message.<span style="color:#50fa7b">ParsePiece</span>(state.index, state.buf, msg)
+</span></span><span style="display:flex;"><span>    state.downloaded <span style="color:#ff79c6">+=</span> n
+</span></span><span style="display:flex;"><span>    state.backlog<span style="color:#ff79c6">--</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L53-L83">github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83</a></p>
 <h3 id="요청을-보낼-시간입니다">요청을 보낼 시간입니다!</h3>
 <p>파일, 조각 및 조각 해시는 전부가 아닙니다. 조각을 <strong>블록</strong>으로 세분하여 더 발전시킬 수 있습니다.
 블록은 조각의 일부입니다. 해당 블록이 속한 조각의 <strong>인덱스</strong>,
@@ -1566,78 +1566,78 @@ donePieces <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</
 <p>최신 클라이언트는 <a href="https://luminarys.com/posts/writing-a-bittorrent-client.html">적응형(adaptive)</a> 큐 크기를
 사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
 이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// MaxBlockSize 요청할 수 있는 최대 바이트 수
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> MaxBlockSize = <span style="color:#bd93f9">16384</span>
-
-<span style="color:#6272a4">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> MaxBacklog = <span style="color:#bd93f9">5</span>
-
-<span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">attemptDownloadPiece</span>(c <span style="color:#ff79c6">*</span>client.Client, pw <span style="color:#ff79c6">*</span>pieceWork) ([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd">error</span>) {
-  state <span style="color:#ff79c6">:=</span> pieceProgress{
-    index:  pw.index,
-    client: c,
-    buf:    <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, pw.length),
-  }
-
-  <span style="color:#6272a4">// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다
-</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// 262KB 조각을 다운로드하려면 30초가 충분합니다
-</span><span style="color:#6272a4"></span>  c.Conn.<span style="color:#50fa7b">SetDeadline</span>(time.<span style="color:#50fa7b">Now</span>().<span style="color:#50fa7b">Add</span>(<span style="color:#bd93f9">30</span> <span style="color:#ff79c6">*</span> time.Second))
-  <span style="color:#ff79c6">defer</span> c.Conn.<span style="color:#50fa7b">SetDeadline</span>(time.Time{}) <span style="color:#6272a4">// 데드라인 비활성화
-</span><span style="color:#6272a4"></span>
-  <span style="color:#ff79c6">for</span> state.downloaded &lt; pw.length {
-    <span style="color:#6272a4">// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> !state.client.Choked {
-      <span style="color:#ff79c6">for</span> state.backlog &lt; MaxBacklog <span style="color:#ff79c6">&amp;&amp;</span> state.requested &lt; pw.length {
-        blockSize <span style="color:#ff79c6">:=</span> MaxBlockSize
-        <span style="color:#6272a4">// 마지막 블록은 일반 블록보다 짧을 수 있습니다.
-</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> pw.length<span style="color:#ff79c6">-</span>state.requested &lt; blockSize {
-          blockSize = pw.length <span style="color:#ff79c6">-</span> state.requested
-        }
-
-        err <span style="color:#ff79c6">:=</span> c.<span style="color:#50fa7b">SendRequest</span>(pw.index, state.requested, blockSize)
-        <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-        }
-        state.backlog<span style="color:#ff79c6">++</span>
-        state.requested <span style="color:#ff79c6">+=</span> blockSize
-      }
-    }
-
-    err <span style="color:#ff79c6">:=</span> state.<span style="color:#50fa7b">readMessage</span>()
-    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
-    }
-  }
-
-  <span style="color:#ff79c6">return</span> state.buf, <span style="color:#ff79c6">nil</span>
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L85-L123">github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#6272a4">// MaxBlockSize 요청할 수 있는 최대 바이트 수
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> MaxBlockSize = <span style="color:#bd93f9">16384</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">const</span> MaxBacklog = <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">attemptDownloadPiece</span>(c <span style="color:#ff79c6">*</span>client.Client, pw <span style="color:#ff79c6">*</span>pieceWork) ([]<span style="color:#8be9fd">byte</span>, <span style="color:#8be9fd">error</span>) {
+</span></span><span style="display:flex;"><span>  state <span style="color:#ff79c6">:=</span> pieceProgress{
+</span></span><span style="display:flex;"><span>    index:  pw.index,
+</span></span><span style="display:flex;"><span>    client: c,
+</span></span><span style="display:flex;"><span>    buf:    <span style="color:#8be9fd;font-style:italic">make</span>([]<span style="color:#8be9fd">byte</span>, pw.length),
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4">// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// 262KB 조각을 다운로드하려면 30초가 충분합니다
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>  c.Conn.<span style="color:#50fa7b">SetDeadline</span>(time.<span style="color:#50fa7b">Now</span>().<span style="color:#50fa7b">Add</span>(<span style="color:#bd93f9">30</span> <span style="color:#ff79c6">*</span> time.Second))
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">defer</span> c.Conn.<span style="color:#50fa7b">SetDeadline</span>(time.Time{}) <span style="color:#6272a4">// 데드라인 비활성화
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">for</span> state.downloaded &lt; pw.length {
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">if</span> !state.client.Choked {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">for</span> state.backlog &lt; MaxBacklog <span style="color:#ff79c6">&amp;&amp;</span> state.requested &lt; pw.length {
+</span></span><span style="display:flex;"><span>        blockSize <span style="color:#ff79c6">:=</span> MaxBlockSize
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4">// 마지막 블록은 일반 블록보다 짧을 수 있습니다.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">if</span> pw.length<span style="color:#ff79c6">-</span>state.requested &lt; blockSize {
+</span></span><span style="display:flex;"><span>          blockSize = pw.length <span style="color:#ff79c6">-</span> state.requested
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        err <span style="color:#ff79c6">:=</span> c.<span style="color:#50fa7b">SendRequest</span>(pw.index, state.requested, blockSize)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        state.backlog<span style="color:#ff79c6">++</span>
+</span></span><span style="display:flex;"><span>        state.requested <span style="color:#ff79c6">+=</span> blockSize
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    err <span style="color:#ff79c6">:=</span> state.<span style="color:#50fa7b">readMessage</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">nil</span>, err
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">return</span> state.buf, <span style="color:#ff79c6">nil</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L85-L123">github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123</a></p>
 <h3 id="maingo">main.go</h3>
 <p>아주 간단합니다. 거의 다 왔어요.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#ff79c6">package</span> main
-
-<span style="color:#ff79c6">import</span> (
-    <span style="color:#f1fa8c">&#34;log&#34;</span>
-    <span style="color:#f1fa8c">&#34;os&#34;</span>
-
-    <span style="color:#f1fa8c">&#34;github.com/veggiedefender/torrent-client/torrentfile&#34;</span>
-)
-
-<span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-  inPath <span style="color:#ff79c6">:=</span> os.Args[<span style="color:#bd93f9">1</span>]
-  outPath <span style="color:#ff79c6">:=</span> os.Args[<span style="color:#bd93f9">2</span>]
-
-  tf, err <span style="color:#ff79c6">:=</span> torrentfile.<span style="color:#50fa7b">Open</span>(inPath)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-      log.<span style="color:#50fa7b">Fatal</span>(err)
-  }
-
-  err = tf.<span style="color:#50fa7b">DownloadToFile</span>(outPath)
-  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-      log.<span style="color:#50fa7b">Fatal</span>(err)
-  }
-}
-</code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go">github.com/veggiedefender/torrent-client/main.go</a></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;log&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;os&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;github.com/veggiedefender/torrent-client/torrentfile&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
+</span></span><span style="display:flex;"><span>  inPath <span style="color:#ff79c6">:=</span> os.Args[<span style="color:#bd93f9">1</span>]
+</span></span><span style="display:flex;"><span>  outPath <span style="color:#ff79c6">:=</span> os.Args[<span style="color:#bd93f9">2</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  tf, err <span style="color:#ff79c6">:=</span> torrentfile.<span style="color:#50fa7b">Open</span>(inPath)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#50fa7b">Fatal</span>(err)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  err = tf.<span style="color:#50fa7b">DownloadToFile</span>(outPath)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">if</span> err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#50fa7b">Fatal</span>(err)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go">github.com/veggiedefender/torrent-client/main.go</a></p>
 <p><a href="https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL">데모 영상</a></p>
 <h1 id="이것이-전부가-아닙니다">이것이 전부가 아닙니다</h1>
 <p>간결함을 위해 몇 가지 중요한 부분 코드만 포함시켰습니다.
@@ -1647,28 +1647,28 @@ donePieces <span style="color:#ff79c6">:=</span> <span style="color:#bd93f9">0</
 <blockquote>
 <p>역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Go는 설치되어 있다고 가정합니다.</span>
-git clone https://github.com/veggiedefender/torrent-client.git
-<span style="color:#8be9fd;font-style:italic">cd</span> torrent-client
-<span style="color:#6272a4"># linux, darwin</span>
-curl -L http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash<span style="color:#ff79c6">=</span>7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
-<span style="color:#6272a4"># windows</span>
-wget http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash<span style="color:#ff79c6">=</span>7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
-go run main.go debian.torrent debian.iso
-</code></pre></div><section class="footnotes" role="doc-endnotes">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># Go는 설치되어 있다고 가정합니다.</span>
+</span></span><span style="display:flex;"><span>git clone https://github.com/veggiedefender/torrent-client.git
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">cd</span> torrent-client
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># linux, darwin</span>
+</span></span><span style="display:flex;"><span>curl -L http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash<span style="color:#ff79c6">=</span>7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># windows</span>
+</span></span><span style="display:flex;"><span>wget http://bttracker.debian.org:6969/file/debian-10.0.0-amd64-netinst.iso.torrent?info_hash<span style="color:#ff79c6">=</span>7f9161c88883c639bcde80d7f0a6045ab9cf16bb -o debian.torrent
+</span></span><span style="display:flex;"><span>go run main.go debian.torrent debian.iso
+</span></span></code></pre></div><div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>일부 트래커는 대역폭을 절약하기 위해 <a href="http://bittorrent.org/beps/bep_0015.html">[UDP]</a> 바이너리 프로토콜을 사용합니다 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>일부 트래커는 대역폭을 절약하기 위해 <a href="http://bittorrent.org/beps/bep_0015.html">[UDP]</a> 바이너리 프로토콜을 사용합니다&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
-<p>역주: network byte order -&gt; big-endian / host byte order -&gt; little-endian <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:2">
+<p>역주: network byte order -&gt; big-endian / host byte order -&gt; little-endian&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
-<p>동일한 바이트를 <strong>little-endian</strong> 순서로 해석하면 0xE11A = 57626이 됩니다. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:3">
+<p>동일한 바이트를 <strong>little-endian</strong> 순서로 해석하면 0xE11A = 57626이 됩니다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
             
             
@@ -1803,7 +1803,7 @@ go run main.go debian.torrent debian.iso
 
 &copy;
 	
-	Im Changsu 2020 - 2021
+	Im Changsu 2020 - 2022
 	
 </div>
   </div>
