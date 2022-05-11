@@ -9,7 +9,7 @@ tags:
   - vi
   - vim
 categories:
-  - common
+  - shell
 ---
 
 > 업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데, VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리합니다.
