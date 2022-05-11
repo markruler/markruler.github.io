@@ -20,15 +20,14 @@ categories:
 
 - 현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.
 - 계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다.
-
-## 분석
-
-장애가 발생할 때마다 특정 API가 굉장히 오랜 시간 커넥션이 끊기지 않고 있었다.
+- 장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.
 
 ![transaction-deadlock](/images/datadog/transaction-deadlock.png)
 
 *`RedisSystemException`은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다.
 만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.*
+
+## 분석
 
 시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다.
 설정하지 않으면 **default 값은 -1** 로 타임아웃이 발생하지 않는다.
@@ -38,7 +37,7 @@ categories:
 TransactionDefinition.TIMEOUT_DEFAULT = -1;
 ```
 
-하지만 트랜잭션이 왜 저렇게 오래 유지되는지 원인을 알 수 없었다.
+하지만 트랜잭션이 왜 저렇게 오래 유지되는지 알 수 없었다.
 그래도 서버 장애가 발생하는 이유는 알 수 있었다.
 TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(Deadlock)이 발생했고
 하나의 서비스 뿐만 아니라 해당 테이블을 사용하는 모든 서비스에 장애가 발생했다.
@@ -87,7 +86,7 @@ public Result list(Param param) {
 
 *10 minutes Average Latency*
 
-위 평균 지연 시간 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
+위 Average Latency 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
 그런데 이전부터 거의 구분할 수 없을 정도로 Alert가 발생하던 것을 확인할 수 있다.
 임계점을 높인 이후에는 애플리케이션이 정상일 때 OK로 표시된다.
 
@@ -115,30 +114,43 @@ Datadog의 APM(Application Performance Management) 서비스는
 
 ```xml
 <!-- Logback -->
-<configuration>
-  <property name="baseDir" value="/home/markruler/logs"/>
-  <property name="defaultPattern" value="[%d{yyyy-MM-dd HH:mm:ss}:%X{dd.trace_id:-0} %X{dd.span_id:-0}] %-5level %logger{35} - %msg%n"/>
+<appender name="appRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${baseDir}/app.log</file>
+    <encoder>
+        <charset>UTF-8</charset>
+        <pattern>${defaultPattern}</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>${baseDir}/archive/app.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>200MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+</appender>
 
-  <appender name="infoRolling"
-            class="ch.qos.logback.core.rolling.RollingFileAppender">
-      <file>${baseDir}/data/jdbc.log</file>
-      <encoder>
-          <charset>UTF-8</charset>
-          <pattern>${defaultPattern}</pattern>
-      </encoder>
-      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-          <fileNamePattern>${baseDir}/archive/sql.%d{yyyy-MM-dd}.%i.log
-          </fileNamePattern>
-          <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-              <maxFileSize>200MB</maxFileSize>
-          </timeBasedFileNamingAndTriggeringPolicy>
-      </rollingPolicy>
-  </appender>
-  
-  <root level="info">
-      <appender-ref ref="infoRolling"/>
-  </root>
-</configuration>
+<appender name="springRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${baseDir}/spring.log</file>
+    <encoder>
+        <charset>UTF-8</charset>
+        <pattern>${defaultPattern}</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+        <fileNamePattern>${baseDir}/archive/spring.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
+        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>200MB</maxFileSize>
+        </timeBasedFileNamingAndTriggeringPolicy>
+    </rollingPolicy>
+</appender>
+
+<logger name="com.markruler">
+    <level value="debug" />
+    <appender-ref ref="appRolling" />
+</logger>
+​
+<logger name="org.springframework">
+    <level value="info" />
+    <appender-ref ref="springRolling"/>
+</logger>
 ```
 
 그리고 Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` 포함)을 Logger로 대체했다.
@@ -248,26 +260,49 @@ org.apache.http.conn.HttpHostConnectException: Connect to api.external.com:80 [a
         at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)
 ```
 
-로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 `org.apache.httpcomponents.httpclient` 이며 Connection Request Timeout 기본값이 `-1` 이다.
-주석에서 가리키는 system default 는 `java.net.SocketOptions.SO_TIMEOUT` (0x1006)이며 10진수로 4,102(ms)이다.
+로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 `org.apache.httpcomponents.httpclient` 이며 Timeout 기본값이 `-1` 이다.
 
 ```java
 // org.apache.http.client.config.RequestConfig
+connectionRequestTimeout = -1
+connectTimeout = -1
+socketTimeout = -1
+```
 
+해당 값들은 Connection Manager에서 `0`으로 설정된다.
+
+```java
+// org.apache.http.impl.execchain.MainClientExec
+this.connManager.connect(
+        managedConn,
+        route,
+        timeout > 0 ? timeout : 0,
+        context);
+```
+
+`0`으로 설정된 Timeout은 발생하지 않기 때문에 무한정 대기한다. (infinite timeout)
+
+```java
+// java.net.Socket
 /**
- * Returns the timeout in milliseconds used when requesting a connection
- * from the connection manager. A timeout value of zero is interpreted
- * as an infinite timeout.
- * <p>
- * A timeout value of zero is interpreted as an infinite timeout.
- * A negative value is interpreted as undefined (system default).
- * </p>
- * <p>
- * Default: {@code -1}
- * </p>
+ * Connects this socket to the server with a specified timeout value.
+ * A timeout of zero is interpreted as an infinite timeout. The connection
+ * will then block until established or an error occurs.
+ *
+ * @param   endpoint the {@code SocketAddress}
+ * @param   timeout  the timeout value to be used in milliseconds.
+ * @throws  IOException if an error occurs during the connection
+ * @throws  SocketTimeoutException if timeout expires before connecting
+ * @throws  java.nio.channels.IllegalBlockingModeException
+ *          if this socket has an associated channel,
+ *          and the channel is in non-blocking mode
+ * @throws  IllegalArgumentException if endpoint is null or is a
+ *          SocketAddress subclass not supported by this socket
+ * @since 1.4
+ * @spec JSR-51
  */
-public int getConnectionRequestTimeout() {
-    return connectionRequestTimeout;
+public void connect(SocketAddress endpoint, int timeout) throws IOException {
+    // ...
 }
 ```
 
@@ -276,8 +311,7 @@ public int getConnectionRequestTimeout() {
 
 ## 해결 2
 
-`HikariDataSource` 의 Connection Timeout 값을 300,000(ms)에서 30,000(ms)으로 수정했다.
-(기본값이 30,000)
+`HikariDataSource` 의 Connection Timeout 값을 300,000(ms)에서 30,000(ms)으로 수정했다. (기본값이 30,000)
 
 ```xml
 <!-- https://github.com/brettwooldridge/HikariCP -->
@@ -300,6 +334,8 @@ public int getConnectionRequestTimeout() {
     </constructor-arg>
 </bean>
 ```
+
+마지막으로 HTTP Client의 Timeout 값을 설정하자.
 
 # 결론
 

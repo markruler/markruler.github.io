@@ -1081,17 +1081,17 @@
 <ul>
 <li>현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.</li>
 <li>계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다.</li>
+<li>장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.</li>
 </ul>
-<h2 id="분석">분석</h2>
-<p>장애가 발생할 때마다 특정 API가 굉장히 오랜 시간 커넥션이 끊기지 않고 있었다.</p>
 <p><img src="/images/datadog/transaction-deadlock.png" alt="transaction-deadlock"></p>
 <p><em><code>RedisSystemException</code>은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다.
 만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.</em></p>
+<h2 id="분석">분석</h2>
 <p>시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다.
 설정하지 않으면 <strong>default 값은 -1</strong> 로 타임아웃이 발생하지 않는다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// org.springframework.transaction.support.AbstractPlatformTransactionManager
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>TransactionDefinition<span style="color:#ff79c6">.</span><span style="color:#50fa7b">TIMEOUT_DEFAULT</span> <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>1<span style="color:#ff79c6">;</span>
-</span></span></code></pre></div><p>하지만 트랜잭션이 왜 저렇게 오래 유지되는지 원인을 알 수 없었다.
+</span></span></code></pre></div><p>하지만 트랜잭션이 왜 저렇게 오래 유지되는지 알 수 없었다.
 그래도 서버 장애가 발생하는 이유는 알 수 있었다.
 TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(Deadlock)이 발생했고
 하나의 서비스 뿐만 아니라 해당 테이블을 사용하는 모든 서비스에 장애가 발생했다.</p>
@@ -1121,7 +1121,7 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 이미 Datadog 도입 시점부터 알람이 자주 발생했는데도 고치지 않았던 것으로 보인다.</p>
 <p><img src="/images/datadog/alert-threshold.png" alt="alert-threshold"></p>
 <p><em>10 minutes Average Latency</em></p>
-<p>위 평균 지연 시간 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
+<p>위 Average Latency 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
 그런데 이전부터 거의 구분할 수 없을 정도로 Alert가 발생하던 것을 확인할 수 있다.
 임계점을 높인 이후에는 애플리케이션이 정상일 때 OK로 표시된다.</p>
 <p>임계점에 대한 기준은 과거 이력을 보고 설정했다.
@@ -1141,30 +1141,43 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 그래서 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어려웠다.</p>
 <p>먼저 목적별로 로그 파일을 분리해보자.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- Logback --&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;configuration&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;property</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;baseDir&#34;</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;/home/markruler/logs&#34;</span><span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;property</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;defaultPattern&#34;</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;[%d{yyyy-MM-dd HH:mm:ss}:%X{dd.trace_id:-0} %X{dd.span_id:-0}] %-5level %logger{35} - %msg%n&#34;</span><span style="color:#ff79c6">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;appender</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;appRolling&#34;</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;file&gt;</span>${baseDir}/app.log<span style="color:#ff79c6">&lt;/file&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;encoder&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;charset&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/charset&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;pattern&gt;</span>${defaultPattern}<span style="color:#ff79c6">&lt;/pattern&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/encoder&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;rollingPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;fileNamePattern&gt;</span>${baseDir}/archive/app.%d{yyyy-MM-dd_HH}.%i.log<span style="color:#ff79c6">&lt;/fileNamePattern&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;maxFileSize&gt;</span>200MB<span style="color:#ff79c6">&lt;/maxFileSize&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/rollingPolicy&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/appender&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;appender</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;infoRolling&#34;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;file&gt;</span>${baseDir}/data/jdbc.log<span style="color:#ff79c6">&lt;/file&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;charset&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/charset&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;pattern&gt;</span>${defaultPattern}<span style="color:#ff79c6">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;rollingPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;fileNamePattern&gt;</span>${baseDir}/archive/sql.%d{yyyy-MM-dd}.%i.log
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;/fileNamePattern&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">&lt;maxFileSize&gt;</span>200MB<span style="color:#ff79c6">&lt;/maxFileSize&gt;</span>
-</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;/rollingPolicy&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;root</span> <span style="color:#50fa7b">level=</span><span style="color:#f1fa8c">&#34;info&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">&lt;appender-ref</span> <span style="color:#50fa7b">ref=</span><span style="color:#f1fa8c">&#34;infoRolling&#34;</span><span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&lt;/root&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/configuration&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;appender</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;springRolling&#34;</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;file&gt;</span>${baseDir}/spring.log<span style="color:#ff79c6">&lt;/file&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;encoder&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;charset&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/charset&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;pattern&gt;</span>${defaultPattern}<span style="color:#ff79c6">&lt;/pattern&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/encoder&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;rollingPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;fileNamePattern&gt;</span>${baseDir}/archive/spring.%d{yyyy-MM-dd_HH}.%i.log<span style="color:#ff79c6">&lt;/fileNamePattern&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;maxFileSize&gt;</span>200MB<span style="color:#ff79c6">&lt;/maxFileSize&gt;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/rollingPolicy&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/appender&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;logger</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;com.markruler&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;level</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;debug&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;appender-ref</span> <span style="color:#50fa7b">ref=</span><span style="color:#f1fa8c">&#34;appRolling&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/logger&gt;</span>
+</span></span><span style="display:flex;"><span>​
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;logger</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;org.springframework&#34;</span><span style="color:#ff79c6">&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;level</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;info&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;appender-ref</span> <span style="color:#50fa7b">ref=</span><span style="color:#f1fa8c">&#34;springRolling&#34;</span><span style="color:#ff79c6">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/logger&gt;</span>
 </span></span></code></pre></div><p>그리고 Checkstyle을 도입해서 모든 <code>System.out</code>, <code>System.err</code>(<code>printStackTrace</code> 포함)을 Logger로 대체했다.
 코드를 봤을 때 의도된 예외라면 error 레벨이 아닌 info 레벨로 로그를 남겼다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- checkstyle.xml --&gt;</span>
@@ -1247,30 +1260,44 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 </span></span><span style="display:flex;"><span>        at org.apache.http.impl.client.InternalHttpClient.doExecute<span style="color:#ff79c6">(</span>InternalHttpClient.java:185<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>        at org.apache.http.impl.client.CloseableHttpClient.execute<span style="color:#ff79c6">(</span>CloseableHttpClient.java:83<span style="color:#ff79c6">)</span>
 </span></span><span style="display:flex;"><span>        at org.apache.http.impl.client.CloseableHttpClient.execute<span style="color:#ff79c6">(</span>CloseableHttpClient.java:108<span style="color:#ff79c6">)</span>
-</span></span></code></pre></div><p>로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 <code>org.apache.httpcomponents.httpclient</code> 이며 Connection Request Timeout 기본값이 <code>-1</code> 이다.
-주석에서 가리키는 system default 는 <code>java.net.SocketOptions.SO_TIMEOUT</code> (0x1006)이며 10진수로 4,102(ms)이다.</p>
+</span></span></code></pre></div><p>로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 <code>org.apache.httpcomponents.httpclient</code> 이며 Timeout 기본값이 <code>-1</code> 이다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// org.apache.http.client.config.RequestConfig
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>
-</span></span><span style="display:flex;"><span><span style="color:#6272a4">/**
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * Returns the timeout in milliseconds used when requesting a connection
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * from the connection manager. A timeout value of zero is interpreted
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * as an infinite timeout.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;p&gt;
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * A timeout value of zero is interpreted as an infinite timeout.
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * A negative value is interpreted as undefined (system default).
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;/p&gt;
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;p&gt;
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * Default: {@code -1}
-</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * &lt;/p&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span>connectionRequestTimeout <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>1
+</span></span><span style="display:flex;"><span>connectTimeout <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>1
+</span></span><span style="display:flex;"><span>socketTimeout <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>1
+</span></span></code></pre></div><p>해당 값들은 Connection Manager에서 <code>0</code>으로 설정된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// org.apache.http.impl.execchain.MainClientExec
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">connManager</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">connect</span><span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>        managedConn<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>        route<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>        timeout <span style="color:#ff79c6">&gt;</span> 0 <span style="color:#ff79c6">?</span> timeout <span style="color:#ff79c6">:</span> 0<span style="color:#ff79c6">,</span>
+</span></span><span style="display:flex;"><span>        context<span style="color:#ff79c6">);</span>
+</span></span></code></pre></div><p><code>0</code>으로 설정된 Timeout은 발생하지 않기 때문에 무한정 대기한다. (infinite timeout)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#6272a4">// java.net.Socket
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#6272a4">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * Connects this socket to the server with a specified timeout value.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * A timeout of zero is interpreted as an infinite timeout. The connection
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * will then block until established or an error occurs.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @param   endpoint the {@code SocketAddress}
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @param   timeout  the timeout value to be used in milliseconds.
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @throws  IOException if an error occurs during the connection
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @throws  SocketTimeoutException if timeout expires before connecting
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @throws  java.nio.channels.IllegalBlockingModeException
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *          if this socket has an associated channel,
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *          and the channel is in non-blocking mode
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @throws  IllegalArgumentException if endpoint is null or is a
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> *          SocketAddress subclass not supported by this socket
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @since 1.4
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> * @spec JSR-51
 </span></span></span><span style="display:flex;"><span><span style="color:#6272a4"> */</span>
-</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">int</span> <span style="color:#50fa7b">getConnectionRequestTimeout</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> connectionRequestTimeout<span style="color:#ff79c6">;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">connect</span><span style="color:#ff79c6">(</span>SocketAddress endpoint<span style="color:#ff79c6">,</span> <span style="color:#8be9fd">int</span> timeout<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4">// ...
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
 </span></span></code></pre></div><p>그렇다면 왜 4~5분이 걸리는 걸까?
 <code>HikariDataSource</code> 의 Connection Timeout이 300초로 설정되어 있었기 때문에 메서드 레벨에서 타임아웃이 발생한 것이다.</p>
 <h2 id="해결-2">해결 2</h2>
-<p><code>HikariDataSource</code> 의 Connection Timeout 값을 300,000(ms)에서 30,000(ms)으로 수정했다.
-(기본값이 30,000)</p>
+<p><code>HikariDataSource</code> 의 Connection Timeout 값을 300,000(ms)에서 30,000(ms)으로 수정했다. (기본값이 30,000)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- https://github.com/brettwooldridge/HikariCP --&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- https://github.com/brettwooldridge/HikariCP#frequently-used --&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;bean</span> <span style="color:#50fa7b">id=</span><span style="color:#f1fa8c">&#34;dataSource&#34;</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;com.zaxxer.hikari.HikariDataSource&#34;</span> <span style="color:#50fa7b">destroy-method=</span><span style="color:#f1fa8c">&#34;close&#34;</span><span style="color:#ff79c6">&gt;</span>
@@ -1290,7 +1317,8 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 </span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/bean&gt;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/constructor-arg&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/bean&gt;</span>
-</span></span></code></pre></div><h1 id="결론">결론</h1>
+</span></span></code></pre></div><p>마지막으로 HTTP Client의 Timeout 값을 설정하자.</p>
+<h1 id="결론">결론</h1>
 <p>Timeout을 설정하지 않으면 데드락부터 연쇄 서버 장애까지 많은 것을 겪을 수 있다.
 부디 Timeout 설정을 잊지 말자.
 그리고 유의미한 로깅과 모니터링을 하자! 🧑‍💻</p>
