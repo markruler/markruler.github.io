@@ -190,31 +190,30 @@ Datadog의 APM(Application Performance Management) 서비스는
 ```java
 // org.springframework.transaction.TransactionTimedOutException
 org.springframework.transaction.TransactionTimedOutException: Transaction timed out: deadline was Wed May 04 16:42:38 KST 2022
-  at org.springframework.transaction.support.ResourceHolderSupport.checkTransactionTimeout(ResourceHolderSupport.java:141)
-  at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInMillis(ResourceHolderSupport.java:130)
-  at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInSeconds(ResourceHolderSupport.java:114)
-  at org.mybatis.spring.transaction.SpringManagedTransaction.getTimeout(SpringManagedTransaction.java:139)
-  at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:87)
-  at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
-  at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:325)
-  at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
-  at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
-  at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:89)
-  at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:151)
-  at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:145)
-  at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140)
-  at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:76)
-  at sun.reflect.GeneratedMethodAccessor113.invoke(Unknown Source)
-  at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
-  at java.lang.reflect.Method.invoke(Method.java:498)
-  at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:434)
-  at com.sun.proxy.$Proxy36.selectOne(Unknown Source)
-  at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:167)
-  at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
-  at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:145)
-  at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
-  at com.sun.proxy.$Proxy96.getRecordCount_new(Unknown Source)
-  ...
+        at org.springframework.transaction.support.ResourceHolderSupport.checkTransactionTimeout(ResourceHolderSupport.java:141)
+        at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInMillis(ResourceHolderSupport.java:130)
+        at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInSeconds(ResourceHolderSupport.java:114)
+        at org.mybatis.spring.transaction.SpringManagedTransaction.getTimeout(SpringManagedTransaction.java:139)
+        at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:87)
+        at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
+        at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:325)
+        at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+        at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+        at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:89)
+        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:151)
+        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:145)
+        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140)
+        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:76)
+        at sun.reflect.GeneratedMethodAccessor113.invoke(Unknown Source)
+        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+        at java.lang.reflect.Method.invoke(Method.java:498)
+        at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:434)
+        at com.sun.proxy.$Proxy36.selectOne(Unknown Source)
+        at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:167)
+        at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
+        at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:145)
+        at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+        ...
 ```
 
 ```java
@@ -233,21 +232,43 @@ public class ServerErrorAdvice {
 
 # 상황 2
 
+![transaction-timeout](/images/datadog/transaction-timeout.png)
+
 주말이 지나고 월요일 아침, 갑자기 레이턴시가 높아지고 `TransactionTimedOutException` 예외가 발생했다.
 
 ## 분석 2
 
-![transaction-timeout](/images/datadog/transaction-timeout.png)
+예외가 발생한 코드는 다음과 비슷한 구조를 가졌다.
 
-![connection-timeout](/images/datadog/connection-timeout.png)
+```java
+@Service
+@Transactional
+public class ServiceImpl implements Service {
 
-`TransactionTimedOutException` 이 발생한 요청에서 4~5분의 레이턴시가 발생했다.
+    @Override
+    public List<Result> list() {
+        
+        Response response = callHttpClientWithoutTimeout(); // (2) TransactionTimedOutException 발생
+
+        return accessDb(response);
+    }
+
+    @Override
+    public Response callHttpClientWithoutTimeout() {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet request = new HttpGet(url);
+        CloseableHttpResponse response = httpClient.execute(request); // (1) HttpHostConnectException 발생
+        return response;
+    }
+}
+```
+
 먼저 해당 요청들의 로그를 확인해보았다.
-외부 API 서버로 요청하는 부분에서 해당 시간대에 일시적으로 Connection Timeout이 발생했던 것을 확인할 수 있었다.
+IPInfoDB API 서버로 요청하는 부분에서 해당 시간대에 일시적으로 Connection Timeout이 발생했던 것을 확인할 수 있었다.
 
-```bash
-ERROR ServiceImpl - org.apache.http.conn.HttpHostConnectException: Connect to api.external.com:80 [api.external.com/x.x.x.x] failed: 연결 시간 초과 (Connection timed out)
-org.apache.http.conn.HttpHostConnectException: Connect to api.external.com:80 [api.external.com/x.x.x.x] failed: 연결 시간 초과 (Connection timed out)
+```java
+[2022-05-09 06:32:57:8502224037446002723 2136207119638956779] ERROR org.apache.http.conn.HttpHostConnectException: Connect to api.ipinfodb.com:80 [api.ipinfodb.com/45.32.138.106] failed: 연결 시간 초과 (Connection timed out)
+org.apache.http.conn.HttpHostConnectException: Connect to api.ipinfodb.com:80 [api.ipinfodb.com/45.32.138.106] failed: 연결 시간 초과 (Connection timed out)
         at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:159)
         at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:373)
         at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:394)
@@ -258,6 +279,27 @@ org.apache.http.conn.HttpHostConnectException: Connect to api.external.com:80 [a
         at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
         at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)
         at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)
+        ...
+        at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:798)
+        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:808)
+        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+        at java.lang.Thread.run(Thread.java:748)
+Caused by: java.net.ConnectException: 연결 시간 초과 (Connection timed out)
+        at java.net.PlainSocketImpl.socketConnect(Native Method)
+        at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+        at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+        at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+        at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+        at java.net.Socket.connect(Socket.java:589)
+        at org.apache.http.conn.socket.PlainConnectionSocketFactory.connectSocket(PlainConnectionSocketFactory.java:75)
+        at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:142)
+        ... 134 common frames omitted
 ```
 
 로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 `org.apache.httpcomponents.httpclient` 이며 Timeout 기본값이 `-1` 이다.
@@ -280,62 +322,112 @@ this.connManager.connect(
         context);
 ```
 
-`0`으로 설정된 Timeout은 발생하지 않기 때문에 무한정 대기한다. (infinite timeout)
-
-```java
-// java.net.Socket
-/**
- * Connects this socket to the server with a specified timeout value.
- * A timeout of zero is interpreted as an infinite timeout. The connection
- * will then block until established or an error occurs.
- *
- * @param   endpoint the {@code SocketAddress}
- * @param   timeout  the timeout value to be used in milliseconds.
- * @throws  IOException if an error occurs during the connection
- * @throws  SocketTimeoutException if timeout expires before connecting
- * @throws  java.nio.channels.IllegalBlockingModeException
- *          if this socket has an associated channel,
- *          and the channel is in non-blocking mode
- * @throws  IllegalArgumentException if endpoint is null or is a
- *          SocketAddress subclass not supported by this socket
- * @since 1.4
- * @spec JSR-51
- */
-public void connect(SocketAddress endpoint, int timeout) throws IOException {
-    // ...
-}
-```
-
-그렇다면 왜 4~5분이 걸리는 걸까?
-`HikariDataSource` 의 Connection Timeout이 300초로 설정되어 있었기 때문에 메서드 레벨에서 타임아웃이 발생한 것이다.
+`0`으로 설정된 Timeout은 발생하지 않기 때문에 무한정 대기한다.
+그러다가 트랜잭션 타임아웃이 발생하면서 커넥션이 끊긴 것이다.
+데드락과 달리 연쇄 서버 장애는 아닌 셈이다.
 
 ## 해결 2
 
-`HikariDataSource` 의 Connection Timeout 값을 300,000(ms)에서 30,000(ms)으로 수정했다. (기본값이 30,000)
+네트워크 연결이 필요할 경우 반드시 Timeout 값을 설정하자.
 
-```xml
-<!-- https://github.com/brettwooldridge/HikariCP -->
-<!-- https://github.com/brettwooldridge/HikariCP#frequently-used -->
-<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
-    <constructor-arg>
-        <bean class="com.zaxxer.hikari.HikariConfig">
-            <constructor-arg>
-                <props>
-                    <prop key="jdbcUrl">${jdbc-url}</prop>
-                    <prop key="username">${username}</prop>
-                    <prop key="password">${password}</prop>
-                </props>
-            </constructor-arg>
-            <property name="idleTimeout" value="600000"/>
-            <property name="minimumIdle" value="10"/>
-            <property name="maximumPoolSize" value="50"/>
-            <property name="connectionTimeout" value="30000"/>
-        </bean>
-    </constructor-arg>
-</bean>
+```java
+int timeout = 5;
+
+RequestConfig config = RequestConfig.custom()
+        .setConnectTimeout(timeout * 1000)
+        .setConnectionRequestTimeout(timeout * 1000)
+        .setSocketTimeout(timeout * 1000)
+        .build();
+
+HttpClient httpClient = 
+    HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 ```
 
-마지막으로 HTTP Client의 Timeout 값을 설정하자.
+# 추가적인 문제 2
+
+## OkHttpClient Memory Leaks
+
+적은 메모리를 가진 서버에서 알 수 없는 이유로 DB나 Redis 커넥션이 끊기는 경우가 있다.
+톰캣의 `catalina.out` 로그에서 그 이유를 알 수 있었다.
+
+```bash
+경고 [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application [ROOT] appears to have started a thread named [OkHttp ConnectionPool] but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
+ java.lang.Object.wait(Native Method)
+ java.lang.Object.wait(Object.java:460)
+ okhttp3.internal.Util.waitMillis(Util.kt:536)
+ okhttp3.internal.Util.lockAndWaitNanos(Util.kt:522)
+ okhttp3.internal.connection.RealConnectionPool$cleanupRunnable$1.run(RealConnectionPool.kt:49)
+ java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+ java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+ java.lang.Thread.run(Thread.java:748)
+
+# 위 스레드와 관련 있는 SQL
+심각 [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application [ROOT] created a ThreadLocal with key of type [java.lang.ThreadLocal] (value [java.lang.ThreadLocal@687e2dc4]) and a value of type [io.netty.util.internal.InternalThreadLocalMap] (value [io.netty.util.internal.InternalThreadLocalMap@348ccbcb]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+
+심각 [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application [ROOT] created a ThreadLocal with key of type [oracle.jdbc.driver.AutoKeyInfo$1] (value [oracle.jdbc.driver.AutoKeyInfo$1@213a23bb]) and a value of type [oracle.jdbc.driver.OracleSql] (value [
+            (
+                ${SQL_INSERT}
+            )
+            ]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
+```
+
+또 다른 API 요청에서 `OkHttpClient`를 사용하는데 다음과 같이 작성되어 있다.
+
+```java
+OkHttpClient client = new OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .build();
+
+public Response sendRequest(Request request) throws IOException {
+    Response response = client.newCall(request).execute();
+    return response.body().string();
+}
+```
+
+여기서 문제가 무엇일까?
+`Call.execute()` 주석을 보면 쉽게 원인을 알 수 있다.
+
+```kotlin
+// okhttp3.Call
+
+/**
+* Invokes the request immediately, and blocks until the response can be processed or is in error.
+*
+* To avoid leaking resources callers should close the [Response] which in turn will close the
+* underlying [ResponseBody].
+*
+* ```
+* // ensure the response (and underlying response body) is closed
+* try (Response response = client.newCall(request).execute()) {
+*   ...
+* }
+* ```
+*
+* The caller may read the response body with the response's [Response.body] method. To avoid
+* leaking resources callers must [close the response body][ResponseBody] or the response.
+*
+* ...
+*/
+@Throws(IOException::class)
+fun execute(): Response
+```
+
+**"자원 누수를 방지하려면 [Response]를 닫아야 한다."**
+다음은 [OkHttp 공식 문서](https://square.github.io/okhttp/)의 코드다.
+
+```java
+OkHttpClient client = new OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
+        .build();
+
+String run(Request request) throws IOException {
+  try (Response response = client.newCall(request).execute()) {
+    return response.body().string();
+  }
+}
+```
 
 # 결론
 
