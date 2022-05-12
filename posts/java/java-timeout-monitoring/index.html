@@ -1211,7 +1211,7 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 <p><em>10 minutes Average Latency</em></p>
 <p>위 Average Latency 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
 그런데 이전부터 거의 구분할 수 없을 정도로 Alert가 발생하던 것을 확인할 수 있다.
-임계점을 높인 이후에는 애플리케이션이 정상일 때 OK로 표시된다.</p>
+임계점을 높인 이후에는 정상적인 애플리케이션에서는 <code>OK</code>가 표시된다.</p>
 <p>임계점에 대한 기준은 과거 이력을 보고 설정했다.
 장애가 발생하던 시점에 전조가 보이기 시작한 값을 경고 임계점(Warning threshold)으로 설정하고,
 증상이 나타났을 때 값을 알람 임계점으로 설정했다.
@@ -1226,48 +1226,8 @@ TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(
 게다가 공통 로깅을 AOP로 분리하지 않고 각각의 메서드에서 처리하고 있었다.</p>
 <p><code>System.out</code> 을 사용하면 로그 레벨이나 목적별로 분리해서 설정할 수 없을 뿐더러
 애플리케이션 로그 파일에 로그가 남지 않고 Tomcat의 <code>catalina.out</code> 에 남는다.
-그래서 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어려웠다.</p>
-<p>먼저 목적별로 로그 파일을 분리해보자.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- Logback --&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;appender</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;appRolling&#34;</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;file&gt;</span>${baseDir}/app.log<span style="color:#ff79c6">&lt;/file&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;charset&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/charset&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;pattern&gt;</span>${defaultPattern}<span style="color:#ff79c6">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;rollingPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;fileNamePattern&gt;</span>${baseDir}/archive/app.%d{yyyy-MM-dd_HH}.%i.log<span style="color:#ff79c6">&lt;/fileNamePattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;maxFileSize&gt;</span>200MB<span style="color:#ff79c6">&lt;/maxFileSize&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/rollingPolicy&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;appender</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;springRolling&#34;</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.RollingFileAppender&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;file&gt;</span>${baseDir}/spring.log<span style="color:#ff79c6">&lt;/file&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;encoder&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;charset&gt;</span>UTF-8<span style="color:#ff79c6">&lt;/charset&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;pattern&gt;</span>${defaultPattern}<span style="color:#ff79c6">&lt;/pattern&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/encoder&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;rollingPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.TimeBasedRollingPolicy&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;fileNamePattern&gt;</span>${baseDir}/archive/spring.%d{yyyy-MM-dd_HH}.%i.log<span style="color:#ff79c6">&lt;/fileNamePattern&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;timeBasedFileNamingAndTriggeringPolicy</span> <span style="color:#50fa7b">class=</span><span style="color:#f1fa8c">&#34;ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">&lt;maxFileSize&gt;</span>200MB<span style="color:#ff79c6">&lt;/maxFileSize&gt;</span>
-</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;/rollingPolicy&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/appender&gt;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;logger</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;com.markruler&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;level</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;debug&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;appender-ref</span> <span style="color:#50fa7b">ref=</span><span style="color:#f1fa8c">&#34;appRolling&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/logger&gt;</span>
-</span></span><span style="display:flex;"><span>​
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;logger</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;org.springframework&#34;</span><span style="color:#ff79c6">&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;level</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;info&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;appender-ref</span> <span style="color:#50fa7b">ref=</span><span style="color:#f1fa8c">&#34;springRolling&#34;</span><span style="color:#ff79c6">/&gt;</span>
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;/logger&gt;</span>
-</span></span></code></pre></div><p>그리고 Checkstyle을 도입해서 모든 <code>System.out</code>, <code>System.err</code>(<code>printStackTrace</code> 포함)을 Logger로 대체했다.
-코드를 봤을 때 의도된 예외라면 error 레벨이 아닌 info 레벨로 로그를 남겼다.</p>
+그럼 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어렵다.
+Checkstyle을 도입해서 모든 <code>System.out</code>, <code>System.err</code>(<code>printStackTrace</code> 포함)을 Logger로 대체해보자.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#6272a4">&lt;!-- checkstyle.xml --&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;module</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;RegexpSinglelineJava&#34;</span><span style="color:#ff79c6">&gt;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&lt;property</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;id&#34;</span> <span style="color:#50fa7b">value=</span><span style="color:#f1fa8c">&#34;SystemOutput&#34;</span><span style="color:#ff79c6">/&gt;</span>

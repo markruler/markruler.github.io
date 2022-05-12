@@ -88,7 +88,7 @@ public Result list(Param param) {
 
 위 Average Latency 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
 그런데 이전부터 거의 구분할 수 없을 정도로 Alert가 발생하던 것을 확인할 수 있다.
-임계점을 높인 이후에는 애플리케이션이 정상일 때 OK로 표시된다.
+임계점을 높인 이후에는 정상적인 애플리케이션에서는 `OK`가 표시된다.
 
 임계점에 대한 기준은 과거 이력을 보고 설정했다.
 장애가 발생하던 시점에 전조가 보이기 시작한 값을 경고 임계점(Warning threshold)으로 설정하고,
@@ -108,53 +108,8 @@ Datadog의 APM(Application Performance Management) 서비스는
 
 `System.out` 을 사용하면 로그 레벨이나 목적별로 분리해서 설정할 수 없을 뿐더러
 애플리케이션 로그 파일에 로그가 남지 않고 Tomcat의 `catalina.out` 에 남는다.
-그래서 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어려웠다.
-
-먼저 목적별로 로그 파일을 분리해보자.
-
-```xml
-<!-- Logback -->
-<appender name="appRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${baseDir}/app.log</file>
-    <encoder>
-        <charset>UTF-8</charset>
-        <pattern>${defaultPattern}</pattern>
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>${baseDir}/archive/app.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
-        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-            <maxFileSize>200MB</maxFileSize>
-        </timeBasedFileNamingAndTriggeringPolicy>
-    </rollingPolicy>
-</appender>
-
-<appender name="springRolling" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>${baseDir}/spring.log</file>
-    <encoder>
-        <charset>UTF-8</charset>
-        <pattern>${defaultPattern}</pattern>
-    </encoder>
-    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-        <fileNamePattern>${baseDir}/archive/spring.%d{yyyy-MM-dd_HH}.%i.log</fileNamePattern>
-        <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-            <maxFileSize>200MB</maxFileSize>
-        </timeBasedFileNamingAndTriggeringPolicy>
-    </rollingPolicy>
-</appender>
-
-<logger name="com.markruler">
-    <level value="debug" />
-    <appender-ref ref="appRolling" />
-</logger>
-​
-<logger name="org.springframework">
-    <level value="info" />
-    <appender-ref ref="springRolling"/>
-</logger>
-```
-
-그리고 Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` 포함)을 Logger로 대체했다.
-코드를 봤을 때 의도된 예외라면 error 레벨이 아닌 info 레벨로 로그를 남겼다.
+그럼 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어렵다.
+Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` 포함)을 Logger로 대체해보자.
 
 ```xml
 <!-- checkstyle.xml -->
