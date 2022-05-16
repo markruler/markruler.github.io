@@ -95,7 +95,7 @@ public Result list(Param param) {
 증상이 나타났을 때 값을 알람 임계점으로 설정했다.
 — 정확한 기준이라고는 할 수 없다. 앞으로도 알람이 발생할 때마다 조정할 예정이다.
 
-## Error Tracing
+## Log Tracing & Error Tracking
 
 Datadog의 APM(Application Performance Management) 서비스는
 애플리케이션의 성능을 실시간으로 분석할 수 있게 도와주고
@@ -109,7 +109,7 @@ Datadog의 APM(Application Performance Management) 서비스는
 `System.out` 을 사용하면 로그 레벨이나 목적별로 분리해서 설정할 수 없을 뿐더러
 애플리케이션 로그 파일에 로그가 남지 않고 Tomcat의 `catalina.out` 에 남는다.
 그럼 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어렵다.
-Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` 포함)을 Logger로 대체해보자.
+Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` 포함)을 Logger로 대체했다.
 
 ```xml
 <!-- checkstyle.xml -->
@@ -129,8 +129,12 @@ Checkstyle을 도입해서 모든 `System.out`, `System.err`(`printStackTrace` �
 </module>
 ```
 
-특히 선임 중 한 분이 [“200 OK, But”](https://twitter.com/rpbaltazar/status/1458979690790539266) 방식을 선호했기 때문에
-그 분이 퇴사하시자마자 HTTP 상태 코드를 분리했다.
+특히 선임 중 한 분이 [“200 OK, But”](https://twitter.com/rpbaltazar/status/1458979690790539266) 방식을 선호했다.
+이 방식은 오류가 발생해도 잡아서(catch) `200 OK` 응답을 보낸다.
+**에러가 발생하는데도 모니터링 도구에서는 마치 애플리케이션이 정상적인 것처럼 보인다.**
+이런 방식은 HTTP가 네트워크 프로토콜이라는 것을 고려해보면
+서버와 클라이언트 간 커뮤니케이션을 더 힘들게 만든다는 것을 알 수 있다.
+그래서 그 분이 퇴사하시자마자 HTTP 상태 코드를 분리했다.
 
 ![200-ok-but](/images/web/200-ok-but.png)
 
@@ -193,7 +197,7 @@ public class ServerErrorAdvice {
 
 ## 분석 2
 
-예외가 발생한 코드는 다음과 비슷한 구조를 가졌다.
+예외가 발생한 코드는 다음과 같은 구조를 가졌다.
 
 ```java
 @Service
@@ -202,9 +206,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public List<Result> list() {
-        
         Response response = callHttpClientWithoutTimeout(); // (2) TransactionTimedOutException 발생
-
         return accessDb(response);
     }
 
@@ -218,8 +220,9 @@ public class ServiceImpl implements Service {
 }
 ```
 
-먼저 해당 요청들의 로그를 확인해보았다.
-IPInfoDB API 서버로 요청하는 부분에서 해당 시간대에 일시적으로 Connection Timeout이 발생했던 것을 확인할 수 있었다.
+먼저 로그를 확인해보았다.
+해당 시간대에 IPInfoDB API 서버로 요청하는 부분에서
+일시적으로 Connection Timeout이 발생했던 것을 확인할 수 있었다.
 
 ```java
 [2022-05-09 06:32:57:8502224037446002723 2136207119638956779] ERROR org.apache.http.conn.HttpHostConnectException: Connect to api.ipinfodb.com:80 [api.ipinfodb.com/45.32.138.106] failed: 연결 시간 초과 (Connection timed out)
@@ -277,13 +280,13 @@ this.connManager.connect(
         context);
 ```
 
-`0`으로 설정된 Timeout은 발생하지 않기 때문에 무한정 대기한다.
+`0`으로 설정된 커넥션 타임아웃은 발생하지 않기 때문에 끊기지 않고 계속 대기한다.
 그러다가 트랜잭션 타임아웃이 발생하면서 커넥션이 끊긴 것이다.
 데드락과 달리 연쇄 서버 장애는 아닌 셈이다.
 
 ## 해결 2
 
-네트워크 연결이 필요할 경우 반드시 Timeout 값을 설정하자.
+네트워크 연결이 필요할 경우 반드시 Timeout 값을 설정해야 한다.
 
 ```java
 int timeout = 5;
@@ -302,7 +305,7 @@ HttpClient httpClient =
 
 ## OkHttpClient Memory Leaks
 
-적은 메모리를 가진 서버에서 알 수 없는 이유로 DB나 Redis 커넥션이 끊기는 경우가 있다.
+같은 시기 적은 메모리를 가진 서버에서 알 수 없는 이유로 DB나 Redis 커넥션이 끊기는 경우가 있었다.
 톰캣의 `catalina.out` 로그에서 그 이유를 알 수 있었다.
 
 ```bash
@@ -316,7 +319,6 @@ HttpClient httpClient =
  java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
  java.lang.Thread.run(Thread.java:748)
 
-# 위 스레드와 관련 있는 SQL
 심각 [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application [ROOT] created a ThreadLocal with key of type [java.lang.ThreadLocal] (value [java.lang.ThreadLocal@687e2dc4]) and a value of type [io.netty.util.internal.InternalThreadLocalMap] (value [io.netty.util.internal.InternalThreadLocalMap@348ccbcb]) but failed to remove it when the web application was stopped. Threads are going to be renewed over time to try and avoid a probable memory leak.
 
 심각 [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application [ROOT] created a ThreadLocal with key of type [oracle.jdbc.driver.AutoKeyInfo$1] (value [oracle.jdbc.driver.AutoKeyInfo$1@213a23bb]) and a value of type [oracle.jdbc.driver.OracleSql] (value [
@@ -341,7 +343,7 @@ public Response sendRequest(Request request) throws IOException {
 ```
 
 여기서 문제가 무엇일까?
-`Call.execute()` 주석을 보면 쉽게 원인을 알 수 있다.
+`Call.execute()` 주석을 보면 쉽게 원인을 알 수 있었다.
 
 ```kotlin
 // okhttp3.Call
@@ -387,8 +389,7 @@ String run(Request request) throws IOException {
 # 결론
 
 Timeout을 설정하지 않으면 데드락부터 연쇄 서버 장애까지 많은 것을 겪을 수 있다.
-부디 Timeout 설정을 잊지 말자.
-그리고 유의미한 로깅과 모니터링을 하자! 🧑‍💻
+부디 Timeout 설정을 잊지 말고 이것을 관찰할 수 있도록 유의미한 로깅과 모니터링을 하자! 🧑‍💻
 
 # 더 읽을 거리
 
