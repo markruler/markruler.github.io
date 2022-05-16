@@ -1,6 +1,6 @@
 ---
 date: 2022-05-11T02:19:00+09:00
-title: "Java 애플리케이션을 모니터링하면서 Timeout의 중요성 깨닫기"
+title: "모니터링과 타임아웃의 중요성"
 description: "이거 모르는 개발자 많다카더라"
 featured_image: "/images/datadog/alert-threshold.png"
 images: ["/images/datadog/alert-threshold.png"]
