@@ -16,7 +16,7 @@
 ### Windows
 
 - version <= 0.92.0
-  - 0.93.0부터는 SCSS가 빌드되지 않는데 원인을 모름.
+  - [0.93.0](https://github.com/gohugoio/hugo/releases/tag/v0.93.0)부터는 SCSS가 빌드되지 않는데 원인을 모름.
 
 ```ps1
 # Windows
