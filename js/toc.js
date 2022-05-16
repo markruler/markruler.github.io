@@ -5,7 +5,8 @@ var spy = function () {
     }
     var currentTop = $(window).scrollTop();
     var currentBottom = $(window).scrollTop() + $(window).height();
-    var pageBottom = $('#EOF').offset().top;
+    // var pageBottom = $('#EOF').offset().top;
+    var pageBottom = $('#EOF').offset();
 
     var meetUnread = false
     var currentIndex = -1
@@ -24,6 +25,11 @@ var spy = function () {
         }
     })
 }
+
+var onNavClick = function () {
+  
+}
+
 $().ready(function () {
     $(".collapse").each(function (idx) {
         $(this).collapse("show");

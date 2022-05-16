@@ -790,7 +790,7 @@
 <br>
 에지 트리거링은 상태를 망가뜨리고 다시 원상태를 생성하지 못하게 할 위험이 있습니다.
 레벨 트리거링은 굉장히 포용적이고, 교정되어야 할 컴포넌트가 그렇지
-못할 경우 다시 교정될 수 있도록 여지를 줍니다. 이것이 쿠버네티스가 잘 동작하는 이유입니다.&rdquo;<br>
+못할 경우 다시 교정될 수 있도록 여지를 줍니다. 이것이 쿠버네티스가 잘 동작하는 이유입니다.&quot;<br>
 <br>
 ― Joe Beda<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, Heptio CTO (<a href="http://shop.oreilly.com/product/0636920075837.do">Cloud Native Infrastructure</a>에서 발췌)</p>
 </blockquote>
@@ -802,15 +802,15 @@
 하이에서 로우로 <strong>바뀔 때</strong> 신경써야 할까요, 아니면 하이에
 <strong>있는 지 여부</strong>에 신경써야 할까요?</p>
 <p>아래처럼 간단한 덧셈 연산을 통해 설명해보겠습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">7</span>
-</span></span></code></pre></div><p>에지 트리거링 관점에서 위 연산은 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>add <span style="color:#bd93f9">4</span> to a
-</span></span></code></pre></div><p>더하는 순간 한 번 발생합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
+<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">7</span>
+</code></pre></div><p>에지 트리거링 관점에서 위 연산은 다음과 같습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">add <span style="color:#bd93f9">4</span> to a
+</code></pre></div><p>더하는 순간 한 번 발생합니다.</p>
 <p>레벨 트리거링 관점에서는 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>a is <span style="color:#bd93f9">7</span>
-</span></span></code></pre></div><p>더할 때부터 다음 이벤트가 발생할 때까지 계속 이러한 상태가 유지됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">a is <span style="color:#bd93f9">7</span>
+</code></pre></div><p>더할 때부터 다음 이벤트가 발생할 때까지 계속 이러한 상태가 유지됩니다.</p>
 <h2 id="분산-시스템에서-에지-트리거링과-레벨-트리거링">분산 시스템에서 에지 트리거링과 레벨 트리거링</h2>
 <p>추상적으로는 에지 트리거링과 레벨 트리거링 사이에 명확한 차이가 없습니다.
 하지만 현실에서는 시스템 프로그래밍 수준에서도 실질적인 한계에 대처해야 합니다.
@@ -846,17 +846,17 @@
 하강하는 신호가 가려지면 레벨 트리거 시스템은 대부분 다시 교정하지만,
 에지 트리거 시스템은 두 번의 상승만 볼 수 있기 때문에 본래의 신호를 잃어버립니다.</p>
 <p>다시 덧셈 연산으로 레벨 트리거 시스템의 신호를 나타내면 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">2</span>
-</span></span></code></pre></div><p>그러나 에지 트리거 시스템에서는 아래와 같이 관측됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">3</span>
-</span></span></code></pre></div><h1 id="희망-상태와-실제-상태-조정하기">희망 상태와 실제 상태 조정하기</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">2</span>
+</code></pre></div><p>그러나 에지 트리거 시스템에서는 아래와 같이 관측됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">3</span>
+</code></pre></div><h1 id="희망-상태와-실제-상태-조정하기">희망 상태와 실제 상태 조정하기</h1>
 <p>쿠버네티스는 하나의 신호만 관측하지 않고 <strong>희망하는(desired)</strong> 클러스터
 상태와 <strong>실제(actual)</strong> 클러스터 상태 두 가지를 관측합니다.
 희망 상태는 클러스터를 사용하는 사람이 바라는 상태를 말합니다.
@@ -877,10 +877,10 @@
 <p>단일 컨테이너 레플리카로 시작해서 5개의 레플리카로 확장한 후
 2개의 레플리카로 축소하려는 경우,
 에지 트리거 시스템은 희망 상태를 아래와 같이 관측합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> replicas <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
-</span></span><span style="display:flex;"><span><span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">3</span>;
-</span></span></code></pre></div><p>시스템의 실제 상태는 이러한 명령에 즉시 반응할 수 없습니다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> replicas <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
+<span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
+<span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">3</span>;
+</code></pre></div><p>시스템의 실제 상태는 이러한 명령에 즉시 반응할 수 없습니다.
 위 다이어그램처럼 실행 중인 레플리카가 3개만 있을 때 3개의 레플리카를
 종료할 수도 있습니다. 그럼 레플리카가 하나도 안 남겠죠.</p>
 <p>레벨 트리거 시스템에서는 항상 희망 상태와 실제 상태 전체를 비교합니다.
@@ -904,18 +904,18 @@
 </blockquote>
 <p><img src="/images/kubernetes/typical-flow-scheduling-pod.png" alt="typical-flow-scheduling-pod"></p>
 <p><em>출처: Core Kubernetes: Jazz Improv over Orchestration - Joe Beda</em></p>
-<div class="footnotes" role="doc-endnotes">
+<section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1">
+<li id="fn:1" role="doc-endnote">
 <p>쿠버네티스 창시자 중 한 명&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2">
+<li id="fn:2" role="doc-endnote">
 <p>조정(reconciliation)이란 실제 클러스터 상태를 사용자가 정의한 상태로 제어하는 것을 말합니다. 이에 대한 자세한 내용은
 <a href="https://github.com/kubernetes-sigs/controller-runtime/blob/v0.7.0/pkg/reconcile/reconcile.go#L53-L87">소스 코드에 달린 주석</a>을 읽어보세요.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</div>
+</section>
 
             
             
