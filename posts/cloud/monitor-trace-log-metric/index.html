@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
   
-  <title>마이크로서비스 기반 observability 용어 정리 - 임창수 블로그</title>
+  <title>Observability 용어 정리 - 임창수 블로그</title>
   
   
   
@@ -19,7 +19,7 @@
 
   
   
-  <meta property="og:title" content="마이크로서비스 기반 observability 용어 정리" />
+  <meta property="og:title" content="Observability 용어 정리" />
 <meta property="og:description" content="observability" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/cloud/monitor-trace-log-metric/" /><meta property="og:image" content="https://markruler.github.io/images/changsu/2020-portrait.png"/><meta property="article:section" content="posts" />
@@ -34,7 +34,7 @@
   <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://markruler.github.io/images/changsu/2020-portrait.png"/>
 
-<meta name="twitter:title" content="마이크로서비스 기반 observability 용어 정리"/>
+<meta name="twitter:title" content="Observability 용어 정리"/>
 <meta name="twitter:description" content="observability"/>
 
   
@@ -201,10 +201,6 @@
 						
 						
 						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
 						
 							<li>
 								<a href="#observability" onclick="onNavClick(`#observability-nav`)" id="observability-nav">
@@ -225,8 +221,8 @@
 						
 						
 							<li>
-								<a href="#logging" onclick="onNavClick(`#logging-nav`)" id="logging-nav">
-									Logging
+								<a href="#event-logging" onclick="onNavClick(`#event-logging-nav`)" id="event-logging-nav">
+									Event Logging
 								</a>
 							</li>
 						
@@ -243,8 +239,8 @@
 						
 						
 							<li>
-								<a href="#tracing" onclick="onNavClick(`#tracing-nav`)" id="tracing-nav">
-									Tracing
+								<a href="#software-tracing" onclick="onNavClick(`#software-tracing-nav`)" id="software-tracing-nav">
+									Software Tracing
 								</a>
 							</li>
 						
@@ -262,6 +258,42 @@
 							
 								<ul class="collapse" data-toggle="collapse">
 							
+						
+						
+							<li>
+								<a href="#logging--tracing" onclick="onNavClick(`#logging--tracing-nav`)" id="logging--tracing-nav">
+									Logging : Tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#trace--track" onclick="onNavClick(`#trace--track-nav`)" id="trace--track-nav">
+									Trace : Track
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
 						
 						
 							<li>
@@ -436,10 +468,6 @@
 						
 						
 						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
 						
 							<li>
 								<a href="#observability" onclick="onNavClick(`#observability-nav`)" id="observability-nav">
@@ -460,8 +488,8 @@
 						
 						
 							<li>
-								<a href="#logging" onclick="onNavClick(`#logging-nav`)" id="logging-nav">
-									Logging
+								<a href="#event-logging" onclick="onNavClick(`#event-logging-nav`)" id="event-logging-nav">
+									Event Logging
 								</a>
 							</li>
 						
@@ -478,8 +506,8 @@
 						
 						
 							<li>
-								<a href="#tracing" onclick="onNavClick(`#tracing-nav`)" id="tracing-nav">
-									Tracing
+								<a href="#software-tracing" onclick="onNavClick(`#software-tracing-nav`)" id="software-tracing-nav">
+									Software Tracing
 								</a>
 							</li>
 						
@@ -497,6 +525,42 @@
 							
 								<ul class="collapse" data-toggle="collapse">
 							
+						
+						
+							<li>
+								<a href="#logging--tracing" onclick="onNavClick(`#logging--tracing-nav`)" id="logging--tracing-nav">
+									Logging : Tracing
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#trace--track" onclick="onNavClick(`#trace--track-nav`)" id="trace--track-nav">
+									Trace : Track
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
 						
 						
 							<li>
@@ -626,7 +690,7 @@
         
         style="background-image: url('https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png')"  >
         <div class="post-title">
-          마이크로서비스 기반 observability 용어 정리
+          Observability 용어 정리
           
           <div class="post-subtitle">
             observability
@@ -661,77 +725,164 @@
         
           <div class="post-body" v-pre>
             
-            <p>observability 관련 용어를 명확히 설명하기 힘들어서 공부하는 중.</p>
-<h2 id="observability">Observability</h2>
+            <h1 id="observability">Observability</h1>
 <ul>
 <li>관측성</li>
 <li>관찰성</li>
 <li>관측 가능성</li>
 </ul>
-<blockquote>
-<p>제어 이론에서 &lsquo;observability&rsquo;라는 용어는 시스템의 내부 상태와 그에 따른 행동을 시스템에 대한 입력과 출력만 보고 결정할 수 있다면 그 시스템이 관측 가능하다는 것을 나타낸다. - &lt;마스터링 분산 추적&gt; p6</p>
-</blockquote>
-<h2 id="logging">Logging</h2>
-<blockquote>
-<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://www.fluentd.org/">Fluentd</a><br>
-<a href="https://www.elastic.co/">Elastic</a></p>
-</blockquote>
+<p>제어 이론에서 &lsquo;observability&rsquo;라는 용어는
+시스템의 내부 상태 변수와 그에 따른 행동을
+시스템에 대한 입력과 출력만 보고 결정할 수 있다면
+그 시스템이 관측 가능하다는 것을 나타낸다.</p>
+<h1 id="event-logging">Event Logging</h1>
 <p><img src="/images/cloud/kibana5-fluentd.png" alt="kibana5-fluentd">
 <em>Fluentd-Kibana</em></p>
 <p>로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다.
-하지만 각 로그 스트림은 한 서비스의 단일 인스턴스에 대해서만 알려주기 때문에 마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.</p>
-<h2 id="tracing">Tracing</h2>
-<blockquote>
-<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://www.jaegertracing.io/">Jaeger</a>, <a href="https://opentracing.io/">OpenTracing</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace">Difference between Tracking and Tracing</a>:<br>
-<br>
-To trace: follow the completed path backwards from its current point to where it began.<br>
-To track: follow the emerging path forwards from your starting point to wherever the thing currently is.<br>
-<br>
-When you &ldquo;trace&rdquo; a cellphone call, you try to determine its origin. This is the same whether done right now, or for a call made a month ago. You go backward to the starting point.<br>
-When you &ldquo;track&rdquo; a cellphone, you monitor its current location, right now, and follow it wherever it goes in the future.</p>
-</blockquote>
+하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에
+마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.</p>
+<ul>
+<li><a href="https://www.fluentd.org/">Fluentd</a></li>
+<li><a href="https://www.elastic.co/">Elastic</a></li>
+<li><a href="https://docs.datadoghq.com/logs/">Datadog Log Management</a></li>
+</ul>
+<h1 id="software-tracing">Software Tracing</h1>
 <p><img src="/images/cloud/jaeger-embed-trace-view.png" alt="jaeger-embed-trace-view">
 <em>Jaeger</em></p>
 <p>사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
-리눅스에서 쓰이는 strace, 구글 크롬의 <a href="https://developers.google.com/web/tools/chrome-devtools/network/">Network log</a> 등
-흔히 접하는 것들도 트레이싱 도구다.
 주로 서비스를 최적화하는 데 사용된다.
 예를 들어, 특정 서비스에 병목이 예상되는 경우
 트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있다.
 결국 트레이싱은 구조화된 형태의 로그 이벤트일 뿐이다.</p>
-<h3 id="distributed-tracing">Distributed tracing</h3>
-<blockquote>
-<p>&lt;마스터링 분산 추적&gt; p58</p>
-</blockquote>
-<p>분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며, 분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다. 기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리 종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며, 이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.</p>
-<h2 id="monitoring">Monitoring</h2>
-<blockquote>
-<p><a href="https://landscape.cncf.io/">CNCF Landscape</a> : <a href="https://prometheus.io/">Prometheus</a>, <a href="https://thanos.io/">Thanos</a></p>
-</blockquote>
+<ul>
+<li><a href="https://www.jaegertracing.io/">Jaeger</a></li>
+<li><a href="https://opentracing.io/">OpenTracing</a></li>
+<li><a href="https://linux.die.net/man/1/strace">strace</a> - Linux man page</li>
+<li>구글 크롬의 <a href="https://developers.google.com/web/tools/chrome-devtools/network/">Network log</a></li>
+</ul>
+<h2 id="logging--tracing">Logging : Tracing</h2>
+<table>
+<thead>
+<tr>
+<th>Event logging</th>
+<th>Software tracing</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consumed primarily by system administrators</td>
+<td>Consumed primarily by developers</td>
+</tr>
+<tr>
+<td>Logs &ldquo;high level&rdquo; information (e.g. failed installation of a program)</td>
+<td>Logs &ldquo;low level&rdquo; information (e.g. a thrown exception)</td>
+</tr>
+<tr>
+<td>Must not be too &ldquo;noisy&rdquo; (containing many duplicate events or information that is not helpful for its intended audience)</td>
+<td>Can be noisy</td>
+</tr>
+<tr>
+<td>A standards-based output format is often desirable, sometimes even required</td>
+<td>Few limitations on output format</td>
+</tr>
+<tr>
+<td>Event log messages are often localized</td>
+<td>Localization is rarely a concern</td>
+</tr>
+<tr>
+<td>Addition of new types of events, as well as new event messages, need not be agile</td>
+<td>Addition of new tracing messages must be agile</td>
+</tr>
+</tbody>
+</table>
+<h2 id="trace--track">Trace : Track</h2>
+<ul>
+<li>track은 시작 지점에서 시작해서 현재 지점으로 새로운 경로를 계속 따라가는 것이다.
+<ul>
+<li>To track: follow the emerging path forwards from your starting point to wherever the thing currently is.</li>
+<li>When you &ldquo;track&rdquo; a cellphone, you monitor its current location,
+right now, and follow it wherever it goes in the future.</li>
+</ul>
+</li>
+<li>trace는 현재 지점에서 시작된 지점까지 이미 완료된 경로를 따라가는 것이다.
+<ul>
+<li>To trace: follow the completed path backwards from its current point to where it began.</li>
+<li>When you &ldquo;trace&rdquo; a cellphone call, you try to determine its origin.
+This is the same whether done right now, or for a call made a month ago.
+You go backward to the starting point.</li>
+</ul>
+</li>
+</ul>
+<h2 id="distributed-tracing">Distributed tracing</h2>
+<p>분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며,
+분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다.
+기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리
+종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며,
+이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.</p>
+<h1 id="monitoring">Monitoring</h1>
 <p><img src="/images/cloud/grafana-visualize.jpg" alt="grafana-visualize">
 <em>Grafana</em></p>
-<p>애플리케이션을 계측하고
-메트릭 수집(collect), 집계(aggregate), 분석(analyze)을 포함하는 시스템이다.
-진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 경고를 보낸다.</p>
-<h2 id="profiling">Profiling</h2>
-<blockquote>
-<p><a href="https://developer.android.com/studio/profile">Android Profiler</a></p>
-</blockquote>
+<p>애플리케이션 계측(measure), 메트릭 수집(collect), 집계(aggregate), 분석(analyze) 등을 포함하는 시스템이다.
+진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 알람을 보낸다.
+예를 들어 설정한 임계점(threshold)을 넘을 경우 이메일을 보내거나 슬랙 채널에 메시지를 보낼 수 있다.</p>
+<ul>
+<li><a href="https://prometheus.io/">Prometheus</a></li>
+<li><a href="https://grafana.com/">Grafana</a></li>
+<li><a href="https://thanos.io/">Thanos</a></li>
+<li><a href="https://docs.datadoghq.com/getting_started/">Datadog</a></li>
+</ul>
+<h1 id="profiling">Profiling</h1>
 <p><img src="/images/cloud/android-profiler-callouts.png" alt="android-profiler-callouts"></p>
-<p><del>(Monitoring + Tracing)</del>
+<p>프로그램의 공간(메모리) 또는 시간 복잡성, 특정 명령의 사용 또는 빈도를 측정하는
+<a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">동적 프로그램 분석(Dynamic program analysis)</a>의 한 형태다.
 모니터링과 달리 벤치마킹에 주 목적이 있다.
 분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 통계에 쓰인다.</p>
-<hr>
-<h2 id="참조">참조</h2>
 <ul>
-<li>&lt;마스터링 분산 추적&gt; - 유리 슈쿠로</li>
+<li><a href="https://www.baeldung.com/java-profilers">A Guide to Java Profilers</a></li>
+<li><a href="https://docs.datadoghq.com/tracing/profiler/">Datadog Continuous Profiler</a></li>
+<li><a href="https://developer.android.com/studio/profile">Android Profiler</a></li>
+</ul>
+<hr>
+<h1 id="참조">참조</h1>
+<ul>
+<li>Observability
+<ul>
+<li>유리 슈쿠로 &lt;마스터링 분산 추적&gt; 6쪽</li>
+<li><a href="https://en.wikipedia.org/wiki/Observability">Observability</a> - Wikipedia</li>
+<li><a href="https://landscape.cncf.io/">CNCF Landscape</a></li>
+</ul>
+</li>
+<li>Logging
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Logging_(software)">Logging</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_management">Log management</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_analysis">Log analysis</a> - Wikipedia</li>
+</ul>
+</li>
+<li>Tracing
+<ul>
+<li>유리 슈쿠로 &lt;마스터링 분산 추적&gt; 58쪽</li>
+<li><a href="https://en.wikipedia.org/wiki/Tracing_(software)">Tracing</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Audit_trail">Audit trail</a> - Wikipedia</li>
+<li><a href="https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace">Difference between Tracking and Tracing</a></li>
+<li><a href="https://opentracing.io/docs/overview/what-is-tracing/">What is Distributed Tracing? - OpenTracing</a></li>
 <li><a href="https://www.bmc.com/blogs/monitoring-logging-tracing">Tracing vs Logging vs Monitoring: What’s the Difference?</a></li>
 <li><a href="https://winderresearch.com/logging-vs-tracing-vs-monitoring/">Logging vs Tracing vs Monitoring</a></li>
+</ul>
+</li>
+<li>Monitoring
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Application_performance_management">Application performance management</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Event_monitoring">Event monitoring</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_monitor">Log monitor</a> - Wikipedia</li>
 <li><a href="https://techbeacon.com/enterprise-it/monitoring-demystified-guide-logging-tracing-metrics">Monitoring demystified: A guide for logging, tracing, metrics</a></li>
-<li><a href="https://opentracing.io/docs/overview/what-is-tracing/">What is Distributed Tracing? - OpenTracing</a></li>
+</ul>
+</li>
+<li>Profiling
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Profiling_(computer_programming)">Profiling</a> - Wikipedia</li>
+</ul>
+</li>
 </ul>
 
             
@@ -780,7 +931,7 @@ When you &ldquo;track&rdquo; a cellphone, you monitor its current location, righ
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;text=%eb%a7%88%ec%9d%b4%ed%81%ac%eb%a1%9c%ec%84%9c%eb%b9%84%ec%8a%a4%20%ea%b8%b0%eb%b0%98%20observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;text=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -811,7 +962,7 @@ When you &ldquo;track&rdquo; a cellphone, you monitor its current location, righ
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;title=%eb%a7%88%ec%9d%b4%ed%81%ac%eb%a1%9c%ec%84%9c%eb%b9%84%ec%8a%a4%20%ea%b8%b0%eb%b0%98%20observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac&amp;summary=%eb%a7%88%ec%9d%b4%ed%81%ac%eb%a1%9c%ec%84%9c%eb%b9%84%ec%8a%a4%20%ea%b8%b0%eb%b0%98%20observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;title=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac&amp;summary=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -835,7 +986,7 @@ When you &ldquo;track&rdquo; a cellphone, you monitor its current location, righ
     
     
     <li>
-      <a href="mailto:?subject= - %eb%a7%88%ec%9d%b4%ed%81%ac%eb%a1%9c%ec%84%9c%eb%b9%84%ec%8a%a4%20%ea%b8%b0%eb%b0%98%20observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac.&amp;body=%eb%a7%88%ec%9d%b4%ed%81%ac%eb%a1%9c%ec%84%9c%eb%b9%84%ec%8a%a4%20%ea%b8%b0%eb%b0%98%20observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac%2c%20by%20%0aobservability%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac.&amp;body=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac%2c%20by%20%0aobservability%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">

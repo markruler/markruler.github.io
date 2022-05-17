@@ -16,6 +16,8 @@ categories:
   - monitoring
 ---
 
+> [Observability 용어 정리](/posts/cloud/monitor-trace-log-metric/)
+
 # 상황
 
 - 현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.
