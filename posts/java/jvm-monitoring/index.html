@@ -1199,7 +1199,9 @@
 <li>JVM Stack 조회</li>
 </ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jstack -l <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PID</span><span style="color:#f1fa8c">}</span> &gt; thread_dump.txt
-</code></pre></div><h2 id="non-daemon-thread">Non-Daemon Thread</h2>
+</code></pre></div><p><img src="/images/java/jvm-monitoring/visualvm-tomcat-threads.png" alt="visualvm-tomcat-threads">
+<em>VisuamVM에서 확인한 Thread Stack</em></p>
+<h2 id="non-daemon-thread">Non-Daemon Thread</h2>
 <ul>
 <li><code>thread.setDaemon(false)</code></li>
 <li>Non-Daemon Thread가 실행 중인 경우 JVM은 종료되지 않는다.</li>
@@ -1230,8 +1232,8 @@ Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.</li>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">-XX:+HeapDumpOnOutOfMemoryError <span style="color:#f1fa8c">\
 </span><span style="color:#f1fa8c"></span>-XX:HeapDumpPath<span style="color:#ff79c6">=</span>jvm.hprof
 </code></pre></div><h2 id="jdk-tools">JDK Tools</h2>
-<p><img src="/images/java/java-conceptual-diagram.png" alt="Java Platform Standard Edition 8 Documentation"></p>
-<p><em><a href="https://docs.oracle.com/javase/8/docs/">Java Platform Standard Edition 8 Documentation</a></em></p>
+<p><img src="/images/java/java-conceptual-diagram.png" alt="Java Platform Standard Edition 8 Documentation">
+<em><a href="https://docs.oracle.com/javase/8/docs/">Java Platform Standard Edition 8 Documentation</a></em></p>
 <ul>
 <li><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/index.html">JDK Tools and Utilities</a></li>
 <li>jps: JVM Process Status</li>
@@ -1390,9 +1392,9 @@ app.hprof: Java HPROF dump, created Tue May <span style="color:#bd93f9">17</span
 </table>
 <h2 id="visual-gc">Visual GC</h2>
 <p>JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.</p>
-<p><img src="/images/java/jvm-monitoring/visualgc-plugin.png" alt="VisualGC Plugin"></p>
-<p>VisualVM의 Tools &gt; Plugins에서 다운로드 할 수 있다.</p>
-<p><img src="/images/java/jvm-monitoring/visualgc-with-visualvm.png" alt="Untitled"></p>
+<p><img src="/images/java/jvm-monitoring/visualgc-plugin.png" alt="VisualGC Plugin">
+<em>VisualVM의 Tools &gt; Plugins에서 다운로드 할 수 있다.</em></p>
+<p><img src="/images/java/jvm-monitoring/visualgc-with-visualvm.png" alt="visualgc-with-visualvm"></p>
 <h1 id="monitoring-tools">Monitoring Tools</h1>
 <h2 id="eclipse-memory-analyzer-mat">Eclipse Memory Analyzer (MAT)</h2>
 <ul>
@@ -1424,15 +1426,15 @@ Java heap space
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># etc/visualvm.conf</span>
 <span style="color:#8be9fd;font-style:italic">visualvm_jdkhome</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$JAVA_HOME</span><span style="color:#f1fa8c">&#34;</span>
 </code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; ./bin/visualvm
-</code></pre></div><p><img src="/images/java/jvm-monitoring/visualvm-tomcat-threads.png" alt="visualvm-tomcat-threads"></p>
-<ul>
+</code></pre></div><ul>
 <li>Dump 파일을 확인하거나 Remote로 연결해서 실시간으로 확인할 수 있다.
 <ul>
-<li>File &gt; Load &gt; *.hprof 선택</li>
+<li>File &gt; Load &gt; <code>*.hprof</code> 선택</li>
 </ul>
 </li>
 </ul>
-<p><img src="/images/java/jvm-monitoring/visualvm-heap-dump.png" alt="visualvm-heap-dump"></p>
+<p><img src="/images/java/jvm-monitoring/visualvm-heap-dump.png" alt="visualvm-heap-dump">
+<em>VisuamVM에서 확인한 Heap Dump</em></p>
 <ul>
 <li>Remote로 연결하기 위해서는 WAS에 JMX 설정이 필요하다.
 <ul>
@@ -1457,7 +1459,8 @@ Java heap space
 </span><span style="color:#f1fa8c"></span>-jar
 </code></pre></div><h2 id="jconsole">JConsole</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jconsole
-</code></pre></div><p><img src="/images/java/jvm-monitoring/jconsole-overview.png" alt="jconsole-overview"></p>
+</code></pre></div><p><img src="/images/java/jvm-monitoring/jconsole-overview.png" alt="jconsole-overview">
+<em>JConsole 화면</em></p>
 <h2 id="datadog">Datadog</h2>
 <ul>
 <li><a href="https://docs.datadoghq.com/tracing/profiler/enabling/java/">Enabling the Java Profiler</a></li>

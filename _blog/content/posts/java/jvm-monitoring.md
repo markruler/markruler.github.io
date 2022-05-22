@@ -30,6 +30,9 @@ categories:
 > jstack -l ${PID} > thread_dump.txt
 ```
 
+![visualvm-tomcat-threads](/images/java/jvm-monitoring/visualvm-tomcat-threads.png)
+*VisuamVM에서 확인한 Thread Stack*
+
 ## Non-Daemon Thread
 
 - `thread.setDaemon(false)`
@@ -68,7 +71,6 @@ JVM 실행 시 아래 옵션을 추가하면 `OutOfMemoryError` 발생으로 JVM
 ## JDK Tools
 
 ![Java Platform Standard Edition 8 Documentation](/images/java/java-conceptual-diagram.png)
-
 *[Java Platform Standard Edition 8 Documentation](https://docs.oracle.com/javase/8/docs/)*
 
 - [JDK Tools and Utilities](https://docs.oracle.com/javase/8/docs/technotes/tools/index.html)
@@ -209,10 +211,9 @@ $ jstat -options
 JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.
 
 ![VisualGC Plugin](/images/java/jvm-monitoring/visualgc-plugin.png)
+*VisualVM의 Tools > Plugins에서 다운로드 할 수 있다.*
 
-VisualVM의 Tools > Plugins에서 다운로드 할 수 있다.
-
-![Untitled](/images/java/jvm-monitoring/visualgc-with-visualvm.png)
+![visualgc-with-visualvm](/images/java/jvm-monitoring/visualgc-with-visualvm.png)
 
 # Monitoring Tools
 
@@ -263,12 +264,11 @@ visualvm_jdkhome="$JAVA_HOME"
 > ./bin/visualvm
 ```
 
-![visualvm-tomcat-threads](/images/java/jvm-monitoring/visualvm-tomcat-threads.png)
-
 - Dump 파일을 확인하거나 Remote로 연결해서 실시간으로 확인할 수 있다.
-  - File > Load > *.hprof 선택
+  - File > Load > `*.hprof` 선택
 
 ![visualvm-heap-dump](/images/java/jvm-monitoring/visualvm-heap-dump.png)
+*VisuamVM에서 확인한 Heap Dump*
 
 - Remote로 연결하기 위해서는 WAS에 JMX 설정이 필요하다.
   - [Apache](https://tomcat.apache.org/download-70.cgi)
@@ -298,6 +298,7 @@ visualvm_jdkhome="$JAVA_HOME"
 ```
 
 ![jconsole-overview](/images/java/jvm-monitoring/jconsole-overview.png)
+*JConsole 화면*
 
 ## Datadog
 
