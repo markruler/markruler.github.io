@@ -38,11 +38,13 @@ ${PID} Bootstrap -Djava...
 쓰레드 덤프(Thread Dump)란 모든 쓰레드 상태의 스냅샷이다.
 
 ![java-thread-state-machine](/images/java/jvm-monitoring/java-thread-state-machine.png)
+
 *[Java Thread States and Life Cycle](https://www.uml-diagrams.org/java-thread-uml-state-machine-diagram-example.html)*
 
 쓰레드 덤프에 메서드 콜 스택 정보를 가진 스택 프레임(Stack Frame)은 없다.
 
 ![Debugging in IntelliJ](/images/java/jvm-monitoring/debugging-in-intellij.png)
+
 *IntelliJ에서 디버깅하면 볼 수 있는 스택 프레임*
 
 ```bash
@@ -96,6 +98,7 @@ private boolean daemon = false;
 VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할 수 있다.
 
 ![visualvm-tomcat-threads](/images/java/jvm-monitoring/visualvm-tomcat-threads.png)
+
 *VisualVM에서 확인한 Thread Stack*
 
 # Heap Dump
@@ -186,6 +189,7 @@ VisualVM은 실시간으로 확인하는 용도로 사용한다.
 - `File > Load > *.hprof`
 
 ![visualvm-heap-dump](/images/java/jvm-monitoring/visualvm-heap-dump.png)
+
 *VisuamVM에서 확인한 Heap Dump*
 
 Remote로 연결하기 위해서는 WAS에 JMX 설정이 필요하다.
@@ -250,6 +254,7 @@ GC 모니터링이란 JVM이 어떻게 GC를 수행하고 있는지 알아내는
 JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.
 
 ![VisualGC Plugin](/images/java/jvm-monitoring/visualgc-plugin.png)
+
 *VisualVM의 Tools > Plugins에서 다운로드 할 수 있다.*
 
 ![visualgc-with-visualvm](/images/java/jvm-monitoring/visualgc-with-visualvm.png)
@@ -261,6 +266,7 @@ JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.
 - [JDK Tools and Utilities](https://docs.oracle.com/javase/8/docs/technotes/tools/index.html)
 
 ![Java Platform Standard Edition 8 Documentation](/images/java/java-conceptual-diagram.png)
+
 *[Java Platform Standard Edition 8 Documentation](https://docs.oracle.com/javase/8/docs/)*
 
 - jcmd: 성능 관련 카운터 조회
