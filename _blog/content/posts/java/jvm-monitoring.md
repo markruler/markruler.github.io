@@ -112,7 +112,8 @@ VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할
 
 JVM 실행 시 아래 옵션을 추가하면 `OutOfMemoryError` 발생으로 JVM이 종료될 때 힙 덤프를 생성한다.
 
-- `-XX:HeapDumpPath`를 생략하면 `JAVA_PATH`에 `java_pid<pid>.hprof` 형태로 파일이 생성된다.
+- `-XX:HeapDumpPath`를 생략하면 Java Process를 실행시킨 곳에 `java_pid<pid>.hprof` 형태로 파일이 생성된다.
+  > By default the heap dump is created in a file called java_pid.hprof in the working directory of the VM. - [Oracle Docs](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/clopts001.html)
 - `-XX:+PrintClassHistogramAfterFullGC`, `-XX:+PrintClassHistogramBeforeFullGC` 등의 옵션으로
   Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.
 

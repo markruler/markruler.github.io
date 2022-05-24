@@ -1405,7 +1405,11 @@
 <h2 id="outofmemoryerror">OutOfMemoryError</h2>
 <p>JVM 실행 시 아래 옵션을 추가하면 <code>OutOfMemoryError</code> 발생으로 JVM이 종료될 때 힙 덤프를 생성한다.</p>
 <ul>
-<li><code>-XX:HeapDumpPath</code>를 생략하면 <code>JAVA_PATH</code>에 <code>java_pid&lt;pid&gt;.hprof</code> 형태로 파일이 생성된다.</li>
+<li><code>-XX:HeapDumpPath</code>를 생략하면 Java Process를 실행시킨 곳에 <code>java_pid&lt;pid&gt;.hprof</code> 형태로 파일이 생성된다.
+<blockquote>
+<p>By default the heap dump is created in a file called java_pid.hprof in the working directory of the VM. - <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/clopts001.html">Oracle Docs</a></p>
+</blockquote>
+</li>
 <li><code>-XX:+PrintClassHistogramAfterFullGC</code>, <code>-XX:+PrintClassHistogramBeforeFullGC</code> 등의 옵션으로
 Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.</li>
 </ul>
