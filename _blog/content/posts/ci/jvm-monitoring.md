@@ -447,38 +447,33 @@ Jenkins Pipeline을 활용하면 `Jenkinsfile` 을 사용해서 선언형 배포
 
 # 더 읽을 거리
 
-## CI/CD
+- CI/CD
+  - [CI/CD 정리](https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md) - markruler
+  - [<지속적인 통합> 요약](https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/continuous-integration.md) - markruler
+  - [하루에 1000번 배포하는 조직 되기](https://blog.banksalad.com/tech/become-an-organization-that-deploys-1000-times-a-day/) - Banksalad
+  - [Release Note 톺아보기](https://tech.kakaoenterprise.com/113) - kakao enterprise
+- Proxy Server
+  - [포워드 프록시(forward proxy) 리버스 프록시(reverse proxy)의 차이](https://www.lesstif.com/system-admin/forward-proxy-reverse-proxy-21430345.html) - lesstif
+    - [Proxy servers explained](https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/) - Cloudflare
+    - [Reverse Proxy vs. Forward Proxy: The Differences](https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy) - Oxylabs
+- SLB: Server Load Balancing
+  - [Differences Between Layer 4 and Layer 7 Load Balancing](https://www.nginx.com/resources/glossary/layer-7-load-balancing/) - NGINX
+    - [High Availability Load Balancers with Maglev](https://blog.cloudflare.com/high-availability-load-balancers-with-maglev/) - Cloudflare
+    - [Multi-tier load-balancing with Linux](https://vincent.bernat.ch/en/blog/2018-multi-tier-loadbalancer) - Vincent Bernat
+    - [A Primer on Proxies](https://blog.cloudflare.com/a-primer-on-proxies/) - Cloudflare
+    - [L4 vs L7 Load Balancing](https://levelup.gitconnected.com/l4-vs-l7-load-balancing-d2012e271f56) - Mohak Puri
+    - [L4 & L7](https://www.nowwatersblog.com/backend/serverLoad/L4L7) - nowwater
+  - <인프라/네트워크 엔지니어를 위한 네트워크 이해 및 설계 가이드> - 미야타 히로시
+  - <인프라 엔지니어의 교과서: 네트워크 관리편> - 기술평론사 엮음
+  - <웹 엔지니어가 알아야 할 인프라의 기본> - 바바 토시아키
+  - [L4 장비의 동작과 서비스 배포시 유의점](https://tech.kakao.com/2014/05/30/l4/) - Kakao
+  - [L4 스위치 도입시 생겼던 이야기](https://elky84.github.io/2018/08/19/network_issue/) - elky84
+  - [Safe Deploy - 안전하게 L4 에서 제외하는 방법](https://meetup.toast.com/posts/189) - NHN
+  - [L4/L7 스위치의 대안, 오픈 소스 로드 밸런서 HAProxy](https://d2.naver.com/helloworld/284659) - NAVER D2
+- Docker
+  - [도커를 이용한 웹서비스 무중단 배포하기](https://subicura.com/2016/06/07/zero-downtime-docker-deployment.html) - subicura
+  - [The definitive guide to docker's default-address-pools option](https://straz.to/2021-09-08-docker-address-pools/)
 
-- [CI/CD 정리](https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md) - markruler
-- [<지속적인 통합> 요약](https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/continuous-integration.md) - markruler
-- [하루에 1000번 배포하는 조직 되기](https://blog.banksalad.com/tech/become-an-organization-that-deploys-1000-times-a-day/) - Banksalad
-- [Release Note 톺아보기](https://tech.kakaoenterprise.com/113) - kakao enterprise
-
-## Proxy Server
-
-- [포워드 프록시(forward proxy) 리버스 프록시(reverse proxy)의 차이](https://www.lesstif.com/system-admin/forward-proxy-reverse-proxy-21430345.html) - lesstif
-  - [Proxy servers explained](https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/) - Cloudflare
-  - [Reverse Proxy vs. Forward Proxy: The Differences](https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy) - Oxylabs
-
-## SLB: Server Load Balancing
-
-- [Differences Between Layer 4 and Layer 7 Load Balancing](https://www.nginx.com/resources/glossary/layer-7-load-balancing/) - NGINX
-  - [High Availability Load Balancers with Maglev](https://blog.cloudflare.com/high-availability-load-balancers-with-maglev/) - Cloudflare
-  - [Multi-tier load-balancing with Linux](https://vincent.bernat.ch/en/blog/2018-multi-tier-loadbalancer) - Vincent Bernat
-  - [A Primer on Proxies](https://blog.cloudflare.com/a-primer-on-proxies/) - Cloudflare
-  - [L4 vs L7 Load Balancing](https://levelup.gitconnected.com/l4-vs-l7-load-balancing-d2012e271f56) - Mohak Puri
-  - [L4 & L7](https://www.nowwatersblog.com/backend/serverLoad/L4L7) - nowwater
-- <인프라/네트워크 엔지니어를 위한 네트워크 이해 및 설계 가이드> - 미야타 히로시
-- <인프라 엔지니어의 교과서: 네트워크 관리편> - 기술평론사 엮음
-- <웹 엔지니어가 알아야 할 인프라의 기본> - 바바 토시아키
-- [L4 장비의 동작과 서비스 배포시 유의점](https://tech.kakao.com/2014/05/30/l4/) - Kakao
-- [L4 스위치 도입시 생겼던 이야기](https://elky84.github.io/2018/08/19/network_issue/) - elky84
-- [Safe Deploy - 안전하게 L4 에서 제외하는 방법](https://meetup.toast.com/posts/189) - NHN
-- [L4/L7 스위치의 대안, 오픈 소스 로드 밸런서 HAProxy](https://d2.naver.com/helloworld/284659) - NAVER D2
-
-## Docker
-
-- [도커를 이용한 웹서비스 무중단 배포하기](https://subicura.com/2016/06/07/zero-downtime-docker-deployment.html) - subicura
-- [The definitive guide to docker's default-address-pools option](https://straz.to/2021-09-08-docker-address-pools/)
+## 각주
 
 [^1]: <AWS 토폴로지로 이해하는 Amazon VPC> 10장. 분산 제어 - 차정도
