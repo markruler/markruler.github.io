@@ -449,50 +449,6 @@
 						
 						
 							<li>
-								<a href="#%ec%b6%94%ea%b0%80%ec%a0%81%ec%9d%b8-%eb%ac%b8%ec%a0%9c-2" onclick="onNavClick(`#추가적인-문제-2-nav`)" id="추가적인-문제-2-nav">
-									추가적인 문제 2
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#okhttpclient-memory-leaks" onclick="onNavClick(`#okhttpclient-memory-leaks-nav`)" id="okhttpclient-memory-leaks-nav">
-									OkHttpClient Memory Leaks
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
 								<a href="#%ea%b2%b0%eb%a1%a0" onclick="onNavClick(`#결론-nav`)" id="결론-nav">
 									결론
 								</a>
@@ -930,50 +886,6 @@
 						
 						
 							<li>
-								<a href="#%ec%b6%94%ea%b0%80%ec%a0%81%ec%9d%b8-%eb%ac%b8%ec%a0%9c-2" onclick="onNavClick(`#추가적인-문제-2-nav`)" id="추가적인-문제-2-nav">
-									추가적인 문제 2
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#okhttpclient-memory-leaks" onclick="onNavClick(`#okhttpclient-memory-leaks-nav`)" id="okhttpclient-memory-leaks-nav">
-									OkHttpClient Memory Leaks
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
 								<a href="#%ea%b2%b0%eb%a1%a0" onclick="onNavClick(`#결론-nav`)" id="결론-nav">
 									결론
 								</a>
@@ -1380,73 +1292,6 @@ RequestConfig config <span style="color:#ff79c6">=</span> RequestConfig<span sty
 
 HttpClient httpClient <span style="color:#ff79c6">=</span> 
     HttpClientBuilder<span style="color:#ff79c6">.</span><span style="color:#50fa7b">create</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">setDefaultRequestConfig</span><span style="color:#ff79c6">(</span>config<span style="color:#ff79c6">).</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-</code></pre></div><h1 id="추가적인-문제-2">추가적인 문제 2</h1>
-<h2 id="okhttpclient-memory-leaks">OkHttpClient Memory Leaks</h2>
-<p>같은 시기 적은 메모리를 가진 서버에서 알 수 없는 이유로 DB나 Redis 커넥션이 끊기는 경우가 있었다.
-톰캣의 <code>catalina.out</code> 로그에서 그 이유를 알 수 있었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">경고 <span style="color:#ff79c6">[</span>localhost-startStop-2<span style="color:#ff79c6">]</span> org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesThreads The web application <span style="color:#ff79c6">[</span>ROOT<span style="color:#ff79c6">]</span> appears to have started a thread named <span style="color:#ff79c6">[</span>OkHttp ConnectionPool<span style="color:#ff79c6">]</span> but has failed to stop it. This is very likely to create a memory leak. Stack trace of thread:
- java.lang.Object.wait<span style="color:#ff79c6">(</span>Native Method<span style="color:#ff79c6">)</span>
- java.lang.Object.wait<span style="color:#ff79c6">(</span>Object.java:460<span style="color:#ff79c6">)</span>
- okhttp3.internal.Util.waitMillis<span style="color:#ff79c6">(</span>Util.kt:536<span style="color:#ff79c6">)</span>
- okhttp3.internal.Util.lockAndWaitNanos<span style="color:#ff79c6">(</span>Util.kt:522<span style="color:#ff79c6">)</span>
- okhttp3.internal.connection.RealConnectionPool<span style="color:#8be9fd;font-style:italic">$cleanupRunnable$1</span>.run<span style="color:#ff79c6">(</span>RealConnectionPool.kt:49<span style="color:#ff79c6">)</span>
- java.util.concurrent.ThreadPoolExecutor.runWorker<span style="color:#ff79c6">(</span>ThreadPoolExecutor.java:1149<span style="color:#ff79c6">)</span>
- java.util.concurrent.ThreadPoolExecutor<span style="color:#8be9fd;font-style:italic">$Worker</span>.run<span style="color:#ff79c6">(</span>ThreadPoolExecutor.java:624<span style="color:#ff79c6">)</span>
- java.lang.Thread.run<span style="color:#ff79c6">(</span>Thread.java:748<span style="color:#ff79c6">)</span>
-
-심각 <span style="color:#ff79c6">[</span>localhost-startStop-2<span style="color:#ff79c6">]</span> org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application <span style="color:#ff79c6">[</span>ROOT<span style="color:#ff79c6">]</span> created a ThreadLocal with key of <span style="color:#8be9fd;font-style:italic">type</span> <span style="color:#ff79c6">[</span>java.lang.ThreadLocal<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">[</span>java.lang.ThreadLocal@687e2dc4<span style="color:#ff79c6">])</span> and a value of <span style="color:#8be9fd;font-style:italic">type</span> <span style="color:#ff79c6">[</span>io.netty.util.internal.InternalThreadLocalMap<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">[</span>io.netty.util.internal.InternalThreadLocalMap@348ccbcb<span style="color:#ff79c6">])</span> but failed to remove it when the web application was stopped. Threads are going to be renewed over <span style="color:#8be9fd;font-style:italic">time</span> to try and avoid a probable memory leak.
-
-심각 <span style="color:#ff79c6">[</span>localhost-startStop-2<span style="color:#ff79c6">]</span> org.apache.catalina.loader.WebappClassLoaderBase.checkThreadLocalMapForLeaks The web application <span style="color:#ff79c6">[</span>ROOT<span style="color:#ff79c6">]</span> created a ThreadLocal with key of <span style="color:#8be9fd;font-style:italic">type</span> <span style="color:#ff79c6">[</span>oracle.jdbc.driver.AutoKeyInfo<span style="color:#8be9fd;font-style:italic">$1</span><span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">[</span>oracle.jdbc.driver.AutoKeyInfo<span style="color:#8be9fd;font-style:italic">$1</span>@213a23bb<span style="color:#ff79c6">])</span> and a value of <span style="color:#8be9fd;font-style:italic">type</span> <span style="color:#ff79c6">[</span>oracle.jdbc.driver.OracleSql<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">[</span>
-            <span style="color:#ff79c6">(</span>
-                <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">SQL_INSERT</span><span style="color:#f1fa8c">}</span>
-            <span style="color:#ff79c6">)</span>
-            <span style="color:#ff79c6">])</span> but failed to remove it when the web application was stopped. Threads are going to be renewed over <span style="color:#8be9fd;font-style:italic">time</span> to try and avoid a probable memory leak.
-</code></pre></div><p>또 다른 API 요청에서 <code>OkHttpClient</code>를 사용하는데 다음과 같이 작성되어 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">OkHttpClient client <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">Builder</span><span style="color:#ff79c6">()</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">connectTimeout</span><span style="color:#ff79c6">(</span>10<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">)</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">readTimeout</span><span style="color:#ff79c6">(</span>10<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">)</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-
-<span style="color:#8be9fd;font-style:italic">public</span> Response <span style="color:#50fa7b">sendRequest</span><span style="color:#ff79c6">(</span>Request request<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-    Response response <span style="color:#ff79c6">=</span> client<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newCall</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">).</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">();</span>
-    <span style="color:#ff79c6">return</span> response<span style="color:#ff79c6">.</span><span style="color:#50fa7b">body</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">string</span><span style="color:#ff79c6">();</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><p>여기서 문제가 무엇일까?
-<code>Call.execute()</code> 주석을 보면 쉽게 원인을 알 수 있었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-kotlin" data-lang="kotlin"><span style="color:#6272a4">// okhttp3.Call
-</span><span style="color:#6272a4"></span>
-<span style="color:#6272a4">/**
-</span><span style="color:#6272a4">* Invokes the request immediately, and blocks until the response can be processed or is in error.
-</span><span style="color:#6272a4">*
-</span><span style="color:#6272a4">* To avoid leaking resources callers should close the [Response] which in turn will close the
-</span><span style="color:#6272a4">* underlying [ResponseBody].
-</span><span style="color:#6272a4">*
-</span><span style="color:#6272a4">* ```
-</span><span style="color:#6272a4">* // ensure the response (and underlying response body) is closed
-</span><span style="color:#6272a4">* try (Response response = client.newCall(request).execute()) {
-</span><span style="color:#6272a4">*   ...
-</span><span style="color:#6272a4">* }
-</span><span style="color:#6272a4">* ```
-</span><span style="color:#6272a4">*
-</span><span style="color:#6272a4">* The caller may read the response body with the response&#39;s [Response.body] method. To avoid
-</span><span style="color:#6272a4">* leaking resources callers must [close the response body][ResponseBody] or the response.
-</span><span style="color:#6272a4">*
-</span><span style="color:#6272a4">* ...
-</span><span style="color:#6272a4">*/</span>
-@Throws(IOException<span style="color:#ff79c6">::</span><span style="color:#ff79c6">class</span>)
-<span style="color:#ff79c6">fun</span> <span style="color:#50fa7b">execute</span>(): Response
-</code></pre></div><p><strong>&ldquo;자원 누수를 방지하려면 [Response]를 닫아야 한다.&quot;</strong>
-다음은 <a href="https://square.github.io/okhttp/">OkHttp 공식 문서</a>의 코드다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">OkHttpClient client <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">Builder</span><span style="color:#ff79c6">()</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">connectTimeout</span><span style="color:#ff79c6">(</span>10<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">)</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">readTimeout</span><span style="color:#ff79c6">(</span>10<span style="color:#ff79c6">,</span> TimeUnit<span style="color:#ff79c6">.</span><span style="color:#50fa7b">SECONDS</span><span style="color:#ff79c6">)</span>
-        <span style="color:#ff79c6">.</span><span style="color:#50fa7b">build</span><span style="color:#ff79c6">();</span>
-
-String <span style="color:#50fa7b">run</span><span style="color:#ff79c6">(</span>Request request<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> IOException <span style="color:#ff79c6">{</span>
-  <span style="color:#ff79c6">try</span> <span style="color:#ff79c6">(</span>Response response <span style="color:#ff79c6">=</span> client<span style="color:#ff79c6">.</span><span style="color:#50fa7b">newCall</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">).</span><span style="color:#50fa7b">execute</span><span style="color:#ff79c6">())</span> <span style="color:#ff79c6">{</span>
-    <span style="color:#ff79c6">return</span> response<span style="color:#ff79c6">.</span><span style="color:#50fa7b">body</span><span style="color:#ff79c6">().</span><span style="color:#50fa7b">string</span><span style="color:#ff79c6">();</span>
-  <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
 </code></pre></div><h1 id="결론">결론</h1>
 <p>Timeout을 설정하지 않으면 데드락부터 연쇄 서버 장애까지 많은 것을 겪을 수 있다.
 부디 Timeout 설정을 잊지 말고 이것을 관찰할 수 있도록 유의미한 로깅과 모니터링을 하자! 🧑‍💻</p>
