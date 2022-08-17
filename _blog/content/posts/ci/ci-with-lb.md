@@ -320,7 +320,7 @@ func init() {
 
 설정이 끝났다면 iptables를 다시 실행한다.
 
-## httpd 다시 시작할 때 문제가 없을까?
+## httpd를 다시 실행해야 할 때
 
 > httpd 컨테이너를 재실행(restart)하지 않고도 설정 파일을 다시 적용(reload)하는 방법을 아직 찾지 못했다.
 
@@ -390,10 +390,10 @@ java.lang.NullPointerException
 
 ## Akamai 에러 페이지 응답
 
-L4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 경우 응답받을 수 있다.
-
-- 1번 서버가 `disable`, 2번 서버가 `enable` 상태
-- 1번 서버를 `enable`, 2번 서버를 `disable` 상태로 변경한 후 `apply`
+Layer 4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 경우 응답받을 수 있다.
+예를 들어, 1번 서버는 `disable`, 2번 서버는 `enable` 상태일 때
+1번 서버를 `enable`, 2번 서버를 `disable` 상태로 변경한 후 `apply` 하면
+다음과 같은 에러가 발생할 수 있다.
 
 ```bash
 Service Unavailable - Zero size object
