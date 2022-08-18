@@ -385,6 +385,24 @@
 						
 						
 							<li>
+								<a href="#proxy" onclick="onNavClick(`#proxy-nav`)" id="proxy-nav">
+									Proxy
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
 								<a href="#akamai-%ec%97%90%eb%9f%ac-%ed%8e%98%ec%9d%b4%ec%a7%80-%ec%9d%91%eb%8b%b5" onclick="onNavClick(`#akamai-에러-페이지-응답-nav`)" id="akamai-에러-페이지-응답-nav">
 									Akamai 에러 페이지 응답
 								</a>
@@ -746,6 +764,24 @@
 							<li>
 								<a href="#sessionrepositoryfilter-%ec%97%90%eb%9f%ac-%ed%8e%98%ec%9d%b4%ec%a7%80-%ec%9d%91%eb%8b%b5" onclick="onNavClick(`#sessionrepositoryfilter-에러-페이지-응답-nav`)" id="sessionrepositoryfilter-에러-페이지-응답-nav">
 									SessionRepositoryFilter 에러 페이지 응답
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#proxy" onclick="onNavClick(`#proxy-nav`)" id="proxy-nav">
+									Proxy
 								</a>
 							</li>
 						
@@ -1271,6 +1307,16 @@ Root Cause
 java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">lang</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">NullPointerException</span>
   org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">springframework</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">session</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">web</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">http</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">SessionRepositoryFilter$SessionRepositoryRequestWrapper$SessionCommittingRequestDispatcher</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">forward</span><span style="color:#ff79c6">(</span>SessionRepositoryFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>447<span style="color:#ff79c6">)</span>
   <span style="color:#ff79c6">...</span>
+</code></pre></div><h2 id="proxy">Proxy</h2>
+<p>upstream 서버(Tomcat)의 응답이 늦어질 경우 발생할 수 있다.
+<code>mod_proxy</code> 의 timeout 값을 조절하여 응답이 늦어지는 경우를 방지할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="color:#6272a4">&lt;!-- 502 Bad Gateway --&gt;</span>
+Proxy Error
+
+The proxy server received an invalid response from an upstream server.
+The proxy server could not handle the request
+
+Reason: Error reading from remote server
 </code></pre></div><h2 id="akamai-에러-페이지-응답">Akamai 에러 페이지 응답</h2>
 <p>Layer 4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 경우 응답받을 수 있다.
 예를 들어, 1번 서버는 <code>disable</code>, 2번 서버는 <code>enable</code> 상태일 때

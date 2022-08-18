@@ -388,6 +388,21 @@ java.lang.NullPointerException
   ...
 ```
 
+## Proxy
+
+upstream 서버(Tomcat)의 응답이 늦어질 경우 발생할 수 있다.
+`mod_proxy` 의 timeout 값을 조절하여 응답이 늦어지는 경우를 방지할 수 있다.
+
+```html
+<!-- 502 Bad Gateway -->
+Proxy Error
+
+The proxy server received an invalid response from an upstream server.
+The proxy server could not handle the request
+
+Reason: Error reading from remote server
+```
+
 ## Akamai 에러 페이지 응답
 
 Layer 4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 경우 응답받을 수 있다.
