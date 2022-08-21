@@ -2,10 +2,10 @@
 title: ""
 date: ""
 description: ""
-# images needed for showing Twitter Card
-images: []
 # featured_image needed for showing list
-featured_image: "/images/markruler-default.png"
+featured_image: "/images/master/markruler-wave.png"
+# images needed for showing Twitter Card
+images: ["/images/master/markruler-wave.png"]
 socialshare: true
 series: []
 categories: []

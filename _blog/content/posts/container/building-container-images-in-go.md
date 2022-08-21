@@ -2,8 +2,8 @@
 date: 2021-02-28T12:49:00+09:00
 title: "Go 언어로 컨테이너 이미지 빌드하기"
 description: "Ahmet Alp Balkan"
-# featured_image: "/images/kubernetes/k8s-triggering.png"
-# images: ["/images/kubernetes/k8s-triggering.png"]
+featured_image: "/images/master/markruler-wave.png"
+images: ["/images/master/markruler-wave.png"]
 socialshare: true
 tags:
   - container
