@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+  
+  <title>Tomcat 이해하기 - 임창수 블로그</title>
+  
+  
+  
+  
+  
+  <meta theme="Hugo Theme Diary(MIT) by Rise Ported from Makito's Journal(MIT).">
+  <meta charset="utf-8">
+  <meta name="X-UA-Compatible" content="IE=edge">
+  <meta name="google-site-verification" content="">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+  <meta content="telephone=no" name="format-detection">
+  <meta name="description" content="Servlet Container">
+  <meta name="renderer" content="webkit">
+  <meta name="theme-color" content="#ffffff">
+
+  
+  
+  <meta property="og:title" content="Tomcat 이해하기" />
+<meta property="og:description" content="Servlet Container" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/java/tomcat/" /><meta property="og:image" content="https://markruler.github.io/images/java/http-servlet-request-flow.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-08-23T02:45:00+09:00" />
+<meta property="article:modified_time" content="2022-08-23T02:45:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
+
+
+  
+
+  
+  
+  <meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/java/http-servlet-request-flow.png"/>
+
+<meta name="twitter:title" content="Tomcat 이해하기"/>
+<meta name="twitter:description" content="Servlet Container"/>
+
+  
+
+  
+  <meta name="google-site-verification" content="60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc" />
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-FFMDWZ27TN');
+  </script>
+
+  
+  
+
+  <script src="/vendor/js/jquery.min.js" ></script>
+  <script src="/vendor/js/popper.min.js" ></script>
+  <script src="/vendor/js/bootstrap.min.js" ></script>
+  <script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
+  <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+  <script src="/vendor/js/vue.min.js" ></script>
+
+  
+
+  
+  <link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+  
+  
+
+  
+  
+  
+  <link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.4c4033ff4494b2f0a0c5e7c899105f5abe76b2f05e54a45b5044a3bf6016c74c.css" integrity="sha256-TEAz/0SUsvCgxefImRBfWr52svBeVKRbUESjv2AWx0w=" media="screen">
+  
+
+  <script src="https://markruler.github.io//js/loadCSS.js"></script>
+  <script>
+    loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
+  </script>
+
+  
+
+  
+  
+  <script src="https://markruler.github.io//js/toc.js"></script>
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</head>
+<body>
+  <div id="app"><div ref="sideContainer" class="side-container">
+
+  <a class="a-block nav-head false" href="https://markruler.github.io/">
+
+  <div class="nav-title">
+    Im Changsu
+  </div>
+  
+    <div class="nav-subtitle">
+      What, Why, How.
+    </div>
+  
+  </a>
+  <div class="nav-link-list">
+    
+    
+    
+    
+    
+    
+    
+    <a class="a-block nav-link-item false" href="/about">
+      About
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <a class="a-block nav-link-item active" href="/posts">
+      Posts
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    <a class="a-block nav-link-item false" href="/categories">
+      Categories
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    <a class="a-block nav-link-item false" href="/tags">
+      Tags
+    </a>
+    
+    
+    
+    
+    
+    
+    
+    <a class="a-block nav-link-item false" href="/index.xml">
+      RSS Feed
+    </a>
+    
+    
+  </div>
+
+  <div class="nav-footer">
+    
+
+
+&copy;
+	
+	Im Changsu 2020 - 2022
+	
+
+  </div>
+
+</div><div ref="extraContainer" class="extra-container">
+    
+    
+    
+    <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#architecture" onclick="onNavClick(`#architecture-nav`)" id="architecture-nav">
+									Architecture
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#server" onclick="onNavClick(`#server-nav`)" id="server-nav">
+									Server
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#service" onclick="onNavClick(`#service-nav`)" id="service-nav">
+									Service
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#connector" onclick="onNavClick(`#connector-nav`)" id="connector-nav">
+									Connector
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#container" onclick="onNavClick(`#container-nav`)" id="container-nav">
+									Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#engine-container" onclick="onNavClick(`#engine-container-nav`)" id="engine-container-nav">
+									Engine Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#host-container" onclick="onNavClick(`#host-container-nav`)" id="host-container-nav">
+									Host Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#context-container" onclick="onNavClick(`#context-container-nav`)" id="context-container-nav">
+									Context Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#valve" onclick="onNavClick(`#valve-nav`)" id="valve-nav">
+									Valve
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#spring-application%ec%97%90%ec%84%9c-httprequest%ec%9d%98-%ed%9d%90%eb%a6%84" onclick="onNavClick(`#spring-application에서-httprequest의-흐름-nav`)" id="spring-application에서-httprequest의-흐름-nav">
+									Spring application에서 HttpRequest의 흐름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#versions" onclick="onNavClick(`#versions-nav`)" id="versions-nav">
+									Versions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ajp-apache-jserv-protocol" onclick="onNavClick(`#ajp-apache-jserv-protocol-nav`)" id="ajp-apache-jserv-protocol-nav">
+									AJP: Apache JServ Protocol
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#jmx-java-management-extensions" onclick="onNavClick(`#jmx-java-management-extensions-nav`)" id="jmx-java-management-extensions-nav">
+									JMX: Java Management eXtensions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ea%b0%81%ec%a3%bc" onclick="onNavClick(`#각주-nav`)" id="각주-nav">
+									각주
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a class="pagination-action" v-on:click="toggleDarkMode">
+            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" ref="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- TOC -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#architecture" onclick="onNavClick(`#architecture-nav`)" id="architecture-nav">
+									Architecture
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#server" onclick="onNavClick(`#server-nav`)" id="server-nav">
+									Server
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#service" onclick="onNavClick(`#service-nav`)" id="service-nav">
+									Service
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#connector" onclick="onNavClick(`#connector-nav`)" id="connector-nav">
+									Connector
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#container" onclick="onNavClick(`#container-nav`)" id="container-nav">
+									Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#engine-container" onclick="onNavClick(`#engine-container-nav`)" id="engine-container-nav">
+									Engine Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#host-container" onclick="onNavClick(`#host-container-nav`)" id="host-container-nav">
+									Host Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#context-container" onclick="onNavClick(`#context-container-nav`)" id="context-container-nav">
+									Context Container
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#valve" onclick="onNavClick(`#valve-nav`)" id="valve-nav">
+									Valve
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#spring-application%ec%97%90%ec%84%9c-httprequest%ec%9d%98-%ed%9d%90%eb%a6%84" onclick="onNavClick(`#spring-application에서-httprequest의-흐름-nav`)" id="spring-application에서-httprequest의-흐름-nav">
+									Spring application에서 HttpRequest의 흐름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#versions" onclick="onNavClick(`#versions-nav`)" id="versions-nav">
+									Versions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ajp-apache-jserv-protocol" onclick="onNavClick(`#ajp-apache-jserv-protocol-nav`)" id="ajp-apache-jserv-protocol-nav">
+									AJP: Apache JServ Protocol
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#jmx-java-management-extensions" onclick="onNavClick(`#jmx-java-management-extensions-nav`)" id="jmx-java-management-extensions-nav">
+									JMX: Java Management eXtensions
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#%ea%b0%81%ec%a3%bc" onclick="onNavClick(`#각주-nav`)" id="각주-nav">
+									각주
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div ref="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a ref="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
+            <i class="material-icons" v-if="isDarkMode">
+                brightness_4
+            </i>
+            <i class="material-icons" v-else="isDarkMode">
+                brightness_7
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" ref="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title"></div>
+        
+        <div class="single-column-header-subtitle">Im Changsu</div>
+        
+
+    </a>
+</div>
+
+    <div id="content">
+<div ref="streamContainer" class="stream-container">
+  <div class="post-list-container post-list-container-shadow">
+    <div class="post">
+      
+      
+      
+      
+      
+
+      <div class="post-head-wrapper"  
+        
+        style="background-image: url('https://markruler.github.io/images/java/http-servlet-request-flow.png')"  >
+        <div class="post-title">
+          Tomcat 이해하기
+          
+          <div class="post-subtitle">
+            Servlet Container
+          </div>
+          
+          <div class="post-meta">
+            
+            <time itemprop="datePublished">
+              2022년 08월 23일 02시 45분
+            </time>
+            
+
+            
+            <i class="material-icons" style="">folder</i>
+            <a href="/categories/">[java]</a>
+            &nbsp;
+            
+
+            
+            <i class="material-icons" style="">label</i>
+            
+            <a href="/tags/web">web</a>
+            &nbsp;
+            
+            
+            
+          </div>
+        </div>
+      </div>
+
+      <div class="post-body-wrapper">
+        
+          <div class="post-body" v-pre>
+            
+            <h1 id="architecture">Architecture</h1>
+<p><img src="/images/java/tomcat-architecture.png" alt="Key metrics for monitoring Tomcat - Datadog"></p>
+<p><a href="https://www.datadoghq.com/blog/tomcat-architecture-and-performance/">Key metrics for monitoring Tomcat</a> - Datadog</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
+<span style="color:#ff79c6">&lt;Server</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8005&#34;</span> <span style="color:#50fa7b">shutdown=</span><span style="color:#f1fa8c">&#34;SHUTDOWN&#34;</span><span style="color:#ff79c6">&gt;</span>
+   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.AprLifecycleListener&#34;</span> <span style="color:#50fa7b">SSLEngine=</span><span style="color:#f1fa8c">&#34;on&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JasperListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;GlobalNamingResources&gt;</span>
+     <span style="color:#ff79c6">&lt;Resource</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span> <span style="color:#50fa7b">auth=</span><span style="color:#f1fa8c">&#34;Container&#34;</span>
+               <span style="color:#50fa7b">type=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.UserDatabase&#34;</span>
+               <span style="color:#50fa7b">description=</span><span style="color:#f1fa8c">&#34;User database that can be updated and saved&#34;</span>
+               <span style="color:#50fa7b">factory=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.users.MemoryUserDatabaseFactory&#34;</span>
+               <span style="color:#50fa7b">pathname=</span><span style="color:#f1fa8c">&#34;conf/tomcat-users.xml&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+   <span style="color:#ff79c6">&lt;/GlobalNamingResources&gt;</span>
+   <span style="color:#ff79c6">&lt;Service</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span><span style="color:#ff79c6">&gt;</span>
+     <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8080&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span>
+                <span style="color:#50fa7b">connectionTimeout=</span><span style="color:#f1fa8c">&#34;20000&#34;</span>
+                <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+     <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8009&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;AJP/1.3&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+     <span style="color:#ff79c6">&lt;Engine</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span> <span style="color:#50fa7b">defaultHost=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span><span style="color:#ff79c6">&gt;</span>
+       <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.LockOutRealm&#34;</span><span style="color:#ff79c6">&gt;</span>
+         <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.UserDatabaseRealm&#34;</span>
+                <span style="color:#50fa7b">resourceName=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span><span style="color:#ff79c6">/&gt;</span>
+       <span style="color:#ff79c6">&lt;/Realm&gt;</span>
+       <span style="color:#ff79c6">&lt;Host</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span>  <span style="color:#50fa7b">appBase=</span><span style="color:#f1fa8c">&#34;webapps&#34;</span>
+             <span style="color:#50fa7b">unpackWARs=</span><span style="color:#f1fa8c">&#34;true&#34;</span> <span style="color:#50fa7b">autoDeploy=</span><span style="color:#f1fa8c">&#34;true&#34;</span><span style="color:#ff79c6">&gt;</span>
+         <span style="color:#ff79c6">&lt;Valve</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.valves.AccessLogValve&#34;</span>
+                <span style="color:#50fa7b">directory=</span><span style="color:#f1fa8c">&#34;logs&#34;</span>
+                <span style="color:#50fa7b">prefix=</span><span style="color:#f1fa8c">&#34;localhost_access_log.&#34;</span> <span style="color:#50fa7b">suffix=</span><span style="color:#f1fa8c">&#34;.txt&#34;</span>
+                <span style="color:#50fa7b">pattern=</span><span style="color:#f1fa8c">&#34;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+       <span style="color:#ff79c6">&lt;/Host&gt;</span>
+     <span style="color:#ff79c6">&lt;/Engine&gt;</span>
+   <span style="color:#ff79c6">&lt;/Service&gt;</span>
+<span style="color:#ff79c6">&lt;/Server&gt;</span>
+</code></pre></div><h2 id="server">Server</h2>
+<p>카탈리나(Catalina) 서버는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
+즉, 서블릿을 실행하기 위한 환경을 제공한다. 카탈리나 서버에는 하나 이상의 서비스(Service)가 포함된다.</p>
+<h2 id="service">Service</h2>
+<p>1개의 서비스는 1개의 엔진과 1개 이상의 커넥터를 포함한다.</p>
+<h2 id="connector">Connector</h2>
+<p>커넥터는 TCP 포트에서 요청을 수신 대기(listen)하고,
+해당 요청을 처리하고 응답을 만들기 위해 엔진(Engine)으로 보낸다.
+기본 구성으로 <code>HTTP/1.1</code> (<a href="https://tomcat.apache.org/tomcat-8.5-doc/config/http.html">Coyote</a>라고도 불림)와
+<code>AJP/1.3</code> 커넥터가 포함된다.</p>
+<h2 id="container">Container</h2>
+<h3 id="engine-container">Engine Container</h3>
+<ul>
+<li><code>org.apache.catalina.LifecycleListener</code> 를 구현한 구현체는 해당 엔진이 언제 시작되고 중지되는지 감시하기 위한 컴포넌트다.
+설정하면 엔진의 수명 주기(Lifecycle) 이벤트 발생을 감지할 수 있다.</li>
+<li>Tomcat은 <a href="https://tomcat.apache.org/tomcat-8.5-doc/jasper-howto.html">재스퍼(Jasper) 엔진</a>을 사용하여
+JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페이지로 렌더링한다.</li>
+<li>Tomcat은 줄리(JULI: <code>java.util.logging</code>) 패키지를 사용해서 로깅(Logging)을 수행한다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+</ul>
+<h3 id="host-container">Host Container</h3>
+<p>Host 요소는 실행 중인 Tomcat 서버의 가상 호스트를 나타낸다.
+클라이언트가 네트워크 이름을 사용하여 Tomcat 서버에 연결하려면
+이 이름이 사용자가 속한 인터넷 도메인을 관리하는 DNS(도메인 이름 서비스) 서버에 등록되어 있어야 한다.
+만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요한 설정이다.
+— 기본적으로 <code>localhost</code> 로 입력되어 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">GET http:<span style="color:#6272a4">//www.testwebapp.com/sample/
+</span><span style="color:#6272a4"></span>
+Request Headers:
+Connection: keep-alive
+Host: www.testwebapp.com
+User-Agent: Apache-HttpClient/<span style="color:#bd93f9">4.5</span>.<span style="color:#bd93f9">5</span> (Java/<span style="color:#bd93f9">10.0</span>.<span style="color:#bd93f9">1</span>)
+</code></pre></div><p>위와 같은 HTTP 요청은 <code>Host</code> 헤더와 일치하는 호스트에 매핑한다.</p>
+<p><code>CATALINA_BASE</code> 변수를 사용하여 여러 Tomcat 인스턴스를 구성한 경우<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>가 아니라면
+<code>CATALINA_BASE</code> 는 Tomcat을 설치한 디렉토리인 <code>CATALINA_HOME</code> 의 값으로 설정된다.</p>
+<h3 id="context-container">Context Container</h3>
+<p>Context 요소는 특정 가상 호스트(Host Container) 내에서 실행되는 웹 애플리케이션을 나타낸다.
+단순하게 바라보면 <code>webapp/</code> 디렉토리로 구분되는 것이 하나의 컨텍스트다.
+호스트는 각각 고유한 경로를 가진 여러 컨텍스트를 포함할 수 있다.
+<code>Context</code> 인터페이스를 구현한 <a href="https://tomcat.apache.org/tomcat-8.5-doc/api/org/apache/catalina/core/StandardContext.html"><code>StandardContext</code></a>가
+주로 사용된다.</p>
+<p>서블릿 리스너인 <code>javax.servlet.ServletContextListener</code> 와 <code>javax.servlet.HttpSessionListener</code> 등은
+<code>javax.servlet.ServletContextEvent</code> 를 관리하는 <code>java.util.EventListener</code> 를 구현한다.
+— 엔진의 수명 주기를 관리하는 <code>LifecycleListener</code> 와 다르다.
+<code>LifecycleListener</code> 를 구현한 <code>JasperListener</code> 를 사용해서 Jasper 엔진을 관리하고,
+Jasper 엔진을 사용해서 servlet을 관리한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyServletListener</span> <span style="color:#8be9fd;font-style:italic">implements</span> ServletContextListener <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">addLifeCycleListener</span><span style="color:#ff79c6">(</span>ServletContextEvent event<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        ApplicationContextFacade source <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>ApplicationContextFacade<span style="color:#ff79c6">)</span> event<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSource</span><span style="color:#ff79c6">();</span>
+        ApplicationContext applicationContext <span style="color:#ff79c6">=</span> get<span style="color:#ff79c6">(</span>source<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;context&#34;</span><span style="color:#ff79c6">);</span>
+        StandardContext standardContext <span style="color:#ff79c6">=</span> get<span style="color:#ff79c6">(</span>applicationContext<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;context&#34;</span><span style="color:#ff79c6">);</span>
+        standardContext<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addLifecycleListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> LifecycleListenerImpl<span style="color:#ff79c6">());</span>
+    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><h3 id="valve">Valve</h3>
+<p>밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터다.
+밸브는 톰캣에서만 쓸 수 있는 기술이고,
+서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술이다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
+<h1 id="spring-application에서-httprequest의-흐름">Spring application에서 HttpRequest의 흐름</h1>
+<p><img src="/images/java/http-servlet-request-flow.png" alt="HTTP Servlet Request"></p>
+<ul>
+<li><a href="https://github.com/xpdojo/java/blob/main/request-lifecycle-servlet/README.md">PoC: Proof of concept</a></li>
+</ul>
+<h1 id="versions">Versions</h1>
+<p><a href="https://tomcat.apache.org/whichversion.html">출처 문서</a></p>
+<table>
+<thead>
+<tr>
+<th>Servlet Spec</th>
+<th>JSP Spec</th>
+<th>EL Spec</th>
+<th>WebSocket Spec</th>
+<th>Authentication (JASPIC) Spec</th>
+<th>Apache Tomcat Version</th>
+<th>Supported Java Versions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6.0</td>
+<td>3.1</td>
+<td>5.0</td>
+<td>2.1</td>
+<td>3.0</td>
+<td>10.1.x</td>
+<td>11 and later</td>
+</tr>
+<tr>
+<td>5.0</td>
+<td>3.0</td>
+<td>4.0</td>
+<td>2.0</td>
+<td>2.0</td>
+<td>10.0.x</td>
+<td>8 and later</td>
+</tr>
+<tr>
+<td>4.0</td>
+<td>2.3</td>
+<td>3.0</td>
+<td>1.1</td>
+<td>1.1</td>
+<td>9.0.x</td>
+<td>8 and later</td>
+</tr>
+<tr>
+<td>3.1</td>
+<td>2.3</td>
+<td>3.0</td>
+<td>1.1</td>
+<td>1.1</td>
+<td>8.5.x</td>
+<td>7 and later</td>
+</tr>
+<tr>
+<td>3.1</td>
+<td>2.3</td>
+<td>3.0</td>
+<td>1.1</td>
+<td>N/A</td>
+<td>8.0.x (superseded)</td>
+<td>7 and later</td>
+</tr>
+<tr>
+<td>3.0</td>
+<td>2.2</td>
+<td>2.2</td>
+<td>1.1</td>
+<td>N/A</td>
+<td>7.0.x (archived)</td>
+<td>6 and later (7 and later for WebSocket)</td>
+</tr>
+<tr>
+<td>2.5</td>
+<td>2.1</td>
+<td>2.1</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>6.0.x (archived)</td>
+<td>5 and later</td>
+</tr>
+<tr>
+<td>2.4</td>
+<td>2.0</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>5.5.x (archived)</td>
+<td>1.4 and later</td>
+</tr>
+<tr>
+<td>2.3</td>
+<td>1.2</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>4.1.x (archived)</td>
+<td>1.3 and later</td>
+</tr>
+<tr>
+<td>2.2</td>
+<td>1.1</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>3.3.x (archived)</td>
+<td>1.1 and later</td>
+</tr>
+</tbody>
+</table>
+<h1 id="ajp-apache-jserv-protocol">AJP: Apache JServ Protocol</h1>
+<p>웹 서버(httpd)의 인바운드 요청을
+애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜이다.<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></p>
+<h1 id="jmx-java-management-extensions"><strong>JMX:</strong> Java Management eXtensions</h1>
+<p>애플리케이션을 관리하고 모니터링하기 위한 Java API다. <sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup></p>
+<p><img src="/images/java/jmx-architecture.png" alt="JMX Architecture"></p>
+<h1 id="참조">참조</h1>
+<ul>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/architecture/overview.html">Apache Tomcat 8 Architecture</a>
+<ul>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/server.html">Server</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/service.html">Service</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/http.html">Connectors - HTTP/1.1</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/engine.html">Engine</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/host.html">Host</a></li>
+<li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/context.html">Context</a></li>
+</ul>
+</li>
+<li><a href="https://howtodoinjava.com/tomcat/tomcats-architecture-and-server-xml-configuration-tutorial/">Tomcat – Architecture and server.xml configuration</a> - HowToDoInJava
+<ul>
+<li><a href="https://howtodoinjava.com/tomcat/a-birds-eye-view-on-how-web-servers-work/">How web servers work?</a> - HowToDoInJava</li>
+</ul>
+</li>
+<li><a href="https://www.geeksforgeeks.org/servlet-flow-of-execution/">Servlet – Flow Of Execution</a> - GeeksforGeeks</li>
+<li><a href="https://www.datadoghq.com/blog/tomcat-architecture-and-performance/">Key metrics for monitoring Tomcat</a> - Datadog</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/servletcontextlistener-servlet-listener-example">ServletContextListener Servlet Listener Example</a> - DigitalOcean</li>
+<li>&lt;자바 고양이 톰캣(Tomcat) 이야기&gt; - 최진식</li>
+<li>&lt;아파치 톰캣 7 따라잡기&gt; - Tanuj Khare</li>
+<li>&lt;톰캣 최종 분석&gt; (톰캣4, 5) - Budi Kurniawan, Paul Deck</li>
+<li><a href="https://www.lesstif.com/linux-core/linux-web-server-web-application/nginx-apache-tomcat">nginx 와 apache tomcat 연동하기</a> - lessif</li>
+<li><a href="https://ehdvudee.tistory.com/20">AJP 프로토콜 모든 것을 분석 해보자</a> - ehdvudee</li>
+<li><a href="https://cheershennah.tistory.com/142">아파치Apache - 톰캣 Tomcat  연동하는 이유?  AJP란?</a> - cheersHena</li>
+</ul>
+<h2 id="각주">각주</h2>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://tomcat.apache.org/tomcat-8.5-doc/logging.html">Logging in Tomcat</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://howtodoinjava.com/tomcat/running-multiple-instances-of-tomcat-with-single-server-installation/">Running multiple instances of Tomcat with single server installation</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="http://i5on9i.blogspot.com/2014/07/tomcat-valve-servlet-filter.html">Tomcat 의 Valve 와 Servlet Filter</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Apache_JServ_Protocol">AJP: Apache JServ Protocol</a> - Wikipedia&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Java_Management_Extensions">JMX: Java Management Extensions</a> - Wikipedia&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+            
+            
+            
+            
+          </div>
+        </div>
+
+
+        <nav class="post-pagination">
+          
+          <a class="newer-posts">
+            다음 글<br>없음
+          </a>
+          
+
+          
+          <a class="older-posts" href="https://markruler.github.io/posts/gui/x-based-desktop/">
+            이전 글<br>X-based desktop
+          </a>
+          
+        </nav>
+        
+        <div class="post-comment-wrapper">
+          
+          
+
+
+
+
+
+
+
+        </div>
+
+        
+        
+
+
+
+
+
+<section class="social-share">
+  <ul class="share-icons">
+    
+    
+    <li>
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftomcat%2f&amp;text=Tomcat%20%ec%9d%b4%ed%95%b4%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+        
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">bg</title>
+    <circle cx="24" cy="24" fill="#1CB7EB" r="24" style="pointer-events:inherit" id="svg_1"></circle>
+    <path d="M36.8,15.4C35.9,15.9 34.8,16.2 33.8,16.3C34.9,15.6 35.7,14.5 36.1,13.2C35.1,13.8 34,14.3 32.7,14.6C31.7,13.5 30.4,12.8 28.9,12.8C26,12.8 23.6,15.3 23.6,18.5C23.6,18.9 23.6,19.4 23.7,19.8C19.3,19.6 15.4,17.3 12.8,13.9C12.3,14.7 12.1,15.7 12.1,16.8C12.1,18.8 13,20.5 14.4,21.5C13.5,21.5 12.7,21.2 12,20.8C12,20.8 12,20.9 12,20.9C12,23.6 13.8,25.9 16.2,26.5C15.8,26.6 15.3,26.7 14.8,26.7C14.5,26.7 14.1,26.7 13.8,26.6C14.5,28.9 16.4,30.5 18.7,30.5C16.9,32 14.6,32.9 12.2,32.9C11.8,32.9 11.4,32.9 10.9,32.8C13.2,34.4 16,35.4 19,35.4C28.7,35.4 34,26.8 34,19.3C34,19.1 34,18.8 34,18.6C35.2,17.6 36.1,16.6 36.8,15.4z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
+  </g>
+</svg>
+        <p>Twitter</p>
+      </a>
+    </li>
+    
+
+    
+    
+    <li>
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftomcat%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
+  <circle cx="24" cy="24" fill="#4E71A8" r="24" />
+  <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
+</svg>
+        <p>Facebook</p>
+        </a>
+    </li>
+    
+
+    
+    
+    <li>
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftomcat%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftomcat%2f&amp;title=Tomcat%20%ec%9d%b4%ed%95%b4%ed%95%98%ea%b8%b0&amp;summary=Tomcat%20%ec%9d%b4%ed%95%b4%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:none">
+    <title style="pointer-events:inherit">background</title>
+    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
+  </g>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">Layer 1</title>
+    <circle cx="64" cy="64" fill="#0076B4" r="64" id="svg_2" stroke-dasharray="none"></circle>
+    <path d="M44.119,95.934L29.184,95.934L29.184,47.93L44.119,47.93L44.119,95.934zM36.656,41.371C31.864,41.371 28,37.495 28,32.718C28,27.943 31.864,24.066 36.656,24.066C41.427,24.066 45.302,27.942 45.302,32.718C45.303,37.495 41.428,41.371 36.656,41.371zM100,95.934L85.081,95.934L85.081,72.59C85.081,67.024 84.984,59.862 77.329,59.862C69.564,59.862 68.381,65.927 68.381,72.192L68.381,95.934L53.479,95.934L53.479,47.93L67.78,47.93L67.78,54.492L67.984,54.492C69.974,50.718 74.841,46.739 82.101,46.739C97.206,46.739 99.998,56.678 99.998,69.607L100,95.934L100,95.934z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
+  </g>
+</svg>
+          <p>LinkedIn</p>
+        </a>
+    </li>
+    
+
+    
+    
+
+    
+    
+    <li>
+      <a href="mailto:?subject= - Tomcat%20%ec%9d%b4%ed%95%b4%ed%95%98%ea%b8%b0.&amp;body=Tomcat%20%ec%9d%b4%ed%95%b4%ed%95%98%ea%b8%b0%2c%20by%20%0aServlet%20Container%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftomcat%2f%0a" target="_blank" class="share-btn email">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:none">
+    <title style="pointer-events:inherit">background</title>
+    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
+  </g>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">Layer 1</title>
+    <path d="M16,0C7.163,0 0,7.163 0,16C0,24.836 7.163,32 16,32S32,24.836 32,16C32,7.163 24.837,0 16,0z" fill="#333333" style="pointer-events:inherit" id="svg_2"></path>
+    <polygon fill="#FFFFFF" points="6.518,21.815 11.707,15.291 6.518,12.119   " style="pointer-events:inherit" id="svg_4"></polygon>
+    <polygon fill="#FFFFFF" points="19.5,15.746 15.989,17.908 12.472,15.758 7.11,22.5 24.867,22.5   " style="pointer-events:inherit" id="svg_5"></polygon>
+    <polygon fill="#FFFFFF" points="15.988,16.864 25.482,11.017 25.482,9.5 6.518,9.5 6.518,11.076   " style="pointer-events:inherit" id="svg_6"></polygon>
+    <polygon fill="#FFFFFF" points="20.263,15.276 25.482,21.843 25.482,12.062   " style="pointer-events:inherit" id="svg_7"></polygon>
+  </g>
+</svg>
+        <p>Email</p>
+      </a>
+    </li>
+  </ul>
+</section>
+
+
+      </div>
+    </div>
+  </div>
+  
+    </div><div id="single-column-footer">
+
+
+&copy;
+	
+	Im Changsu 2020 - 2022
+	
+</div>
+  </div>
+  <script>
+let app;
+
+app = new Vue({
+    el: '#app',
+    data: {
+        scrollY: 0,
+        navOpacity: 0,
+        isDrawerOpen: false,
+        mounted: false,
+        isDarkMode: false
+    },
+    methods: {
+            sgn(t, x) {
+                let k = 1. / (1. - 2 * t);
+                if (x <= t) return 0;
+                else if (x >= 1 - t) return 1;
+                else {
+                    return k * (x - t);
+                }
+            },
+            handleScroll() {
+                this.scrollY = window.scrollY;
+                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+
+                if (this.navOpacity >= 1) {
+                    navBackground.style.opacity = 1;
+                    navTitle.style.opacity = 1;
+                } else {
+                    navBackground.style.opacity = 0;
+                    navTitle.style.opacity = 0;
+                }
+            },
+            handleResize() {
+                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
+                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
+            },
+            navBarHeight() {
+                return this.$refs.navBar.offsetHeight;
+            },
+            pageHeadHeight() {
+                return this.$refs.pageHead.offsetHeight;
+            },
+            toggleDrawer() {
+                this.isDrawerOpen = !this.isDrawerOpen;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            closeDrawer() {
+                this.isDrawerOpen = false;
+                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
+            },
+            toggleDarkMode() {
+                this.isDarkMode = !this.isDarkMode;
+                if (this.isDarkMode==true){
+                    document.cookie = "night=1;path=/";
+                    document.body.classList.add("night");
+                } else {
+                    document.cookie = "night=0;path=/";
+                    document.body.classList.remove("night");
+                }
+            }
+    },
+    created() {
+        window.addEventListener('scroll', this.handleScroll);
+        window.addEventListener('resize', this.handleResize);
+        window._nonDesktop = function () {
+            let check = false;
+            (function (a) {
+                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
+            })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        };
+        
+        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (night==""){
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                
+                this.toggleDarkMode();
+                
+            }
+        }else{
+            
+            if (night=="1") {
+                this.toggleDarkMode();
+            }
+        }
+    },
+    mounted() {
+        this.handleScroll();
+        this.handleResize();
+        this.mounted = true;
+
+        
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll);
+        window.removeEventListener('resize', this.handleResize);
+    }
+});
+</script>
+
+<script src="https://markruler.github.io//js/journal.js"></script>
+</body>
+
+</html>
