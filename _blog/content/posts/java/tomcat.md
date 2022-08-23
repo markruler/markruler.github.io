@@ -13,9 +13,9 @@ categories:
 
 # Architecture
 
-![[Key metrics for monitoring Tomcat](https://www.datadoghq.com/blog/tomcat-architecture-and-performance/) - Datadog](/images/java/tomcat-architecture.png)
+![Tomcat Architecture](/images/java/tomcat-architecture.png)
 
-[Key metrics for monitoring Tomcat](https://www.datadoghq.com/blog/tomcat-architecture-and-performance/) - Datadog
+*[출처 - Datadog](https://www.datadoghq.com/blog/tomcat-architecture-and-performance/)*
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
@@ -57,7 +57,8 @@ categories:
 ## Server
 
 카탈리나(Catalina) 서버는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
-즉, 서블릿을 실행하기 위한 환경을 제공한다. 카탈리나 서버에는 하나 이상의 서비스(Service)가 포함된다.
+즉, 서블릿을 실행하기 위한 환경을 제공한다.
+이러한 카탈리나 서버에는 하나 이상의 서비스(Service)가 포함된다.
 
 ## Service
 
@@ -65,27 +66,28 @@ categories:
 
 ## Connector
 
-커넥터는 TCP 포트에서 요청을 수신 대기(listen)하고,
-해당 요청을 처리하고 응답을 만들기 위해 엔진(Engine)으로 보낸다.
-기본 구성으로 `HTTP/1.1` ([Coyote](https://tomcat.apache.org/tomcat-8.5-doc/config/http.html)라고도 불림)와
-`AJP/1.3` 커넥터가 포함된다.
+코요테([Coyote](https://tomcat.apache.org/tomcat-8.5-doc/config/http.html)) 커넥터는
+TCP 포트에서 요청을 수신 대기(listen)한다.
+그리고 해당 요청을 처리하고 응답을 만들기 위해 엔진(Engine)으로 보낸다.
+기본 구성으로 `HTTP/1.1` 와 `AJP/1.3` 커넥터가 포함된다.
 
 ## Container
 
 ### Engine Container
 
+Tomcat은 [재스퍼(Jasper) 엔진](https://tomcat.apache.org/tomcat-8.5-doc/jasper-howto.html)을 사용하여
+JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페이지로 렌더링한다.
+
 - `org.apache.catalina.LifecycleListener` 를 구현한 구현체는 해당 엔진이 언제 시작되고 중지되는지 감시하기 위한 컴포넌트다.
   설정하면 엔진의 수명 주기(Lifecycle) 이벤트 발생을 감지할 수 있다.
-- Tomcat은 [재스퍼(Jasper) 엔진](https://tomcat.apache.org/tomcat-8.5-doc/jasper-howto.html)을 사용하여
-  JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페이지로 렌더링한다.
-- Tomcat은 줄리(JULI: `java.util.logging`) 패키지를 사용해서 로깅(Logging)을 수행한다.[^1]
+- 줄리(JULI: `java.util.logging`) 패키지를 사용해서 로깅(Logging)을 수행한다.[^1]
 
 ### Host Container
 
 Host 요소는 실행 중인 Tomcat 서버의 가상 호스트를 나타낸다.
 클라이언트가 네트워크 이름을 사용하여 Tomcat 서버에 연결하려면
 이 이름이 사용자가 속한 인터넷 도메인을 관리하는 DNS(도메인 이름 서비스) 서버에 등록되어 있어야 한다.
-만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요한 설정이다.
+만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요할 수 있다.
 — 기본적으로 `localhost` 로 입력되어 있다.
 
 ```json
@@ -106,7 +108,7 @@ User-Agent: Apache-HttpClient/4.5.5 (Java/10.0.1)
 
 Context 요소는 특정 가상 호스트(Host Container) 내에서 실행되는 웹 애플리케이션을 나타낸다.
 단순하게 바라보면 `webapp/` 디렉토리로 구분되는 것이 하나의 컨텍스트다.
-호스트는 각각 고유한 경로를 가진 여러 컨텍스트를 포함할 수 있다.
+`Host`는 각각 고유한 경로를 가진 여러 `Context`를 포함할 수 있다.
 `Context` 인터페이스를 구현한 [`StandardContext`](https://tomcat.apache.org/tomcat-8.5-doc/api/org/apache/catalina/core/StandardContext.html)가
 주로 사용된다.
 
@@ -137,7 +139,7 @@ public final class MyServletListener implements ServletContextListener {
 
 ![HTTP Servlet Request](/images/java/http-servlet-request-flow.png)
 
-- [PoC: Proof of concept](https://github.com/xpdojo/java/blob/main/request-lifecycle-servlet/README.md)
+*[Demonstration](https://github.com/xpdojo/java/blob/main/request-lifecycle-servlet/)*
 
 # Versions
 
