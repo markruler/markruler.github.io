@@ -1,4 +1,6 @@
 Write-Host "Deploying updates to GitHub..."
-# hugo -d ../
+hugo -d ../
 
-git commit -m "rebuilding site $(Get-Date)"
+# git add -A
+# git commit -m "rebuilding site $(Get-Date) on Windows"
+# git push origin main
