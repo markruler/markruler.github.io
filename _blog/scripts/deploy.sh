@@ -18,7 +18,7 @@ hugo -d ../ # if using a theme, replace with `hugo -t <YOURTHEME>`
 # git add .
 git add -A
 
-msg="rebuilding site $(date)"
+msg="rebuilding site $(date) on Unix-like system"
 if [ -n "$*" ]; then
 	msg="$*"
 fi
