@@ -11,12 +11,26 @@
       <copyright>Im Changsu 2020 - 2022</copyright>
     
     
-      <lastBuildDate>Tue, 23 Aug 2022 02:45:00 +0900</lastBuildDate>
+      <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate>
     
     
     
       <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
       
+    
+    
+    
+    <item>
+      <title>Jenkins Workspace 동시성 문제</title>
+      <link>https://markruler.github.io/posts/ci/jenkins-workspace-con/</link>
+      <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/ci/jenkins-workspace-con/</guid>
+      <description>
+        개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
+pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.
+      </description>
+    </item>
     
     
     
@@ -145,20 +159,6 @@
       <description>
         거두절미 생각보다 컨테이너는 간단한 게 아닙니다. 컨테이너를 쉽게 생성하고 삭제할 수 있었던 이유는 도커와 같은 컨테이너 관리 도구가 복잡한 것들을 꽁꽁 감췄기 때문입니다. 컨테이너를 공부하면 할수록 알아야 할 게 더 늘어나고 있지만 이쯤에서 유익했던 자료들을 모아 보려 합니다.
 참고 자료  👍 필수  책 - 컨테이너 보안, Liz Rice katacoda - An Introduction to Containers for Go programmers, Liz Rice   컨테이너  A Practical Introduction to Container Terminology, Scott McCarty Build Your Own Container Using Less than 100 Lines of Go, Julian Friedman Implementing Container Runtime Shim: runc, Ivan Velichko   컨테이너 런타임  리눅스 컨테이너란?
-      </description>
-    </item>
-    
-    
-    
-    <item>
-      <title>최소한의 안전한 Bash 스크립트 템플릿</title>
-      <link>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</link>
-      <pubDate>Sun, 14 Feb 2021 15:22:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
-      <guid>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</guid>
-      <description>
-        Maciej Radzikowski가 작성한 Minimal safe Bash script template (2020-12-14)를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   Bash 스크립트. 거의 모든 사람들이 언젠가 작성해야 하는 것입니다. 하지만 그 중 누구도 &amp;ldquo;맞아요, 저는 Bash 스크립트 작성하는 것을 사랑합니다&amp;quot;라고 말하지 않습니다. 거의 모든 사람들이 Bash 스크립트를 작성할 때 주의를 기울이지 않는 이유죠.
-저는 여러분을 Bash 전문가로 만들려는 것이 아닙니다 (저도 전문가는 아닙니다). 다만 스크립트를 더 안전하게 만들어 줄 최소한의 템플릿을 보여 드리겠습니다.
       </description>
     </item>
     
