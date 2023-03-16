@@ -24,4 +24,6 @@ if [ -n "$*" ]; then
 fi
 git commit -m "$msg"
 
-git push origin main
+push_branch="v1"
+git push origin $push_branch
+
