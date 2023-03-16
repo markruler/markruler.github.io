@@ -99,7 +99,18 @@ VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할
 
 ![visualvm-tomcat-threads](/images/java/jvm-monitoring/visualvm-tomcat-threads.png)
 
-*VisualVM에서 확인한 Thread Stack*
+*VisualVM에서 확인한 Thread Stack. OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생했었다.*
+
+공식 홈페이지에서 다운로드한 후 `bin` 디렉토리의 실행 파일을 실행하면 된다.
+실행하면 로컬 환경의 모든 JVM 프로세스를 확인할 수 있다.
+
+```sh
+bin/visualvm
+```
+
+IntelliJ 플러그인 [VisualVM Launcher](https://plugins.jetbrains.com/plugin/7115-visualvm-launcher)도 있긴 하지만,
+기본적으로 실행했을 때 모든 JVM 프로세스를 확인할 수 있어서
+VisualVM을 사용하는 데에 큰 불편함이 없었다.
 
 # Heap Dump
 

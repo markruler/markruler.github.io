@@ -1395,7 +1395,13 @@
 </code></pre></div><h3 id="visualvm">VisualVM</h3>
 <p>VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할 수 있다.</p>
 <p><img src="/images/java/jvm-monitoring/visualvm-tomcat-threads.png" alt="visualvm-tomcat-threads"></p>
-<p><em>VisualVM에서 확인한 Thread Stack</em></p>
+<p><em>VisualVM에서 확인한 Thread Stack. OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생했었다.</em></p>
+<p>공식 홈페이지에서 다운로드한 후 <code>bin</code> 디렉토리의 실행 파일을 실행하면 된다.
+실행하면 로컬 환경의 모든 JVM 프로세스를 확인할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">bin/visualvm
+</code></pre></div><p>IntelliJ 플러그인 <a href="https://plugins.jetbrains.com/plugin/7115-visualvm-launcher">VisualVM Launcher</a>도 있긴 하지만,
+기본적으로 실행했을 때 모든 JVM 프로세스를 확인할 수 있어서
+VisualVM을 사용하는 데에 큰 불편함이 없었다.</p>
 <h1 id="heap-dump">Heap Dump</h1>
 <blockquote>
 <p>A heap dump is a snapshot of all the objects in the Java Virtual Machine (JVM) heap at a certain point in time.
