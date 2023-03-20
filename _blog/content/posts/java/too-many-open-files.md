@@ -33,7 +33,7 @@ Caused by: java.net.SocketException: Too many open files
 `SocketException`인데 `Too many open files`? **이게 OOM**?
 이해되지 않았다.
 
-문제를 정의하기 위해 분석해봐야겠다.
+문제를 정의하기 위해 먼저 이해부터 해야 했다.
 
 # 분석
 
