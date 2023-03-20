@@ -33,17 +33,15 @@ Caused by: java.net.SocketException: Too many open files
 `SocketException`인데 `Too many open files`? **이게 OOM**?
 이해되지 않았다.
 
-문제를 정의하기 위해 분석해보자.
+문제를 정의하기 위해 분석해봐야겠다.
 
 # 분석
-
-> 테스트 환경: Ubuntu 22.04
 
 ## Too many open files
 
 근본적인 원인이 되는 `Too many open files`는
 프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생한다.
-안전하게 로컬 환경에서 먼저 테스트해봤다.
+로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤다.
 
 ```sh
 # 우선 별도의 세션을 연다.
@@ -160,12 +158,11 @@ NOFILE   max number of open files 1024 1048576 files
 ```
 
 이 제한을 늘리면 문제가 해결될 것 같았다.
-그런데 한번 더 생각해보자.
-1024만큼의 요청이 발생할 필요 없는 서버였다.
+그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였다.
 갑자기 요청이 늘어난 원인이 무엇일까?
 
-혼자가 아닌 함께 개발할 때 내가 사용하려는 인터페이스가
-다른 소스에서도 이미 통용되어 사용되고 있다면
+혼자가 아닌 함께 개발할 때,
+내가 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
 해당 소스 코드를 복사해서 사용하는 경우가 많았다.
 `OkHttpClient`도 그대로 복사해서 사용했었다.
 
@@ -238,11 +235,11 @@ public class MyHttpClient {
 ```
 
 다시 4,000개의 요청을 보내도록 테스트했다.
-더이상 불필요하게 스레드가 늘어나지 않았고,
+더 이상 불필요하게 스레드가 늘어나지 않았고,
 스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
 (평균 10초 → 3초)
 
-시스템 제한 설정을 변경할 필요없이
+시스템 제한 설정을 변경할 필요 없이
 `Too many open files` 에러도 발생하지 않았다.
 
 ![visualvm okhttpclient bean](/images/java/too-many-open-files/visualvm-okhttpclient-bean.png)
