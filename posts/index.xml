@@ -11,12 +11,27 @@
       <copyright>Im Changsu 2020 - 2022</copyright>
     
     
-      <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate>
+      <lastBuildDate>Mon, 20 Mar 2023 21:58:00 +0900</lastBuildDate>
     
     
     
       <atom:link href="https://markruler.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
       
+    
+    
+    
+    <item>
+      <title>Too many open files</title>
+      <link>https://markruler.github.io/posts/java/too-many-open-files/</link>
+      <pubDate>Mon, 20 Mar 2023 21:58:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/java/too-many-open-files/</guid>
+      <description>
+        커버 이미지 출처: Stable diffusion &amp;ldquo;swimming pool lane pattern&amp;rdquo;
+ 증상 Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다. 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, Too many open files 에러가 발생했다. 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이 IDC에 위치한 서버(CentOS 7)에서는 OutOfMemoryError가 발생하면서 동작하지 않았다.
+java.lang.OutOfMemoryError: unable to create new native thread ... java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error ... Caused by: java.net.SocketException: Too many open files SocketException인데 Too many open files?
+      </description>
+    </item>
     
     
     
@@ -145,20 +160,6 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
         한빛미디어의 지원을 받아 작성되었습니다.
  거두절미 컨테이너에 관심 있으신 분이라면 필수 소장 도서입니다. 저도 컨테이너, 쿠버네티스, 도커, 클라우드 관련 도서를 많이 읽어봤지만 컨테이너를 이렇게 간명하고 깊게 다루는 책은 없었습니다. 컨테이너 &amp;lsquo;보안&amp;rsquo;을 설명하기 위해 컨테이너가 어떻게 동작하는지 설명하는 데에 책의 대부분을 차지합니다. 다만 200 페이지에 많은 내용을 압축한 만큼 도해는 많지 않습니다.
 먼저 저자의 katacoda (An Introduction to Containers for Go programmers)로 실습해보시거나 발표(What is a container, really? Let&amp;rsquo;s write one in Go from scratch)를 보시길 추천드립니다.
-      </description>
-    </item>
-    
-    
-    
-    <item>
-      <title>컨테이너 톺아보기</title>
-      <link>https://markruler.github.io/posts/container/container-study-guide/</link>
-      <pubDate>Wed, 17 Feb 2021 23:47:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
-      <guid>https://markruler.github.io/posts/container/container-study-guide/</guid>
-      <description>
-        거두절미 생각보다 컨테이너는 간단한 게 아닙니다. 컨테이너를 쉽게 생성하고 삭제할 수 있었던 이유는 도커와 같은 컨테이너 관리 도구가 복잡한 것들을 꽁꽁 감췄기 때문입니다. 컨테이너를 공부하면 할수록 알아야 할 게 더 늘어나고 있지만 이쯤에서 유익했던 자료들을 모아 보려 합니다.
-참고 자료  👍 필수  책 - 컨테이너 보안, Liz Rice katacoda - An Introduction to Containers for Go programmers, Liz Rice   컨테이너  A Practical Introduction to Container Terminology, Scott McCarty Build Your Own Container Using Less than 100 Lines of Go, Julian Friedman Implementing Container Runtime Shim: runc, Ivan Velichko   컨테이너 런타임  리눅스 컨테이너란?
       </description>
     </item>
     

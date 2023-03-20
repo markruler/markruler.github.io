@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
   
-  <title>Jenkins Workspace 동시성 문제 - 임창수 블로그</title>
+  <title>Too many open files - 임창수 블로그</title>
   
   
   
@@ -13,18 +13,18 @@
   <meta name="google-site-verification" content="">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta content="telephone=no" name="format-detection">
-  <meta name="description" content="WorkspaceList">
+  <meta name="description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험">
   <meta name="renderer" content="webkit">
   <meta name="theme-color" content="#ffffff">
 
   
   
-  <meta property="og:title" content="Jenkins Workspace 동시성 문제" />
-<meta property="og:description" content="WorkspaceList" />
+  <meta property="og:title" content="Too many open files" />
+<meta property="og:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/" /><meta property="og:image" content="https://markruler.github.io/images/ci/jenkins-logo.png" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-11-14T00:38:00+09:00" />
-<meta property="article:modified_time" content="2022-11-14T00:38:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
+<meta property="og:url" content="https://markruler.github.io/posts/java/too-many-open-files/" /><meta property="og:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-20T21:58:00+09:00" />
+<meta property="article:modified_time" content="2023-03-20T21:58:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
 
   
@@ -32,10 +32,10 @@
   
   
   <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/ci/jenkins-logo.png"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg"/>
 
-<meta name="twitter:title" content="Jenkins Workspace 동시성 문제"/>
-<meta name="twitter:description" content="WorkspaceList"/>
+<meta name="twitter:title" content="Too many open files"/>
+<meta name="twitter:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험"/>
 
   
 
@@ -203,8 +203,8 @@
 						
 						
 							<li>
-								<a href="#%ea%b0%9c%ec%9a%94" onclick="onNavClick(`#개요-nav`)" id="개요-nav">
-									개요
+								<a href="#%ec%a6%9d%ec%83%81" onclick="onNavClick(`#증상-nav`)" id="증상-nav">
+									증상
 								</a>
 							</li>
 						
@@ -221,8 +221,8 @@
 						
 						
 							<li>
-								<a href="#workspacelist" onclick="onNavClick(`#workspacelist-nav`)" id="workspacelist-nav">
-									WorkspaceList
+								<a href="#%eb%b6%84%ec%84%9d" onclick="onNavClick(`#분석-nav`)" id="분석-nav">
+									분석
 								</a>
 							</li>
 						
@@ -243,8 +243,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" onclick="onNavClick(`#문제-nav`)" id="문제-nav">
-									문제
+								<a href="#too-many-open-files" onclick="onNavClick(`#too-many-open-files-nav`)" id="too-many-open-files-nav">
+									Too many open files
 								</a>
 							</li>
 						
@@ -261,8 +261,8 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
-									해결
+								<a href="#%ed%8c%8c%ec%9d%bc-%eb%94%94%ec%8a%a4%ed%81%ac%eb%a6%bd%ed%84%b0-file-descriptor" onclick="onNavClick(`#파일-디스크립터-file-descriptor-nav`)" id="파일-디스크립터-file-descriptor-nav">
+									파일 디스크립터 (File descriptor)
 								</a>
 							</li>
 						
@@ -283,30 +283,8 @@
 						
 						
 							<li>
-								<a href="#timeout%ea%b3%bc-cron" onclick="onNavClick(`#timeout과-cron-nav`)" id="timeout과-cron-nav">
-									timeout과 cron
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c-1" onclick="onNavClick(`#문제-1-nav`)" id="문제-1-nav">
-									문제
+								<a href="#%eb%ac%b8%ec%a0%9c-%ec%a0%95%ec%9d%98" onclick="onNavClick(`#문제-정의-nav`)" id="문제-정의-nav">
+									문제 정의
 								</a>
 							</li>
 						
@@ -323,7 +301,7 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0-1" onclick="onNavClick(`#해결-1-nav`)" id="해결-1-nav">
+								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
 									해결
 								</a>
 							</li>
@@ -438,8 +416,8 @@
 						
 						
 							<li>
-								<a href="#%ea%b0%9c%ec%9a%94" onclick="onNavClick(`#개요-nav`)" id="개요-nav">
-									개요
+								<a href="#%ec%a6%9d%ec%83%81" onclick="onNavClick(`#증상-nav`)" id="증상-nav">
+									증상
 								</a>
 							</li>
 						
@@ -456,8 +434,8 @@
 						
 						
 							<li>
-								<a href="#workspacelist" onclick="onNavClick(`#workspacelist-nav`)" id="workspacelist-nav">
-									WorkspaceList
+								<a href="#%eb%b6%84%ec%84%9d" onclick="onNavClick(`#분석-nav`)" id="분석-nav">
+									분석
 								</a>
 							</li>
 						
@@ -478,8 +456,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" onclick="onNavClick(`#문제-nav`)" id="문제-nav">
-									문제
+								<a href="#too-many-open-files" onclick="onNavClick(`#too-many-open-files-nav`)" id="too-many-open-files-nav">
+									Too many open files
 								</a>
 							</li>
 						
@@ -496,8 +474,8 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
-									해결
+								<a href="#%ed%8c%8c%ec%9d%bc-%eb%94%94%ec%8a%a4%ed%81%ac%eb%a6%bd%ed%84%b0-file-descriptor" onclick="onNavClick(`#파일-디스크립터-file-descriptor-nav`)" id="파일-디스크립터-file-descriptor-nav">
+									파일 디스크립터 (File descriptor)
 								</a>
 							</li>
 						
@@ -518,30 +496,8 @@
 						
 						
 							<li>
-								<a href="#timeout%ea%b3%bc-cron" onclick="onNavClick(`#timeout과-cron-nav`)" id="timeout과-cron-nav">
-									timeout과 cron
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								<ul class="collapse" data-toggle="collapse">
-							
-						
-						
-							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c-1" onclick="onNavClick(`#문제-1-nav`)" id="문제-1-nav">
-									문제
+								<a href="#%eb%ac%b8%ec%a0%9c-%ec%a0%95%ec%9d%98" onclick="onNavClick(`#문제-정의-nav`)" id="문제-정의-nav">
+									문제 정의
 								</a>
 							</li>
 						
@@ -558,7 +514,7 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0-1" onclick="onNavClick(`#해결-1-nav`)" id="해결-1-nav">
+								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
 									해결
 								</a>
 							</li>
@@ -624,40 +580,37 @@
 
       <div class="post-head-wrapper"  
         
-        style="background-image: url('https://markruler.github.io/images/ci/jenkins-logo.png')"  >
+        style="background-image: url('https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg')"  >
         <div class="post-title">
-          Jenkins Workspace 동시성 문제
+          Too many open files
           
           <div class="post-subtitle">
-            WorkspaceList
+            소켓 &#39;파일&#39;을 몰랐을 때의 위험
           </div>
           
           <div class="post-meta">
             
             <time itemprop="datePublished">
-              2022년 11월 14일 00시 38분
+              2023년 03월 20일 21시 58분
             </time>
             
 
             
             <i class="material-icons" style="">folder</i>
-            <a href="/categories/">[devops]</a>
+            <a href="/categories/">[linux]</a>
             &nbsp;
             
 
             
             <i class="material-icons" style="">label</i>
             
-            <a href="/tags/ci">ci</a>
+            <a href="/tags/socket">socket</a>
             &nbsp;
             
-            <a href="/tags/cd">cd</a>
+            <a href="/tags/linux">linux</a>
             &nbsp;
             
-            <a href="/tags/jenkins">jenkins</a>
-            &nbsp;
-            
-            <a href="/tags/git">git</a>
+            <a href="/tags/file">file</a>
             &nbsp;
             
             
@@ -670,116 +623,159 @@
         
           <div class="post-body" v-pre>
             
-            <h1 id="개요">개요</h1>
-<p>Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해
-<a href="https://www.jenkins.io/doc/book/pipeline/syntax/#triggers">triggers</a> directive를 사용했다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#ff79c6">{</span>
-    agent any
+            <blockquote>
+<p>커버 이미지 출처: <a href="https://stablediffusionweb.com/">Stable diffusion</a> &ldquo;swimming pool lane pattern&rdquo;</p>
+</blockquote>
+<h1 id="증상">증상</h1>
+<p>Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다.
+요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, <code>Too many open files</code> 에러가 발생했다.
+작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
+IDC에 위치한 서버(CentOS 7)에서는 <code>OutOfMemoryError</code>가 발생하면서 동작하지 않았다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">java.lang.OutOfMemoryError: unable to create new native thread
+...
+java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
+...
+Caused by: java.net.SocketException: Too many open files
+</code></pre></div><p><code>SocketException</code>인데 <code>Too many open files</code>? <strong>이게 OOM</strong>?
+이해되지 않았다.</p>
+<p>문제를 정의하기 위해 분석해보자.</p>
+<h1 id="분석">분석</h1>
+<blockquote>
+<p>테스트 환경: Ubuntu 22.04</p>
+</blockquote>
+<h2 id="too-many-open-files">Too many open files</h2>
+<p>근본적인 원인이 되는 <code>Too many open files</code>는
+프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생한다.
+안전하게 로컬 환경에서 먼저 테스트해봤다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 우선 별도의 세션을 연다.</span>
+bash
+</code></pre></div><p><code>prlimit</code>를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
+</code></pre></div><p>기본적으로 <strong>4096</strong>이 설정되어 있었다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
+NOFILE   max number of open files <span style="color:#bd93f9">4096</span> <span style="color:#bd93f9">1048576</span> files
+</code></pre></div><p><code>ulimit</code>를 이용해 열 수 있는 파일 디스크립터 수를 제한한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">0</span>
+</code></pre></div><p>그리고 <code>cat</code> 명령어를 실행하면 <code>Too many open files</code>가 발생한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
+<span style="color:#6272a4"># bash: start_pipeline: pgrp pipe: Too many open files</span>
+<span style="color:#6272a4"># ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24</span>
+</code></pre></div><p>다시 나갔다가 새로운 세션을 연다.
+limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
+하지만 에러가 발생한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">4</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
+<span style="color:#6272a4"># bash: start_pipeline: pgrp pipe: Too many open files</span>
+<span style="color:#6272a4"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
+<span style="color:#6272a4"># ...</span>
+</code></pre></div><p>5로 설정하면 에러가 발생하지 않고 정상적으로 출력된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">5</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
+<span style="color:#6272a4"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
+<span style="color:#6272a4"># ...</span>
+</code></pre></div><p>이유가 무엇일까?</p>
+<h2 id="파일-디스크립터-file-descriptor">파일 디스크립터 (File descriptor)</h2>
+<p>리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
+반환된 파일 디스크립터는 <code>fd_array</code>의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#6272a4">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
+</span><span style="color:#6272a4"></span>stuct task_struct {
+    ...
+  <span style="color:#6272a4">/* Filesystem information: */</span>
+  <span style="color:#ff79c6">struct</span> fs_struct    <span style="color:#ff79c6">*</span>fs;
 
-    triggers <span style="color:#ff79c6">{</span>
-        cron<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;* * * * *&#34;</span><span style="color:#ff79c6">)</span> <span style="color:#6272a4">// HERE
-</span><span style="color:#6272a4"></span>    <span style="color:#ff79c6">}</span>
-
-    stages <span style="color:#ff79c6">{...}</span>
-
-    post <span style="color:#ff79c6">{</span>
-        always <span style="color:#ff79c6">{</span>
-            cleanWs<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">cleanWhenNotBuilt:</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">,</span>
-                    <span style="color:#8be9fd;font-style:italic">deleteDirs:</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span>
-                    <span style="color:#8be9fd;font-style:italic">disableDeferredWipeout:</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span>
-                    <span style="color:#8be9fd;font-style:italic">notFailBuild:</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">,</span>
-                    <span style="color:#8be9fd;font-style:italic">patterns:</span> <span style="color:#ff79c6">[</span>
-                        <span style="color:#ff79c6">[</span><span style="color:#8be9fd;font-style:italic">pattern:</span> <span style="color:#f1fa8c">&#39;.git/**&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">type:</span> <span style="color:#f1fa8c">&#39;EXCLUDE&#39;</span><span style="color:#ff79c6">],</span>
-                        <span style="color:#ff79c6">[</span><span style="color:#8be9fd;font-style:italic">pattern:</span> <span style="color:#f1fa8c">&#39;.gitignore&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">type:</span> <span style="color:#f1fa8c">&#39;EXCLUDE&#39;</span><span style="color:#ff79c6">],</span>
-                        <span style="color:#ff79c6">[</span><span style="color:#8be9fd;font-style:italic">pattern:</span> <span style="color:#f1fa8c">&#39;.meta/**&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">type:</span> <span style="color:#f1fa8c">&#39;EXCLUDE&#39;</span><span style="color:#ff79c6">],</span>
-                    <span style="color:#ff79c6">]</span>
-            <span style="color:#ff79c6">)</span>
-        <span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><p>해당 Job은 빌드 간 메타데이터(<code>.meta/</code>)를 공유해야 했기 때문에
-<a href="https://plugins.jenkins.io/ws-cleanup/">cleanWs</a> 플러그인에서도
-<code>.git</code> 디렉토리와 함께 삭제되지 않도록 설정했다.</p>
-<p>하지만 무슨 이유인지 메타데이터가 간헐적으로 누락되었고,
-작업도 원하는대로 동작하지 않고 있었다.</p>
-<h1 id="workspacelist">WorkspaceList</h1>
-<p>Jenkins에서 Job을 실행할 경우 말그대로 작업 공간을 위한
-Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#6272a4">// hudson.slaves.WorkspaceList
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">synchronized</span> Lease <span style="color:#50fa7b">allocate</span><span style="color:#ff79c6">(</span>@NonNull FilePath base<span style="color:#ff79c6">,</span> Object context<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> InterruptedException <span style="color:#ff79c6">{</span>
-    <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 1<span style="color:#ff79c6">;</span> <span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-        FilePath candidate <span style="color:#ff79c6">=</span> i <span style="color:#ff79c6">==</span> 1 <span style="color:#ff79c6">?</span> base <span style="color:#ff79c6">:</span> base<span style="color:#ff79c6">.</span><span style="color:#50fa7b">withSuffix</span><span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;@&#34;</span> <span style="color:#ff79c6">+</span> i<span style="color:#ff79c6">);</span>
-        Entry e <span style="color:#ff79c6">=</span> inUse<span style="color:#ff79c6">.</span><span style="color:#50fa7b">get</span><span style="color:#ff79c6">(</span>candidate<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getRemote</span><span style="color:#ff79c6">());</span>
-        <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>e <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#ff79c6">!</span>e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">quick</span> <span style="color:#ff79c6">&amp;&amp;</span> e<span style="color:#ff79c6">.</span><span style="color:#50fa7b">context</span> <span style="color:#ff79c6">!=</span> context<span style="color:#ff79c6">)</span>
-            <span style="color:#ff79c6">continue</span><span style="color:#ff79c6">;</span>
-        <span style="color:#ff79c6">return</span> acquire<span style="color:#ff79c6">(</span>candidate<span style="color:#ff79c6">,</span> <span style="color:#ff79c6">false</span><span style="color:#ff79c6">,</span> context<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><p>Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않는다.
-Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java">WorkspaceList 객체</a>에
-전체 Workspace 목록을 저장한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#6272a4">// hudson.slaves.WorkspaceList
-</span><span style="color:#6272a4"></span><span style="color:#6272a4">/**
-</span><span style="color:#6272a4"> * Used by {@link Computer} to keep track of workspaces that are actively in use.
+  <span style="color:#6272a4">/* Open file information: */</span>
+  <span style="color:#ff79c6">struct</span> files_struct <span style="color:#ff79c6">*</span>files;
+  ...
+};
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#6272a4">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
+</span><span style="color:#6272a4"></span><span style="color:#6272a4">/*
+</span><span style="color:#6272a4"> * Open file table structure
 </span><span style="color:#6272a4"> */</span>
-<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">WorkspaceList</span> <span style="color:#ff79c6">{</span>
+<span style="color:#ff79c6">struct</span> files_struct {
+  ...
+  <span style="color:#ff79c6">struct</span> file __rcu <span style="color:#ff79c6">*</span> fd_array[NR_OPEN_DEFAULT];
+};
+</code></pre></div><p><code>fd_array</code> 배열의 첫 번째 인덱스[0]는 표준 입력(<code>stdin</code>), 두 번째 인덱스[1]는 표준 출력(<code>stdout</code>).
+세 번째 인덱스[2]는 표준 에러(<code>stderr</code>)다.
+네 번째 인덱스[3]부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
+그래서 <code>ulimit -n 4</code>로 설정하면 정상적으로 <code>cat</code>의 출력이 나오는 것이다.</p>
+<p>다시 문제로 돌아가서 그럼 <code>java.net.SocketException: Too many open files</code>는 왜 발생했던 걸까?</p>
+<p>Linux에서는 Socket도 파일로 취급한다.
+그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
+시스템 제한을 초과하면 <code>Too many open files</code> 에러가 발생하는 것이다.</p>
+<p>문제가 발생했던 서버의 시스템 제한을 확인해봤다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
+</code></pre></div><p>SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
+NOFILE   max number of open files <span style="color:#bd93f9">1024</span> <span style="color:#bd93f9">1048576</span> files
+</code></pre></div><p>이 제한을 늘리면 문제가 해결될 것 같았다.
+그런데 한번 더 생각해보자.
+1024만큼의 요청이 발생할 필요 없는 서버였다.
+갑자기 요청이 늘어난 원인이 무엇일까?</p>
+<p>혼자가 아닌 함께 개발할 때 내가 사용하려는 인터페이스가
+다른 소스에서도 이미 통용되어 사용되고 있다면
+해당 소스 코드를 복사해서 사용하는 경우가 많았다.
+<code>OkHttpClient</code>도 그대로 복사해서 사용했었다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">OkHttpClient client <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">();</span>
+</code></pre></div><p>하지만 <code>OkHttpClient</code>를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성된다.
+파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트해봤다.</p>
+<p><a href="https://markruler.github.io/posts/java/jvm-monitoring/#visualvm">VisualVM</a>을 사용해서 스레드를 확인해봤다.</p>
+<p><img src="/images/java/too-many-open-files/visualvm-bad-okhttp-connectionpool.png" alt="visualvm-bad-okhttp-connectionpool"></p>
+<p>OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 <code>java.net.SocketException: Too many open files</code>이 발생했다.</p>
+<h1 id="문제-정의">문제 정의</h1>
+<p>실제 문제는 불필요한 스레드가 과다 생성되어 발생한 것이다.
+<strong>이 에러가 특히 위험한 이유는 시스템 제한을 초과했기 때문에 동일한 머신에 있는 다른 프로세스에도 영향을 준다는 것이다.</strong></p>
+<h1 id="해결">해결</h1>
+<p><code>OkHttp ConnectionPool</code>을 재사용하기 위해 Spring Bean으로 등록했다.
+<strong>이는 <a href="https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/">공식 문서</a>에도 있는 내용이다.</strong></p>
+<blockquote>
+<p><strong>OkHttpClients Should Be Shared</strong>
+<br>
+OkHttp performs best when you create a single OkHttpClient instance
+and reuse it for all of your HTTP calls.
+This is because each client holds its own connection pool and thread pools.
+Reusing connections and threads reduces latency and saves memory.
+Conversely, creating a client for each request wastes resources on idle pools.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">
+```java
+<span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
+<span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean<span style="color:#ff79c6">;</span>
+<span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
 
-    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">AllocationAt</span> <span style="color:#8be9fd;font-style:italic">extends</span> Exception <span style="color:#ff79c6">{...}</span>
-    
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">      * Book keeping for workspace allocation.
-</span><span style="color:#6272a4">      */</span>
-    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Entry</span> <span style="color:#ff79c6">{...}</span>
-    
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * Represents a leased workspace that needs to be returned later.
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">abstract</span> <span style="color:#8be9fd;font-style:italic">static</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">Lease</span> <span style="color:#8be9fd;font-style:italic">implements</span> <span style="color:#6272a4">/*Auto*/</span>Closeable <span style="color:#ff79c6">{...}</span>
+@Configuration
+<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OkHttpConfig</span> <span style="color:#ff79c6">{</span>
+
+    @Bean
+    <span style="color:#8be9fd;font-style:italic">public</span> OkHttpClient <span style="color:#50fa7b">okHttpClient</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">();</span>
+    <span style="color:#ff79c6">}</span>
+
+<span style="color:#ff79c6">}</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
+<span style="color:#ff79c6">import</span> org.springframework.beans.factory.annotation.Autowired<span style="color:#ff79c6">;</span>
+<span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
+
+@Component
+<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyHttpClient</span> <span style="color:#ff79c6">{</span>
+
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> OkHttpClient httpClient<span style="color:#ff79c6">;</span>
+
+    @Autowired
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">MyHttpClient</span><span style="color:#ff79c6">(</span>OkHttpClient httpClient<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">httpClient</span> <span style="color:#ff79c6">=</span> httpClient<span style="color:#ff79c6">;</span>
+    <span style="color:#ff79c6">}</span>
 
     <span style="color:#6272a4">// ...
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
-</code></pre></div><h2 id="문제">문제</h2>
-<p>만약 파이프라인에서 <code>Concurrent Build</code> 옵션을 허용한 채
-여러 개의 빌드를 동시에 실행하면 간혹 <code>job_name</code> workspace에서 실행되지 않고
-<code>job_name@2</code> 에서만 실행되는 경우가 있다.
-그런데 메타데이터 파일을 공유해서 사용해야 하는 경우
-<code>job_name</code> workspace에서 실행되기를 보장해야 한다.</p>
-<h2 id="해결">해결</h2>
-<p><strong>Jenkins Master 프로세스를 재시작</strong>해서 <code>WorkspaceList</code>를 초기화하거나
-<strong>새로운 이름의 Job을 생성</strong>하면 새로운 이름의 workspace에서 빌드할 수 있다.
-이후 <a href="https://en.wikipedia.org/wiki/Thread_safety">스레드 안전성</a>을 보장하기 위해
-<code>Concurrent Build</code> 옵션을 허용하지 않은 채 빌드한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#ff79c6">{</span>
-    agent any
+</code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.
+더이상 불필요하게 스레드가 늘어나지 않았고,
+스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
+(평균 10초 → 3초)</p>
+<p>시스템 제한 설정을 변경할 필요없이
+<code>Too many open files</code> 에러도 발생하지 않았다.</p>
+<p><img src="/images/java/too-many-open-files/visualvm-okhttpclient-bean.png" alt="visualvm okhttpclient bean"></p>
 
-    triggers <span style="color:#ff79c6">{</span>
-        cron<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;* * * * *&#34;</span><span style="color:#ff79c6">)</span>
-    <span style="color:#ff79c6">}</span>
-    
-    <span style="color:#6272a4">// https://www.jenkins.io/doc/book/pipeline/syntax/#options
-</span><span style="color:#6272a4"></span>    options <span style="color:#ff79c6">{</span>
-        <span style="color:#6272a4">// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정한다.
-</span><span style="color:#6272a4"></span>        timeout<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">time:</span> <span style="color:#bd93f9">50</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">unit:</span> <span style="color:#f1fa8c">&#39;SECONDS&#39;</span><span style="color:#ff79c6">)</span>
-    
-        <span style="color:#6272a4">// 빌드 스케줄이 2개 생성되면 &#39;job_name&#39;, &#39;job_name@2&#39; workspace가 생성되고
-</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// metadata를 각각 관리하게 된다. abortPrevious 값을 true로 설정하면
-</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 이미 빌드 중인 프로세스와 겹쳐서 &#39;job_name@2&#39; workspace가 생성되더라도
-</span><span style="color:#6272a4"></span>        <span style="color:#6272a4">// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &#39;job_name&#39; workspace에서 실행된다.
-</span><span style="color:#6272a4"></span>        disableConcurrentBuilds<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">abortPrevious:</span> <span style="color:#ff79c6">true</span><span style="color:#ff79c6">)</span>
-    <span style="color:#ff79c6">}</span>
-
-    stages <span style="color:#ff79c6">{...}</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><h1 id="timeout과-cron">timeout과 cron</h1>
-<p>Crontab(Unix의 Job Scheduler)처럼 Jenkins는 <code>cron</code> 설정을 통해 잡 스케줄러를 만들 수 있다.
-Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다.</p>
-<h2 id="문제-1">문제</h2>
-<p><code>timeout</code> 설정도 <code>cron</code> 설정과 같이 1분으로 두면 timeout abort 되기 전
-<code>job_name@2</code> workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있다.</p>
-<h2 id="해결-1">해결</h2>
-<p>만약 <code>cron</code> 간격을 1분으로 설정했다면 <code>timeout</code>을 50초로 설정하는 등 차이를 둔다. (55초는 살짝 겹쳤다…)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-groovy" data-lang="groovy">timeout<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">time:</span> <span style="color:#bd93f9">50</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">unit:</span> <span style="color:#f1fa8c">&#39;SECONDS&#39;</span><span style="color:#ff79c6">)</span>
-</code></pre></div>
             
             
             
@@ -790,14 +786,14 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다
 
         <nav class="post-pagination">
           
-          <a class="newer-posts" href="https://markruler.github.io/posts/java/too-many-open-files/">
-            다음 글<br>Too many open files
+          <a class="newer-posts">
+            다음 글<br>없음
           </a>
           
 
           
-          <a class="older-posts" href="https://markruler.github.io/posts/java/tomcat/">
-            이전 글<br>Tomcat 이해하기
+          <a class="older-posts" href="https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/">
+            이전 글<br>Jenkins Workspace 동시성 문제
           </a>
           
         </nav>
@@ -826,7 +822,7 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fci%2fjenkins-workspace-concurrency%2f&amp;text=Jenkins%20Workspace%20%eb%8f%99%ec%8b%9c%ec%84%b1%20%eb%ac%b8%ec%a0%9c" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;text=Too%20many%20open%20files" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -844,7 +840,7 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다
     
     
     <li>
-      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fci%2fjenkins-workspace-concurrency%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
   <circle cx="24" cy="24" fill="#4E71A8" r="24" />
   <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
@@ -857,7 +853,7 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fci%2fjenkins-workspace-concurrency%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fci%2fjenkins-workspace-concurrency%2f&amp;title=Jenkins%20Workspace%20%eb%8f%99%ec%8b%9c%ec%84%b1%20%eb%ac%b8%ec%a0%9c&amp;summary=Jenkins%20Workspace%20%eb%8f%99%ec%8b%9c%ec%84%b1%20%eb%ac%b8%ec%a0%9c" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;title=Too%20many%20open%20files&amp;summary=Too%20many%20open%20files" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -881,7 +877,7 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다
     
     
     <li>
-      <a href="mailto:?subject= - Jenkins%20Workspace%20%eb%8f%99%ec%8b%9c%ec%84%b1%20%eb%ac%b8%ec%a0%9c.&amp;body=Jenkins%20Workspace%20%eb%8f%99%ec%8b%9c%ec%84%b1%20%eb%ac%b8%ec%a0%9c%2c%20by%20%0aWorkspaceList%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fci%2fjenkins-workspace-concurrency%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - Too%20many%20open%20files.&amp;body=Too%20many%20open%20files%2c%20by%20%0a%ec%86%8c%ec%bc%93%20%27%ed%8c%8c%ec%9d%bc%27%ec%9d%84%20%eb%aa%b0%eb%9e%90%ec%9d%84%20%eb%95%8c%ec%9d%98%20%ec%9c%84%ed%97%98%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
