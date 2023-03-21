@@ -733,9 +733,7 @@ This is because each client holds its own connection pool and thread pools.
 Reusing connections and threads reduces latency and saves memory.
 Conversely, creating a client for each request wastes resources on idle pools.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">
-```java
-<span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
 <span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean<span style="color:#ff79c6">;</span>
 <span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
 
@@ -764,13 +762,13 @@ Conversely, creating a client for each request wastes resources on idle pools.</
 
     <span style="color:#6272a4">// ...
 </span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
-</code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.
-더 이상 불필요하게 스레드가 늘어나지 않았고,
+</code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.</p>
+<p><img src="/images/java/too-many-open-files/visualvm-okhttpclient-bean.png" alt="visualvm okhttpclient bean"></p>
+<p>더 이상 불필요하게 스레드가 늘어나지 않았고,
 스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
 (평균 10초 → 3초)</p>
 <p>시스템 제한 설정을 변경할 필요 없이
 <code>Too many open files</code> 에러도 발생하지 않았다.</p>
-<p><img src="/images/java/too-many-open-files/visualvm-okhttpclient-bean.png" alt="visualvm okhttpclient bean"></p>
 
             
             

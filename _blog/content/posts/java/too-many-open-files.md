@@ -198,8 +198,6 @@ OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 `java.net.Socke
 > Conversely, creating a client for each request wastes resources on idle pools.
 
 ```java
-
-```java
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -235,11 +233,12 @@ public class MyHttpClient {
 ```
 
 다시 4,000개의 요청을 보내도록 테스트했다.
+
+![visualvm okhttpclient bean](/images/java/too-many-open-files/visualvm-okhttpclient-bean.png)
+
 더 이상 불필요하게 스레드가 늘어나지 않았고,
 스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
 (평균 10초 → 3초)
 
 시스템 제한 설정을 변경할 필요 없이
 `Too many open files` 에러도 발생하지 않았다.
-
-![visualvm okhttpclient bean](/images/java/too-many-open-files/visualvm-okhttpclient-bean.png)
