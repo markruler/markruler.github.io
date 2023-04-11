@@ -107,7 +107,7 @@ cat /etc/os-release
 ## 파일 디스크립터 (File descriptor)
 
 리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
-반환된 파일 디스크립터는 `fdtable`의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.
+반환된 파일 디스크립터는 `fdtable`의 참조값을 나타내며, 파일을 읽고 쓰는데 사용된다.
 
 ```c
 // https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
@@ -134,9 +134,11 @@ struct files_struct {
 };
 ```
 
-`fdtable` 배열의 첫 번째 인덱스[0]는 표준 입력(`stdin`), 두 번째 인덱스[1]는 표준 출력(`stdout`).
-세 번째 인덱스[2]는 표준 에러(`stderr`)다.
-네 번째 인덱스[3]부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
+*정확히 fd를 어떻게 찾는지는 확인하지 않았다. 나중에 [이 블로그](https://m.blog.naver.com/arcyze/60048807080) 참고해서 공부하자.*
+
+`fdtable`의 0번 fd는 표준 입력(`stdin`), 1번 fd는 표준 출력(`stdout`).
+2번 fd는 표준 에러(`stderr`)다.
+3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
 그래서 `ulimit -n 4`로 설정하면 정상적으로 `cat`의 출력이 나오는 것이다.
 
 다시 문제로 돌아가서 그럼 `java.net.SocketException: Too many open files`는 왜 발생했던 걸까?
