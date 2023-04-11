@@ -673,7 +673,7 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
 </code></pre></div><p>이유가 무엇일까?</p>
 <h2 id="파일-디스크립터-file-descriptor">파일 디스크립터 (File descriptor)</h2>
 <p>리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
-반환된 파일 디스크립터는 <code>fd_array</code>의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.</p>
+반환된 파일 디스크립터는 <code>fdtable</code>의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#6272a4">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
 </span><span style="color:#6272a4"></span>stuct task_struct {
     ...
@@ -689,10 +689,11 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
 </span><span style="color:#6272a4"> * Open file table structure
 </span><span style="color:#6272a4"> */</span>
 <span style="color:#ff79c6">struct</span> files_struct {
+  <span style="color:#ff79c6">struct</span> fdtable __rcu <span style="color:#ff79c6">*</span>fdt;
   ...
   <span style="color:#ff79c6">struct</span> file __rcu <span style="color:#ff79c6">*</span> fd_array[NR_OPEN_DEFAULT];
 };
-</code></pre></div><p><code>fd_array</code> 배열의 첫 번째 인덱스[0]는 표준 입력(<code>stdin</code>), 두 번째 인덱스[1]는 표준 출력(<code>stdout</code>).
+</code></pre></div><p><code>fdtable</code> 배열의 첫 번째 인덱스[0]는 표준 입력(<code>stdin</code>), 두 번째 인덱스[1]는 표준 출력(<code>stdout</code>).
 세 번째 인덱스[2]는 표준 에러(<code>stderr</code>)다.
 네 번째 인덱스[3]부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
 그래서 <code>ulimit -n 4</code>로 설정하면 정상적으로 <code>cat</code>의 출력이 나오는 것이다.</p>

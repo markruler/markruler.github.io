@@ -107,7 +107,7 @@ cat /etc/os-release
 ## 파일 디스크립터 (File descriptor)
 
 리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
-반환된 파일 디스크립터는 `fd_array`의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.
+반환된 파일 디스크립터는 `fdtable`의 인덱스를 나타내며, 파일을 읽고 쓰는데 사용된다.
 
 ```c
 // https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
@@ -128,12 +128,13 @@ stuct task_struct {
  * Open file table structure
  */
 struct files_struct {
+  struct fdtable __rcu *fdt;
   ...
   struct file __rcu * fd_array[NR_OPEN_DEFAULT];
 };
 ```
 
-`fd_array` 배열의 첫 번째 인덱스[0]는 표준 입력(`stdin`), 두 번째 인덱스[1]는 표준 출력(`stdout`).
+`fdtable` 배열의 첫 번째 인덱스[0]는 표준 입력(`stdin`), 두 번째 인덱스[1]는 표준 출력(`stdout`).
 세 번째 인덱스[2]는 표준 에러(`stderr`)다.
 네 번째 인덱스[3]부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
 그래서 `ulimit -n 4`로 설정하면 정상적으로 `cat`의 출력이 나오는 것이다.
