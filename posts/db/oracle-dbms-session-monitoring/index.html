@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
   
-  <title>Too many open files - 임창수 블로그</title>
+  <title>오라클 DBMS 세션 모니터링 - 임창수 블로그</title>
   
   
   
@@ -13,18 +13,18 @@
   <meta name="google-site-verification" content="">
   <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
   <meta content="telephone=no" name="format-detection">
-  <meta name="description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험">
+  <meta name="description" content="Standard Edition 2에서">
   <meta name="renderer" content="webkit">
   <meta name="theme-color" content="#ffffff">
 
   
   
-  <meta property="og:title" content="Too many open files" />
-<meta property="og:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험" />
+  <meta property="og:title" content="오라클 DBMS 세션 모니터링" />
+<meta property="og:description" content="Standard Edition 2에서" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/java/too-many-open-files/" /><meta property="og:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-03-20T21:58:00+09:00" />
-<meta property="article:modified_time" content="2023-03-20T21:58:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
+<meta property="og:url" content="https://markruler.github.io/posts/db/oracle-dbms-session-monitoring/" /><meta property="og:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-30T23:58:00+09:00" />
+<meta property="article:modified_time" content="2023-04-30T23:58:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
 
   
@@ -32,10 +32,10 @@
   
   
   <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png"/>
 
-<meta name="twitter:title" content="Too many open files"/>
-<meta name="twitter:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험"/>
+<meta name="twitter:title" content="오라클 DBMS 세션 모니터링"/>
+<meta name="twitter:description" content="Standard Edition 2에서"/>
 
   
 
@@ -203,8 +203,8 @@
 						
 						
 							<li>
-								<a href="#%ec%a6%9d%ec%83%81" onclick="onNavClick(`#증상-nav`)" id="증상-nav">
-									증상
+								<a href="#%ea%b0%9c%ec%9a%94" onclick="onNavClick(`#개요-nav`)" id="개요-nav">
+									개요
 								</a>
 							</li>
 						
@@ -221,8 +221,26 @@
 						
 						
 							<li>
-								<a href="#%eb%b6%84%ec%84%9d" onclick="onNavClick(`#분석-nav`)" id="분석-nav">
-									분석
+								<a href="#db-%ec%a7%84%eb%8b%a8-%eb%8f%84%ea%b5%ac%ea%b0%80-%ed%95%84%ec%9a%94%ed%95%98%eb%8b%a4" onclick="onNavClick(`#db-진단-도구가-필요하다-nav`)" id="db-진단-도구가-필요하다-nav">
+									DB 진단 도구가 필요하다
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ac%ec%9a%a9-%ec%82%ac%eb%a1%80" onclick="onNavClick(`#사용-사례-nav`)" id="사용-사례-nav">
+									사용 사례
 								</a>
 							</li>
 						
@@ -243,8 +261,8 @@
 						
 						
 							<li>
-								<a href="#too-many-open-files" onclick="onNavClick(`#too-many-open-files-nav`)" id="too-many-open-files-nav">
-									Too many open files
+								<a href="#resmgrcpu-quantum" onclick="onNavClick(`#resmgrcpu-quantum-nav`)" id="resmgrcpu-quantum-nav">
+									resmgr:cpu quantum
 								</a>
 							</li>
 						
@@ -261,8 +279,8 @@
 						
 						
 							<li>
-								<a href="#%ed%8c%8c%ec%9d%bc-%eb%94%94%ec%8a%a4%ed%81%ac%eb%a6%bd%ed%84%b0-file-descriptor" onclick="onNavClick(`#파일-디스크립터-file-descriptor-nav`)" id="파일-디스크립터-file-descriptor-nav">
-									파일 디스크립터 (File descriptor)
+								<a href="#enq-tx---row-lock-contention" onclick="onNavClick(`#enq-tx---row-lock-contention-nav`)" id="enq-tx---row-lock-contention-nav">
+									enq: TX - row lock contention
 								</a>
 							</li>
 						
@@ -283,8 +301,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c-%ec%a0%95%ec%9d%98" onclick="onNavClick(`#문제-정의-nav`)" id="문제-정의-nav">
-									문제 정의
+								<a href="#%ea%b2%b0%eb%a1%a0" onclick="onNavClick(`#결론-nav`)" id="결론-nav">
+									결론
 								</a>
 							</li>
 						
@@ -301,8 +319,8 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
-									해결
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
 								</a>
 							</li>
 						
@@ -416,8 +434,8 @@
 						
 						
 							<li>
-								<a href="#%ec%a6%9d%ec%83%81" onclick="onNavClick(`#증상-nav`)" id="증상-nav">
-									증상
+								<a href="#%ea%b0%9c%ec%9a%94" onclick="onNavClick(`#개요-nav`)" id="개요-nav">
+									개요
 								</a>
 							</li>
 						
@@ -434,8 +452,26 @@
 						
 						
 							<li>
-								<a href="#%eb%b6%84%ec%84%9d" onclick="onNavClick(`#분석-nav`)" id="분석-nav">
-									분석
+								<a href="#db-%ec%a7%84%eb%8b%a8-%eb%8f%84%ea%b5%ac%ea%b0%80-%ed%95%84%ec%9a%94%ed%95%98%eb%8b%a4" onclick="onNavClick(`#db-진단-도구가-필요하다-nav`)" id="db-진단-도구가-필요하다-nav">
+									DB 진단 도구가 필요하다
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ac%ec%9a%a9-%ec%82%ac%eb%a1%80" onclick="onNavClick(`#사용-사례-nav`)" id="사용-사례-nav">
+									사용 사례
 								</a>
 							</li>
 						
@@ -456,8 +492,8 @@
 						
 						
 							<li>
-								<a href="#too-many-open-files" onclick="onNavClick(`#too-many-open-files-nav`)" id="too-many-open-files-nav">
-									Too many open files
+								<a href="#resmgrcpu-quantum" onclick="onNavClick(`#resmgrcpu-quantum-nav`)" id="resmgrcpu-quantum-nav">
+									resmgr:cpu quantum
 								</a>
 							</li>
 						
@@ -474,8 +510,8 @@
 						
 						
 							<li>
-								<a href="#%ed%8c%8c%ec%9d%bc-%eb%94%94%ec%8a%a4%ed%81%ac%eb%a6%bd%ed%84%b0-file-descriptor" onclick="onNavClick(`#파일-디스크립터-file-descriptor-nav`)" id="파일-디스크립터-file-descriptor-nav">
-									파일 디스크립터 (File descriptor)
+								<a href="#enq-tx---row-lock-contention" onclick="onNavClick(`#enq-tx---row-lock-contention-nav`)" id="enq-tx---row-lock-contention-nav">
+									enq: TX - row lock contention
 								</a>
 							</li>
 						
@@ -496,8 +532,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c-%ec%a0%95%ec%9d%98" onclick="onNavClick(`#문제-정의-nav`)" id="문제-정의-nav">
-									문제 정의
+								<a href="#%ea%b2%b0%eb%a1%a0" onclick="onNavClick(`#결론-nav`)" id="결론-nav">
+									결론
 								</a>
 							</li>
 						
@@ -514,8 +550,8 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" onclick="onNavClick(`#해결-nav`)" id="해결-nav">
-									해결
+								<a href="#%ec%b0%b8%ec%a1%b0" onclick="onNavClick(`#참조-nav`)" id="참조-nav">
+									참조
 								</a>
 							</li>
 						
@@ -580,37 +616,33 @@
 
       <div class="post-head-wrapper"  
         
-        style="background-image: url('https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg')"  >
+        style="background-image: url('https://markruler.github.io/images/db/oracle-dbms-session-kibana.png')"  >
         <div class="post-title">
-          Too many open files
+          오라클 DBMS 세션 모니터링
           
           <div class="post-subtitle">
-            소켓 &#39;파일&#39;을 몰랐을 때의 위험
+            Standard Edition 2에서
           </div>
           
           <div class="post-meta">
             
             <time itemprop="datePublished">
-              2023년 03월 20일 21시 58분
+              2023년 04월 30일 23시 58분
             </time>
             
 
-            
-            <i class="material-icons" style="">folder</i>
-            <a href="/categories/">[linux]</a>
-            &nbsp;
             
 
             
             <i class="material-icons" style="">label</i>
             
-            <a href="/tags/socket">socket</a>
+            <a href="/tags/oracle">oracle</a>
             &nbsp;
             
-            <a href="/tags/linux">linux</a>
+            <a href="/tags/dbms">dbms</a>
             &nbsp;
             
-            <a href="/tags/file">file</a>
+            <a href="/tags/monitoring">monitoring</a>
             &nbsp;
             
             
@@ -623,154 +655,129 @@
         
           <div class="post-body" v-pre>
             
-            <blockquote>
-<p>커버 이미지 출처: <a href="https://stablediffusionweb.com/">Stable diffusion</a> &ldquo;swimming pool lane pattern&rdquo;</p>
-</blockquote>
-<h1 id="증상">증상</h1>
-<p>Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다.
-요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, <code>Too many open files</code> 에러가 발생했다.
-작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
-IDC에 위치한 서버(CentOS 7)에서는 <code>OutOfMemoryError</code>가 발생하면서 동작하지 않았다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">java.lang.OutOfMemoryError: unable to create new native thread
-...
-java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
-...
-Caused by: java.net.SocketException: Too many open files
-</code></pre></div><p><code>SocketException</code>인데 <code>Too many open files</code>? <strong>이게 OOM</strong>?
-이해되지 않았다.</p>
-<p>문제를 정의하기 위해 먼저 이해부터 해야 했다.</p>
-<h1 id="분석">분석</h1>
-<h2 id="too-many-open-files">Too many open files</h2>
-<p>근본적인 원인이 되는 <code>Too many open files</code>는
-프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생한다.
-로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 우선 별도의 세션을 연다.</span>
-bash
-</code></pre></div><p><code>prlimit</code>를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
-</code></pre></div><p>기본적으로 <strong>4096</strong>이 설정되어 있었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
-NOFILE   max number of open files <span style="color:#bd93f9">4096</span> <span style="color:#bd93f9">1048576</span> files
-</code></pre></div><p><code>ulimit</code>를 이용해 열 수 있는 파일 디스크립터 수를 제한한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">0</span>
-</code></pre></div><p>그리고 <code>cat</code> 명령어를 실행하면 <code>Too many open files</code>가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#6272a4"># bash: start_pipeline: pgrp pipe: Too many open files</span>
-<span style="color:#6272a4"># ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24</span>
-</code></pre></div><p>다시 나갔다가 새로운 세션을 연다.
-limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
-하지만 에러가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">4</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#6272a4"># bash: start_pipeline: pgrp pipe: Too many open files</span>
-<span style="color:#6272a4"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
-<span style="color:#6272a4"># ...</span>
-</code></pre></div><p>5로 설정하면 에러가 발생하지 않고 정상적으로 출력된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">ulimit</span> -n <span style="color:#bd93f9">5</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#6272a4"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
-<span style="color:#6272a4"># ...</span>
-</code></pre></div><p>이유가 무엇일까?</p>
-<h2 id="파일-디스크립터-file-descriptor">파일 디스크립터 (File descriptor)</h2>
-<p>리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
-반환된 파일 디스크립터는 <code>fdtable</code>의 참조값을 나타내며, 파일을 읽고 쓰는데 사용된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#6272a4">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
-</span><span style="color:#6272a4"></span>stuct task_struct {
-    ...
-  <span style="color:#6272a4">/* Filesystem information: */</span>
-  <span style="color:#ff79c6">struct</span> fs_struct    <span style="color:#ff79c6">*</span>fs;
-
-  <span style="color:#6272a4">/* Open file information: */</span>
-  <span style="color:#ff79c6">struct</span> files_struct <span style="color:#ff79c6">*</span>files;
-  ...
-};
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#6272a4">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
-</span><span style="color:#6272a4"></span><span style="color:#6272a4">/*
-</span><span style="color:#6272a4"> * Open file table structure
-</span><span style="color:#6272a4"> */</span>
-<span style="color:#ff79c6">struct</span> files_struct {
-  <span style="color:#ff79c6">struct</span> fdtable __rcu <span style="color:#ff79c6">*</span>fdt;
-  ...
-  <span style="color:#ff79c6">struct</span> file __rcu <span style="color:#ff79c6">*</span> fd_array[NR_OPEN_DEFAULT];
-};
-</code></pre></div><p><em>정확히 fd를 어떻게 찾는지는 확인하지 않았다. 나중에 <a href="https://m.blog.naver.com/arcyze/60048807080">이 블로그</a> 참고해서 공부하자.</em></p>
-<p><code>fdtable</code>의 0번 fd는 표준 입력(<code>stdin</code>), 1번 fd는 표준 출력(<code>stdout</code>).
-2번 fd는 표준 에러(<code>stderr</code>)다.
-3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
-그래서 <code>ulimit -n 4</code>로 설정하면 정상적으로 <code>cat</code>의 출력이 나오는 것이다.</p>
-<p>다시 문제로 돌아가서 그럼 <code>java.net.SocketException: Too many open files</code>는 왜 발생했던 걸까?</p>
-<p>Linux에서는 Socket도 파일로 취급한다.
-그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
-시스템 제한을 초과하면 <code>Too many open files</code> 에러가 발생하는 것이다.</p>
-<p>문제가 발생했던 서버의 시스템 제한을 확인해봤다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
-</code></pre></div><p>SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
-NOFILE   max number of open files <span style="color:#bd93f9">1024</span> <span style="color:#bd93f9">1048576</span> files
-</code></pre></div><p>이 제한을 늘리면 문제가 해결될 것 같았다.
-그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였다.
-갑자기 요청이 늘어난 원인이 무엇일까?</p>
-<p>혼자가 아닌 함께 개발할 때,
-내가 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
-해당 소스 코드를 복사해서 사용하는 경우가 많았다.
-<code>OkHttpClient</code>도 그대로 복사해서 사용했었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">OkHttpClient client <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">();</span>
-</code></pre></div><p>하지만 <code>OkHttpClient</code>를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성된다.
-파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트해봤다.</p>
-<p><a href="https://markruler.github.io/posts/java/jvm-monitoring/#visualvm">VisualVM</a>을 사용해서 스레드를 확인해봤다.</p>
-<p><img src="/images/java/too-many-open-files/visualvm-bad-okhttp-connectionpool.png" alt="visualvm-bad-okhttp-connectionpool"></p>
-<p>OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 <code>java.net.SocketException: Too many open files</code>이 발생했다.</p>
-<h1 id="문제-정의">문제 정의</h1>
-<p>실제 문제는 불필요한 스레드가 과다 생성되어 발생한 것이다.
-<strong>이 에러가 특히 위험한 이유는 시스템 제한을 초과했기 때문에 동일한 머신에 있는 다른 프로세스에도 영향을 준다는 것이다.</strong></p>
-<h1 id="해결">해결</h1>
-<p><code>OkHttp ConnectionPool</code>을 재사용하기 위해 Spring Bean으로 등록했다.
-<strong>이는 <a href="https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/">공식 문서</a>에도 있는 내용이다.</strong></p>
-<blockquote>
-<p><strong>OkHttpClients Should Be Shared</strong>
-<br>
-OkHttp performs best when you create a single OkHttpClient instance
-and reuse it for all of your HTTP calls.
-This is because each client holds its own connection pool and thread pools.
-Reusing connections and threads reduces latency and saves memory.
-Conversely, creating a client for each request wastes resources on idle pools.</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
-<span style="color:#ff79c6">import</span> org.springframework.context.annotation.Bean<span style="color:#ff79c6">;</span>
-<span style="color:#ff79c6">import</span> org.springframework.context.annotation.Configuration<span style="color:#ff79c6">;</span>
-
-@Configuration
-<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">OkHttpConfig</span> <span style="color:#ff79c6">{</span>
-
-    @Bean
-    <span style="color:#8be9fd;font-style:italic">public</span> OkHttpClient <span style="color:#50fa7b">okHttpClient</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> OkHttpClient<span style="color:#ff79c6">();</span>
-    <span style="color:#ff79c6">}</span>
-
-<span style="color:#ff79c6">}</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#ff79c6">import</span> okhttp3.OkHttpClient<span style="color:#ff79c6">;</span>
-<span style="color:#ff79c6">import</span> org.springframework.beans.factory.annotation.Autowired<span style="color:#ff79c6">;</span>
-<span style="color:#ff79c6">import</span> org.springframework.stereotype.Component<span style="color:#ff79c6">;</span>
-
-@Component
-<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyHttpClient</span> <span style="color:#ff79c6">{</span>
-
-    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> OkHttpClient httpClient<span style="color:#ff79c6">;</span>
-
-    @Autowired
-    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#50fa7b">MyHttpClient</span><span style="color:#ff79c6">(</span>OkHttpClient httpClient<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">this</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">httpClient</span> <span style="color:#ff79c6">=</span> httpClient<span style="color:#ff79c6">;</span>
-    <span style="color:#ff79c6">}</span>
-
-    <span style="color:#6272a4">// ...
-</span><span style="color:#6272a4"></span><span style="color:#ff79c6">}</span>
-</code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.</p>
-<p><img src="/images/java/too-many-open-files/visualvm-okhttpclient-bean.png" alt="visualvm okhttpclient bean"></p>
-<p>더 이상 불필요하게 스레드가 늘어나지 않았고,
-스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
-(평균 10초 → 3초)</p>
-<p>시스템 제한 설정을 변경할 필요 없이
-<code>Too many open files</code> 에러도 발생하지 않았다.</p>
+            <h1 id="개요">개요</h1>
+<p>현재 팀에서 구독중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
+이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>까지 사용 가능하다.
+만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
+트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
+<strong>하지만 우리는 성능 저하가 발생했을 때 이를 진단할 수 있는 방법이 없었다.</strong>
+SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
+Oracle Diagnostics Pack<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을
+사용할 수 없다.</p>
+<h1 id="db-진단-도구가-필요하다">DB 진단 도구가 필요하다</h1>
+<p>연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.
+검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰다.</p>
+<p>하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌다.
+Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었다.
+이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.</p>
+<p>Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(<code>V$SESSION</code><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>)에서
+세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span>
+<span style="color:#ff79c6">FROM</span> (<span style="color:#ff79c6">SELECT</span> sess.sid,
+             sess.<span style="color:#8be9fd;font-style:italic">serial</span><span style="color:#ff79c6">#</span>,
+             ROUND(sess.wait_time_micro <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">1000</span>, <span style="color:#bd93f9">2</span>)            wait_time_millis,
+             ROUND(sess.time_since_last_wait_micro <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">1000</span>, <span style="color:#bd93f9">2</span>) time_since_last_wait_millis,
+             <span style="color:#ff79c6">CASE</span>
+                 <span style="color:#ff79c6">WHEN</span> sess.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;ACTIVE&#39;</span>
+                     <span style="color:#ff79c6">THEN</span> sess.last_call_et
+                 <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span>
+                 <span style="color:#ff79c6">END</span>                                          active_elapsed_time_secs,
+             sess.<span style="color:#ff79c6">state</span>,
+             sess.event,
+             sess.username,
+             sess.osuser,
+             sess.machine,
+             sess.program,
+             sess.<span style="color:#ff79c6">type</span>,
+             sess.sql_child_number,
+             sess.sql_exec_id,
+             sess.sql_exec_start,
+             sess.sql_id,
+             (<span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">sql</span>.sql_fulltext
+              <span style="color:#ff79c6">FROM</span> v$sql <span style="color:#ff79c6">sql</span>
+              <span style="color:#ff79c6">WHERE</span> sess.sql_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sql</span>.sql_id
+                  <span style="color:#ff79c6">FETCH</span> <span style="color:#ff79c6">FIRST</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ROWS</span> <span style="color:#ff79c6">ONLY</span>) sql_fulltext,
+             sess.prev_exec_id,
+             sess.prev_exec_start,
+             sess.prev_sql_id,
+             (<span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">sql</span>.sql_fulltext
+              <span style="color:#ff79c6">FROM</span> v$sql <span style="color:#ff79c6">sql</span>
+              <span style="color:#ff79c6">WHERE</span> sess.prev_sql_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sql</span>.sql_id
+                  <span style="color:#ff79c6">FETCH</span> <span style="color:#ff79c6">FIRST</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ROWS</span> <span style="color:#ff79c6">ONLY</span>) prev_sql_fulltext,
+             blocking_session
+      <span style="color:#ff79c6">FROM</span> v$session sess
+      <span style="color:#ff79c6">WHERE</span> sess.username <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;SYS&#39;</span>
+      <span style="color:#ff79c6">ORDER</span> <span style="color:#ff79c6">BY</span> logon_time <span style="color:#ff79c6">DESC</span>)
+<span style="color:#ff79c6">WHERE</span> (wait_time_millis <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">OR</span> time_since_last_wait_millis <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>)
+  <span style="color:#6272a4">/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/</span>
+  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;update user$ set spare6=DECODE(to_char(:2, &#39;&#39;YYYY-MM-DD&#39;&#39;), &#39;&#39;0000-00-00&#39;&#39;, to_date(NULL), :2) where user#=:1&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;UPDATE &#34;SYSTEM&#34;.&#34;SYS_EXPORT_SCHEMA_01&#34; SET value_n = :1 WHERE process_order = :2&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+  <span style="color:#ff79c6">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#f1fa8c">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+</code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였다.
+이를 Elasticsearch에 저장하려면 식별자가 필요했다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#8be9fd;font-style:italic">id</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>prev_exec_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>prev_sql_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>unix_epoch_time(prev_exec_start)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+</code></pre></div><p>어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었다.
+하지만 만에 하나를 위해 <code>prev_exec_start</code>도 추가했다.
+누적된 데이터를 Kibana로 시각화하면 다음과 같다.</p>
+<p><img src="/images/db/oracle-dbms-session-kibana.png" alt="Oracle DBMS Session to Kibana"></p>
+<h1 id="사용-사례">사용 사례</h1>
+<p>DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표다.
+메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아니다.
+이런 지표가 필요하다면 Prometheus나 Datadog을 사용한다.
+우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었다.</p>
+<h2 id="resmgrcpu-quantum">resmgr:cpu quantum</h2>
+<p>세션이 CPU 자원을 할당받기 위해 대기하는 이벤트<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>다.
+Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고
+CPU 사용량이 제한(throttling)되어 있을 때 발생한다.</p>
+<p>먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했다.
+대시보드를 확인해보니 Wait Event <code>resmgr:cpu quantum</code>이 다수 발생했다.</p>
+<p><img src="/images/db/wait-event-cpu-quantum.png" alt="Wait Event - cpu quantum"></p>
+<p>해당 Wait Event가 발생한 SQL의 Execution Plan을 확인해보니,
+실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었다.
+SE2는 리소스가 제한된 만큼 <strong>리소스를 효율적으로 사용하는 것이 속도만큼 중요했다</strong>.</p>
+<p>이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했다.
+주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했다.
+불필요한 쿼리도 제거했다.</p>
+<h2 id="enq-tx---row-lock-contention">enq: TX - row lock contention</h2>
+<p>여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>다.</p>
+<p><img src="/images/db/wait-event-row-lock-contention.png" alt="Wait Event - row lock contention"></p>
+<p>해당 Wait Event가 발생한 SQL을 확인해보니
+데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았다.</p>
+<p>분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다&hellip;</p>
+<h1 id="결론">결론</h1>
+<p>Oracle DBMS 외에 다른 RDB를 사용하더라도 리소스를 효율적으로 사용하는 것은 속도만큼 중요하다.
+애초에 RDB가 적합하지 않을 수도 있다. (적정 기술)
+만약 진단 도구가 제공되지 않는다면 시스템 장애를 대비하기 위해 다른 방법으로라도 준비해야 한다.</p>
+<h1 id="참조">참조</h1>
+<ul>
+<li>Oracle Database 19
+<ul>
+<li><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html">Licensing Information</a></li>
+<li><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/oracle-wait-events.html">Oracle Wait Events</a></li>
+</ul>
+</li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://www.cubrid.com/blog/3813513">Oracle Database SE2 살펴보기</a> - CUBRID&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35">Oracle Diagnostics Pack</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html">V$SESSION</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0">resmgr:cpu quantum</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5" role="doc-endnote">
+<p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07">enq: TX - row lock contention</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
             
             
@@ -782,14 +789,14 @@ Conversely, creating a client for each request wastes resources on idle pools.</
 
         <nav class="post-pagination">
           
-          <a class="newer-posts" href="https://markruler.github.io/posts/db/oracle-dbms-session-monitoring/">
-            다음 글<br>오라클 DBMS 세션 모니터링
+          <a class="newer-posts">
+            다음 글<br>없음
           </a>
           
 
           
-          <a class="older-posts" href="https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/">
-            이전 글<br>Jenkins Workspace 동시성 문제
+          <a class="older-posts" href="https://markruler.github.io/posts/java/too-many-open-files/">
+            이전 글<br>Too many open files
           </a>
           
         </nav>
@@ -818,7 +825,7 @@ Conversely, creating a client for each request wastes resources on idle pools.</
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;text=Too%20many%20open%20files" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;text=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -836,7 +843,7 @@ Conversely, creating a client for each request wastes resources on idle pools.</
     
     
     <li>
-      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
   <circle cx="24" cy="24" fill="#4E71A8" r="24" />
   <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
@@ -849,7 +856,7 @@ Conversely, creating a client for each request wastes resources on idle pools.</
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f&amp;title=Too%20many%20open%20files&amp;summary=Too%20many%20open%20files" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;title=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81&amp;summary=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -873,7 +880,7 @@ Conversely, creating a client for each request wastes resources on idle pools.</
     
     
     <li>
-      <a href="mailto:?subject= - Too%20many%20open%20files.&amp;body=Too%20many%20open%20files%2c%20by%20%0a%ec%86%8c%ec%bc%93%20%27%ed%8c%8c%ec%9d%bc%27%ec%9d%84%20%eb%aa%b0%eb%9e%90%ec%9d%84%20%eb%95%8c%ec%9d%98%20%ec%9c%84%ed%97%98%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fjava%2ftoo-many-open-files%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - %ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81.&amp;body=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81%2c%20by%20%0aStandard%20Edition%202%ec%97%90%ec%84%9c%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
