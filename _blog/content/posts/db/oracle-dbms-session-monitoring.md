@@ -1,7 +1,7 @@
 ---
 date: 2023-04-30T23:58:00+09:00
-title: "오라클 DBMS 세션 모니터링"
-description: "Standard Edition 2에서"
+title: "오라클 DBMS SE2 세션 모니터링"
+description: "Standard Edition 2는 Diagnostics Pack을 사용할 수 없다"
 featured_image: "/images/db/oracle-dbms-session-kibana.png"
 images: ["/images/db/oracle-dbms-session-kibana.png"]
 socialshare: true
