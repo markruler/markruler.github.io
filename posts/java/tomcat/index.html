@@ -966,37 +966,35 @@
 <p><em><a href="https://www.datadoghq.com/blog/tomcat-architecture-and-performance/">출처 - Datadog</a></em></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
 <span style="color:#ff79c6">&lt;Server</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8005&#34;</span> <span style="color:#50fa7b">shutdown=</span><span style="color:#f1fa8c">&#34;SHUTDOWN&#34;</span><span style="color:#ff79c6">&gt;</span>
-   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.AprLifecycleListener&#34;</span> <span style="color:#50fa7b">SSLEngine=</span><span style="color:#f1fa8c">&#34;on&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JasperListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;GlobalNamingResources&gt;</span>
-     <span style="color:#ff79c6">&lt;Resource</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span> <span style="color:#50fa7b">auth=</span><span style="color:#f1fa8c">&#34;Container&#34;</span>
-               <span style="color:#50fa7b">type=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.UserDatabase&#34;</span>
-               <span style="color:#50fa7b">description=</span><span style="color:#f1fa8c">&#34;User database that can be updated and saved&#34;</span>
-               <span style="color:#50fa7b">factory=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.users.MemoryUserDatabaseFactory&#34;</span>
-               <span style="color:#50fa7b">pathname=</span><span style="color:#f1fa8c">&#34;conf/tomcat-users.xml&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-   <span style="color:#ff79c6">&lt;/GlobalNamingResources&gt;</span>
-   <span style="color:#ff79c6">&lt;Service</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span><span style="color:#ff79c6">&gt;</span>
-     <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8080&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span>
-                <span style="color:#50fa7b">connectionTimeout=</span><span style="color:#f1fa8c">&#34;20000&#34;</span>
-                <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-     <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8009&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;AJP/1.3&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-     <span style="color:#ff79c6">&lt;Engine</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span> <span style="color:#50fa7b">defaultHost=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span><span style="color:#ff79c6">&gt;</span>
-       <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.LockOutRealm&#34;</span><span style="color:#ff79c6">&gt;</span>
-         <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.UserDatabaseRealm&#34;</span>
-                <span style="color:#50fa7b">resourceName=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span><span style="color:#ff79c6">/&gt;</span>
-       <span style="color:#ff79c6">&lt;/Realm&gt;</span>
-       <span style="color:#ff79c6">&lt;Host</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span>  <span style="color:#50fa7b">appBase=</span><span style="color:#f1fa8c">&#34;webapps&#34;</span>
-             <span style="color:#50fa7b">unpackWARs=</span><span style="color:#f1fa8c">&#34;true&#34;</span> <span style="color:#50fa7b">autoDeploy=</span><span style="color:#f1fa8c">&#34;true&#34;</span><span style="color:#ff79c6">&gt;</span>
-         <span style="color:#ff79c6">&lt;Valve</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.valves.AccessLogValve&#34;</span>
-                <span style="color:#50fa7b">directory=</span><span style="color:#f1fa8c">&#34;logs&#34;</span>
-                <span style="color:#50fa7b">prefix=</span><span style="color:#f1fa8c">&#34;localhost_access_log.&#34;</span> <span style="color:#50fa7b">suffix=</span><span style="color:#f1fa8c">&#34;.txt&#34;</span>
-                <span style="color:#50fa7b">pattern=</span><span style="color:#f1fa8c">&#34;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-       <span style="color:#ff79c6">&lt;/Host&gt;</span>
-     <span style="color:#ff79c6">&lt;/Engine&gt;</span>
-   <span style="color:#ff79c6">&lt;/Service&gt;</span>
+  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.AprLifecycleListener&#34;</span> <span style="color:#50fa7b">SSLEngine=</span><span style="color:#f1fa8c">&#34;on&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JasperListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;GlobalNamingResources&gt;</span>
+    <span style="color:#ff79c6">&lt;Resource</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span>
+              <span style="color:#50fa7b">auth=</span><span style="color:#f1fa8c">&#34;Container&#34;</span>
+              <span style="color:#50fa7b">type=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.UserDatabase&#34;</span>
+              <span style="color:#50fa7b">description=</span><span style="color:#f1fa8c">&#34;User database that can be updated and saved&#34;</span>
+              <span style="color:#50fa7b">factory=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.users.MemoryUserDatabaseFactory&#34;</span>
+              <span style="color:#50fa7b">pathname=</span><span style="color:#f1fa8c">&#34;conf/tomcat-users.xml&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+  <span style="color:#ff79c6">&lt;/GlobalNamingResources&gt;</span>
+  <span style="color:#ff79c6">&lt;Service</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span><span style="color:#ff79c6">&gt;</span>
+    <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8080&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#50fa7b">connectionTimeout=</span><span style="color:#f1fa8c">&#34;20000&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+    <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8009&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;AJP/1.3&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+    <span style="color:#ff79c6">&lt;Engine</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span> <span style="color:#50fa7b">defaultHost=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span><span style="color:#ff79c6">&gt;</span>
+      <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.LockOutRealm&#34;</span><span style="color:#ff79c6">&gt;</span>
+        <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.UserDatabaseRealm&#34;</span> <span style="color:#50fa7b">resourceName=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span><span style="color:#ff79c6">/&gt;</span>
+      <span style="color:#ff79c6">&lt;/Realm&gt;</span>
+      <span style="color:#ff79c6">&lt;Host</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span>  <span style="color:#50fa7b">appBase=</span><span style="color:#f1fa8c">&#34;webapps&#34;</span>
+            <span style="color:#50fa7b">unpackWARs=</span><span style="color:#f1fa8c">&#34;true&#34;</span> <span style="color:#50fa7b">autoDeploy=</span><span style="color:#f1fa8c">&#34;true&#34;</span><span style="color:#ff79c6">&gt;</span>
+        <span style="color:#ff79c6">&lt;Valve</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.valves.AccessLogValve&#34;</span>
+              <span style="color:#50fa7b">directory=</span><span style="color:#f1fa8c">&#34;logs&#34;</span>
+              <span style="color:#50fa7b">prefix=</span><span style="color:#f1fa8c">&#34;localhost_access_log.&#34;</span> <span style="color:#50fa7b">suffix=</span><span style="color:#f1fa8c">&#34;.txt&#34;</span>
+              <span style="color:#50fa7b">pattern=</span><span style="color:#f1fa8c">&#34;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&#34;</span> <span style="color:#ff79c6">/&gt;</span>
+      <span style="color:#ff79c6">&lt;/Host&gt;</span>
+    <span style="color:#ff79c6">&lt;/Engine&gt;</span>
+  <span style="color:#ff79c6">&lt;/Service&gt;</span>
 <span style="color:#ff79c6">&lt;/Server&gt;</span>
 </code></pre></div><h2 id="server">Server</h2>
 <p>카탈리나(Catalina) 서버는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.

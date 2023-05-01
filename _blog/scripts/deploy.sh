@@ -26,4 +26,3 @@ git commit -m "$msg"
 
 push_branch="v1"
 git push origin $push_branch
-
