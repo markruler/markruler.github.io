@@ -14,12 +14,12 @@ tags:
 # 개요
 
 현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
-이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개[^1]까지 사용 가능하다.
+이 라이센스는 [프로세서 최대 2개, CPU Threads 최대 16개](https://www.cubrid.com/blog/3813513)까지 사용 가능하다.
 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
 트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
 **하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다.**
 SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
-Oracle Diagnostics Pack[^2]을
+[Oracle Diagnostics Pack](https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35)을
 사용할 수 없다.
 
 # DB 진단 도구가 필요하다
@@ -31,7 +31,7 @@ Oracle Diagnostics Pack[^2]을
 Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었다.
 이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.
 
-Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(`V$SESSION`[^3])에서
+Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰([V$SESSION](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html))에서
 세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.
 
 ```sql
@@ -103,7 +103,7 @@ DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지
 
 ## resmgr:cpu quantum
 
-세션이 CPU 자원을 할당받기 위해 대기하는 이벤트[^4]다.
+세션이 CPU 자원을 할당받기 위해 대기하는 이벤트[^1]다.
 Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고
 CPU 사용량이 제한(throttling)되어 있을 때 발생한다.
 
@@ -122,7 +122,7 @@ SE2는 리소스가 제한된 만큼 **리소스를 효율적으로 사용하는
 
 ## enq: TX - row lock contention
 
-여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트[^5]다.
+여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트[^2]다.
 
 ![Wait Event - row lock contention](/images/db/wait-event-row-lock-contention.png)
 
@@ -131,11 +131,17 @@ SE2는 리소스가 제한된 만큼 **리소스를 효율적으로 사용하는
 
 분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다...
 
+> 주목할 것은, 오라클에서 발생하는 Lock 경합의 대부분을 차지하는 `enq: TM - contention` 이벤트[^3]와
+> `enq: TX - row lock contention` 이벤트[^4]가 Concurrency가 아닌 Application으로 분류돼 있다는 사실이다.
+> ...
+> 이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것이다.
+> Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐이다.
+> 근본적인 해법은 애플리케이션 로직에서 찾아야 한다.[^5]
+
 # 결론
 
 리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
-애초에 RDB가 적합하지 않을 수 있다.
-간혹 적정 기술을 잘 선택한다면 기술 자체가 리소스를 효율적으로 사용해서 성능 저하를 피할 수 있다.
+애초에 RDB가 적합하지 않을 수 있다.[^6]
 
 어떤 기술을 사용하든 진단 도구부터 찾아보자.
 기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.
@@ -145,11 +151,13 @@ SE2는 리소스가 제한된 만큼 **리소스를 효율적으로 사용하는
 - Oracle Database 19
   - [Licensing Information](https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html)
   - [Oracle Wait Events](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/oracle-wait-events.html)
+- 오라클 성능 고도화 - 원리와 해법 1, 조시형
 
 # 각주
 
-[^1]: [Oracle Database SE2 살펴보기](https://www.cubrid.com/blog/3813513) - CUBRID
-[^2]: [Oracle Diagnostics Pack](https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35)
-[^3]: [V$SESSION](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html)
-[^4]: [resmgr:cpu quantum](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0)
-[^5]: [enq: TX - row lock contention](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07)
+[^1]: [resmgr:cpu quantum](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0)
+[^2]: [enq: TX - row lock contention](https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07)
+[^3]: DML 테이블 Lock 경합 시 발생한다.
+[^4]: DML 로우 Lock 경합 시 발생한다.
+[^5]: 오라클 성능 고도화 - 원리와 해법 1, 100쪽
+[^6]: 적정 기술
