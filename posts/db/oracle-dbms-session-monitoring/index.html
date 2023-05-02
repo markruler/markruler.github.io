@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
   
-  <title>오라클 DBMS SE2 세션 모니터링 - 임창수 블로그</title>
+  <title>오라클 DBMS SE2 세션 사후 진단 - 임창수 블로그</title>
   
   
   
@@ -19,7 +19,7 @@
 
   
   
-  <meta property="og:title" content="오라클 DBMS SE2 세션 모니터링" />
+  <meta property="og:title" content="오라클 DBMS SE2 세션 사후 진단" />
 <meta property="og:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/db/oracle-dbms-session-monitoring/" /><meta property="og:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png" /><meta property="article:section" content="posts" />
@@ -34,7 +34,7 @@
   <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png"/>
 
-<meta name="twitter:title" content="오라클 DBMS SE2 세션 모니터링"/>
+<meta name="twitter:title" content="오라클 DBMS SE2 세션 사후 진단"/>
 <meta name="twitter:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다"/>
 
   
@@ -654,7 +654,7 @@
         
         style="background-image: url('https://markruler.github.io/images/db/oracle-dbms-session-kibana.png')"  >
         <div class="post-title">
-          오라클 DBMS SE2 세션 모니터링
+          오라클 DBMS SE2 세션 사후 진단
           
           <div class="post-subtitle">
             Standard Edition 2는 Diagnostics Pack을 사용할 수 없다
@@ -692,7 +692,7 @@
           <div class="post-body" v-pre>
             
             <h1 id="개요">개요</h1>
-<p>현재 팀에서 구독중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
+<p>현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
 이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>까지 사용 가능하다.
 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
 트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
@@ -753,7 +753,9 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 </code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였다.
 이를 Elasticsearch에 저장하려면 식별자가 필요했다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#8be9fd;font-style:italic">id</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>prev_exec_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>prev_sql_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>unix_epoch_time(prev_exec_start)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
-</code></pre></div><p>어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었다.
+</code></pre></div><p>먼저 고려했던 식별자는 <code>sql_exec_id</code>와 <code>sql_id</code>다.
+하지만 대기 상태라면 <code>sql_exec_id</code>는 <code>NULL</code>이기 때문에 <code>prev_exec_id</code>와 <code>prev_sql_id</code>를 선택했다.
+어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었다.
 하지만 만에 하나를 위해 <code>prev_exec_start</code>도 추가했다.
 누적된 데이터를 Kibana로 시각화하면 다음과 같다.</p>
 <p><img src="/images/db/oracle-dbms-session-kibana.png" alt="Oracle DBMS Session to Kibana"></p>
@@ -782,12 +784,11 @@ SE2는 리소스가 제한된 만큼 <strong>리소스를 효율적으로 사용
 데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았다.</p>
 <p>분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다&hellip;</p>
 <h1 id="결론">결론</h1>
-<p>Oracle DBMS가 아닌 다른 RDB를 사용할 수 있다.
-마찬가지로 리소스를 효율적으로 사용하는 것은 중요하다.
+<p>리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
 애초에 RDB가 적합하지 않을 수도 있다.
-적정 기술을 선택하는 것도 중요하다.
-어떤 기술을 사용하든 진단 도구부터 찾아보자.
-진단 도구가 제공되지 않는다면 시스템 장애를 대비하기 위해 다른 방법으로라도 준비해야 한다.</p>
+간혹 적정 기술을 잘 선택한다면 기술 자체가 리소스를 효율적으로 사용하기 때문에 성능 저하가 발생하지 않는다.</p>
+<p>어떤 기술을 사용하든 진단 도구부터 찾아보자.
+기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.</p>
 <h1 id="참조">참조</h1>
 <ul>
 <li>Oracle Database 19
@@ -865,7 +866,7 @@ SE2는 리소스가 제한된 만큼 <strong>리소스를 효율적으로 사용
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;text=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;text=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%ec%82%ac%ed%9b%84%20%ec%a7%84%eb%8b%a8" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         
 <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
@@ -896,7 +897,7 @@ SE2는 리소스가 제한된 만큼 <strong>리소스를 효율적으로 사용
     
     
     <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;title=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81&amp;summary=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f&amp;title=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%ec%82%ac%ed%9b%84%20%ec%a7%84%eb%8b%a8&amp;summary=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%ec%82%ac%ed%9b%84%20%ec%a7%84%eb%8b%a8" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -920,7 +921,7 @@ SE2는 리소스가 제한된 만큼 <strong>리소스를 효율적으로 사용
     
     
     <li>
-      <a href="mailto:?subject= - %ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81.&amp;body=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81%2c%20by%20%0aStandard%20Edition%202%eb%8a%94%20Diagnostics%20Pack%ec%9d%84%20%ec%82%ac%ec%9a%a9%ed%95%a0%20%ec%88%98%20%ec%97%86%eb%8b%a4%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject= - %ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%ec%82%ac%ed%9b%84%20%ec%a7%84%eb%8b%a8.&amp;body=%ec%98%a4%eb%9d%bc%ed%81%b4%20DBMS%20SE2%20%ec%84%b8%ec%85%98%20%ec%82%ac%ed%9b%84%20%ec%a7%84%eb%8b%a8%2c%20by%20%0aStandard%20Edition%202%eb%8a%94%20Diagnostics%20Pack%ec%9d%84%20%ec%82%ac%ec%9a%a9%ed%95%a0%20%ec%88%98%20%ec%97%86%eb%8b%a4%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fdb%2foracle-dbms-session-monitoring%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">

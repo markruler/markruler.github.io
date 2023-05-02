@@ -1,6 +1,6 @@
 ---
 date: 2023-04-30T23:58:00+09:00
-title: "오라클 DBMS SE2 세션 모니터링"
+title: "오라클 DBMS SE2 세션 사후 진단"
 description: "Standard Edition 2는 Diagnostics Pack을 사용할 수 없다"
 featured_image: "/images/db/oracle-dbms-session-kibana.png"
 images: ["/images/db/oracle-dbms-session-kibana.png"]
@@ -13,7 +13,7 @@ tags:
 
 # 개요
 
-현재 팀에서 구독중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
+현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
 이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개[^1]까지 사용 가능하다.
 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
 트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
@@ -86,6 +86,8 @@ WHERE (wait_time_millis > 0 OR time_since_last_wait_millis > 0)
 id = f"{prev_exec_id}-{prev_sql_id}-{unix_epoch_time(prev_exec_start)}"
 ```
 
+먼저 고려했던 식별자는 `sql_exec_id`와 `sql_id`다.
+하지만 대기 상태라면 `sql_exec_id`는 `NULL`이기 때문에 `prev_exec_id`와 `prev_sql_id`를 선택했다.
 어느 정도 데이터가 쌓이고 살펴보니 `prev_exec_id`와 `prev_sql_id` 만으로도 충분히 식별되었다.
 하지만 만에 하나를 위해 `prev_exec_start`도 추가했다.
 누적된 데이터를 Kibana로 시각화하면 다음과 같다.
@@ -131,12 +133,12 @@ SE2는 리소스가 제한된 만큼 **리소스를 효율적으로 사용하는
 
 # 결론
 
-Oracle DBMS가 아닌 다른 RDB를 사용할 수 있다.
-마찬가지로 리소스를 효율적으로 사용하는 것은 중요하다.
+리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
 애초에 RDB가 적합하지 않을 수도 있다.
-적정 기술을 선택하는 것도 중요하다.
+간혹 적정 기술을 잘 선택한다면 기술 자체가 리소스를 효율적으로 사용하기 때문에 성능 저하가 발생하지 않는다.
+
 어떤 기술을 사용하든 진단 도구부터 찾아보자.
-진단 도구가 제공되지 않는다면 시스템 장애를 대비하기 위해 다른 방법으로라도 준비해야 한다.
+기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.
 
 # 참조
 
