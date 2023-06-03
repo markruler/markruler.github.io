@@ -15,9 +15,10 @@ categories:
 
 ![Tomcat Architecture](/images/java/tomcat-architecture.png)
 
-*[출처 - Datadog](https://www.datadoghq.com/blog/tomcat-architecture-and-performance/)*
+*[이미지 출처 - Datadog](https://www.datadoghq.com/blog/tomcat-architecture-and-performance/)*
 
 ```xml
+<!-- server.xml -->
 <?xml version='1.0' encoding='utf-8'?>
 <Server port="8005" shutdown="SHUTDOWN">
   <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
@@ -54,24 +55,28 @@ categories:
 
 ## Server
 
-카탈리나(Catalina) 서버는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
+카탈리나 서버(Catalina Server)는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
 즉, 서블릿을 실행하기 위한 환경을 제공한다.
 이러한 카탈리나 서버에는 하나 이상의 서비스(Service)가 포함된다.
 
 ## Service
 
-1개의 서비스는 1개의 엔진과 1개 이상의 커넥터를 포함한다.
+1개의 서비스는 1개 이상의 [커넥터](#connector)와 1개의 [엔진](#engine-container)를 포함한다.
 
 ## Connector
 
 코요테([Coyote](https://tomcat.apache.org/tomcat-8.5-doc/config/http.html)) 커넥터는
+클라이언트와 Tomcat 사이의 통신을 관리한다.
 TCP 포트에서 요청을 수신 대기(listen)한다.
 그리고 해당 요청을 처리하고 응답을 만들기 위해 엔진(Engine)으로 보낸다.
-기본 구성으로 `HTTP/1.1` 와 `AJP/1.3` 커넥터가 포함된다.
+기본 구성으로 `HTTP/1.1` 와 `AJP/1.3`(Apache JServ Protocol) 커넥터가 포함된다.
 
 ## Container
 
 ### Engine Container
+
+Engine은 웹 애플리케이션의 라우팅을 담당한다.
+여러 개의 [Host](#host-container)를 가질 수 있으며, 클라이언트의 요청을 적절한 Host로 전달한다.
 
 Tomcat은 [재스퍼(Jasper) 엔진](https://tomcat.apache.org/tomcat-8.5-doc/jasper-howto.html)을 사용하여
 JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페이지로 렌더링한다.
@@ -82,7 +87,7 @@ JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페�
 
 ### Host Container
 
-Host 요소는 실행 중인 Tomcat 서버의 가상 호스트를 나타낸다.
+Host 요소는 실행 중인 Tomcat 서버의 개별 가상 호스트를 나타낸다.
 클라이언트가 네트워크 이름을 사용하여 Tomcat 서버에 연결하려면
 이 이름이 사용자가 속한 인터넷 도메인을 관리하는 DNS(도메인 이름 서비스) 서버에 등록되어 있어야 한다.
 만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요할 수 있다.
@@ -166,6 +171,22 @@ public final class MyServletListener implements ServletContextListener {
 애플리케이션을 관리하고 모니터링하기 위한 Java API다. [^5]
 
 ![JMX Architecture](/images/java/jmx-architecture.png)
+
+Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체다.
+모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공한다.
+Standard MBean, Dynamic MBean과 추가적으로 Model MBean, Open MBean, Monitor MBean으로 구분되며
+이를 통해 구현할 수 있다.
+
+MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소다.
+애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있다.
+MBean Server는 MBean의 생명주기를 관리하고,
+MBean의 속성 및 연산에 대한 액세스를 제공하며,
+알림을 수신하는 등의 작업을 수행한다.
+
+JMX 에이전트는 JMX 서비스의 일부로, 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출한다.
+에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며,
+MBean Server를 통해 애플리케이션의 관리 작업을 수행한다.
+JMX 에이전트는 Java 애플리케이션 내부에 포함되거나, 별도의 프로세스로 실행될 수 있다.
 
 # 참조
 
