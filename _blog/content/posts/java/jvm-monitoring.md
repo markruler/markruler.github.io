@@ -185,13 +185,23 @@ Java heap space
 
 [VisualVM](https://visualvm.github.io/download.html)은 애플리케이션을 **실시간으로 분석**하는 데 주로 사용한다.
 
-```bash
-# etc/visualvm.conf
+```sh
+# $VISUALVM_HOME/etc/visualvm.conf
+# Default location of JDK:
+#
+# It can be overridden on command line by using --jdkhome <dir>
+# Be careful when changing jdkhome.
+# There are two VisualVM launchers for Windows (32-bit and 64-bit) and
+# installer points to one of those in the VisualVM application shortcut 
+# based on the Java version selected at installation time.
+#
+#visualvm_jdkhome="/path/to/jdk"
 visualvm_jdkhome="$JAVA_HOME"
 ```
 
-```bash
-> ./bin/visualvm
+```sh
+# 실행
+./bin/visualvm
 ```
 
 아래 기능으로 힙 덤프를 간략히 확인할 수도 있다.
@@ -204,27 +214,56 @@ VisualVM은 실시간으로 확인하는 용도로 사용한다.
 
 *VisuamVM에서 확인한 Heap Dump*
 
-Remote로 연결하기 위해서는 WAS에 JMX 설정이 필요하다.
+Remote에서 모니터링하기 위해서는 JVM 애플리케이션에 JMX 옵션을 추가해야 한다.
+[Apache Tomcat](https://archive.apache.org/dist/tomcat/)을 사용한다면 아래와 같이 추가한다.
 
-- [Apache](https://tomcat.apache.org/download-70.cgi)
-- [Tomcat](https://archive.apache.org/dist/tomcat/)
-
-```bash
-# 버전에 맞춰서 다운로드
-> ${CATALINA_HOME}/bin/catalina.sh version
-
-> curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
-
-> ${CATALINA_HOME}/bin/catalina.sh start \
--Dcom.sun.management.jmxremote \
--Dcom.sun.management.jmxremote.local.only=false \
--Dcom.sun.management.jmxremote.port=1099 \
--Dcom.sun.management.jmxremote.rmi.port=1099 \
--Dcom.sun.management.jmxremote.ssl=false \
--Dcom.sun.management.jmxremote.authenticate=false \
--Djava.rmi.server.hostname=127.0.0.1 \
--jar
+```sh
+# Tomcat 다운로드
+curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
 ```
+
+```sh
+${CATALINA_HOME}/bin/catalina.sh version
+```
+
+```sh
+${CATALINA_HOME}/bin/catalina.sh start \
+  -Dcom.sun.management.jmxremote \
+  -Dcom.sun.management.jmxremote.local.only=false \
+  -Dcom.sun.management.jmxremote.port=1099 \
+  -Dcom.sun.management.jmxremote.rmi.port=1099 \
+
+  -Dcom.sun.management.jmxremote.ssl=false \
+
+  -Dcom.sun.management.jmxremote.authenticate=false \
+  # -Dcom.sun.management.jmxremote.authenticate=true \
+  # -Dcom.sun.management.jmxremote.password.file=$CATALINA_BASE/conf/jmxremote.password \
+  # -Dcom.sun.management.jmxremote.access.file=$CATALINA_BASE/conf/jmxremote.access \
+
+  # -Djava.rmi.server.hostname=${REAL_HOST} \
+  -Djava.rmi.server.hostname=255.255.255.255 \
+
+  -jar
+```
+
+이후 VisualVM에서 다음과 같이 설정한다.
+
+> File > Add JMX Connection
+
+![File > Add JMX Connection](/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png)
+
+JVM 옵션으로 추가한 RMI(Remote Method Invocation) HOST와 PORT를 입력한다.
+
+![Setting JMX Connection](/images/java/jvm-monitoring/visualvm-setting-jmx-connection.png)
+
+추가하면 다음과 같이 스레드를 실시간으로 모니터링 할 수 있다.
+스레드와 힙 메모리의 스냅샷을 저장할 수도 있다.
+
+![Setting JMX Connection](/images/java/jvm-monitoring/visualvm-jmx-monitoring.png)
+
+설정만 한다면 여러 호스트를 모니터링 할 수 있다.
+
+![Setting JMX Connection](/images/java/jvm-monitoring/visualvm-double-jmx-monitoring.png)
 
 # GC Monitoring
 
@@ -385,7 +424,6 @@ PS Old Generation
 - [Java 애플리케이션 트러블 슈팅](https://d2.naver.com/helloworld/1286587) - NAVER D2
 - [Java Memory Analysis](https://kwonnam.pe.kr/wiki/java/memory) - 권남
 - [JVM Crash 문제 해결하기](https://www.whatap.io/ko/blog/28/) - 와탭
-- [JMap, JHat으로 Heap Dump 분석](https://cselabnotes.com/kr/2021/03/26/39/) - 삐멜
 - [자바 메모리누수(with 힙덤프) 분석하기](http://honeymon.io/tech/2019/05/30/java-memory-leak-analysis.html) - 김지헌
 - [Java Heap Dump 를 이용한 문제 해결](https://lng1982.tistory.com/352) - 탁구치는 개발자
 - [JVM의 default Heap Size가 궁금하세요?](https://sarc.io/index.php/java/1092-jvm-default-heap-size) - 삵(sarc)

@@ -1454,9 +1454,19 @@ Java heap space
 -Xmx6g
 </code></pre></div><h3 id="visualvm-1">VisualVM</h3>
 <p><a href="https://visualvm.github.io/download.html">VisualVM</a>은 애플리케이션을 <strong>실시간으로 분석</strong>하는 데 주로 사용한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># etc/visualvm.conf</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># $VISUALVM_HOME/etc/visualvm.conf</span>
+<span style="color:#6272a4"># Default location of JDK:</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4"># It can be overridden on command line by using --jdkhome &lt;dir&gt;</span>
+<span style="color:#6272a4"># Be careful when changing jdkhome.</span>
+<span style="color:#6272a4"># There are two VisualVM launchers for Windows (32-bit and 64-bit) and</span>
+<span style="color:#6272a4"># installer points to one of those in the VisualVM application shortcut </span>
+<span style="color:#6272a4"># based on the Java version selected at installation time.</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4">#visualvm_jdkhome=&#34;/path/to/jdk&#34;</span>
 <span style="color:#8be9fd;font-style:italic">visualvm_jdkhome</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$JAVA_HOME</span><span style="color:#f1fa8c">&#34;</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; ./bin/visualvm
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 실행</span>
+./bin/visualvm
 </code></pre></div><p>아래 기능으로 힙 덤프를 간략히 확인할 수도 있다.
 하지만 기능이 다양한 <a href="#eclipse-memory-analyzer-mat">MAT</a>가 있기 때문에
 VisualVM은 실시간으로 확인하는 용도로 사용한다.</p>
@@ -1465,26 +1475,41 @@ VisualVM은 실시간으로 확인하는 용도로 사용한다.</p>
 </ul>
 <p><img src="/images/java/jvm-monitoring/visualvm-heap-dump.png" alt="visualvm-heap-dump"></p>
 <p><em>VisuamVM에서 확인한 Heap Dump</em></p>
-<p>Remote로 연결하기 위해서는 WAS에 JMX 설정이 필요하다.</p>
-<ul>
-<li><a href="https://tomcat.apache.org/download-70.cgi">Apache</a></li>
-<li><a href="https://archive.apache.org/dist/tomcat/">Tomcat</a></li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 버전에 맞춰서 다운로드</span>
-&gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CATALINA_HOME</span><span style="color:#f1fa8c">}</span>/bin/catalina.sh version
+<p>Remote에서 모니터링하기 위해서는 JVM 애플리케이션에 JMX 옵션을 추가해야 한다.
+<a href="https://archive.apache.org/dist/tomcat/">Apache Tomcat</a>을 사용한다면 아래와 같이 추가한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># Tomcat 다운로드</span>
+curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CATALINA_HOME</span><span style="color:#f1fa8c">}</span>/bin/catalina.sh version
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CATALINA_HOME</span><span style="color:#f1fa8c">}</span>/bin/catalina.sh start <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Dcom.sun.management.jmxremote <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Dcom.sun.management.jmxremote.local.only<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Dcom.sun.management.jmxremote.port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1099</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Dcom.sun.management.jmxremote.rmi.port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1099</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>
+  -Dcom.sun.management.jmxremote.ssl<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>
+  -Dcom.sun.management.jmxremote.authenticate<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  <span style="color:#6272a4"># -Dcom.sun.management.jmxremote.authenticate=true \</span>
+  <span style="color:#6272a4"># -Dcom.sun.management.jmxremote.password.file=$CATALINA_BASE/conf/jmxremote.password \</span>
+  <span style="color:#6272a4"># -Dcom.sun.management.jmxremote.access.file=$CATALINA_BASE/conf/jmxremote.access \</span>
 
-&gt; curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
-
-&gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CATALINA_HOME</span><span style="color:#f1fa8c">}</span>/bin/catalina.sh start <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote.local.only<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote.port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1099</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote.rmi.port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">1099</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote.ssl<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Dcom.sun.management.jmxremote.authenticate<span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">false</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-Djava.rmi.server.hostname<span style="color:#ff79c6">=</span>127.0.0.1 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>-jar
-</code></pre></div><h1 id="gc-monitoring">GC Monitoring</h1>
+  <span style="color:#6272a4"># -Djava.rmi.server.hostname=${REAL_HOST} \</span>
+  -Djava.rmi.server.hostname<span style="color:#ff79c6">=</span>255.255.255.255 <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>
+  -jar
+</code></pre></div><p>이후 VisualVM에서 다음과 같이 설정한다.</p>
+<blockquote>
+<p>File &gt; Add JMX Connection</p>
+</blockquote>
+<p><img src="/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png" alt="File > Add JMX Connection"></p>
+<p>JVM 옵션으로 추가한 RMI(Remote Method Invocation) HOST와 PORT를 입력한다.</p>
+<p><img src="/images/java/jvm-monitoring/visualvm-setting-jmx-connection.png" alt="Setting JMX Connection"></p>
+<p>추가하면 다음과 같이 스레드를 실시간으로 모니터링 할 수 있다.
+스레드와 힙 메모리의 스냅샷을 저장할 수도 있다.</p>
+<p><img src="/images/java/jvm-monitoring/visualvm-jmx-monitoring.png" alt="Setting JMX Connection"></p>
+<p>설정만 한다면 여러 호스트를 모니터링 할 수 있다.</p>
+<p><img src="/images/java/jvm-monitoring/visualvm-double-jmx-monitoring.png" alt="Setting JMX Connection"></p>
+<h1 id="gc-monitoring">GC Monitoring</h1>
 <p>GC 모니터링이란 JVM이 어떻게 GC를 수행하고 있는지 알아내는 과정을 말한다.</p>
 <h2 id="tool-2">Tool</h2>
 <p>처음이라면 NAVER D2에 올라온 글
@@ -1651,7 +1676,6 @@ PS Old Generation
 <li><a href="https://d2.naver.com/helloworld/1286587">Java 애플리케이션 트러블 슈팅</a> - NAVER D2</li>
 <li><a href="https://kwonnam.pe.kr/wiki/java/memory">Java Memory Analysis</a> - 권남</li>
 <li><a href="https://www.whatap.io/ko/blog/28/">JVM Crash 문제 해결하기</a> - 와탭</li>
-<li><a href="https://cselabnotes.com/kr/2021/03/26/39/">JMap, JHat으로 Heap Dump 분석</a> - 삐멜</li>
 <li><a href="http://honeymon.io/tech/2019/05/30/java-memory-leak-analysis.html">자바 메모리누수(with 힙덤프) 분석하기</a> - 김지헌</li>
 <li><a href="https://lng1982.tistory.com/352">Java Heap Dump 를 이용한 문제 해결</a> - 탁구치는 개발자</li>
 <li><a href="https://sarc.io/index.php/java/1092-jvm-default-heap-size">JVM의 default Heap Size가 궁금하세요?</a> - 삵(sarc)</li>
