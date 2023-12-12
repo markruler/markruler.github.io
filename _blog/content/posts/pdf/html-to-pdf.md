@@ -96,10 +96,9 @@ p**y**ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다�
   - [page.setContent(html, {waitUntil: 'networkidle'}); · Issue #907 · puppeteer/puppeteer](https://github.com/puppeteer/puppeteer/issues/907#issuecomment-472334126)
   - [setContent extra options · Issue #211 · miyakogi/pyppeteer](https://github.com/miyakogi/pyppeteer/issues/211)
 
-반면 [playwright](https://github.com/microsoft/playwright-python)는 해당 기능들을
+반면 [Microsoft의 playwright](https://github.com/microsoft/playwright-python)는 해당 기능들을
 모두 지원하면서, Javascript는 물론 Python도 지원했다.
-Content로 PDF 출력하는 기능도 지원하기 위해
-[microsoft의 playwright](https://github.com/microsoft/playwright-python)로 변경하기로 결정했다.
+Content로 PDF 출력하는 기능도 지원하기 위해 playwright로 변경하기로 결정했다.
 [puppeteer와 인터페이스를 유사하게 만들었기](https://playwright.dev/docs/puppeteer)
 때문에 변경하는 데에 많은 리소스가 들진 않았다.
 
