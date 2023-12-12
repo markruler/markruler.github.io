@@ -86,7 +86,7 @@ HTML 작성 시 브라우저 프린트 기능으로 계속 확인하면서(`Ctrl
 작업할 수 있기 때문에 WebKit이 아닌 Chrome(Blank 엔진)을 선택했다.
 팀원 모두가 Safari를 쓰면 모르겠는데 모두 Edge 아니면 Chrome을 사용하고 있었다.
 
-# 3차: microsoft/playwright
+# 3차 시도: microsoft/playwright
 
 URL이 아닌 Raw HTML, Raw CSS Content를 전달해서 PDF 출력하는 기능도 지원되어야 한다.
 p**y**ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아서
