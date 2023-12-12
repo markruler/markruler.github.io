@@ -80,15 +80,12 @@ apt-get update \
 
 `google-chrome`을 headless 모드로 실행해서 프린트하면
 출력물이 브라우저 프린트(`window.print()`)와 동일하게 나왔다.
-또한 private 환경에서도 출력이 가능해졌다.
-
-HTML 작성 시 브라우저 프린트 기능으로 계속 확인하면서(`Ctrl + P`)
-작업할 수 있기 때문에 WebKit이 아닌 Chrome(Blank 엔진)을 선택했다.
-팀원 모두가 Safari를 쓰면 모르겠는데 모두 Edge 아니면 Chrome을 사용하고 있었다.
+(팀원 모두 Edge 아니면 Chrome을 사용함)
+또한 private 환경에서도 출력할 수 있게 되었다.
 
 # 3차 시도: microsoft/playwright
 
-URL이 아닌 Raw HTML, Raw CSS Content를 전달해서 PDF 출력하는 기능도 지원되어야 한다.
+URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 한다.
 p**y**ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아서
 이미지 렌더링(img src, background url 등)이 되지 않았다.
 
@@ -98,9 +95,9 @@ p**y**ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다�
 
 반면 [Microsoft의 playwright](https://github.com/microsoft/playwright-python)는 해당 기능들을
 모두 지원하면서, Javascript는 물론 Python도 지원했다.
-Content로 PDF 출력하는 기능도 지원하기 위해 playwright로 변경하기로 결정했다.
+결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했다.
 [puppeteer와 인터페이스를 유사하게 만들었기](https://playwright.dev/docs/puppeteer)
-때문에 변경하는 데에 많은 리소스가 들진 않았다.
+때문에 변경하는 데에 많은 리소스가 들지 않았다.
 
 다음은 간단히 실행 가능한 토막 코드다.
 
