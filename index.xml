@@ -11,12 +11,26 @@
       <copyright>Im Changsu 2020 - 2023</copyright>
     
     
-      <lastBuildDate>Sun, 30 Apr 2023 23:58:00 +0900</lastBuildDate>
+      <lastBuildDate>Tue, 12 Dec 2023 22:02:00 +0900</lastBuildDate>
     
     
     
       <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
       
+    
+    
+    
+    <item>
+      <title>Playwright를 사용해서 HTML 페이지를 PDF로 만들기</title>
+      <link>https://markruler.github.io/posts/pdf/html-to-pdf/</link>
+      <pubDate>Tue, 12 Dec 2023 22:02:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/pdf/html-to-pdf/</guid>
+      <description>
+        개요 팀내에서 문서 생성 도구로 PDFmyURL과 OZ e-Form을 사용하고 있다. 보통 이런 외부 솔루션은 테스트 할 때 매우 불편했다.
+PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있다. 하나는 URL을 통해 페이지를 읽어서 PDF를 생성하는 인터페이스고, 하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스다. URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지 조회가 가능해야 하기 때문에, private 환경에서는 테스트 할 수가 없다. 그래서 해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생긴다. 더 큰 문제는 데이터를 Public으로 공개해야 하기 때문에 문서에 따라 개인 정보 유출 문제를 피해야 했다.
+      </description>
+    </item>
     
     
     
@@ -144,21 +158,6 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
       <guid>https://markruler.github.io/posts/shell/git-commands/</guid>
       <description>
         Git Internal  차이가 아니라 스냅샷 데이터의 무결성 Git 프로젝트의 세 가지 단계   Git directory  HEAD refs info objects  tree blob (binary large object) commit tag   index Hash Function config   SCM: Source Code Management 포셀린(Porcelain) 명령어  init clone submodule subtree branch  xargs   tag switch  upstream   status add fetch commit merge pull rebase  squash와 fixup   cherry-pick stash  How git stash works   reset restore revert Git으로 버그 찾기  blame bisect   show log  Triple Dot(&amp;hellip;)   reflog: Reference logs diff push   플러밍(Plumbing) 명령어  rev-parse hash-object ls-tree ls-files cat-file write-tree commit-tree read-tree update-index   Advanced  Git Hooks Garbage Collection  Packfiles gc   prune   Git Server  Fork Branch protection rules   참고   Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
-      </description>
-    </item>
-    
-    
-    
-    <item>
-      <title>Go 언어로 컨테이너 이미지 빌드하기</title>
-      <link>https://markruler.github.io/posts/container/building-container-images-in-go/</link>
-      <pubDate>Sun, 28 Feb 2021 12:49:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
-      <guid>https://markruler.github.io/posts/container/building-container-images-in-go/</guid>
-      <description>
-        Ahmet Alp Balkan의 Building container images in Go를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   이 글에서는 도커(Docker)를 사용하지 않고 어떻게 OCI 컨테이너 이미지를 만드는지 설명합니다. 이를 위해 go-containerregistry 모듈을 이용해 프로그래밍해서 레이어 및 이미지 매니페스트를 빌드합니다. 예를 들어 nginx 이미지 위에 정적 웹 사이트 콘텐츠를 추가하여 컨테이너 이미지를 빌드하고 Go 프로그램을 사용하는 gcr.io 같은 레지스트리에 푸시하겠습니다.
-순서는 다음과 같습니다.
- 도커 허브에서 nginx 이미지를 가져 옵니다(pull). 기존 /usr/share/nginx/html 디렉터리를 삭제하는 새 레이어를 만듭니다.
       </description>
     </item>
     

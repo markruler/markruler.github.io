@@ -1,3 +1,4 @@
+# cd _blog
 Write-Host "Deploying updates to GitHub..."
 hugo -d ../
 
