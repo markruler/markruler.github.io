@@ -22,7 +22,7 @@
   <meta property="og:title" content="Playwright를 사용해서 HTML 페이지를 PDF로 만들기" />
 <meta property="og:description" content="HTML to PDF" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/pdf/html-to-pdf/" /><meta property="og:image" content="https://markruler.github.io/images/pdf/htmltopdf.png" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://markruler.github.io/posts/pdf/html-to-pdf/" /><meta property="og:image" content="https://markruler.github.io/images/pdf/htmltopdf/htmltopdf.png" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-12-12T22:02:00+09:00" />
 <meta property="article:modified_time" content="2023-12-12T22:02:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
@@ -32,7 +32,7 @@
   
   
   <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/pdf/htmltopdf.png"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/pdf/htmltopdf/htmltopdf.png"/>
 
 <meta name="twitter:title" content="Playwright를 사용해서 HTML 페이지를 PDF로 만들기"/>
 <meta name="twitter:description" content="HTML to PDF"/>
@@ -253,6 +253,50 @@
 					
 						
 						
+						
+						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#windowprint%eb%a1%9c-%ec%b6%9c%eb%a0%a5" onclick="onNavClick(`#windowprint로-출력-nav`)" id="windowprint로-출력-nav">
+									window.print()로 출력
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#playwright%eb%a1%9c-%ec%b6%9c%eb%a0%a5" onclick="onNavClick(`#playwright로-출력-nav`)" id="playwright로-출력-nav">
+									Playwright로 출력
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
 						
 						
 						
@@ -518,6 +562,50 @@
 						
 						
 						
+							
+								<ul class="collapse" data-toggle="collapse">
+							
+						
+						
+							<li>
+								<a href="#windowprint%eb%a1%9c-%ec%b6%9c%eb%a0%a5" onclick="onNavClick(`#windowprint로-출력-nav`)" id="windowprint로-출력-nav">
+									window.print()로 출력
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#playwright%eb%a1%9c-%ec%b6%9c%eb%a0%a5" onclick="onNavClick(`#playwright로-출력-nav`)" id="playwright로-출력-nav">
+									Playwright로 출력
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
 						
 							<li>
 								<a href="#3%ec%b0%a8-%ec%8b%9c%eb%8f%84-microsoftplaywright" onclick="onNavClick(`#3차-시도-microsoftplaywright-nav`)" id="3차-시도-microsoftplaywright-nav">
@@ -680,7 +768,7 @@
 
       <div class="post-head-wrapper"  
         
-        style="background-image: url('https://markruler.github.io/images/pdf/htmltopdf.png')"  >
+        style="background-image: url('https://markruler.github.io/images/pdf/htmltopdf/htmltopdf.png')"  >
         <div class="post-title">
           Playwright를 사용해서 HTML 페이지를 PDF로 만들기
           
@@ -775,6 +863,10 @@ apt-get update <span style="color:#f1fa8c">\
 출력물이 브라우저 프린트(<code>window.print()</code>)와 동일하게 나왔다.
 (팀원 모두 Edge 아니면 Chrome을 사용함)
 또한 private 환경에서도 출력할 수 있게 되었다.</p>
+<h2 id="windowprint로-출력">window.print()로 출력</h2>
+<p><img src="/images/pdf/htmltopdf/window.print.png" alt="window.print() - google.com"></p>
+<h2 id="playwright로-출력">Playwright로 출력</h2>
+<p><img src="/images/pdf/htmltopdf/playwright.print.png" alt="playwright - google.com"></p>
 <h1 id="3차-시도-microsoftplaywright">3차 시도: microsoft/playwright</h1>
 <p>URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했다.
 p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아서
@@ -792,7 +884,7 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했다.
 <a href="https://playwright.dev/docs/puppeteer">puppeteer와 인터페이스를 유사하게 만들었기</a>
 때문에 변경하는 데에 많은 리소스가 들지 않았다.</p>
-<p>다음은 간단히 실행 가능한 토막 코드다.</p>
+<p>다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#6272a4"># python3 -m pip install playwright</span>
 <span style="color:#6272a4"># python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/</span>
 <span style="color:#6272a4"># python3 main.py</span>

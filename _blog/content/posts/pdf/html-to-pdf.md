@@ -2,8 +2,8 @@
 date: 2023-12-12T22:02:00+09:00
 title: "Playwright를 사용해서 HTML 페이지를 PDF로 만들기"
 description: "HTML to PDF"
-featured_image: "/images/pdf/htmltopdf.png"
-images: ["/images/pdf/htmltopdf.png"]
+featured_image: "/images/pdf/htmltopdf/htmltopdf.png"
+images: ["/images/pdf/htmltopdf/htmltopdf.png"]
 socialshare: true
 tags:
   - web
@@ -85,6 +85,14 @@ apt-get update \
 (팀원 모두 Edge 아니면 Chrome을 사용함)
 또한 private 환경에서도 출력할 수 있게 되었다.
 
+## window.print()로 출력
+
+![window.print() - google.com](/images/pdf/htmltopdf/window.print.png)
+
+## Playwright로 출력
+
+![playwright - google.com](/images/pdf/htmltopdf/playwright.print.png)
+
 # 3차 시도: microsoft/playwright
 
 URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했다.
@@ -101,7 +109,7 @@ p**y**ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다�
 [puppeteer와 인터페이스를 유사하게 만들었기](https://playwright.dev/docs/puppeteer)
 때문에 변경하는 데에 많은 리소스가 들지 않았다.
 
-다음은 간단히 실행 가능한 토막 코드다.
+다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드다.
 
 ```python
 # python3 -m pip install playwright
