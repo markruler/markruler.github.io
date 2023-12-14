@@ -89,9 +89,9 @@ apt-get update \
 
 ![window.print() - google.com](/images/pdf/htmltopdf/window.print.png)
 
-## Playwright로 출력
+## Pyppeteer로 출력
 
-![playwright - google.com](/images/pdf/htmltopdf/playwright.print.png)
+![pyppeteer - google.com](/images/pdf/htmltopdf/pyppeteer.print.png)
 
 # 3차 시도: microsoft/playwright
 
