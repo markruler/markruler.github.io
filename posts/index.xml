@@ -11,12 +11,25 @@
       <copyright>Im Changsu 2020 - 2023</copyright>
     
     
-      <lastBuildDate>Tue, 12 Dec 2023 22:02:00 +0900</lastBuildDate>
+      <lastBuildDate>Thu, 13 Jun 2024 17:40:00 +0900</lastBuildDate>
     
     
     
       <atom:link href="https://markruler.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
       
+    
+    
+    
+    <item>
+      <title>🕸️ 서버 to 서버 요청 시 발생한 DNS 레이턴시</title>
+      <link>https://markruler.github.io/posts/network/server-to-server-dns/</link>
+      <pubDate>Thu, 13 Jun 2024 17:40:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/network/server-to-server-dns/</guid>
+      <description>
+        배경 분석: dig 으로 테스트  nameserver 8.8.8.8 로 지정 nameserver는 resolv.conf 설정을 따름 비교   해결: 호스트 파일 수정  배경  약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.  해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.   환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.  분석: dig 으로 테스트 nameserver 8.8.8.8 로 지정 dig @8.8.8.8 api.
+      </description>
+    </item>
     
     
     
@@ -145,19 +158,6 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
         Observability 용어 정리
  상황  현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다. 계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다. 장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.  RedisSystemException은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다. 만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.
 분석 시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다. 설정하지 않으면 default 값은 -1 로 타임아웃이 발생하지 않는다.
-      </description>
-    </item>
-    
-    
-    
-    <item>
-      <title>CLI 환경에서 소스 코드 관리하기</title>
-      <link>https://markruler.github.io/posts/shell/git-commands/</link>
-      <pubDate>Wed, 01 Dec 2021 23:28:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
-      <guid>https://markruler.github.io/posts/shell/git-commands/</guid>
-      <description>
-        Git Internal  차이가 아니라 스냅샷 데이터의 무결성 Git 프로젝트의 세 가지 단계   Git directory  HEAD refs info objects  tree blob (binary large object) commit tag   index Hash Function config   SCM: Source Code Management 포셀린(Porcelain) 명령어  init clone submodule subtree branch  xargs   tag switch  upstream   status add fetch commit merge pull rebase  squash와 fixup   cherry-pick stash  How git stash works   reset restore revert Git으로 버그 찾기  blame bisect   show log  Triple Dot(&amp;hellip;)   reflog: Reference logs diff push   플러밍(Plumbing) 명령어  rev-parse hash-object ls-tree ls-files cat-file write-tree commit-tree read-tree update-index   Advanced  Git Hooks Garbage Collection  Packfiles gc   prune   Git Server  Fork Branch protection rules   참고   Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
       </description>
     </item>
     
