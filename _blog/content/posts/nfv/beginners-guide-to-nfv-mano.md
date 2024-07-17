@@ -11,7 +11,7 @@ categories:
   - translate
 ---
 
-> - [Faisal Khan의 A Beginner’s Guide to NFV Management & Orchestration (MANO)](https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/)을 번역한 글입니다.
+> - [Faisal Khan의 A Beginner's Guide to NFV Management & Orchestration (MANO)](https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/)을 번역한 글입니다.
 > - 저자의 허락을 받고 번역했습니다.
 
 NFV 여행의 초심자는 NFV Management & Orchestration (NFV MANO)를 이해하려고 할 때 다음과 같은 두 가지 걸림돌이 있습니다.
@@ -114,17 +114,15 @@ VIM이 NFVI을 위한 것이라면 VNFM은 VNF을 위한 것입니다.
 
 위의 섹션 1에서 보았듯이, 각각의 NFVI 도메인을 관리하는 VIM이 여러 개 있을 수 있습니다. 이것은 `과제 1`을 만듭니다.
 
-#### 과제 1
+> 과제 1
+>
+> 동일한 또는 서로 다른 PoP(Point of Presence)에 여러 VIM이 있는 경우, 누가 다른 VIM의 자원을 관리/조정할까요?
+> 섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 `과제 2`를 만듭니다.
 
-동일한 또는 서로 다른 PoP(Point of Presence)에 여러 VIM이 있는 경우,
-누가 다른 VIM의 자원을 관리/조정할까요?
-
-섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 `과제 2`를 만듭니다.
-
-#### 과제 2
-
-서로 다른 VNFM 도메인의 VNF를 포함하는 종단 간(end-to-end) 서비스 생성을
-누가 관리/조정할까요?
+> 과제 2
+>
+> 서로 다른 VNFM 도메인의 VNF를 포함하는 종단 간(end-to-end) 서비스 생성을
+> 누가 관리/조정할까요?
 
 이러한 과제는 NFVO의 다음 두 가지 기능이 해결해 줍니다.
 

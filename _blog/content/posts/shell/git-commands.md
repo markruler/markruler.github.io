@@ -135,8 +135,8 @@ Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
 만든 체크섬은 40자 길이의 16진수 문자열이다.
 파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구한다.
 
-> _[Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
-> 정말 그렇게 되면 어떤 일이 벌어질까?](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0)_
+> *[Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
+> 정말 그렇게 되면 어떤 일이 벌어질까?](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0)*
 
 이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용한다.
 그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 된다.
@@ -458,7 +458,7 @@ submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 
 
 - 왜 submodule 대신 subtree를 사용해야 할까?
   - [Git subtree: the alternative to Git submodule](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
-  - [Why your company shouldn’t use Git submodules](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/) - Amber
+  - [Why your company shouldn't use Git submodules](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/) - Amber
 
 ![tree-subtree-concept](/images/shell/git/tree-subtree-concept.png)
 
@@ -868,8 +868,8 @@ $ git rebase --onto main featureA featureB
 interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.
 
 ```bash
-$ git rebase -i <commit>^
-$ git rebase --interactive <commit>^
+> git rebase -i <commit>^
+> git rebase --interactive <commit>^
 ```
 
 아래와 같은 하위 명령어들이 있다.
@@ -1050,8 +1050,8 @@ $ cat .git/refs/stash
 HEAD를 특정 상태로 되돌린다.
 다양한 mode 옵션이 있다.
 
-- `--soft` – 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.
-- `--mixed` – default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo `add`)
+- `--soft` - 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.
+- `--mixed` - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo `add`)
 
   ```bash
   $ git reset HEAD^
@@ -1061,7 +1061,7 @@ HEAD를 특정 상태로 되돌린다.
   M package.json
   ```
 
-- `--hard` – 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.
+- `--hard` - 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.
 
   ```bash
   $ git reset --hard HEAD^
@@ -1943,7 +1943,7 @@ Completed with errors, see above
   - [gitrevisions](https://git-scm.com/docs/gitrevisions) - git-scm
   - [Refs and the Reflog](https://www.atlassian.com/git/tutorials/refs-and-the-reflog) - Atlassian
 - index
-  - [Make your monorepo feel small with Git’s sparse index](https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/) - Derrick Stolee
+  - [Make your monorepo feel small with Git's sparse index](https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/) - Derrick Stolee
   - [Git: Understanding the Index File](https://mincong.io/2018/04/28/git-index/) - Mincong Huang
   - [The Git Index](https://shafiul.github.io//gitbook/7_the_git_index.html)
 - config
@@ -1957,7 +1957,7 @@ Completed with errors, see above
   - [subtree](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
   - [git-submodule](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88) - git-scm
   - [Git subtree: the alternative to Git submodule](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
-  - [Why your company shouldn’t use Git submodules](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/) - Amber
+  - [Why your company shouldn't use Git submodules](https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/) - Amber
   - [Use subtrees and submodules to add a public repo to your project](https://openclassrooms.com/en/courses/5671626-manage-your-code-project-with-git-github/6152286-use-subtrees-and-submodules-to-add-a-public-repo-to-your-project) - OpenClassrooms
   - [The power of Git subtree](https://blog.developer.atlassian.com/the-power-of-git-subtree/) - Atlassian
   - [Git subtree를 활용한 코드 공유](https://blog.rhostem.com/posts/2020-01-03-code-sharing-with-git-subtree) - rhostem

@@ -53,7 +53,6 @@ COTS 서버 블레이드는 컴퓨팅 노드의 한 가지 예입니다.
 
 ## 2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기
 
-
 이전 섹션에서 컴퓨팅 노드의 일부로 NIC를 언급했습니다. 이건 사실입니다.
 위의 경우 NIC 기능이 서버에 있기 때문입니다.
 그러나 최근 세분화된 모델(예: [Open Compute Project, OCP](http://www.opencompute.org/about/)) 트렌드가 있습니다.

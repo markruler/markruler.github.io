@@ -11,7 +11,7 @@ categories:
   - translate
 ---
 
-> - [Faisal Khan의 A Beginner’s Guide to Docker Container in NFV](https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/)를 번역한 글입니다.
+> - [Faisal Khan의 A Beginner's Guide to Docker Container in NFV](https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/)를 번역한 글입니다.
 > - 저자의 허락을 받고 번역했습니다.
 > - 2016년 3월 3일에 쓰여진 글로 현재와 다를 수 있습니다.
 

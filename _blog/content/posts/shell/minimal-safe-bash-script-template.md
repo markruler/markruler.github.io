@@ -414,7 +414,7 @@ Bash를 사용하면 `npm install`과 같은 범용 기능이 없습니다.
 
 - 스크립트에 대한 설명이 있는 `usage()` 텍스트
 - 관련 내용 `cleanup()`
-- `parse_params()`의 파라미터 – `--help`와 `--no-color`는 그대로 두고 예시(`-f`, `-p`)는 변경하세요.
+- `parse_params()`의 파라미터 - `--help`와 `--no-color`는 그대로 두고 예시(`-f`, `-p`)는 변경하세요.
 - 실제 스크립트 로직
 
 # 이식성 (Portability)
@@ -458,14 +458,14 @@ Bash 스크립트를 작성할 때 JetBrains IDE와 같이
 
 템플릿에 문제가 있거나 중요한 항목이 빠졌다고 생각되면 [코멘트](https://betterdev.blog/minimal-safe-bash-script-template/)로 알려 주세요.
 
-**업데이트 2020-12-15**
+## 업데이트 2020-12-15
 
 [Reddit](https://www.reddit.com/r/programming/duplicates/kcxnag/minimal_safe_bash_script_template/)과
 [HackerNews](https://news.ycombinator.com/item?id=25428621)에서 많은 코멘트를 받은 후
 템플릿을 개선했습니다.
 개정 이력을 [gist](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038)에서 확인하세요.
 
-**업데이트 2020-12-16**
+## 업데이트 2020-12-16
 
 이 게시물에 대한 링크는 [Hacker News의 첫 페이지(#7)](https://news.ycombinator.com/front?day=2020-12-15)에 도달했습니다.
 상상도 못한 일이었습니다.
