@@ -8,9 +8,8 @@ socialshare: true
 tags:
   - web
   - security
-  - translate
 Categories:
-  - web
+  - translate
 ---
 
 > - 리디아 할리(Lydia Hallie, [@lydiahallie](https://twitter.com/lydiahallie))가 쓴 [CS Visualized: CORS](https://dev.to/lydiahallie/cs-visualized-cors-5b8h)를 번역한 글입니다.

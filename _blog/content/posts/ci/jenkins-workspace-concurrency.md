@@ -10,8 +10,9 @@ tags:
   - cd
   - jenkins
   - git
-categories:
   - devops
+categories:
+  - case
 ---
 
 # 개요

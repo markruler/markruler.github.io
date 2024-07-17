@@ -9,8 +9,9 @@ tags:
   - xdg
   - x.org
   - linux
-categories:
   - GUI
+categories:
+  - note
 ---
 
 # XDG: X Development Group

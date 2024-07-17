@@ -1,15 +1,16 @@
 ---
 date: 2024-07-17T22:40:00+09:00
-title: "SSH (Secure Shell)"
+title: "🤫 SSH (Secure Shell)"
 description: "일상에서의 SSH"
 featured_image: "/images/master/markruler-wave.png"
 images: ["/images/master/markruler-wave.png"]
 socialshare: true
 tags:
-  - Shell
-  - Linux
+  - shell
+  - linux
+  - security
 categories:
-  - Security
+  - how-to
 ---
 
 # SSH Server

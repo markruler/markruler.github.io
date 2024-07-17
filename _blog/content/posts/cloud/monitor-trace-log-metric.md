@@ -6,7 +6,7 @@ featured_image: "/images/cloud/jaeger-embed-trace-view.png"
 tags:
   - cloud
 categories:
-  - cloud
+  - note
 ---
 
 # Observability

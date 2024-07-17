@@ -7,9 +7,8 @@ tags:
   - nfv
   - virtualization
   - cloud
-  - translate
 categories:
-  - cloud
+  - translate
 ---
 
 > - [Faisal Khan의 A Cheat Sheet for Understanding "NFV Architecture"](https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/)를 번역한 글입니다.

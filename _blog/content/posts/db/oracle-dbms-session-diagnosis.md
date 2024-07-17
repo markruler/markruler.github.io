@@ -9,6 +9,8 @@ tags:
   - oracle
   - dbms
   - monitoring
+categories:
+  - how-to
 ---
 
 # 개요

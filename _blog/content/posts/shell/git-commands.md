@@ -7,8 +7,9 @@ images: ["/images/shell/git-logo-2color.png"]
 socialshare: true
 tags:
   - git
-Categories:
   - shell
+Categories:
+  - how-to
 ---
 
 - [Git Internal](#git-internal)

@@ -10,7 +10,7 @@ tags:
   - network
   - latency
 Categories:
-  - network
+  - case
 ---
 
 - [배경](#배경)

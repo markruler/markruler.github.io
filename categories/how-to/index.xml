@@ -1,0 +1,163 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>임창수 블로그</title>
+    <link>https://markruler.github.io/categories/how-to/</link>
+    <description>What, Why, How.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+      <language>ko-kr</language>
+    
+    
+      <copyright>Im Changsu 2020 - 2024</copyright>
+    
+    
+      <lastBuildDate>Wed, 17 Jul 2024 22:40:00 +0900</lastBuildDate>
+    
+    
+    
+      <atom:link href="https://markruler.github.io/categories/how-to/index.xml" rel="self" type="application/rss+xml" />
+      
+    
+    
+    
+    <item>
+      <title>🤫 SSH (Secure Shell)</title>
+      <link>https://markruler.github.io/posts/shell/ssh/</link>
+      <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/shell/ssh/</guid>
+      <description>
+        SSH Server SSH 데몬 설정 파일은 /etc/ssh/sshd_config이다.
+authoized_keys  역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식) 위치: 보통 사용자의 홈 디렉토리 아래의 ~/.ssh/authorized_keys에 위치한다. 내용: 클라이언트의 공개 키가 저장된다. 서버는 클라이언트의 접속 시도 시, 이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다. 보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에, 공개 키 인증 방식이 비밀번호 인증보다 더 안전하다. 특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Playwright를 사용해서 HTML 페이지를 PDF로 만들기</title>
+      <link>https://markruler.github.io/posts/pdf/html-to-pdf/</link>
+      <pubDate>Tue, 12 Dec 2023 22:02:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/pdf/html-to-pdf/</guid>
+      <description>
+        개요 팀내에서 문서 생성 도구로 PDFmyURL과 OZ e-Form을 사용하고 있다. 보통 이런 외부 솔루션은 테스트 할 때 매우 불편하다.
+PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있다. 하나는 URL을 통해 페이지를 읽어서 PDF를 생성하는 인터페이스고, 하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스다. URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할 수 있어야 한다. 그래서 private 환경에서는 테스트 할 수가 없다. 그래서 해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생긴다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>오라클 DBMS SE2 세션 사후 진단</title>
+      <link>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</link>
+      <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
+      <description>
+        개요 현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다. 이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개까지 사용 가능하다. 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만, 트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다. 하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다. SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은 Oracle Diagnostics Pack을 사용할 수 없다.
+DB 진단 도구가 필요하다 연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>JVM 모니터링</title>
+      <link>https://markruler.github.io/posts/java/jvm-monitoring/</link>
+      <pubDate>Mon, 23 May 2022 00:09:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/java/jvm-monitoring/</guid>
+      <description>
+        모니터링과 타임아웃의 중요성은 아무리 강조해도 지나치지 않는다. 최근 회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 트래픽이 발생하는데도 2년동안 방치되고 있었다. 이런 레거시는 유지 보수할 일이 없다면 개발팀에서도 확인하기 어렵다. 사용자가 리포팅해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋다. 심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.
+ 먼저 알아두면 좋은 명령어가 있다. jps는 JVM Process Status를 출력하는 명령어로 현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>모니터링과 타임아웃의 중요성</title>
+      <link>https://markruler.github.io/posts/java/java-timeout-monitoring/</link>
+      <pubDate>Wed, 11 May 2022 02:19:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/java/java-timeout-monitoring/</guid>
+      <description>
+        Observability 용어 정리
+ 상황  현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다. 계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다. 장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.  RedisSystemException은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다. 만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.
+분석 시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다. 설정하지 않으면 default 값은 -1 로 타임아웃이 발생하지 않는다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>CLI 환경에서 소스 코드 관리하기</title>
+      <link>https://markruler.github.io/posts/shell/git-commands/</link>
+      <pubDate>Wed, 01 Dec 2021 23:28:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/shell/git-commands/</guid>
+      <description>
+        Git Internal  차이가 아니라 스냅샷 데이터의 무결성 Git 프로젝트의 세 가지 단계   Git directory  HEAD refs info objects  tree blob (binary large object) commit tag   index Hash Function config   SCM: Source Code Management 포셀린(Porcelain) 명령어  init clone submodule subtree branch  xargs   tag switch  upstream   status add fetch commit merge pull rebase  squash와 fixup   cherry-pick stash  How git stash works   reset restore revert Git으로 버그 찾기  blame bisect   show log  Triple Dot(&amp;hellip;)   reflog: Reference logs diff push   플러밍(Plumbing) 명령어  rev-parse hash-object ls-tree ls-files cat-file write-tree commit-tree read-tree update-index   Advanced  Git Hooks Garbage Collection  Packfiles gc   prune   Git Server  Fork Branch protection rules   참고   Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Go 언어로 컨테이너 이미지 빌드하기</title>
+      <link>https://markruler.github.io/posts/container/building-container-images-in-go/</link>
+      <pubDate>Sun, 28 Feb 2021 12:49:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/container/building-container-images-in-go/</guid>
+      <description>
+        Ahmet Alp Balkan의 Building container images in Go를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   이 글에서는 도커(Docker)를 사용하지 않고 어떻게 OCI 컨테이너 이미지를 만드는지 설명합니다. 이를 위해 go-containerregistry 모듈을 이용해 프로그래밍해서 레이어 및 이미지 매니페스트를 빌드합니다. 예를 들어 nginx 이미지 위에 정적 웹 사이트 콘텐츠를 추가하여 컨테이너 이미지를 빌드하고 Go 프로그램을 사용하는 gcr.io 같은 레지스트리에 푸시하겠습니다.
+순서는 다음과 같습니다.
+ 도커 허브에서 nginx 이미지를 가져 옵니다(pull). 기존 /usr/share/nginx/html 디렉터리를 삭제하는 새 레이어를 만듭니다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>최소한의 안전한 Bash 스크립트 템플릿</title>
+      <link>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</link>
+      <pubDate>Sun, 14 Feb 2021 15:22:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</guid>
+      <description>
+        Maciej Radzikowski가 작성한 Minimal safe Bash script template (2020-12-14)를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   Bash 스크립트. 거의 모든 사람들이 언젠가 작성해야 하는 것입니다. 하지만 그 중 누구도 &amp;ldquo;맞아요, 저는 Bash 스크립트 작성하는 것을 사랑합니다&amp;quot;라고 말하지 않습니다. 거의 모든 사람들이 Bash 스크립트를 작성할 때 주의를 기울이지 않는 이유죠.
+저는 여러분을 Bash 전문가로 만들려는 것이 아닙니다 (저도 전문가는 아닙니다). 다만 스크립트를 더 안전하게 만들어 줄 최소한의 템플릿을 보여 드리겠습니다.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>CS Visualized: 유용한 깃(Git) 명령어</title>
+      <link>https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/</link>
+      <pubDate>Sat, 09 Jan 2021 08:35:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/</guid>
+      <description>
+        리디아 할리(Lydia Hallie, @lydiahallie)가 쓴 CS Visualized: Useful Git Commands를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   Git이 정말 강력한 도구이긴 하지만, 대다수의 사람들은 끔찍한 악몽 😐 같다는 말도 공감할 거에요. 저는 항상 Git으로 작업할 때 어떤 일이 일어날지 머릿속으로 그려보는 것이 꽤 유용하다는 것을 알았습니다. 특정 명령을 실행할 때 브랜치는 어떻게 상호작용하고, 그것이 히스토리에 어떤 영향을 미칠까요? master에서 reset --hard 하고 origin 리포지터리로 force push한 후, .
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Go로 밑바닥부터 만드는 BitTorrent 클라이언트</title>
+      <link>https://markruler.github.io/posts/go/building-bittorrent-client/</link>
+      <pubDate>Mon, 28 Dec 2020 14:46:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/go/building-bittorrent-client/</guid>
+      <description>
+        Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   거두절미(tl;dr): The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요? 이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트 프로토콜을 구현할 것입니다. 바로 소스 코드를 보거나 마지막 부분으로 넘어갈 수 있습니다.
+비트토렌트(BitTorrent)는 인터넷을 통해 파일을 다운로드하고 배포하기 위한 프로토콜입니다. 다운로더가 중앙 서버와 연결하는 기존의 클라이언트/서버 관계 (예: 넷플릭스에서 영화를 보거나 지금 읽고 있는 웹 페이지를 불러 오는 것)와 달리, 피어(peer) 라고 불리는 비트토렌트 네트워크 참여자들은 서로에게서 파일 조각을 다운로드합니다.
+      </description>
+    </item>
+    
+    
+  </channel>
+</rss>

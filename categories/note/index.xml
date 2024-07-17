@@ -1,0 +1,83 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>임창수 블로그</title>
+    <link>https://markruler.github.io/categories/note/</link>
+    <description>What, Why, How.</description>
+    <generator>Hugo -- gohugo.io</generator>
+    
+      <language>ko-kr</language>
+    
+    
+      <copyright>Im Changsu 2020 - 2024</copyright>
+    
+    
+      <lastBuildDate>Tue, 23 Aug 2022 02:45:00 +0900</lastBuildDate>
+    
+    
+    
+      <atom:link href="https://markruler.github.io/categories/note/index.xml" rel="self" type="application/rss+xml" />
+      
+    
+    
+    
+    <item>
+      <title>Tomcat 이해하기</title>
+      <link>https://markruler.github.io/posts/java/tomcat/</link>
+      <pubDate>Tue, 23 Aug 2022 02:45:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/java/tomcat/</guid>
+      <description>
+        Architecture 이미지 출처 - Datadog
+&amp;lt;!-- server.xml --&amp;gt; &amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;utf-8&amp;#39;?&amp;gt; &amp;lt;Server port=&amp;#34;8005&amp;#34; shutdown=&amp;#34;SHUTDOWN&amp;#34;&amp;gt; &amp;lt;Listener className=&amp;#34;org.apache.catalina.core.AprLifecycleListener&amp;#34; SSLEngine=&amp;#34;on&amp;#34; /&amp;gt; &amp;lt;Listener className=&amp;#34;org.apache.catalina.core.JasperListener&amp;#34; /&amp;gt; &amp;lt;Listener className=&amp;#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&amp;#34; /&amp;gt; &amp;lt;Listener className=&amp;#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&amp;#34; /&amp;gt; &amp;lt;Listener className=&amp;#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&amp;#34; /&amp;gt; &amp;lt;GlobalNamingResources&amp;gt; &amp;lt;Resource name=&amp;#34;UserDatabase&amp;#34; auth=&amp;#34;Container&amp;#34; type=&amp;#34;org.apache.catalina.UserDatabase&amp;#34; description=&amp;#34;User database that can be updated and saved&amp;#34; factory=&amp;#34;org.apache.catalina.users.MemoryUserDatabaseFactory&amp;#34; pathname=&amp;#34;conf/tomcat-users.xml&amp;#34; /&amp;gt; &amp;lt;/GlobalNamingResources&amp;gt; &amp;lt;Service name=&amp;#34;Catalina&amp;#34;&amp;gt; &amp;lt;Connector port=&amp;#34;8080&amp;#34; protocol=&amp;#34;HTTP/1.1&amp;#34; redirectPort=&amp;#34;8443&amp;#34; connectionTimeout=&amp;#34;20000&amp;#34; /&amp;gt; &amp;lt;Connector port=&amp;#34;8009&amp;#34; protocol=&amp;#34;AJP/1.3&amp;#34; redirectPort=&amp;#34;8443&amp;#34; /&amp;gt; &amp;lt;Engine name=&amp;#34;Catalina&amp;#34; defaultHost=&amp;#34;localhost&amp;#34;&amp;gt; &amp;lt;Realm className=&amp;#34;org.apache.catalina.realm.LockOutRealm&amp;#34;&amp;gt; &amp;lt;Realm className=&amp;#34;org.apache.catalina.realm.UserDatabaseRealm&amp;#34; resourceName=&amp;#34;UserDatabase&amp;#34;/&amp;gt; &amp;lt;/Realm&amp;gt; &amp;lt;Host name=&amp;#34;localhost&amp;#34; appBase=&amp;#34;webapps&amp;#34; unpackWARs=&amp;#34;true&amp;#34; autoDeploy=&amp;#34;true&amp;#34;&amp;gt; &amp;lt;Valve className=&amp;#34;org.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>X-based desktop</title>
+      <link>https://markruler.github.io/posts/gui/x-based-desktop/</link>
+      <pubDate>Sun, 21 Aug 2022 23:04:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/gui/x-based-desktop/</guid>
+      <description>
+        XDG: X Development Group XDG는 FreeDesktop.org 의 옛 이름이다.
+ freedesktop.org hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.
+ 관련 소프트웨어 XDG user directories  xdg-user-dirs is a tool to handle well known directories in the users homedir. XDG user directories - archilinux  &amp;gt; echo $XDG_ $XDG_DATA_DIRS $XDG_RUNTIME_DIR &amp;gt; man xdg-user-dirs-update # xdg-user-dirs-update - Update XDG user dir configuration &amp;gt; man xdg-user-dir # xdg-user-dir - Find an XDG user dir &amp;gt; xdg-user-dir DESKTOP &amp;gt; cat /etc/xdg/user-dirs.
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>컨테이너 톺아보기</title>
+      <link>https://markruler.github.io/posts/container/container-study-guide/</link>
+      <pubDate>Wed, 17 Feb 2021 23:47:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/container/container-study-guide/</guid>
+      <description>
+        거두절미 생각보다 컨테이너는 간단한 게 아닙니다. 컨테이너를 쉽게 생성하고 삭제할 수 있었던 이유는 도커와 같은 컨테이너 관리 도구가 복잡한 것들을 꽁꽁 감췄기 때문입니다. 컨테이너를 공부하면 할수록 알아야 할 게 더 늘어나고 있지만 이쯤에서 유익했던 자료들을 모아 보려 합니다.
+참고 자료  👍 필수  책 - 컨테이너 보안, Liz Rice katacoda - An Introduction to Containers for Go programmers, Liz Rice   컨테이너  A Practical Introduction to Container Terminology, Scott McCarty Build Your Own Container Using Less than 100 Lines of Go, Julian Friedman Implementing Container Runtime Shim: runc, Ivan Velichko   컨테이너 런타임  리눅스 컨테이너란?
+      </description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Observability 용어 정리</title>
+      <link>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</link>
+      <pubDate>Fri, 02 Oct 2020 16:24:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</guid>
+      <description>
+        Observability  관측성 관찰성 관측 가능성  제어 이론에서 &amp;lsquo;observability&amp;rsquo;라는 용어는 시스템의 내부 상태 변수와 그에 따른 행동을 시스템에 대한 입력과 출력만 보고 결정할 수 있다면 그 시스템이 관측 가능하다는 것을 나타낸다.
+Event Logging Fluentd-Kibana
+로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다. 하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에 마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.
+ Fluentd Elastic Datadog Log Management  Software Tracing Jaeger
+사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
+      </description>
+    </item>
+    
+    
+  </channel>
+</rss>

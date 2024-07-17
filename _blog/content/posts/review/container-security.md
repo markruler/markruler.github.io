@@ -9,9 +9,8 @@ tags:
   - container
   - kubernetes
   - docker
-  - review
 Categories:
-  - cloud
+  - review
 ---
 
 > 한빛미디어의 지원을 받아 작성되었습니다.

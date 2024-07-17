@@ -7,9 +7,9 @@ images: ["/images/kubernetes/k8s-triggering.png"]
 socialshare: true
 tags:
   - kubernetes
-  - translate
-Categories:
   - cloud
+Categories:
+  - translate
 ---
 
 > - James Bowes([@jrbowes](https://twitter.com/jrbowes))의 [Level Triggering and Reconciliation in Kubernetes](https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d)를 번역한 글입니다.

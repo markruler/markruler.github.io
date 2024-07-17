@@ -9,9 +9,8 @@ tags:
   - nfv
   - virtualization
   - cloud
-  - translate
 categories:
-  - cloud
+  - translate
 ---
 
 > - Faisal Khan의 [Beginners Guide to MEC Architecture (Multi-access Edge Computing)](https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/)을 번역한 글입니다.

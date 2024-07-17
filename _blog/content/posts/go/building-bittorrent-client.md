@@ -10,7 +10,7 @@ tags:
   - go
   - translate
 categories:
-  - go
+  - how-to
 ---
 
 > - [Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)](https://blog.jse.li/posts/torrent/)를 번역한 글입니다.

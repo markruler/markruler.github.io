@@ -10,8 +10,9 @@ tags:
   - cd
   - bamboo
   - git
-categories:
   - devops
+categories:
+  - case
 ---
 
 # 개요

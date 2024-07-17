@@ -6,7 +6,7 @@ featured_image: "/images/kubernetes/vscode-debugging-golang.png"
 tags:
   - kubernetes
 categories:
-  - cloud
+  - how-to
 ---
 
 > 직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.

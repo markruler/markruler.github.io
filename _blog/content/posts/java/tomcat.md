@@ -7,8 +7,9 @@ images: ["/images/java/http-servlet-request-flow.png"]
 socialshare: true
 tags:
   - web
-categories:
   - java
+categories:
+  - note
 ---
 
 # Architecture

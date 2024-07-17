@@ -9,8 +9,8 @@ tags:
   - container
   - kubernetes
   - docker
-Categories:
-  - cloud
+categories:
+  - note
 ---
 
 # 거두절미

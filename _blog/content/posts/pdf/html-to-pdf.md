@@ -9,7 +9,7 @@ tags:
   - web
   - pdf
 Categories:
-  - pdf
+  - how-to
 ---
 
 # 개요
