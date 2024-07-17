@@ -234,4 +234,5 @@ ssh -vv -f -N \
 - Client
   - [SSH config file for OpenSSH client](https://www.ssh.com/academy/ssh/config) - SSH Academy
   - [ssh_config(5)](https://linux.die.net/man/5/ssh_config) - Linux man page
+- Server
   - [sshd_config(5)](https://linux.die.net/man/5/sshd_config) - Linux man page
