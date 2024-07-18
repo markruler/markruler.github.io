@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-hugo server --contentDir content --theme hugo-theme-diary
+hugo server --contentDir _content --theme hugo-theme-diary
