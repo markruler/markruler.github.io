@@ -2,6 +2,7 @@
 
 - [GitHub Page와 Hugo를 이용한 블로그](#github-page와-hugo를-이용한-블로그)
   - [로컬 환경](#로컬-환경)
+  - [콘텐츠 추가](#콘텐츠-추가)
     - [Docker](#docker)
     - [Linux](#linux)
     - [Windows](#windows)
@@ -16,6 +17,12 @@
 - [Hugo 설치](https://gohugo.io/getting-started/installing/)
 - version <= 0.92.0
   - [0.93.0](https://github.com/gohugoio/hugo/releases/tag/v0.93.0)부터는 SCSS가 빌드되지 않는데 원인을 모름.
+
+## 콘텐츠 추가
+
+- 이미지: `_content/images/`
+- 포스트: `_content/posts/`
+- about 페이지: `_content/about/`
 
 ### Docker
 
