@@ -2,8 +2,8 @@
 date: 2022-11-14T00:38:00+09:00
 title: "Jenkins Workspace 동시성 문제"
 description: "WorkspaceList"
-featured_image: "/images/ci/jenkins-logo.png"
-images: ["/images/ci/jenkins-logo.png"]
+featured_image: "/images/ci/jenkins-logo.webp"
+images: ["/images/ci/jenkins-logo.webp"]
 socialshare: true
 tags:
   - ci

@@ -2,8 +2,8 @@
 date: 2022-08-17T03:44:00+09:00
 title: "Load Balancer를 활용해서 배포 프로세스를 개선해보자"
 description: "업무 자동화"
-featured_image: "/images/ci/old-system-2022.png"
-images: ["/images/ci/old-system-2022.png"]
+featured_image: "/images/ci/old-system-2022.webp"
+images: ["/images/ci/old-system-2022.webp"]
 socialshare: true
 tags:
   - ci
@@ -22,7 +22,7 @@ categories:
 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다.
 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.
 
-![개발중인 서비스의 기존 시스템](/images/ci/old-system-2022.png)
+![개발중인 서비스의 기존 시스템](/images/ci/old-system-2022.webp)
 
 *화살표 방향은 단순히 요청의 흐름을 나타낸다.*
 
@@ -88,7 +88,7 @@ categories:
 
 웹 서버가 동일 머신에 있는 웹 애플리케이션만 바라보는 것이 아니라 다른 머신에 있는 서버도 바라보도록 설정했다.
 
-![개발중인 서비스의 새로운 시스템](/images/ci/new-system-2022.png)
+![개발중인 서비스의 새로운 시스템](/images/ci/new-system-2022.webp)
 
 > 총 14단계에서 1단계까지 줄였다.
 > 먼저 코드 리뷰를 마치고 소스 코드가 통합 브랜치(trunk)에 병합되면 자동으로 빌드된다.
@@ -435,7 +435,7 @@ Akamai에 문의 결과 해당 페이지는 커스텀 할 수 없다고 한다.
 HAProxy를 선택한 이유는 기본적으로 [statistics 기능이 Web UI로 제공](https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/)되면서
 Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.
 
-![HAProxy](/images/web/haproxy-statistics-report.png)
+![HAProxy](/images/web/haproxy-statistics-report.webp)
 
 **무엇보다도 마크업(Markup) 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.**
 또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인

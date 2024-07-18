@@ -19,7 +19,7 @@
 <meta property="og:title" content="Load Balancer를 활용해서 배포 프로세스를 개선해보자" />
 <meta property="og:description" content="업무 자동화" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/ci/ci-with-lb/" /><meta property="og:image" content="https://markruler.github.io/images/ci/old-system-2022.png" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://markruler.github.io/posts/ci/ci-with-lb/" /><meta property="og:image" content="https://markruler.github.io/images/ci/old-system-2022.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-08-17T03:44:00+09:00" />
 <meta property="article:modified_time" content="2022-08-17T03:44:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
@@ -29,7 +29,7 @@
 
 
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/ci/old-system-2022.png"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/ci/old-system-2022.webp"/>
 
 <meta name="twitter:title" content="Load Balancer를 활용해서 배포 프로세스를 개선해보자"/>
 <meta name="twitter:description" content="업무 자동화"/>
@@ -519,7 +519,7 @@
                 
                     
                     
-                    style="background-image: url('https://markruler.github.io/images/ci/old-system-2022.png')"
+                    style="background-image: url('https://markruler.github.io/images/ci/old-system-2022.webp')"
                     
                 
             >
@@ -576,7 +576,7 @@
 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다.
 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다.
 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.</p>
-<p><img src="/images/ci/old-system-2022.png" alt="개발중인 서비스의 기존 시스템"></p>
+<p><img src="/images/ci/old-system-2022.webp" alt="개발중인 서비스의 기존 시스템"></p>
 <p><em>화살표 방향은 단순히 요청의 흐름을 나타낸다.</em></p>
 <p>단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다.
 이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
@@ -656,7 +656,7 @@ New status<span style="color:#ff79c6">:</span>     enabled
 </ol>
 <h2 id="개선-프로세스-continuous-delivery">개선 프로세스 (Continuous Delivery)</h2>
 <p>웹 서버가 동일 머신에 있는 웹 애플리케이션만 바라보는 것이 아니라 다른 머신에 있는 서버도 바라보도록 설정했다.</p>
-<p><img src="/images/ci/new-system-2022.png" alt="개발중인 서비스의 새로운 시스템"></p>
+<p><img src="/images/ci/new-system-2022.webp" alt="개발중인 서비스의 새로운 시스템"></p>
 <blockquote>
 <p>총 14단계에서 1단계까지 줄였다.
 먼저 코드 리뷰를 마치고 소스 코드가 통합 브랜치(trunk)에 병합되면 자동으로 빌드된다.</p>
@@ -923,7 +923,7 @@ Reference <span style="color:#6272a4">#15.6f4bc817.1651592357.1872133</span>
 <p>이미 부분적으로 HAProxy를 사용해서 서비스를 이중화하고 있었다.
 HAProxy를 선택한 이유는 기본적으로 <a href="https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/">statistics 기능이 Web UI로 제공</a>되면서
 Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.</p>
-<p><img src="/images/web/haproxy-statistics-report.png" alt="HAProxy"></p>
+<p><img src="/images/web/haproxy-statistics-report.webp" alt="HAProxy"></p>
 <p><strong>무엇보다도 마크업(Markup) 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.</strong>
 또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인
 <a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/">Active Healthcheck가 유료(NGINX Plus) 기능</a>이기 때문이다.</p>
