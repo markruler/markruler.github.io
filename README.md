@@ -9,6 +9,7 @@
   - [배포](#배포)
     - [Bash](#bash)
     - [PowerShell](#powershell)
+  - [Theme 변경](#theme-변경)
 
 ## 로컬 환경
 
@@ -87,4 +88,23 @@ cd _blog
 cd _blog
 
 ./scripts/windows.deploy.ps1
+```
+
+## Theme 변경
+
+```sh
+git submodule add -b main git@github.com:AmazingRise/hugo-theme-diary.git themes/hugo-theme-diary
+```
+
+```sh
+hugo --contentDir content --theme hugo-theme-diary --destination .
+```
+
+```sh
+# Update themes
+git submodule update --remote --merge
+
+# theme submodule 삭제 시
+git rm -f ./hugo-theme-diary
+rm -rf .git/modules/themes/hugo-theme-diary
 ```

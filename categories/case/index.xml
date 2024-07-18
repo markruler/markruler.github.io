@@ -1,37 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>임창수 블로그</title>
+    <title>case on </title>
     <link>https://markruler.github.io/categories/case/</link>
-    <description>What, Why, How.</description>
+    <description>Recent content in case on </description>
     <generator>Hugo -- gohugo.io</generator>
-    
-      <language>ko-kr</language>
-    
-    
-      <copyright>Im Changsu 2020 - 2024</copyright>
-    
-    
-      <lastBuildDate>Thu, 13 Jun 2024 17:40:00 +0900</lastBuildDate>
-    
-    
-    
-      <atom:link href="https://markruler.github.io/categories/case/index.xml" rel="self" type="application/rss+xml" />
-      
-    
-    
-    
+    <language>ko-kr</language>
+    <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
+    <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
+    <copyright>Im Changsu 2020 - 2024</copyright>
+    <lastBuildDate>Thu, 13 Jun 2024 17:40:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/categories/case/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>🕸️ 서버 to 서버 요청 시 발생한 DNS 레이턴시</title>
       <link>https://markruler.github.io/posts/network/server-to-server-dns/</link>
       <pubDate>Thu, 13 Jun 2024 17:40:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/network/server-to-server-dns/</guid>
-      <description>
-        배경 분석: dig 으로 테스트  nameserver 8.8.8.8 로 지정 nameserver는 resolv.conf 설정을 따름 비교   해결: 호스트 파일 수정  배경  약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.  해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.   환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.  분석: dig 으로 테스트 nameserver 8.8.8.8 로 지정 dig @8.8.8.8 api.
-      </description>
+      <description>배경 분석: dig 으로 테스트  nameserver 8.8.8.8 로 지정 nameserver는 resolv.conf 설정을 따름 비교   해결: 호스트 파일 수정  배경  약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.  해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.   환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.  분석: dig 으로 테스트 nameserver 8.8.8.8 로 지정 dig @8.8.8.8 api.</description>
     </item>
-    
-    
     
     <item>
       <title>Too many open files</title>
@@ -39,14 +25,10 @@
       <pubDate>Mon, 20 Mar 2023 21:58:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/java/too-many-open-files/</guid>
-      <description>
-        커버 이미지 출처: Stable diffusion &amp;ldquo;swimming pool lane pattern&amp;rdquo;
+      <description>커버 이미지 출처: Stable diffusion &amp;ldquo;swimming pool lane pattern&amp;rdquo;
  증상 Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다. 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, Too many open files 에러가 발생했다. 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이 IDC에 위치한 서버(CentOS 7)에서는 OutOfMemoryError가 발생하면서 동작하지 않았다.
-java.lang.OutOfMemoryError: unable to create new native thread ... java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error ... Caused by: java.net.SocketException: Too many open files SocketException인데 Too many open files?
-      </description>
+java.lang.OutOfMemoryError: unable to create new native thread ... java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error ... Caused by: java.net.SocketException: Too many open files SocketException인데 Too many open files?</description>
     </item>
-    
-    
     
     <item>
       <title>Jenkins Workspace 동시성 문제</title>
@@ -54,13 +36,9 @@ java.lang.OutOfMemoryError: unable to create new native thread ... java.util.con
       <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</guid>
-      <description>
-        개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
-pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.
-      </description>
+      <description>개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
+pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.</description>
     </item>
-    
-    
     
     <item>
       <title>Load Balancer를 활용해서 배포 프로세스를 개선해보자</title>
@@ -68,13 +46,10 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
       <pubDate>Wed, 17 Aug 2022 03:44:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/ci/ci-with-lb/</guid>
-      <description>
-        개요 현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다. 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다. 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다. 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.
+      <description>개요 현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다. 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다. 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다. 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.
 화살표 방향은 단순히 요청의 흐름을 나타낸다.
-단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다. 이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.
-      </description>
+단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다. 이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.</description>
     </item>
-    
     
   </channel>
 </rss>

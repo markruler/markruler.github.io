@@ -1,38 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>임창수 블로그</title>
+    <title>git on </title>
     <link>https://markruler.github.io/tags/git/</link>
-    <description>What, Why, How.</description>
+    <description>Recent content in git on </description>
     <generator>Hugo -- gohugo.io</generator>
-    
-      <language>ko-kr</language>
-    
-    
-      <copyright>Im Changsu 2020 - 2024</copyright>
-    
-    
-      <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate>
-    
-    
-    
-      <atom:link href="https://markruler.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
-      
-    
-    
-    
+    <language>ko-kr</language>
+    <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
+    <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
+    <copyright>Im Changsu 2020 - 2024</copyright>
+    <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Jenkins Workspace 동시성 문제</title>
       <link>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</link>
       <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</guid>
-      <description>
-        개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
-pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.
-      </description>
+      <description>개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
+pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.</description>
     </item>
-    
-    
     
     <item>
       <title>Load Balancer를 활용해서 배포 프로세스를 개선해보자</title>
@@ -40,14 +26,10 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
       <pubDate>Wed, 17 Aug 2022 03:44:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/ci/ci-with-lb/</guid>
-      <description>
-        개요 현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다. 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다. 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다. 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.
+      <description>개요 현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다. 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다. 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다. 한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.
 화살표 방향은 단순히 요청의 흐름을 나타낸다.
-단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다. 이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.
-      </description>
+단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다. 이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.</description>
     </item>
-    
-    
     
     <item>
       <title>CLI 환경에서 소스 코드 관리하기</title>
@@ -55,12 +37,8 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
       <pubDate>Wed, 01 Dec 2021 23:28:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/shell/git-commands/</guid>
-      <description>
-        Git Internal  차이가 아니라 스냅샷 데이터의 무결성 Git 프로젝트의 세 가지 단계   Git directory  HEAD refs info objects  tree blob (binary large object) commit tag   index Hash Function config   SCM: Source Code Management 포셀린(Porcelain) 명령어  init clone submodule subtree branch  xargs   tag switch  upstream   status add fetch commit merge pull rebase  squash와 fixup   cherry-pick stash  How git stash works   reset restore revert Git으로 버그 찾기  blame bisect   show log  Triple Dot(&amp;hellip;)   reflog: Reference logs diff push   플러밍(Plumbing) 명령어  rev-parse hash-object ls-tree ls-files cat-file write-tree commit-tree read-tree update-index   Advanced  Git Hooks Garbage Collection  Packfiles gc   prune   Git Server  Fork Branch protection rules   참고   Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
-      </description>
+      <description>Git Internal  차이가 아니라 스냅샷 데이터의 무결성 Git 프로젝트의 세 가지 단계   Git directory  HEAD refs info objects  tree blob (binary large object) commit tag   index Hash Function config   SCM: Source Code Management 포셀린(Porcelain) 명령어  init clone submodule subtree branch  xargs   tag switch  upstream   status add fetch commit merge pull rebase  squash와 fixup   cherry-pick stash  How git stash works   reset restore revert Git으로 버그 찾기  blame bisect   show log  Triple Dot(&amp;hellip;)   reflog: Reference logs diff push   플러밍(Plumbing) 명령어  rev-parse hash-object ls-tree ls-files cat-file write-tree commit-tree read-tree update-index   Advanced  Git Hooks Garbage Collection  Packfiles gc   prune   Git Server  Fork Branch protection rules   참고   Git의 모든 기능을 지원하는 것은 CLI 뿐이다.</description>
     </item>
-    
-    
     
     <item>
       <title>CS Visualized: 유용한 깃(Git) 명령어</title>
@@ -68,11 +46,8 @@ pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } sta
       <pubDate>Sat, 09 Jan 2021 08:35:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/</guid>
-      <description>
-        리디아 할리(Lydia Hallie, @lydiahallie)가 쓴 CS Visualized: Useful Git Commands를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   Git이 정말 강력한 도구이긴 하지만, 대다수의 사람들은 끔찍한 악몽 😐 같다는 말도 공감할 거에요. 저는 항상 Git으로 작업할 때 어떤 일이 일어날지 머릿속으로 그려보는 것이 꽤 유용하다는 것을 알았습니다. 특정 명령을 실행할 때 브랜치는 어떻게 상호작용하고, 그것이 히스토리에 어떤 영향을 미칠까요? master에서 reset --hard 하고 origin 리포지터리로 force push한 후, .
-      </description>
+      <description>리디아 할리(Lydia Hallie, @lydiahallie)가 쓴 CS Visualized: Useful Git Commands를 번역한 글입니다. 저자의 허락을 받고 번역했습니다.   Git이 정말 강력한 도구이긴 하지만, 대다수의 사람들은 끔찍한 악몽 😐 같다는 말도 공감할 거에요. 저는 항상 Git으로 작업할 때 어떤 일이 일어날지 머릿속으로 그려보는 것이 꽤 유용하다는 것을 알았습니다. 특정 명령을 실행할 때 브랜치는 어떻게 상호작용하고, 그것이 히스토리에 어떤 영향을 미칠까요? master에서 reset --hard 하고 origin 리포지터리로 force push한 후, .</description>
     </item>
-    
     
   </channel>
 </rss>

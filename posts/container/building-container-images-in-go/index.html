@@ -1,25 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko"><head>
-  
-  <title>Go 언어로 컨테이너 이미지 빌드하기 - 임창수 블로그</title>
-  
-  
-  
-  
-  
-  <meta theme="Hugo Theme Diary(MIT) by Rise Ported from Makito's Journal(MIT).">
-  <meta charset="utf-8">
-  <meta name="X-UA-Compatible" content="IE=edge">
-  <meta name="google-site-verification" content="">
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-  <meta content="telephone=no" name="format-detection">
-  <meta name="description" content="Ahmet Alp Balkan">
-  <meta name="renderer" content="webkit">
-  <meta name="theme-color" content="#ffffff">
+<html><head>
+<title>Go 언어로 컨테이너 이미지 빌드하기</title>
 
-  
-  
-  <meta property="og:title" content="Go 언어로 컨테이너 이미지 빌드하기" />
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Ahmet Alp Balkan">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Go 언어로 컨테이너 이미지 빌드하기" />
 <meta property="og:description" content="Ahmet Alp Balkan" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/container/building-container-images-in-go/" /><meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.png" /><meta property="article:section" content="posts" />
@@ -27,185 +24,66 @@
 <meta property="article:modified_time" content="2021-02-28T12:49:00+09:00" /><meta property="og:site_name" content="임창수 블로그" />
 
 
-  
 
-  
-  
-  <meta name="twitter:card" content="summary_large_image"/>
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.png"/>
 
 <meta name="twitter:title" content="Go 언어로 컨테이너 이미지 빌드하기"/>
 <meta name="twitter:description" content="Ahmet Alp Balkan"/>
 
-  
 
-  
-  <meta name="google-site-verification" content="60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc" />
-  
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-FFMDWZ27TN');
-  </script>
 
-  
-  
 
-  <script src="/vendor/js/jquery.min.js" ></script>
-  <script src="/vendor/js/popper.min.js" ></script>
-  <script src="/vendor/js/bootstrap.min.js" ></script>
-  <script src="/vendor/js/smooth-scroll.polyfills.min.js" ></script>
-  <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-  <script src="/vendor/js/vue.min.js" ></script>
+
+
+
+
+
+
 
   
 
-  
-  <link rel="icon" href="https://markruler.github.io/images/favicon.ico">
-  
-  
 
-  
-  
-  
-  <link rel="stylesheet" href="https://markruler.github.io/scss/dark-mode.min.4c4033ff4494b2f0a0c5e7c899105f5abe76b2f05e54a45b5044a3bf6016c74c.css" integrity="sha256-TEAz/0SUsvCgxefImRBfWr52svBeVKRbUESjv2AWx0w=" media="screen">
-  
 
-  <script src="https://markruler.github.io//js/loadCSS.js"></script>
-  <script>
-    loadCSS("https://fonts.googleapis.com/css?family=Lora|Montserrat|Fira+Mono|Noto+Serif+SC|Material+Icons");
-  </script>
 
-  
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
 
-  
-  
-  <script src="https://markruler.github.io//js/toc.js"></script>
-  
-  
 
-  
 
-  
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-  
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
 
-  
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </head>
 <body>
-  <div id="app"><div ref="sideContainer" class="side-container">
-
-  <a class="a-block nav-head false" href="https://markruler.github.io/">
-
-  <div class="nav-title">
-    Im Changsu
-  </div>
-  
-    <div class="nav-subtitle">
-      What, Why, How.
-    </div>
-  
-  </a>
-  <div class="nav-link-list">
-    
-    
-    
-    
-    
-    
-    
-    <a class="a-block nav-link-item false" href="/about">
-      About
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <a class="a-block nav-link-item active" href="/posts">
-      Posts
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    <a class="a-block nav-link-item false" href="/categories">
-      Categories
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    <a class="a-block nav-link-item false" href="/tags">
-      Tags
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    <a class="a-block nav-link-item false" href="/index.xml">
-      RSS Feed
-    </a>
-    
-    
-  </div>
-
-  <div class="nav-footer">
-    
-
-
-&copy;
-	
-	Im Changsu 2020 - 2024
-	
-
-  </div>
-
-</div><div ref="extraContainer" class="extra-container">
-    
-    
-    
-    <div class="toc">
-
-
-</div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
-                keyboard_arrow_up
-            </i>
-        </a>
-        
-        <a class="pagination-action" v-on:click="toggleDarkMode">
-            <i class="material-icons pagination-action-icon" v-if="isDarkMode">
-                brightness_4
-            </i>
-            <i class="material-icons pagination-action-icon" v-else="isDarkMode">
-                brightness_7
-            </i>
-        </a>
-        
-        
-    </div>
-</div>
-<div class="single-column-drawer-container" ref="drawer"
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
      v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
     <div class="drawer-content">
         <div class="drawer-menu">
@@ -274,32 +152,29 @@
     </div>
 </div>
 <transition name="fade">
-    <div v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav ref="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div ref="navBackground" class="nav-background"></div>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
     <div class="container container-narrow nav-content">
         <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
             <i class="material-icons">
                 menu
             </i>
         </button>
-        <a ref="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
             
         </a>
         
-        <button type="button" class="nav-darkmode-toggle" v-on:click="toggleDarkMode">
-            <i class="material-icons" v-if="isDarkMode">
-                brightness_4
-            </i>
-            <i class="material-icons" v-else="isDarkMode">
-                brightness_7
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
             </i>
         </button>
         
     </div>
 </nav>
-<div class="single-column-header-container" ref="pageHead"
+<div class="single-column-header-container" id="pageHead"
      v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
     <a href="https://markruler.github.io/">
         <div class="single-column-header-title"></div>
@@ -310,59 +185,65 @@
     </a>
 </div>
 
-    <div id="content">
-<div ref="streamContainer" class="stream-container">
-  <div class="post-list-container post-list-container-shadow">
-    <div class="post">
-      
-      
-      
-      
-      
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
 
-      <div class="post-head-wrapper"  
-        
-        style="background-image: url('https://markruler.github.io/images/master/markruler-wave.png')"  >
-        <div class="post-title">
-          Go 언어로 컨테이너 이미지 빌드하기
-          
-          <div class="post-subtitle">
-            Ahmet Alp Balkan
-          </div>
-          
-          <div class="post-meta">
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
             
-            <time itemprop="datePublished">
-              2021년 02월 28일 12시 49분
-            </time>
+            
+            
+                
             
 
-            
-            <i class="material-icons" style="">folder</i>
-            <a href="/categories/">[how-to]</a>
-            &nbsp;
-            
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/master/markruler-wave.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Go 언어로 컨테이너 이미지 빌드하기
+                    
+                    <div class="post-subtitle">
+                        Ahmet Alp Balkan
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            
+                        </time>
+                        
 
-            
-            <i class="material-icons" style="">label</i>
-            
-            <a href="/tags/container">container</a>
-            &nbsp;
-            
-            <a href="/tags/translate">translate</a>
-            &nbsp;
-            
-            
-            
-          </div>
-        </div>
-      </div>
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[how-to]</a>
+                                &nbsp;
+                        
 
-      <div class="post-body-wrapper">
-        
-          <div class="post-body" v-pre>
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/container">container</a>
+                                &nbsp;
+                            
+                                <a href="/tags/translate">translate</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
             
-            <blockquote>
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <blockquote>
 <ul>
 <li>Ahmet Alp Balkan의 <a href="https://ahmet.im/blog/building-container-images-in-go/">Building container images in Go</a>를 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
@@ -530,246 +411,176 @@ docker images
 </ol>
 </section>
 
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;"></p>
+                    
+                </div>
+            </div>
             
             
-            
-            
-          </div>
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/shell/git-commands/">
+			<br>CLI 환경에서 소스 코드 관리하기
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/review/container-security/">
+			<br>책 &#34;컨테이너 보안&#34;
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
         </div>
-
-
-        <nav class="post-pagination">
-          
-          <a class="newer-posts" href="https://markruler.github.io/posts/shell/git-commands/">
-            다음 글<br>CLI 환경에서 소스 코드 관리하기
-          </a>
-          
-
-          
-          <a class="older-posts" href="https://markruler.github.io/posts/review/container-security/">
-            이전 글<br>책 &#34;컨테이너 보안&#34;
-          </a>
-          
-        </nav>
-        
-        <div class="post-comment-wrapper">
-          
-          
-
-
-
-
-
-
-
-        </div>
-
-        
-        
-
-
-
-
-
-<section class="social-share">
-  <ul class="share-icons">
-    
-    
-    <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcontainer%2fbuilding-container-images-in-go%2f&amp;text=Go%20%ec%96%b8%ec%96%b4%eb%a1%9c%20%ec%bb%a8%ed%85%8c%ec%9d%b4%eb%84%88%20%ec%9d%b4%eb%af%b8%ec%a7%80%20%eb%b9%8c%eb%93%9c%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
-        
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
-  <defs></defs>
-  <g style="pointer-events:all">
-    <title style="pointer-events:inherit">bg</title>
-    <circle cx="24" cy="24" fill="#1CB7EB" r="24" style="pointer-events:inherit" id="svg_1"></circle>
-    <path d="M36.8,15.4C35.9,15.9 34.8,16.2 33.8,16.3C34.9,15.6 35.7,14.5 36.1,13.2C35.1,13.8 34,14.3 32.7,14.6C31.7,13.5 30.4,12.8 28.9,12.8C26,12.8 23.6,15.3 23.6,18.5C23.6,18.9 23.6,19.4 23.7,19.8C19.3,19.6 15.4,17.3 12.8,13.9C12.3,14.7 12.1,15.7 12.1,16.8C12.1,18.8 13,20.5 14.4,21.5C13.5,21.5 12.7,21.2 12,20.8C12,20.8 12,20.9 12,20.9C12,23.6 13.8,25.9 16.2,26.5C15.8,26.6 15.3,26.7 14.8,26.7C14.5,26.7 14.1,26.7 13.8,26.6C14.5,28.9 16.4,30.5 18.7,30.5C16.9,32 14.6,32.9 12.2,32.9C11.8,32.9 11.4,32.9 10.9,32.8C13.2,34.4 16,35.4 19,35.4C28.7,35.4 34,26.8 34,19.3C34,19.1 34,18.8 34,18.6C35.2,17.6 36.1,16.6 36.8,15.4z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
-  </g>
-</svg>
-        <p>Twitter</p>
-      </a>
-    </li>
-    
-
-    
-    
-    <li>
-      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fcontainer%2fbuilding-container-images-in-go%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
-  <circle cx="24" cy="24" fill="#4E71A8" r="24" />
-  <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
-</svg>
-        <p>Facebook</p>
-        </a>
-    </li>
-    
-
-    
-    
-    <li>
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcontainer%2fbuilding-container-images-in-go%2f&amp;source=https%3a%2f%2fmarkruler.github.io%2fposts%2fcontainer%2fbuilding-container-images-in-go%2f&amp;title=Go%20%ec%96%b8%ec%96%b4%eb%a1%9c%20%ec%bb%a8%ed%85%8c%ec%9d%b4%eb%84%88%20%ec%9d%b4%eb%af%b8%ec%a7%80%20%eb%b9%8c%eb%93%9c%ed%95%98%ea%b8%b0&amp;summary=Go%20%ec%96%b8%ec%96%b4%eb%a1%9c%20%ec%bb%a8%ed%85%8c%ec%9d%b4%eb%84%88%20%ec%9d%b4%eb%af%b8%ec%a7%80%20%eb%b9%8c%eb%93%9c%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on LinkedIn" class="share-btn linkedin">
-        <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="linkedin" viewBox="0 0 128 128" overflow="hidden">
-  <defs></defs>
-  <g style="pointer-events:none">
-    <title style="pointer-events:inherit">background</title>
-    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
-  </g>
-  <g style="pointer-events:all">
-    <title style="pointer-events:inherit">Layer 1</title>
-    <circle cx="64" cy="64" fill="#0076B4" r="64" id="svg_2" stroke-dasharray="none"></circle>
-    <path d="M44.119,95.934L29.184,95.934L29.184,47.93L44.119,47.93L44.119,95.934zM36.656,41.371C31.864,41.371 28,37.495 28,32.718C28,27.943 31.864,24.066 36.656,24.066C41.427,24.066 45.302,27.942 45.302,32.718C45.303,37.495 41.428,41.371 36.656,41.371zM100,95.934L85.081,95.934L85.081,72.59C85.081,67.024 84.984,59.862 77.329,59.862C69.564,59.862 68.381,65.927 68.381,72.192L68.381,95.934L53.479,95.934L53.479,47.93L67.78,47.93L67.78,54.492L67.984,54.492C69.974,50.718 74.841,46.739 82.101,46.739C97.206,46.739 99.998,56.678 99.998,69.607L100,95.934L100,95.934z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
-  </g>
-</svg>
-          <p>LinkedIn</p>
-        </a>
-    </li>
-    
-
-    
-    
-
-    
-    
-    <li>
-      <a href="mailto:?subject= - Go%20%ec%96%b8%ec%96%b4%eb%a1%9c%20%ec%bb%a8%ed%85%8c%ec%9d%b4%eb%84%88%20%ec%9d%b4%eb%af%b8%ec%a7%80%20%eb%b9%8c%eb%93%9c%ed%95%98%ea%b8%b0.&amp;body=Go%20%ec%96%b8%ec%96%b4%eb%a1%9c%20%ec%bb%a8%ed%85%8c%ec%9d%b4%eb%84%88%20%ec%9d%b4%eb%af%b8%ec%a7%80%20%eb%b9%8c%eb%93%9c%ed%95%98%ea%b8%b0%2c%20by%20%0aAhmet%20Alp%20Balkan%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fcontainer%2fbuilding-container-images-in-go%2f%0a" target="_blank" class="share-btn email">
-        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
-  <defs></defs>
-  <g style="pointer-events:none">
-    <title style="pointer-events:inherit">background</title>
-    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
-  </g>
-  <g style="pointer-events:all">
-    <title style="pointer-events:inherit">Layer 1</title>
-    <path d="M16,0C7.163,0 0,7.163 0,16C0,24.836 7.163,32 16,32S32,24.836 32,16C32,7.163 24.837,0 16,0z" fill="#333333" style="pointer-events:inherit" id="svg_2"></path>
-    <polygon fill="#FFFFFF" points="6.518,21.815 11.707,15.291 6.518,12.119   " style="pointer-events:inherit" id="svg_4"></polygon>
-    <polygon fill="#FFFFFF" points="19.5,15.746 15.989,17.908 12.472,15.758 7.11,22.5 24.867,22.5   " style="pointer-events:inherit" id="svg_5"></polygon>
-    <polygon fill="#FFFFFF" points="15.988,16.864 25.482,11.017 25.482,9.5 6.518,9.5 6.518,11.076   " style="pointer-events:inherit" id="svg_6"></polygon>
-    <polygon fill="#FFFFFF" points="20.263,15.276 25.482,21.843 25.482,12.062   " style="pointer-events:inherit" id="svg_7"></polygon>
-  </g>
-</svg>
-        <p>Email</p>
-      </a>
-    </li>
-  </ul>
-</section>
-
-
-      </div>
     </div>
-  </div>
-  
-    </div><div id="single-column-footer">
 
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            
+        </div>
+        
+        <div class="nav-subtitle">
+            Im Changsu
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://risehere.net/">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+ <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>  <a href="https://risehere.net/">Rise</a>
+<br>
+ <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
 
 &copy;
 	
 	Im Changsu 2020 - 2024
 	
 </div>
-  </div>
-  <script>
-let app;
-
-app = new Vue({
-    el: '#app',
-    data: {
-        scrollY: 0,
-        navOpacity: 0,
-        isDrawerOpen: false,
-        mounted: false,
-        isDarkMode: false
-    },
-    methods: {
-            sgn(t, x) {
-                let k = 1. / (1. - 2 * t);
-                if (x <= t) return 0;
-                else if (x >= 1 - t) return 1;
-                else {
-                    return k * (x - t);
-                }
-            },
-            handleScroll() {
-                this.scrollY = window.scrollY;
-                this.navOpacity = this.sgn(.0, Math.min(1, Math.max(0, window.scrollY / (this.pageHeadHeight() - this.navBarHeight() * 0.8))));
-                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
-
-                if (this.navOpacity >= 1) {
-                    navBackground.style.opacity = 1;
-                    navTitle.style.opacity = 1;
-                } else {
-                    navBackground.style.opacity = 0;
-                    navTitle.style.opacity = 0;
-                }
-            },
-            handleResize() {
-                const {navBar, navBackground, navTitle, extraContainer, streamContainer} = this.$refs;
-                extraContainer.style.left = (streamContainer.offsetWidth - extraContainer.offsetWidth) + 'px';
-            },
-            navBarHeight() {
-                return this.$refs.navBar.offsetHeight;
-            },
-            pageHeadHeight() {
-                return this.$refs.pageHead.offsetHeight;
-            },
-            toggleDrawer() {
-                this.isDrawerOpen = !this.isDrawerOpen;
-                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
-            },
-            closeDrawer() {
-                this.isDrawerOpen = false;
-                document.getElementsByTagName('html')[0].style.overflow = this.isDrawerOpen ? 'hidden' : 'unset';
-            },
-            toggleDarkMode() {
-                this.isDarkMode = !this.isDarkMode;
-                if (this.isDarkMode==true){
-                    document.cookie = "night=1;path=/";
-                    document.body.classList.add("night");
-                } else {
-                    document.cookie = "night=0;path=/";
-                    document.body.classList.remove("night");
-                }
-            }
-    },
-    created() {
-        window.addEventListener('scroll', this.handleScroll);
-        window.addEventListener('resize', this.handleResize);
-        window._nonDesktop = function () {
-            let check = false;
-            (function (a) {
-                if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true;
-            })(navigator.userAgent || navigator.vendor || window.opera);
-            return check;
-        };
-        
-        var night = document.cookie.replace(/(?:(?:^|.*;\s*)night\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        if (night==""){
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                
-                this.toggleDarkMode();
-                
-            }
-        }else{
-            
-            if (night=="1") {
-                this.toggleDarkMode();
-            }
-        }
-    },
-    mounted() {
-        this.handleScroll();
-        this.handleResize();
-        this.mounted = true;
-
-        
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.handleScroll);
-        window.removeEventListener('resize', this.handleResize);
-    }
-});
-</script>
-
-<script src="https://markruler.github.io//js/journal.js"></script>
-</body>
-
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>
