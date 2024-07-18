@@ -2,8 +2,8 @@
 date: 2023-12-12T22:02:00+09:00
 title: "Playwright를 사용해서 HTML 페이지를 PDF로 만들기"
 description: "HTML to PDF"
-featured_image: "/images/pdf/htmltopdf/htmltopdf.png"
-images: ["/images/pdf/htmltopdf/htmltopdf.png"]
+featured_image: "/images/pdf/htmltopdf/htmltopdf.webp"
+images: ["/images/pdf/htmltopdf/htmltopdf.webp"]
 socialshare: true
 tags:
   - web
@@ -87,11 +87,11 @@ apt-get update \
 
 ## window.print()로 출력
 
-![window.print() - google.com](/images/pdf/htmltopdf/window.print.png)
+![window.print() - google.com](/images/pdf/htmltopdf/window.print.webp)
 
 ## Pyppeteer로 출력
 
-![pyppeteer - google.com](/images/pdf/htmltopdf/pyppeteer.print.png)
+![pyppeteer - google.com](/images/pdf/htmltopdf/pyppeteer.print.webp)
 
 # 3차 시도: microsoft/playwright
 
