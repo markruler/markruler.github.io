@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+push_branch="v2"
+
 # https://gohugo.io/hosting-and-deployment/hosting-on-github/#put-it-into-a-script
 
 # git init
@@ -24,5 +26,4 @@ if [ -n "$*" ]; then
 fi
 git commit -m "$msg"
 
-push_branch="v1"
 git push origin $push_branch
