@@ -2,8 +2,8 @@
 date: 2022-08-21T23:04:00+09:00
 title: "X-based desktop"
 description: "리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?"
-featured_image: "/images/master/markruler-wave.png"
-images: ["/images/master/markruler-wave.png"]
+featured_image: "/images/master/markruler-wave.webp"
+images: ["/images/master/markruler-wave.webp"]
 socialshare: true
 tags:
   - xdg

@@ -2,8 +2,8 @@
 date: 2024-06-13T17:40:00+09:00
 title: "🕸️ 서버 to 서버 요청 시 발생한 DNS 레이턴시"
 description: "LG야 힘내"
-featured_image: "/images/network/image-20240611-080044.png"
-images: ["/images/network/image-20240611-080044.png"]
+featured_image: "/images/network/image-20240611-080044.webp"
+images: ["/images/network/image-20240611-080044.webp"]
 socialshare: true
 tags:
   - web
@@ -150,7 +150,7 @@ server -> L4 Switch -> server는 프록시 없이 설정할 수 없다고 함.
 127.0.0.1 api.example.com
 ```
 
-![Datadog Timeseries](/images/network/image-20240611-080044.png)
+![Datadog Timeseries](/images/network/image-20240611-080044.webp)
 
 - 처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인함.
 - 이후 서버 B(초록색)도 수정 후 응답 속도 줄어듦.
