@@ -21,7 +21,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/shell/vim-editor-shortcuts/" /><meta property="og:image" content="https://markruler.github.io/images/shell/vim.jpeg" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-12-07T00:44:00+09:00" />
-<meta property="article:modified_time" content="2020-12-07T00:44:00+09:00" />
+<meta property="article:modified_time" content="2024-07-24T02:06:00+09:00" />
 
 
 
@@ -163,8 +163,8 @@
 						
 						
 							<li>
-								<a href="#homevimrc" class="nav-homevimrc">
-									$HOME/.vimrc
+								<a href="#%ec%84%a4%ec%a0%95" class="nav-설정">
+									설정
 								</a>
 							</li>
 						
@@ -181,8 +181,50 @@
 						
 						
 							<li>
-								<a href="#%eb%aa%85%eb%a0%b9%ec%96%b4" class="nav-명령어">
-									명령어
+								<a href="#%ec%9e%85%eb%a0%a5-%eb%aa%a8%eb%93%9c-insert-mode" class="nav-입력-모드-insert-mode">
+									입력 모드 (Insert Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%ec%a7%80%eb%a7%89-%ed%96%89-%eb%aa%a8%eb%93%9c-last-line-mode" class="nav-마지막-행-모드-last-line-mode">
+									마지막 행 모드 (Last Line Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#last-line-command-" class="nav-last-line-command-">
+									Last Line Command (:)
 								</a>
 							</li>
 						
@@ -201,6 +243,124 @@
 							<li>
 								<a href="#search-mode--" class="nav-search-mode--">
 									Search mode (/, ?)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%aa%85%eb%a0%b9-%eb%aa%a8%eb%93%9c-command-mode" class="nav-명령-모드-command-mode">
+									명령 모드 (Command Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%eb%8f%99" class="nav-이동">
+									이동
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%84%eb%8b%a8%ed%95%9c-%ed%8e%b8%ec%a7%91" class="nav-간단한-편집">
+									간단한 편집
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ad%ec%a0%9c" class="nav-삭제">
+									삭제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ec%a3%bc%ec%96%bc-%eb%aa%a8%eb%93%9cvisual-mode" class="nav-비주얼-모드visual-mode">
+									비주얼 모드(visual mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%99%94%eb%a9%b4-%eb%b6%84%ed%95%a0" class="nav-화면-분할">
+									화면 분할
 								</a>
 							</li>
 						
@@ -318,10 +478,8 @@
 <p>업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
 VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 </blockquote>
-<h1 id="homevimrc">$HOME/.vimrc</h1>
-<ul>
-<li>&quot; - comment</li>
-</ul>
+<h1 id="설정">설정</h1>
+<p>설정 파일인 <code>~/.vimrc</code>에서 큰따옴표(<code>&quot;</code>, double quote)가 앞에 있다면 주석(comment)이 된다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-vim" data-lang="vim">syntax on <span style="color:#6272a4">&#34;구문강조 사용</span>
 colorscheme desert <span style="color:#6272a4">&#34;color 폴더에 colorscheme 설치 필요</span>
 set background=<span style="color:#8be9fd;font-style:italic">dark</span> <span style="color:#6272a4">&#34;하이라이팅 lihgt / dark</span>
@@ -345,123 +503,145 @@ set tenc=utf<span style="color:#bd93f9">-8</span> <span style="color:#6272a4">&#
 set history=<span style="color:#bd93f9">1000</span> <span style="color:#6272a4">&#34;vi 편집기록 기억갯수 .viminfo에 기록</span>
 set showbreak=+++\
 </code></pre></div><p><img src="/images/shell/vim.png" alt="vim"></p>
-<h1 id="명령어">명령어</h1>
-<blockquote>
+<h1 id="입력-모드-insert-mode">입력 모드 (Insert Mode)</h1>
 <ul>
-<li>LLM: Last Line Mode</li>
-<li>CM: Command Mode</li>
-</ul>
-</blockquote>
+<li><code>i</code> 현재 커서에서 편집
 <ul>
-<li>
-<p><code>u</code> - undo</p>
-</li>
-<li>
-<p><code>control + r</code> - redo</p>
-</li>
-<li>
-<p><code>.</code> - 이전 명령 다시 실행</p>
-</li>
-<li>
-<p>비주얼 모드(visual mode)</p>
-<ul>
-<li><code>v</code> - 비주얼 모드</li>
+<li><code>Shift + i</code> 현재 줄의 처음으로 커서를 옮긴 후 편집</li>
 </ul>
 </li>
-<li>
-<p>입력 모드로 전환</p>
+<li><code>s</code> 현재 커서 한 글자 삭제 후 바로 입력 모드
 <ul>
-<li><code>i</code> - 현재 커서에서 편집</li>
-<li><code>a</code> - 다음 칸으로 커서를 옮긴 후 편집</li>
-<li><code>o</code> - 다음 줄로 커서를 옮긴 후 편집</li>
+<li><code>Shift + s</code> 현재 줄 삭제 후 바로 입력 모드</li>
 </ul>
 </li>
-<li>
-<p>간단한 편집</p>
+<li><code>a</code> 다음 칸으로 커서를 옮긴 후 편집
 <ul>
-<li><code>x</code> - 현재 커서 한 글자 삭제 (delete)</li>
-<li><code>X</code> - 현재 커서 앞에 한 글자 삭제 (backspace)</li>
-<li><code>s</code> - 현재 커서 한 글자 삭제 후 바로 입력 모드</li>
-<li><code>r</code> - 현재 커서 한 글자 교체(replace)</li>
-<li><code>y</code> - 복사 (yank)</li>
-<li><code>p</code> - 붙여넣기</li>
-<li><code>&gt;</code> - 들여쓰기</li>
-<li><code>&lt;</code> - 내어쓰기</li>
+<li><code>Shift + a</code> 현재 줄의 끝으로 커서를 옮긴 후 편집</li>
 </ul>
 </li>
-<li>
-<p>삭제</p>
+<li><code>o</code> 다음 줄로 커서를 옮긴 후 편집
 <ul>
-<li><code>:1,.d</code> - 첫 번째 줄부터 현재 커서까지 삭제 (LLM)</li>
-<li><code>:5,10d</code> - 5번 줄부터 10번 줄까지 삭제 (LLM)</li>
-<li><code>dd</code> - 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)
-<ul>
-<li><code>5dd</code> - 현재 줄 포함 아래로 5줄 삭제</li>
-</ul>
-</li>
-<li><code>dgg</code> - 현재 커서에서 첫 줄까지 삭제</li>
-<li><code>dG</code> - 현재 커서에서 마지막 줄까지 삭제</li>
-<li><code>d$</code> - 현재 커서에서 현재 줄 마지막 단어까지 삭제</li>
-<li><code>d^</code> - 현재 커서에서 현재 줄 첫 단어까지 삭제</li>
-<li>워드(w, b)나 방향키(g,h,j,k) 등과 조합해 삭제할 수도 있다(dw, db, dg, dh, dj, dk, &hellip;).</li>
-</ul>
-</li>
-<li>
-<p>이동</p>
-<ul>
-<li><code>control + b</code> - 이전 페이지로 이동</li>
-<li><code>control + f</code> - 다음 페이지로 이동</li>
-<li><code>control + u</code> - 이전 half page로 이동</li>
-<li><code>control + d</code> - 다음 half page로 이동</li>
-<li><code>gg</code> - 문서 맨 앞으로 이동</li>
-<li><code>G</code> - 문서 맨 뒤로 이동</li>
-<li><code>^</code> - 문장 맨 앞으로 이동</li>
-<li><code>$</code> - 문장 맨 뒤로 이동</li>
-<li><code>0</code> - 현재 줄 끝으로 이동</li>
-</ul>
-</li>
-<li>
-<p>화면 분할</p>
-<ul>
-<li><code>control + w</code> + <code>s</code> - horizontal split
-<ul>
-<li><code>new</code> - horizontal split한 후 새로운 창 생성</li>
-</ul>
-</li>
-<li><code>control + w</code> + <code>v</code> - vertical split
-<ul>
-<li><code>vs</code> - vertical split한 후 현재 창 복제</li>
-</ul>
-</li>
-<li><code>control + w</code> + <code>방향키</code> - 분할된 창 간 이동</li>
-<li><code>control + w</code> + <code>&gt;</code> - 창 폭 늘리기</li>
-<li><code>control + w</code> + <code>&lt;</code> - 창 폭 줄이기</li>
-<li><code>control + w</code> + <code>+</code> - 창 높이 늘리기</li>
-<li><code>control + w</code> + <code>-</code> - 창 높이 줄이기</li>
-<li><code>control + w</code> + <code>=</code> - 창 폭, 높이 원래 상태로</li>
-<li><code>control + w</code> + <code>o</code> - only one window</li>
-</ul>
-</li>
-<li>
-<p>탭</p>
-<ul>
-<li><code>:tabnew</code> - 새로운 탭 열기 (LLM)</li>
-<li><code>gt</code> - 다음 탭으로 이동하기</li>
-<li><code>gT</code> - 이전 탭으로 이동하기</li>
+<li><code>Shift + o</code> 이전 줄로 커서를 옮긴 후 편집</li>
 </ul>
 </li>
 </ul>
-<h1 id="search-mode--">Search mode (/, ?)</h1>
+<h1 id="마지막-행-모드-last-line-mode">마지막 행 모드 (Last Line Mode)</h1>
+<h2 id="last-line-command-">Last Line Command (:)</h2>
 <ul>
-<li><code>/regex-pattern</code></li>
-<li><code>:%s/old/new/g</code> - 교체</li>
-<li><code>n</code> - 다음 단어 (?는 반대)</li>
-<li><code>N</code> - 이전 단어 (?는 반대)</li>
+<li><code>:q</code> 종료</li>
+<li><code>:q!</code> 강제 종료</li>
+<li><code>:w</code> 저장</li>
+<li><code>:%s/old/new/gi</code> 문자열 교체 (old -&gt; new)
+<ul>
+<li><code>g</code> 옵션을 빼면 해당 줄의 첫 번째 문자열만 교체</li>
+</ul>
+</li>
+<li><code>:!</code> 명령어 실행
+<ul>
+<li><code>:!ls</code> 현재 디렉토리 파일 목록 출력</li>
+<li><code>:!pwd</code> 현재 디렉토리 경로 출력</li>
+<li><code>:!date</code> 현재 시간 출력</li>
+</ul>
+</li>
+<li><code>:tabnew [file]</code> 새로운 탭 열기 (file이 없으면 빈 탭)
+<ul>
+<li>실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편.</li>
+<li><code>gt</code> 다음 탭으로 이동하기</li>
+<li><code>gT</code> 이전 탭으로 이동하기</li>
+</ul>
+</li>
+</ul>
+<h2 id="search-mode--">Search mode (/, ?)</h2>
+<ul>
+<li><code>/regex-pattern</code> (<code>?regex-pattern</code>) 검색
+<ul>
+<li><code>n</code> 다음 단어 (?는 반대)</li>
+<li><code>N</code> 이전 단어 (?는 반대)</li>
+</ul>
+</li>
+</ul>
+<h1 id="명령-모드-command-mode">명령 모드 (Command Mode)</h1>
+<ul>
+<li><code>u</code> - undo</li>
+<li><code>control + r</code> - redo</li>
+<li><code>.</code> - 이전 명령 다시 실행</li>
+</ul>
+<h2 id="이동">이동</h2>
+<ul>
+<li><code>hjkl</code> 좌하상우 이동</li>
+<li><code>Control + b</code> 이전 페이지로 이동</li>
+<li><code>Control + f</code> 다음 페이지로 이동</li>
+<li><code>Control + u</code> 이전 half page로 이동</li>
+<li><code>Control + d</code> 다음 half page로 이동</li>
+<li><code>gg</code> 문서 맨 앞으로 이동</li>
+<li><code>G</code> 문서 맨 뒤로 이동</li>
+<li><code>^</code> 현재 줄 앞으로 이동</li>
+<li><code>$</code> 현재 줄 끝으로 이동</li>
+</ul>
+<h2 id="간단한-편집">간단한 편집</h2>
+<ul>
+<li><code>y</code> 복사 (yank)</li>
+<li><code>p</code> 붙여넣기</li>
+<li><code>&gt;</code> 들여쓰기</li>
+<li><code>&lt;</code> 내어쓰기</li>
+<li><code>Shift + j</code> 현재 줄과 다음 줄 합치기</li>
+</ul>
+<h2 id="삭제">삭제</h2>
+<ul>
+<li><code>r</code> 현재 커서 한 글자 교체(replace)</li>
+<li><code>x</code> 현재 커서 한 글자 삭제 (delete)</li>
+<li><code>Shift + x</code> 현재 커서 앞에 한 글자 삭제 (backspace)</li>
+<li><code>:1,.d</code> 첫 번째 줄부터 현재 커서까지 삭제 (LLM)</li>
+<li><code>:5,10d</code> 5번 줄부터 10번 줄까지 삭제 (LLM)</li>
+<li><code>dd</code> 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)
+<ul>
+<li>이동키와 조합해 삭제할 수도 있다.</li>
+<li><code>5dd</code> 현재 줄 포함 아래로 5줄 삭제</li>
+<li><code>dgg</code> 현재 커서에서 첫 줄까지 삭제</li>
+<li><code>dG</code> 현재 커서에서 마지막 줄까지 삭제</li>
+<li><code>d$</code> 현재 커서에서 현재 줄 마지막 단어까지 삭제</li>
+<li><code>d^</code> 현재 커서에서 현재 줄 첫 단어까지 삭제</li>
+<li><code>dw</code> 현재 커서에서 현재 단어까지 삭제</li>
+</ul>
+</li>
+</ul>
+<h2 id="비주얼-모드visual-mode">비주얼 모드(visual mode)</h2>
+<ul>
+<li><code>v</code> 비주얼 모드</li>
+<li><code>shift + v</code> 비주얼 라인</li>
+<li><code>Ctrl + v</code> 비주얼 블록
+<ul>
+<li>비주얼 블록 모드에서 <code>Shift + i</code>를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환된다.</li>
+<li>입력을 마치고 <code>ESC</code>를 누르면 블록의 모든 줄에 입력한 내용이 삽입된다. (여러 줄을 주석 처리할 때 유용)</li>
+</ul>
+</li>
+</ul>
+<h2 id="화면-분할">화면 분할</h2>
+<ul>
+<li>탭 기능과 동일하게 터미널 자체 기능을 선호하는 편.</li>
+<li><code>Control + w</code> + <code>s</code> horizontal split
+<ul>
+<li><code>new</code> horizontal split한 후 새로운 창 생성</li>
+</ul>
+</li>
+<li><code>Control + w</code> + <code>v</code> vertical split
+<ul>
+<li><code>vs</code> vertical split한 후 현재 창 복제</li>
+</ul>
+</li>
+<li><code>Control + w</code> + <code>방향키</code> 분할된 창 간 이동</li>
+<li><code>Control + w</code> + <code>&gt;</code> 창 폭 늘리기</li>
+<li><code>Control + w</code> + <code>&lt;</code> 창 폭 줄이기</li>
+<li><code>Control + w</code> + <code>+</code> 창 높이 늘리기</li>
+<li><code>Control + w</code> + <code>-</code> 창 높이 줄이기</li>
+<li><code>Control + w</code> + <code>=</code> 창 폭, 높이 원래 상태로</li>
+<li><code>Control + w</code> + <code>o</code> only one window</li>
 </ul>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2020-12-07</p>
+		    <p style="color:#777;">Last modified on 2024-07-24</p>
                     
                 </div>
             </div>
@@ -615,8 +795,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#homevimrc" class="nav-homevimrc">
-									$HOME/.vimrc
+								<a href="#%ec%84%a4%ec%a0%95" class="nav-설정">
+									설정
 								</a>
 							</li>
 						
@@ -633,8 +813,50 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%eb%aa%85%eb%a0%b9%ec%96%b4" class="nav-명령어">
-									명령어
+								<a href="#%ec%9e%85%eb%a0%a5-%eb%aa%a8%eb%93%9c-insert-mode" class="nav-입력-모드-insert-mode">
+									입력 모드 (Insert Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%ec%a7%80%eb%a7%89-%ed%96%89-%eb%aa%a8%eb%93%9c-last-line-mode" class="nav-마지막-행-모드-last-line-mode">
+									마지막 행 모드 (Last Line Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#last-line-command-" class="nav-last-line-command-">
+									Last Line Command (:)
 								</a>
 							</li>
 						
@@ -653,6 +875,124 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							<li>
 								<a href="#search-mode--" class="nav-search-mode--">
 									Search mode (/, ?)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%aa%85%eb%a0%b9-%eb%aa%a8%eb%93%9c-command-mode" class="nav-명령-모드-command-mode">
+									명령 모드 (Command Mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%eb%8f%99" class="nav-이동">
+									이동
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%84%eb%8b%a8%ed%95%9c-%ed%8e%b8%ec%a7%91" class="nav-간단한-편집">
+									간단한 편집
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%82%ad%ec%a0%9c" class="nav-삭제">
+									삭제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ec%a3%bc%ec%96%bc-%eb%aa%a8%eb%93%9cvisual-mode" class="nav-비주얼-모드visual-mode">
+									비주얼 모드(visual mode)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%99%94%eb%a9%b4-%eb%b6%84%ed%95%a0" class="nav-화면-분할">
+									화면 분할
 								</a>
 							</li>
 						
