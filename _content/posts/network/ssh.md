@@ -6,8 +6,8 @@ description: "일상에서의 SSH"
 featured_image: "/images/master/markruler-wave.webp"
 images: ["/images/master/markruler-wave.webp"]
 tags:
+  - network
   - shell
-  - linux
   - security
 categories:
   - how-to

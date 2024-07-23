@@ -108,6 +108,9 @@ hugo --contentDir content --theme hugo-theme-diary --destination .
 ```
 
 ```sh
+# Init themes
+git submodule update --init --recursive
+
 # Update themes
 git submodule update --remote --merge
 

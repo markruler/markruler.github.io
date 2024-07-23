@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html><head>
+<title>네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="일상에서의 SSH">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)" />
+<meta property="og:description" content="일상에서의 SSH" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/snmp/" /><meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-07-23T19:08:00+09:00" />
+<meta property="article:modified_time" content="2024-07-23T19:08:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.webp"/>
+
+<meta name="twitter:title" content="네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)"/>
+<meta name="twitter:description" content="일상에서의 SSH"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%a0%9c-%ec%a1%b0%ea%b1%b4" class="nav-전제-조건">
+									전제 조건
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b5%ac%ec%84%b1-%ec%9a%94%ec%86%8c" class="nav-구성-요소">
+									구성 요소
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%97%ad%ed%95%a0" class="nav-매니저-에이전트-역할">
+									매니저-에이전트 역할
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ed%86%b5%ec%8b%a0-%eb%b0%a9%ec%8b%9d" class="nav-매니저-에이전트-통신-방식">
+									매니저-에이전트 통신 방식
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%bb%a4%eb%ae%a4%eb%8b%88%ed%8b%b0-%ec%9d%b4%eb%a6%84" class="nav-커뮤니티-이름">
+									커뮤니티 이름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%b2%84%ec%a0%84%eb%b3%84-%ec%b0%a8%ec%9d%b4" class="nav-버전별-차이">
+									버전별 차이
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#v1" class="nav-v1">
+									v1
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v2" class="nav-v2">
+									v2
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v2c" class="nav-v2c">
+									v2c
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v3" class="nav-v3">
+									v3
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ea%b4%80%eb%a0%a8-%eb%aa%85%eb%a0%b9%ec%96%b4-%eb%8f%84%ea%b5%ac" class="nav-관련-명령어-도구">
+									관련 명령어 도구
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#snmpget" class="nav-snmpget">
+									snmpget
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#snmpwalk" class="nav-snmpwalk">
+									snmpwalk
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#mib-2-oid-object-id" class="nav-mib-2-oid-object-id">
+									MIB-2 OID (Object ID)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ex-136121-%eb%b6%84%ed%95%b4" class="nav-ex-136121-분해">
+									ex: 1.3.6.1.2.1 분해
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361211-system" class="nav-1361211-system">
+									1.3.6.1.2.1.1 system
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361212-interfaces" class="nav-1361212-interfaces">
+									1.3.6.1.2.1.2 interfaces
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361213-at---address-translation" class="nav-1361213-at---address-translation">
+									1.3.6.1.2.1.3 at - Address Translation
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361214-ip---internet-protocol" class="nav-1361214-ip---internet-protocol">
+									1.3.6.1.2.1.4 ip - Internet Protocol
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#13612131-ifmib" class="nav-13612131-ifmib">
+									1.3.6.1.2.1.31 ifMIB
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/master/markruler-wave.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)
+                    
+                    <div class="post-subtitle">
+                        일상에서의 SSH
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-07-23 19:08
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[how-to]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/monitoring">monitoring</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="개요">개요</h1>
+<p>주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.</p>
+<h1 id="전제-조건">전제 조건</h1>
+<ul>
+<li>IP 네트워크 환경이 있다.</li>
+<li>관리용 서버(SNMP 서버)가 있다.</li>
+<li>SNMP 프로토콜을 지원하는 기기다.</li>
+</ul>
+<h1 id="구성-요소">구성 요소</h1>
+<ul>
+<li>매니저 (SNMP 서버)
+<ul>
+<li>네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어</li>
+</ul>
+</li>
+<li>에이전트 (네트워크 기기/서버)
+<ul>
+<li>네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능</li>
+</ul>
+</li>
+<li>SNMP 프로토콜 (TCP/IP)
+<ul>
+<li>UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.</li>
+</ul>
+</li>
+<li>MIB (Management Information Base)
+<ul>
+<li>SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.</li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc1156">RFC 1156</a>으로 규정된 MIB1, <a href="https://datatracker.ietf.org/doc/html/rfc1213">RFC 1213</a>으로 규정된 MIB2</li>
+<li>MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있다.</li>
+<li>MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타낸다. 이 번호열을 OID(Object ID)라고 한다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="매니저-에이전트-역할">매니저-에이전트 역할</h2>
+<ul>
+<li>정보의 요청과 응답
+<ul>
+<li>매니저가 에이전트에게 대상 기기의 정보를 요청 → 에이전트는 정보를 매니저에게 응답</li>
+</ul>
+</li>
+<li>설정의 요청과 응답
+<ul>
+<li>매니저가 에이전트에게 대상 기기의 설정 변경을 요청 → 에이전트는 설정을 변경하며 그 결과를 매니저에게 응답</li>
+</ul>
+</li>
+<li>상태 변화의 통보
+<ul>
+<li>에이전트가 매니저에게 대상 기기의 상태 변화를 통보</li>
+</ul>
+</li>
+</ul>
+<h2 id="매니저-에이전트-통신-방식">매니저-에이전트 통신 방식</h2>
+<ul>
+<li>폴링 (Polling)
+<ul>
+<li>매니저가 정기적으로 에이전트로부터 관리 정보를 추출</li>
+</ul>
+</li>
+<li>트랩 (Trap)
+<ul>
+<li>에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보</li>
+</ul>
+</li>
+</ul>
+<h2 id="커뮤니티-이름">커뮤니티 이름</h2>
+<ul>
+<li>매니저와 에이전트는 커뮤니티 이름으로 그룹화한다.</li>
+<li>매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신한다.</li>
+</ul>
+<h1 id="버전별-차이">버전별 차이</h1>
+<h2 id="v1">v1</h2>
+<ul>
+<li>커뮤니티 이름이 포함된 패킷을 평문으로 전달함.</li>
+<li>기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용함.</li>
+</ul>
+<h2 id="v2">v2</h2>
+<ul>
+<li>커뮤니티 이름이 포함된 패킷을 암호화해서 전달함.</li>
+<li>추가된 PDU 타입(예: <a href="http://www.ktword.co.kr/test/view/view.php?m_temp1=5270">GetBulkRequest</a>)을 통해 대량의 데이터를 한 번에 전송할 수 있음.</li>
+</ul>
+<h2 id="v2c">v2c</h2>
+<ul>
+<li>커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달하도록 원복함.</li>
+</ul>
+<h2 id="v3">v3</h2>
+<ul>
+<li>(username, password) 인증 기능이 추가됨.</li>
+<li>이 외 다양한 보안 기능 추가됨.</li>
+</ul>
+<h1 id="관련-명령어-도구">관련 명령어 도구</h1>
+<h2 id="snmpget">snmpget</h2>
+<p>정확한 OID를 입력해야 해서 난 잘 사용하지 않음.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># output</span>
+iso.3.6.1.2.1.1.1.0 <span style="color:#ff79c6">=</span> STRING: <span style="color:#f1fa8c">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
+</span><span style="color:#f1fa8c">Technical Support: http://www.cisco.com/techsupport
+</span><span style="color:#f1fa8c">Copyright (c) 1986-2011 by Cisco Systems, Inc.
+</span><span style="color:#f1fa8c">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
+</code></pre></div><h2 id="snmpwalk">snmpwalk</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; <span style="color:#ff79c6">[</span>OID<span style="color:#ff79c6">]</span>
+</code></pre></div><ul>
+<li>도움말
+<ul>
+<li><code>-h</code> : help</li>
+<li><code>-H</code> : 사용 가능한 옵션</li>
+</ul>
+</li>
+<li><code>-v</code> : SNMP 버전 (<code>1</code> | <code>2c</code> | <code>3</code>)</li>
+<li><code>-l</code> : security level (<code>noAuthNoPriv</code> | <code>authNoPriv</code> | <code>authPriv</code>)</li>
+<li><code>-c</code> : the community string</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
+</code></pre></div><h1 id="mib-2-oid-object-id">MIB-2 OID (Object ID)</h1>
+<p><img src="https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&amp;v=beta&amp;t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY" alt="OID Tree"></p>
+<p><em><a href="https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari">SNMP Explained: What You Must Know About Monitoring via MIB and OIDs</a></em></p>
+<h2 id="ex-136121-분해">ex: 1.3.6.1.2.1 분해</h2>
+<ul>
+<li>첫번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.html">1: ISO assigned</a></li>
+</ul>
+</li>
+<li>두번째 자리
+<ul>
+<li>0: ISO Standard</li>
+<li><a href="https://www.alvestrand.no/objectid/1.3.html">3: Identified Organization (org)</a></li>
+</ul>
+</li>
+<li>세번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.html">6: US Department of Defense (dod)</a></li>
+</ul>
+</li>
+<li>네번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.html">1: Internet</a></li>
+</ul>
+</li>
+<li>다섯번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.2.html">2: Management (mgmt)</a></li>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.4.html">4: Private</a>
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.4.1.9.html">1.3.6.1.4.1.9: Cisco</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>여섯번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.2.1.html">1: SNMP MIB-2</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1361211-system">1.3.6.1.2.1.1 system</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Object</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.3.6.1.2.1.1.1</code></td>
+<td>sysDescr</td>
+<td>System Description</td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.1.1">oidref</a></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.2</code></td>
+<td>sysObjectID</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.3</code></td>
+<td>sysUpTime</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.4</code></td>
+<td>sysContact</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.5</code></td>
+<td>sysName</td>
+<td></td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.1.5">oidref</a></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.6</code></td>
+<td>sysLocation</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.1.7</code></td>
+<td>sysServices</td>
+<td></td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.1.7">oidref</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="1361212-interfaces">1.3.6.1.2.1.2 interfaces</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Object</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.3.6.1.2.1.2.2.1.2</code></td>
+<td>ifDescr</td>
+<td>Interface Description</td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.2">oidref</a></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.2.2.1.4</code></td>
+<td>ifMtu</td>
+<td></td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.4">oidref</a></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.2.2.1.5</code></td>
+<td>ifSpeed</td>
+<td></td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.5">oidref</a></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.2.2.1.10</code></td>
+<td>ifInOctets</td>
+<td></td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.10">oidref</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="1361213-at---address-translation">1.3.6.1.2.1.3 at - Address Translation</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Object</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.3.6.1.2.1.3</code></td>
+<td>at</td>
+<td>Address translation</td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.3">oidref</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="1361214-ip---internet-protocol">1.3.6.1.2.1.4 ip - Internet Protocol</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Object</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.3.6.1.2.1.4.22</code></td>
+<td>ipNetToMediaTable</td>
+<td>SEQUENCE OF IpNetToMediaEntry</td>
+<td><a href="https://oidref.com/1.3.6.1.2.1.4.22">oidref</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="13612131-ifmib">1.3.6.1.2.1.31 ifMIB</h2>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Object</th>
+<th>Description</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1.3.6.1.2.1.31.1</code></td>
+<td>ifMIBObjects</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.31.1.1</code></td>
+<td>ifXTable</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.31.1.1.1</code></td>
+<td>ifXEntry</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.31.1.1.1.6</code></td>
+<td>ifHCInOctets</td>
+<td>인터페이스의 입력 바이트 수</td>
+<td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L505">ifBandwidthInUsage</a>라는 별칭을 씀.</td>
+</tr>
+<tr>
+<td><code>1.3.6.1.2.1.31.1.1.1.10</code></td>
+<td>ifHCOutOctets</td>
+<td>인터페이스의 출력 바이트 수</td>
+<td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L506">ifBandwidthOutUsage</a>라는 별칭을 씀.</td>
+</tr>
+</tbody>
+</table>
+<h1 id="참조">참조</h1>
+<ul>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192469287">&lt;네트워크 운용 및 유지 보수의 모든 것&gt;</a> - 오카노 신</li>
+<li><a href="https://aws-hyoh.tistory.com/179">SNMP 쉽게 이해하기 #1</a> - 네트워크 엔지니어 환경</li>
+<li>OID
+<ul>
+<li><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1">CNRS</a></li>
+<li><a href="https://www.alvestrand.no/objectid/top.html">Alvestrand Data</a></li>
+<li><a href="https://www.circitor.fr/Mibs/Html/C/CISCO-STACK-MIB.php">CISCO-STACK-MIB</a></li>
+<li><a href="https://oidref.com/1.3.6.1.2.1">Reference record for OID 1.3.6.1.2.1</a></li>
+</ul>
+</li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-07-23</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/ssh/">
+			Previous<br>🤫 SSH (Secure Shell)
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%a0%9c-%ec%a1%b0%ea%b1%b4" class="nav-전제-조건">
+									전제 조건
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b5%ac%ec%84%b1-%ec%9a%94%ec%86%8c" class="nav-구성-요소">
+									구성 요소
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%97%ad%ed%95%a0" class="nav-매니저-에이전트-역할">
+									매니저-에이전트 역할
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ed%86%b5%ec%8b%a0-%eb%b0%a9%ec%8b%9d" class="nav-매니저-에이전트-통신-방식">
+									매니저-에이전트 통신 방식
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%bb%a4%eb%ae%a4%eb%8b%88%ed%8b%b0-%ec%9d%b4%eb%a6%84" class="nav-커뮤니티-이름">
+									커뮤니티 이름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%b2%84%ec%a0%84%eb%b3%84-%ec%b0%a8%ec%9d%b4" class="nav-버전별-차이">
+									버전별 차이
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#v1" class="nav-v1">
+									v1
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v2" class="nav-v2">
+									v2
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v2c" class="nav-v2c">
+									v2c
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#v3" class="nav-v3">
+									v3
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ea%b4%80%eb%a0%a8-%eb%aa%85%eb%a0%b9%ec%96%b4-%eb%8f%84%ea%b5%ac" class="nav-관련-명령어-도구">
+									관련 명령어 도구
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#snmpget" class="nav-snmpget">
+									snmpget
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#snmpwalk" class="nav-snmpwalk">
+									snmpwalk
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#mib-2-oid-object-id" class="nav-mib-2-oid-object-id">
+									MIB-2 OID (Object ID)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ex-136121-%eb%b6%84%ed%95%b4" class="nav-ex-136121-분해">
+									ex: 1.3.6.1.2.1 분해
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361211-system" class="nav-1361211-system">
+									1.3.6.1.2.1.1 system
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361212-interfaces" class="nav-1361212-interfaces">
+									1.3.6.1.2.1.2 interfaces
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361213-at---address-translation" class="nav-1361213-at---address-translation">
+									1.3.6.1.2.1.3 at - Address Translation
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1361214-ip---internet-protocol" class="nav-1361214-ip---internet-protocol">
+									1.3.6.1.2.1.4 ip - Internet Protocol
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#13612131-ifmib" class="nav-13612131-ifmib">
+									1.3.6.1.2.1.31 ifMIB
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

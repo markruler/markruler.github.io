@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html><head>
+<title>🤫 SSH (Secure Shell)</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="일상에서의 SSH">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="🤫 SSH (Secure Shell)" />
+<meta property="og:description" content="일상에서의 SSH" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/ssh/" /><meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-07-17T22:40:00+09:00" />
+<meta property="article:modified_time" content="2024-07-18T23:49:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.webp"/>
+
+<meta name="twitter:title" content="🤫 SSH (Secure Shell)"/>
+<meta name="twitter:description" content="일상에서의 SSH"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ssh-server" class="nav-ssh-server">
+									SSH Server
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#authoized_keys" class="nav-authoized_keys">
+									authoized_keys
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-server-%ec%84%a4%ec%a0%95" class="nav-주로-사용하는-server-설정">
+									주로 사용하는 Server 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ssh-client" class="nav-ssh-client">
+									SSH Client
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-%ed%8c%8c%ec%9d%bc-%ec%9a%b0%ec%84%a0-%ec%88%9c%ec%9c%84" class="nav-설정-파일-우선-순위">
+									설정 파일 우선 순위
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#known_hosts" class="nav-known_hosts">
+									known_hosts
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-host-%ec%84%a4%ec%a0%95" class="nav-주로-사용하는-host-설정">
+									주로 사용하는 Host 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git" class="nav-git">
+									Git
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#local-forward" class="nav-local-forward">
+									Local Forward
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/master/markruler-wave.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    🤫 SSH (Secure Shell)
+                    
+                    <div class="post-subtitle">
+                        일상에서의 SSH
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-07-17 22:40
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[how-to]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/shell">shell</a>
+                                &nbsp;
+                            
+                                <a href="/tags/security">security</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="ssh-server">SSH Server</h1>
+<p>SSH 데몬 설정 파일은 <code>/etc/ssh/sshd_config</code>이다.</p>
+<h2 id="authoized_keys">authoized_keys</h2>
+<ul>
+<li>역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)</li>
+<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/authorized_keys</code>에 위치한다.</li>
+<li>내용: 클라이언트의 공개 키가 저장된다.
+서버는 클라이언트의 접속 시도 시,
+이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.</li>
+<li>보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
+공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
+특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.</li>
+</ul>
+<p>SSH 데몬(sshd) 설치 혹은 실행 시 <code>/etc/ssh</code> 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
+만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
+<code>ssh-keygen</code> 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">&gt; ls /etc/ssh | grep <span style="color:#f1fa8c">&#34;ssh_host&#34;</span>
+ssh_host_ecdsa_key
+ssh_host_ecdsa_key.pub
+ssh_host_ed25519_key
+ssh_host_ed25519_key.pub
+ssh_host_rsa_key
+ssh_host_rsa_key.pub
+</code></pre></div><p>수동으로 교체하는 명령어는 다음과 같다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 새 키 생성</span>
+sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key_new
+
+<span style="color:#6272a4"># 새 키를 기존 키로 대체</span>
+sudo mv /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_rsa_key_old
+sudo mv /etc/ssh/ssh_host_rsa_key_new /etc/ssh/ssh_host_rsa_key
+sudo mv /etc/ssh/ssh_host_rsa_key.pub /etc/ssh/ssh_host_rsa_key_old.pub
+sudo mv /etc/ssh/ssh_host_rsa_key_new.pub /etc/ssh/ssh_host_rsa_key.pub
+
+<span style="color:#6272a4"># SSH 서버 재시작</span>
+sudo systemctl restart sshd
+</code></pre></div><h2 id="주로-사용하는-server-설정">주로 사용하는 Server 설정</h2>
+<p>설정 완료 후 데몬 재시작(<code>systemctl restart sshd</code>)해야 적용된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4">## /etc/ssh/sshd_config</span>
+<span style="color:#6272a4"># This is the sshd server system-wide configuration file.  See</span>
+<span style="color:#6272a4"># sshd_config(5) for more information.</span>
+
+<span style="color:#6272a4"># SSH 서버가 Listen할 포트 지정</span>
+Port <span style="color:#bd93f9">22</span>
+
+<span style="color:#6272a4"># 서버의 호스트 키 파일 경로를 지정</span>
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+<span style="color:#6272a4"># 루트 로그인 허용 여부</span>
+PermitRootLogin no <span style="color:#6272a4"># yes, prohibit-password</span>
+
+<span style="color:#6272a4"># 비밀번호 인증 허용 여부</span>
+PasswordAuthentication no <span style="color:#6272a4"># yes</span>
+
+<span style="color:#6272a4"># 공개키 인증 허용 여부</span>
+PubkeyAuthentication yes <span style="color:#6272a4"># no</span>
+
+<span style="color:#6272a4"># 허용할 사용자 및 그룹</span>
+AllowUsers user1 user2
+AllowGroups sshusers
+
+<span style="color:#6272a4"># 거부할 사용자 및 그룹</span>
+DenyUsers user3 user4
+DenyGroups nogroup
+
+<span style="color:#6272a4"># 비밀번호 인증 시도 횟수 제한</span>
+MaxAuthTries <span style="color:#bd93f9">3</span> <span style="color:#6272a4"># default 6</span>
+
+<span style="color:#6272a4"># 비밀번호 인증 시도 간격</span>
+LoginGraceTime <span style="color:#bd93f9">120</span> <span style="color:#6272a4"># seconds == 2m</span>
+</code></pre></div><p><code>/etc/hosts.allow</code> 파일에 허용할 IP를 설정할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 모든 호스트 허용</span>
+sshd: ALL
+<span style="color:#6272a4"># 하나의 IP를 허용할 경우</span>
+sshd: 192.168.1.33
+<span style="color:#6272a4"># IP 대역으로 허용할 경우</span>
+sshd: 192.168.1.0/24
+<span style="color:#6272a4"># 특정 도메인을 허용할 경우</span>
+sshd: .example.com
+</code></pre></div><h1 id="ssh-client">SSH Client</h1>
+<p>system-wide 설정 파일은 <code>/etc/ssh/ssh_config</code>이다.</p>
+<h2 id="설정-파일-우선-순위">설정 파일 우선 순위</h2>
+<ol>
+<li>명령줄 옵션: 가장 우선한다.</li>
+<li>환경 변수</li>
+<li><code>$HOME/.ssh/config</code>: 사용자별 설정 파일</li>
+<li><code>/etc/ssh/ssh_config</code>: 전역 설정 파일</li>
+</ol>
+<h2 id="known_hosts">known_hosts</h2>
+<ul>
+<li>역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)</li>
+<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/known_hosts</code>에 위치한다.</li>
+<li>내용: 서버의 호스트 키 정보가 저장된다.
+클라이언트가 처음 특정 서버에 접속할 때,
+서버의 호스트 키를 확인하고 <code>known_hosts</code> 파일에 저장한다.
+이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.</li>
+<li>보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
+이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.</li>
+</ul>
+<h2 id="주로-사용하는-host-설정">주로 사용하는 Host 설정</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># $HOME/.ssh/config</span>
+Host my-host
+  User markruler
+  HostName 111.222.111.222
+  IdentityFile ~/.ssh/my-key.pem
+  IdentitiesOnly yes
+  LogLevel VERBOSE
+</code></pre></div><p>remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">Host old-host
+  HostName 111.222.111.222
+  User markruler
+  <span style="color:#8be9fd;font-style:italic">HostKeyAlgorithms</span> <span style="color:#ff79c6">=</span> +ssh-rsa,ssh-dss
+  LogLevel VERBOSE
+</code></pre></div><ul>
+<li><a href="https://cloud.ibm.com/docs/hp-virtual-servers?topic=hp-virtual-servers-generate_ssh">HostKeyAlgorithms</a>
+<ul>
+<li>ssh-ed25519</li>
+<li>ssh-rsa</li>
+<li>ssh-dss</li>
+<li>ecdsa-sha2-nistp256</li>
+</ul>
+</li>
+</ul>
+<h2 id="git">Git</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 회사 계정과 분리하고 싶을 경우</span>
+Host work.github.com
+  HostName github.com
+  IdentityFile ~/.ssh/github_work_ed25519
+  User git
+
+Host github.com
+  IdentityFile ~/.ssh/github_ed25519
+  User git
+
+Host bitbucket.org
+  IdentityFile ~/.ssh/bitbucket_ed25519
+  User git
+</code></pre></div><p>위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
+새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">git clone git@work.github.com:xpdojo/kubernetes.git
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-toml" data-lang="toml"><span style="color:#6272a4"># .git/config</span>
+[remote <span style="color:#f1fa8c">&#34;origin&#34;</span>]
+  url = git@work.github.com:xpdojo/kubernetes.git
+  fetch = +refs/heads/*:refs/remotes/origin/*
+</code></pre></div><h2 id="local-forward">Local Forward</h2>
+<ul>
+<li>Bastion Host를 두고 Local Forwarding이 필요한 경우</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">Host tost
+  User markruler
+  HostName ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+  LocalForward localhost:14000 something.abcd.ap-northeast-2.rds.amazonaws.com:1521
+  IdentityFile ~/.ssh/my-rds-key.pem
+  LogLevel VERBOSE
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ssh -f -N tost
+</code></pre></div><p>커넥션을 끊어야 할 경우 PID을 직접 죽인다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ps -ef | grep tost
+<span style="color:#6272a4"># markrul+   38624    4372  0 08:37 ?        00:00:00 ssh -f -N tost</span>
+<span style="color:#8be9fd;font-style:italic">kill</span> -TERM <span style="color:#bd93f9">38624</span>
+</code></pre></div><p><strong>위 설정과 동일한 명령어</strong>는 다음과 같다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ssh -vv -f -N <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -i <span style="color:#f1fa8c">&#34;~/.ssh/my-rds-key.pem&#34;</span> <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+</code></pre></div><h1 id="참조">참조</h1>
+<ul>
+<li>ChatGPT</li>
+<li>Client
+<ul>
+<li><a href="https://www.ssh.com/academy/ssh/config">SSH config file for OpenSSH client</a> - SSH Academy</li>
+<li><a href="https://linux.die.net/man/5/ssh_config">ssh_config(5)</a> - Linux man page</li>
+</ul>
+</li>
+<li>Server
+<ul>
+<li><a href="https://linux.die.net/man/5/sshd_config">sshd_config(5)</a> - Linux man page</li>
+</ul>
+</li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-07-18</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/network/snmp/">
+			Next<br>네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/server-to-server-dns/">
+			Previous<br>🕸️ 서버 to 서버 요청 시 발생한 DNS 레이턴시
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ssh-server" class="nav-ssh-server">
+									SSH Server
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#authoized_keys" class="nav-authoized_keys">
+									authoized_keys
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-server-%ec%84%a4%ec%a0%95" class="nav-주로-사용하는-server-설정">
+									주로 사용하는 Server 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ssh-client" class="nav-ssh-client">
+									SSH Client
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-%ed%8c%8c%ec%9d%bc-%ec%9a%b0%ec%84%a0-%ec%88%9c%ec%9c%84" class="nav-설정-파일-우선-순위">
+									설정 파일 우선 순위
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#known_hosts" class="nav-known_hosts">
+									known_hosts
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-host-%ec%84%a4%ec%a0%95" class="nav-주로-사용하는-host-설정">
+									주로 사용하는 Host 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#git" class="nav-git">
+									Git
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#local-forward" class="nav-local-forward">
+									Local Forward
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
