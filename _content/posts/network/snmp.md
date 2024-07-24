@@ -2,7 +2,7 @@
 date: 2024-07-23T19:08:00+09:00
 lastmod: 2024-07-23T19:08:00+09:00
 title: "네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)"
-description: "일상에서의 SSH"
+description: "PC, 공유기도 SNMP를 지원하면 모니터링 가능"
 featured_image: "/images/master/markruler-wave.webp"
 images: ["/images/master/markruler-wave.webp"]
 tags:

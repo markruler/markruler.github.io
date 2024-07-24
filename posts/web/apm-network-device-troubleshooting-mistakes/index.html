@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html><head>
+<title>APM에서 엉뚱한 걸 찾았던 실수</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="APM은 Application Performance Monitoring의 약자">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="APM에서 엉뚱한 걸 찾았던 실수" />
+<meta property="og:description" content="APM은 Application Performance Monitoring의 약자" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/" /><meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-07-25T01:22:00+09:00" />
+<meta property="article:modified_time" content="2024-07-25T01:22:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.webp"/>
+
+<meta name="twitter:title" content="APM에서 엉뚱한 걸 찾았던 실수"/>
+<meta name="twitter:description" content="APM은 Application Performance Monitoring의 약자"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
+									문제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%84%ec%84%9d-%ec%89%bd%ea%b2%8c-%ea%b0%84%ea%b3%bc%ed%96%88%eb%8d%98-%eb%ac%b8%ec%a0%9c" class="nav-분석-쉽게-간과했던-문제">
+									분석: 쉽게 간과했던 문제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
+									해결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/master/markruler-wave.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    APM에서 엉뚱한 걸 찾았던 실수
+                    
+                    <div class="post-subtitle">
+                        APM은 Application Performance Monitoring의 약자
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-07-25 01:22
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[case]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/monitoring">monitoring</a>
+                                &nbsp;
+                            
+                                <a href="/tags/apm">APM</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다.
+우리팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있다.
+(인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)</p>
+<h1 id="문제">문제</h1>
+<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/first.png" alt="First"></p>
+<p>이용자에게 실제 체감이 될 정도로 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
+또한 서비스 전체에 영향이 있었다.</p>
+<h1 id="분석-쉽게-간과했던-문제">분석: 쉽게 간과했던 문제</h1>
+<p><a href="https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/">Oracle Session 히스토리</a>를 남겨서 확인했을 때
+DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었다.
+DB 문제는 아니었다.</p>
+<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/oracle-session.webp" alt="Oracle Session 히스토리"></p>
+<p>발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.
+이 시점에는 이게 문제라고 생각하지 않았다.</p>
+<blockquote>
+<p><strong>&ldquo;Private IP로 요청하면 더 빠른 거 아냐?&quot;</strong></p>
+</blockquote>
+<p>모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었다.
+혹시 몰라서 라우터 장비에 SNMP 모니터링을 추가했다.
+IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었다.</p>
+<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp" alt="Network Router"></p>
+<h1 id="해결">해결</h1>
+<p>정말 간단하게&hellip; 케이블을 교체해서 해결되었다.</p>
+<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/solved.png" alt="Solved"></p>
+<p>정각마다 발생하는 스파이크는 DB 백업 솔루션에서 정각마다 실행하는 프로그램이 있어서 발생한 것이다.</p>
+<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/replace-udp-cable.webp" alt="Replace UDP Cable"></p>
+<p>순간의 오판으로 시간을 허비했다.
+익숙한 것도 의심하고, 모니터링의 한계점을 파악할 필요가 있다고 느꼈다.</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-07-25</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/snmp/">
+			Previous<br>네트워크 장비 모니터링을 위한 SNMP (Simple Network Management Protocol)
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
+									문제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%84%ec%84%9d-%ec%89%bd%ea%b2%8c-%ea%b0%84%ea%b3%bc%ed%96%88%eb%8d%98-%eb%ac%b8%ec%a0%9c" class="nav-분석-쉽게-간과했던-문제">
+									분석: 쉽게 간과했던 문제
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
+									해결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
