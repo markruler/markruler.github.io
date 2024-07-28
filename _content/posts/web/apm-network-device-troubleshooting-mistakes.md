@@ -3,8 +3,8 @@ date: 2024-07-25T01:22:00+09:00
 lastmod: 2024-07-25T01:22:00+09:00
 title: "APM에서 엉뚱한 걸 찾았던 실수"
 description: "APM은 Application Performance Monitoring의 약자"
-featured_image: "/images/master/markruler-wave.webp"
-images: ["/images/master/markruler-wave.webp"]
+featured_image: "/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp"
+images: ["/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp"]
 tags:
   - network
   - monitoring

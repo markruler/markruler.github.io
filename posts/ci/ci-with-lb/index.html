@@ -550,9 +550,6 @@
                                 <a href="/tags/cd">cd</a>
                                 &nbsp;
                             
-                                <a href="/tags/bamboo">bamboo</a>
-                                &nbsp;
-                            
                                 <a href="/tags/git">git</a>
                                 &nbsp;
                             
@@ -569,7 +566,36 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <h1 id="개요">개요</h1>
+                    <ul>
+<li><a href="#%EA%B0%9C%EC%9A%94">개요</a>
+<ul>
+<li><a href="#%EA%B8%B0%EC%A1%B4-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4">기존 프로세스</a></li>
+<li><a href="#%EA%B0%9C%EC%84%A0-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-continuous-delivery">개선 프로세스 (Continuous Delivery)</a></li>
+</ul>
+</li>
+<li><a href="#%EB%8F%84%EC%9E%85-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%9C-%EB%AC%B8%EC%A0%9C%EB%93%A4">도입 과정에서 발생한 문제들</a>
+<ul>
+<li><a href="#active-health-check%EA%B0%80-%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4">Active Health Check가 필요하다</a></li>
+<li><a href="#iptables-%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC-%EB%8B%A4%EC%8B%9C-%EC%8B%9C%EC%9E%91%ED%95%B4%EC%95%BC-%ED%95%A0-%EB%95%8C">iptables 서비스를 다시 시작해야 할 때</a></li>
+<li><a href="#httpd%EB%A5%BC-%EB%8B%A4%EC%8B%9C-%EC%8B%A4%ED%96%89%ED%95%B4%EC%95%BC-%ED%95%A0-%EB%95%8C">httpd를 다시 실행해야 할 때</a></li>
+</ul>
+</li>
+<li><a href="#%EA%B0%9C%EC%84%A0%EC%9D%98-%EC%97%AC%EC%A7%80%EA%B0%80-%EC%9E%88%EB%8B%A4">개선의 여지가 있다</a>
+<ul>
+<li><a href="#sessionrepositoryfilter-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5"><code>SessionRepositoryFilter</code> 에러 페이지 응답</a></li>
+<li><a href="#proxy">Proxy</a></li>
+<li><a href="#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5">Akamai 에러 페이지 응답</a></li>
+<li><a href="#haproxy-%EC%A0%84%ED%99%98">HAProxy 전환</a></li>
+<li><a href="#%EC%84%A0%EC%96%B8%ED%98%95-%EB%B0%B0%ED%8F%AC-gitops">선언형 배포 (GitOps?)</a></li>
+</ul>
+</li>
+<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC">더 읽을 거리</a>
+<ul>
+<li><a href="#%EA%B0%81%EC%A3%BC">각주</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="개요">개요</h1>
 <p>현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다.
 놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다.
 그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다.
@@ -585,72 +611,49 @@
 정리하자면 기존 프로세스와 개선 프로세스는 다음과 같다.</p>
 <h2 id="기존-프로세스">기존 프로세스</h2>
 <ol>
-<li>
-<p>코드 리뷰를 마치고 소스 코드가 배포 브랜치에 병합되면 버튼을 눌러 빌드한다.</p>
+<li>코드 리뷰를 마치고 소스 코드가 배포 브랜치에 병합되면 버튼을 눌러 빌드한다.
 <ul>
 <li>대부분의 이슈들은 2개의 애플리케이션(<code>:38888</code>, <code>:39999</code>)에 함께 반영된다.</li>
 </ul>
 </li>
-<li>
-<p><code>telnet</code> 을 사용해서 Alteon Switch에 접속한다.</p>
-</li>
-<li>
-<p>배포하기 전에 서비스 도메인(<code>d1.markruler.com</code>, <code>d2.markruler.com</code>)에 접속할 수 있는지 확인한다.</p>
-</li>
-<li>
-<p>가상 호스트(vhost)에 묶여 있는 <code>s1</code> 서버를 비활성화한다.</p>
+<li><code>telnet</code> 을 사용해서 Alteon Switch에 접속한다.</li>
+<li>배포하기 전에 서비스 도메인(<code>d1.markruler.com</code>, <code>d2.markruler.com</code>)에 접속할 수 있는지 확인한다.</li>
+<li>가상 호스트(vhost)에 묶여 있는 <code>s1</code> 서버를 비활성화한다.</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Server Load Balancing Information<span style="color:#6272a4"># /info/slb/virt 1</span>
-   <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> IP4 <span style="color:#ff79c6">&lt;</span>vhost_IP_Address<span style="color:#ff79c6">&gt;</span>,   <span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span>
-    virtual ports<span style="color:#ff79c6">:</span>
-    http<span style="color:#ff79c6">:</span> rport http, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-    https<span style="color:#ff79c6">:</span> rport https, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
+  <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> IP4 <span style="color:#ff79c6">&lt;</span>vhost_IP_Address<span style="color:#ff79c6">&gt;</span>,   <span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span>
+  virtual ports<span style="color:#ff79c6">:</span>
+  http<span style="color:#ff79c6">:</span> rport http, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
+      real servers<span style="color:#ff79c6">:</span>
+          <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
+          <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
+  https<span style="color:#ff79c6">:</span> rport https, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
+      real servers<span style="color:#ff79c6">:</span>
+          <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
+          <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
 </code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># /cfg/slb/real 1/dis</span>
 Current status<span style="color:#ff79c6">:</span> enabled
 New status<span style="color:#ff79c6">:</span>     disabled
 
 <span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># apply</span>
-</code></pre></div></li>
-<li>
-<p>다시 3번과 동일하게 서비스 도메인에 접속할 수 있는지 확인한다.</p>
-</li>
-<li>
-<p>Bamboo를 사용해서 새로운 버전의 애플리케이션 2개(<code>s1:38888</code>, <code>s1:39999</code>)를 배포한다.</p>
-</li>
-<li>
-<p>배포 스크립트에서 별도로 헬스체크를 하지 않기 때문에 수동으로 접속할 수 있는지 확인(&ldquo;새로 고침&rdquo;)한다.</p>
-</li>
-<li>
-<p>정상적으로 접속되면 Alteon Switch에서 <code>s1</code> 서버를 활성화한다.</p>
+</code></pre></div><ol start="5">
+<li>다시 3번과 동일하게 서비스 도메인에 접속할 수 있는지 확인한다.</li>
+<li>Bamboo를 사용해서 새로운 버전의 애플리케이션 2개(<code>s1:38888</code>, <code>s1:39999</code>)를 배포한다.</li>
+<li>배포 스크립트에서 별도로 헬스체크를 하지 않기 때문에 수동으로 접속할 수 있는지 확인(&ldquo;새로 고침&rdquo;)한다.</li>
+<li>정상적으로 접속되면 Alteon Switch에서 <code>s1</code> 서버를 활성화한다.</li>
+</ol>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># /cfg/slb/real 1/ena</span>
 Current status<span style="color:#ff79c6">:</span> disabled
 New status<span style="color:#ff79c6">:</span>     enabled
 
 <span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># apply</span>
-</code></pre></div></li>
-<li>
-<p>그 후 <code>s2</code> 서버를 비활성화한다. (8번과 동시에 적용하면 Akamai CDN 서비스에서 <a href="#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5"><code>ERR_ZERO_SIZE_OBJECT</code> 에러가 발생할 수 있다</a>)</p>
-</li>
-<li>
-<p>다시 3번과 동일하게 서비스 도메인에 접속할 수  있는지 확인한다.</p>
-</li>
-<li>
-<p>Bamboo에서 새로운 버전의 애플리케이션 2개(<code>s2:38888</code>, <code>s2:39999</code>)를 배포한다.</p>
-</li>
-<li>
-<p>다시 7번과 동일한 이유로 서비스 도메인에 접속할 수  있는지 확인한다.</p>
-</li>
-<li>
-<p>모두 접속되면 Alteon Switch에서 <code>s2</code> 서버를 활성화한다.</p>
-</li>
-<li>
-<p>마지막으로 반영 사항을 갈무리해서 업무 메신저에 공유한다.</p>
-</li>
+</code></pre></div><ol start="9">
+<li>그 후 <code>s2</code> 서버를 비활성화한다. (8번과 동시에 적용하면 Akamai CDN 서비스에서 <a href="#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5"><code>ERR_ZERO_SIZE_OBJECT</code> 에러가 발생할 수 있다</a>)</li>
+<li>다시 3번과 동일하게 서비스 도메인에 접속할 수  있는지 확인한다.</li>
+<li>Bamboo에서 새로운 버전의 애플리케이션 2개(<code>s2:38888</code>, <code>s2:39999</code>)를 배포한다.</li>
+<li>다시 7번과 동일한 이유로 서비스 도메인에 접속할 수  있는지 확인한다.</li>
+<li>모두 접속되면 Alteon Switch에서 <code>s2</code> 서버를 활성화한다.</li>
+<li>마지막으로 반영 사항을 갈무리해서 업무 메신저에 공유한다.</li>
 </ol>
 <h2 id="개선-프로세스-continuous-delivery">개선 프로세스 (Continuous Delivery)</h2>
 <p>웹 서버가 동일 머신에 있는 웹 애플리케이션만 바라보는 것이 아니라 다른 머신에 있는 서버도 바라보도록 설정했다.</p>
@@ -1009,7 +1012,7 @@ Jenkins Pipeline을 활용하면 <code>Jenkinsfile</code> 을 사용해서 선�
 
                 
                 <a class="newer-posts" href="/posts/gui/x-based-desktop/">
-			Next<br>X-based desktop
+			Next<br>X Window System
                 </a>
                 
                 

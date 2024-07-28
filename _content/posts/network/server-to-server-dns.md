@@ -3,8 +3,8 @@ date: 2024-06-13T17:40:00+09:00
 lastmod: 2024-06-13T17:40:00+09:00
 title: "🕸️ 서버 to 서버 요청 시 발생한 DNS 레이턴시"
 description: "LG야 힘내"
-featured_image: "/images/network/image-20240611-080044.webp"
-images: ["/images/network/image-20240611-080044.webp"]
+featured_image: "/images/network/dns/dall-e-dns-latency.webp"
+images: ["/images/network/dns/dall-e-dns-latency.webp"]
 socialshare: true
 tags:
   - web

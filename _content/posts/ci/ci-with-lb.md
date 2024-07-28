@@ -1,5 +1,6 @@
 ---
 date: 2022-08-17T03:44:00+09:00
+lastmod: 2022-08-17T03:44:00+09:00
 title: "Load Balancer를 활용해서 배포 프로세스를 개선해보자"
 description: "업무 자동화"
 featured_image: "/images/ci/old-system-2022.webp"
@@ -8,12 +9,27 @@ socialshare: true
 tags:
   - ci
   - cd
-  - bamboo
   - git
   - devops
 categories:
   - case
 ---
+
+- [개요](#개요)
+  - [기존 프로세스](#기존-프로세스)
+  - [개선 프로세스 (Continuous Delivery)](#개선-프로세스-continuous-delivery)
+- [도입 과정에서 발생한 문제들](#도입-과정에서-발생한-문제들)
+  - [Active Health Check가 필요하다](#active-health-check가-필요하다)
+  - [iptables 서비스를 다시 시작해야 할 때](#iptables-서비스를-다시-시작해야-할-때)
+  - [httpd를 다시 실행해야 할 때](#httpd를-다시-실행해야-할-때)
+- [개선의 여지가 있다](#개선의-여지가-있다)
+  - [`SessionRepositoryFilter` 에러 페이지 응답](#sessionrepositoryfilter-에러-페이지-응답)
+  - [Proxy](#proxy)
+  - [Akamai 에러 페이지 응답](#akamai-에러-페이지-응답)
+  - [HAProxy 전환](#haproxy-전환)
+  - [선언형 배포 (GitOps?)](#선언형-배포-gitops)
+- [더 읽을 거리](#더-읽을-거리)
+  - [각주](#각주)
 
 # 개요
 
@@ -42,40 +58,40 @@ categories:
 3. 배포하기 전에 서비스 도메인(`d1.markruler.com`, `d2.markruler.com`)에 접속할 수 있는지 확인한다.
 4. 가상 호스트(vhost)에 묶여 있는 `s1` 서버를 비활성화한다.
 
-    ```s
-    >> Server Load Balancing Information# /info/slb/virt 1
-       1: IP4 <vhost_IP_Address>,   00:00:00:00:00:00
-        virtual ports:
-        http: rport http, group 1, backup none, rtspslb none
-            real servers:
-               1: <s1_IP_Address>, backup none, 0 ms, group ena, up
-               2: <s2_IP_Address>, backup none, 0 ms, group ena, up
-        https: rport https, group 1, backup none, rtspslb none
-            real servers:
-               1: <s1_IP_Address>, backup none, 0 ms, group ena, up
-               2: <s2_IP_Address>, backup none, 0 ms, group ena, up
-    ```
+```s
+>> Server Load Balancing Information# /info/slb/virt 1
+  1: IP4 <vhost_IP_Address>,   00:00:00:00:00:00
+  virtual ports:
+  http: rport http, group 1, backup none, rtspslb none
+      real servers:
+          1: <s1_IP_Address>, backup none, 0 ms, group ena, up
+          2: <s2_IP_Address>, backup none, 0 ms, group ena, up
+  https: rport https, group 1, backup none, rtspslb none
+      real servers:
+          1: <s1_IP_Address>, backup none, 0 ms, group ena, up
+          2: <s2_IP_Address>, backup none, 0 ms, group ena, up
+```
 
-    ```s
-    >> Main# /cfg/slb/real 1/dis
-    Current status: enabled
-    New status:     disabled
-    
-    >> Main# apply
-    ```
+```s
+>> Main# /cfg/slb/real 1/dis
+Current status: enabled
+New status:     disabled
+
+>> Main# apply
+```
 
 5. 다시 3번과 동일하게 서비스 도메인에 접속할 수 있는지 확인한다.
 6. Bamboo를 사용해서 새로운 버전의 애플리케이션 2개(`s1:38888`, `s1:39999`)를 배포한다.
 7. 배포 스크립트에서 별도로 헬스체크를 하지 않기 때문에 수동으로 접속할 수 있는지 확인("새로 고침")한다.
 8. 정상적으로 접속되면 Alteon Switch에서 `s1` 서버를 활성화한다.
 
-    ```s
-    >> Main# /cfg/slb/real 1/ena
-    Current status: disabled
-    New status:     enabled
-    
-    >> Main# apply
-    ```
+```s
+>> Main# /cfg/slb/real 1/ena
+Current status: disabled
+New status:     enabled
+
+>> Main# apply
+```
 
 9. 그 후 `s2` 서버를 비활성화한다. (8번과 동시에 적용하면 Akamai CDN 서비스에서 [`ERR_ZERO_SIZE_OBJECT` 에러가 발생할 수 있다](#akamai-에러-페이지-응답))
 10. 다시 3번과 동일하게 서비스 도메인에 접속할 수  있는지 확인한다.

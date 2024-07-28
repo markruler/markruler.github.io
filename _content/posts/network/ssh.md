@@ -3,8 +3,8 @@ date: 2024-07-17T22:40:00+09:00
 lastmod: 2024-07-18T23:49:00+09:00
 title: "🤫 SSH (Secure Shell)"
 description: "일상에서의 SSH"
-featured_image: "/images/master/markruler-wave.webp"
-images: ["/images/master/markruler-wave.webp"]
+featured_image: "/images/network/ssh/dall-e-ssh.webp"
+images: ["/images/network/ssh/dall-e-ssh.webp"]
 tags:
   - network
   - shell

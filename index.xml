@@ -9,9 +9,159 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 25 Jul 2024 01:22:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jul 2024 00:51:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>👾 웹 개발자가 알면 유용한 구글 크롬(Google Chrome)의 기능</title>
+        <link>https://markruler.github.io/posts/web/google-chrome/</link>
+        <pubDate>Mon, 29 Jul 2024 00:51:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/google-chrome/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/web/google-chrome/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#chrome-urls&#34;&gt;Chrome URLs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%B6%81%EB%A7%88%ED%81%B4%EB%A6%BF-bookmarklet&#34;&gt;북마클릿 Bookmarklet&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%8A%A4%EB%8B%88%ED%8E%AB&#34;&gt;자바스크립트 스니펫&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%8F%84%EA%B5%AC-devtools&#34;&gt;개발자 도구 DevTools&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#chrome-62&#34;&gt;Chrome 62&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#chrome-65&#34;&gt;Chrome 65&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#chrome-66&#34;&gt;Chrome 66&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#chrome-126&#34;&gt;Chrome 126&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;chrome-urls&#34;&gt;Chrome URLs&lt;/h1&gt;
+&lt;p&gt;크롬 URL은 Google Chrome 브라우저에서 설정 페이지나 특정 기능으로 빠르게 접근할 수 있게 해주는 내부 주소다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;chrome://about/&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;크롬 URL 목록&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;chrome://net-internals/#hsts&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;HSTS 조회 및 비활성화&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;chrome://inspect#devices&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;USB로 모바일 디바이스를 연결해서 개발자 도구(DevTools)로 모바일 크롬 앱을 확인할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;북마클릿-bookmarklet&#34;&gt;북마클릿 Bookmarklet&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;북마클릿(Bookmarklet)&lt;/code&gt;이라는 단어는 &lt;code&gt;북마크(Bookmark)&lt;/code&gt;와 &lt;code&gt;애플릿(Applet)&lt;/code&gt;의 합성어다.
+이 단어는 다음과 같은 이유로 만들어졌다:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;북마크(Bookmark)&lt;/strong&gt;:
+웹 브라우저에서 특정 웹 페이지를 빠르게 접근할 수 있도록 저장하는 기능이다.
+북마크는 사용자가 자주 방문하는 페이지를 저장해 두고 클릭만으로 쉽게 이동할 수 있게 한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;애플릿(Applet)&lt;/strong&gt;:
+작은 애플리케이션 프로그램을 의미하는 단어로,
+보통 웹 브라우저 내에서 실행되는 작은 자바 프로그램을 의미한다.
+그러나 &amp;ldquo;애플릿&amp;quot;은 여기서 작은 규모의 프로그램 또는 스크립트를 의미한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;북마클릿은 자바스크립트 코드를 포함하고 있는 북마크로,
+사용자가 클릭하면 해당 코드가 실행되어 특정 작업을 수행한다.
+이 용어는 북마크의 편리함과 애플릿의 실행 기능을 결합한 형태를 잘 나타낸다.&lt;/p&gt;
+&lt;p&gt;북마클릿은 1990년대 후반에 등장했으며,
+특히 브라우저에서 반복적인 작업을 자동화하거나 웹 페이지를 개인화하기 위한 도구로 널리 사용되었다.
+그 후로 웹 개발자들과 사용자들 사이에서 인기를 끌게 되었다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// background를 노란색으로 변경
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;javascript&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; (&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; () {
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;document&lt;/span&gt;.body.style.backgroundColor &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;yellow&amp;#34;&lt;/span&gt;;
+})();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 3000ms(3초) 후에 이미지에 빨간 테두리 추가
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;javascript&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; sleep() {
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Promise&lt;/span&gt;((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#bd93f9&#34;&gt;3000&lt;/span&gt;));
+  }
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;await&lt;/span&gt; sleep().then(() =&amp;gt; {
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; images &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;document&lt;/span&gt;.querySelectorAll(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;img&amp;#34;&lt;/span&gt;);
+    images.forEach((img) =&amp;gt; {
+      img.style.border &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;2px solid red&amp;#34;&lt;/span&gt;;
+    });
+  });
+})();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 탭 복제
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;javascript&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;window&lt;/span&gt;.open(location));
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// wayback machine에 현재 페이지 저장
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;javascript&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;window&lt;/span&gt;.open(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;https://web.archive.org/save/&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;document&lt;/span&gt;.location.href));
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;자바스크립트-스니펫&#34;&gt;자바스크립트 스니펫&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://goo.gle/devtools-snippets&#34;&gt;자바스크립트 스니펫 실행&lt;/a&gt; | Run snippets of JavaScript
+&lt;ul&gt;
+&lt;li&gt;공식 문서에서도 북마클릿의 대체재라고 언급하지만,
+&amp;lsquo;딸깍&amp;rsquo; 클릭만 하면 되는 북마클릿이 더 편하다&amp;hellip;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://developer.chrome.com/static/docs/devtools/javascript/snippets/image/the-devtools-documentatio-b98254f550319_856.png&#34; alt=&#34;Run snippets of JavaScript&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;개발자-도구-devtools&#34;&gt;개발자 도구 DevTools&lt;/h1&gt;
+&lt;h2 id=&#34;chrome-62&#34;&gt;Chrome 62&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-62?hl=ko#har-imports&#34;&gt;Network 패널에서 HAR 가져오기&lt;/a&gt; | HAR imports in the Network panel
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/network/reference?hl=ko#export&#34;&gt;자세한 내용&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://developer.chrome.com/static/docs/devtools/network/reference/image/selecting-save-as-har-c-543367c2a7051_856.png&#34; alt=&#34;Save all network requests to a HAR file&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;chrome-65&#34;&gt;Chrome 65&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-65?hl=ko#overrides&#34;&gt;로컬 재정의 (Local Overrides)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/overrides?hl=ko&#34;&gt;더 자세한 내용&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://developer.chrome.com/static/blog/new-in-devtools-65/image/persisting-css-change-ac-3da090318c534.gif&#34; alt=&#34;Local Overrides&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;chrome-66&#34;&gt;Chrome 66&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-66?hl=ko#overrides&#34;&gt;Override 파일을 저장할 폴더 지정&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;원본 소스에서 파일 수정 후 저장하면 해당 경로로 파일이 저장됨.&lt;/li&gt;
+&lt;li&gt;이후 해당 페이지는 항상 Override된 파일을 참조하기 때문에 디버깅 후 해당 파일은 삭제함.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://developer.chrome.com/static/blog/new-in-devtools-66/image/an-example-styles-define-a24be5796e36a_856.png&#34; alt=&#34;Local Overrides now works with some styles defined in HTML&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;chrome-126&#34;&gt;Chrome 126&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Console에 자바스크립트 코드를 붙여넣으면 발생하는 &lt;a href=&#34;https://developer.chrome.com/blog/self-xss&#34;&gt;self-XSS 경고&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-126#self-xss-flag&#34;&gt;self-XSS 경고 비활성화&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;Warning&lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt;
+Don’t paste code into the DevTools Console that you don’t understand or haven’t reviewed yourself.
+This could allow attackers to steal your identity or take control &lt;span style=&#34;color:#ff79c6&#34;&gt;of&lt;/span&gt; your computer.
+Please type ‘allow pasting’ below and hit Enter to allow pasting.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;웹 브라우저에 따라 입력하는 것이 다르다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// Google Chrome
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;allow pasting
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// Microsoft Edge
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;console.profile()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;ChatGPT&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/news?hl=ko&#34;&gt;DevTools의 새로운 기능&lt;/a&gt; | What&amp;rsquo;s New in DevTools&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/web/google-chrome/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1618,149 +1768,6 @@ JMX 에이전트는 Java 애플리케이션 내부에 포함되거나, 별도의
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://markruler.github.io/posts/java/tomcat/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>X-based desktop</title>
-        <link>https://markruler.github.io/posts/gui/x-based-desktop/</link>
-        <pubDate>Sun, 21 Aug 2022 23:04:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/gui/x-based-desktop/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/gui/x-based-desktop/ -&lt;h1 id=&#34;xdg-x-development-group&#34;&gt;XDG: X Development Group&lt;/h1&gt;
-&lt;p&gt;XDG는 &lt;code&gt;FreeDesktop.org&lt;/code&gt; 의 옛 이름이다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;http://freedesktop.org/&#34;&gt;freedesktop.org&lt;/a&gt; hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;관련-소프트웨어&#34;&gt;관련 소프트웨어&lt;/h1&gt;
-&lt;h2 id=&#34;xdg-user-directories&#34;&gt;XDG user directories&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.freedesktop.org/wiki/Software/xdg-user-dirs/&#34;&gt;xdg-user-dirs&lt;/a&gt; is a tool to handle well known directories in the users homedir.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://wiki.archlinux.org/title/XDG_user_directories&#34;&gt;XDG user directories&lt;/a&gt; - archilinux&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&amp;gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$XDG_&lt;/span&gt;
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$XDG_DATA_DIRS&lt;/span&gt;    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$XDG_RUNTIME_DIR&lt;/span&gt;
-
-&amp;gt; man xdg-user-dirs-update
-&lt;span style=&#34;color:#6272a4&#34;&gt;# xdg-user-dirs-update - Update XDG user dir configuration&lt;/span&gt;
-&amp;gt; man xdg-user-dir
-&lt;span style=&#34;color:#6272a4&#34;&gt;# xdg-user-dir - Find an XDG user dir&lt;/span&gt;
-
-&amp;gt; xdg-user-dir DESKTOP
-
-&amp;gt; cat /etc/xdg/user-dirs.conf
-...
-&lt;span style=&#34;color:#6272a4&#34;&gt;# the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this&lt;/span&gt;
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;enabled&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;True
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;filename_encoding&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;UTF-8
-
-&amp;gt; cat /etc/xdg/user-dirs.defaults
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;DESKTOP&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Desktop
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;DOWNLOAD&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Downloads
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;TEMPLATES&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Templates
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PUBLICSHARE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Public
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;DOCUMENTS&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Documents
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;MUSIC&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Music
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PICTURES&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Pictures
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;VIDEOS&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;Videos
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;x-window-system&#34;&gt;X Window System&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.x.org/&#34;&gt;X.Org&lt;/a&gt; is an implementation of the X Window System&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, known as X11.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Bitmap&#34;&gt;비트맵&lt;/a&gt; 디스플레이용 &lt;a href=&#34;https://en.wikipedia.org/wiki/Windowing_system&#34;&gt;윈도우 시스템&lt;/a&gt;이다.&lt;/p&gt;
-&lt;h2 id=&#34;gui-도구&#34;&gt;GUI 도구&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.kernelpanic.kr/25&#34;&gt;출처&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;GTK&lt;/th&gt;
-&lt;th&gt;QT&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;지원언어&lt;/td&gt;
-&lt;td&gt;C, C++, Python 등&lt;/td&gt;
-&lt;td&gt;C++, Python 등&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;플랫폼&lt;/td&gt;
-&lt;td&gt;Linux, Windows, MacOS&lt;/td&gt;
-&lt;td&gt;Linux, WIndows, MacOS&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;라이센스&lt;/td&gt;
-&lt;td&gt;LGPL2.1&lt;/td&gt;
-&lt;td&gt;LGPL, GPL, 상용 라이센스&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;대표 데스크탑 환경&lt;/td&gt;
-&lt;td&gt;Gnome, Xfce&lt;/td&gt;
-&lt;td&gt;KDE&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;gnome-desktop&#34;&gt;GNOME Desktop&lt;/h2&gt;
-&lt;p&gt;The &lt;a href=&#34;https://www.freedesktop.org/wiki/GNOME/&#34;&gt;GNOME Desktop&lt;/a&gt; is an attractive and useful desktop environment created by the GNU project.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;GNOME 설정법&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Gconf&lt;/strong&gt; - XML based database (backend system). The older one.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dconf&lt;/strong&gt; - BLOB based database (backend system). The newer one.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Gsettings&lt;/strong&gt; - CLI tool to edit settings. Looks like it works only with Dconf (although I saw somewhere that it might work with Gconf).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;gnome-shell --version
-&lt;span style=&#34;color:#6272a4&#34;&gt;# GNOME Shell 41.8.1&lt;/span&gt;
-
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock animation-time 0.2
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED &lt;span style=&#34;color:#6272a4&#34;&gt;# 투명도 모드&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock background-opacity 0.6 &lt;span style=&#34;color:#6272a4&#34;&gt;# 배경 투명도&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock running-indicator-style DASHES &lt;span style=&#34;color:#6272a4&#34;&gt;# 실행 중인 앱 표시 형태&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock intellihide-mode FOCUS_APPLICATION_WINDOWS
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock dash-max-icon-size &lt;span style=&#34;color:#bd93f9&#34;&gt;32&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# 범위: 16-64&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock extend-height &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;false&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# 화면에 아이콘이 꽉 차지 않을 때 여백을 두지 않음&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock show-windows-preview &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock show-favorites &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock show-trash &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock show-mounts &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock multi-monitor &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# 모니터가 여러 개일 때 어느 모니터에서든 dock을 볼 수 있음&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock scroll-action cycle-windows &lt;span style=&#34;color:#6272a4&#34;&gt;# 아이콘 위에서 마우스 스크롤하면 여러 윈도우를 이동할 수 있음&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock hot-keys &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# `super`+`num`&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock hotkeys-show-dock &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;true&lt;/span&gt;
-gsettings &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; org.gnome.shell.extensions.dash-to-dock force-straight-corner &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;gtk-gimp-toolkit&#34;&gt;GTK: GIMP ToolKit&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GTK&#34;&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;kde-kool-desktop-environment&#34;&gt;KDE: K(ool) Desktop Environment&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/KDE&#34;&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;qt&#34;&gt;Qt&lt;/h3&gt;
-&lt;p&gt;Qt(&amp;ldquo;cute&amp;quot;로 발음)는 GUI 프로그램 개발에 널리 쓰이는 크로스 플랫폼 소프트웨어다.
-서버용 콘솔과 명령 줄 도구와 같은 CLI 프로그램 개발에도 사용된다.
-그래픽 사용자 인터페이스를 사용하는 경우에는 Qt를
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Widget_toolkit&#34;&gt;Widget toolkit&lt;/a&gt;으로 분류한다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/X_Window_System&#34;&gt;Wikipedia: X Windows System&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them&#34;&gt;Ask Ubuntu&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Qt_(software)&#34;&gt;Wikipedia: Qt&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://markruler.github.io/posts/gui/x-based-desktop/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

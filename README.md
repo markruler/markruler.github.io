@@ -20,9 +20,17 @@
 
 ## 콘텐츠 추가
 
-- 이미지: `_content/images/`
-- 포스트: `_content/posts/`
 - about 페이지: `_content/about/`
+- 포스트: `_content/posts/`
+- 이미지: `_content/images/`
+
+```sh
+# AI 이미지 생성
+중앙에 케이블이 여러개 연결된 이미지를 그려줘.
+검은색 배경에 노란색으로 강조해.
+미니멀리즘 스타일로 그려줘.
+결과 이미지 비율은 4:3으로 만들어.
+```
 
 ### Docker
 

@@ -1,9 +1,10 @@
 ---
 date: 2022-08-21T23:04:00+09:00
-title: "X-based desktop"
+lastmod: 2024-07-29T01:04:00+09:00
+title: "X Window System"
 description: "리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?"
-featured_image: "/images/master/markruler-wave.webp"
-images: ["/images/master/markruler-wave.webp"]
+featured_image: "/images/gui/xdg/dall-e-x-window-system.webp"
+images: ["/images/gui/xdg/dall-e-x-window-system.webp"]
 socialshare: true
 tags:
   - xdg
@@ -14,11 +15,30 @@ categories:
   - note
 ---
 
-# XDG: X Development Group
+- [참조](#참조)
+- [freedesktop.org](#freedesktoporg)
+- [관련 소프트웨어](#관련-소프트웨어)
+  - [XDG user directories](#xdg-user-directories)
+  - [X Window System](#x-window-system)
+  - [GUI 도구](#gui-도구)
+  - [GNOME Desktop](#gnome-desktop)
+    - [GTK: GIMP ToolKit](#gtk-gimp-toolkit)
+  - [KDE: K(ool) Desktop Environment](#kde-kool-desktop-environment)
+    - [Qt](#qt)
 
-XDG는 `FreeDesktop.org` 의 옛 이름이다.
+# 참조
 
-> [freedesktop.org](http://freedesktop.org/) hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.
+- ChatGPT
+- [freedesktop.org](https://en.wikipedia.org/wiki/Freedesktop.org) - Wikipedia
+
+# freedesktop.org
+
+XDG는 `X Desktop Group`의 약자로, [freedesktop.org](https://freedesktop.org)의 옛 이름이다.
+
+> freedesktop.org hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.
+> \
+> \
+> freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 상호 운용성과 공유 기술에 중점을 둔 무료 및 오픈 소스 소프트웨어의 개발을 주도합니다.
 
 # 관련 소프트웨어
 
@@ -28,31 +48,46 @@ XDG는 `FreeDesktop.org` 의 옛 이름이다.
 - [XDG user directories](https://wiki.archlinux.org/title/XDG_user_directories) - archilinux
 
 ```bash
-> echo $XDG_
-$XDG_DATA_DIRS    $XDG_RUNTIME_DIR
+printenv | grep XDG_
+# XDG_SESSION_ID=57404
+# XDG_RUNTIME_DIR=/run/user/1000
+# XDG_SESSION_TYPE=tty
+# XDG_SESSION_CLASS=user
+```
 
-> man xdg-user-dirs-update
+```sh
+man xdg-user-dirs-update
 # xdg-user-dirs-update - Update XDG user dir configuration
-> man xdg-user-dir
+```
+
+```sh
+man xdg-user-dir
 # xdg-user-dir - Find an XDG user dir
+```
 
-> xdg-user-dir DESKTOP
+```sh
+xdg-user-dir DESKTOP
+# /home/markruler/Desktop
+```
 
-> cat /etc/xdg/user-dirs.conf
+```sh
+cat /etc/xdg/user-dirs.conf
 ...
 # the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this
 enabled=True
 filename_encoding=UTF-8
+```
 
-> cat /etc/xdg/user-dirs.defaults
-DESKTOP=Desktop
-DOWNLOAD=Downloads
-TEMPLATES=Templates
-PUBLICSHARE=Public
-DOCUMENTS=Documents
-MUSIC=Music
-PICTURES=Pictures
-VIDEOS=Videos
+```sh
+cat /etc/xdg/user-dirs.defaults
+# DESKTOP=Desktop
+# DOWNLOAD=Downloads
+# TEMPLATES=Templates
+# PUBLICSHARE=Public
+# DOCUMENTS=Documents
+# MUSIC=Music
+# PICTURES=Pictures
+# VIDEOS=Videos
 ```
 
 ## X Window System
