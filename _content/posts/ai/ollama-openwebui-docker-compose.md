@@ -1,6 +1,6 @@
 ---
-date: 2024-07-31T20:40:00+09:00
-lastmod: 2024-07-31T20:49:00+09:00
+date: 2024-07-31T23:48:00+09:00
+lastmod: 2024-08-01T01:03:00+09:00
 title: "Docker Compose로 간단하게 Ollama 시작하기"
 description: "근데 이제 Open WebUI를 곁들인"
 featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
@@ -14,12 +14,21 @@ categories:
   - how-to
 ---
 
-# LLM (Large Language Model)
+# 대형 언어 모델 (LLM, Large Language Model)
 
-LLM은 생성형 AI(Generative AI)의 한 형태라고 볼 수 있다.
+**LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델**[^1]이다.
+이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
+다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있다.
+
+[^1]: [AWS](https://aws.amazon.com/ko/what-is/large-language-model/)
+
 일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
 70억 개 수준의 파라미터를 갖는 모델은 소규모 언어 모델(Small Language Model, SLM)이라고 한다.
 이 사이에 중간 규모의 모델은 sLLM(smaller Large Language Model)이라고 한다.
+
+**Ollama**는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
+**Open WebUI**는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
+이 2가지 도구를 Docker Compose로 실행해보자.
 
 # 먼저 Docker Compose 없이 Ollma 실행해보기
 
@@ -167,7 +176,7 @@ volumes:
   open-webui: {}
 ```
 
-실행 후 [http://localhost:3000](http://localhost:3000)로 접속하면 OpenWebUI를 확인할 수 있다.
+실행 후 3000번 포트 혹은 `OPEN_WEBUI_PORT`로 지정한 포트로 접속하면 Open WebUI를 확인할 수 있다.
 
 ![Open WebUI 화면](/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp)
 

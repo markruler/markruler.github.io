@@ -20,8 +20,8 @@
 <meta property="og:description" content="근데 이제 Open WebUI를 곁들인" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/" /><meta property="og:image" content="https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-07-31T20:40:00+09:00" />
-<meta property="article:modified_time" content="2024-07-31T20:49:00+09:00" />
+<meta property="article:published_time" content="2024-07-31T23:48:00+09:00" />
+<meta property="article:modified_time" content="2024-08-01T01:03:00+09:00" />
 
 
 
@@ -163,8 +163,8 @@
 						
 						
 							<li>
-								<a href="#llm-large-language-model" class="nav-llm-large-language-model">
-									LLM (Large Language Model)
+								<a href="#%eb%8c%80%ed%98%95-%ec%96%b8%ec%96%b4-%eb%aa%a8%eb%8d%b8-llm-large-language-model" class="nav-대형-언어-모델-llm-large-language-model">
+									대형 언어 모델 (LLM, Large Language Model)
 								</a>
 							</li>
 						
@@ -279,7 +279,7 @@
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2024-07-31 20:40
+                            2024-07-31 23:48
                         </time>
                         
 
@@ -314,11 +314,16 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <h1 id="llm-large-language-model">LLM (Large Language Model)</h1>
-<p>LLM은 생성형 AI(Generative AI)의 한 형태라고 볼 수 있다.
-일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
+                    <h1 id="대형-언어-모델-llm-large-language-model">대형 언어 모델 (LLM, Large Language Model)</h1>
+<p><strong>LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>이다.
+이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
+다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있다.</p>
+<p>일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
 70억 개 수준의 파라미터를 갖는 모델은 소규모 언어 모델(Small Language Model, SLM)이라고 한다.
 이 사이에 중간 규모의 모델은 sLLM(smaller Large Language Model)이라고 한다.</p>
+<p><strong>Ollama</strong>는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
+<strong>Open WebUI</strong>는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
+이 2가지 도구를 Docker Compose로 실행해보자.</p>
 <h1 id="먼저-docker-compose-없이-ollma-실행해보기">먼저 Docker Compose 없이 Ollma 실행해보기</h1>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
 <span style="color:#ff79c6">from</span> langchain_core.prompts <span style="color:#ff79c6">import</span> ChatPromptTemplate
@@ -445,14 +450,22 @@ docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.oll
 <span style="color:#ff79c6">volumes</span>:
   <span style="color:#ff79c6">ollama</span>: {}
   <span style="color:#ff79c6">open-webui</span>: {}
-</code></pre></div><p>실행 후 <a href="http://localhost:3000">http://localhost:3000</a>로 접속하면 OpenWebUI를 확인할 수 있다.</p>
+</code></pre></div><p>실행 후 3000번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI를 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp" alt="Open WebUI 화면"></p>
 <p>GPU를 사용하는 것도 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp" alt="GPU 사용하는 Ollama Docker Container"></p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://aws.amazon.com/ko/what-is/large-language-model/">AWS</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2024-07-31</p>
+		    <p style="color:#777;">Last modified on 2024-08-01</p>
                     
                 </div>
             </div>
@@ -606,8 +619,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#llm-large-language-model" class="nav-llm-large-language-model">
-									LLM (Large Language Model)
+								<a href="#%eb%8c%80%ed%98%95-%ec%96%b8%ec%96%b4-%eb%aa%a8%eb%8d%b8-llm-large-language-model" class="nav-대형-언어-모델-llm-large-language-model">
+									대형 언어 모델 (LLM, Large Language Model)
 								</a>
 							</li>
 						
