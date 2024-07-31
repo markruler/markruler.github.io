@@ -21,7 +21,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/" /><meta property="og:image" content="https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-07-31T23:48:00+09:00" />
-<meta property="article:modified_time" content="2024-08-01T01:05:00+09:00" />
+<meta property="article:modified_time" content="2024-08-01T00:44:00+09:00" />
 
 
 
@@ -181,8 +181,8 @@
 						
 						
 							<li>
-								<a href="#%eb%a8%bc%ec%a0%80-docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-먼저-docker-compose-없이-ollma-실행해보기">
-									먼저 Docker Compose 없이 Ollma 실행해보기
+								<a href="#docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-docker-compose-없이-ollma-실행해보기">
+									Docker Compose 없이 Ollma 실행해보기
 								</a>
 							</li>
 						
@@ -201,6 +201,24 @@
 							<li>
 								<a href="#docker-compose-%ec%82%ac%ec%9a%a9%ed%95%98%ea%b8%b0" class="nav-docker-compose-사용하기">
 									Docker Compose 사용하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%9c%eb%b9%84%ec%8a%a4%ec%97%90%ec%84%9c-%ea%b3%a0%eb%a0%a4%ed%95%b4%ec%95%bc-%ed%95%a0-%ec%82%ac%ed%95%ad" class="nav-서비스에서-고려해야-할-사항">
+									서비스에서 고려해야 할 사항
 								</a>
 							</li>
 						
@@ -336,13 +354,14 @@
 <p><strong>LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>이다.
 이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
 다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있다.</p>
-<p>일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
-70억 개 수준의 파라미터를 갖는 모델은 소규모 언어 모델(Small Language Model, SLM)이라고 한다.
-이 사이에 중간 규모의 모델은 sLLM(smaller Large Language Model)이라고 한다.</p>
+<p>일반적으로 <strong>700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM</strong>이라고 한다.
+<strong>70억 개 수준의 파라미터를 갖는 모델은 SLM</strong>(Small Language Model)이라고 한다.
+이 사이에 <strong>중간 규모의 모델은 sLLM</strong>(smaller Large Language Model)이라고 한다.</p>
 <p><strong>Ollama</strong>는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
 <strong>Open WebUI</strong>는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
 이 2가지 도구를 Docker Compose로 실행해보자.</p>
-<h1 id="먼저-docker-compose-없이-ollma-실행해보기">먼저 Docker Compose 없이 Ollma 실행해보기</h1>
+<h1 id="docker-compose-없이-ollma-실행해보기">Docker Compose 없이 Ollma 실행해보기</h1>
+<p>먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
 <span style="color:#ff79c6">from</span> langchain_core.prompts <span style="color:#ff79c6">import</span> ChatPromptTemplate
 
@@ -402,7 +421,7 @@ conversation_history <span style="color:#ff79c6">=</span> initial_prompt<span st
         <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Assistant:&#34;</span>, response)
 </code></pre></div><p>위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">중고차 판매 어시스턴트 AMI와 대화를 시작합니다. <span style="color:#f1fa8c">&#39;exit&#39;</span>을 입력하면 종료됩니다.
-You: Hyundai 차 추천해줘.
+&gt; You: Hyundai 차 추천해줘.
 Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
 
 Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델은 다음과 같습니다:
@@ -413,19 +432,21 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 
 이러한 정보는 구매자에게 도움이 될 수 있습니다. 그러나, 구매자는 직접 자동차를 방문하고 테스트해 보아야 합니다.
 
-You: <span style="color:#8be9fd;font-style:italic">exit</span>
+&gt; You: <span style="color:#8be9fd;font-style:italic">exit</span>
 대화를 종료합니다.
 </code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp" alt="GPU 사용하는 프로그램"></p>
 <h1 id="docker-compose-사용하기">Docker Compose 사용하기</h1>
 <p><a href="https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml">Open WebUI 레포지토리에 있는 docker-compose.yaml</a> 파일을 참조해서 실행해봤지만
-답변 시 CPU를 사용하는 것을 확인할 수 있었다.</p>
+답변 시 CPU만 사용하는 것을 확인할 수 있었다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp" alt="CPU를 사용하는 Docker Ollama"></p>
-<p><a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image">확인해보니</a> Windows에서 Docker로 실행할 경우 CPU를 사용한다.
-<a href="https://docs.docker.com/compose/gpu-support/">Docker Compose 문서</a>를 참조해서 옵션을 추가한다.</p>
+<p>확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용한다.
+<a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image">Ollama 문서</a>를
+참조해서 GPU를 사용하도록 설정해보자.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># Docker로 실행할 경우</span>
 docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Docker Compose로 실행할 경우</span>
+</code></pre></div><p><a href="https://docs.docker.com/compose/gpu-support/">Docker Compose 문서</a>를 참조해서 옵션을 추가한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Docker Compose로 실행할 경우</span>
 <span style="color:#ff79c6">services</span>:
   <span style="color:#ff79c6">ollama</span>:
     <span style="color:#ff79c6">volumes</span>:
@@ -468,21 +489,33 @@ docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.oll
 <span style="color:#ff79c6">volumes</span>:
   <span style="color:#ff79c6">ollama</span>: {}
   <span style="color:#ff79c6">open-webui</span>: {}
-</code></pre></div><p>실행 후 3000번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI를 확인할 수 있다.</p>
+</code></pre></div><p>실행 후 <code>3000</code>번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp" alt="Open WebUI 화면"></p>
 <p>GPU를 사용하는 것도 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp" alt="GPU 사용하는 Ollama Docker Container"></p>
+<h1 id="서비스에서-고려해야-할-사항">서비스에서 고려해야 할 사항</h1>
+<ul>
+<li><strong>검색 증강 생성(RAG, Retrieval-Augmented Generation)</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.</li>
+<li><strong>파인 튜닝(Fine-tuning)</strong><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.</li>
+</ul>
 <h1 id="더-알아보기">더 알아보기</h1>
 <ul>
 <li><a href="https://youtu.be/cto0f7prJXs">(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)</a></li>
 <li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598">(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영</a> - 입문</li>
 <li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703">(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준</a> - 입문 + 측정</li>
+<li><a href="https://platform.openai.com/docs/guides/fine-tuning">Fine-tuning</a> - OpenAI Platform</li>
 </ul>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p><a href="https://aws.amazon.com/ko/what-is/large-language-model/">AWS</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://aws.amazon.com/ko/what-is/large-language-model/">대규모 언어 모델(LLM)이란 무엇인가요?</a> - AWS&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/">검색 증강 생성(RAG)이란 무엇인가요?</a> - AWS&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://www.skelterlabs.com/blog/rag-vs-finetuning">RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드</a> - 스켈터 랩스 Skelter Labs&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -661,8 +694,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%eb%a8%bc%ec%a0%80-docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-먼저-docker-compose-없이-ollma-실행해보기">
-									먼저 Docker Compose 없이 Ollma 실행해보기
+								<a href="#docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-docker-compose-없이-ollma-실행해보기">
+									Docker Compose 없이 Ollma 실행해보기
 								</a>
 							</li>
 						
@@ -681,6 +714,24 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							<li>
 								<a href="#docker-compose-%ec%82%ac%ec%9a%a9%ed%95%98%ea%b8%b0" class="nav-docker-compose-사용하기">
 									Docker Compose 사용하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%9c%eb%b9%84%ec%8a%a4%ec%97%90%ec%84%9c-%ea%b3%a0%eb%a0%a4%ed%95%b4%ec%95%bc-%ed%95%a0-%ec%82%ac%ed%95%ad" class="nav-서비스에서-고려해야-할-사항">
+									서비스에서 고려해야 할 사항
 								</a>
 							</li>
 						
