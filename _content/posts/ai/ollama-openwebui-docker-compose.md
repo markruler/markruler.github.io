@@ -23,14 +23,14 @@ categories:
 [^1]: [대규모 언어 모델(LLM)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/large-language-model/) - AWS
 
 일반적으로 **700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM**이라고 한다.
-**70억 개 수준의 파라미터를 갖는 모델은 SLM**(Small Language Model)이라고 한다.
+**70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM**(Small Language Model)이라고 한다.
 이 사이에 **중간 규모의 모델은 sLLM**(smaller Large Language Model)이라고 한다.
 
 **Ollama**는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
 **Open WebUI**는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
-이 2가지 도구를 Docker Compose로 실행해보자.
+이 2가지 도구를 간단하게 사용해보자.
 
-# Docker Compose 없이 Ollma 실행해보기
+# Docker 없이 Ollma 실행해보기
 
 먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.
 
@@ -119,8 +119,8 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 
 # Docker Compose 사용하기
 
-[Open WebUI 레포지토리에 있는 docker-compose.yaml](https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml) 파일을 참조해서 실행해봤지만
-답변 시 CPU만 사용하는 것을 확인할 수 있었다.
+처음에는 Open WebUI 레포지토리에 있는 [docker-compose.yaml](https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml)
+파일로 실행해봤지만 답변 시 **CPU만 사용**하는 것을 확인할 수 있었다.
 
 ![CPU를 사용하는 Docker Ollama](/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp)
 
@@ -133,7 +133,7 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
 
-[Docker Compose 문서](https://docs.docker.com/compose/gpu-support/)를 참조해서 옵션을 추가한다.
+Docker Compose로 실행할 때도 [공식 문서](https://docs.docker.com/compose/gpu-support/)를 참조해서 옵션을 추가할 수 있었다.
 
 ```yaml
 # Docker Compose로 실행할 경우
@@ -189,7 +189,11 @@ GPU를 사용하는 것도 확인할 수 있다.
 
 ![GPU 사용하는 Ollama Docker Container](/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp)
 
-# 서비스에서 고려해야 할 사항
+# 더 나은 결과물을 위해 추가로 고려해야 할 사항
+
+*[Optimizing LLMs for accuracy](https://platform.openai.com/docs/guides/optimizing-llm-accuracy) - OpenAI Platform*
+
+![LLM optimization context](/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp)
 
 - **검색 증강 생성(RAG, Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
 - **미세 조정(Fine-tuning, 파인 튜닝)**[^3] 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
@@ -200,9 +204,10 @@ GPU를 사용하는 것도 확인할 수 있다.
 # 더 알아보기
 
 - 입문 (전체적인 그림 그리기)
-  - [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
   - [(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598) - 입문
   - [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
+  - [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
+  - [(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트](https://youtu.be/cto0f7prJXs)
 - 검색 증강 생성 (RAG)
   - [검색 증강 생성(RAG)이란?](https://www.elastic.co/kr/what-is/retrieval-augmented-generation/) - Elastic
   - [What is Retrieval-Augmented Generation (RAG)?](https://youtu.be/T-D1OfcDW1M) - IBM Techonology
