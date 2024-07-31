@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html><head>
+<title>Docker Compose로 간단하게 Ollama 시작하기</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="근데 이제 Open WebUI를 곁들인">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Docker Compose로 간단하게 Ollama 시작하기" />
+<meta property="og:description" content="근데 이제 Open WebUI를 곁들인" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/" /><meta property="og:image" content="https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-07-31T20:40:00+09:00" />
+<meta property="article:modified_time" content="2024-07-31T20:49:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"/>
+
+<meta name="twitter:title" content="Docker Compose로 간단하게 Ollama 시작하기"/>
+<meta name="twitter:description" content="근데 이제 Open WebUI를 곁들인"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#llm-large-language-model" class="nav-llm-large-language-model">
+									LLM (Large Language Model)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a8%bc%ec%a0%80-docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-먼저-docker-compose-없이-ollma-실행해보기">
+									먼저 Docker Compose 없이 Ollma 실행해보기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-compose-%ec%82%ac%ec%9a%a9%ed%95%98%ea%b8%b0" class="nav-docker-compose-사용하기">
+									Docker Compose 사용하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    Docker Compose로 간단하게 Ollama 시작하기
+                    
+                    <div class="post-subtitle">
+                        근데 이제 Open WebUI를 곁들인
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-07-31 20:40
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[how-to]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/llm">LLM</a>
+                                &nbsp;
+                            
+                                <a href="/tags/ai">AI</a>
+                                &nbsp;
+                            
+                                <a href="/tags/docker-compose">docker-compose</a>
+                                &nbsp;
+                            
+                                <a href="/tags/gpu">GPU</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="llm-large-language-model">LLM (Large Language Model)</h1>
+<p>LLM은 생성형 AI(Generative AI)의 한 형태라고 볼 수 있다.
+일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
+70억 개 수준의 파라미터를 갖는 모델은 소규모 언어 모델(Small Language Model, SLM)이라고 한다.
+이 사이에 중간 규모의 모델은 sLLM(smaller Large Language Model)이라고 한다.</p>
+<h1 id="먼저-docker-compose-없이-ollma-실행해보기">먼저 Docker Compose 없이 Ollma 실행해보기</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
+<span style="color:#ff79c6">from</span> langchain_core.prompts <span style="color:#ff79c6">import</span> ChatPromptTemplate
+
+<span style="color:#6272a4"># Initialize the prompt with system message</span>
+initial_prompt <span style="color:#ff79c6">=</span> [
+    (
+        <span style="color:#f1fa8c">&#34;system&#34;</span>,
+        <span style="color:#f1fa8c">&#34;너는 중고차 판매를 도와주는 어시스턴트야.&#34;</span> <span style="color:#ff79c6">+</span>
+        <span style="color:#f1fa8c">&#34;이름은 AMI야.&#34;</span> <span style="color:#ff79c6">+</span>
+        <span style="color:#f1fa8c">&#34;존댓말을 해야 해.&#34;</span> <span style="color:#ff79c6">+</span>
+        <span style="color:#f1fa8c">&#34;human이 우리 서비스의 자동차를 구매하도록 유도하고 관련 질문 아니면 대답해줄 수 없다고 해.&#34;</span>,
+    )
+]
+
+
+<span style="color:#6272a4"># Function to create a prompt with message history</span>
+<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">create_prompt_with_history</span>(history, new_message):
+    <span style="color:#ff79c6">return</span> ChatPromptTemplate<span style="color:#ff79c6">.</span>from_messages(history <span style="color:#ff79c6">+</span> [(<span style="color:#f1fa8c">&#34;human&#34;</span>, new_message)])
+
+
+<span style="color:#6272a4"># Initialize the model</span>
+llm <span style="color:#ff79c6">=</span> ChatOllama(
+    model<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;llama3.1:8b&#34;</span>,
+    temperature<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,
+)
+
+<span style="color:#6272a4"># Conversation history</span>
+conversation_history <span style="color:#ff79c6">=</span> initial_prompt<span style="color:#ff79c6">.</span>copy()
+
+
+<span style="color:#6272a4"># Function to process new user input</span>
+<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">process_input</span>(input_text):
+    <span style="color:#ff79c6">global</span> conversation_history
+    prompt <span style="color:#ff79c6">=</span> create_prompt_with_history(conversation_history, input_text)
+    chain <span style="color:#ff79c6">=</span> prompt <span style="color:#ff79c6">|</span> llm
+    response <span style="color:#ff79c6">=</span> chain<span style="color:#ff79c6">.</span>invoke({<span style="color:#f1fa8c">&#34;input&#34;</span>: input_text})
+
+    <span style="color:#6272a4"># Add the new messages to the conversation history</span>
+    conversation_history<span style="color:#ff79c6">.</span>append((<span style="color:#f1fa8c">&#34;human&#34;</span>, input_text))
+    conversation_history<span style="color:#ff79c6">.</span>append((<span style="color:#f1fa8c">&#34;assistant&#34;</span>, response<span style="color:#ff79c6">.</span>content))
+
+    <span style="color:#ff79c6">return</span> response<span style="color:#ff79c6">.</span>content
+
+
+<span style="color:#6272a4"># Main loop to handle console input</span>
+<span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;__main__&#34;</span>:
+    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &#39;exit&#39;을 입력하면 종료됩니다.&#34;</span>)
+
+    <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">True</span>:
+        user_input <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">input</span>(<span style="color:#f1fa8c">&#34;You: &#34;</span>)
+
+        <span style="color:#ff79c6">if</span> user_input<span style="color:#ff79c6">.</span>lower() <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;exit&#39;</span>:
+            <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;대화를 종료합니다.&#34;</span>)
+            <span style="color:#ff79c6">break</span>
+
+        response <span style="color:#ff79c6">=</span> process_input(user_input)
+        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Assistant:&#34;</span>, response)
+</code></pre></div><p>위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">중고차 판매 어시스턴트 AMI와 대화를 시작합니다. <span style="color:#f1fa8c">&#39;exit&#39;</span>을 입력하면 종료됩니다.
+You: Hyundai 차 추천해줘.
+Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
+
+Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델은 다음과 같습니다:
+
+*   Hyundai Elantra: 이 모델은 중형 세단으로, 내구성과 경제성을 강조합니다.
+*   Hyundai Sonata: 이 모델은 중형 세단으로, 스타일과 기능을 제공합니다.
+*   Hyundai Tucson: 이 모델은 소형 SUV로, 공간과 성능을 제공합니다.
+
+이러한 정보는 구매자에게 도움이 될 수 있습니다. 그러나, 구매자는 직접 자동차를 방문하고 테스트해 보아야 합니다.
+
+You: <span style="color:#8be9fd;font-style:italic">exit</span>
+대화를 종료합니다.
+</code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.</p>
+<p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp" alt="GPU 사용하는 프로그램"></p>
+<h1 id="docker-compose-사용하기">Docker Compose 사용하기</h1>
+<p><a href="https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml">Open WebUI 레포지토리에 있는 docker-compose.yaml</a> 파일을 참조해서 실행해봤지만
+답변 시 CPU를 사용하는 것을 확인할 수 있었다.</p>
+<p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp" alt="CPU를 사용하는 Docker Ollama"></p>
+<p><a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image">확인해보니</a> Windows에서 Docker로 실행할 경우 CPU를 사용한다.
+<a href="https://docs.docker.com/compose/gpu-support/">Docker Compose 문서</a>를 참조해서 옵션을 추가한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># Docker로 실행할 경우</span>
+docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Docker Compose로 실행할 경우</span>
+<span style="color:#ff79c6">services</span>:
+  <span style="color:#ff79c6">ollama</span>:
+    <span style="color:#ff79c6">volumes</span>:
+      - ollama:/root/.ollama
+    <span style="color:#ff79c6">container_name</span>: ollama
+    <span style="color:#ff79c6">pull_policy</span>: always
+    <span style="color:#ff79c6">tty</span>: <span style="color:#ff79c6">true</span>
+    <span style="color:#ff79c6">restart</span>: unless-stopped
+    <span style="color:#ff79c6">image</span>: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+    <span style="color:#6272a4"># 추가한 옵션 [deploy](https://docs.docker.com/compose/gpu-support/)</span>
+    <span style="color:#ff79c6">deploy</span>:
+      <span style="color:#ff79c6">resources</span>:
+        <span style="color:#ff79c6">reservations</span>:
+          <span style="color:#ff79c6">devices</span>:
+            - <span style="color:#ff79c6">driver</span>: nvidia
+              <span style="color:#ff79c6">count</span>: <span style="color:#bd93f9">1</span>
+              <span style="color:#ff79c6">capabilities</span>: [gpu]
+
+  <span style="color:#ff79c6">open-webui</span>:
+    <span style="color:#ff79c6">build</span>:
+      <span style="color:#ff79c6">context</span>: .
+      <span style="color:#ff79c6">args</span>:
+        <span style="color:#ff79c6">OLLAMA_BASE_URL</span>: <span style="color:#f1fa8c">&#39;/ollama&#39;</span>
+      <span style="color:#ff79c6">dockerfile</span>: Dockerfile
+    <span style="color:#ff79c6">image</span>: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    <span style="color:#ff79c6">container_name</span>: open-webui
+    <span style="color:#ff79c6">volumes</span>:
+      - open-webui:/app/backend/data
+    <span style="color:#ff79c6">depends_on</span>:
+      - ollama
+    <span style="color:#ff79c6">ports</span>:
+      - ${OPEN_WEBUI_PORT-3000}:8080
+    <span style="color:#ff79c6">environment</span>:
+      - <span style="color:#f1fa8c">&#39;OLLAMA_BASE_URL=http://ollama:11434&#39;</span>
+      - <span style="color:#f1fa8c">&#39;WEBUI_SECRET_KEY=&#39;</span>
+    <span style="color:#ff79c6">extra_hosts</span>:
+      - host.docker.internal:host-gateway
+    <span style="color:#ff79c6">restart</span>: unless-stopped
+
+<span style="color:#ff79c6">volumes</span>:
+  <span style="color:#ff79c6">ollama</span>: {}
+  <span style="color:#ff79c6">open-webui</span>: {}
+</code></pre></div><p>실행 후 <a href="http://localhost:3000">http://localhost:3000</a>로 접속하면 OpenWebUI를 확인할 수 있다.</p>
+<p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp" alt="Open WebUI 화면"></p>
+<p>GPU를 사용하는 것도 확인할 수 있다.</p>
+<p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp" alt="GPU 사용하는 Ollama Docker Container"></p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-07-31</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/web/google-chrome/">
+			Previous<br>👾 웹 개발자가 알면 유용한 구글 크롬(Google Chrome)의 기능
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#llm-large-language-model" class="nav-llm-large-language-model">
+									LLM (Large Language Model)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a8%bc%ec%a0%80-docker-compose-%ec%97%86%ec%9d%b4-ollma-%ec%8b%a4%ed%96%89%ed%95%b4%eb%b3%b4%ea%b8%b0" class="nav-먼저-docker-compose-없이-ollma-실행해보기">
+									먼저 Docker Compose 없이 Ollma 실행해보기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#docker-compose-%ec%82%ac%ec%9a%a9%ed%95%98%ea%b8%b0" class="nav-docker-compose-사용하기">
+									Docker Compose 사용하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

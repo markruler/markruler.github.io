@@ -9,9 +9,155 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 29 Jul 2024 00:51:00 +0900</lastBuildDate>
+    <lastBuildDate>Wed, 31 Jul 2024 20:40:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Docker Compose로 간단하게 Ollama 시작하기</title>
+        <link>https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/</link>
+        <pubDate>Wed, 31 Jul 2024 20:40:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/ -&lt;h1 id=&#34;llm-large-language-model&#34;&gt;LLM (Large Language Model)&lt;/h1&gt;
+&lt;p&gt;LLM은 생성형 AI(Generative AI)의 한 형태라고 볼 수 있다.
+일반적으로 700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM이라고 한다.
+70억 개 수준의 파라미터를 갖는 모델은 소규모 언어 모델(Small Language Model, SLM)이라고 한다.
+이 사이에 중간 규모의 모델은 sLLM(smaller Large Language Model)이라고 한다.&lt;/p&gt;
+&lt;h1 id=&#34;먼저-docker-compose-없이-ollma-실행해보기&#34;&gt;먼저 Docker Compose 없이 Ollma 실행해보기&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; langchain_community.chat_models &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; ChatOllama
+&lt;span style=&#34;color:#ff79c6&#34;&gt;from&lt;/span&gt; langchain_core.prompts &lt;span style=&#34;color:#ff79c6&#34;&gt;import&lt;/span&gt; ChatPromptTemplate
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Initialize the prompt with system message&lt;/span&gt;
+initial_prompt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; [
+    (
+        &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;system&amp;#34;&lt;/span&gt;,
+        &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;너는 중고차 판매를 도와주는 어시스턴트야.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
+        &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;이름은 AMI야.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
+        &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;존댓말을 해야 해.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt;
+        &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;human이 우리 서비스의 자동차를 구매하도록 유도하고 관련 질문 아니면 대답해줄 수 없다고 해.&amp;#34;&lt;/span&gt;,
+    )
+]
+
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Function to create a prompt with message history&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;create_prompt_with_history&lt;/span&gt;(history, new_message):
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; ChatPromptTemplate&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;from_messages(history &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; [(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;human&amp;#34;&lt;/span&gt;, new_message)])
+
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Initialize the model&lt;/span&gt;
+llm &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; ChatOllama(
+    model&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;llama3.1:8b&amp;#34;&lt;/span&gt;,
+    temperature&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;,
+)
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Conversation history&lt;/span&gt;
+conversation_history &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; initial_prompt&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;copy()
+
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Function to process new user input&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;process_input&lt;/span&gt;(input_text):
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;global&lt;/span&gt; conversation_history
+    prompt &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; create_prompt_with_history(conversation_history, input_text)
+    chain &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; prompt &lt;span style=&#34;color:#ff79c6&#34;&gt;|&lt;/span&gt; llm
+    response &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; chain&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;invoke({&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;input&amp;#34;&lt;/span&gt;: input_text})
+
+    &lt;span style=&#34;color:#6272a4&#34;&gt;# Add the new messages to the conversation history&lt;/span&gt;
+    conversation_history&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;append((&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;human&amp;#34;&lt;/span&gt;, input_text))
+    conversation_history&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;append((&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;assistant&amp;#34;&lt;/span&gt;, response&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;content))
+
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; response&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;content
+
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Main loop to handle console input&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &amp;#39;exit&amp;#39;을 입력하면 종료됩니다.&amp;#34;&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;True&lt;/span&gt;:
+        user_input &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;input&lt;/span&gt;(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;You: &amp;#34;&lt;/span&gt;)
+
+        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; user_input&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;lower() &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;exit&amp;#39;&lt;/span&gt;:
+            &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;대화를 종료합니다.&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#ff79c6&#34;&gt;break&lt;/span&gt;
+
+        response &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; process_input(user_input)
+        &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Assistant:&amp;#34;&lt;/span&gt;, response)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;exit&amp;#39;&lt;/span&gt;을 입력하면 종료됩니다.
+You: Hyundai 차 추천해줘.
+Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
+
+Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델은 다음과 같습니다:
+
+*   Hyundai Elantra: 이 모델은 중형 세단으로, 내구성과 경제성을 강조합니다.
+*   Hyundai Sonata: 이 모델은 중형 세단으로, 스타일과 기능을 제공합니다.
+*   Hyundai Tucson: 이 모델은 소형 SUV로, 공간과 성능을 제공합니다.
+
+이러한 정보는 구매자에게 도움이 될 수 있습니다. 그러나, 구매자는 직접 자동차를 방문하고 테스트해 보아야 합니다.
+
+You: &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt;
+대화를 종료합니다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp&#34; alt=&#34;GPU 사용하는 프로그램&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;docker-compose-사용하기&#34;&gt;Docker Compose 사용하기&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml&#34;&gt;Open WebUI 레포지토리에 있는 docker-compose.yaml&lt;/a&gt; 파일을 참조해서 실행해봤지만
+답변 시 CPU를 사용하는 것을 확인할 수 있었다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp&#34; alt=&#34;CPU를 사용하는 Docker Ollama&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image&#34;&gt;확인해보니&lt;/a&gt; Windows에서 Docker로 실행할 경우 CPU를 사용한다.
+&lt;a href=&#34;https://docs.docker.com/compose/gpu-support/&#34;&gt;Docker Compose 문서&lt;/a&gt;를 참조해서 옵션을 추가한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# Docker로 실행할 경우&lt;/span&gt;
+docker run -d --gpus&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# Docker Compose로 실행할 경우&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;services&lt;/span&gt;:
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;ollama&lt;/span&gt;:
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;volumes&lt;/span&gt;:
+      - ollama:/root/.ollama
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;container_name&lt;/span&gt;: ollama
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;pull_policy&lt;/span&gt;: always
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;tty&lt;/span&gt;: &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;restart&lt;/span&gt;: unless-stopped
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;image&lt;/span&gt;: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+    &lt;span style=&#34;color:#6272a4&#34;&gt;# 추가한 옵션 [deploy](https://docs.docker.com/compose/gpu-support/)&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;deploy&lt;/span&gt;:
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;resources&lt;/span&gt;:
+        &lt;span style=&#34;color:#ff79c6&#34;&gt;reservations&lt;/span&gt;:
+          &lt;span style=&#34;color:#ff79c6&#34;&gt;devices&lt;/span&gt;:
+            - &lt;span style=&#34;color:#ff79c6&#34;&gt;driver&lt;/span&gt;: nvidia
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;count&lt;/span&gt;: &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;capabilities&lt;/span&gt;: [gpu]
+
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;open-webui&lt;/span&gt;:
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;build&lt;/span&gt;:
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;context&lt;/span&gt;: .
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;args&lt;/span&gt;:
+        &lt;span style=&#34;color:#ff79c6&#34;&gt;OLLAMA_BASE_URL&lt;/span&gt;: &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;/ollama&amp;#39;&lt;/span&gt;
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;dockerfile&lt;/span&gt;: Dockerfile
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;image&lt;/span&gt;: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;container_name&lt;/span&gt;: open-webui
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;volumes&lt;/span&gt;:
+      - open-webui:/app/backend/data
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;depends_on&lt;/span&gt;:
+      - ollama
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;ports&lt;/span&gt;:
+      - ${OPEN_WEBUI_PORT-3000}:8080
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;environment&lt;/span&gt;:
+      - &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;OLLAMA_BASE_URL=http://ollama:11434&amp;#39;&lt;/span&gt;
+      - &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;WEBUI_SECRET_KEY=&amp;#39;&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;extra_hosts&lt;/span&gt;:
+      - host.docker.internal:host-gateway
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;restart&lt;/span&gt;: unless-stopped
+
+&lt;span style=&#34;color:#ff79c6&#34;&gt;volumes&lt;/span&gt;:
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;ollama&lt;/span&gt;: {}
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;open-webui&lt;/span&gt;: {}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;실행 후 &lt;a href=&#34;http://localhost:3000&#34;&gt;http://localhost:3000&lt;/a&gt;로 접속하면 OpenWebUI를 확인할 수 있다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp&#34; alt=&#34;Open WebUI 화면&#34;&gt;&lt;/p&gt;
+&lt;p&gt;GPU를 사용하는 것도 확인할 수 있다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp&#34; alt=&#34;GPU 사용하는 Ollama Docker Container&#34;&gt;&lt;/p&gt;
+- https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1483,291 +1629,6 @@ Jenkins &lt;code&gt;cron&lt;/code&gt;의 최소 간격은 1분(&lt;code&gt;* * *
 &lt;p&gt;만약 &lt;code&gt;cron&lt;/code&gt; 간격을 1분으로 설정했다면 &lt;code&gt;timeout&lt;/code&gt;을 50초로 설정하는 등 차이를 둔다. (55초는 살짝 겹쳤다…)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;timeout&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;time:&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;unit:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;SECONDS&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Tomcat 이해하기</title>
-        <link>https://markruler.github.io/posts/java/tomcat/</link>
-        <pubDate>Tue, 23 Aug 2022 02:45:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/java/tomcat/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/java/tomcat/ -&lt;h1 id=&#34;architecture&#34;&gt;Architecture&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/tomcat-architecture.png&#34; alt=&#34;Tomcat Architecture&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/tomcat-architecture-and-performance/&#34;&gt;이미지 출처 - Datadog&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&amp;lt;!-- server.xml --&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;?xml version=&amp;#39;1.0&amp;#39; encoding=&amp;#39;utf-8&amp;#39;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Server&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;port=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;8005&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;shutdown=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;SHUTDOWN&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Listener&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.core.AprLifecycleListener&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;SSLEngine=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;on&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Listener&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.core.JasperListener&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Listener&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Listener&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Listener&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;GlobalNamingResources&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Resource&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;UserDatabase&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;auth=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Container&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;type=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.UserDatabase&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;description=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;User database that can be updated and saved&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;factory=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.users.MemoryUserDatabaseFactory&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;pathname=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;conf/tomcat-users.xml&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/GlobalNamingResources&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Service&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Catalina&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Connector&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;port=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;8080&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;protocol=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;HTTP/1.1&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;redirectPort=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;8443&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;connectionTimeout=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;20000&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Connector&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;port=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;8009&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;protocol=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;AJP/1.3&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;redirectPort=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;8443&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Engine&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Catalina&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;defaultHost=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Realm&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.realm.LockOutRealm&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Realm&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.realm.UserDatabaseRealm&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;resourceName=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;UserDatabase&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/Realm&amp;gt;&lt;/span&gt;
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Host&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;name=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;localhost&amp;#34;&lt;/span&gt;  &lt;span style=&#34;color:#50fa7b&#34;&gt;appBase=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;webapps&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#50fa7b&#34;&gt;unpackWARs=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;autoDeploy=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;Valve&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;className=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;org.apache.catalina.valves.AccessLogValve&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;directory=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;logs&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;prefix=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;localhost_access_log.&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;suffix=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;.txt&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#50fa7b&#34;&gt;pattern=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;%h %l %u %t &amp;amp;quot;%r&amp;amp;quot; %s %b&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/Host&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/Engine&amp;gt;&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/Service&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/Server&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;server&#34;&gt;Server&lt;/h2&gt;
-&lt;p&gt;카탈리나 서버(Catalina Server)는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
-즉, 서블릿을 실행하기 위한 환경을 제공한다.
-이러한 카탈리나 서버에는 하나 이상의 서비스(Service)가 포함된다.&lt;/p&gt;
-&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
-&lt;p&gt;1개의 서비스는 1개 이상의 &lt;a href=&#34;#connector&#34;&gt;커넥터&lt;/a&gt;와 1개의 &lt;a href=&#34;#engine-container&#34;&gt;엔진&lt;/a&gt;를 포함한다.&lt;/p&gt;
-&lt;h2 id=&#34;connector&#34;&gt;Connector&lt;/h2&gt;
-&lt;p&gt;코요테(&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/http.html&#34;&gt;Coyote&lt;/a&gt;) 커넥터는
-클라이언트와 Tomcat 사이의 통신을 관리한다.
-TCP 포트에서 요청을 수신 대기(listen)한다.
-그리고 해당 요청을 처리하고 응답을 만들기 위해 엔진(Engine)으로 보낸다.
-기본 구성으로 &lt;code&gt;HTTP/1.1&lt;/code&gt; 와 &lt;code&gt;AJP/1.3&lt;/code&gt;(Apache JServ Protocol) 커넥터가 포함된다.&lt;/p&gt;
-&lt;h2 id=&#34;container&#34;&gt;Container&lt;/h2&gt;
-&lt;h3 id=&#34;engine-container&#34;&gt;Engine Container&lt;/h3&gt;
-&lt;p&gt;Engine은 웹 애플리케이션의 라우팅을 담당한다.
-여러 개의 &lt;a href=&#34;#host-container&#34;&gt;Host&lt;/a&gt;를 가질 수 있으며, 클라이언트의 요청을 적절한 Host로 전달한다.&lt;/p&gt;
-&lt;p&gt;Tomcat은 &lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/jasper-howto.html&#34;&gt;재스퍼(Jasper) 엔진&lt;/a&gt;을 사용하여
-JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페이지로 렌더링한다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;org.apache.catalina.LifecycleListener&lt;/code&gt; 를 구현한 구현체는 해당 엔진이 언제 시작되고 중지되는지 감시하기 위한 컴포넌트다.
-설정하면 엔진의 수명 주기(Lifecycle) 이벤트 발생을 감지할 수 있다.&lt;/li&gt;
-&lt;li&gt;줄리(JULI: &lt;code&gt;java.util.logging&lt;/code&gt;) 패키지를 사용해서 로깅(Logging)을 수행한다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;host-container&#34;&gt;Host Container&lt;/h3&gt;
-&lt;p&gt;Host 요소는 실행 중인 Tomcat 서버의 개별 가상 호스트를 나타낸다.
-클라이언트가 네트워크 이름을 사용하여 Tomcat 서버에 연결하려면
-이 이름이 사용자가 속한 인터넷 도메인을 관리하는 DNS(도메인 이름 서비스) 서버에 등록되어 있어야 한다.
-만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요할 수 있다.
-— 기본적으로 &lt;code&gt;localhost&lt;/code&gt; 로 입력되어 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;GET http:&lt;span style=&#34;color:#6272a4&#34;&gt;//www.testwebapp.com/sample/
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;
-Request Headers:
-Connection: keep-alive
-Host: www.testwebapp.com
-User-Agent: Apache-HttpClient/&lt;span style=&#34;color:#bd93f9&#34;&gt;4.5&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;5&lt;/span&gt; (Java/&lt;span style=&#34;color:#bd93f9&#34;&gt;10.0&lt;/span&gt;.&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위와 같은 HTTP 요청은 &lt;code&gt;Host&lt;/code&gt; 헤더와 일치하는 호스트에 매핑한다.&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;CATALINA_BASE&lt;/code&gt; 변수를 사용하여 여러 Tomcat 인스턴스를 구성한 경우&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;가 아니라면
-&lt;code&gt;CATALINA_BASE&lt;/code&gt; 는 Tomcat을 설치한 디렉토리인 &lt;code&gt;CATALINA_HOME&lt;/code&gt; 의 값으로 설정된다.&lt;/p&gt;
-&lt;h3 id=&#34;context-container&#34;&gt;Context Container&lt;/h3&gt;
-&lt;p&gt;Context 요소는 특정 가상 호스트(Host Container) 내에서 실행되는 웹 애플리케이션을 나타낸다.
-단순하게 바라보면 &lt;code&gt;webapp/&lt;/code&gt; 디렉토리로 구분되는 것이 하나의 컨텍스트다.
-&lt;code&gt;Host&lt;/code&gt;는 각각 고유한 경로를 가진 여러 &lt;code&gt;Context&lt;/code&gt;를 포함할 수 있다.
-&lt;code&gt;Context&lt;/code&gt; 인터페이스를 구현한 &lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/api/org/apache/catalina/core/StandardContext.html&#34;&gt;&lt;code&gt;StandardContext&lt;/code&gt;&lt;/a&gt;가
-주로 사용된다.&lt;/p&gt;
-&lt;p&gt;서블릿 리스너인 &lt;code&gt;javax.servlet.ServletContextListener&lt;/code&gt; 와 &lt;code&gt;javax.servlet.HttpSessionListener&lt;/code&gt; 등은
-&lt;code&gt;javax.servlet.ServletContextEvent&lt;/code&gt; 를 관리하는 &lt;code&gt;java.util.EventListener&lt;/code&gt; 를 구현한다.
-— 엔진의 수명 주기를 관리하는 &lt;code&gt;LifecycleListener&lt;/code&gt; 와 다르다.
-&lt;code&gt;LifecycleListener&lt;/code&gt; 를 구현한 &lt;code&gt;JasperListener&lt;/code&gt; 를 사용해서 Jasper 엔진을 관리하고,
-Jasper 엔진을 사용해서 servlet을 관리한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;MyServletListener&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;implements&lt;/span&gt; ServletContextListener &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;addLifeCycleListener&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;ServletContextEvent event&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        ApplicationContextFacade source &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;ApplicationContextFacade&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; event&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getSource&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;();&lt;/span&gt;
-        ApplicationContext applicationContext &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; get&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;source&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;context&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-        StandardContext standardContext &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; get&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;applicationContext&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;context&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-        standardContext&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;addLifecycleListener&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; LifecycleListenerImpl&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;valve&#34;&gt;Valve&lt;/h3&gt;
-&lt;p&gt;밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터다.
-밸브는 톰캣에서만 쓸 수 있는 기술이고,
-서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술이다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;h1 id=&#34;spring-application에서-httprequest의-흐름&#34;&gt;Spring application에서 HttpRequest의 흐름&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/http-servlet-request-flow.png&#34; alt=&#34;HTTP Servlet Request&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://github.com/xpdojo/java/blob/main/request-lifecycle-servlet/&#34;&gt;Demonstration&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h1 id=&#34;versions&#34;&gt;Versions&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://tomcat.apache.org/whichversion.html&#34;&gt;출처 문서&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Servlet Spec&lt;/th&gt;
-&lt;th&gt;JSP Spec&lt;/th&gt;
-&lt;th&gt;EL Spec&lt;/th&gt;
-&lt;th&gt;WebSocket Spec&lt;/th&gt;
-&lt;th&gt;Authentication (JASPIC) Spec&lt;/th&gt;
-&lt;th&gt;Apache Tomcat Version&lt;/th&gt;
-&lt;th&gt;Supported Java Versions&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;6.0&lt;/td&gt;
-&lt;td&gt;3.1&lt;/td&gt;
-&lt;td&gt;5.0&lt;/td&gt;
-&lt;td&gt;2.1&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;10.1.x&lt;/td&gt;
-&lt;td&gt;11 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;5.0&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;4.0&lt;/td&gt;
-&lt;td&gt;2.0&lt;/td&gt;
-&lt;td&gt;2.0&lt;/td&gt;
-&lt;td&gt;10.0.x&lt;/td&gt;
-&lt;td&gt;8 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;4.0&lt;/td&gt;
-&lt;td&gt;2.3&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;9.0.x&lt;/td&gt;
-&lt;td&gt;8 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;3.1&lt;/td&gt;
-&lt;td&gt;2.3&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;8.5.x&lt;/td&gt;
-&lt;td&gt;7 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;3.1&lt;/td&gt;
-&lt;td&gt;2.3&lt;/td&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;8.0.x (superseded)&lt;/td&gt;
-&lt;td&gt;7 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;3.0&lt;/td&gt;
-&lt;td&gt;2.2&lt;/td&gt;
-&lt;td&gt;2.2&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;7.0.x (archived)&lt;/td&gt;
-&lt;td&gt;6 and later (7 and later for WebSocket)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2.5&lt;/td&gt;
-&lt;td&gt;2.1&lt;/td&gt;
-&lt;td&gt;2.1&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;6.0.x (archived)&lt;/td&gt;
-&lt;td&gt;5 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2.4&lt;/td&gt;
-&lt;td&gt;2.0&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;5.5.x (archived)&lt;/td&gt;
-&lt;td&gt;1.4 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2.3&lt;/td&gt;
-&lt;td&gt;1.2&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;4.1.x (archived)&lt;/td&gt;
-&lt;td&gt;1.3 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2.2&lt;/td&gt;
-&lt;td&gt;1.1&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;N/A&lt;/td&gt;
-&lt;td&gt;3.3.x (archived)&lt;/td&gt;
-&lt;td&gt;1.1 and later&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h1 id=&#34;ajp-apache-jserv-protocol&#34;&gt;AJP: Apache JServ Protocol&lt;/h1&gt;
-&lt;p&gt;웹 서버(httpd)의 인바운드 요청을
-애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜이다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;h1 id=&#34;jmx-java-management-extensions&#34;&gt;&lt;strong&gt;JMX:&lt;/strong&gt; Java Management eXtensions&lt;/h1&gt;
-&lt;p&gt;애플리케이션을 관리하고 모니터링하기 위한 Java API다. &lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jmx-architecture.png&#34; alt=&#34;JMX Architecture&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체다.
-모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공한다.
-Standard MBean, Dynamic MBean과 추가적으로 Model MBean, Open MBean, Monitor MBean으로 구분되며
-이를 통해 구현할 수 있다.&lt;/p&gt;
-&lt;p&gt;MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소다.
-애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있다.
-MBean Server는 MBean의 생명주기를 관리하고,
-MBean의 속성 및 연산에 대한 액세스를 제공하며,
-알림을 수신하는 등의 작업을 수행한다.&lt;/p&gt;
-&lt;p&gt;JMX 에이전트는 JMX 서비스의 일부로, 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출한다.
-에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며,
-MBean Server를 통해 애플리케이션의 관리 작업을 수행한다.
-JMX 에이전트는 Java 애플리케이션 내부에 포함되거나, 별도의 프로세스로 실행될 수 있다.&lt;/p&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/architecture/overview.html&#34;&gt;Apache Tomcat 8 Architecture&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/server.html&#34;&gt;Server&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/service.html&#34;&gt;Service&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/http.html&#34;&gt;Connectors - HTTP/1.1&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/engine.html&#34;&gt;Engine&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/host.html&#34;&gt;Host&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/config/context.html&#34;&gt;Context&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://howtodoinjava.com/tomcat/tomcats-architecture-and-server-xml-configuration-tutorial/&#34;&gt;Tomcat – Architecture and server.xml configuration&lt;/a&gt; - HowToDoInJava
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://howtodoinjava.com/tomcat/a-birds-eye-view-on-how-web-servers-work/&#34;&gt;How web servers work?&lt;/a&gt; - HowToDoInJava&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.geeksforgeeks.org/servlet-flow-of-execution/&#34;&gt;Servlet – Flow Of Execution&lt;/a&gt; - GeeksforGeeks&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/tomcat-architecture-and-performance/&#34;&gt;Key metrics for monitoring Tomcat&lt;/a&gt; - Datadog&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.digitalocean.com/community/tutorials/servletcontextlistener-servlet-listener-example&#34;&gt;ServletContextListener Servlet Listener Example&lt;/a&gt; - DigitalOcean&lt;/li&gt;
-&lt;li&gt;&amp;lt;자바 고양이 톰캣(Tomcat) 이야기&amp;gt; - 최진식&lt;/li&gt;
-&lt;li&gt;&amp;lt;아파치 톰캣 7 따라잡기&amp;gt; - Tanuj Khare&lt;/li&gt;
-&lt;li&gt;&amp;lt;톰캣 최종 분석&amp;gt; (톰캣4, 5) - Budi Kurniawan, Paul Deck&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.lesstif.com/linux-core/linux-web-server-web-application/nginx-apache-tomcat&#34;&gt;nginx 와 apache tomcat 연동하기&lt;/a&gt; - lessif&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ehdvudee.tistory.com/20&#34;&gt;AJP 프로토콜 모든 것을 분석 해보자&lt;/a&gt; - ehdvudee&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cheershennah.tistory.com/142&#34;&gt;아파치Apache - 톰캣 Tomcat  연동하는 이유?  AJP란?&lt;/a&gt; - cheersHena&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;각주&#34;&gt;각주&lt;/h2&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/logging.html&#34;&gt;Logging in Tomcat&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://howtodoinjava.com/tomcat/running-multiple-instances-of-tomcat-with-single-server-installation/&#34;&gt;Running multiple instances of Tomcat with single server installation&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;http://i5on9i.blogspot.com/2014/07/tomcat-valve-servlet-filter.html&#34;&gt;Tomcat 의 Valve 와 Servlet Filter&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Apache_JServ_Protocol&#34;&gt;AJP: Apache JServ Protocol&lt;/a&gt; - Wikipedia&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:5&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Java_Management_Extensions&#34;&gt;JMX: Java Management Extensions&lt;/a&gt; - Wikipedia&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://markruler.github.io/posts/java/tomcat/ - Im Changsu 2020 - 2024</description>
         </item>
     
     
