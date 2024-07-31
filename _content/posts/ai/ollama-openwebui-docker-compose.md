@@ -192,14 +192,20 @@ GPU를 사용하는 것도 확인할 수 있다.
 # 서비스에서 고려해야 할 사항
 
 - **검색 증강 생성(RAG, Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
-- **파인 튜닝(Fine-tuning)**[^3] 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
+- **미세 조정(Fine-tuning, 파인 튜닝)**[^3] 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
 
 [^2]: [검색 증강 생성(RAG)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/) - AWS
 [^3]: [RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드](https://www.skelterlabs.com/blog/rag-vs-finetuning) - 스켈터 랩스 Skelter Labs
 
 # 더 알아보기
 
-- [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
-- [(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598) - 입문
-- [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
-- [Fine-tuning](https://platform.openai.com/docs/guides/fine-tuning) - OpenAI Platform
+- 입문 (전체적인 그림 그리기)
+  - [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
+  - [(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598) - 입문
+  - [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
+- 검색 증강 생성 (RAG)
+  - [검색 증강 생성(RAG)이란?](https://www.elastic.co/kr/what-is/retrieval-augmented-generation/) - Elastic
+  - [Retrieval augmented generation using Elasticsearch and OpenAI](https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation) - OpenAI Cookbook
+  - [Elasticsearch Relevance Engine(ESRE)](https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine) - Elastic
+- 미세 조정 (파인 튜닝)
+  - [Fine-tuning](https://platform.openai.com/docs/guides/fine-tuning) - OpenAI Platform
