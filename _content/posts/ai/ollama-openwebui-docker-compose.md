@@ -1,6 +1,6 @@
 ---
 date: 2024-07-31T23:48:00+09:00
-lastmod: 2024-08-01T01:03:00+09:00
+lastmod: 2024-08-01T01:05:00+09:00
 title: "Docker Compose로 간단하게 Ollama 시작하기"
 description: "근데 이제 Open WebUI를 곁들인"
 featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
@@ -183,3 +183,9 @@ volumes:
 GPU를 사용하는 것도 확인할 수 있다.
 
 ![GPU 사용하는 Ollama Docker Container](/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp)
+
+# 더 알아보기
+
+- [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
+- [(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598) - 입문
+- [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
