@@ -1,6 +1,6 @@
 ---
 date: 2024-07-31T23:48:00+09:00
-lastmod: 2024-08-01T00:44:00+09:00
+lastmod: 2024-08-01T01:05:00+09:00
 title: "Docker Compose로 간단하게 Ollama 시작하기"
 description: "근데 이제 Open WebUI를 곁들인"
 featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
@@ -205,6 +205,7 @@ GPU를 사용하는 것도 확인할 수 있다.
   - [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
 - 검색 증강 생성 (RAG)
   - [검색 증강 생성(RAG)이란?](https://www.elastic.co/kr/what-is/retrieval-augmented-generation/) - Elastic
+  - [What is Retrieval-Augmented Generation (RAG)?](https://youtu.be/T-D1OfcDW1M) - IBM Techonology
   - [Retrieval augmented generation using Elasticsearch and OpenAI](https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation) - OpenAI Cookbook
   - [Elasticsearch Relevance Engine(ESRE)](https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine) - Elastic
 - 미세 조정 (파인 튜닝)
