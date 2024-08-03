@@ -1,3 +1,6 @@
+SHELL := bash
+BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+
 init:
 	git submodule update --init --recursive
 .PHONY: init
@@ -9,16 +12,21 @@ clean: clean
 .PHONY: clean
 
 build: clean
-	@echo "Build the site..."
-	@hugo --destination . --contentDir _content --theme hugo-theme-diary
+	@printf "\033[0;32mBuild the site...\033[0m\n"
+	hugo --destination . --contentDir _content --theme hugo-theme-diary
 .PHONY: build
 
-deploy:
-	@echo "Deploy the site..."
-	@./scripts/deploy.sh
+deploy: build
+	git add -A
+	@msg="rebuilding site $(shell date '+%Y-%m-%dT%H:%M:%S %Z%z') on Unix-like system"; \
+	echo "$$msg"; \
+	git commit -m "$$msg"
+	@printf "\033[0;32mDeploying updates to GitHub...\033[0m\n"
+	@git push origin $(BRANCH)
+	@echo "COMPLETE!"
 .PHONY: deploy
 
 run:
 	@echo "Run the site..."
-	@./scripts/startup.sh
+	hugo server --contentDir _content --theme hugo-theme-diary
 .PHONY: run
