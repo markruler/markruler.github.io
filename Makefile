@@ -12,7 +12,7 @@ clean: clean
 .PHONY: clean
 
 build: clean
-	@printf "\033[0;32mBuild the site...\033[0m\n"
+	@printf "\033[38;5;45mBuild the site...\033[38;5;15m\n"
 	hugo --destination . --contentDir _content --theme hugo-theme-diary
 .PHONY: build
 
@@ -21,9 +21,9 @@ deploy: build
 	@msg="rebuilding site $(shell date '+%Y-%m-%dT%H:%M:%S %Z%z') on Unix-like system"; \
 	echo "$$msg"; \
 	git commit -m "$$msg"
-	@printf "\033[0;32mDeploying updates to GitHub...\033[0m\n"
+	@printf "\033[38;5;46mDeploying updates to GitHub...\033[38;5;15m\n"
 	@git push origin $(BRANCH)
-	@echo "COMPLETE!"
+	@printf "\033[38;5;198mCOMPLETE! \033[38;5;15m\n"
 .PHONY: deploy
 
 run:
