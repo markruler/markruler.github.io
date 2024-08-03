@@ -1,6 +1,6 @@
 ---
 date: 2024-07-31T23:48:00+09:00
-lastmod: 2024-08-01T01:05:00+09:00
+lastmod: 2024-08-03T21:24:00+09:00
 title: "Docker Compose로 간단하게 Ollama 시작하기"
 description: "근데 이제 Open WebUI를 곁들인"
 featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
@@ -33,6 +33,10 @@ categories:
 # Docker 없이 Ollma 실행해보기
 
 먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.
+
+```sh
+pip install langchain-community==0.2.11
+```
 
 ```python
 from langchain_community.chat_models import ChatOllama
@@ -197,9 +201,11 @@ GPU를 사용하는 것도 확인할 수 있다.
 
 - **검색 증강 생성(RAG, Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
 - **미세 조정(Fine-tuning, 파인 튜닝)**[^3] 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
+- **가드레일(Guardrails)**[^4]을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)
 
 [^2]: [검색 증강 생성(RAG)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/) - AWS
 [^3]: [RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드](https://www.skelterlabs.com/blog/rag-vs-finetuning) - 스켈터 랩스 Skelter Labs
+[^4]: [신뢰할 수 있고 안전하며 보안이 뛰어난 대규모 언어 모델 대화 시스템을 구현하는 NVIDIA](https://developer.nvidia.com/ko-kr/blog/nvidia-enables-trustworthy-safe-and-secure-large-language-model-conversational-systems/) - NVIDIA
 
 # 더 알아보기
 
@@ -215,3 +221,10 @@ GPU를 사용하는 것도 확인할 수 있다.
   - [Elasticsearch Relevance Engine(ESRE)](https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine) - Elastic
 - 미세 조정 (파인 튜닝)
   - [Fine-tuning](https://platform.openai.com/docs/guides/fine-tuning) - OpenAI Platform
+- 가드레일
+  - [LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)](https://youtu.be/4zRc-k2KNKQ)
+  - [The landscape of LLM guardrails: intervention levels and techniques](https://www.ml6.eu/blogpost/the-landscape-of-llm-guardrails-intervention-levels-and-techniques) - ML6
+  - [How to implement LLM guardrails](https://cookbook.openai.com/examples/how_to_use_guardrails) - OpenAI Cookbook
+  - [NVIDIA NeMo Guardrails: Full Walkthrough for Chatbots / AI](https://youtu.be/SwqusllMCnE)
+    - [NVIDIA/NeMo-Guardrails](https://github.com/NVIDIA/NeMo-Guardrails) - GitHub repository
+  - [On Topic Validation](https://www.guardrailsai.com/docs/examples/response_is_on_topic) - Guardrails AI

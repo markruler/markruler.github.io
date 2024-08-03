@@ -21,7 +21,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/" /><meta property="og:image" content="https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-07-31T23:48:00+09:00" />
-<meta property="article:modified_time" content="2024-08-01T01:05:00+09:00" />
+<meta property="article:modified_time" content="2024-08-03T21:24:00+09:00" />
 
 
 
@@ -364,7 +364,8 @@
 이 2가지 도구를 간단하게 사용해보자.</p>
 <h1 id="docker-없이-ollma-실행해보기">Docker 없이 Ollma 실행해보기</h1>
 <p>먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">pip install langchain-community<span style="color:#ff79c6">==</span>0.2.11
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
 <span style="color:#ff79c6">from</span> langchain_core.prompts <span style="color:#ff79c6">import</span> ChatPromptTemplate
 
 <span style="color:#6272a4"># Initialize the prompt with system message</span>
@@ -501,6 +502,7 @@ docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.oll
 <ul>
 <li><strong>검색 증강 생성(RAG, Retrieval-Augmented Generation)</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.</li>
 <li><strong>미세 조정(Fine-tuning, 파인 튜닝)</strong><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.</li>
+<li><strong>가드레일(Guardrails)</strong><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)</li>
 </ul>
 <h1 id="더-알아보기">더 알아보기</h1>
 <ul>
@@ -525,6 +527,19 @@ docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.oll
 <li><a href="https://platform.openai.com/docs/guides/fine-tuning">Fine-tuning</a> - OpenAI Platform</li>
 </ul>
 </li>
+<li>가드레일
+<ul>
+<li><a href="https://youtu.be/4zRc-k2KNKQ">LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)</a></li>
+<li><a href="https://www.ml6.eu/blogpost/the-landscape-of-llm-guardrails-intervention-levels-and-techniques">The landscape of LLM guardrails: intervention levels and techniques</a> - ML6</li>
+<li><a href="https://cookbook.openai.com/examples/how_to_use_guardrails">How to implement LLM guardrails</a> - OpenAI Cookbook</li>
+<li><a href="https://youtu.be/SwqusllMCnE">NVIDIA NeMo Guardrails: Full Walkthrough for Chatbots / AI</a>
+<ul>
+<li><a href="https://github.com/NVIDIA/NeMo-Guardrails">NVIDIA/NeMo-Guardrails</a> - GitHub repository</li>
+</ul>
+</li>
+<li><a href="https://www.guardrailsai.com/docs/examples/response_is_on_topic">On Topic Validation</a> - Guardrails AI</li>
+</ul>
+</li>
 </ul>
 <section class="footnotes" role="doc-endnotes">
 <hr>
@@ -538,12 +553,15 @@ docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.oll
 <li id="fn:3" role="doc-endnote">
 <p><a href="https://www.skelterlabs.com/blog/rag-vs-finetuning">RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드</a> - 스켈터 랩스 Skelter Labs&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
+<li id="fn:4" role="doc-endnote">
+<p><a href="https://developer.nvidia.com/ko-kr/blog/nvidia-enables-trustworthy-safe-and-secure-large-language-model-conversational-systems/">신뢰할 수 있고 안전하며 보안이 뛰어난 대규모 언어 모델 대화 시스템을 구현하는 NVIDIA</a> - NVIDIA&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
 </ol>
 </section>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2024-08-01</p>
+		    <p style="color:#777;">Last modified on 2024-08-03</p>
                     
                 </div>
             </div>
