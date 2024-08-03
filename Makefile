@@ -1,6 +1,9 @@
 SHELL := bash
 BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 
+# ANSI Escape Code - Color
+# https://en.wikipedia.org/wiki/ANSI_escape_code#colors
+
 init:
 	git submodule update --init --recursive
 .PHONY: init
