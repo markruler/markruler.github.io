@@ -14,8 +14,22 @@ init:
 
 clean:
 	@echo "Remove all generated files and directories..."
-	rm -rf posts/ categories/ tags/ about/ page/ scss/ series/ js/ vendor/ resources/ \
-		404.html index.html index.xml sitemap.xml rss.xsl robots.txt
+	rm -rf posts/ \
+		about/ \
+		categories/ \
+		js/ \
+		page/ \
+		resources/ \
+		scss/ \
+		series/ \
+		tags/ \
+		vendor/ \
+		404.html \
+		index.html \
+		index.xml \
+		robots.txt \
+		rss.xsl \
+		sitemap.xml
 .PHONY: clean
 
 build: clean
