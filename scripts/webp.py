@@ -16,7 +16,7 @@ def convert_to_webp(input_path, quality):
 def main():
     parser = argparse.ArgumentParser(description="Convert images to WebP format.")
     parser.add_argument('input', type=str, help="Path to the input image file.")
-    parser.add_argument('--quality', type=int, default=100, help="Quality of the output WebP file (default: 100).")
+    parser.add_argument('--quality', type=int, default=90, help="Quality of the output WebP file (default: 100).")
     
     args = parser.parse_args()
     convert_to_webp(args.input, args.quality)
