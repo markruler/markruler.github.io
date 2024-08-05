@@ -102,7 +102,7 @@ javascript:void(window.open("https://web.archive.org/save/"+document.location.hr
 브라우저에서 페이지 성능을 체크할 수 있다.
 아래 스크린샷처럼 Core Web Vitals(CWV)도 함께 확인할 수 있다.
 
-![Performance Panel](/images/web/google-chrome/performance-panel.png)
+![Performance Panel](/images/web/google-chrome/performance-panel.webp)
 
 ## Network 패널
 
@@ -161,7 +161,7 @@ javascript:void(window.open("https://web.archive.org/save/"+document.location.hr
   - 개발자 도구 Source 패널에서 정적 파일을 수정 후 해당 페이지를 새로고침하면 모두 리로드된다.
   - Local Override는 Source 패널에서 수정 후 저장하면, 이후 해당 페이지를 새로고침해도 수정한 내용이 유지된다.
 
-![Local Overrides](https://developer.chrome.com/static/blog/new-in-devtools-65/image/persisting-css-change-ac-3da090318c534.gif)
+![Local Overrides](/images/web/google-chrome/persisting-css-change-ac-3da090318c534.gif)
 
 ## Chrome 66
 
