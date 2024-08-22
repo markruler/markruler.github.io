@@ -1,8 +1,8 @@
 ---
 date: 2024-07-17T22:40:00+09:00
 lastmod: 2024-07-18T23:49:00+09:00
-title: "🤫 SSH (Secure Shell)"
-description: "일상에서의 SSH"
+title: "일상에서의 SSH"
+description: "Secure Shell"
 featured_image: "/images/network/ssh/dall-e-ssh.webp"
 images: ["/images/network/ssh/dall-e-ssh.webp"]
 tags:
@@ -12,6 +12,8 @@ tags:
 categories:
   - how-to
 ---
+
+> 업무에서 자주 사용하는 SSH 설정을 정리합니다.
 
 # SSH Server
 
