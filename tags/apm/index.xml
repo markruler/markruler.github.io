@@ -11,13 +11,13 @@
     <copyright>Im Changsu 2020 - 2024</copyright>
     <lastBuildDate>Thu, 25 Jul 2024 01:22:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/apm/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>APM에서 엉뚱한 걸 찾았던 실수</title>
+      <title>APM만큼 네트워크 모니터링도 중요하다</title>
       <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
       <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</guid>
       <description>APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다. 우리팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있다. (인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)
-문제 이용자에게 실제 체감이 될 정도로 레이턴시가 높아지고, 정각마다 스파이크 발생했다. 또한 서비스 전체에 영향이 있었다.
+문제 어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다. 또한 서비스 전체에 영향이 있었다.
 분석: 쉽게 간과했던 문제 Oracle Session 히스토리를 남겨서 확인했을 때 DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었다. DB 문제는 아니었다.
 발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.</description>
     </item>

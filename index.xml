@@ -460,7 +460,7 @@ Please type ‘allow pasting’ below and hit Enter to allow pasting.
     
     
         <item>
-        <title>APM에서 엉뚱한 걸 찾았던 실수</title>
+        <title>APM만큼 네트워크 모니터링도 중요하다</title>
         <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
         <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
@@ -470,7 +470,7 @@ Please type ‘allow pasting’ below and hit Enter to allow pasting.
 (인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)&lt;/p&gt;
 &lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/first.png&#34; alt=&#34;First&#34;&gt;&lt;/p&gt;
-&lt;p&gt;이용자에게 실제 체감이 될 정도로 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
+&lt;p&gt;어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
 또한 서비스 전체에 영향이 있었다.&lt;/p&gt;
 &lt;h1 id=&#34;분석-쉽게-간과했던-문제&#34;&gt;분석: 쉽게 간과했던 문제&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/&#34;&gt;Oracle Session 히스토리&lt;/a&gt;를 남겨서 확인했을 때
@@ -483,7 +483,7 @@ DB 문제는 아니었다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&amp;ldquo;Private IP로 요청하면 더 빠른 거 아냐?&amp;quot;&lt;/strong&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었다.
-혹시 몰라서 라우터 장비에 SNMP 모니터링을 추가했다.
+혹시 몰라서 라우터 장비에 &lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP&lt;/a&gt; 모니터링을 추가했다.
 IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp&#34; alt=&#34;Network Router&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;

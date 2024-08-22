@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>APM에서 엉뚱한 걸 찾았던 실수</title>
+<title>APM만큼 네트워크 모니터링도 중요하다</title>
 
 
 
@@ -10,14 +10,14 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="APM은 Application Performance Monitoring의 약자">
+<meta name="description" content="APM에서 엉뚱한 걸 찾았던 실수">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="APM에서 엉뚱한 걸 찾았던 실수" />
-<meta property="og:description" content="APM은 Application Performance Monitoring의 약자" />
+<meta property="og:title" content="APM만큼 네트워크 모니터링도 중요하다" />
+<meta property="og:description" content="APM에서 엉뚱한 걸 찾았던 실수" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/" /><meta property="og:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-07-25T01:22:00+09:00" />
@@ -31,8 +31,8 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp"/>
 
-<meta name="twitter:title" content="APM에서 엉뚱한 걸 찾았던 실수"/>
-<meta name="twitter:description" content="APM은 Application Performance Monitoring의 약자"/>
+<meta name="twitter:title" content="APM만큼 네트워크 모니터링도 중요하다"/>
+<meta name="twitter:description" content="APM에서 엉뚱한 걸 찾았던 실수"/>
 
 
 
@@ -272,10 +272,10 @@
                 
             >
                 <div class="post-title">
-                    APM에서 엉뚱한 걸 찾았던 실수
+                    APM만큼 네트워크 모니터링도 중요하다
                     
                     <div class="post-subtitle">
-                        APM은 Application Performance Monitoring의 약자
+                        APM에서 엉뚱한 걸 찾았던 실수
                     </div>
                     
                     <div class="post-meta">
@@ -318,7 +318,7 @@
 (인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)</p>
 <h1 id="문제">문제</h1>
 <p><img src="/images/web/apm-network-device-troubleshooting-mistakes/first.png" alt="First"></p>
-<p>이용자에게 실제 체감이 될 정도로 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
+<p>어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
 또한 서비스 전체에 영향이 있었다.</p>
 <h1 id="분석-쉽게-간과했던-문제">분석: 쉽게 간과했던 문제</h1>
 <p><a href="https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/">Oracle Session 히스토리</a>를 남겨서 확인했을 때
@@ -331,7 +331,7 @@ DB 문제는 아니었다.</p>
 <p><strong>&ldquo;Private IP로 요청하면 더 빠른 거 아냐?&quot;</strong></p>
 </blockquote>
 <p>모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었다.
-혹시 몰라서 라우터 장비에 SNMP 모니터링을 추가했다.
+혹시 몰라서 라우터 장비에 <a href="/posts/network/snmp/">SNMP</a> 모니터링을 추가했다.
 IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었다.</p>
 <p><img src="/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp" alt="Network Router"></p>
 <h1 id="해결">해결</h1>

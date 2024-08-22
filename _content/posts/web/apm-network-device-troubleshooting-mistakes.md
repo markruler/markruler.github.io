@@ -1,8 +1,8 @@
 ---
 date: 2024-07-25T01:22:00+09:00
 lastmod: 2024-07-25T01:22:00+09:00
-title: "APM에서 엉뚱한 걸 찾았던 실수"
-description: "APM은 Application Performance Monitoring의 약자"
+title: "APM만큼 네트워크 모니터링도 중요하다"
+description: "APM에서 엉뚱한 걸 찾았던 실수"
 featured_image: "/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp"
 images: ["/images/web/apm-network-device-troubleshooting-mistakes/dall-e-looking-for-something.webp"]
 tags:
@@ -21,7 +21,7 @@ APM은 애플리케이션 성능 모니터링(Application Performance Monitoring
 
 ![First](/images/web/apm-network-device-troubleshooting-mistakes/first.png)
 
-이용자에게 실제 체감이 될 정도로 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
+어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다.
 또한 서비스 전체에 영향이 있었다.
 
 # 분석: 쉽게 간과했던 문제
@@ -38,7 +38,7 @@ DB 문제는 아니었다.
 > **"Private IP로 요청하면 더 빠른 거 아냐?"**
 
 모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었다.
-혹시 몰라서 라우터 장비에 SNMP 모니터링을 추가했다.
+혹시 몰라서 라우터 장비에 [SNMP](/posts/network/snmp/) 모니터링을 추가했다.
 IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었다.
 
 ![Network Router](/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp)
