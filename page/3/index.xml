@@ -9,9 +9,380 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Wed, 31 Jul 2024 23:48:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>최소한의 안전한 Bash 스크립트 템플릿</title>
+        <link>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</link>
+        <pubDate>Sun, 14 Feb 2021 15:22:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/ -&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://twitter.com/radzikowski_m&#34;&gt;Maciej Radzikowski&lt;/a&gt;가 작성한 &lt;a href=&#34;https://betterdev.blog/minimal-safe-bash-script-template/&#34;&gt;Minimal safe Bash script template (2020-12-14)&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Bash 스크립트.
+거의 모든 사람들이 언젠가 작성해야 하는 것입니다.
+하지만 그 중 누구도 &amp;ldquo;맞아요, 저는 Bash 스크립트 작성하는 것을 사랑합니다&amp;quot;라고 말하지 않습니다.
+거의 모든 사람들이 Bash 스크립트를 작성할 때 주의를 기울이지 않는 이유죠.&lt;/p&gt;
+&lt;p&gt;저는 여러분을 Bash 전문가로 만들려는 것이 아닙니다 (저도 전문가는 아닙니다).
+다만 스크립트를 더 안전하게 만들어 줄 최소한의 템플릿을 보여 드리겠습니다.
+저에게 감사해하실 필요는 없어요. 여러분의 미래가 여러분에게 감사해할 것입니다.&lt;/p&gt;
+&lt;h1 id=&#34;bash에서-스크립팅-하는-이유&#34;&gt;Bash에서 스크립팅 하는 이유&lt;/h1&gt;
+&lt;p&gt;Bash 스크립팅에 대한 가장 좋은 설명이 최근 저의 트위터 피드에 나타났습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;자전거 타는 거랑 비슷해&amp;quot;의 반대말은 &amp;ldquo;bash 프로그래밍이랑 비슷해&amp;quot;이다.&lt;br&gt;
+몇 번을 했던지 상관없이 매번 다시 배워야 한다는 말.&lt;br&gt;
+&lt;br&gt;
+- &lt;a href=&#34;https://twitter.com/JakeWharton/status/1334177665356587008&#34;&gt;Jake Wharton&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;하지만 Bash는 널리 사랑받는 언어인 JavaScript처럼 쉽게 사라지지 않을 것입니다.
+주요 언어가 되지 않길 바라더라도 Bash는 항상 우리와 가까운 곳에 있습니다.&lt;/p&gt;
+&lt;p&gt;Bash는 &lt;a href=&#34;https://www.quora.com/Is-Bash-considered-the-lingua-franca-of-shells/answer/Paul-Reiber&#34;&gt;셸(shell) 왕좌를 물려받았고&lt;/a&gt;
+Docker 이미지를 포함한 거의 모든 Linux에서 찾을 수 있습니다.
+이는 대부분의 백엔드가 실행되는 환경입니다.
+따라서 서버 애플리케이션 시작, CI/CD 또는 통합 테스트 실행을
+스크립팅해야 하는 경우 Bash를 사용하면 됩니다.&lt;/p&gt;
+&lt;p&gt;몇 가지 명령을 이어 붙이고, 출력을 다른 명령으로 전달하고,
+실행 파일을 시작하기 위해 Bash는 가장 쉽고 가장 기본적인 솔루션입니다.
+더 크고 복잡한 스크립트를 다른 언어로 작성하는 것은 매우 타당한 일이지만
+Python, Ruby, fish 또는 다른 인터프리터가 어디에서나 사용할 수 있을 것이라고 기대할 수는 없습니다.
+또한 일부 프로덕션 서버, Docker 이미지 또는 CI 환경에 이 언어들을 추가하려면
+두 번 생각해보고 또 다시 한 번 생각해 보아야 합니다.&lt;/p&gt;
+&lt;p&gt;하지만 Bash는 완벽하지 않습니다.
+문법은 최악이고 에러 핸들링도 어렵습니다.
+우리가 해결해야 하는 지뢰가 널려 있죠.&lt;/p&gt;
+&lt;h1 id=&#34;bash-스크립트-템플릿&#34;&gt;Bash 스크립트 템플릿&lt;/h1&gt;
+&lt;p&gt;거두절미하고 템플릿은 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; -Eeuo pipefail
+&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;trap&lt;/span&gt; cleanup SIGINT SIGTERM ERR EXIT
+
+&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;script_dir&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &amp;amp;&amp;gt;/dev/null &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;pwd&lt;/span&gt; -P&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+
+usage&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  cat &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;lt;&amp;lt;EOF
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Usage: $(basename &amp;#34;${BASH_SOURCE[0]}&amp;#34;) [-h] [-v] [-f] -p param_value arg1 [arg2...]
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Script description here.
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Available options:
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-h, --help      Print this help and exit
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-v, --verbose   Print script debug info
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-f, --flag      Some flag description
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-p, --param     Some param description
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;EOF&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+cleanup&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;trap&lt;/span&gt; - SIGINT SIGTERM ERR EXIT
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# script cleanup here&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+setup_colors&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -t &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -z &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NO_COLOR&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;TERM&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; !&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;dumb&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#ff79c6&#34;&gt;then&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;31m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;GREEN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;32m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;ORANGE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;33m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BLUE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;34m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PURPLE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;35m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;CYAN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;36m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;YELLOW&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[1;33m&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;GREEN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;ORANGE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BLUE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PURPLE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;CYAN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;YELLOW&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;fi&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+msg&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &amp;gt;&amp;amp;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; -e &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;1&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+die&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;local&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;msg&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$1&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;local&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;code&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;2&lt;/span&gt;-1&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# default exit status 1&lt;/span&gt;
+  msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$msg&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$code&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+parse_params&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# default values of variables set from params&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;flag&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;while&lt;/span&gt; :; &lt;span style=&#34;color:#ff79c6&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;1&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; in
+    -h | --help&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; usage ;;
+    -v | --verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; -x ;;
+    --no-color&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NO_COLOR&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; ;;
+    -f | --flag&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;flag&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; ;; &lt;span style=&#34;color:#6272a4&#34;&gt;# example flag&lt;/span&gt;
+    -p | --param&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# example named parameter&lt;/span&gt;
+      &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;2&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;shift&lt;/span&gt;
+      ;;
+    -?*&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Unknown option: &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$1&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; ;;
+    *&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;break&lt;/span&gt; ;;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;esac&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;shift&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;done&lt;/span&gt;
+
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;args&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# check required params and arguments&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -z &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Missing required parameter: param&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;${#&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;args&lt;/span&gt;[@]&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt; -eq &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Missing script arguments&amp;#34;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+parse_params &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+setup_colors
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# script logic here&lt;/span&gt;
+
+msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Read parameters:&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;- flag: &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;flag&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;- param: &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;- arguments: &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;args&lt;/span&gt;[*]-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;너무 길지 않게 만들려는 생각이었습니다.
+저는 스크립트 로직때문에 500줄이나 스크롤하고 싶지 않습니다.
+동시에 어떤 스크립트에서든 좋은 기반 스크립트가 되었으면 했습니다.
+하지만 Bash는 의존성 관리라는 것이 없어서 쉽게 만들 수는 없었습니다.&lt;/p&gt;
+&lt;p&gt;한 가지 해결책은 처음부터 모든 보일러 플레이트 및 유틸리티
+함수(function)가 있는 별도의 스크립트를 같이 실행시키는 것입니다.
+이 방식의 단점은 &amp;ldquo;간단한 Bash 스크립트&amp;quot;라는 의도를 잃어버리고 항상
+별도의 파일을 달고 다녀야 한다는 것입니다. 그래서 저는 템플릿을
+가능한 한 짧게 만들기 위해 필수적인 것만을 템플릿에 넣자고 결정했습니다.&lt;/p&gt;
+&lt;p&gt;이제 좀 더 자세히 살펴보겠습니다.&lt;/p&gt;
+&lt;h2 id=&#34;bash-선택하기&#34;&gt;Bash 선택하기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;스크립트는 기본적으로 셔뱅(shebang)&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;으로 시작합니다.
+&lt;a href=&#34;https://stackoverflow.com/questions/21612980/why-is-usr-bin-env-bash-superior-to-bin-bash&#34;&gt;최적의 호환성&lt;/a&gt;을 위해
+&lt;code&gt;/bin/bash&lt;/code&gt;가 아닌 &lt;code&gt;/usr/bin/env&lt;/code&gt;를 참조합니다.
+링크된 StackOverflow 질문의 답변을 읽어 보시면
+이 경우에도 오류가 발생할 수는 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;빠르게-실패하기&#34;&gt;빠르게 실패하기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; -Eeuo pipefail
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;set&lt;/code&gt; 명령어는 스크립트 실행 옵션을 변경합니다.
+예를 들면 &lt;strong&gt;기본적으로 Bash는 일부 명령이 실패하는 것과 상관없이&lt;/strong&gt;
+0 외의 종료 상태 코드를 반환합니다. 다음 단계로 잘 넘어갑니다.
+이제 다음과 같이 짧은 스크립트를 살펴보겠습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&lt;/span&gt;cp important_file ./backups/
+rm important_file
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여기서 &lt;code&gt;backups&lt;/code&gt; 디렉토리가 존재하지 않을 경우 어떻게 될까요?
+정확히 말하면 콘솔에 오류 메시지가 표시되지만
+응답하기 전에 두 번째 명령에 의해 파일이 이미 제거됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;set -Eeuo pipefail&lt;/code&gt; 옵션들이 정확하게 무엇을 바꾸는지,
+어떻게 사용자를 보호할 것인지에 대한 자세한 내용은
+&lt;a href=&#34;https://vaneyckt.io/posts/safer_bash_scripts_with_set_euxo_pipefail/&#34;&gt;몇 년 동안 제 북마크에 있는 글&lt;/a&gt;을 참조해주세요.&lt;/p&gt;
+&lt;p&gt;하지만 &lt;a href=&#34;https://www.reddit.com/r/commandline/comments/g1vsxk/the_first_two_statements_of_your_bash_script/fniifmk/&#34;&gt;이러한 옵션 설정에 대해 몇 가지 반론&lt;/a&gt;이 있다는 것을 알고 있어야 합니다.&lt;/p&gt;
+&lt;h2 id=&#34;위치-가져오기&#34;&gt;위치 가져오기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;script_dir&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &amp;amp;&amp;gt;/dev/null &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;pwd&lt;/span&gt; -P&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 줄은 스크립트가 위치한 디렉토리를 지정하는 데 가장 효과적이며, &lt;del&gt;여기에 &lt;code&gt;cd&lt;/code&gt;를 붙입니다.&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;스크립트가 작업 디렉토리에 있다면 스크립트가 상대 경로로 동작하며
+파일을 복사하고 명령어를 실행합니다.
+동일한 디렉토리에서 스크립트를 실행하는 한 그렇습니다.&lt;/p&gt;
+&lt;p&gt;하지만 CI 구성에서 다음과 같은 스크립트를 실행한다면&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;/opt/ci/project/script.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 스크립트는 프로젝트 디렉토리가 아니라 CI 도구의 다른 작업 디렉토리에서 동작합니다.
+스크립트를 실행하기 전에 해당 디렉토리로 이동함으로써 고칠 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cd&lt;/span&gt; /opt/ci/project &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ./script.sh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그래도 스크립트 쪽에서 해결하는 게 훨씬 좋습니다.
+스크립트가 일부 파일을 읽거나 동일한 디렉터리에서
+다른 프로그램을 실행하려는 경우 아래처럼 호출합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;cat &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$script_dir&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;/my_file&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;동시에 스크립트는 작업 디렉토리 위치를 변경하지 않습니다.
+스크립트가 다른 디렉토리에서 실행되어 사용자가 일부 파일에 대한
+상대 경로를 제공하더라도 해당 스크립트를 읽을 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;정리하기&#34;&gt;정리하기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;trap&lt;/span&gt; cleanup SIGINT SIGTERM ERR EXIT
+
+cleanup&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;trap&lt;/span&gt; - SIGINT SIGTERM ERR EXIT
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# script cleanup here&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;스크립트의 &lt;code&gt;trap&lt;/code&gt;을 &lt;code&gt;finally&lt;/code&gt; 블록으로 생각해 보세요.
+보통 오류나 외부 신호에 의해 스크립트가 끝나면 &lt;code&gt;cleanup()&lt;/code&gt; 함수가 실행됩니다.
+예를 들어 스크립트가 생성한 모든 임시 파일들을 제거할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cleanup()&lt;/code&gt;은 끝날 때뿐만 아니라 스크립트가 특정 부분만 제거할 수도 있다는 것을 기억하세요.
+제거하려는 자원이 반드시 있어야 하는 것은 아닙니다.&lt;/p&gt;
+&lt;h2 id=&#34;도움되는-도움말-표시하기&#34;&gt;도움되는 도움말 표시하기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;usage&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  cat &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;lt;&amp;lt;EOF
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Usage: $(basename &amp;#34;${BASH_SOURCE[0]}&amp;#34;) [-h] [-v] [-f] -p param_value arg1 [arg2...]
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;Script description here.
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;...
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;EOF&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;exit&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;usage()&lt;/code&gt; 함수가 상대적으로 스크립트 상단에 있을 경우 다음 두 가지 방식으로 동작합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;모든 옵션을 아는 것도 아니면서 스크립트 전체를 보고 싶지 않은 사용자를 위해 &lt;code&gt;도움말을 표시합니다&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;스크립트 수정 시 &lt;code&gt;최소한의 문서&lt;/code&gt;입니다. (예: 2주 후, 무엇을 작성했는지 떠올릴 필요가 없습니다)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;여기에 모든 함수를 기록해야 한다고 말하는 것은 아닙니다.
+그러나 짧고 적절한 스크립트 사용법(usage) 메시지는 필수 항목입니다.&lt;/p&gt;
+&lt;h2 id=&#34;적절한-메시지-출력하기&#34;&gt;적절한 메시지 출력하기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;setup_colors&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -t &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -z &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NO_COLOR&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;TERM&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; !&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;dumb&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt;; &lt;span style=&#34;color:#ff79c6&#34;&gt;then&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;31m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;GREEN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;32m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;ORANGE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;33m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BLUE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;34m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PURPLE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;35m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;CYAN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[0;36m&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;YELLOW&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;\033[1;33m&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;else&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;GREEN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;ORANGE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;BLUE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;PURPLE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;CYAN&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;YELLOW&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;fi&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+
+msg&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &amp;gt;&amp;amp;&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt; -e &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;1&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 텍스트에서 색상을 사용하지 않으려면 &lt;code&gt;setup_colors()&lt;/code&gt; 함수를 지우세요.
+하지만 저는 매번 코드를 구글에다 검색하지 않는다면
+색상을 더 자주 사용할 수 있다는 것을 알기 때문에 지우지 않습니다.&lt;/p&gt;
+&lt;p&gt;둘째로, 이러한 &lt;strong&gt;색상은 &lt;code&gt;msg()&lt;/code&gt; 함수에만 사용하도록 되어 있고&lt;/strong&gt; &lt;code&gt;echo&lt;/code&gt; 명령에는 사용되지 않습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;msg()&lt;/code&gt; 함수는 스크립트 출력을 제외한 모든 것을 출력하는 데 사용됩니다.
+여기에는 오류뿐만 아니라 모든 로그와 메시지가 포함됩니다.
+&lt;a href=&#34;https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46&#34;&gt;12 팩터 CLI 앱&lt;/a&gt;이라는 좋은 글을 인용합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;요컨대 stdout은 출력용이고 stderr는 메시지용입니다.&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jdxcode.com/&#34;&gt;Jeff Dickey&lt;/a&gt;, who &lt;a href=&#34;https://github.com/oclif/oclif/graphs/contributors&#34;&gt;knows a little&lt;/a&gt; about &lt;a href=&#34;https://github.com/heroku/cli/graphs/contributors&#34;&gt;building CLI apps&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;그래서 대부분의 경우 &lt;code&gt;stdout&lt;/code&gt;에 색상을 사용하지 않는 것이 좋습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;msg()&lt;/code&gt;로 출력된 메시지는 &lt;code&gt;stderr&lt;/code&gt; 스트림으로 전송되며 색상과 같은 특수 시퀀스를 지원합니다.
+또한 &lt;code&gt;stderr&lt;/code&gt; 출력이 대화형 터미널이 아니거나 &lt;a href=&#34;https://no-color.org/&#34;&gt;표준 파라미터 중 하나&lt;/a&gt;가 전달되면 색상이 비활성화됩니다.&lt;/p&gt;
+&lt;p&gt;사용법:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;msg &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;This is a &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;RED&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;very important&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NOFORMAT&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt; message, but not a script output value!&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;stderr&lt;/code&gt;가 대화형 터미널이 아닐 때 어떻게 작동하는지 확인하려면 스크립트에 위와 같은 줄을 추가하세요.
+그런 다음 &lt;code&gt;stderr&lt;/code&gt;를 &lt;code&gt;stdout&lt;/code&gt;으로 리다이렉션하고 cat에 보내줍니다(pipe).
+파이프가 동작하면 출력이 더 이상 터미널로 직접 전송되지 않고 다음 명령으로
+전송되므로 이제 색상을 사용하지 않도록 설정해야 합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ ./test.sh 2&amp;gt;&amp;amp;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; | cat
+This is a very important message, but not a script output value!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;모든-파라미터-파싱&#34;&gt;모든 파라미터 파싱&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;parse_params&lt;span style=&#34;color:#ff79c6&#34;&gt;()&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# default values of variables set from params&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;flag&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;&amp;#39;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;while&lt;/span&gt; :; &lt;span style=&#34;color:#ff79c6&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;1&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; in
+    -h | --help&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; usage ;;
+    -v | --verbose&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;set&lt;/span&gt; -x ;;
+    --no-color&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;NO_COLOR&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; ;;
+    -f | --flag&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;flag&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; ;; &lt;span style=&#34;color:#6272a4&#34;&gt;# example flag&lt;/span&gt;
+    -p | --param&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;# example named parameter&lt;/span&gt;
+      &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;2&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;shift&lt;/span&gt;
+      ;;
+    -?*&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Unknown option: &lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$1&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; ;;
+    *&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;break&lt;/span&gt; ;;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;esac&lt;/span&gt;
+    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;shift&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;done&lt;/span&gt;
+
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;args&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
+
+  &lt;span style=&#34;color:#6272a4&#34;&gt;# check required params and arguments&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; -z &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;param&lt;/span&gt;-&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Missing required parameter: param&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;[[&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;${#&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;args&lt;/span&gt;[@]&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt; -eq &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;]]&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; die &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;Missing script arguments&amp;#34;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;스크립트에서 파라미터로 만들어야 하는 것이 있다면, 저는 보통 그렇게 합니다.
+스크립트가 한 곳에서만 사용되더라도 마찬가지입니다.
+이렇게 하면 복사 및 재사용이 쉬워지며, 이 작업은 종종 더 빠릅니다.
+또한 하드 코딩이 필요한 부분이 있더라도 일반적으로 Bash 스크립트보다 더 높은 수준입니다.&lt;/p&gt;
+&lt;p&gt;플래그(flags), 지정된 파라미터(named parameters, keyword arguments) 및 위치 인자(positional arguments)라는
+&lt;a href=&#34;https://betterdev.blog/command-line-arguments-anatomy-explained/&#34;&gt;세 가지 주요 CLI 파라미터 유형&lt;/a&gt;이 있습니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+&lt;code&gt;parse_params()&lt;/code&gt; 함수는 모두 지원합니다.&lt;/p&gt;
+&lt;p&gt;여기서 처리되지 않는 유일한 공통 파라미터 패턴은
+&lt;a href=&#34;https://betterdev.blog/command-line-arguments-anatomy-explained/#flags_and_named_arguments&#34;&gt;여러 개의 단일 문자 플래그를 연결하는&lt;/a&gt; 것입니다.
+&lt;code&gt;-a -b&lt;/code&gt;처럼 두 개의 플래그가 아닌 &lt;code&gt;-ab&lt;/code&gt;로 전달하려면 추가 코드가 필요합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;while&lt;/code&gt; 루프는 파라미터들을 수동으로 파싱하는 방법입니다.
+다른 모든 언어에서는 &lt;a href=&#34;https://docs.python.org/3/library/argparse.html&#34;&gt;내장 파서&lt;/a&gt;
+또는 &lt;a href=&#34;https://yargs.js.org/&#34;&gt;사용 가능한 라이브러리&lt;/a&gt;를 사용해야 합니다.
+하지만 우리가 사용하려는 것은 Bash입니다.&lt;/p&gt;
+&lt;p&gt;템플릿에 플래그(&lt;code&gt;-f&lt;/code&gt;)와 지정된 파라미터(&lt;code&gt;-p&lt;/code&gt;)가 예시로 있습니다.
+다른 파라미터를 추가하기 위해서는 변경하거나 복사하기만 하면 됩니다.
+그후 잊지 말고 &lt;code&gt;usage()&lt;/code&gt; 함수를 업데이트하세요.&lt;/p&gt;
+&lt;p&gt;여기서 중요한 것은 &lt;strong&gt;알 수 없는 옵션에 오류를 던지는 것&lt;/strong&gt;입니다.
+Bash 인자 파싱에 대한 Google 검색 결과를 보면 일반적으로 놓치는 것입니다.
+스크립트가 알 수 없는 옵션을 받았다는 것은 스크립트가 수행할 수
+없는 작업을 사용자는 수행하기를 원했음을 의미합니다.
+따라서 사용자의 기대와 스크립트 동작은 상당히 다를 수 있습니다.
+좋지 않은 일이 일어나기 전에 실행을 아예 막는 것이 좋습니다.&lt;/p&gt;
+&lt;p&gt;Bash에는 파라미터를 파싱하는 두 가지 대안이 있습니다. &lt;code&gt;getopt&lt;/code&gt;와 &lt;code&gt;getopts&lt;/code&gt;입니다.
+이 명령어들을 사용하는 것에 대한 &lt;a href=&#34;https://unix.stackexchange.com/questions/62950/getopt-getopts-or-manual-parsing-what-to-use-when-i-want-to-support-both-shor&#34;&gt;찬성과 반대 의견&lt;/a&gt;이 있습니다.
+기본적으로 macOS의 &lt;code&gt;getopt&lt;/code&gt;가 &lt;a href=&#34;https://stackoverflow.com/questions/11777695/why-the-getopt-doesnt-work-well-in-my-mac-os&#34;&gt;완전히 다르게 동작&lt;/a&gt;하고,
+&lt;code&gt;getopts&lt;/code&gt;가 긴 파라미터(예: &lt;code&gt;--help&lt;/code&gt;)를 지원하지 않기 때문에 이러한 도구가 최선은 아니라는 것을 알게 되었습니다.&lt;/p&gt;
+&lt;h1 id=&#34;템플릿-사용하기&#34;&gt;템플릿 사용하기&lt;/h1&gt;
+&lt;p&gt;인터넷에서 찾을 수 있는 대부분의 코드처럼 복사-붙여넣기만 하면 됩니다.&lt;/p&gt;
+&lt;p&gt;음, 사실은 말하자면요.
+Bash를 사용하면 &lt;code&gt;npm install&lt;/code&gt;과 같은 범용 기능이 없습니다.&lt;/p&gt;
+&lt;p&gt;복사한 후에는 4가지 항목만 변경하면 됩니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;스크립트에 대한 설명이 있는 &lt;code&gt;usage()&lt;/code&gt; 텍스트&lt;/li&gt;
+&lt;li&gt;관련 내용 &lt;code&gt;cleanup()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;parse_params()&lt;/code&gt;의 파라미터 - &lt;code&gt;--help&lt;/code&gt;와 &lt;code&gt;--no-color&lt;/code&gt;는 그대로 두고 예시(&lt;code&gt;-f&lt;/code&gt;, &lt;code&gt;-p&lt;/code&gt;)는 변경하세요.&lt;/li&gt;
+&lt;li&gt;실제 스크립트 로직&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;이식성-portability&#34;&gt;이식성 (Portability)&lt;/h1&gt;
+&lt;p&gt;MacOS (기본적으로 구식 Bash 3.2)와 몇몇의 Docker 이미지에서 템플릿을 테스트했습니다.
+Debian, Ubuntu, CentOS, Amazon Linux, Fedora입니다. 제대로 동작합니다.&lt;/p&gt;
+&lt;p&gt;분명히 Alpine Linux와 같은 Bash가 빠진 환경에서는 작동하지 않을 것입니다.
+Alpine은 미니멀리즘 시스템으로서 매우 가벼운 ash (Almquist shell)를 사용합니다.&lt;/p&gt;
+&lt;p&gt;거의 모든 곳에서 작동하는
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Bourne_shell&#34;&gt;본 셸&lt;/a&gt;(Bourne shell, &lt;code&gt;/bin/sh&lt;/code&gt;)
+호환 스크립트를 사용하는 것이 좋지 않냐고 질문할 수 있습니다.
+적어도 저에게는 그렇지 않습니다.
+Bash는 (아직도 사용하기 쉽지 않지만) 더 안전하고 강력하기 때문에
+거의 다룰 일 없는 몇 가지 리눅스 배포판을 지원하지 않는 것 정도는 받아들일 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;p&gt;Bash 또는 기타 &lt;del&gt;더 나은&lt;/del&gt; 언어로 CLI 스크립트를 만들 때 몇 가지 범용 규칙이 있습니다.
+다음 자료들은 작은 스크립트와 대형 CLI 애플리케이션을 안정적으로 만드는 방법으로 안내합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://clig.dev/&#34;&gt;명령행 인터페이스 가이드라인&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46&#34;&gt;12 팩터 CLI 앱&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://betterdev.blog/command-line-arguments-anatomy-explained/&#34;&gt;예시를 들어 설명하는 명령행 인자 구조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;끝맺음&#34;&gt;끝맺음&lt;/h1&gt;
+&lt;p&gt;제가 Bash 스크립트 템플릿을 만든 첫 번째이자 마지막이 아닙니다.
+좋은 대안 중 하나는 &lt;a href=&#34;https://github.com/ralish/bash-script-template&#34;&gt;이 프로젝트&lt;/a&gt;입니다.
+비록 제가 매일 필요로 하는 것에 비해 조금 크긴 하지만요.
+결국 저는 Bash 스크립트를 가능한 한 작게 (그리고 희한하게) 유지하려고 노력합니다.&lt;/p&gt;
+&lt;p&gt;Bash 스크립트를 작성할 때 JetBrains IDE와 같이
+&lt;a href=&#34;https://github.com/koalaman/shellcheck&#34;&gt;ShellCheck&lt;/a&gt; 린터를 지원하는 IDE를 사용하십시오.
+이것은 당신에게 역효과를 줄 수 있는 &lt;a href=&#34;https://github.com/koalaman/shellcheck/blob/master/README.md#user-content-gallery-of-bad-code&#34;&gt;많은 것&lt;/a&gt;들을 하지 못하게 할 것입니다.&lt;/p&gt;
+&lt;p&gt;저의 Bash 스크립트 템플릿은 GitHub Gist(MIT 라이센스)처럼 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038&#34;&gt;script-template.sh&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;템플릿에 문제가 있거나 중요한 항목이 빠졌다고 생각되면 &lt;a href=&#34;https://betterdev.blog/minimal-safe-bash-script-template/&#34;&gt;코멘트&lt;/a&gt;로 알려 주세요.&lt;/p&gt;
+&lt;h2 id=&#34;업데이트-2020-12-15&#34;&gt;업데이트 2020-12-15&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.reddit.com/r/programming/duplicates/kcxnag/minimal_safe_bash_script_template/&#34;&gt;Reddit&lt;/a&gt;과
+&lt;a href=&#34;https://news.ycombinator.com/item?id=25428621&#34;&gt;HackerNews&lt;/a&gt;에서 많은 코멘트를 받은 후
+템플릿을 개선했습니다.
+개정 이력을 &lt;a href=&#34;https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038&#34;&gt;gist&lt;/a&gt;에서 확인하세요.&lt;/p&gt;
+&lt;h2 id=&#34;업데이트-2020-12-16&#34;&gt;업데이트 2020-12-16&lt;/h2&gt;
+&lt;p&gt;이 게시물에 대한 링크는 &lt;a href=&#34;https://news.ycombinator.com/front?day=2020-12-15&#34;&gt;Hacker News의 첫 페이지(#7)&lt;/a&gt;에 도달했습니다.
+상상도 못한 일이었습니다.&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/%EC%85%94%EB%B1%85&#34;&gt;셔뱅&lt;/a&gt;이란 해시 기호와 느낌표(&lt;code&gt;#!&lt;/code&gt;)로 이루어진 문자 시퀀스로 인터프리터 지시자(interpreter directive)를 지정합니다. 지정하려는 인터프리터 프로그램은 절대경로로 표시합니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;간단히 말하면,
+&amp;lsquo;플래그&amp;rsquo;는 &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;false&lt;/code&gt;를 인자로 받으며 &lt;code&gt;true&lt;/code&gt;일 경우 생략할 수 있습니다.
+&amp;lsquo;지정된 파라미터&amp;rsquo;는 파라미터와 함께 특정 값을 인자로 지정해야 합니다.
+&amp;lsquo;위치 인자&amp;rsquo;는 인자를 적합한 위치에 지정해야 합니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://markruler.github.io/posts/shell/minimal-safe-bash-script-template/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1964,179 +2335,6 @@ HDD를 영구 스토리지에 사용한다는 것이 장점입니다.&lt;/p&gt;
 &lt;p&gt;&amp;ldquo;Compute Node&amp;rdquo;, &amp;ldquo;NIC&amp;rdquo; 및 &amp;ldquo;Storage&amp;rdquo; 세 부분을 이해하면 컴퓨팅 도메인의 그림이 완성되고
 완전한 NFV 아키텍처 서버를 만들기 때문에 정말 중요합니다.&lt;/p&gt;
 - https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>NFV MANO 초심자 가이드</title>
-        <link>https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/</link>
-        <pubDate>Wed, 23 Sep 2020 00:58:08 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/ -&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to NFV Management &amp;amp; Orchestration (MANO)&lt;/a&gt;을 번역한 글입니다.&lt;/li&gt;
-&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;NFV 여행의 초심자는 NFV Management &amp;amp; Orchestration (NFV MANO)를 이해하려고 할 때 다음과 같은 두 가지 걸림돌이 있습니다.&lt;/p&gt;
-&lt;p&gt;첫번째로 초심자는 기존의 네트워크가 EMS, NMS, 또는 OSS가 지원하는 것들처럼 하나의 관리 시스템만 필요하다고 알고 있습니다.
-반면에 NFV 네트워크는 VIM 관리자, VNF 관리자, 오케스트레이터와 같은 여러 관리자를 필요로 합니다.&lt;/p&gt;
-&lt;p&gt;관리자가 충분하지 않다면 기존 EMS와 OSS/BSS도 있습니다.
-즉, 5개의 다른 관리 시스템입니다.
-이 정도만 해도 NFV 초심자는 힘들어합니다.&lt;/p&gt;
-&lt;p&gt;둘째, NFV MANO 모델을 단순하게 설명하는 정보가 부족합니다.
-예를 들어, 구글의 많은 기술들은 주로 벤더의 MANO 구현 방식을 설명합니다.&lt;/p&gt;
-&lt;p&gt;ETSI 표준과 같이 MANO 아키텍처를 정의하는 표준 레퍼런스 문서가 있다고 해도
-초심자가 그 문서들을 따라가기는 쉽지 않습니다.&lt;/p&gt;
-&lt;p&gt;하지만 ETSI의 MANO 모델을 이해하는 것이 얼마나 중요한지는 무시할 수 없습니다.
-우선 ETSI는 NFV 아키텍처와 프레임워크 정의에 상당한 작업을 한 최초이자 유일한 표준 기관입니다.&lt;/p&gt;
-&lt;p&gt;따라서 ETSI 모델을 이해하여 MANO를 이해하는 것이 좋습니다.&lt;/p&gt;
-&lt;p&gt;이 글은 가능한 한 간단하게 ETSI MANO 모델을 보여주려는 조그만 시도입니다.&lt;/p&gt;
-&lt;p&gt;그 전에 하나만 묻겠습니다!&lt;/p&gt;
-&lt;p&gt;먼저 NFV MANO에 대해 아는 것이 왜 중요할까요?&lt;/p&gt;
-&lt;p&gt;그 이유는 MANO가 NFV 아키텍처의 심장과 두뇌 역할을 하며
-MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것이기 때문입니다.&lt;/p&gt;
-&lt;p&gt;둘째, ETSI 모델을 참조하여 모든 벤더의 NFV 솔루션을 이해하고 벤치마킹하는 데 도움이 될 것입니다.&lt;/p&gt;
-&lt;p&gt;아니면 당신은 곧 RFP 작성을 끝내야하며 MANO 부분에 무엇을 포함해야 하는지 알고 싶을 수도 있습니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;역주: &lt;a href=&#34;https://en.wikipedia.org/wiki/Request_for_proposal&#34;&gt;RFP&lt;/a&gt;? Request for Proposal. 제안요청서.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;목표가 무엇이든 간에 이 가이드로부터 무언가를 얻기를 바랍니다.&lt;/p&gt;
-&lt;p&gt;(이 시점에 NFV 용어를 다시 상기해야 할 경우, &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;NFV 아키텍처의 치트 시트&lt;/a&gt;를 참조하세요)&lt;/p&gt;
-&lt;h2 id=&#34;nfv에서-mano란&#34;&gt;NFV에서 MANO란?&lt;/h2&gt;
-&lt;p&gt;MANO는 관리 및 오케스트레이션(Management and Orchestration)을 의미합니다.&lt;/p&gt;
-&lt;p&gt;MANO는 아래 다이어그램에서 세 가지 관리자를 포함하는 회색 블록입니다.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Virtualized Infrastructure Manager (VIM).&lt;/li&gt;
-&lt;li&gt;VNF Manager (VNFM).&lt;/li&gt;
-&lt;li&gt;NFV Orchestrator (VNFO).&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;그리고 리포지토리 그룹까지(블록 4, 그 밑에 더 있음)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/mano-in-nfv.png&#34; alt=&#34;mano-in-nfv&#34;&gt;&lt;/p&gt;
-&lt;p&gt;MANO 내부에 있는 4개의 블록 외에도, 외부에 기존의 요소 관리(EM)와 OSS/BSS라는 두 개의 블록이 있습니다.
-두 블록은 MANO에 직접 속하지 않지만 MANO와 정보를 교환하기 때문에, 초심자는 MANO 블록과 적절한 위치에 두어야 합니다.&lt;/p&gt;
-&lt;p&gt;가상화 인프라 매니저(VIM)부터 6개 블록에 대해 설명드리겠습니다.&lt;/p&gt;
-&lt;h2 id=&#34;1-virtualized-infrastructure-manager-vim&#34;&gt;1. Virtualized Infrastructure Manager (VIM)&lt;/h2&gt;
-&lt;p&gt;VIM은 &lt;code&gt;하나의 도메인&lt;/code&gt;에서 NFVI 리소스를 관리합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;NFVI는 NFV 환경의 물리 자원(서버, 스토리지 등), 가상 자원(가상 머신), 소프트웨어 자원(하이퍼바이저)을 포함하는 NFV 인프라입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;여기에서 &lt;code&gt;하나의 도메인&lt;/code&gt;이라는 단어를 기억하세요.
-NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 있을 수 있습니다.
-오케스트레이터 섹션에서 다시 볼 것이므로 &lt;code&gt;multiple VIM&lt;/code&gt;이라는 개념을 염두에 두세요.&lt;/p&gt;
-&lt;p&gt;그렇다면 VIM이 처리하는 일반적인 태스크는 무엇일까요?&lt;/p&gt;
-&lt;p&gt;다음과 같은 태스크를 처리합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;NFVI 도메인에 있는 가상 자원의 라이프사이클 관리. 즉, NFVI 도메인의 물리 자원으로부터 VM(가상 머신)을 생성, 유지, 해제하는 것&lt;/li&gt;
-&lt;li&gt;물리 자원과 연결된 가상 머신(VM) 목록 유지&lt;/li&gt;
-&lt;li&gt;하드웨어, 소프트웨어, 가상 자원의 성능 및 장애 관리&lt;/li&gt;
-&lt;li&gt;노스바운드 API를 유지하여 물리/가상 자원을 다른 관리 시스템에 노출&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;2-virtual-network-function-manager-vnfm&#34;&gt;2. Virtual Network Function Manager (VNFM)&lt;/h2&gt;
-&lt;p&gt;VIM이 NFVI을 위한 것이라면 VNFM은 VNF을 위한 것입니다.&lt;/p&gt;
-&lt;p&gt;즉, VNFM은 VNF를 관리합니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;VNF는 라우터 VNF, 스위치 VNF 등과 같은 가상화된 네트워크 요소입니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;구체적으로 VNFM은 다음을 수행합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;VNFM은 VNF의 라이프사이클을 관리. 즉, VNF 인스턴스를 생성, 유지, 종료(VIM이 생성하고 관리하는 VM에 설치됨)&lt;/li&gt;
-&lt;li&gt;VNF의 FCAPS(즉, VNF의 오류, 구성, 회계, 성능, 보안) 관리&lt;/li&gt;
-&lt;li&gt;VNF를 스케일 업/다운하여 CPU 사용량을 스케일 업/다운&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;별도의 VNF를 관리하는 VNFM이 여러 개 있을 수도 있고,
-여러 VNF를 관리하는 하나의 VNFM이 있을 수도 있다.&lt;/p&gt;
-&lt;h2 id=&#34;3-nfv-orchestrator-nfvo&#34;&gt;3. NFV Orchestrator (NFVO)&lt;/h2&gt;
-&lt;p&gt;위의 섹션 1과 2를 살펴보셨다면 NFVO가 왜 필요한지 알 수 있을 것입니다.&lt;/p&gt;
-&lt;p&gt;위의 섹션 1에서 보았듯이, 각각의 NFVI 도메인을 관리하는 VIM이 여러 개 있을 수 있습니다. 이것은 &lt;code&gt;과제 1&lt;/code&gt;을 만듭니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;과제 1&lt;/p&gt;
-&lt;p&gt;동일한 또는 서로 다른 PoP(Point of Presence)에 여러 VIM이 있는 경우, 누가 다른 VIM의 자원을 관리/조정할까요?
-섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 &lt;code&gt;과제 2&lt;/code&gt;를 만듭니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;blockquote&gt;
-&lt;p&gt;과제 2&lt;/p&gt;
-&lt;p&gt;서로 다른 VNFM 도메인의 VNF를 포함하는 종단 간(end-to-end) 서비스 생성을
-누가 관리/조정할까요?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;이러한 과제는 NFVO의 다음 두 가지 기능이 해결해 줍니다.&lt;/p&gt;
-&lt;h3 id=&#34;resource-orchestration&#34;&gt;Resource Orchestration&lt;/h3&gt;
-&lt;p&gt;NFVO는 서로 다른 PoP 간에 또는 하나의 PoP 내에서 NFVI 자원을 조정, 승인, 해제, 결합합니다.
-이는 NFVI 자원을 직접 사용하는 대신 노스바운드 API를 통해 VIM과 직접 연결함으로써 수행합니다.&lt;/p&gt;
-&lt;p&gt;이 기능은 서로 다른 VIM의 자원 할당하는 &lt;code&gt;과제 1&lt;/code&gt;을 직접 해결합니다.&lt;/p&gt;
-&lt;h3 id=&#34;service-orchestration&#34;&gt;Service Orchestration&lt;/h3&gt;
-&lt;p&gt;서비스 오케스트레이션은 서로 다른 VNF(다른 VNFM이 관리할 수 있는) 간에 종단 간 서비스를 생성하는 &lt;code&gt;과제 2&lt;/code&gt;를 해결합니다.&lt;/p&gt;
-&lt;p&gt;다음과 같은 방법으로 해결합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;서비스 오케스트레이션은 VNF와 직접 통신할 필요가 없도록 각 VNFM과 조정하여 서로 다른 VNF 간에 종단 간 서비스를 생성합니다.
-예를 들면 한 벤더의 기지국 VNF와 다른 벤더의 중심 노드 VNF 사이에 서비스를 생성하는 것입니다.&lt;/li&gt;
-&lt;li&gt;서비스 오케스트레이션은 해당되는 VNFM을 인스턴스화할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;네트워크 서비스 인스턴스의 토폴로지(&lt;a href=&#34;https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html&#34;&gt;VNF Forwarding Graph&lt;/a&gt;, &lt;code&gt;VNFFG&lt;/code&gt;라고도 함)도 관리합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;NFVO가 서로 다른 기능을 결합하고 서로 다른 방법으로 분산된 NFV 환경에서 종단 간 서비스를 생성하며 자원을 조정하는,
-NFV의 접착제와 같다는 점을 알 수 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;4-repositories&#34;&gt;4. Repositories&lt;/h2&gt;
-&lt;p&gt;NFV MANO에서 서로 다른 정보를 저장하는 리포지토리(파일/목록)를 이해하는 것이 매우 중요하다.
-리포지토리에는 네 가지 유형이 있다.&lt;/p&gt;
-&lt;h3 id=&#34;vnf-catalog&#34;&gt;VNF Catalog&lt;/h3&gt;
-&lt;p&gt;VNF 카탈로그는 사용 가능한 모든 VNFD(VNF Descriptor)의 저장소다.&lt;/p&gt;
-&lt;p&gt;VNFD는 VNF의 배포 및 동작 요구 사항 측면에서 VNF를 설명하는 배포 템플릿이다.
-주로 VNFM이 VNF 인스턴스화 및 VNF 인스턴스의 라이프사이클 관리 프로세스에서 사용한다.
-VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상화된 자원을 관리 및 조정하는데도 사용된다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf&#34;&gt;ETSI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.openstack.org/tacker/latest/contributor/vnfd_template_description.html&#34;&gt;Openstack&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;network-services-ns-catalog&#34;&gt;Network Services (NS) Catalog&lt;/h3&gt;
-&lt;p&gt;사용 가능한 네트워크 서비스의 카탈로그(목록) 입니다.
-가상 링크를 통한 연결에 대한 설명과 VNF 측면에서 네트워크 서비스를 위한 배포 템플릿은 향후 사용을 위해 NS 카탈로그에 저장된다.&lt;/p&gt;
-&lt;h3 id=&#34;nfv-instances&#34;&gt;NFV Instances&lt;/h3&gt;
-&lt;p&gt;NFV 인스턴스 목록에는 네트워크 서비스 인스턴스 및 관련 VNF 인스턴스에 대한 모든 세부 정보가 들어 있다.&lt;/p&gt;
-&lt;h3 id=&#34;nfvi-resources&#34;&gt;NFVI Resources&lt;/h3&gt;
-&lt;p&gt;NFV 서비스 구축에 활용되는 NFVI 자원의 리포지토리다.&lt;/p&gt;
-&lt;p&gt;다음 두 가지 관리 시스템은 NFV MANO에 속하지 않지만 NFVO MANO 기능 블록과 정보를 교환하기 때문에 설명한다.&lt;/p&gt;
-&lt;h2 id=&#34;5-element-management-em&#34;&gt;5. Element Management (EM)&lt;/h2&gt;
-&lt;p&gt;EM은 MANO에 속하지 않지만 중요한 역할을 한다.&lt;/p&gt;
-&lt;p&gt;EM은 VNF의 기능 부분에 대한 FCAPS를 담당한다. VNFM은 VNF의 FCAPS도 하지만 가상 부분에서만 한다.&lt;/p&gt;
-&lt;p&gt;명확히 하기 위해 예를 들면, 일반적으로 MANO는 가상과 물리적 세계의 델타에만 책임이 있다.
-VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행한다.
-장애 관리(fault management) 측면에서 VNF를 실행하는 데 문제가 있으면 VNFM이 보고하지만,
-기능과 관련된 장애인 경우(예: 모바일 코어에서 일부 신호 전달 문제) EM이 보고한다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;델타(delta): 수학에서 &lt;code&gt;&#39;차이&#39;&lt;/code&gt;, &lt;code&gt;&#39;변화&#39;&lt;/code&gt;를 나타냄&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;VNFM은 운영자가 모든 종류의 FCAPS(가상 + 기능)에 대해 단일 GUI를 사용하고자 하는 경우에 대비하여 EM에 인터페이스를 노출시킨다.&lt;/p&gt;
-&lt;h2 id=&#34;6-ossbss&#34;&gt;6. OSS/BSS&lt;/h2&gt;
-&lt;p&gt;OSS/BSS는 서비스 사업자가 사업을 운영하기 위해 사용하는 시스템/애플리케이션 모음을 포함한다.&lt;/p&gt;
-&lt;p&gt;NFV는 OSS/BSS와 같이 동작해야 한다.&lt;/p&gt;
-&lt;p&gt;원칙적으로는 VNF와 NFVI를 직접 관리하기 위해 기존 OSS/BSS의 기능을 확장할 수 있지만,
-그것은 벤더의 독점적 구현일 수 있다(적어도 현재까지는 ETSI가 EM과 VNF 간의 인터페이스는 정의하지 않았다).
-NFV는 개방형 플랫폼(open platform)이기 때문에 (MANO에서처럼)개방형 인터페이스를 통해 NFV 엔터티를 관리하는 것이 더 타당하다.&lt;/p&gt;
-&lt;p&gt;그러나 기존의 OSS/BBS는 NFV MANO의 특정 구현으로 인해 지원되지 않는 경우,
-추가 기능을 제공함으로써 NFV MANO에 부가 가치를 만들 수 있다.
-이는 NFV MANO와 기존 OSS/BSS 사이의 개방형 참조점(Or-Ma-NFVO)을 통해 이루어진다.&lt;/p&gt;
-&lt;h2 id=&#34;7-reference-points&#34;&gt;7. Reference Points&lt;/h2&gt;
-&lt;p&gt;마지막으로 &lt;code&gt;참조점&lt;/code&gt;에 대해 언급할 가치가 있습니다.&lt;/p&gt;
-&lt;p&gt;MANO에는 그림과 같이 기능 블록 간의 상호 연결점으로 표시되는 여러 참조점이 있습니다.
-Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
-&lt;p&gt;왜 MANO는 그들을 인터페이스가 아닌 참조점이라고 부르나요?&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;인터페이스&lt;/code&gt;가 엔터티 간의 양방향 통신을 허용하는 것과 관련이 있기 때문에 MANO는 참조점을 인터페이스라고 부르지 않습니다.
-참조점은 기능 블록의 외부 관점(external view)을 정의하고 노출하는 아키텍처 개념입니다.
-그리고 MANO는 기능 블록에 대해 이야기하기 때문에 &lt;code&gt;참조점&lt;/code&gt;이라는 단어를 대신 사용합니다.&lt;/p&gt;
-&lt;p&gt;이것이 NFV MANO에 대한 전부입니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/&#34;&gt;원문 링크&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;당신의 견해를 알려주세요. 최종 사용자라면 NFV의 여러 관리 시스템에 대해 어떻게 생각하시나요?
-그들이 당신에게 타당한가요? 기존 EMS/OSS와 어떻게 비교하시나요?&lt;/p&gt;
-&lt;p&gt;벤더라면 NFV MANO에서 구현 중인 부분과 힘든점은 무엇인가요? 어떠한 견해라도 알려주세요.&lt;/p&gt;
-- https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html><head>
+<title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="W3C Trace Context">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Traceparent 헤더로 클라이언트부터 서버까지 추적하기" />
+<meta property="og:description" content="W3C Trace Context" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/web/traceparent-datadog/" /><meta property="og:image" content="https://markruler.github.io/images/web/traceparent-datadog/w3c.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-08-22T18:00:00+09:00" />
+<meta property="article:modified_time" content="2024-08-22T18:00:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/web/traceparent-datadog/w3c.png"/>
+
+<meta name="twitter:title" content="Traceparent 헤더로 클라이언트부터 서버까지 추적하기"/>
+<meta name="twitter:description" content="W3C Trace Context"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#trace-context" class="nav-trace-context">
+									Trace Context
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#traceparent-%ed%97%a4%eb%8d%94-%ed%98%95%ec%8b%9d" class="nav-traceparent-헤더-형식">
+									Traceparent 헤더 형식
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%85%8c%ec%8a%a4%ed%8a%b8-%ed%99%98%ea%b2%bd" class="nav-테스트-환경">
+									테스트 환경
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%b2%b4-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ed%9d%90%eb%a6%84" class="nav-전체-네트워크-흐름">
+									전체 네트워크 흐름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#trace_id%eb%a1%9c-trace%ec%99%80-log-%ec%97%b0%ea%b2%b0%ed%95%98%ea%b8%b0" class="nav-trace_id로-trace와-log-연결하기">
+									trace_id로 Trace와 Log 연결하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-browser%ec%97%90%ec%84%9c-%ec%9a%94%ec%b2%ad-%ec%8b%9c-traceparent-%ed%97%a4%eb%8d%94-%ec%b6%94%ea%b0%80%ed%95%98%ea%b8%b0" class="nav-1-browser에서-요청-시-traceparent-헤더-추가하기">
+									1. Browser에서 요청 시 Traceparent 헤더 추가하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-akamai-cdn%ec%97%90%ec%84%9c-traceparent%ec%9d%98-%ea%b0%92%ec%9d%84-%eb%a1%9c%ea%b7%b8%eb%a1%9c-%ec%b6%94%ea%b0%80%ed%95%98%ea%b8%b0" class="nav-2-akamai-cdn에서-traceparent의-값을-로그로-추가하기">
+									2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-apache-http-serverhttpd%ec%97%90%ec%84%9c-traceparent-%ed%97%a4%eb%8d%94-%eb%a1%9c%ea%b7%b8-%eb%82%a8%ea%b8%b0%ea%b8%b0" class="nav-3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기">
+									3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#4-java-application-spring-boot" class="nav-4-java-application-spring-boot">
+									4. Java Application (Spring Boot)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#5-%ea%b2%b0%ea%b3%bc" class="nav-5-결과">
+									5. 결과
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%ec%b9%98%eb%a9%b0" class="nav-마치며">
+									마치며
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%81%ec%a3%bc" class="nav-각주">
+									각주
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/web/traceparent-datadog/w3c.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Traceparent 헤더로 클라이언트부터 서버까지 추적하기
+                    
+                    <div class="post-subtitle">
+                        W3C Trace Context
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-08-22 18:00
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[case]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/monitoring">monitoring</a>
+                                &nbsp;
+                            
+                                <a href="/tags/apm">APM</a>
+                                &nbsp;
+                            
+                                <a href="/tags/trace">trace</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="개요">개요</h1>
+<p>모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었다.
+해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았다.
+에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달하고 있었다.
+서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었다.
+클라이언트 이벤트는 연결되어 있지 않기 때문이다.</p>
+<p>또 다른 문제가 있었다.
+서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만
+클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었다.
+그리고 모든 요청이 아닌 전체 요청의 5% 정도에서만 발생하고 있었다.
+하지만 국가, Edge IP, User Agent, 요청 URL 등을 확인해봐도 특정 패턴을 보이는 것이 없어서 원인을 알 수 없었다.</p>
+<p><img src="/images/web/traceparent-datadog/akamai-read-error.jpeg" alt="Akamai ERR_READ_ERROR"></p>
+<p>원인을 찾기 위해 클라이언트에서 요청하는 부분부터 추적하고 싶었다.
+우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
+<a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum">RUM(Real User Monitoring)을 APM과 연결하면</a>
+클라이언트부터 서버 Span까지 한눈에 확인할 수 있다.
+하지만 Akamai에선 4초 이상이라고 응답 속도가 측정되고, RUM에선 수백ms로 측정돼서 확인해보니,
+Akamai Datastream 2에서는 요청하고 응답받을 때까지 duration을 측정하고,
+Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다고 한다(2024년 8월 22일 기준).
+게다가 일주일 간 RUM 스크립트를 추가해보니 예상 견적이 만만치 않았다.
+다른 방법을 찾아야 했다.</p>
+<h1 id="trace-context">Trace Context</h1>
+<p>W3C 권고안(REC, Recommendation)인 Trace Context<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>는 분산 추적 통합을 위해 작성되었다.
+플랫폼마다 Trace 방법이 달라서 추적 흐름이 끊기는 것을 방지하기 위해 통합이 필요하단 이유<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>였다.
+Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했다.
+Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했다.</p>
+<p><img src="/images/web/traceparent-datadog/datadog-trace-context.png" alt="datadog-trace-context.png"></p>
+<p><em><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/">Monitor OTel instrumented apps with support for W3C Trace Context | Datadog</a></em></p>
+<h2 id="traceparent-헤더-형식">Traceparent 헤더 형식</h2>
+<ul>
+<li>해당 권고안에 명시된 헤더가 2개(traceparent, tracestate<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>) 있지만 여기서는 추적을 위한 <code>traceparent</code> 헤더만 살펴본다.</li>
+<li><code>{version}-{trace-id}-{parent-id}-{trace-flags}</code>
+<ul>
+<li><code>version</code>: 8 bits(1 byte). 현재는 00 고정이다. 2글자의 16진수. ff is forbidden.</li>
+<li><code>trace-id</code>: <strong>128 bits(16 bytes) trace ID, 32글자의 16진수. All zeroes forbidden.</strong></li>
+<li><code>parent-id</code>: 64 bits(8 bytes) span ID, 16글자의 16진수. All zeroes forbidden.</li>
+<li><code>trace-flags</code>: 8 bits(1 byte) <a href="https://en.wikipedia.org/wiki/Bit_field">비트 필드</a>.
+데이터독에서는 2가지를 지정할 수 있음: Sampled (<code>01</code>), not sampled (<code>00</code>).</li>
+</ul>
+</li>
+<li>예시: <code>00-8adb122e8b139de4a8744a379b4db39a-45897f550adef5c9-01</code></li>
+</ul>
+<h1 id="테스트-환경">테스트 환경</h1>
+<h2 id="전체-네트워크-흐름">전체 네트워크 흐름</h2>
+<p>Client(Mobile App / Browser) → Akamai CDN → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]</p>
+<h1 id="trace_id로-trace와-log-연결하기">trace_id로 Trace와 Log 연결하기</h1>
+<p>이 방법은 APM Trace와 Log Collection에 로그가 있어야 한다.</p>
+<h2 id="1-browser에서-요청-시-traceparent-헤더-추가하기">1. Browser에서 요청 시 Traceparent 헤더 추가하기</h2>
+<p>요청 시 아래 스크립트로 생성한 값을 <code>Traceparent</code> 헤더와 함께 보낸다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#6272a4">/**
+</span><span style="color:#6272a4"> * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
+</span><span style="color:#6272a4"> */</span>
+<span style="color:#ff79c6">class</span> Traceparent {
+  constructor(version, traceId, parentId, flags) {
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
+</span><span style="color:#6272a4">     * 
+</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#version
+</span><span style="color:#6272a4">     */</span>
+    <span style="color:#ff79c6">this</span>.version <span style="color:#ff79c6">=</span> version;
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
+</span><span style="color:#6272a4">     * 
+</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#trace-id
+</span><span style="color:#6272a4">     */</span>
+    <span style="color:#ff79c6">this</span>.traceId <span style="color:#ff79c6">=</span> traceId;
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
+</span><span style="color:#6272a4">     * 
+</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#parent-id
+</span><span style="color:#6272a4">     */</span>
+    <span style="color:#ff79c6">this</span>.parentId <span style="color:#ff79c6">=</span> parentId;
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * 2HEXDIGLC   ; 8 bit flags.
+</span><span style="color:#6272a4">     * 
+</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
+</span><span style="color:#6272a4">     */</span>
+    <span style="color:#ff79c6">this</span>.flags <span style="color:#ff79c6">=</span> flags;
+  }
+  toString() {
+    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">`</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.version<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.traceId<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.parentId<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.flags<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>;
+  }
+}
+
+<span style="color:#6272a4">// 랜덤 바이트 생성
+</span><span style="color:#6272a4">// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> randomBytes(size) {
+  <span style="color:#ff79c6">const</span> bytes <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Uint8Array(size);
+  <span style="color:#8be9fd;font-style:italic">window</span>.crypto.getRandomValues(bytes);
+  <span style="color:#ff79c6">return</span> bytes;
+}
+
+<span style="color:#6272a4">// 16진수 문자열로 변환
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> bufferHex(buffer) {
+  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">Array</span>.from(buffer)
+    .map((b) =&gt; b.toString(<span style="color:#bd93f9">16</span>).padStart(<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#34;0&#34;</span>))
+    .join(<span style="color:#f1fa8c">&#34;&#34;</span>);
+}
+
+<span style="color:#6272a4">// 10진수 숫자를 16진수 문자열로 변환
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> toHex(number) {
+  <span style="color:#ff79c6">return</span> number.toString(<span style="color:#bd93f9">16</span>).padStart(<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#34;0&#34;</span>);
+}
+
+<span style="color:#6272a4">// 버전, traceId, id, flags 생성
+</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> make() {
+  <span style="color:#ff79c6">const</span> version <span style="color:#ff79c6">=</span> toHex(<span style="color:#bd93f9">0</span>); <span style="color:#6272a4">// 현재 버전은 항상 `00`이므로 0으로 설정
+</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> traceId <span style="color:#ff79c6">=</span> bufferHex(randomBytes(<span style="color:#bd93f9">16</span>));
+  <span style="color:#ff79c6">const</span> parentId <span style="color:#ff79c6">=</span> bufferHex(randomBytes(<span style="color:#bd93f9">8</span>));
+  <span style="color:#ff79c6">const</span> traceFlags <span style="color:#ff79c6">=</span> toHex(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// Datadog: Sampled (01) / not sampled (00)
+</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> Traceparent(version, traceId, parentId, traceFlags);
+}
+
+<span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+  make,
+};
+</code></pre></div><h2 id="2-akamai-cdn에서-traceparent의-값을-로그로-추가하기">2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기</h2>
+<p>Akamai Datastream 2에 <strong>커스텀 필드</strong>를 추가해서 traceparent 헤더의 값을 데이터독에 로그로 전달하도록 한다.</p>
+<ul>
+<li>Properties (Property Manage) &gt; Property 선택 후 규칙 추가</li>
+<li>Datadog Log에서 Grok Parser를 활용해 Akamai Datastream - <code>customField</code>로 남겨진 <code>traceparent</code> 헤더에서 trace_id를 추출한다.</li>
+</ul>
+<pre tabindex="0"><code class="language-grok" data-lang="grok"># Grok Parser
+traceparent_nullif (traceparent:%{traceparent_rule}|traceparent:\^|traceparent:-|traceparent:|-)
+
+traceparent_rule %{_version}-%{_trace_id}-%{_parent_id}-%{_flags}
+
+# Extract from: customField
+
+_version %{regex(&quot;[a-zA-Z0-9]*&quot;):traceparent.version}
+_trace_id %{regex(&quot;[a-zA-Z0-9]*&quot;):traceparent.trace_id}
+_parent_id %{regex(&quot;[a-zA-Z0-9]*&quot;):traceparent.parent_id}
+_flags %{regex(&quot;[a-zA-Z0-9]*&quot;):traceparent.flags}
+</code></pre><h2 id="3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기">3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기</h2>
+<p>LogFormat에  <code>%{header_name}i</code> 으로 남기면 <a href="https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats">헤더의 값을 로그로 남길 수</a> 있다.
+httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#6272a4">&lt;!-- httpd.conf --&gt;</span>
+<span style="color:#ff79c6">&lt;IfModule</span> log_config_module<span style="color:#ff79c6">&gt;</span>
+  LogFormat &#34;%h %l %u %t \&#34;%r\&#34; %&gt;s %b %D \&#34;%{Referer}i\&#34; \&#34;%{User-Agent}i\&#34; \&#34;%{traceparent}i\&#34; %{BALANCER_WORKER_ROUTE}e&#34; combined
+  CustomLog /var/log/httpd/access.log combined
+<span style="color:#ff79c6">&lt;/IfModule&gt;</span>
+</code></pre></div><pre tabindex="0"><code class="language-grok" data-lang="grok"># Grok Parser
+_traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{word:traceparent.parent_id})?(-%{data:traceparent.flags})?
+</code></pre><h2 id="4-java-application-spring-boot">4. Java Application (Spring Boot)</h2>
+<p><code>dd.trace.propagation.style</code> 속성의 기본값은 <code>datadog,tracecontext</code>으로 Datadog의 Trace ID가 우선한다.
+이를 <code>tracecontext,datadog</code>으로 변경하면 W3C Trace ID를 우선한다.
+물론 여기서는 클라이언트에서 전달한 Trace ID를 사용한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">nohup ~/.jdk/temurin-17.0.6/bin/java <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Ddd.service.name<span style="color:#ff79c6">=</span>my-service <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -Ddd.trace.propagation.style<span style="color:#ff79c6">=</span>tracecontext,datadog <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  -jar <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">ARTIFACT_PATH</span><span style="color:#f1fa8c">}</span>/app.jar <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>  --spring.profiles.active<span style="color:#ff79c6">=</span>prod <span style="color:#f1fa8c">\
+</span><span style="color:#f1fa8c"></span>&gt; /dev/null &amp;
+</code></pre></div><ul>
+<li><a href="https://github.com/DataDog/dd-trace-java/releases">dd-java-agent 다운로드</a></li>
+<li>W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
+Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원한다.</li>
+<li>Datadog도 옵션 <code>dd.trace.128.bit.traceid.generation.enabled</code>을 추가해서 128비트 Trace ID를 출력할 수 있다고 한다.</li>
+</ul>
+<h2 id="5-결과">5. 결과</h2>
+<p>Trace에 Log를 연결한 모습은 다음과 같다.</p>
+<p><img src="/images/web/traceparent-datadog/connect-trace-log.png" alt="Connect Trace and Log"></p>
+<h1 id="마치며">마치며</h1>
+<p>서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &gt; CDN &gt; 웹 서버 로그로 확인할 수 있고,
+클라이언트 &gt; CDN &gt; 방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있다.</p>
+<p>Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.
+OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했다.</p>
+<p>지연 문제도 찾아서 해결되었다.
+Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
+원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있었다.
+아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습이다.</p>
+<p><img src="/images/web/traceparent-datadog/solve-network-delay.png" alt="Solve Network Delay"></p>
+<p>이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었다.</p>
+<h1 id="참조">참조</h1>
+<ul>
+<li><a href="https://www.w3.org/TR/trace-context/">Trace Context | W3C</a>
+<ul>
+<li><a href="https://github.com/w3c/trace-context/tree/main/spec">Github(w3c/trace-context) | W3C</a></li>
+<li><a href="https://cloud.google.com/trace/docs/trace-context">Trace context | Google Cloud</a></li>
+<li><a href="https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext">Elastic APM adopts W3C TraceContext | Elastic</a></li>
+</ul>
+</li>
+<li>Datadog
+<ul>
+<li><a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext">Connect RUM and Traces</a></li>
+<li><a href="https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers">Parsing</a>
+<ul>
+<li><a href="https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers">Grok Parser</a></li>
+<li><a href="https://docs.datadoghq.com/standard-attributes/">Default Standard Attributes</a></li>
+</ul>
+</li>
+<li><a href="https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java">Trace Context Propagation</a></li>
+<li><a href="https://docs.datadoghq.com/tracing/trace_collection/library_config/java/">Configuring the Java Tracing Library</a></li>
+<li><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/">Monitor OTel instrumented apps with support for W3C Trace Context</a></li>
+<li><a href="https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/">Remap Custom Severity Values to the Official Log Status</a></li>
+<li><a href="https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs">Correlated Logs Are Not Showing Up In The Trace ID Panel</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="각주">각주</h1>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>W3C의 권고안에는 <a href="https://www.w3.org/2004/02/Process-20040205/tr.html#maturity-levels">레벨</a>이 있는데
+Trace Context는 <a href="https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/">2020년 2월</a> 최고 레벨인 Recommendation(REC)으로 전환된 권고안이다.
+올해(2024년)에는 <a href="https://www.w3.org/TR/trace-context-2/">Level 2</a>와 <a href="https://w3c.github.io/trace-context/">Level 3</a>까지 나왔다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://www.w3.org/TR/trace-context/#problem-statement">Problem Statement</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://www.w3.org/TR/trace-context/#tracestate-header">tracestate</a>는 <code>key=value</code> 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항이다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-08-22</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/ai/ollama-openwebui-docker-compose/">
+			Previous<br>Docker Compose로 간단하게 Ollama 시작하기
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#trace-context" class="nav-trace-context">
+									Trace Context
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#traceparent-%ed%97%a4%eb%8d%94-%ed%98%95%ec%8b%9d" class="nav-traceparent-헤더-형식">
+									Traceparent 헤더 형식
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ed%85%8c%ec%8a%a4%ed%8a%b8-%ed%99%98%ea%b2%bd" class="nav-테스트-환경">
+									테스트 환경
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%84%ec%b2%b4-%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac-%ed%9d%90%eb%a6%84" class="nav-전체-네트워크-흐름">
+									전체 네트워크 흐름
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#trace_id%eb%a1%9c-trace%ec%99%80-log-%ec%97%b0%ea%b2%b0%ed%95%98%ea%b8%b0" class="nav-trace_id로-trace와-log-연결하기">
+									trace_id로 Trace와 Log 연결하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-browser%ec%97%90%ec%84%9c-%ec%9a%94%ec%b2%ad-%ec%8b%9c-traceparent-%ed%97%a4%eb%8d%94-%ec%b6%94%ea%b0%80%ed%95%98%ea%b8%b0" class="nav-1-browser에서-요청-시-traceparent-헤더-추가하기">
+									1. Browser에서 요청 시 Traceparent 헤더 추가하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-akamai-cdn%ec%97%90%ec%84%9c-traceparent%ec%9d%98-%ea%b0%92%ec%9d%84-%eb%a1%9c%ea%b7%b8%eb%a1%9c-%ec%b6%94%ea%b0%80%ed%95%98%ea%b8%b0" class="nav-2-akamai-cdn에서-traceparent의-값을-로그로-추가하기">
+									2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-apache-http-serverhttpd%ec%97%90%ec%84%9c-traceparent-%ed%97%a4%eb%8d%94-%eb%a1%9c%ea%b7%b8-%eb%82%a8%ea%b8%b0%ea%b8%b0" class="nav-3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기">
+									3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#4-java-application-spring-boot" class="nav-4-java-application-spring-boot">
+									4. Java Application (Spring Boot)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#5-%ea%b2%b0%ea%b3%bc" class="nav-5-결과">
+									5. 결과
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%ec%b9%98%eb%a9%b0" class="nav-마치며">
+									마치며
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%81%ec%a3%bc" class="nav-각주">
+									각주
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

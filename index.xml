@@ -9,9 +9,238 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Wed, 31 Jul 2024 23:48:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
+        <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>
+        <pubDate>Thu, 22 Aug 2024 18:00:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/traceparent-datadog/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/web/traceparent-datadog/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었다.
+해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았다.
+에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달하고 있었다.
+서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었다.
+클라이언트 이벤트는 연결되어 있지 않기 때문이다.&lt;/p&gt;
+&lt;p&gt;또 다른 문제가 있었다.
+서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만
+클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었다.
+그리고 모든 요청이 아닌 전체 요청의 5% 정도에서만 발생하고 있었다.
+하지만 국가, Edge IP, User Agent, 요청 URL 등을 확인해봐도 특정 패턴을 보이는 것이 없어서 원인을 알 수 없었다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/akamai-read-error.jpeg&#34; alt=&#34;Akamai ERR_READ_ERROR&#34;&gt;&lt;/p&gt;
+&lt;p&gt;원인을 찾기 위해 클라이언트에서 요청하는 부분부터 추적하고 싶었다.
+우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
+&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum&#34;&gt;RUM(Real User Monitoring)을 APM과 연결하면&lt;/a&gt;
+클라이언트부터 서버 Span까지 한눈에 확인할 수 있다.
+하지만 Akamai에선 4초 이상이라고 응답 속도가 측정되고, RUM에선 수백ms로 측정돼서 확인해보니,
+Akamai Datastream 2에서는 요청하고 응답받을 때까지 duration을 측정하고,
+Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다고 한다(2024년 8월 22일 기준).
+게다가 일주일 간 RUM 스크립트를 추가해보니 예상 견적이 만만치 않았다.
+다른 방법을 찾아야 했다.&lt;/p&gt;
+&lt;h1 id=&#34;trace-context&#34;&gt;Trace Context&lt;/h1&gt;
+&lt;p&gt;W3C 권고안(REC, Recommendation)인 Trace Context&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;는 분산 추적 통합을 위해 작성되었다.
+플랫폼마다 Trace 방법이 달라서 추적 흐름이 끊기는 것을 방지하기 위해 통합이 필요하단 이유&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;였다.
+Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했다.
+Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/datadog-trace-context.png&#34; alt=&#34;datadog-trace-context.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context | Datadog&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;traceparent-헤더-형식&#34;&gt;Traceparent 헤더 형식&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;해당 권고안에 명시된 헤더가 2개(traceparent, tracestate&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;) 있지만 여기서는 추적을 위한 &lt;code&gt;traceparent&lt;/code&gt; 헤더만 살펴본다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;{version}-{trace-id}-{parent-id}-{trace-flags}&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;version&lt;/code&gt;: 8 bits(1 byte). 현재는 00 고정이다. 2글자의 16진수. ff is forbidden.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;trace-id&lt;/code&gt;: &lt;strong&gt;128 bits(16 bytes) trace ID, 32글자의 16진수. All zeroes forbidden.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;parent-id&lt;/code&gt;: 64 bits(8 bytes) span ID, 16글자의 16진수. All zeroes forbidden.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;trace-flags&lt;/code&gt;: 8 bits(1 byte) &lt;a href=&#34;https://en.wikipedia.org/wiki/Bit_field&#34;&gt;비트 필드&lt;/a&gt;.
+데이터독에서는 2가지를 지정할 수 있음: Sampled (&lt;code&gt;01&lt;/code&gt;), not sampled (&lt;code&gt;00&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;예시: &lt;code&gt;00-8adb122e8b139de4a8744a379b4db39a-45897f550adef5c9-01&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;테스트-환경&#34;&gt;테스트 환경&lt;/h1&gt;
+&lt;h2 id=&#34;전체-네트워크-흐름&#34;&gt;전체 네트워크 흐름&lt;/h2&gt;
+&lt;p&gt;Client(Mobile App / Browser) → Akamai CDN → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]&lt;/p&gt;
+&lt;h1 id=&#34;trace_id로-trace와-log-연결하기&#34;&gt;trace_id로 Trace와 Log 연결하기&lt;/h1&gt;
+&lt;p&gt;이 방법은 APM Trace와 Log Collection에 로그가 있어야 한다.&lt;/p&gt;
+&lt;h2 id=&#34;1-browser에서-요청-시-traceparent-헤더-추가하기&#34;&gt;1. Browser에서 요청 시 Traceparent 헤더 추가하기&lt;/h2&gt;
+&lt;p&gt;요청 시 아래 스크립트로 생성한 값을 &lt;code&gt;Traceparent&lt;/code&gt; 헤더와 함께 보낸다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt; * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;class&lt;/span&gt; Traceparent {
+  constructor(version, traceId, parentId, flags) {
+    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#version
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; version;
+    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-id
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.traceId &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; traceId;
+    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#parent-id
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.parentId &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; parentId;
+    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 2HEXDIGLC   ; 8 bit flags.
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * 
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.flags &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; flags;
+  }
+  toString() {
+    &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;`&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.version&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.traceId&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.parentId&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;this&lt;/span&gt;.flags&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;`&lt;/span&gt;;
+  }
+}
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;// 랜덤 바이트 생성
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; randomBytes(size) {
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; bytes &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; Uint8Array(size);
+  &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;window&lt;/span&gt;.crypto.getRandomValues(bytes);
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; bytes;
+}
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;// 16진수 문자열로 변환
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; bufferHex(buffer) {
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;Array&lt;/span&gt;.from(buffer)
+    .map((b) =&amp;gt; b.toString(&lt;span style=&#34;color:#bd93f9&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;))
+    .join(&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;);
+}
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;// 10진수 숫자를 16진수 문자열로 변환
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; toHex(number) {
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; number.toString(&lt;span style=&#34;color:#bd93f9&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;);
+}
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;// 버전, traceId, id, flags 생성
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;function&lt;/span&gt; make() {
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; version &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; toHex(&lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;); &lt;span style=&#34;color:#6272a4&#34;&gt;// 현재 버전은 항상 `00`이므로 0으로 설정
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; traceId &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; bufferHex(randomBytes(&lt;span style=&#34;color:#bd93f9&#34;&gt;16&lt;/span&gt;));
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; parentId &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; bufferHex(randomBytes(&lt;span style=&#34;color:#bd93f9&#34;&gt;8&lt;/span&gt;));
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;const&lt;/span&gt; traceFlags &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; toHex(&lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt;); &lt;span style=&#34;color:#6272a4&#34;&gt;// Datadog: Sampled (01) / not sampled (00)
+&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;new&lt;/span&gt; Traceparent(version, traceId, parentId, traceFlags);
+}
+
+&lt;span style=&#34;color:#ff79c6&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;default&lt;/span&gt; {
+  make,
+};
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;2-akamai-cdn에서-traceparent의-값을-로그로-추가하기&#34;&gt;2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기&lt;/h2&gt;
+&lt;p&gt;Akamai Datastream 2에 &lt;strong&gt;커스텀 필드&lt;/strong&gt;를 추가해서 traceparent 헤더의 값을 데이터독에 로그로 전달하도록 한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Properties (Property Manage) &amp;gt; Property 선택 후 규칙 추가&lt;/li&gt;
+&lt;li&gt;Datadog Log에서 Grok Parser를 활용해 Akamai Datastream - &lt;code&gt;customField&lt;/code&gt;로 남겨진 &lt;code&gt;traceparent&lt;/code&gt; 헤더에서 trace_id를 추출한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
+traceparent_nullif (traceparent:%{traceparent_rule}|traceparent:\^|traceparent:-|traceparent:|-)
+
+traceparent_rule %{_version}-%{_trace_id}-%{_parent_id}-%{_flags}
+
+# Extract from: customField
+
+_version %{regex(&amp;quot;[a-zA-Z0-9]*&amp;quot;):traceparent.version}
+_trace_id %{regex(&amp;quot;[a-zA-Z0-9]*&amp;quot;):traceparent.trace_id}
+_parent_id %{regex(&amp;quot;[a-zA-Z0-9]*&amp;quot;):traceparent.parent_id}
+_flags %{regex(&amp;quot;[a-zA-Z0-9]*&amp;quot;):traceparent.flags}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기&#34;&gt;3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기&lt;/h2&gt;
+&lt;p&gt;LogFormat에  &lt;code&gt;%{header_name}i&lt;/code&gt; 으로 남기면 &lt;a href=&#34;https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats&#34;&gt;헤더의 값을 로그로 남길 수&lt;/a&gt; 있다.
+httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&amp;lt;!-- httpd.conf --&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;IfModule&lt;/span&gt; log_config_module&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
+  LogFormat &amp;#34;%h %l %u %t \&amp;#34;%r\&amp;#34; %&amp;gt;s %b %D \&amp;#34;%{Referer}i\&amp;#34; \&amp;#34;%{User-Agent}i\&amp;#34; \&amp;#34;%{traceparent}i\&amp;#34; %{BALANCER_WORKER_ROUTE}e&amp;#34; combined
+  CustomLog /var/log/httpd/access.log combined
+&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;/IfModule&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
+_traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{word:traceparent.parent_id})?(-%{data:traceparent.flags})?
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;4-java-application-spring-boot&#34;&gt;4. Java Application (Spring Boot)&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dd.trace.propagation.style&lt;/code&gt; 속성의 기본값은 &lt;code&gt;datadog,tracecontext&lt;/code&gt;으로 Datadog의 Trace ID가 우선한다.
+이를 &lt;code&gt;tracecontext,datadog&lt;/code&gt;으로 변경하면 W3C Trace ID를 우선한다.
+물론 여기서는 클라이언트에서 전달한 Trace ID를 사용한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;nohup ~/.jdk/temurin-17.0.6/bin/java &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -Ddd.service.name&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;my-service &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -Ddd.trace.propagation.style&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;tracecontext,datadog &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -jar &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f1fa8c&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;ARTIFACT_PATH&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;/app.jar &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  --spring.profiles.active&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;prod &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;&amp;gt; /dev/null &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/DataDog/dd-trace-java/releases&#34;&gt;dd-java-agent 다운로드&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
+Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원한다.&lt;/li&gt;
+&lt;li&gt;Datadog도 옵션 &lt;code&gt;dd.trace.128.bit.traceid.generation.enabled&lt;/code&gt;을 추가해서 128비트 Trace ID를 출력할 수 있다고 한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-결과&#34;&gt;5. 결과&lt;/h2&gt;
+&lt;p&gt;Trace에 Log를 연결한 모습은 다음과 같다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/connect-trace-log.png&#34; alt=&#34;Connect Trace and Log&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;마치며&#34;&gt;마치며&lt;/h1&gt;
+&lt;p&gt;서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &amp;gt; CDN &amp;gt; 웹 서버 로그로 확인할 수 있고,
+클라이언트 &amp;gt; CDN &amp;gt; 방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있다.&lt;/p&gt;
+&lt;p&gt;Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.
+OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했다.&lt;/p&gt;
+&lt;p&gt;지연 문제도 찾아서 해결되었다.
+Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
+원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있었다.
+아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습이다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/solve-network-delay.png&#34; alt=&#34;Solve Network Delay&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었다.&lt;/p&gt;
+&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/&#34;&gt;Trace Context | W3C&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/w3c/trace-context/tree/main/spec&#34;&gt;Github(w3c/trace-context) | W3C&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/trace/docs/trace-context&#34;&gt;Trace context | Google Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext&#34;&gt;Elastic APM adopts W3C TraceContext | Elastic&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Datadog
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext&#34;&gt;Connect RUM and Traces&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers&#34;&gt;Parsing&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers&#34;&gt;Grok Parser&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/standard-attributes/&#34;&gt;Default Standard Attributes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java&#34;&gt;Trace Context Propagation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/library_config/java/&#34;&gt;Configuring the Java Tracing Library&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/&#34;&gt;Remap Custom Severity Values to the Official Log Status&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs&#34;&gt;Correlated Logs Are Not Showing Up In The Trace ID Panel&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;W3C의 권고안에는 &lt;a href=&#34;https://www.w3.org/2004/02/Process-20040205/tr.html#maturity-levels&#34;&gt;레벨&lt;/a&gt;이 있는데
+Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/&#34;&gt;2020년 2월&lt;/a&gt; 최고 레벨인 Recommendation(REC)으로 전환된 권고안이다.
+올해(2024년)에는 &lt;a href=&#34;https://www.w3.org/TR/trace-context-2/&#34;&gt;Level 2&lt;/a&gt;와 &lt;a href=&#34;https://w3c.github.io/trace-context/&#34;&gt;Level 3&lt;/a&gt;까지 나왔다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#problem-statement&#34;&gt;Problem Statement&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#tracestate-header&#34;&gt;tracestate&lt;/a&gt;는 &lt;code&gt;key=value&lt;/code&gt; 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항이다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://markruler.github.io/posts/web/traceparent-datadog/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1660,126 +1889,6 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
 &lt;p&gt;시스템 제한 설정을 변경할 필요 없이
 &lt;code&gt;Too many open files&lt;/code&gt; 에러도 발생하지 않았다.&lt;/p&gt;
 - https://markruler.github.io/posts/java/too-many-open-files/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Jenkins Workspace 동시성 문제</title>
-        <link>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</link>
-        <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해
-&lt;a href=&#34;https://www.jenkins.io/doc/book/pipeline/syntax/#triggers&#34;&gt;triggers&lt;/a&gt; directive를 사용했다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;pipeline &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-    agent any
-
-    triggers &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        cron&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;* * * * *&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;// HERE
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-
-    stages &lt;span style=&#34;color:#ff79c6&#34;&gt;{...}&lt;/span&gt;
-
-    post &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        always &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-            cleanWs&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;cleanWhenNotBuilt:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt;
-                    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;deleteDirs:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt;
-                    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;disableDeferredWipeout:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt;
-                    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;notFailBuild:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt;
-                    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;patterns:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;
-                        &lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;pattern:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;.git/**&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;type:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;],&lt;/span&gt;
-                        &lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;pattern:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;.gitignore&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;type:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;],&lt;/span&gt;
-                        &lt;span style=&#34;color:#ff79c6&#34;&gt;[&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;pattern:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;.meta/**&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;type:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;],&lt;/span&gt;
-                    &lt;span style=&#34;color:#ff79c6&#34;&gt;]&lt;/span&gt;
-            &lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-        &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;해당 Job은 빌드 간 메타데이터(&lt;code&gt;.meta/&lt;/code&gt;)를 공유해야 했기 때문에
-&lt;a href=&#34;https://plugins.jenkins.io/ws-cleanup/&#34;&gt;cleanWs&lt;/a&gt; 플러그인에서도
-&lt;code&gt;.git&lt;/code&gt; 디렉토리와 함께 삭제되지 않도록 설정했다.&lt;/p&gt;
-&lt;p&gt;하지만 무슨 이유인지 메타데이터가 간헐적으로 누락되었고,
-작업도 원하는대로 동작하지 않고 있었다.&lt;/p&gt;
-&lt;h1 id=&#34;workspacelist&#34;&gt;WorkspaceList&lt;/h1&gt;
-&lt;p&gt;Jenkins에서 Job을 실행할 경우 말그대로 작업 공간을 위한
-Workspace(&lt;code&gt;$JENKINS_HOME/workspace&lt;/code&gt;) 디렉토리가 생성된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// hudson.slaves.WorkspaceList
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;synchronized&lt;/span&gt; Lease &lt;span style=&#34;color:#50fa7b&#34;&gt;allocate&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;@NonNull FilePath base&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; Object context&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;throws&lt;/span&gt; InterruptedException &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; 1&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;++)&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        FilePath candidate &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; i &lt;span style=&#34;color:#ff79c6&#34;&gt;==&lt;/span&gt; 1 &lt;span style=&#34;color:#ff79c6&#34;&gt;?&lt;/span&gt; base &lt;span style=&#34;color:#ff79c6&#34;&gt;:&lt;/span&gt; base&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;withSuffix&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;@&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;+&lt;/span&gt; i&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-        Entry e &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; inUse&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;get&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;candidate&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;getRemote&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;());&lt;/span&gt;
-        &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;e &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;!&lt;/span&gt;e&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;quick&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; e&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;context&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; context&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-            &lt;span style=&#34;color:#ff79c6&#34;&gt;continue&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;;&lt;/span&gt;
-        &lt;span style=&#34;color:#ff79c6&#34;&gt;return&lt;/span&gt; acquire&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;candidate&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;false&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; context&lt;span style=&#34;color:#ff79c6&#34;&gt;);&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않는다.
-Jenkins 런타임의 &lt;a href=&#34;https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java&#34;&gt;WorkspaceList 객체&lt;/a&gt;에
-전체 Workspace 목록을 저장한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;// hudson.slaves.WorkspaceList
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt; * Used by {@link Computer} to keep track of workspaces that are actively in use.
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;WorkspaceList&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;AllocationAt&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;extends&lt;/span&gt; Exception &lt;span style=&#34;color:#ff79c6&#34;&gt;{...}&lt;/span&gt;
-    
-    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;      * Book keeping for workspace allocation.
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;      */&lt;/span&gt;
-    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;Entry&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;{...}&lt;/span&gt;
-    
-    &lt;span style=&#34;color:#6272a4&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     * Represents a leased workspace that needs to be returned later.
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;     */&lt;/span&gt;
-    &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;Lease&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;implements&lt;/span&gt; &lt;span style=&#34;color:#6272a4&#34;&gt;/*Auto*/&lt;/span&gt;Closeable &lt;span style=&#34;color:#ff79c6&#34;&gt;{...}&lt;/span&gt;
-
-    &lt;span style=&#34;color:#6272a4&#34;&gt;// ...
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;문제&#34;&gt;문제&lt;/h2&gt;
-&lt;p&gt;만약 파이프라인에서 &lt;code&gt;Concurrent Build&lt;/code&gt; 옵션을 허용한 채
-여러 개의 빌드를 동시에 실행하면 간혹 &lt;code&gt;job_name&lt;/code&gt; workspace에서 실행되지 않고
-&lt;code&gt;job_name@2&lt;/code&gt; 에서만 실행되는 경우가 있다.
-그런데 메타데이터 파일을 공유해서 사용해야 하는 경우
-&lt;code&gt;job_name&lt;/code&gt; workspace에서 실행되기를 보장해야 한다.&lt;/p&gt;
-&lt;h2 id=&#34;해결&#34;&gt;해결&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Jenkins Master 프로세스를 재시작&lt;/strong&gt;해서 &lt;code&gt;WorkspaceList&lt;/code&gt;를 초기화하거나
-&lt;strong&gt;새로운 이름의 Job을 생성&lt;/strong&gt;하면 새로운 이름의 workspace에서 빌드할 수 있다.
-이후 &lt;a href=&#34;https://en.wikipedia.org/wiki/Thread_safety&#34;&gt;스레드 안전성&lt;/a&gt;을 보장하기 위해
-&lt;code&gt;Concurrent Build&lt;/code&gt; 옵션을 허용하지 않은 채 빌드한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;pipeline &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-    agent any
-
-    triggers &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        cron&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;* * * * *&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-    
-    &lt;span style=&#34;color:#6272a4&#34;&gt;// https://www.jenkins.io/doc/book/pipeline/syntax/#options
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;    options &lt;span style=&#34;color:#ff79c6&#34;&gt;{&lt;/span&gt;
-        &lt;span style=&#34;color:#6272a4&#34;&gt;// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정한다.
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        timeout&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;time:&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;unit:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;SECONDS&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-    
-        &lt;span style=&#34;color:#6272a4&#34;&gt;// 빌드 스케줄이 2개 생성되면 &amp;#39;job_name&amp;#39;, &amp;#39;job_name@2&amp;#39; workspace가 생성되고
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// metadata를 각각 관리하게 된다. abortPrevious 값을 true로 설정하면
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// 이미 빌드 중인 프로세스와 겹쳐서 &amp;#39;job_name@2&amp;#39; workspace가 생성되더라도
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#6272a4&#34;&gt;// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &amp;#39;job_name&amp;#39; workspace에서 실행된다.
-&lt;/span&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;&lt;/span&gt;        disableConcurrentBuilds&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;abortPrevious:&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;true&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-    &lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-
-    stages &lt;span style=&#34;color:#ff79c6&#34;&gt;{...}&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;timeout과-cron&#34;&gt;timeout과 cron&lt;/h1&gt;
-&lt;p&gt;Crontab(Unix의 Job Scheduler)처럼 Jenkins는 &lt;code&gt;cron&lt;/code&gt; 설정을 통해 잡 스케줄러를 만들 수 있다.
-Jenkins &lt;code&gt;cron&lt;/code&gt;의 최소 간격은 1분(&lt;code&gt;* * * * *&lt;/code&gt;)이다.&lt;/p&gt;
-&lt;h2 id=&#34;문제-1&#34;&gt;문제&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;timeout&lt;/code&gt; 설정도 &lt;code&gt;cron&lt;/code&gt; 설정과 같이 1분으로 두면 timeout abort 되기 전
-&lt;code&gt;job_name@2&lt;/code&gt; workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있다.&lt;/p&gt;
-&lt;h2 id=&#34;해결-1&#34;&gt;해결&lt;/h2&gt;
-&lt;p&gt;만약 &lt;code&gt;cron&lt;/code&gt; 간격을 1분으로 설정했다면 &lt;code&gt;timeout&lt;/code&gt;을 50초로 설정하는 등 차이를 둔다. (55초는 살짝 겹쳤다…)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;timeout&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;time:&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;50&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;unit:&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;SECONDS&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

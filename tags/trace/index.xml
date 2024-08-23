@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>APM on 임창수 블로그</title>
-    <link>https://markruler.github.io/tags/apm/</link>
-    <description>Recent content in APM on 임창수 블로그</description>
+    <title>trace on 임창수 블로그</title>
+    <link>https://markruler.github.io/tags/trace/</link>
+    <description>Recent content in trace on 임창수 블로그</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ko-kr</language>
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/apm/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/trace/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
       <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>
@@ -18,18 +18,6 @@
       <guid>https://markruler.github.io/posts/web/traceparent-datadog/</guid>
       <description>개요 모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었다. 해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았다. 에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달하고 있었다. 서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었다. 클라이언트 이벤트는 연결되어 있지 않기 때문이다.
 또 다른 문제가 있었다. 서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만 클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었다.</description>
-    </item>
-    
-    <item>
-      <title>APM만큼 네트워크 모니터링도 중요하다</title>
-      <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
-      <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
-      <guid>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</guid>
-      <description>APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다. 우리팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있다. (인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)
-문제 어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다. 또한 서비스 전체에 영향이 있었다.
-분석: 쉽게 간과했던 문제 Oracle Session 히스토리를 남겨서 확인했을 때 DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었다. DB 문제는 아니었다.
-발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.</description>
     </item>
     
   </channel>
