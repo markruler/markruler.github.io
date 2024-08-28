@@ -1,6 +1,6 @@
 ---
 date: 2024-07-17T22:40:00+09:00
-lastmod: 2024-07-18T23:49:00+09:00
+lastmod: 2024-08-28T22:42:00+09:00
 title: "일상에서의 SSH"
 description: "Secure Shell"
 featured_image: "/images/network/ssh/dall-e-ssh.webp"
@@ -13,11 +13,42 @@ categories:
   - how-to
 ---
 
+- [SSH key 생성](#ssh-key-생성)
+- [SSH Server](#ssh-server)
+  - [authoized\_keys](#authoized_keys)
+  - [주로 사용하는 Server 설정](#주로-사용하는-server-설정)
+- [SSH Client](#ssh-client)
+  - [설정 파일 우선 순위](#설정-파일-우선-순위)
+  - [known\_hosts](#known_hosts)
+  - [주로 사용하는 Host 설정](#주로-사용하는-host-설정)
+  - [Git](#git)
+  - [Local Forward](#local-forward)
+- [Password 입력 없이 SSH Key로 Client에서 Server로 접속하기](#password-입력-없이-ssh-key로-client에서-server로-접속하기)
+- [참조](#참조)
+
 > 업무에서 자주 사용하는 SSH 설정을 정리합니다.
+
+# SSH key 생성
+
+```sh
+# RSA
+ssh-keygen -t rsa -b 4096 -C ""
+
+# ED25519
+ssh-keygen -t ed25519 -f $HOME/.ssh/my-ed25519 -C "comment" -N "password"
+```
 
 # SSH Server
 
 SSH 데몬 설정 파일은 `/etc/ssh/sshd_config`이다.
+
+```sh
+sudo apt install openssh-server
+```
+
+```sh
+systemctl status ssh
+```
 
 ## authoized_keys
 
@@ -117,6 +148,10 @@ sshd: .example.com
 # SSH Client
 
 system-wide 설정 파일은 `/etc/ssh/ssh_config`이다.
+
+```sh
+sudo apt install openssh-client
+```
 
 ## 설정 파일 우선 순위
 
@@ -230,6 +265,40 @@ ssh -vv -f -N \
   ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
 ```
 
+# Password 입력 없이 SSH Key로 Client에서 Server로 접속하기
+
+Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+(AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)
+
+```sh
+# server: SSH Key 생성
+touch ~/.ssh/authorized_keys
+# 600(rw)
+chmod 600 ~/.ssh/authorized_keys
+cat ~/.ssh/mykey.pub >> ~/.ssh/authorized_keys
+
+# server > client private key 전달 (최대한 안전한 방식으로)
+# scp ~/.ssh/mykey client@host2:~/.ssh/mykey
+
+# client
+# 700(rwx)
+chmod 700 ~/.ssh
+# 400(r)
+chmod 400 ~/.ssh/mykey
+
+# client ~/.ssh/config
+Host host1
+  User markruler
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/mykey
+  HostName 192.168.0.10
+  Port 22
+  LogLevel VERBOSE
+
+# client
+ssh host1
+```
+
 # 참조
 
 - ChatGPT
@@ -238,3 +307,8 @@ ssh -vv -f -N \
   - [ssh_config(5)](https://linux.die.net/man/5/ssh_config) - Linux man page
 - Server
   - [sshd_config(5)](https://linux.die.net/man/5/sshd_config) - Linux man page
+- 원리
+  - [보안 그리고 암호화 알고리즘](https://naleejang.tistory.com/218) - 장현정(naleejang)
+  - [SSH 동작원리 및 EC2 SSH 접속](https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596) - redwood
+- [Managing multiple Bitbucket user SSH keys on one device](https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/) - Bitbucket
+  - [Git 계정 여러 개 동시 사용하기](https://blog.outsider.ne.kr/1448) - Outsider's Dev Story

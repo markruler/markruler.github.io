@@ -21,7 +21,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://markruler.github.io/posts/network/ssh/" /><meta property="og:image" content="https://markruler.github.io/images/network/ssh/dall-e-ssh.webp" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2024-07-17T22:40:00+09:00" />
-<meta property="article:modified_time" content="2024-07-18T23:49:00+09:00" />
+<meta property="article:modified_time" content="2024-08-28T22:42:00+09:00" />
 
 
 
@@ -155,6 +155,24 @@
 		
 		
 		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ssh-key-%ec%83%9d%ec%84%b1" class="nav-ssh-key-생성">
+									SSH key 생성
+								</a>
+							</li>
+						
+						
+					
+				
 			
 				
 				
@@ -347,6 +365,24 @@
 						
 						
 							<li>
+								<a href="#password-%ec%9e%85%eb%a0%a5-%ec%97%86%ec%9d%b4-ssh-key%eb%a1%9c-client%ec%97%90%ec%84%9c-server%eb%a1%9c-%ec%a0%91%ec%86%8d%ed%95%98%ea%b8%b0" class="nav-password-입력-없이-ssh-key로-client에서-server로-접속하기">
+									Password 입력 없이 SSH Key로 Client에서 Server로 접속하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
 								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
 									참조
 								</a>
@@ -459,12 +495,40 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <blockquote>
+                    <ul>
+<li><a href="#ssh-key-%EC%83%9D%EC%84%B1">SSH key 생성</a></li>
+<li><a href="#ssh-server">SSH Server</a>
+<ul>
+<li><a href="#authoized_keys">authoized_keys</a></li>
+<li><a href="#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-server-%EC%84%A4%EC%A0%95">주로 사용하는 Server 설정</a></li>
+</ul>
+</li>
+<li><a href="#ssh-client">SSH Client</a>
+<ul>
+<li><a href="#%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EC%9A%B0%EC%84%A0-%EC%88%9C%EC%9C%84">설정 파일 우선 순위</a></li>
+<li><a href="#known_hosts">known_hosts</a></li>
+<li><a href="#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-host-%EC%84%A4%EC%A0%95">주로 사용하는 Host 설정</a></li>
+<li><a href="#git">Git</a></li>
+<li><a href="#local-forward">Local Forward</a></li>
+</ul>
+</li>
+<li><a href="#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0">Password 입력 없이 SSH Key로 Client에서 Server로 접속하기</a></li>
+<li><a href="#%EC%B0%B8%EC%A1%B0">참조</a></li>
+</ul>
+<blockquote>
 <p>업무에서 자주 사용하는 SSH 설정을 정리합니다.</p>
 </blockquote>
-<h1 id="ssh-server">SSH Server</h1>
+<h1 id="ssh-key-생성">SSH key 생성</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># RSA</span>
+ssh-keygen -t rsa -b <span style="color:#bd93f9">4096</span> -C <span style="color:#f1fa8c">&#34;&#34;</span>
+
+<span style="color:#6272a4"># ED25519</span>
+ssh-keygen -t ed25519 -f <span style="color:#8be9fd;font-style:italic">$HOME</span>/.ssh/my-ed25519 -C <span style="color:#f1fa8c">&#34;comment&#34;</span> -N <span style="color:#f1fa8c">&#34;password&#34;</span>
+</code></pre></div><h1 id="ssh-server">SSH Server</h1>
 <p>SSH 데몬 설정 파일은 <code>/etc/ssh/sshd_config</code>이다.</p>
-<h2 id="authoized_keys">authoized_keys</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo apt install openssh-server
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">systemctl status ssh
+</code></pre></div><h2 id="authoized_keys">authoized_keys</h2>
 <ul>
 <li>역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)</li>
 <li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/authorized_keys</code>에 위치한다.</li>
@@ -544,7 +608,8 @@ sshd: 192.168.1.0/24
 sshd: .example.com
 </code></pre></div><h1 id="ssh-client">SSH Client</h1>
 <p>system-wide 설정 파일은 <code>/etc/ssh/ssh_config</code>이다.</p>
-<h2 id="설정-파일-우선-순위">설정 파일 우선 순위</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo apt install openssh-client
+</code></pre></div><h2 id="설정-파일-우선-순위">설정 파일 우선 순위</h2>
 <ol>
 <li>명령줄 옵션: 가장 우선한다.</li>
 <li>환경 변수</li>
@@ -627,6 +692,35 @@ Host bitbucket.org
 </span><span style="color:#f1fa8c"></span>  -i <span style="color:#f1fa8c">&#34;~/.ssh/my-rds-key.pem&#34;</span> <span style="color:#f1fa8c">\
 </span><span style="color:#f1fa8c"></span>  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 <span style="color:#f1fa8c">\
 </span><span style="color:#f1fa8c"></span>  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+</code></pre></div><h1 id="password-입력-없이-ssh-key로-client에서-server로-접속하기">Password 입력 없이 SSH Key로 Client에서 Server로 접속하기</h1>
+<p>Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+(AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># server: SSH Key 생성</span>
+touch ~/.ssh/authorized_keys
+<span style="color:#6272a4"># 600(rw)</span>
+chmod <span style="color:#bd93f9">600</span> ~/.ssh/authorized_keys
+cat ~/.ssh/mykey.pub &gt;&gt; ~/.ssh/authorized_keys
+
+<span style="color:#6272a4"># server &gt; client private key 전달 (최대한 안전한 방식으로)</span>
+<span style="color:#6272a4"># scp ~/.ssh/mykey client@host2:~/.ssh/mykey</span>
+
+<span style="color:#6272a4"># client</span>
+<span style="color:#6272a4"># 700(rwx)</span>
+chmod <span style="color:#bd93f9">700</span> ~/.ssh
+<span style="color:#6272a4"># 400(r)</span>
+chmod <span style="color:#bd93f9">400</span> ~/.ssh/mykey
+
+<span style="color:#6272a4"># client ~/.ssh/config</span>
+Host host1
+  User markruler
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/mykey
+  HostName 192.168.0.10
+  Port <span style="color:#bd93f9">22</span>
+  LogLevel VERBOSE
+
+<span style="color:#6272a4"># client</span>
+ssh host1
 </code></pre></div><h1 id="참조">참조</h1>
 <ul>
 <li>ChatGPT</li>
@@ -641,11 +735,22 @@ Host bitbucket.org
 <li><a href="https://linux.die.net/man/5/sshd_config">sshd_config(5)</a> - Linux man page</li>
 </ul>
 </li>
+<li>원리
+<ul>
+<li><a href="https://naleejang.tistory.com/218">보안 그리고 암호화 알고리즘</a> - 장현정(naleejang)</li>
+<li><a href="https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596">SSH 동작원리 및 EC2 SSH 접속</a> - redwood</li>
+</ul>
+</li>
+<li><a href="https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/">Managing multiple Bitbucket user SSH keys on one device</a> - Bitbucket
+<ul>
+<li><a href="https://blog.outsider.ne.kr/1448">Git 계정 여러 개 동시 사용하기</a> - Outsider&rsquo;s Dev Story</li>
+</ul>
+</li>
 </ul>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2024-07-18</p>
+		    <p style="color:#777;">Last modified on 2024-08-28</p>
                     
                 </div>
             </div>
@@ -799,6 +904,24 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
+								<a href="#ssh-key-%ec%83%9d%ec%84%b1" class="nav-ssh-key-생성">
+									SSH key 생성
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
 								<a href="#ssh-server" class="nav-ssh-server">
 									SSH Server
 								</a>
@@ -977,6 +1100,24 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							
 								</ul>
 							
+						
+						
+						
+							<li>
+								<a href="#password-%ec%9e%85%eb%a0%a5-%ec%97%86%ec%9d%b4-ssh-key%eb%a1%9c-client%ec%97%90%ec%84%9c-server%eb%a1%9c-%ec%a0%91%ec%86%8d%ed%95%98%ea%b8%b0" class="nav-password-입력-없이-ssh-key로-client에서-server로-접속하기">
+									Password 입력 없이 SSH Key로 Client에서 Server로 접속하기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						

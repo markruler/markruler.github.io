@@ -16,9 +16,8 @@
       <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/network/ssh/</guid>
-      <description>업무에서 자주 사용하는 SSH 설정을 정리합니다.
- SSH Server SSH 데몬 설정 파일은 /etc/ssh/sshd_config이다.
-authoized_keys  역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식) 위치: 보통 사용자의 홈 디렉토리 아래의 ~/.ssh/authorized_keys에 위치한다. 내용: 클라이언트의 공개 키가 저장된다. 서버는 클라이언트의 접속 시도 시, 이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다. 보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에, 공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.</description>
+      <description>SSH key 생성 SSH Server  authoized_keys 주로 사용하는 Server 설정   SSH Client  설정 파일 우선 순위 known_hosts 주로 사용하는 Host 설정 Git Local Forward   Password 입력 없이 SSH Key로 Client에서 Server로 접속하기 참조   업무에서 자주 사용하는 SSH 설정을 정리합니다.
+ SSH key 생성 # RSA ssh-keygen -t rsa -b 4096 -C &amp;#34;&amp;#34; # ED25519 ssh-keygen -t ed25519 -f $HOME/.ssh/my-ed25519 -C &amp;#34;comment&amp;#34; -N &amp;#34;password&amp;#34; SSH Server SSH 데몬 설정 파일은 /etc/ssh/sshd_config이다.</description>
     </item>
     
     <item>

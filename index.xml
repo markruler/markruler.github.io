@@ -1085,12 +1085,40 @@ iso.3.6.1.2.1.1.1.0 &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; STR
         <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/ssh/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/network/ssh/ -&lt;blockquote&gt;
+        <description>임창수 블로그 https://markruler.github.io/posts/network/ssh/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-key-%EC%83%9D%EC%84%B1&#34;&gt;SSH key 생성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-server&#34;&gt;SSH Server&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#authoized_keys&#34;&gt;authoized_keys&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-server-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Server 설정&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-client&#34;&gt;SSH Client&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EC%9A%B0%EC%84%A0-%EC%88%9C%EC%9C%84&#34;&gt;설정 파일 우선 순위&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#known_hosts&#34;&gt;known_hosts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-host-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Host 설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git&#34;&gt;Git&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#local-forward&#34;&gt;Local Forward&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
 &lt;p&gt;업무에서 자주 사용하는 SSH 설정을 정리합니다.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h1 id=&#34;ssh-server&#34;&gt;SSH Server&lt;/h1&gt;
+&lt;h1 id=&#34;ssh-key-생성&#34;&gt;SSH key 생성&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# RSA&lt;/span&gt;
+ssh-keygen -t rsa -b &lt;span style=&#34;color:#bd93f9&#34;&gt;4096&lt;/span&gt; -C &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# ED25519&lt;/span&gt;
+ssh-keygen -t ed25519 -f &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;$HOME&lt;/span&gt;/.ssh/my-ed25519 -C &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-server&#34;&gt;SSH Server&lt;/h1&gt;
 &lt;p&gt;SSH 데몬 설정 파일은 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;이다.&lt;/p&gt;
-&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo apt install openssh-server
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;systemctl status ssh
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)&lt;/li&gt;
 &lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치한다.&lt;/li&gt;
@@ -1170,7 +1198,8 @@ sshd: 192.168.1.0/24
 sshd: .example.com
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-client&#34;&gt;SSH Client&lt;/h1&gt;
 &lt;p&gt;system-wide 설정 파일은 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;이다.&lt;/p&gt;
-&lt;h2 id=&#34;설정-파일-우선-순위&#34;&gt;설정 파일 우선 순위&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo apt install openssh-client
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-파일-우선-순위&#34;&gt;설정 파일 우선 순위&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;명령줄 옵션: 가장 우선한다.&lt;/li&gt;
 &lt;li&gt;환경 변수&lt;/li&gt;
@@ -1253,6 +1282,35 @@ Host bitbucket.org
 &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -i &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;~/.ssh/my-rds-key.pem&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
 &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 &lt;span style=&#34;color:#f1fa8c&#34;&gt;\
 &lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&lt;/span&gt;  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;password-입력-없이-ssh-key로-client에서-server로-접속하기&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/h1&gt;
+&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+(AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# server: SSH Key 생성&lt;/span&gt;
+touch ~/.ssh/authorized_keys
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 600(rw)&lt;/span&gt;
+chmod &lt;span style=&#34;color:#bd93f9&#34;&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
+cat ~/.ssh/mykey.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# server &amp;gt; client private key 전달 (최대한 안전한 방식으로)&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# scp ~/.ssh/mykey client@host2:~/.ssh/mykey&lt;/span&gt;
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# client&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 700(rwx)&lt;/span&gt;
+chmod &lt;span style=&#34;color:#bd93f9&#34;&gt;700&lt;/span&gt; ~/.ssh
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 400(r)&lt;/span&gt;
+chmod &lt;span style=&#34;color:#bd93f9&#34;&gt;400&lt;/span&gt; ~/.ssh/mykey
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# client ~/.ssh/config&lt;/span&gt;
+Host host1
+  User markruler
+  IdentitiesOnly yes
+  IdentityFile ~/.ssh/mykey
+  HostName 192.168.0.10
+  Port &lt;span style=&#34;color:#bd93f9&#34;&gt;22&lt;/span&gt;
+  LogLevel VERBOSE
+
+&lt;span style=&#34;color:#6272a4&#34;&gt;# client&lt;/span&gt;
+ssh host1
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;ChatGPT&lt;/li&gt;
@@ -1265,6 +1323,17 @@ Host bitbucket.org
 &lt;li&gt;Server
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/5/sshd_config&#34;&gt;sshd_config(5)&lt;/a&gt; - Linux man page&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;원리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://naleejang.tistory.com/218&#34;&gt;보안 그리고 암호화 알고리즘&lt;/a&gt; - 장현정(naleejang)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596&#34;&gt;SSH 동작원리 및 EC2 SSH 접속&lt;/a&gt; - redwood&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/&#34;&gt;Managing multiple Bitbucket user SSH keys on one device&lt;/a&gt; - Bitbucket
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.outsider.ne.kr/1448&#34;&gt;Git 계정 여러 개 동시 사용하기&lt;/a&gt; - Outsider&amp;rsquo;s Dev Story&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
