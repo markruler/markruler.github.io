@@ -195,8 +195,11 @@ if __name__ == '__main__':
 - CSS attribute 중 `page-break-***` 를 사용하면 페이지를 원하는 부분에서 분리할 수 있다.
   - `page-break-after: always;` 해당 Element 이후에 내용이 있더라도 페이지를 분리한다.
   - `page-break-after: avoid;` 해당 Element 이후에 페이지는 분리하지 않는다. 이후 내용이 페이지를 넘친다면 페이지 분리되긴 한다.
-- PDF 생성 후 응답되기까지 PDFmyURL만큼 걸린다.
-  - 약 2~5초 (평균 약 4초)
+- PDF 생성 후 응답되기까지 2초 정도 소요된다.
+  - PDFmyURL, OZ report와 비슷하다.
+  - 1주일 기준
+    - P50: 2.01s
+    - P95: 2.83s
 - Server to Server로 요청 시 Spring Boot에서 FeignClient로
   [x-www-form-urlencoded](https://wildeveloperetrain.tistory.com/304)
   데이터를 보내려면 `MultiValueMap<String, String>`을 사용해야 한다.
