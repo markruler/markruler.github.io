@@ -9,7 +9,18 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/categories/case/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 29 Aug 2024 22:38:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/categories/case/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IP로 지리적 위치(Geolocation) 찾기</title>
+      <link>https://markruler.github.io/posts/network/ip-geolocation/</link>
+      <pubDate>Thu, 29 Aug 2024 22:38:00 +0900</pubDate>
+      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/network/ip-geolocation/</guid>
+      <description>현상 약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했다.
+원인 해당 비즈니스 로직에는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 얻는 작업을 가장 먼저 하고 있다. 국가 정보를 얻는 곳은 IP-API라는 유료 API 서비스와 IPInfoDB를 사용하고 있다. 대략적인 코드는 다음과 같다.
+@Cacheable(value = CacheName.IPAPI_COUNTRY_CODE, key = &amp;#34;#ipAddress&amp;#34;) public Geolocation findIsoCountryCode(final String ipAddress) { if (isPrivate(ipAddress)) { return Geolocation.korea(); } return ipapiFeignClient.findGeolocationByIpAddress(ipAddress, IPAPI_ACCESS_KEY); } 문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것이다.</description>
+    </item>
+    
     <item>
       <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
       <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>

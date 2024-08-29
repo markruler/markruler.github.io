@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html><head>
+<title>IP로 지리적 위치(Geolocation) 찾기</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="CDN에서 위치 정보를 얻는 방법">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="IP로 지리적 위치(Geolocation) 찾기" />
+<meta property="og:description" content="CDN에서 위치 정보를 얻는 방법" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/ip-geolocation/" /><meta property="og:image" content="https://markruler.github.io/images/network/ip-geolocation/ip-geolocation.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-08-29T22:38:00+09:00" />
+<meta property="article:modified_time" content="2024-08-29T22:38:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/network/ip-geolocation/ip-geolocation.webp"/>
+
+<meta name="twitter:title" content="IP로 지리적 위치(Geolocation) 찾기"/>
+<meta name="twitter:description" content="CDN에서 위치 정보를 얻는 방법"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%98%84%ec%83%81" class="nav-현상">
+									현상
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9b%90%ec%9d%b8" class="nav-원인">
+									원인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
+									해결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ea%b5%ac%ed%98%84-%eb%b0%a9%eb%b2%95-spring-framework" class="nav-구현-방법-spring-framework">
+									구현 방법 (Spring Framework)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%a4%ec%9c%bc%eb%a1%9c-%ec%96%bb%ec%9d%80-%ec%a0%95%ed%99%95%ec%84%b1" class="nav-덤으로-얻은-정확성">
+									덤으로 얻은 정확성?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%9c%eb%a1%9c-%ed%8a%b8%eb%9f%ac%ec%8a%a4%ed%8a%b8" class="nav-제로-트러스트">
+									제로 트러스트!
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/network/ip-geolocation/ip-geolocation.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    IP로 지리적 위치(Geolocation) 찾기
+                    
+                    <div class="post-subtitle">
+                        CDN에서 위치 정보를 얻는 방법
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-08-29 22:38
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[case]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/ip">ip</a>
+                                &nbsp;
+                            
+                                <a href="/tags/geolocation">geolocation</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="현상">현상</h1>
+<p>약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했다.</p>
+<h1 id="원인">원인</h1>
+<p><img src="/images/network/ip-geolocation/ipapi-latency.png" alt=""></p>
+<p>해당 비즈니스 로직에는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 얻는 작업을 가장 먼저 하고 있다.
+국가 정보를 얻는 곳은 IP-API라는 유료 API 서비스와 IPInfoDB를 사용하고 있다.
+대략적인 코드는 다음과 같다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Cacheable<span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">=</span> CacheName<span style="color:#ff79c6">.</span><span style="color:#50fa7b">IPAPI_COUNTRY_CODE</span><span style="color:#ff79c6">,</span> key <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;#ipAddress&#34;</span><span style="color:#ff79c6">)</span>
+<span style="color:#8be9fd;font-style:italic">public</span> Geolocation <span style="color:#50fa7b">findIsoCountryCode</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> String ipAddress<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>isPrivate<span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">korea</span><span style="color:#ff79c6">();</span>
+    <span style="color:#ff79c6">}</span>
+    <span style="color:#ff79c6">return</span> ipapiFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPAPI_ACCESS_KEY<span style="color:#ff79c6">);</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><p>문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것이다.</p>
+<h1 id="해결">해결</h1>
+<p>이를 해결하기 위해 캐싱도 해봤지만 처음 접속한 IP의 경우 조회가 발생할 수 밖에 없었고,
+결정적으로 이렇게 처음 접속한 IP가 매우 많았다(월 130만 건 정도)는 것이다.</p>
+<p>이 문제는 생각보다 간단하게 해결할 수 있다.
+CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있다.</p>
+<ul>
+<li>Akamai의 EdgeScape 기능을 활성화하면 <code>X-Akamai-Edgescape</code> 헤더로
+<a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">국가 코드 2자리(ISO 3166-1 alpha-2)</a>를 확인할 수 있다.</li>
+<li><a href="https://developers.cloudflare.com/network/ip-geolocation/">CloudFlare의 문서</a>를 확인해보면
+관련 기능을 활성화 했을 경우 <code>CF-IPCountry</code> 헤더로 확인할 수 있다고 한다.</li>
+<li>Amazon CloudFront도 <code>CloudFront-Viewer-Country</code> 헤더로 확인할 수 있다고 한다.</li>
+</ul>
+<p>이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었다.</p>
+<h2 id="구현-방법-spring-framework">구현 방법 (Spring Framework)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">PARAMETER</span><span style="color:#ff79c6">)</span>
+@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
+<span style="color:#8be9fd;font-style:italic">public</span> @interface GeoLocation <span style="color:#ff79c6">{</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Aspect
+@Component
+@RequiredArgsConstructor
+<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">GeoLocationAspect</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> HttpServletRequest request<span style="color:#ff79c6">;</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> GeoLocationService service<span style="color:#ff79c6">;</span>
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * &lt;code&gt;@annotation(GeoLocation)&lt;/code&gt;와 같은 방식은
+</span><span style="color:#6272a4">     * &lt;code&gt;@GeoLocation&lt;/code&gt; 애노테이션이 붙은 메서드에만 적용됩니다.
+</span><span style="color:#6272a4">     */</span>
+    @Pointcut<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.GetMapping) || &#34;</span>
+            <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.PostMapping) || &#34;</span>
+            <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.RequestMapping)&#34;</span><span style="color:#ff79c6">)</span>
+    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">mappingAnnotations</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+    <span style="color:#ff79c6">}</span>
+    @Around<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;mappingAnnotations()&#34;</span><span style="color:#ff79c6">)</span>
+    <span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">injectGeoLocation</span><span style="color:#ff79c6">(</span>ProceedingJoinPoint joinPoint<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Throwable <span style="color:#ff79c6">{</span>
+        MethodSignature signature <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>MethodSignature<span style="color:#ff79c6">)</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSignature</span><span style="color:#ff79c6">();</span>
+        Method method <span style="color:#ff79c6">=</span> signature<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMethod</span><span style="color:#ff79c6">();</span>
+        Object<span style="color:#ff79c6">[]</span> args <span style="color:#ff79c6">=</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getArgs</span><span style="color:#ff79c6">();</span>
+        Parameter<span style="color:#ff79c6">[]</span> parameters <span style="color:#ff79c6">=</span> method<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameters</span><span style="color:#ff79c6">();</span>
+        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0<span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> parameters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
+            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parameters<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">].</span><span style="color:#50fa7b">isAnnotationPresent</span><span style="color:#ff79c6">(</span>GeoLocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
+                Location geoLocation <span style="color:#ff79c6">=</span> getGeoLocationFromRequest<span style="color:#ff79c6">();</span>
+                <span style="color:#6272a4">// @GeoLocation 파라미터에 위치 정보를 주입합니다.
+</span><span style="color:#6272a4"></span>                args<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> geoLocation<span style="color:#ff79c6">;</span>
+            <span style="color:#ff79c6">}</span>
+        <span style="color:#ff79c6">}</span>
+        <span style="color:#6272a4">// 메서드 호출을 진행합니다.
+</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">proceed</span><span style="color:#ff79c6">(</span>args<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">}</span>
+    <span style="color:#6272a4">/**
+</span><span style="color:#6272a4">     * CDN, ipapi, IPInfoDB 순으로 접속 국가 코드 조회
+</span><span style="color:#6272a4">     *
+</span><span style="color:#6272a4">     * @return Geolocation
+</span><span style="color:#6272a4">     */</span>
+    <span style="color:#8be9fd;font-style:italic">private</span> Location <span style="color:#50fa7b">getGeoLocationFromRequest</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">return</span> service<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findLocation</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">}</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@GetMapping
+<span style="color:#8be9fd;font-style:italic">public</span> Response<span style="color:#ff79c6">&lt;</span>Items<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">control</span><span style="color:#ff79c6">(</span>
+        @GeoLocation <span style="color:#8be9fd;font-style:italic">final</span> Location location<span style="color:#ff79c6">,</span>
+        @AuthenticationPrincipal <span style="color:#8be9fd;font-style:italic">final</span> PrincipalDetailDto user<span style="color:#ff79c6">,</span>
+        @RequestBody @Valid <span style="color:#8be9fd;font-style:italic">final</span> RequestDto requestDto
+<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+    log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">debug</span><span style="color:#ff79c6">(</span>location<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">return</span> success<span style="color:#ff79c6">(</span>service<span style="color:#ff79c6">.</span><span style="color:#50fa7b">process</span><span style="color:#ff79c6">(</span>requestDto<span style="color:#ff79c6">));</span>
+<span style="color:#ff79c6">}</span>
+</code></pre></div><h1 id="덤으로-얻은-정확성">덤으로 얻은 정확성?</h1>
+<p>추가로 해결되었던 점은 정확성이었다.</p>
+<p>현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔다.
+확인해보니 ipapi에서 정확하지 않은 Geolocation 정보가 응답되고 있었다. 이는 ipapi만의 문제가 아니었다.</p>
+<p><img src="/images/network/ip-geolocation/iplocation-inaccuracy.png" alt=""></p>
+<p><em>네덜란드이거나 아제르바이잔이거나 | <a href="https://iplocation.io/">iplocation.io</a></em></p>
+<p><img src="/images/network/ip-geolocation/ipapi-inaccuracy.png" alt=""></p>
+<p><em>파나마 공화국이다 | <a href="https://ipapi.com/">ipapi</a></em></p>
+<p>우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었다.
+하지만 4달이 지난 현재(8월 29일)에도 업데이트되지 않았다.</p>
+<p>그렇다면 CDN Provider는 믿을 수 있을까?
+우리가 사용한 CDN은 Akamai이고, Akamai에서 제공하는 <strong>Akamai EdgeScape Methodology</strong> 문서(Akamai Control &gt;
+Download Center &gt; Core Features &gt; EdgeScape)를 보면 신뢰도가 높아보였다.</p>
+<blockquote>
+<p>&lt;Akamai EdgeScape Methodology&gt; - &ldquo;How Does Akamai Know the Location of an IP Address?&rdquo; 섹션 발췌 (ChatGPT를 통한 번역)</p>
+<ul>
+<li><strong>공공 등록 데이터</strong> 우리는 다양한 공공 인터넷 등록 기관과 ISP에 등록된 IP 블록에 대한 지리적 정보를 획득합니다. 이 정보는 데이터베이스의 기본 계층을 형성합니다. 이는 공개된 블록 주소에 대한 정보이므로, 다른 데이터 소스를 분석할 때 가장 신뢰도가 낮은 데이터로 간주합니다.</li>
+<li><strong>호스트 이름 패턴 매칭</strong> 인터넷상의 많은 기계(라우터, 서버, POP, 최종 사용자 기계 등)는 호스트 이름(역방향 DNS 항목)과 연결되어 있습니다. 많은 경우, 이 호스트 이름에는 기계의 위치를 암시하는 지리적 정보가 포함되어 있습니다. 다양한 네트워크와 ISP의 호스트 이름을 분석하여 이러한 이름에 내포된 지리적 정보를 추출할 수 있는 패턴 데이터베이스를 구축하고 지속적으로 추가하고 있습니다.</li>
+<li><strong>알려진 위치</strong> Akamai는 전 세계에 분산된 광범위한 서버 네트워크를 보유하고 있어 인근 기계의 위치를 결정할 때 데이터 포인트로 활용할 수 있습니다. 또한, 트래픽을 효율적으로 제공하기 위해 네트워크 및 고객과의 관계를 통해 서버 위치에 대한 유용한 정보를 얻습니다.</li>
+<li><strong>능동 측정</strong> Akamai의 광범위한 고객 기반 덕분에, 우리는 특정 시간에 인터넷상의 많은 &ldquo;활성&rdquo; 최종 사용자 IP를 알고 있습니다. 우리는 이러한 활성 IP에 글로벌 분산 네트워크의 다양한 지점에서 traceroute와 ping을 수행합니다. 또한 라우터와 인프라 서버와 같은 비최종 사용자 IP에 대해 제한된 수의 traceroute와 ping을 수행합니다.
+추적을 분석할 때, 위에서 설명한 호스트 이름 패턴 매칭을 통해 결정된 기계의 위치와 인터넷 등록 기관에서 제공된 지리적 정보를 사용하여 추적된 IP의 위치를 결정합니다. 추가로, 추적에 포함된 지연 시간 정보와 라우터에 대한 ping을 통해 수집된 지연 시간 정보를 사용하여 잘못된 데이터를 걸러내고 선택한 위치의 정확성을 높입니다.</li>
+<li><strong>경쟁사와의 차별화</strong> 우리의 경쟁사도 일부 동일한 방법을 사용하여 데이터베이스를 생성할 가능성이 있지만, 우리의 컨텐츠 전송 네트워크(CDN)의 방대한 규모와 범위, 그리고 이를 통해 제공되는 정보가 중요한 차별화 요소입니다. 또한, 네트워크 제공업체와의 관계, 방대한 고객 기반, 그리고 인터넷과 그 토폴로지에 대한 통찰력을 바탕으로 Akamai는 업계에서 독보적인 위치를 차지하고 있습니다.</li>
+</ul>
+</blockquote>
+<h2 id="제로-트러스트">제로 트러스트!</h2>
+<p>하지만 하루만에 문제가 발생했다.
+간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었다.
+확인해보니 Akamai에서 전달하는 <code>True-Client-IP</code> 헤더는 실제 한국 사용자 IP였고,
+<code>X-Akamai-EdgeScape</code> 헤더에는 미국(country_code=US),
+<code>X-Forwarded-For</code> 헤더<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>는 Akamai 엣지 서버의 IP가 전달되고 있었다.
+이 경우 <code>True-Client-IP</code>와 <code>X-Forwarded-For</code> 헤더가 달랐다.
+그래서 <strong><code>True-Client-IP</code>와 <code>X-Forwarded-For</code> 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐시하도록 설정했다.</strong>
+(CDN -&gt; ipapi -&gt; IPInfoDB 순)</p>
+<p>추가로 Apache에서 <code>RemoteIPHeader X-Forwarded-For</code> 설정이 있으면
+프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
+그래서 해당 설정을 빼고 <code>True-Client-IP</code>를 확인한다.</p>
+<p><em>다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 한다.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;VirtualHost</span> *:443<span style="color:#ff79c6">&gt;</span>
+    ServerName www.example.com
+    ProxyRequests Off
+    ProxyVia Off
+    ProxyPreserveHost On
+    # RemoteIPHeader X-Forwarded-For
+    ProxyAddHeaders On
+<span style="color:#ff79c6">&lt;/VirtualHost&gt;</span>
+</code></pre></div><h1 id="참조">참조</h1>
+<ul>
+<li>True-Client-IP 헤더
+<ul>
+<li><a href="https://techdocs.akamai.com/property-mgr/docs/origin-server#true-client-ip-header">Akamai | <code>True-Client-IP</code> 설정</a></li>
+<li><a href="https://developers.cloudflare.com/network/true-client-ip-header/">Cloudflare | <code>True-Client-IP</code> 설정</a></li>
+<li><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-true-client-ip-header.html">AWS CloudFront | <code>True-Client-IP</code> 헤더 추가하기</a></li>
+</ul>
+</li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For">X-Forwarded-For | mdn web docs</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader">Apache Module mod_remoteip</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2024-08-29</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/web/traceparent-datadog/">
+			Previous<br>Traceparent 헤더로 클라이언트부터 서버까지 추적하기
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%98%84%ec%83%81" class="nav-현상">
+									현상
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9b%90%ec%9d%b8" class="nav-원인">
+									원인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
+									해결
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ea%b5%ac%ed%98%84-%eb%b0%a9%eb%b2%95-spring-framework" class="nav-구현-방법-spring-framework">
+									구현 방법 (Spring Framework)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%a4%ec%9c%bc%eb%a1%9c-%ec%96%bb%ec%9d%80-%ec%a0%95%ed%99%95%ec%84%b1" class="nav-덤으로-얻은-정확성">
+									덤으로 얻은 정확성?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%9c%eb%a1%9c-%ed%8a%b8%eb%9f%ac%ec%8a%a4%ed%8a%b8" class="nav-제로-트러스트">
+									제로 트러스트!
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
+									참조
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
