@@ -408,31 +408,39 @@
                     <h1 id="현상">현상</h1>
 <p>약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했다.</p>
 <h1 id="원인">원인</h1>
-<p><img src="/images/network/ip-geolocation/ipapi-latency.png" alt=""></p>
-<p>해당 비즈니스 로직에는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 얻는 작업을 가장 먼저 하고 있다.
-국가 정보를 얻는 곳은 IP-API라는 유료 API 서비스와 IPInfoDB를 사용하고 있다.
+<p><img src="/images/network/ip-geolocation/ipapi-latency.png" alt="ipapi Latency"></p>
+<p>해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 조회하는 기능이 가장 먼저 수행되고 있다.
+국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다.
 대략적인 코드는 다음과 같다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Cacheable<span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">=</span> CacheName<span style="color:#ff79c6">.</span><span style="color:#50fa7b">IPAPI_COUNTRY_CODE</span><span style="color:#ff79c6">,</span> key <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;#ipAddress&#34;</span><span style="color:#ff79c6">)</span>
 <span style="color:#8be9fd;font-style:italic">public</span> Geolocation <span style="color:#50fa7b">findIsoCountryCode</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> String ipAddress<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
     <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>isPrivate<span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
         <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">korea</span><span style="color:#ff79c6">();</span>
     <span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">return</span> ipapiFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPAPI_ACCESS_KEY<span style="color:#ff79c6">);</span>
+    var ipapi <span style="color:#ff79c6">=</span> ipapiFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPAPI_ACCESS_KEY<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ipapi <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">from</span><span style="color:#ff79c6">(</span>ipapi<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">}</span>
+    var ipInfoDB <span style="color:#ff79c6">=</span> ipInfoDBFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPINFODB_ACCESS_KEY<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ipInfoDB <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">from</span><span style="color:#ff79c6">(</span>ipInfoDB<span style="color:#ff79c6">);</span>
+    <span style="color:#ff79c6">}</span>
+    <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">korea</span><span style="color:#ff79c6">();</span>
 <span style="color:#ff79c6">}</span>
 </code></pre></div><p>문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것이다.</p>
 <h1 id="해결">해결</h1>
 <p>이를 해결하기 위해 캐싱도 해봤지만 처음 접속한 IP의 경우 조회가 발생할 수 밖에 없었고,
-결정적으로 이렇게 처음 접속한 IP가 매우 많았다(월 130만 건 정도)는 것이다.</p>
-<p>이 문제는 생각보다 간단하게 해결할 수 있다.
-CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있다.</p>
+결정적으로 이렇게 처음 접속한 IP가 매우 많았다(약 130만 건/월)는 것이다.</p>
+<p>이 문제는 생각보다 간단하게 해결할 수 있었다.
+CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있는데,
+이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었다.</p>
 <ul>
-<li>Akamai의 EdgeScape 기능을 활성화하면 <code>X-Akamai-Edgescape</code> 헤더로
+<li><strong>Akamai</strong>의 EdgeScape 기능을 활성화하면 <code>X-Akamai-Edgescape</code> 헤더로
 <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">국가 코드 2자리(ISO 3166-1 alpha-2)</a>를 확인할 수 있다.</li>
-<li><a href="https://developers.cloudflare.com/network/ip-geolocation/">CloudFlare의 문서</a>를 확인해보면
+<li><a href="https://developers.cloudflare.com/network/ip-geolocation/"><strong>CloudFlare</strong>의 문서</a>를 확인해보면
 관련 기능을 활성화 했을 경우 <code>CF-IPCountry</code> 헤더로 확인할 수 있다고 한다.</li>
-<li>Amazon CloudFront도 <code>CloudFront-Viewer-Country</code> 헤더로 확인할 수 있다고 한다.</li>
+<li><strong>Amazon CloudFront</strong>도 <code>CloudFront-Viewer-Country</code> 헤더로 확인할 수 있다고 한다.</li>
 </ul>
-<p>이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었다.</p>
 <h2 id="구현-방법-spring-framework">구현 방법 (Spring Framework)</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">PARAMETER</span><span style="color:#ff79c6">)</span>
 @Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
@@ -498,7 +506,7 @@ CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻
 <p>우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었다.
 하지만 4달이 지난 현재(8월 29일)에도 업데이트되지 않았다.</p>
 <p>그렇다면 CDN Provider는 믿을 수 있을까?
-우리가 사용한 CDN은 Akamai이고, Akamai에서 제공하는 <strong>Akamai EdgeScape Methodology</strong> 문서(Akamai Control &gt;
+우리가 사용한 CDN은 Akamai이고, Akamai에서 제공하는 <em>Akamai EdgeScape Methodology</em> 문서(Akamai Control &gt;
 Download Center &gt; Core Features &gt; EdgeScape)를 보면 신뢰도가 높아보였다.</p>
 <blockquote>
 <p>&lt;Akamai EdgeScape Methodology&gt; - &ldquo;How Does Akamai Know the Location of an IP Address?&rdquo; 섹션 발췌 (ChatGPT를 통한 번역)</p>
@@ -513,16 +521,16 @@ Download Center &gt; Core Features &gt; EdgeScape)를 보면 신뢰도가 높아
 </blockquote>
 <h2 id="제로-트러스트">제로 트러스트!</h2>
 <p>하지만 하루만에 문제가 발생했다.
-간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었다.
-확인해보니 Akamai에서 전달하는 <code>True-Client-IP</code> 헤더는 실제 한국 사용자 IP였고,
+간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었다.</p>
+<p>확인해보니 Akamai에서 전달하는 <code>True-Client-IP</code> 헤더는 실제 한국 사용자 IP였고,
 <code>X-Akamai-EdgeScape</code> 헤더에는 미국(country_code=US),
 <code>X-Forwarded-For</code> 헤더<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>는 Akamai 엣지 서버의 IP가 전달되고 있었다.
 이 경우 <code>True-Client-IP</code>와 <code>X-Forwarded-For</code> 헤더가 달랐다.
-그래서 <strong><code>True-Client-IP</code>와 <code>X-Forwarded-For</code> 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐시하도록 설정했다.</strong>
+그래서 <strong><code>True-Client-IP</code>와 <code>X-Forwarded-For</code> 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐싱하도록 설정했다.</strong>
 (CDN -&gt; ipapi -&gt; IPInfoDB 순)</p>
 <p>추가로 Apache에서 <code>RemoteIPHeader X-Forwarded-For</code> 설정이 있으면
 프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
-그래서 해당 설정을 빼고 <code>True-Client-IP</code>를 확인한다.</p>
+그래서 해당 설정을 제거했다.</p>
 <p><em>다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 한다.</em></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;VirtualHost</span> *:443<span style="color:#ff79c6">&gt;</span>
     ServerName www.example.com
