@@ -25,7 +25,7 @@
 &lt;p&gt;약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했다.&lt;/p&gt;
 &lt;h1 id=&#34;원인&#34;&gt;원인&lt;/h1&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-latency.png&#34; alt=&#34;ipapi Latency&#34;&gt;&lt;/p&gt;
-&lt;p&gt;해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 조회하는 기능이 가장 먼저 수행되고 있다.
+&lt;p&gt;해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;를 조회하는 기능이 가장 먼저 수행되고 있다.
 국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다.
 대략적인 코드는 다음과 같다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;@Cacheable&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;value &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; CacheName&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;IPAPI_COUNTRY_CODE&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;,&lt;/span&gt; key &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;#ipAddress&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
@@ -51,11 +51,9 @@
 CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있는데,
 이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Akamai&lt;/strong&gt;의 EdgeScape 기능을 활성화하면 &lt;code&gt;X-Akamai-Edgescape&lt;/code&gt; 헤더로
-&lt;a href=&#34;https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2&#34;&gt;국가 코드 2자리(ISO 3166-1 alpha-2)&lt;/a&gt;를 확인할 수 있다.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/ip-geolocation/&#34;&gt;&lt;strong&gt;CloudFlare&lt;/strong&gt;의 문서&lt;/a&gt;를 확인해보면
-관련 기능을 활성화 했을 경우 &lt;code&gt;CF-IPCountry&lt;/code&gt; 헤더로 확인할 수 있다고 한다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Amazon CloudFront&lt;/strong&gt;도 &lt;code&gt;CloudFront-Viewer-Country&lt;/code&gt; 헤더로 확인할 수 있다고 한다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Akamai&lt;/strong&gt;는 EdgeScape 기능을 활성화하면 &lt;code&gt;X-Akamai-Edgescape&lt;/code&gt; 헤더로 확인할 수 있다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CloudFlare&lt;/strong&gt;는 관련 기능을 활성화 했을 경우 &lt;code&gt;CF-IPCountry&lt;/code&gt; 헤더로 확인할 수 있다고 한다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Amazon CloudFront&lt;/strong&gt;는 &lt;code&gt;CloudFront-Viewer-Country&lt;/code&gt; 헤더로 확인할 수 있다고 한다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;구현-방법-spring-framework&#34;&gt;구현 방법 (Spring Framework)&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;@Target&lt;span style=&#34;color:#ff79c6&#34;&gt;(&lt;/span&gt;ElementType&lt;span style=&#34;color:#ff79c6&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#50fa7b&#34;&gt;PARAMETER&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;)&lt;/span&gt;
@@ -115,9 +113,9 @@ CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻
 &lt;p&gt;추가로 해결되었던 점은 정확성이었다.&lt;/p&gt;
 &lt;p&gt;현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔다.
 확인해보니 ipapi에서 정확하지 않은 Geolocation 정보가 응답되고 있었다. 이는 ipapi만의 문제가 아니었다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/iplocation-inaccuracy.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/iplocation-inaccuracy.png&#34; alt=&#34;iplocation inaccuracy&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;네덜란드이거나 아제르바이잔이거나 | &lt;a href=&#34;https://iplocation.io/&#34;&gt;iplocation.io&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-inaccuracy.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-inaccuracy.png&#34; alt=&#34;ipapi inaccuracy&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;파나마 공화국이다 | &lt;a href=&#34;https://ipapi.com/&#34;&gt;ipapi&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었다.
 하지만 4달이 지난 현재(8월 29일)에도 업데이트되지 않았다.&lt;/p&gt;
@@ -140,12 +138,12 @@ Download Center &amp;gt; Core Features &amp;gt; EdgeScape)를 보면 신뢰도�
 간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었다.&lt;/p&gt;
 &lt;p&gt;확인해보니 Akamai에서 전달하는 &lt;code&gt;True-Client-IP&lt;/code&gt; 헤더는 실제 한국 사용자 IP였고,
 &lt;code&gt;X-Akamai-EdgeScape&lt;/code&gt; 헤더에는 미국(country_code=US),
-&lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;는 Akamai 엣지 서버의 IP가 전달되고 있었다.
+&lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;는 Akamai 엣지 서버의 IP가 전달되고 있었다.
 이 경우 &lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 달랐다.
 그래서 &lt;strong&gt;&lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐싱하도록 설정했다.&lt;/strong&gt;
 (CDN -&amp;gt; ipapi -&amp;gt; IPInfoDB 순)&lt;/p&gt;
 &lt;p&gt;추가로 Apache에서 &lt;code&gt;RemoteIPHeader X-Forwarded-For&lt;/code&gt; 설정이 있으면
-프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;
 그래서 해당 설정을 제거했다.&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 한다.&lt;/em&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;lt;VirtualHost&lt;/span&gt; *:443&lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt;
@@ -170,10 +168,22 @@ Download Center &amp;gt; Core Features &amp;gt; EdgeScape)를 보면 신뢰도�
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For&#34;&gt;X-Forwarded-For | mdn web docs&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;조회하는 정보는 &lt;a href=&#34;https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2&#34;&gt;국가 코드 2자리(ISO 3166-1 alpha-2)&lt;/a&gt;다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader&#34;&gt;Apache Module mod_remoteip&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://techdocs.akamai.com/property-mgr/docs/content-tgting&#34;&gt;Content Targeting (EdgeScape)&lt;/a&gt; | Akamai&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/ip-geolocation/&#34;&gt;IP geolocation&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/adding-cloudfront-headers.html&#34;&gt;Add CloudFront request headers&lt;/a&gt; | Amazon CloudFront&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For&#34;&gt;X-Forwarded-For&lt;/a&gt; | mdn web docs&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader&#34;&gt;Apache Module mod_remoteip&lt;/a&gt; | Apache&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;

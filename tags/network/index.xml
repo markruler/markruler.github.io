@@ -17,7 +17,7 @@
       <author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/network/ip-geolocation/</guid>
       <description>현상 약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했다.
-원인 해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 조회하는 기능이 가장 먼저 수행되고 있다. 국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다. 대략적인 코드는 다음과 같다.
+원인 해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보1를 조회하는 기능이 가장 먼저 수행되고 있다. 국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다. 대략적인 코드는 다음과 같다.
 @Cacheable(value = CacheName.IPAPI_COUNTRY_CODE, key = &amp;#34;#ipAddress&amp;#34;) public Geolocation findIsoCountryCode(final String ipAddress) { if (isPrivate(ipAddress)) { return Geolocation.korea(); } var ipapi = ipapiFeignClient.findGeolocationByIpAddress(ipAddress, IPAPI_ACCESS_KEY); if (ipapi != null) { return Geolocation.from(ipapi); } var ipInfoDB = ipInfoDBFeignClient.</description>
     </item>
     

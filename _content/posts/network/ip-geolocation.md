@@ -21,7 +21,7 @@ categories:
 
 ![ipapi Latency](/images/network/ip-geolocation/ipapi-latency.png)
 
-해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보를 조회하는 기능이 가장 먼저 수행되고 있다.
+해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보[^1]를 조회하는 기능이 가장 먼저 수행되고 있다.
 국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다.
 대략적인 코드는 다음과 같다.
 
@@ -54,11 +54,9 @@ public Geolocation findIsoCountryCode(final String ipAddress) {
 CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있는데,
 이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었다.
 
-- **Akamai**의 EdgeScape 기능을 활성화하면 `X-Akamai-Edgescape` 헤더로
-  [국가 코드 2자리(ISO 3166-1 alpha-2)](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)를 확인할 수 있다.
-- [**CloudFlare**의 문서](https://developers.cloudflare.com/network/ip-geolocation/)를 확인해보면
-  관련 기능을 활성화 했을 경우 `CF-IPCountry` 헤더로 확인할 수 있다고 한다.
-- **Amazon CloudFront**도 `CloudFront-Viewer-Country` 헤더로 확인할 수 있다고 한다.
+- **Akamai**는 EdgeScape 기능을 활성화하면 `X-Akamai-Edgescape` 헤더로 확인할 수 있다.[^2]
+- **CloudFlare**는 관련 기능을 활성화 했을 경우 `CF-IPCountry` 헤더로 확인할 수 있다고 한다.[^3]
+- **Amazon CloudFront**는 `CloudFront-Viewer-Country` 헤더로 확인할 수 있다고 한다.[^4]
 
 ## 구현 방법 (Spring Framework)
 
@@ -131,11 +129,11 @@ public Response<Items> control(
 현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔다.
 확인해보니 ipapi에서 정확하지 않은 Geolocation 정보가 응답되고 있었다. 이는 ipapi만의 문제가 아니었다.
 
-![](/images/network/ip-geolocation/iplocation-inaccuracy.png)
+![iplocation inaccuracy](/images/network/ip-geolocation/iplocation-inaccuracy.png)
 
 *네덜란드이거나 아제르바이잔이거나 | [iplocation.io](https://iplocation.io/)*
 
-![](/images/network/ip-geolocation/ipapi-inaccuracy.png)
+![ipapi inaccuracy](/images/network/ip-geolocation/ipapi-inaccuracy.png)
 
 *파나마 공화국이다 | [ipapi](https://ipapi.com/)*
 
@@ -161,13 +159,13 @@ Download Center > Core Features > EdgeScape)를 보면 신뢰도가 높아보였
 
 확인해보니 Akamai에서 전달하는 `True-Client-IP` 헤더는 실제 한국 사용자 IP였고,
 `X-Akamai-EdgeScape` 헤더에는 미국(country_code=US),
-`X-Forwarded-For` 헤더[^1]는 Akamai 엣지 서버의 IP가 전달되고 있었다.
+`X-Forwarded-For` 헤더[^5]는 Akamai 엣지 서버의 IP가 전달되고 있었다.
 이 경우 `True-Client-IP`와 `X-Forwarded-For` 헤더가 달랐다.
 그래서 **`True-Client-IP`와 `X-Forwarded-For` 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐싱하도록 설정했다.**
 (CDN -> ipapi -> IPInfoDB 순)
 
 추가로 Apache에서 `RemoteIPHeader X-Forwarded-For` 설정이 있으면
-프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.[^2]
+프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.[^6]
 그래서 해당 설정을 제거했다.
 
 *다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 한다.*
@@ -190,5 +188,9 @@ Download Center > Core Features > EdgeScape)를 보면 신뢰도가 높아보였
   - [Cloudflare | `True-Client-IP` 설정](https://developers.cloudflare.com/network/true-client-ip-header/)
   - [AWS CloudFront | `True-Client-IP` 헤더 추가하기](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-true-client-ip-header.html)
 
-[^1]: [X-Forwarded-For | mdn web docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For)
-[^2]: [Apache Module mod_remoteip](https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader)
+[^1]: 조회하는 정보는 [국가 코드 2자리(ISO 3166-1 alpha-2)](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2)다.
+[^2]: [Content Targeting (EdgeScape)](https://techdocs.akamai.com/property-mgr/docs/content-tgting) | Akamai
+[^3]: [IP geolocation](https://developers.cloudflare.com/network/ip-geolocation/) | Cloudflare
+[^4]: [Add CloudFront request headers](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/adding-cloudfront-headers.html) | Amazon CloudFront
+[^5]: [X-Forwarded-For](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For) | mdn web docs
+[^6]: [Apache Module mod_remoteip](https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader) | Apache
