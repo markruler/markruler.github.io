@@ -163,18 +163,18 @@ MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것�
 &lt;h1 id=&#34;1-virtualized-infrastructure-manager-vim&#34;&gt;1. Virtualized Infrastructure Manager (VIM)&lt;/h1&gt;
 &lt;p&gt;VIM은 &lt;code&gt;하나의 도메인&lt;/code&gt;에서 NFVI 리소스를 관리합니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;NFVI는 NFV 환경의 물리 자원(서버, 스토리지 등), 가상 자원(가상 머신), 소프트웨어 자원(하이퍼바이저)을 포함하는 NFV 인프라입니다.&lt;/li&gt;
+&lt;li&gt;NFVI는 NFV 환경의 물리 자원(서버, 스토리지 등), 가상 자원(가상 머신), 소프트웨어 자원(하이퍼바이저)을 포함하는 NFV 인프라(Network Functions Virtualization Infrastructure)입니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;여기에서 &lt;code&gt;하나의 도메인&lt;/code&gt;이라는 단어를 기억하세요.
-NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 있을 수 있습니다.
+NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 &lt;code&gt;multiple VIM&lt;/code&gt;이 있을 수 있습니다.
 오케스트레이터 섹션에서 다시 볼 것이므로 &lt;code&gt;multiple VIM&lt;/code&gt;이라는 개념을 염두에 두세요.&lt;/p&gt;
-&lt;p&gt;그렇다면 VIM이 처리하는 일반적인 태스크는 무엇일까요?&lt;/p&gt;
-&lt;p&gt;다음과 같은 태스크를 처리합니다.&lt;/p&gt;
+&lt;p&gt;그렇다면 VIM이 일반적으로 처리하는 작업은 무엇일까요?&lt;/p&gt;
+&lt;p&gt;다음과 같은 작업을 처리합니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;NFVI 도메인에 있는 가상 자원의 라이프사이클 관리. 즉, NFVI 도메인의 물리 자원으로부터 VM(가상 머신)을 생성, 유지, 해제하는 것&lt;/li&gt;
 &lt;li&gt;물리 자원과 연결된 가상 머신(VM) 목록 유지&lt;/li&gt;
 &lt;li&gt;하드웨어, 소프트웨어, 가상 자원의 성능 및 장애 관리&lt;/li&gt;
-&lt;li&gt;노스바운드 API를 유지하여 물리/가상 자원을 다른 관리 시스템에 노출&lt;/li&gt;
+&lt;li&gt;Northbound API를 유지하여 물리/가상 자원을 다른 관리 시스템에 노출&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;2-virtual-network-function-manager-vnfm&#34;&gt;2. Virtual Network Function Manager (VNFM)&lt;/h1&gt;
 &lt;p&gt;VIM이 NFVI을 위한 것이라면 VNFM은 VNF을 위한 것입니다.&lt;/p&gt;
@@ -189,7 +189,7 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 �
 &lt;li&gt;VNF를 스케일 업/다운하여 CPU 사용량을 스케일 업/다운&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;별도의 VNF를 관리하는 VNFM이 여러 개 있을 수도 있고,
-여러 VNF를 관리하는 하나의 VNFM이 있을 수도 있다.&lt;/p&gt;
+여러 VNF를 관리하는 하나의 VNFM이 있을 수도 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;3-nfv-orchestrator-nfvo&#34;&gt;3. NFV Orchestrator (NFVO)&lt;/h1&gt;
 &lt;p&gt;위의 섹션 1과 2를 살펴보셨다면 NFVO가 왜 필요한지 알 수 있을 것입니다.&lt;/p&gt;
 &lt;p&gt;위의 섹션 1에서 보았듯이, 각각의 NFVI 도메인을 관리하는 VIM이 여러 개 있을 수 있습니다. 이것은 &lt;code&gt;과제 1&lt;/code&gt;을 만듭니다.&lt;/p&gt;
@@ -206,7 +206,7 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 �
 &lt;p&gt;이러한 과제는 NFVO의 다음 두 가지 기능이 해결해 줍니다.&lt;/p&gt;
 &lt;h2 id=&#34;resource-orchestration&#34;&gt;Resource Orchestration&lt;/h2&gt;
 &lt;p&gt;NFVO는 서로 다른 PoP 간에 또는 하나의 PoP 내에서 NFVI 자원을 조정, 승인, 해제, 결합합니다.
-이는 NFVI 자원을 직접 사용하는 대신 노스바운드 API를 통해 VIM과 직접 연결함으로써 수행합니다.&lt;/p&gt;
+이는 NFVI 자원을 직접 사용하는 대신 Northbound API를 통해 VIM과 직접 연결함으로써 수행합니다.&lt;/p&gt;
 &lt;p&gt;이 기능은 서로 다른 VIM의 자원 할당하는 &lt;code&gt;과제 1&lt;/code&gt;을 직접 해결합니다.&lt;/p&gt;
 &lt;h2 id=&#34;service-orchestration&#34;&gt;Service Orchestration&lt;/h2&gt;
 &lt;p&gt;서비스 오케스트레이션은 서로 다른 VNF(다른 VNFM이 관리할 수 있는) 간에 종단 간 서비스를 생성하는 &lt;code&gt;과제 2&lt;/code&gt;를 해결합니다.&lt;/p&gt;
@@ -220,14 +220,15 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 여러 VIM이 �
 &lt;p&gt;NFVO가 서로 다른 기능을 결합하고 서로 다른 방법으로 분산된 NFV 환경에서 종단 간 서비스를 생성하며 자원을 조정하는,
 NFV의 접착제와 같다는 점을 알 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;4-repositories&#34;&gt;4. Repositories&lt;/h1&gt;
-&lt;p&gt;NFV MANO에서 서로 다른 정보를 저장하는 리포지토리(파일/목록)를 이해하는 것이 매우 중요합니다.
+&lt;p&gt;NFV MANO에서 서로 다른 정보를 저장하는 리포지토리(파일/목록)를 이해하는 것은 매우 중요합니다.
 리포지토리에는 네 가지 유형이 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;vnf-catalog&#34;&gt;VNF Catalog&lt;/h2&gt;
 &lt;p&gt;VNF 카탈로그는 사용 가능한 모든 VNFD(VNF Descriptor)의 저장소입니다.&lt;/p&gt;
-&lt;p&gt;VNFD는 VNF의 배포 및 동작 요구 사항 측면에서 VNF를 설명하는 배포 템플릿입니다.
+&lt;p&gt;VNFD는 VNF의 배포 및 동작 요구 사항 측면에서 VNF를 설명하는 배포 템플릿(deployment template)입니다.
 주로 VNFM이 VNF 인스턴스화 및 VNF 인스턴스의 라이프사이클 관리 프로세스에서 사용합니다.
-VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상화된 자원을 관리 및 조정하는데도 사용됩니다.&lt;/p&gt;
+VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상화된 자원을 관리 및 조정하는 데도 사용됩니다.&lt;/p&gt;
 &lt;blockquote&gt;
+&lt;p&gt;[역주] 예시&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf&#34;&gt;VNF Descriptor (VNFD) Overview | ETSI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html&#34;&gt;VNF Descriptor Template Guide | Openstack&lt;/a&gt;&lt;/li&gt;
@@ -250,21 +251,28 @@ VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행합니�
 장애 관리(fault management) 측면에서 VNF를 실행하는 데 문제가 있으면 VNFM이 보고하지만,
 기능과 관련된 장애인 경우(예: 모바일 코어에서 일부 신호 전달 문제) EM이 보고합니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;델타(delta): 수학에서 &lt;code&gt;&#39;차이&#39;&lt;/code&gt;, &lt;code&gt;&#39;변화&#39;&lt;/code&gt;를 나타냄&lt;/p&gt;
+&lt;p&gt;델타(delta): 수학에서 &lt;code&gt;&#39;차이&#39;&lt;/code&gt;, &lt;code&gt;&#39;변화&#39;&lt;/code&gt;를 나타냄.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;VNFM은 운영자가 모든 종류의 FCAPS(가상 + 기능)에 대해 단일 GUI를 사용하고자 하는 경우에 대비하여 EM에 인터페이스를 노출시킵니다.&lt;/p&gt;
 &lt;h1 id=&#34;6-ossbss&#34;&gt;6. OSS/BSS&lt;/h1&gt;
 &lt;p&gt;OSS/BSS는 서비스 사업자가 사업을 운영하기 위해 사용하는 시스템/애플리케이션 모음을 포함합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;OSS: Operations Support Systems&lt;/li&gt;
+&lt;li&gt;BSS: Business Support Systems&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;NFV는 OSS/BSS와 같이 동작해야 합니다.&lt;/p&gt;
 &lt;p&gt;원칙적으로는 VNF와 NFVI를 직접 관리하기 위해 기존 OSS/BSS의 기능을 확장할 수 있지만,
-그것은 벤더의 독점적 구현일 수 있습니다(적어도 현재까지는 ETSI가 EM과 VNF 간의 인터페이스는 정의하지 않았습니다).
-NFV는 개방형 플랫폼(open platform)이기 때문에 (MANO처럼) 개방형 인터페이스를 통해 NFV 엔터티를 관리하는 것이 더 타당합니다.&lt;/p&gt;
+그것은 벤더의 독점적 구현일 수 있습니다.
+(적어도 현재까지는 ETSI가 EM과 VNF 간의 인터페이스는 정의하지 않았습니다.)
+NFV는 오픈 플랫폼(open platform)이기 때문에 MANO처럼 오픈 인터페이스(open interfaces)를 통해 NFV 엔터티를 관리하는 것이 더 타당합니다.&lt;/p&gt;
 &lt;p&gt;그러나 기존의 OSS/BBS는 NFV MANO의 특정 구현으로 인해 지원되지 않는 경우,
 추가 기능을 제공함으로써 NFV MANO에 부가 가치를 만들 수 있습니다.
-이는 NFV MANO와 기존 OSS/BSS 사이의 개방형 참조점(Or-Ma-NFVO)을 통해 이루어집니다.&lt;/p&gt;
+이는 NFV MANO와 기존 OSS/BSS 사이의 &lt;a href=&#34;https://telcocloudbridge.com/blog/open-ran-tutorial/&#34;&gt;오픈 참조점(open reference point)&lt;/a&gt;(Or-Ma-NFVO)을 통해 이루어집니다.&lt;/p&gt;
 &lt;h1 id=&#34;7-reference-points&#34;&gt;7. Reference Points&lt;/h1&gt;
 &lt;p&gt;마지막으로 &lt;code&gt;참조점&lt;/code&gt;에 대해 언급할 가치가 있습니다.&lt;/p&gt;
-&lt;p&gt;MANO에는 그림과 같이 기능 블록 간의 상호 연결점으로 표시되는 여러 참조점이 있습니다.
+&lt;p&gt;MANO에는 그림과 같이 기능 블록 간의 연결 포인트(interconnection point)로 표시되는 여러 참조점이 있습니다.
 Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
 &lt;p&gt;왜 MANO는 그들을 인터페이스가 아닌 참조점이라고 부를까요?&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;인터페이스&lt;/code&gt;가 엔터티 간의 양방향 통신을 허용하는 것과 관련이 있기 때문에 MANO는 참조점을 인터페이스라고 부르지 않습니다.
