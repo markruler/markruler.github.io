@@ -190,7 +190,7 @@ OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 `java.net.Socke
 # 해결
 
 `OkHttp ConnectionPool`을 재사용하기 위해 Spring Bean으로 등록했다.
-**이는 [공식 문서](https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/)에도 있는 내용이다.**
+**이는 [공식 문서](https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/index.html)에도 있는 내용이다.**
 
 > **OkHttpClients Should Be Shared**
 >\
