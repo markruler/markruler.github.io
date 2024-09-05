@@ -6,7 +6,7 @@ languageCode = "ko-kr"
 title = "임창수 블로그" # will set 'og:site_name'
 copyright = "Im Changsu 2020 - 2024"
 enableRobotsTXT = true
-theme = "hugo-theme-diary"
+theme = [ "hugo-theme-diary" ]
 # googleAnalytics = "60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc"
 
 [author]
@@ -44,7 +44,7 @@ series = "series"
     autoHeadingIDType = "github"
   [markup.goldmark.renderer]
     hardWraps = false
-    unsafe = false
+    unsafe = true # for raw HTML tag (ex: video)
     xhtml = false
 [markup.blackFriday]
   hrefTargetBlank = false

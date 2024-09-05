@@ -112,7 +112,7 @@ git submodule add -b main git@github.com:AmazingRise/hugo-theme-diary.git themes
 ```
 
 ```sh
-hugo --contentDir content --theme hugo-theme-diary --destination .
+hugo --contentDir content --destination .
 ```
 
 ```sh

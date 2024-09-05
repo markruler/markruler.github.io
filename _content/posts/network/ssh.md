@@ -3,8 +3,8 @@ date: 2024-07-17T22:40:00+09:00
 lastmod: 2024-08-28T22:42:00+09:00
 title: "일상에서의 SSH"
 description: "Secure Shell"
-featured_image: "/images/network/ssh/dall-e-ssh.webp"
-images: ["/images/network/ssh/dall-e-ssh.webp"]
+featured_image: "/images/network/ssh/pexels-mo-eid-1268975-8347500.jpg"
+images: ["/images/network/ssh/pexels-mo-eid-1268975-8347500.jpg"]
 tags:
   - network
   - shell

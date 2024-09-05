@@ -49,5 +49,5 @@ deploy: build
 
 run:
 	@echo "Run the site..."
-	hugo server --contentDir _content --theme hugo-theme-diary
+	hugo server --contentDir _content
 .PHONY: run
