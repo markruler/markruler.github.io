@@ -1,8 +1,8 @@
 ---
 date: 2024-07-25T01:22:00+09:00
 lastmod: 2024-07-25T01:22:00+09:00
-title: "APM만큼 네트워크 모니터링도 중요하다"
-description: "APM에서 엉뚱한 걸 찾았던 실수"
+title: "APM만큼 중요한 네트워크 모니터링"
+description: "네트워크 장비 문제로 인한 레이턴시 증가 사례"
 featured_image: "/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.jpg"
 images: ["/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.jpg"]
 tags:
