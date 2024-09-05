@@ -268,17 +268,36 @@ CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻
 &lt;p&gt;우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었다.
 하지만 4달이 지난 현재(8월 29일)에도 업데이트되지 않았다.&lt;/p&gt;
 &lt;p&gt;그렇다면 CDN Provider는 믿을 수 있을까?
-우리가 사용한 CDN은 Akamai이고, Akamai에서 제공하는 &lt;em&gt;Akamai EdgeScape Methodology&lt;/em&gt; 문서(Akamai Control &amp;gt;
-Download Center &amp;gt; Core Features &amp;gt; EdgeScape)를 보면 신뢰도가 높아보였다.&lt;/p&gt;
+내가 사용하는 Akamai 문서를 보면 신뢰도가 높아보였다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;lt;Akamai EdgeScape Methodology&amp;gt; - &amp;ldquo;How Does Akamai Know the Location of an IP Address?&amp;rdquo; 섹션 발췌 (ChatGPT를 통한 번역)&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;How Does Akamai Know the Location of an IP Address?&amp;rdquo; | &amp;lt;Akamai EdgeScape Methodology&amp;gt; 발췌&lt;/p&gt;
+&lt;p&gt;(Akamai Control &amp;gt; Download Center &amp;gt; Core Features &amp;gt; EdgeScape)&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;공공 등록 데이터&lt;/strong&gt; 우리는 다양한 공공 인터넷 등록 기관과 ISP에 등록된 IP 블록에 대한 지리적 정보를 획득합니다. 이 정보는 데이터베이스의 기본 계층을 형성합니다. 이는 공개된 블록 주소에 대한 정보이므로, 다른 데이터 소스를 분석할 때 가장 신뢰도가 낮은 데이터로 간주합니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;호스트 이름 패턴 매칭&lt;/strong&gt; 인터넷상의 많은 기계(라우터, 서버, POP, 최종 사용자 기계 등)는 호스트 이름(역방향 DNS 항목)과 연결되어 있습니다. 많은 경우, 이 호스트 이름에는 기계의 위치를 암시하는 지리적 정보가 포함되어 있습니다. 다양한 네트워크와 ISP의 호스트 이름을 분석하여 이러한 이름에 내포된 지리적 정보를 추출할 수 있는 패턴 데이터베이스를 구축하고 지속적으로 추가하고 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;알려진 위치&lt;/strong&gt; Akamai는 전 세계에 분산된 광범위한 서버 네트워크를 보유하고 있어 인근 기계의 위치를 결정할 때 데이터 포인트로 활용할 수 있습니다. 또한, 트래픽을 효율적으로 제공하기 위해 네트워크 및 고객과의 관계를 통해 서버 위치에 대한 유용한 정보를 얻습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;능동 측정&lt;/strong&gt; Akamai의 광범위한 고객 기반 덕분에, 우리는 특정 시간에 인터넷상의 많은 &amp;ldquo;활성&amp;rdquo; 최종 사용자 IP를 알고 있습니다. 우리는 이러한 활성 IP에 글로벌 분산 네트워크의 다양한 지점에서 traceroute와 ping을 수행합니다. 또한 라우터와 인프라 서버와 같은 비최종 사용자 IP에 대해 제한된 수의 traceroute와 ping을 수행합니다.
-추적을 분석할 때, 위에서 설명한 호스트 이름 패턴 매칭을 통해 결정된 기계의 위치와 인터넷 등록 기관에서 제공된 지리적 정보를 사용하여 추적된 IP의 위치를 결정합니다. 추가로, 추적에 포함된 지연 시간 정보와 라우터에 대한 ping을 통해 수집된 지연 시간 정보를 사용하여 잘못된 데이터를 걸러내고 선택한 위치의 정확성을 높입니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;경쟁사와의 차별화&lt;/strong&gt; 우리의 경쟁사도 일부 동일한 방법을 사용하여 데이터베이스를 생성할 가능성이 있지만, 우리의 컨텐츠 전송 네트워크(CDN)의 방대한 규모와 범위, 그리고 이를 통해 제공되는 정보가 중요한 차별화 요소입니다. 또한, 네트워크 제공업체와의 관계, 방대한 고객 기반, 그리고 인터넷과 그 토폴로지에 대한 통찰력을 바탕으로 Akamai는 업계에서 독보적인 위치를 차지하고 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Public Registry Data&lt;/strong&gt;
+We obtain geographic information for the IP blocks registered with the various public Internet registries and ISPs. This information forms the base layer of the database.
+As this is public information registered for blocks of addresses, we trust this data the least when analyzing the different sources of data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hostname Pattern Matching&lt;/strong&gt;
+Many machines on the Internet (routers, servers, POPs, and even end-user machines) have a hostname (reverse DNS entry) associated with them.
+In many cases, these hostnames contain geographic information hinting at the location of that machine.
+By analyzing hostnames from different networks and ISPs, we have built up, and continue to add to,
+a database of patterns that allows us to extract the geographic information embedded in these names.
+It also allows us to extrapolate the location of other machines on the Internet,
+by giving us data points that can be used when tracing to other IPs.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Known Locations&lt;/strong&gt;
+Akamai has an extensive network of servers distributed across the globe, which act as data points when determining the location of machines nearby.
+We also have relationships with networks and customers all over the world.
+In order to serve their traffic efficiently, we sometimes get useful information from them regarding the location of their servers,
+which we can also use as data points in creating our geographic database.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Active Measurement&lt;/strong&gt;
+Due to Akamai&amp;rsquo;s extensive customer base, we have the unique ability to know at any given time a large fraction of &amp;ldquo;active&amp;rdquo; end-user IPs on the net.
+We then perform traceroutes and pings from various points on our globally distributed network to these active IPs.
+We also perform a reduced number of traces and pings to IPs in the non end-user space, such as routers and infrastructure servers.&lt;br&gt;
+&lt;br&gt;
+When analyzing the traces, we use the location of machines determined using the Hostname pattern matching described above
+and the geographic information from the Internet registries to determine the location of the IP traced to.
+In addition, we use the latency information contained within the trace and the latency information gathered from pinging routers,
+along with the limitations imposed by speed-of-light bounds,
+in order to weed out bad data and increase the probability of the location we choose being correct.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;제로-트러스트&#34;&gt;제로 트러스트!&lt;/h2&gt;
@@ -390,7 +409,7 @@ Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병�
 &lt;/ul&gt;
 &lt;h1 id=&#34;테스트-환경&#34;&gt;테스트 환경&lt;/h1&gt;
 &lt;h2 id=&#34;전체-네트워크-흐름&#34;&gt;전체 네트워크 흐름&lt;/h2&gt;
-&lt;p&gt;Client(Mobile App / Browser) → Akamai CDN → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]&lt;/p&gt;
+&lt;p&gt;Client(Mobile App / Browser) → CDN (Akamai) → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]&lt;/p&gt;
 &lt;h1 id=&#34;trace_id로-trace와-log-연결하기&#34;&gt;trace_id로 Trace와 Log 연결하기&lt;/h1&gt;
 &lt;p&gt;이 방법은 APM Trace와 Log Collection에 로그가 있어야 한다.&lt;/p&gt;
 &lt;h2 id=&#34;1-browser에서-요청-시-traceparent-헤더-추가하기&#34;&gt;1. Browser에서 요청 시 Traceparent 헤더 추가하기&lt;/h2&gt;
@@ -513,7 +532,7 @@ Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원한다.&l
 &lt;h1 id=&#34;마치며&#34;&gt;마치며&lt;/h1&gt;
 &lt;p&gt;서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &amp;gt; CDN &amp;gt; 웹 서버 로그로 확인할 수 있고,
 방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있다.&lt;/p&gt;
-&lt;p&gt;Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.
+&lt;p&gt;Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;
 OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했다.&lt;/p&gt;
 &lt;p&gt;지연 문제도 찾아서 해결되었다.
 Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
@@ -561,6 +580,9 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#tracestate-header&#34;&gt;tracestate&lt;/a&gt;는 &lt;code&gt;key=value&lt;/code&gt; 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항이다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, &lt;a href=&#34;https://github.com/DataDog/browser-sdk/issues/1538&#34;&gt;beforeSend API를 사용해야 한다고 한다&lt;/a&gt;. 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 듯하다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -723,8 +745,8 @@ docker run -d --gpus&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;all 
 &lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://platform.openai.com/docs/guides/optimizing-llm-accuracy&#34;&gt;Optimizing LLMs for accuracy&lt;/a&gt; - OpenAI Platform&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp&#34; alt=&#34;LLM optimization context&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;검색 증강 생성(RAG, Retrieval-Augmented Generation)&lt;/strong&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;미세 조정(Fine-tuning, 파인 튜닝)&lt;/strong&gt;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;RAG(Retrieval-Augmented Generation)&lt;/strong&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;파인 튜닝(Fine-tuning)&lt;/strong&gt;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;가드레일(Guardrails)&lt;/strong&gt;&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;더-알아보기&#34;&gt;더 알아보기&lt;/h1&gt;
@@ -737,7 +759,7 @@ docker run -d --gpus&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;all 
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/cto0f7prJXs&#34;&gt;(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;검색 증강 생성 (RAG)
+&lt;li&gt;RAG
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.elastic.co/kr/what-is/retrieval-augmented-generation/&#34;&gt;검색 증강 생성(RAG)이란?&lt;/a&gt; - Elastic&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/T-D1OfcDW1M&#34;&gt;What is Retrieval-Augmented Generation (RAG)?&lt;/a&gt; - IBM Techonology&lt;/li&gt;
@@ -745,7 +767,7 @@ docker run -d --gpus&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;all 
 &lt;li&gt;&lt;a href=&#34;https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine&#34;&gt;Elasticsearch Relevance Engine(ESRE)&lt;/a&gt; - Elastic&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;미세 조정 (파인 튜닝)
+&lt;li&gt;파인 튜닝
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://platform.openai.com/docs/guides/fine-tuning&#34;&gt;Fine-tuning&lt;/a&gt; - OpenAI Platform&lt;/li&gt;
 &lt;/ul&gt;

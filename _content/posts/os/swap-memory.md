@@ -50,9 +50,6 @@ sudo dd if=/dev/zero of=/swapfile bs=1M count=16K
 `swapon` 매뉴얼에도 명시[^1]되어 있지만 `fallocate`는 사용하지 않는 것을 권장한다.[^2]
 연속된 블록에 실제 데이터를 파일에 쓰는 `dd`와 달리 `fallocate`는 논리적인 파일의 크기만 설정하고 데이터를 쓰지 않기 때문이다.
 
-[^1]: [swapon(8) | Linux manual page](https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES)
-[^2]: [fallocatte vs. dd | StackExchange](https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal)
-
 > 스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 한다.
 > 그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋다.
 > 물리적으로 할당되지 않은 블록을 포함할 수 있는 **Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에**
@@ -217,8 +214,6 @@ sudo swapoff /swapfile
 **안정성을 위해** 스왑 메모리를 비활성화하는 것이 좋다.
 스왑이 자주 발생하면 디스크 입출력이 증가하면서 성능이 저하되는 문제도 있다.
 
-[^3]: [최초 이슈 kuberenetes#31676](https://github.com/kubernetes/kubernetes/issues/31676)
-
 # Prometheus node-exporter를 이용한 모니터링
 
 [이 리포지터리](https://github.com/markruler/node-monitoring)를 클론해서
@@ -237,3 +232,7 @@ sudo docker compose up -d
 - [Swap Management | kernel.org](https://www.kernel.org/doc/gorman/html/understand/understand014.html)
 - [Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환](https://velog.io/@sjuhwan/Virtualization-101-3-1-메모리-오버커밋과-메모리-여유공간-확보-방법)
 - [kubelet swap on 체크 PR#31996](https://github.com/kubernetes/kubernetes/pull/31996)
+
+[^1]: [swapon(8) | Linux manual page](https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES)
+[^2]: [fallocatte vs. dd | StackExchange](https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal)
+[^3]: [최초 이슈 kuberenetes#31676](https://github.com/kubernetes/kubernetes/issues/31676)

@@ -1,6 +1,6 @@
 ---
 date: 2024-08-22T18:00:00+09:00
-lastmod: 2024-08-22T18:00:00+09:00
+lastmod: 2024-09-05T21:47:00+09:00
 title: "Traceparent 헤더로 클라이언트부터 서버까지 추적하기"
 description: "W3C Trace Context"
 featured_image: "/images/web/traceparent-datadog/w3c.png"
@@ -66,7 +66,7 @@ Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병�
 
 ## 전체 네트워크 흐름
 
-Client(Mobile App / Browser) → Akamai CDN → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]
+Client(Mobile App / Browser) → CDN (Akamai) → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]
 
 # trace_id로 Trace와 Log 연결하기
 
@@ -218,7 +218,7 @@ Trace에 Log를 연결한 모습은 다음과 같다.
 서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 > CDN > 웹 서버 로그로 확인할 수 있고,
 방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있다.
 
-Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.
+Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었다.[^4]
 OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했다.
 
 지연 문제도 찾아서 해결되었다.
@@ -254,3 +254,4 @@ Trace Context는 [2020년 2월](https://www.w3.org/news/2020/trace-context-is-a-
 올해(2024년)에는 [Level 2](https://www.w3.org/TR/trace-context-2/)와 [Level 3](https://w3c.github.io/trace-context/)까지 나왔다.
 [^2]: [Problem Statement](https://www.w3.org/TR/trace-context/#problem-statement)
 [^3]: [tracestate](https://www.w3.org/TR/trace-context/#tracestate-header)는 `key=value` 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항이다.
+[^4]: Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, [beforeSend API를 사용해야 한다고 한다](https://github.com/DataDog/browser-sdk/issues/1538). 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 듯하다.

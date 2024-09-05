@@ -199,8 +199,8 @@ GPU를 사용하는 것도 확인할 수 있다.
 
 ![LLM optimization context](/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp)
 
-- **검색 증강 생성(RAG, Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
-- **미세 조정(Fine-tuning, 파인 튜닝)**[^3] 을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
+- **RAG(Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
+- **파인 튜닝(Fine-tuning)**[^3]을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
 - **가드레일(Guardrails)**[^4]을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)
 
 [^2]: [검색 증강 생성(RAG)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/) - AWS
@@ -214,12 +214,12 @@ GPU를 사용하는 것도 확인할 수 있다.
   - [(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703) - 입문 + 측정
   - [(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)](https://youtu.be/cto0f7prJXs)
   - [(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트](https://youtu.be/cto0f7prJXs)
-- 검색 증강 생성 (RAG)
+- RAG
   - [검색 증강 생성(RAG)이란?](https://www.elastic.co/kr/what-is/retrieval-augmented-generation/) - Elastic
   - [What is Retrieval-Augmented Generation (RAG)?](https://youtu.be/T-D1OfcDW1M) - IBM Techonology
   - [Retrieval augmented generation using Elasticsearch and OpenAI](https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation) - OpenAI Cookbook
   - [Elasticsearch Relevance Engine(ESRE)](https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine) - Elastic
-- 미세 조정 (파인 튜닝)
+- 파인 튜닝
   - [Fine-tuning](https://platform.openai.com/docs/guides/fine-tuning) - OpenAI Platform
 - 가드레일
   - [LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)](https://youtu.be/4zRc-k2KNKQ)
