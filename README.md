@@ -11,6 +11,7 @@
     - [Bash](#bash)
     - [PowerShell](#powershell)
   - [Theme 변경](#theme-변경)
+    - [submodule 삭제](#submodule-삭제)
 
 ## 로컬 환경
 
@@ -125,4 +126,12 @@ git submodule update --remote --merge
 # theme submodule 삭제 시
 git rm -f ./hugo-theme-diary
 rm -rf .git/modules/themes/hugo-theme-diary
+```
+
+### submodule 삭제
+
+```sh
+git submodule deinit -f themes/hugo-theme-diary
+rm -rf .git/modules/themes/hugo-theme-diary
+git rm -f themes/hugo-theme-diary
 ```

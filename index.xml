@@ -9,9 +9,157 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 29 Aug 2024 22:38:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 05 Sep 2024 21:13:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>일상에서의 스왑 메모리 (Swap Memory)</title>
+        <link>https://markruler.github.io/posts/os/swap-memory/</link>
+        <pubDate>Thu, 05 Sep 2024 21:13:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/os/swap-memory/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/os/swap-memory/ -&lt;p&gt;&lt;strong&gt;스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역&lt;/strong&gt;이다.
+고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법이다.
+이 글은 &lt;strong&gt;Ubuntu 24.04&lt;/strong&gt;에서 &lt;strong&gt;스왑 메모리를 file로 설정&lt;/strong&gt;하고, 나의 환경에 맞게 조정하기 위해 &lt;strong&gt;모니터링 하는 방법&lt;/strong&gt;을 설명한다.&lt;/p&gt;
+&lt;p&gt;먼저 현재 스왑 메모리 사용량 확인한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapon --show
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정되어 있지 않다면 아무것도 출력되지 않는다.
+Ubuntu 24.04 기준으로는 기본적으로 설정되어 있다.
+이 글은 설정되어 있지 않다는 전제로 진행한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;NAME      TYPE SIZE USED PRIO
+/swap.img file   8G   0B   -2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;스왑-설정-file&#34;&gt;스왑 설정: file&lt;/h1&gt;
+&lt;h2 id=&#34;스왑-파일-생성&#34;&gt;스왑 파일 생성&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dd&lt;/code&gt; 명령으로 16 GiB 크기의 &lt;code&gt;/swapfile&lt;/code&gt; 이라는 파일을 생성한다.
+(파일명은 뭘로 해도 상관없다.)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo dd &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;/dev/zero &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;of&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;/swapfile &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;bs&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;1M &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;16K
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 16384+0 records in&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 16384+0 records out&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 17179869184 bytes (17 GB, 16 GiB) copied, 11.2337 s, 1.5 GB/s&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;swapon&lt;/code&gt; 매뉴얼에도 명시&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;되어 있지만 &lt;code&gt;fallocate&lt;/code&gt;는 사용하지 않는 것을 권장한다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+연속된 블록에 실제 데이터를 파일에 쓰는 &lt;code&gt;dd&lt;/code&gt;와 달리 &lt;code&gt;fallocate&lt;/code&gt;는 논리적인 파일의 크기만 설정하고 데이터를 쓰지 않기 때문이다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 한다.
+그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋다.
+물리적으로 할당되지 않은 블록을 포함할 수 있는 &lt;strong&gt;Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에&lt;/strong&gt;
+스왑이 예상대로 동작하지 않을 수 있다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;권한-설정&#34;&gt;권한 설정&lt;/h2&gt;
+&lt;p&gt;Swap 파일을 root만 읽고 쓰도록 권한을 설정한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo chmod &lt;span style=&#34;color:#bd93f9&#34;&gt;600&lt;/span&gt; /swapfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo ls -hal /swapfile
+&lt;span style=&#34;color:#6272a4&#34;&gt;# -rw------- 1 root root 16.0G  3월  9 16:43 /swapfile&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;파일-형태-변경&#34;&gt;파일 형태 변경&lt;/h2&gt;
+&lt;p&gt;파일 형태를 확인해보면 &lt;code&gt;data&lt;/code&gt; 파일이다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo file /swapfile
+&lt;span style=&#34;color:#6272a4&#34;&gt;# /swapfile: data&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Swap 파일을 Linux swap file로 설정한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo mkswap /swapfile
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Setting up swapspace version 1, size = 16 GiB (17179865088 bytes)&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo file /swapfile
+&lt;span style=&#34;color:#6272a4&#34;&gt;# /swapfile: Linux swap file, 4k page size, little endian, version 1, size 4194303 pages, 0 bad pages, no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;swap-영역-설정&#34;&gt;Swap 영역 설정&lt;/h2&gt;
+&lt;p&gt;만든 Swap 파일을 swap 영역으로 설정한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapon /swapfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-확인&#34;&gt;설정 확인&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapon --show
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;NAME      TYPE SIZE USED PRIO
+/swapfile file  16G   0B   -2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사용되는 부분이 생기면 아래처럼 &lt;code&gt;USED&lt;/code&gt; 부분에 사이즈가 커짐.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;NAME      TYPE SIZE   USED PRIO
+/swapfile file  16G 153.3M   -2
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;TYPE&lt;/code&gt; : Swap 메모리의 종류
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;file&lt;/code&gt;: 파일&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;partition&lt;/code&gt;: 디스크 파티션&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;SIZE&lt;/code&gt; : Swap 메모리의 크기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;USED&lt;/code&gt; : Swap 메모리의 사용량&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;PRIO&lt;/code&gt; : Swap 메모리의 우선순위. 값이 클수록 우선적으로 사용된다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;부팅-시-자동-마운트-설정&#34;&gt;부팅 시 자동 마운트 설정&lt;/h1&gt;
+&lt;p&gt;Ubuntu 24.04 기준 기본 설정값에는 &lt;code&gt;/swap.img&lt;/code&gt; 파일이 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# /etc/fstab: static file system information.&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Use &amp;#39;blkid&amp;#39; to print the universally unique identifier for a&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# device; this may be used with UUID= as a more robust way to name devices&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# that works even if disks are added and removed. See fstab(5).&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;#&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# &amp;lt;file system&amp;gt; &amp;lt;mount point&amp;gt;   &amp;lt;type&amp;gt;  &amp;lt;options&amp;gt;       &amp;lt;dump&amp;gt;  &amp;lt;pass&amp;gt;&lt;/span&gt;
+/swap.img       none    swap    sw      &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;       &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;(위 설정이 없다는 전제 하에)
+새로 추가한 스왑 영역을 추가한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;/swapfile none swap sw 0 0&amp;#39;&lt;/span&gt; | sudo tee -a /etc/fstab
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;용량-늘리기&#34;&gt;용량 늘리기&lt;/h1&gt;
+&lt;p&gt;스왑 메모리 크기는 시스템의 물리 메모리 용량과 사용 용도에 따라 결정된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;free -h
+&lt;span style=&#34;color:#6272a4&#34;&gt;#                total        used        free      shared  buff/cache   available&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Mem:            31Gi        24Gi       490Mi       3.9Gi       5.8Gi       2.0Gi&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Swap:          2.0Gi       1.3Gi       677Mi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈를 늘리기 전 swap을 끈다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapoff /swapfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈를 추가한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# 4GiB 추가&lt;/span&gt;
+sudo dd &lt;span style=&#34;color:#ff79c6&#34;&gt;if&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;/dev/zero &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;of&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;/swapfile &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;bs&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;1M &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;count&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;4K &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;oflag&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;append &lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;conv&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt;notrunc
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 4096+0 records in&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 4096+0 records out&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# 4294967296 bytes (4.3 GB, 4.0 GiB) copied, 4.60434 s, 933 MB/s&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈 늘린 것을 적용하려면 &lt;code&gt;swapon -v&lt;/code&gt; 명령어로 다시 설정해야 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo mkswap /swapfile
+&lt;span style=&#34;color:#6272a4&#34;&gt;# mkswap: /swapfile: warning: wiping old swap signature.&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Setting up swapspace version 1, size = 8 GiB (8589930496 bytes)&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# no label, UUID=1516c52d-9ed8-4a52-939f-30a892aff73f&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapon -v /swapfile                                                                                                 ✭ ✱
+&lt;span style=&#34;color:#6272a4&#34;&gt;# swapon: /swapfile: found signature [pagesize=4096, signature=swap]&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# swapon: /swapfile: pagesize=4096, swapsize=8589934592, devsize=8589934592&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# swapon /swapfile&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;free -h
+&lt;span style=&#34;color:#6272a4&#34;&gt;#                total        used        free      shared  buff/cache   available&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Mem:            31Gi        24Gi       433Mi       4.0Gi       5.8Gi       1.5Gi&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# Swap:          8.0Gi       1.3Gi       6.7Gi&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;비활성화&#34;&gt;비활성화&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapoff /swapfile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/fstab&lt;/code&gt; 파일에서 Swap 파일 설정을 제거한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#6272a4&#34;&gt;# /etc/fstab&lt;/span&gt;
+&lt;span style=&#34;color:#6272a4&#34;&gt;# /swapfile none swap sw 0 0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;kubernetes에서-swap-기능을-비활성화해야-하는-이유&#34;&gt;Kubernetes에서 Swap 기능을 비활성화해야 하는 이유&lt;/h1&gt;
+&lt;p&gt;가장 큰 이유는 스왑 메모리가 있다면 Kubernetes는 메모리 부족 상황을 정확하게 파악할 수 없다는 것이다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
+&lt;strong&gt;안정성을 위해&lt;/strong&gt; 스왑 메모리를 비활성화하는 것이 좋다.
+스왑이 자주 발생하면 디스크 입출력이 증가하면서 성능이 저하되는 문제도 있다.&lt;/p&gt;
+&lt;h1 id=&#34;prometheus-node-exporter를-이용한-모니터링&#34;&gt;Prometheus node-exporter를 이용한 모니터링&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/node-monitoring&#34;&gt;이 리포지터리&lt;/a&gt;를 클론해서
+Prometheus와 Grafana를 실행해서 모니터링 할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo docker compose up -d
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/os/swap-memory/grafana-prometheus-swap-memory.png&#34; alt=&#34;Node Monitoring with Prometheus and Grafana&#34;&gt;&lt;/p&gt;
+&lt;p&gt;본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/gorman/html/understand/understand014.html&#34;&gt;Swap Management | kernel.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://velog.io/@sjuhwan/Virtualization-101-3-1-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%A4%EB%B2%84%EC%BB%A4%EB%B0%8B%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%97%AC%EC%9C%A0%EA%B3%B5%EA%B0%84-%ED%99%95%EB%B3%B4-%EB%B0%A9%EB%B2%95&#34;&gt;Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/pull/31996&#34;&gt;kubelet swap on 체크 PR#31996&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES&#34;&gt;swapon(8) | Linux manual page&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal&#34;&gt;fallocatte vs. dd | StackExchange&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/31676&#34;&gt;최초 이슈 kuberenetes#31676&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://markruler.github.io/posts/os/swap-memory/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1832,156 +1980,6 @@ p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 L
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/articles/new-headless/&#34;&gt;Chrome’s Headless mode gets an upgrade: introducing &amp;ndash;headless=new | Chromium | Chrome for Developers&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/pdf/html-to-pdf/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>오라클 DBMS SE2 세션 사후 진단</title>
-        <link>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</link>
-        <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
-이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용 가능하다.
-만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
-트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
-&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다.&lt;/strong&gt;
-SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
-&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35&#34;&gt;Oracle Diagnostics Pack&lt;/a&gt;을
-사용할 수 없다.&lt;/p&gt;
-&lt;h1 id=&#34;db-진단-도구가-필요하다&#34;&gt;DB 진단 도구가 필요하다&lt;/h1&gt;
-&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.
-검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰다.&lt;/p&gt;
-&lt;p&gt;하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌다.
-Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었다.
-이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.&lt;/p&gt;
-&lt;p&gt;Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html&#34;&gt;V$SESSION&lt;/a&gt;)에서
-세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt;
-&lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; sess.sid,
-             sess.&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;serial&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;#&lt;/span&gt;,
-             ROUND(sess.wait_time_micro &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;)            wait_time_millis,
-             ROUND(sess.time_since_last_wait_micro &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;) time_since_last_wait_millis,
-             &lt;span style=&#34;color:#ff79c6&#34;&gt;CASE&lt;/span&gt;
-                 &lt;span style=&#34;color:#ff79c6&#34;&gt;WHEN&lt;/span&gt; sess.status &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;ACTIVE&amp;#39;&lt;/span&gt;
-                     &lt;span style=&#34;color:#ff79c6&#34;&gt;THEN&lt;/span&gt; sess.last_call_et
-                 &lt;span style=&#34;color:#ff79c6&#34;&gt;ELSE&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
-                 &lt;span style=&#34;color:#ff79c6&#34;&gt;END&lt;/span&gt;                                          active_elapsed_time_secs,
-             sess.&lt;span style=&#34;color:#ff79c6&#34;&gt;state&lt;/span&gt;,
-             sess.event,
-             sess.username,
-             sess.osuser,
-             sess.machine,
-             sess.program,
-             sess.&lt;span style=&#34;color:#ff79c6&#34;&gt;type&lt;/span&gt;,
-             sess.sql_child_number,
-             sess.sql_exec_id,
-             sess.sql_exec_start,
-             sess.sql_id,
-             (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_fulltext
-              &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;
-              &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.sql_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_id
-                  &lt;span style=&#34;color:#ff79c6&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ONLY&lt;/span&gt;) sql_fulltext,
-             sess.prev_exec_id,
-             sess.prev_exec_start,
-             sess.prev_sql_id,
-             (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_fulltext
-              &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;
-              &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.prev_sql_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_id
-                  &lt;span style=&#34;color:#ff79c6&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ONLY&lt;/span&gt;) prev_sql_fulltext,
-             blocking_session
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$session sess
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.username &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;SYS&amp;#39;&lt;/span&gt;
-      &lt;span style=&#34;color:#ff79c6&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;BY&lt;/span&gt; logon_time &lt;span style=&#34;color:#ff79c6&#34;&gt;DESC&lt;/span&gt;)
-&lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; (wait_time_millis &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;OR&lt;/span&gt; time_since_last_wait_millis &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;)
-  &lt;span style=&#34;color:#6272a4&#34;&gt;/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;update user$ set spare6=DECODE(to_char(:2, &amp;#39;&amp;#39;YYYY-MM-DD&amp;#39;&amp;#39;), &amp;#39;&amp;#39;0000-00-00&amp;#39;&amp;#39;, to_date(NULL), :2) where user#=:1&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;UPDATE &amp;#34;SYSTEM&amp;#34;.&amp;#34;SYS_EXPORT_SCHEMA_01&amp;#34; SET value_n = :1 WHERE process_order = :2&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
-  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;중점적으로 수집하고 싶었던 데이터는 &lt;strong&gt;Wait Event&lt;/strong&gt;와 &lt;strong&gt;SQL Full Text&lt;/strong&gt;였다.
-이를 Elasticsearch에 저장하려면 식별자가 필요했다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;id&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;prev_exec_id&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;prev_sql_id&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;unix_epoch_time(prev_exec_start)&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 고려했던 식별자는 &lt;code&gt;sql_exec_id&lt;/code&gt;와 &lt;code&gt;sql_id&lt;/code&gt;다.
-하지만 대기 상태라면 &lt;code&gt;sql_exec_id&lt;/code&gt;는 &lt;code&gt;NULL&lt;/code&gt;이기 때문에 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt;를 선택했다.
-어느 정도 데이터가 쌓이고 살펴보니 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt; 만으로도 충분히 식별되었다.
-하지만 만에 하나를 위해 &lt;code&gt;prev_exec_start&lt;/code&gt;도 추가했다.
-누적된 데이터를 Kibana로 시각화하면 다음과 같다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/oracle-dbms-session-kibana.png&#34; alt=&#34;Oracle DBMS Session to Kibana&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;사용-사례&#34;&gt;사용 사례&lt;/h1&gt;
-&lt;p&gt;DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표다.
-메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아니다.
-이런 지표가 필요하다면 Prometheus나 Datadog을 사용한다.
-우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었다.&lt;/p&gt;
-&lt;h2 id=&#34;resmgrcpu-quantum&#34;&gt;resmgr:cpu quantum&lt;/h2&gt;
-&lt;p&gt;세션이 CPU 자원을 할당받기 위해 대기하는 이벤트&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;다.
-Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고
-CPU 사용량이 제한(throttling)되어 있을 때 발생한다.&lt;/p&gt;
-&lt;p&gt;먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했다.
-대시보드를 확인해보니 Wait Event &lt;code&gt;resmgr:cpu quantum&lt;/code&gt;이 다수 발생했다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-cpu-quantum.png&#34; alt=&#34;Wait Event - cpu quantum&#34;&gt;&lt;/p&gt;
-&lt;p&gt;해당 Wait Event가 발생한 SQL의 Execution Plan을 확인해보니,
-실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었다.
-SE2는 리소스가 제한된 만큼 &lt;strong&gt;리소스를 효율적으로 사용하는 것이 속도만큼 중요했다&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했다.
-주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했다.
-불필요한 쿼리도 제거했다.&lt;/p&gt;
-&lt;h2 id=&#34;enq-tx---row-lock-contention&#34;&gt;enq: TX - row lock contention&lt;/h2&gt;
-&lt;p&gt;여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-row-lock-contention.png&#34; alt=&#34;Wait Event - row lock contention&#34;&gt;&lt;/p&gt;
-&lt;p&gt;해당 Wait Event가 발생한 SQL을 확인해보니
-데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았다.&lt;/p&gt;
-&lt;p&gt;분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다&amp;hellip;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;주목할 것은, 오라클에서 발생하는 Lock 경합의 대부분을 차지하는 &lt;code&gt;enq: TM - contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;와
-&lt;code&gt;enq: TX - row lock contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;가 Concurrency가 아닌 Application으로 분류돼 있다는 사실이다.
-&amp;hellip;
-이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것이다.
-Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐이다.
-근본적인 해법은 애플리케이션 로직에서 찾아야 한다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
-&lt;p&gt;리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
-애초에 RDB가 적합하지 않을 수 있다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;어떤 기술을 사용하든 진단 도구부터 찾아보자.
-기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.&lt;/p&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Oracle Database 19
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html&#34;&gt;Licensing Information&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/oracle-wait-events.html&#34;&gt;Oracle Wait Events&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;오라클 성능 고도화 - 원리와 해법 1, 조시형&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0&#34;&gt;resmgr:cpu quantum&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07&#34;&gt;enq: TX - row lock contention&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;DML 테이블 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;DML 로우 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:5&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;오라클 성능 고도화 - 원리와 해법 1, 100쪽&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:6&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;적정 기술&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

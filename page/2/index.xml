@@ -9,9 +9,159 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 29 Aug 2024 22:38:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 05 Sep 2024 21:13:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>오라클 DBMS SE2 세션 사후 진단</title>
+        <link>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</link>
+        <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
+이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용 가능하다.
+만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
+트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
+&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다.&lt;/strong&gt;
+SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
+&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35&#34;&gt;Oracle Diagnostics Pack&lt;/a&gt;을
+사용할 수 없다.&lt;/p&gt;
+&lt;h1 id=&#34;db-진단-도구가-필요하다&#34;&gt;DB 진단 도구가 필요하다&lt;/h1&gt;
+&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.
+검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰다.&lt;/p&gt;
+&lt;p&gt;하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌다.
+Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었다.
+이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.&lt;/p&gt;
+&lt;p&gt;Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html&#34;&gt;V$SESSION&lt;/a&gt;)에서
+세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;*&lt;/span&gt;
+&lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; sess.sid,
+             sess.&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;serial&lt;/span&gt;&lt;span style=&#34;color:#ff79c6&#34;&gt;#&lt;/span&gt;,
+             ROUND(sess.wait_time_micro &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;)            wait_time_millis,
+             ROUND(sess.time_since_last_wait_micro &lt;span style=&#34;color:#ff79c6&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#bd93f9&#34;&gt;2&lt;/span&gt;) time_since_last_wait_millis,
+             &lt;span style=&#34;color:#ff79c6&#34;&gt;CASE&lt;/span&gt;
+                 &lt;span style=&#34;color:#ff79c6&#34;&gt;WHEN&lt;/span&gt; sess.status &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;ACTIVE&amp;#39;&lt;/span&gt;
+                     &lt;span style=&#34;color:#ff79c6&#34;&gt;THEN&lt;/span&gt; sess.last_call_et
+                 &lt;span style=&#34;color:#ff79c6&#34;&gt;ELSE&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+                 &lt;span style=&#34;color:#ff79c6&#34;&gt;END&lt;/span&gt;                                          active_elapsed_time_secs,
+             sess.&lt;span style=&#34;color:#ff79c6&#34;&gt;state&lt;/span&gt;,
+             sess.event,
+             sess.username,
+             sess.osuser,
+             sess.machine,
+             sess.program,
+             sess.&lt;span style=&#34;color:#ff79c6&#34;&gt;type&lt;/span&gt;,
+             sess.sql_child_number,
+             sess.sql_exec_id,
+             sess.sql_exec_start,
+             sess.sql_id,
+             (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_fulltext
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.sql_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_id
+                  &lt;span style=&#34;color:#ff79c6&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ONLY&lt;/span&gt;) sql_fulltext,
+             sess.prev_exec_id,
+             sess.prev_exec_start,
+             sess.prev_sql_id,
+             (&lt;span style=&#34;color:#ff79c6&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_fulltext
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;
+              &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.prev_sql_id &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;sql&lt;/span&gt;.sql_id
+                  &lt;span style=&#34;color:#ff79c6&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;ONLY&lt;/span&gt;) prev_sql_fulltext,
+             blocking_session
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;FROM&lt;/span&gt; v$session sess
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; sess.username &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;SYS&amp;#39;&lt;/span&gt;
+      &lt;span style=&#34;color:#ff79c6&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;BY&lt;/span&gt; logon_time &lt;span style=&#34;color:#ff79c6&#34;&gt;DESC&lt;/span&gt;)
+&lt;span style=&#34;color:#ff79c6&#34;&gt;WHERE&lt;/span&gt; (wait_time_millis &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;OR&lt;/span&gt; time_since_last_wait_millis &lt;span style=&#34;color:#ff79c6&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;)
+  &lt;span style=&#34;color:#6272a4&#34;&gt;/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;update user$ set spare6=DECODE(to_char(:2, &amp;#39;&amp;#39;YYYY-MM-DD&amp;#39;&amp;#39;), &amp;#39;&amp;#39;0000-00-00&amp;#39;&amp;#39;, to_date(NULL), :2) where user#=:1&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;UPDATE &amp;#34;SYSTEM&amp;#34;.&amp;#34;SYS_EXPORT_SCHEMA_01&amp;#34; SET value_n = :1 WHERE process_order = :2&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+  &lt;span style=&#34;color:#ff79c6&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(sql_fulltext, &lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#ff79c6&#34;&gt;!=&lt;/span&gt; &lt;span style=&#34;color:#bd93f9&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;중점적으로 수집하고 싶었던 데이터는 &lt;strong&gt;Wait Event&lt;/strong&gt;와 &lt;strong&gt;SQL Full Text&lt;/strong&gt;였다.
+이를 Elasticsearch에 저장하려면 식별자가 필요했다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#8be9fd;font-style:italic&#34;&gt;id&lt;/span&gt; &lt;span style=&#34;color:#ff79c6&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f1fa8c&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;prev_exec_id&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;prev_sql_id&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;{&lt;/span&gt;unix_epoch_time(prev_exec_start)&lt;span style=&#34;color:#f1fa8c&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#f1fa8c&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 고려했던 식별자는 &lt;code&gt;sql_exec_id&lt;/code&gt;와 &lt;code&gt;sql_id&lt;/code&gt;다.
+하지만 대기 상태라면 &lt;code&gt;sql_exec_id&lt;/code&gt;는 &lt;code&gt;NULL&lt;/code&gt;이기 때문에 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt;를 선택했다.
+어느 정도 데이터가 쌓이고 살펴보니 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt; 만으로도 충분히 식별되었다.
+하지만 만에 하나를 위해 &lt;code&gt;prev_exec_start&lt;/code&gt;도 추가했다.
+누적된 데이터를 Kibana로 시각화하면 다음과 같다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/oracle-dbms-session-kibana.png&#34; alt=&#34;Oracle DBMS Session to Kibana&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;사용-사례&#34;&gt;사용 사례&lt;/h1&gt;
+&lt;p&gt;DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표다.
+메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아니다.
+이런 지표가 필요하다면 Prometheus나 Datadog을 사용한다.
+우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었다.&lt;/p&gt;
+&lt;h2 id=&#34;resmgrcpu-quantum&#34;&gt;resmgr:cpu quantum&lt;/h2&gt;
+&lt;p&gt;세션이 CPU 자원을 할당받기 위해 대기하는 이벤트&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;다.
+Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고
+CPU 사용량이 제한(throttling)되어 있을 때 발생한다.&lt;/p&gt;
+&lt;p&gt;먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했다.
+대시보드를 확인해보니 Wait Event &lt;code&gt;resmgr:cpu quantum&lt;/code&gt;이 다수 발생했다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-cpu-quantum.png&#34; alt=&#34;Wait Event - cpu quantum&#34;&gt;&lt;/p&gt;
+&lt;p&gt;해당 Wait Event가 발생한 SQL의 Execution Plan을 확인해보니,
+실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었다.
+SE2는 리소스가 제한된 만큼 &lt;strong&gt;리소스를 효율적으로 사용하는 것이 속도만큼 중요했다&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했다.
+주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했다.
+불필요한 쿼리도 제거했다.&lt;/p&gt;
+&lt;h2 id=&#34;enq-tx---row-lock-contention&#34;&gt;enq: TX - row lock contention&lt;/h2&gt;
+&lt;p&gt;여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-row-lock-contention.png&#34; alt=&#34;Wait Event - row lock contention&#34;&gt;&lt;/p&gt;
+&lt;p&gt;해당 Wait Event가 발생한 SQL을 확인해보니
+데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았다.&lt;/p&gt;
+&lt;p&gt;분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;주목할 것은, 오라클에서 발생하는 Lock 경합의 대부분을 차지하는 &lt;code&gt;enq: TM - contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;와
+&lt;code&gt;enq: TX - row lock contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;가 Concurrency가 아닌 Application으로 분류돼 있다는 사실이다.
+&amp;hellip;
+이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것이다.
+Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐이다.
+근본적인 해법은 애플리케이션 로직에서 찾아야 한다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
+&lt;p&gt;리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
+애초에 RDB가 적합하지 않을 수 있다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;어떤 기술을 사용하든 진단 도구부터 찾아보자.
+기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.&lt;/p&gt;
+&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Oracle Database 19
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html&#34;&gt;Licensing Information&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/oracle-wait-events.html&#34;&gt;Oracle Wait Events&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;오라클 성능 고도화 - 원리와 해법 1, 조시형&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0&#34;&gt;resmgr:cpu quantum&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07&#34;&gt;enq: TX - row lock contention&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;DML 테이블 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;DML 로우 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;오라클 성능 고도화 - 원리와 해법 1, 100쪽&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;적정 기술&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -3803,83 +3953,6 @@ docker images
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://markruler.github.io/posts/container/building-container-images-in-go/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>책 &#34;컨테이너 보안&#34;</title>
-        <link>https://markruler.github.io/posts/review/container-security/</link>
-        <pubDate>Sun, 21 Feb 2021 11:47:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/review/container-security/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/review/container-security/ -&lt;blockquote&gt;
-&lt;p&gt;한빛미디어의 지원을 받아 작성되었습니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;거두절미&#34;&gt;거두절미&lt;/h1&gt;
-&lt;p&gt;컨테이너에 관심 있으신 분이라면 필수 소장 도서입니다.
-저도 컨테이너, 쿠버네티스, 도커, 클라우드 관련 도서를 많이 읽어봤지만
-컨테이너를 이렇게 간명하고 깊게 다루는 책은 없었습니다.
-컨테이너 &amp;lsquo;보안&amp;rsquo;을 설명하기 위해 컨테이너가 어떻게 동작하는지
-설명하는 데에 책의 대부분을 차지합니다.
-다만 200 페이지에 많은 내용을 압축한 만큼 도해는 많지 않습니다.&lt;/p&gt;
-&lt;p&gt;먼저 저자의 &lt;a href=&#34;https://www.katacoda.com/lizrice/courses/containers-and-go&#34;&gt;katacoda (An Introduction to Containers for Go programmers)&lt;/a&gt;로
-실습해보시거나 &lt;a href=&#34;https://youtu.be/HPuvDm8IC-4&#34;&gt;발표(What is a container, really? Let&amp;rsquo;s write one in Go from scratch)&lt;/a&gt;를 보시길 추천드립니다.&lt;/p&gt;
-&lt;h1 id=&#34;저자-리즈-라이스에-대해&#34;&gt;저자 리즈 라이스에 대해&lt;/h1&gt;
-&lt;p&gt;저자 리즈 라이스(Liz Rice)는 아쿠아 시큐리티(Aqua Security)의 오픈 소스 엔지니어링
-부사장(VP Open Source Engineering)이자 클라우드 네이티브 보안 전문가입니다.
-저자는 수년 전부터 꾸준히 &lt;code&gt;컨테이너&lt;/code&gt;와 &lt;code&gt;보안&lt;/code&gt;에 관련된 좋은 글을 내고 발표를 하고 있습니다.
-저는 한빛미디어의 &amp;lt;나는 리뷰어다 2021&amp;gt; 리뷰어로 선정되어 책의 리뷰를 쓰게 되었지만
-이전부터 저자의 &lt;a href=&#34;https://www.lizrice.com/&#34;&gt;블로그&lt;/a&gt;나
-&lt;a href=&#34;https://twitter.com/lizrice&#34;&gt;트위터&lt;/a&gt;를 챙겨볼 정도로 팬이 되었습니다.&lt;/p&gt;
-&lt;h1 id=&#34;대상-독자&#34;&gt;대상 독자&lt;/h1&gt;
-&lt;p&gt;도커와 쿠버네티스 등 컨테이너 관련 도구들을 조금은 다뤄보셨고 리눅스의
-기본 명령어를 알고 계신 분에게 추천드리지만
-하나씩 찾아보면서 읽어보겠다 하는 분들도 충분히 읽으실 수 있습니다.
-컨테이너 네트워크를 설명할 때 방화벽과 OSI 레이어부터 설명할 정도니까요.&lt;/p&gt;
-&lt;h1 id=&#34;번역&#34;&gt;번역&lt;/h1&gt;
-&lt;p&gt;컴퓨터 분야 기술 번역으로 꽤 오래 활동하신 류광님이 번역해주셨습니다.
-&lt;a href=&#34;https://kubernetes.io/ko/docs/contribute/localization_ko/&#34;&gt;공식 한글화 쿠버네티스 문서&lt;/a&gt;나
-한국 커뮤니티에서 쓰이는 용어와 다소 차이가 있어서 자연스럽게 읽히진 않습니다.
-사실 영어와 한국어가 정확히 일대일로 치환되는 것은 아니기 때문에
-역자의 고민이 묻어나는 부분이긴 하지만 독자에 따라 호불호가 있을 수 있습니다.&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;원문&lt;/th&gt;
-&lt;th&gt;번역&lt;/th&gt;
-&lt;th&gt;커뮤니티에서 흔히 볼 수 있는 번역&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;deployment&lt;/td&gt;
-&lt;td&gt;배치본&lt;/td&gt;
-&lt;td&gt;디플로이먼트&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;controller&lt;/td&gt;
-&lt;td&gt;제어기&lt;/td&gt;
-&lt;td&gt;컨트롤러&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;namespace&lt;/td&gt;
-&lt;td&gt;이름공간&lt;/td&gt;
-&lt;td&gt;네임스페이스&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;multitenancy&lt;/td&gt;
-&lt;td&gt;다중 입주&lt;/td&gt;
-&lt;td&gt;멀티테넌시&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
-&lt;p&gt;책이 압축되어 있는 만큼 중간중간 별도의 링크를 남겨 더 읽을 거리를
-제공합니다. 저도 컨테이너 분야를 공부하면서
-&lt;a href=&#34;https://markruler.github.io/posts/container/container-study-guide/&#34;&gt;도움되었던 자료들&lt;/a&gt;을
-모으며 번역하고 있습니다. 필요하신 분들에게 도움이 되었으면 좋겠습니다.&lt;/p&gt;
-- https://markruler.github.io/posts/review/container-security/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

@@ -1,7 +1,7 @@
 ---
-draft: true
-date: 2024-09-04T18:00:00+09:00
-lastmod: 2024-09-05T18:00:00+09:00
+draft: false
+date: 2024-09-05T21:13:00+09:00
+lastmod: 2024-09-05T21:13:00+09:00
 title: "일상에서의 스왑 메모리 (Swap Memory)"
 description: "스왑 메모리 설정과 모니터링"
 # featured_image: "/images/os/swap-memory/pexels-artyusufpatel-9203123.jpg"
@@ -25,12 +25,19 @@ sudo swapon --show
 ```
 
 설정되어 있지 않다면 아무것도 출력되지 않는다.
+Ubuntu 24.04 기준으로는 기본적으로 설정되어 있다.
+이 글은 설정되어 있지 않다는 전제로 진행한다.
+
+```sh
+NAME      TYPE SIZE USED PRIO
+/swap.img file   8G   0B   -2
+```
 
 # 스왑 설정: file
 
 ## 스왑 파일 생성
 
-`dd` 명령으로 1 GiB 크기의 `/swapfile` 이라는 파일을 생성한다.
+`dd` 명령으로 16 GiB 크기의 `/swapfile` 이라는 파일을 생성한다.
 (파일명은 뭘로 해도 상관없다.)
 
 ```sh
@@ -121,15 +128,21 @@ NAME      TYPE SIZE   USED PRIO
 
 # 부팅 시 자동 마운트 설정
 
-다음은 Ubuntu 24.04 기준 기본 설정값이다.
+Ubuntu 24.04 기준 기본 설정값에는 `/swap.img` 파일이 있다.
 
 ```sh
-# /etc/fstab
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-/swapfile none swap sw 0 0
+/swap.img       none    swap    sw      0       0
 ```
 
-만약 설정이 없다면 추가한다.
+(위 설정이 없다는 전제 하에)
+새로 추가한 스왑 영역을 추가한다.
 
 ```sh
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
@@ -162,7 +175,7 @@ sudo dd if=/dev/zero of=/swapfile bs=1M count=4K oflag=append conv=notrunc
 # 4294967296 bytes (4.3 GB, 4.0 GiB) copied, 4.60434 s, 933 MB/s
 ```
 
-사이즈 늘린 것을 적용하려면 다시 적용해야 한다.
+사이즈 늘린 것을 적용하려면 `swapon -v` 명령어로 다시 설정해야 한다.
 
 ```sh
 sudo mkswap /swapfile
@@ -191,13 +204,12 @@ free -h
 sudo swapoff /swapfile
 ```
 
-`/etc/fstab` 파일에서 Swap 파일 설정 제거
+`/etc/fstab` 파일에서 Swap 파일 설정을 제거한다.
 
 ```sh
-sudo vi /etc/fstab
+# /etc/fstab
+# /swapfile none swap sw 0 0
 ```
-
-해당 파일에서 Swap 파일과 관련된 라인을 삭제한다. (혹은 주석처리)
 
 # Kubernetes에서 Swap 기능을 비활성화해야 하는 이유
 
@@ -209,12 +221,14 @@ sudo vi /etc/fstab
 
 # Prometheus node-exporter를 이용한 모니터링
 
-[리포지터리](https://github.com/xpdojo/analyzer/tree/main/prometheus)를 클론해서
+[이 리포지터리](https://github.com/markruler/node-monitoring)를 클론해서
 Prometheus와 Grafana를 실행해서 모니터링 할 수 있다.
 
 ```sh
 sudo docker compose up -d
 ```
+
+![Node Monitoring with Prometheus and Grafana](/images/os/swap-memory/grafana-prometheus-swap-memory.png)
 
 본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있다.
 

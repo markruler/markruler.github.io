@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html><head>
+<title>일상에서의 스왑 메모리 (Swap Memory)</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="스왑 메모리 설정과 모니터링">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="일상에서의 스왑 메모리 (Swap Memory)" />
+<meta property="og:description" content="스왑 메모리 설정과 모니터링" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/os/swap-memory/" /><meta property="og:image" content="https://markruler.github.io/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.jpg" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-09-05T21:13:00+09:00" />
+<meta property="article:modified_time" content="2024-09-05T21:13:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.jpg"/>
+
+<meta name="twitter:title" content="일상에서의 스왑 메모리 (Swap Memory)"/>
+<meta name="twitter:description" content="스왑 메모리 설정과 모니터링"/>
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%8a%a4%ec%99%91-%ec%84%a4%ec%a0%95-file" class="nav-스왑-설정-file">
+									스왑 설정: file
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%8a%a4%ec%99%91-%ed%8c%8c%ec%9d%bc-%ec%83%9d%ec%84%b1" class="nav-스왑-파일-생성">
+									스왑 파일 생성
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b6%8c%ed%95%9c-%ec%84%a4%ec%a0%95" class="nav-권한-설정">
+									권한 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ed%98%95%ed%83%9c-%eb%b3%80%ea%b2%bd" class="nav-파일-형태-변경">
+									파일 형태 변경
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#swap-%ec%98%81%ec%97%ad-%ec%84%a4%ec%a0%95" class="nav-swap-영역-설정">
+									Swap 영역 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-%ed%99%95%ec%9d%b8" class="nav-설정-확인">
+									설정 확인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%80%ed%8c%85-%ec%8b%9c-%ec%9e%90%eb%8f%99-%eb%a7%88%ec%9a%b4%ed%8a%b8-%ec%84%a4%ec%a0%95" class="nav-부팅-시-자동-마운트-설정">
+									부팅 시 자동 마운트 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9a%a9%eb%9f%89-%eb%8a%98%eb%a6%ac%ea%b8%b0" class="nav-용량-늘리기">
+									용량 늘리기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ed%99%9c%ec%84%b1%ed%99%94" class="nav-비활성화">
+									비활성화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kubernetes%ec%97%90%ec%84%9c-swap-%ea%b8%b0%eb%8a%a5%ec%9d%84-%eb%b9%84%ed%99%9c%ec%84%b1%ed%99%94%ed%95%b4%ec%95%bc-%ed%95%98%eb%8a%94-%ec%9d%b4%ec%9c%a0" class="nav-kubernetes에서-swap-기능을-비활성화해야-하는-이유">
+									Kubernetes에서 Swap 기능을 비활성화해야 하는 이유
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#prometheus-node-exporter%eb%a5%bc-%ec%9d%b4%ec%9a%a9%ed%95%9c-%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" class="nav-prometheus-node-exporter를-이용한-모니터링">
+									Prometheus node-exporter를 이용한 모니터링
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수 블로그
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수 블로그</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    일상에서의 스왑 메모리 (Swap Memory)
+                    
+                    <div class="post-subtitle">
+                        스왑 메모리 설정과 모니터링
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-09-05 21:13
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[how-to]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/linux">linux</a>
+                                &nbsp;
+                            
+                                <a href="/tags/memory">memory</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p><strong>스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역</strong>이다.
+고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법이다.
+이 글은 <strong>Ubuntu 24.04</strong>에서 <strong>스왑 메모리를 file로 설정</strong>하고, 나의 환경에 맞게 조정하기 위해 <strong>모니터링 하는 방법</strong>을 설명한다.</p>
+<p>먼저 현재 스왑 메모리 사용량 확인한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapon --show
+</code></pre></div><p>설정되어 있지 않다면 아무것도 출력되지 않는다.
+Ubuntu 24.04 기준으로는 기본적으로 설정되어 있다.
+이 글은 설정되어 있지 않다는 전제로 진행한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">NAME      TYPE SIZE USED PRIO
+/swap.img file   8G   0B   -2
+</code></pre></div><h1 id="스왑-설정-file">스왑 설정: file</h1>
+<h2 id="스왑-파일-생성">스왑 파일 생성</h2>
+<p><code>dd</code> 명령으로 16 GiB 크기의 <code>/swapfile</code> 이라는 파일을 생성한다.
+(파일명은 뭘로 해도 상관없다.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo dd <span style="color:#ff79c6">if</span><span style="color:#ff79c6">=</span>/dev/zero <span style="color:#8be9fd;font-style:italic">of</span><span style="color:#ff79c6">=</span>/swapfile <span style="color:#8be9fd;font-style:italic">bs</span><span style="color:#ff79c6">=</span>1M <span style="color:#8be9fd;font-style:italic">count</span><span style="color:#ff79c6">=</span>16K
+<span style="color:#6272a4"># 16384+0 records in</span>
+<span style="color:#6272a4"># 16384+0 records out</span>
+<span style="color:#6272a4"># 17179869184 bytes (17 GB, 16 GiB) copied, 11.2337 s, 1.5 GB/s</span>
+</code></pre></div><p><code>swapon</code> 매뉴얼에도 명시<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>되어 있지만 <code>fallocate</code>는 사용하지 않는 것을 권장한다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
+연속된 블록에 실제 데이터를 파일에 쓰는 <code>dd</code>와 달리 <code>fallocate</code>는 논리적인 파일의 크기만 설정하고 데이터를 쓰지 않기 때문이다.</p>
+<blockquote>
+<p>스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 한다.
+그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋다.
+물리적으로 할당되지 않은 블록을 포함할 수 있는 <strong>Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에</strong>
+스왑이 예상대로 동작하지 않을 수 있다.</p>
+</blockquote>
+<h2 id="권한-설정">권한 설정</h2>
+<p>Swap 파일을 root만 읽고 쓰도록 권한을 설정한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo chmod <span style="color:#bd93f9">600</span> /swapfile
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo ls -hal /swapfile
+<span style="color:#6272a4"># -rw------- 1 root root 16.0G  3월  9 16:43 /swapfile</span>
+</code></pre></div><h2 id="파일-형태-변경">파일 형태 변경</h2>
+<p>파일 형태를 확인해보면 <code>data</code> 파일이다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo file /swapfile
+<span style="color:#6272a4"># /swapfile: data</span>
+</code></pre></div><p>Swap 파일을 Linux swap file로 설정한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo mkswap /swapfile
+<span style="color:#6272a4"># Setting up swapspace version 1, size = 16 GiB (17179865088 bytes)</span>
+<span style="color:#6272a4"># no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo file /swapfile
+<span style="color:#6272a4"># /swapfile: Linux swap file, 4k page size, little endian, version 1, size 4194303 pages, 0 bad pages, no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09</span>
+</code></pre></div><h2 id="swap-영역-설정">Swap 영역 설정</h2>
+<p>만든 Swap 파일을 swap 영역으로 설정한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapon /swapfile
+</code></pre></div><h2 id="설정-확인">설정 확인</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapon --show
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">NAME      TYPE SIZE USED PRIO
+/swapfile file  16G   0B   -2
+</code></pre></div><p>사용되는 부분이 생기면 아래처럼 <code>USED</code> 부분에 사이즈가 커짐.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">NAME      TYPE SIZE   USED PRIO
+/swapfile file  16G 153.3M   -2
+</code></pre></div><ul>
+<li><code>TYPE</code> : Swap 메모리의 종류
+<ul>
+<li><code>file</code>: 파일</li>
+<li><code>partition</code>: 디스크 파티션</li>
+</ul>
+</li>
+<li><code>SIZE</code> : Swap 메모리의 크기</li>
+<li><code>USED</code> : Swap 메모리의 사용량</li>
+<li><code>PRIO</code> : Swap 메모리의 우선순위. 값이 클수록 우선적으로 사용된다.</li>
+</ul>
+<h1 id="부팅-시-자동-마운트-설정">부팅 시 자동 마운트 설정</h1>
+<p>Ubuntu 24.04 기준 기본 설정값에는 <code>/swap.img</code> 파일이 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># /etc/fstab: static file system information.</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4"># Use &#39;blkid&#39; to print the universally unique identifier for a</span>
+<span style="color:#6272a4"># device; this may be used with UUID= as a more robust way to name devices</span>
+<span style="color:#6272a4"># that works even if disks are added and removed. See fstab(5).</span>
+<span style="color:#6272a4">#</span>
+<span style="color:#6272a4"># &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;</span>
+/swap.img       none    swap    sw      <span style="color:#bd93f9">0</span>       <span style="color:#bd93f9">0</span>
+</code></pre></div><p>(위 설정이 없다는 전제 하에)
+새로 추가한 스왑 영역을 추가한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#39;/swapfile none swap sw 0 0&#39;</span> | sudo tee -a /etc/fstab
+</code></pre></div><h1 id="용량-늘리기">용량 늘리기</h1>
+<p>스왑 메모리 크기는 시스템의 물리 메모리 용량과 사용 용도에 따라 결정된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">free -h
+<span style="color:#6272a4">#                total        used        free      shared  buff/cache   available</span>
+<span style="color:#6272a4"># Mem:            31Gi        24Gi       490Mi       3.9Gi       5.8Gi       2.0Gi</span>
+<span style="color:#6272a4"># Swap:          2.0Gi       1.3Gi       677Mi</span>
+</code></pre></div><p>사이즈를 늘리기 전 swap을 끈다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapoff /swapfile
+</code></pre></div><p>사이즈를 추가한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 4GiB 추가</span>
+sudo dd <span style="color:#ff79c6">if</span><span style="color:#ff79c6">=</span>/dev/zero <span style="color:#8be9fd;font-style:italic">of</span><span style="color:#ff79c6">=</span>/swapfile <span style="color:#8be9fd;font-style:italic">bs</span><span style="color:#ff79c6">=</span>1M <span style="color:#8be9fd;font-style:italic">count</span><span style="color:#ff79c6">=</span>4K <span style="color:#8be9fd;font-style:italic">oflag</span><span style="color:#ff79c6">=</span>append <span style="color:#8be9fd;font-style:italic">conv</span><span style="color:#ff79c6">=</span>notrunc
+<span style="color:#6272a4"># 4096+0 records in</span>
+<span style="color:#6272a4"># 4096+0 records out</span>
+<span style="color:#6272a4"># 4294967296 bytes (4.3 GB, 4.0 GiB) copied, 4.60434 s, 933 MB/s</span>
+</code></pre></div><p>사이즈 늘린 것을 적용하려면 <code>swapon -v</code> 명령어로 다시 설정해야 한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo mkswap /swapfile
+<span style="color:#6272a4"># mkswap: /swapfile: warning: wiping old swap signature.</span>
+<span style="color:#6272a4"># Setting up swapspace version 1, size = 8 GiB (8589930496 bytes)</span>
+<span style="color:#6272a4"># no label, UUID=1516c52d-9ed8-4a52-939f-30a892aff73f</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapon -v /swapfile                                                                                                 ✭ ✱
+<span style="color:#6272a4"># swapon: /swapfile: found signature [pagesize=4096, signature=swap]</span>
+<span style="color:#6272a4"># swapon: /swapfile: pagesize=4096, swapsize=8589934592, devsize=8589934592</span>
+<span style="color:#6272a4"># swapon /swapfile</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">free -h
+<span style="color:#6272a4">#                total        used        free      shared  buff/cache   available</span>
+<span style="color:#6272a4"># Mem:            31Gi        24Gi       433Mi       4.0Gi       5.8Gi       1.5Gi</span>
+<span style="color:#6272a4"># Swap:          8.0Gi       1.3Gi       6.7Gi</span>
+</code></pre></div><h1 id="비활성화">비활성화</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo swapoff /swapfile
+</code></pre></div><p><code>/etc/fstab</code> 파일에서 Swap 파일 설정을 제거한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># /etc/fstab</span>
+<span style="color:#6272a4"># /swapfile none swap sw 0 0</span>
+</code></pre></div><h1 id="kubernetes에서-swap-기능을-비활성화해야-하는-이유">Kubernetes에서 Swap 기능을 비활성화해야 하는 이유</h1>
+<p>가장 큰 이유는 스왑 메모리가 있다면 Kubernetes는 메모리 부족 상황을 정확하게 파악할 수 없다는 것이다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>
+<strong>안정성을 위해</strong> 스왑 메모리를 비활성화하는 것이 좋다.
+스왑이 자주 발생하면 디스크 입출력이 증가하면서 성능이 저하되는 문제도 있다.</p>
+<h1 id="prometheus-node-exporter를-이용한-모니터링">Prometheus node-exporter를 이용한 모니터링</h1>
+<p><a href="https://github.com/markruler/node-monitoring">이 리포지터리</a>를 클론해서
+Prometheus와 Grafana를 실행해서 모니터링 할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">sudo docker compose up -d
+</code></pre></div><p><img src="/images/os/swap-memory/grafana-prometheus-swap-memory.png" alt="Node Monitoring with Prometheus and Grafana"></p>
+<p>본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있다.</p>
+<h1 id="더-읽을거리">더 읽을거리</h1>
+<ul>
+<li><a href="https://www.kernel.org/doc/gorman/html/understand/understand014.html">Swap Management | kernel.org</a></li>
+<li><a href="https://velog.io/@sjuhwan/Virtualization-101-3-1-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%A4%EB%B2%84%EC%BB%A4%EB%B0%8B%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%97%AC%EC%9C%A0%EA%B3%B5%EA%B0%84-%ED%99%95%EB%B3%B4-%EB%B0%A9%EB%B2%95">Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환</a></li>
+<li><a href="https://github.com/kubernetes/kubernetes/pull/31996">kubelet swap on 체크 PR#31996</a></li>
+</ul>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES">swapon(8) | Linux manual page</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal">fallocatte vs. dd | StackExchange</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><a href="https://github.com/kubernetes/kubernetes/issues/31676">최초 이슈 kuberenetes#31676</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2024-09-05</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/ip-geolocation/">
+			이전글<br>IP로 지리적 위치(Geolocation) 찾기
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수 블로그
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%8a%a4%ec%99%91-%ec%84%a4%ec%a0%95-file" class="nav-스왑-설정-file">
+									스왑 설정: file
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%8a%a4%ec%99%91-%ed%8c%8c%ec%9d%bc-%ec%83%9d%ec%84%b1" class="nav-스왑-파일-생성">
+									스왑 파일 생성
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b6%8c%ed%95%9c-%ec%84%a4%ec%a0%95" class="nav-권한-설정">
+									권한 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ed%98%95%ed%83%9c-%eb%b3%80%ea%b2%bd" class="nav-파일-형태-변경">
+									파일 형태 변경
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#swap-%ec%98%81%ec%97%ad-%ec%84%a4%ec%a0%95" class="nav-swap-영역-설정">
+									Swap 영역 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-%ed%99%95%ec%9d%b8" class="nav-설정-확인">
+									설정 확인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%80%ed%8c%85-%ec%8b%9c-%ec%9e%90%eb%8f%99-%eb%a7%88%ec%9a%b4%ed%8a%b8-%ec%84%a4%ec%a0%95" class="nav-부팅-시-자동-마운트-설정">
+									부팅 시 자동 마운트 설정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9a%a9%eb%9f%89-%eb%8a%98%eb%a6%ac%ea%b8%b0" class="nav-용량-늘리기">
+									용량 늘리기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%ed%99%9c%ec%84%b1%ed%99%94" class="nav-비활성화">
+									비활성화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#kubernetes%ec%97%90%ec%84%9c-swap-%ea%b8%b0%eb%8a%a5%ec%9d%84-%eb%b9%84%ed%99%9c%ec%84%b1%ed%99%94%ed%95%b4%ec%95%bc-%ed%95%98%eb%8a%94-%ec%9d%b4%ec%9c%a0" class="nav-kubernetes에서-swap-기능을-비활성화해야-하는-이유">
+									Kubernetes에서 Swap 기능을 비활성화해야 하는 이유
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#prometheus-node-exporter%eb%a5%bc-%ec%9d%b4%ec%9a%a9%ed%95%9c-%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" class="nav-prometheus-node-exporter를-이용한-모니터링">
+									Prometheus node-exporter를 이용한 모니터링
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

@@ -17,6 +17,7 @@ clean:
 	rm -rf posts/ \
 		about/ \
 		categories/ \
+		public/ \
 		js/ \
 		page/ \
 		resources/ \
