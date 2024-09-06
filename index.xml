@@ -23,12 +23,12 @@
         <guid>https://markruler.github.io/posts/os/swap-memory/</guid>
         <description>임창수 블로그 https://markruler.github.io/posts/os/swap-memory/ -&lt;p&gt;&lt;strong&gt;스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역&lt;/strong&gt;이다.
 고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법이다.
-이 글은 &lt;strong&gt;Ubuntu 24.04&lt;/strong&gt;에서 &lt;strong&gt;스왑 메모리를 file로 설정&lt;/strong&gt;하고, 나의 환경에 맞게 조정하기 위해 &lt;strong&gt;모니터링 하는 방법&lt;/strong&gt;을 설명한다.&lt;/p&gt;
-&lt;p&gt;먼저 현재 스왑 메모리 사용량 확인한다.&lt;/p&gt;
+이 글은 &lt;strong&gt;Ubuntu&lt;/strong&gt;에서 &lt;strong&gt;스왑 메모리를 file로 설정&lt;/strong&gt;하고, 나의 환경에 맞게 조정하기 위해 &lt;strong&gt;모니터링 하는 방법&lt;/strong&gt;을 설명한다.&lt;/p&gt;
+&lt;p&gt;먼저 스왑 메모리 설정을 확인한다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;sudo swapon --show
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정되어 있지 않다면 아무것도 출력되지 않는다.
-Ubuntu 24.04 기준으로는 기본적으로 설정되어 있다.
-이 글은 설정되어 있지 않다는 전제로 진행한다.&lt;/p&gt;
+&lt;em&gt;Ubuntu 24.04 기준&lt;/em&gt;으로는 기본적으로 다음과 같이 &lt;code&gt;/swap.img&lt;/code&gt;가 설정되어 있다.
+하지만 이 글은 설정되어 있지 않다는 전제로 진행한다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;NAME      TYPE SIZE USED PRIO
 /swap.img file   8G   0B   -2
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
