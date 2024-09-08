@@ -326,11 +326,11 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
     
         <item>
         <title>엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략</title>
-        <link>https://markruler.github.io/posts/search/elasticsearch-batch/</link>
+        <link>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</link>
         <pubDate>Wed, 21 Dec 2022 22:20:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/search/elasticsearch-batch/</guid>
-        <description>임창수 블로그 https://markruler.github.io/posts/search/elasticsearch-batch/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공한다.
+        <guid>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</guid>
+        <description>임창수 블로그 https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공한다.
 엘라스틱서치가 빠른 이유는 문서의 단어(term)들을 역색인(inverted index)하기 때문이다.
 책에서 특정 단어를 찾는 걸 상상해 보자.
 &lt;strong&gt;관계형 데이터베이스(RDB, Relational Database)는&lt;/strong&gt; &lt;code&gt;LIKE&lt;/code&gt; 검색을 통해 검색 키워드가 포함된 &lt;strong&gt;모든 페이지를 찾아야 한다&lt;/strong&gt;.
@@ -374,7 +374,7 @@ RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지
 당시 검색 키워드를 저장하고 집계만 하던 기능에 사용되던 Elastic Cloud가 있었고,
 MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었다.
 그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/search/improve-response.png&#34; alt=&#34;Elasticsearch&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/search/improve-response-time.png&#34; alt=&#34;Elasticsearch로 응답 속도 개선&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;엘라스틱서치를 검색 기능에 도입 후 서버 응답 속도 (Datadog APM)&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;개선 전 평균 응답 시간: &lt;strong&gt;약 6,000~7,000ms&lt;/strong&gt; (7일 집계)&lt;/li&gt;
@@ -430,6 +430,7 @@ Spring Batch로 전환하면 &lt;strong&gt;배치 작업을 병럴 처리해서 
 RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것이다.&lt;/p&gt;
 &lt;h1 id=&#34;이-고민을-나만-했던-게-아니었다&#34;&gt;이 고민을 나만 했던 게 아니었다&lt;/h1&gt;
 &lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html&#34;&gt;Tune for indexing speed&lt;/a&gt; | Elastic&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/fBfUr_8Pq8A&#34;&gt;엘라스틱서치를 이용한 상품 검색 엔진 개발 일지&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ&#34;&gt;샵바이 주문 검색 성능 개선기&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.redhat.com/topics/integration/what-is-change-data-capture&#34;&gt;What is change data capture (CDC)?&lt;/a&gt; | Red Hat
@@ -466,7 +467,7 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
-- https://markruler.github.io/posts/search/elasticsearch-batch/ - Im Changsu 2020 - 2024</description>
+- https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ - Im Changsu 2020 - 2024</description>
         </item>
     
     
