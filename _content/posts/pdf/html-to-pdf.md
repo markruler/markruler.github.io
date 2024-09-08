@@ -203,7 +203,6 @@ if __name__ == '__main__':
 - Server to Server로 요청 시 Spring Boot에서 FeignClient로
   [x-www-form-urlencoded](https://wildeveloperetrain.tistory.com/304)
   데이터를 보내려면 `MultiValueMap<String, String>`을 사용해야 한다.
-- OZ report는 별도의 스크립트와 프로그램을 사용하고 있기 때문에 옮기는 데에 비용이 꽤 들어서 아직 못 하고 있다.
 
 # 참조
 
