@@ -4,8 +4,8 @@ date: 2022-12-21T22:20:00+09:00
 lastmod: 2024-09-08T10:55:00+09:00
 title: "엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략"
 description: "검색 성능을 개선한 e커머스 서비스 사례"
-featured_image: "/images/search/web-solution-capabilities-data-ingestion.png"
-images: ["/images/search/web-solution-capabilities-data-ingestion.png"]
+featured_image: "/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"
+images: ["/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"]
 tags:
   - elasticsearch
   - batch
@@ -50,7 +50,7 @@ RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지
 MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었다.
 그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했다.
 
-![Elasticsearch로 응답 속도 개선](/images/search/improve-response-time.png)
+![Elasticsearch로 응답 속도 개선](/images/search/elasticsearch-indexing-strategy/improve-response-time.png)
 
 *엘라스틱서치를 검색 기능에 도입 후 서버 응답 속도 (Datadog APM)*
 
