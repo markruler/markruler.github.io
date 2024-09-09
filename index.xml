@@ -408,7 +408,7 @@ Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다
 플랫폼마다 Trace 방법이 달라서 추적 흐름이 끊기는 것을 방지하기 위해 통합이 필요하단 이유&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;였다.
 Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했다.
 Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/datadog-trace-context.png&#34; alt=&#34;datadog-trace-context.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/datadog-trace-context.webp&#34; alt=&#34;datadog-trace-context.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context | Datadog&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;traceparent-헤더-형식&#34;&gt;Traceparent 헤더 형식&lt;/h2&gt;
 &lt;ul&gt;
@@ -545,7 +545,7 @@ Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원한다.&l
 &lt;/ul&gt;
 &lt;h2 id=&#34;5-결과&#34;&gt;5. 결과&lt;/h2&gt;
 &lt;p&gt;Trace에 Log를 연결한 모습은 다음과 같다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/connect-trace-log.png&#34; alt=&#34;Connect Trace and Log&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/connect-trace-log.webp&#34; alt=&#34;Connect Trace and Log&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;마치며&#34;&gt;마치며&lt;/h1&gt;
 &lt;p&gt;서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &amp;gt; CDN &amp;gt; 웹 서버 로그로 확인할 수 있고,
 방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있다.&lt;/p&gt;
@@ -555,7 +555,7 @@ OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템
 Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
 원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있었다.
 아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습이다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/solve-network-delay.png&#34; alt=&#34;Solve Network Delay&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/solve-network-delay.webp&#34; alt=&#34;Solve Network Delay&#34;&gt;&lt;/p&gt;
 &lt;p&gt;이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었다.&lt;/p&gt;
 &lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;

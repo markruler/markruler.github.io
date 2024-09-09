@@ -4,9 +4,8 @@ date: 2024-09-05T21:13:00+09:00
 lastmod: 2024-09-05T21:13:00+09:00
 title: "일상에서의 스왑 메모리 (Swap Memory)"
 description: "스왑 메모리 설정과 모니터링"
-# featured_image: "/images/os/swap-memory/pexels-artyusufpatel-9203123.jpg"
-featured_image: "/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.jpg"
-images: ["/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.jpg"]
+featured_image: "/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.webp"
+images: ["/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.webp"]
 tags:
   - linux
   - memory

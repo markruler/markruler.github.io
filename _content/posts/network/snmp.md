@@ -3,8 +3,8 @@ date: 2024-07-23T19:08:00+09:00
 lastmod: 2024-07-23T19:08:00+09:00
 title: "네트워크 장비 모니터링을 위한 SNMP"
 description: "Simple Network Management Protocol"
-featured_image: "/images/network/snmp/pexels-googledeepmind-17485706.jpg"
-images: ["/images/network/snmp/pexels-googledeepmind-17485706.jpg"]
+featured_image: "/images/network/snmp/pexels-googledeepmind-17485706.webp"
+images: ["/images/network/snmp/pexels-googledeepmind-17485706.webp"]
 tags:
   - network
   - monitoring

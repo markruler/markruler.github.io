@@ -3,8 +3,8 @@ date: 2024-08-22T18:00:00+09:00
 lastmod: 2024-09-05T21:47:00+09:00
 title: "Traceparent 헤더로 클라이언트부터 서버까지 추적하기"
 description: "W3C Trace Context"
-featured_image: "/images/web/traceparent-datadog/w3c.png"
-images: ["/images/web/traceparent-datadog/w3c.png"]
+featured_image: "/images/web/traceparent-datadog/w3c.webp"
+images: ["/images/web/traceparent-datadog/w3c.webp"]
 tags:
   - network
   - monitoring
@@ -47,7 +47,7 @@ W3C 권고안(REC, Recommendation)인 Trace Context[^1]는 분산 추적 통합�
 Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했다.
 Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했다.
 
-![datadog-trace-context.png](/images/web/traceparent-datadog/datadog-trace-context.png)
+![datadog-trace-context.png](/images/web/traceparent-datadog/datadog-trace-context.webp)
 
 *[Monitor OTel instrumented apps with support for W3C Trace Context | Datadog](https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/)*
 
@@ -211,7 +211,7 @@ nohup ~/.jdk/temurin-17.0.6/bin/java \
 
 Trace에 Log를 연결한 모습은 다음과 같다.
 
-![Connect Trace and Log](/images/web/traceparent-datadog/connect-trace-log.png)
+![Connect Trace and Log](/images/web/traceparent-datadog/connect-trace-log.webp)
 
 # 마치며
 
@@ -226,7 +226,7 @@ Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 
 원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있었다.
 아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습이다.
 
-![Solve Network Delay](/images/web/traceparent-datadog/solve-network-delay.png)
+![Solve Network Delay](/images/web/traceparent-datadog/solve-network-delay.webp)
 
 이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었다.
 
