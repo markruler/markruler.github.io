@@ -398,8 +398,8 @@ in order to weed out bad data and increase the probability of the location we ch
 우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
 &lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum&#34;&gt;RUM(Real User Monitoring)을 APM과 연결하면&lt;/a&gt;
 클라이언트부터 서버 Span까지 한눈에 확인할 수 있다.
-하지만 Akamai에선 4초 이상이라고 응답 속도가 측정되고, RUM에선 수백ms로 측정돼서 확인해보니,
-Akamai Datastream 2에서는 요청하고 응답받을 때까지 duration을 측정하고,
+하지만 응답 속도가 Akamai에선 4초 이상이라고 측정되고 Datadog RUM에선 수백ms로 측정되었다.
+그래서 Datadog에 확인 요청했더니 Akamai Datastream 2에서는 요청하고 응답받을 때까지의 duration을 측정하지만,
 Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다고 한다(2024년 8월 22일 기준).
 게다가 일주일 간 RUM 스크립트를 추가해보니 예상 견적이 만만치 않았다.
 다른 방법을 찾아야 했다.&lt;/p&gt;
