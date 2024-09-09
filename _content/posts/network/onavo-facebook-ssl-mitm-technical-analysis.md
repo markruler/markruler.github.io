@@ -1,6 +1,6 @@
 ---
 draft: true
-date: 2024-09-05T21:59:00+09:00
+date: 2024-09-08T21:59:00+09:00
 lastmod: 2024-09-12T18:00:00+09:00
 title: "Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"
 description: "@HaxRob"
@@ -8,6 +8,7 @@ featured_image: "/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbda
 images: ["/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"]
 tags:
   - network
+  - mitm
 categories:
   - translate
 ---
