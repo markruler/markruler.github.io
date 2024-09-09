@@ -109,7 +109,8 @@ cd _blog
 ## Theme 변경
 
 ```sh
-git submodule add -b main git@github.com:AmazingRise/hugo-theme-diary.git themes/hugo-theme-diary
+# git submodule add -b main git@github.com:AmazingRise/hugo-theme-diary.git themes/hugo-theme-diary
+git submodule add -b develop git@github.com:markruler/hugo-theme-diary.git themes/hugo-theme-diary
 ```
 
 ```sh
