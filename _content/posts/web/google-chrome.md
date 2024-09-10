@@ -1,6 +1,7 @@
 ---
+draft: false
 date: 2024-07-29T00:51:00+09:00
-lastmod: 2024-08-06T01:07:00+09:00
+lastmod: 2024-09-10T11:15:00+09:00
 title: "웹 개발자가 알면 유용한 구글 크롬(Google Chrome)의 기능"
 description: "개발 편의성을 높일 수 있는 기능을 소개합니다."
 featured_image: "/images/web/google-chrome/google-chrome-1200x630wa.png"
@@ -87,6 +88,11 @@ javascript:void(window.open(location));
 ```js
 // wayback machine에 현재 페이지 저장
 javascript:void(window.open("https://web.archive.org/save/"+document.location.href));
+```
+
+```js
+// decoded URI 복사
+javascript:console.log(prompt('copy (Control+C) this link:', decodeURIComponent(window.location)))
 ```
 
 ## 자바스크립트 스니펫
