@@ -798,14 +798,14 @@ if (!doNotTrack) {
 <h1 id="관련-명령어-도구">관련 명령어 도구</h1>
 <h2 id="snmpget">snmpget</h2>
 <p>정확한 OID를 입력해야 해서 난 잘 사용하지 않음.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># output</span>
-iso.3.6.1.2.1.1.1.0 <span style="color:#ff79c6">=</span> STRING: <span style="color:#f1fa8c">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
-</span><span style="color:#f1fa8c">Technical Support: http://www.cisco.com/techsupport
-</span><span style="color:#f1fa8c">Copyright (c) 1986-2011 by Cisco Systems, Inc.
-</span><span style="color:#f1fa8c">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># output</span>
+iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
+</span><span style="color:#87ceeb">Technical Support: http://www.cisco.com/techsupport
+</span><span style="color:#87ceeb">Copyright (c) 1986-2011 by Cisco Systems, Inc.
+</span><span style="color:#87ceeb">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
 </code></pre></div><h2 id="snmpwalk">snmpwalk</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; <span style="color:#ff79c6">[</span>OID<span style="color:#ff79c6">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; [OID]
 </code></pre></div><ul>
 <li>도움말
 <ul>
@@ -817,7 +817,7 @@ iso.3.6.1.2.1.1.1.0 <span style="color:#ff79c6">=</span> STRING: <span style="co
 <li><code>-l</code> : security level (<code>noAuthNoPriv</code> | <code>authNoPriv</code> | <code>authPriv</code>)</li>
 <li><code>-c</code> : the community string</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
 </code></pre></div><h1 id="mib-2-oid-object-id">MIB-2 OID (Object ID)</h1>
 <p><img src="https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&amp;v=beta&amp;t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY" alt="OID Tree"></p>
 <p><em><a href="https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari">SNMP Explained: What You Must Know About Monitoring via MIB and OIDs</a></em></p>

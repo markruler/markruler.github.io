@@ -503,14 +503,14 @@ if (!doNotTrack) {
 하이에서 로우로 <strong>바뀔 때</strong> 신경써야 할까요, 아니면 하이에
 <strong>있는 지 여부</strong>에 신경써야 할까요?</p>
 <p>아래처럼 간단한 덧셈 연산을 통해 설명해보겠습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">3</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
-<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">7</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">&gt; <span style="color:#f00">let</span> a = <span style="color:#f60">3</span>;
+&gt; a += <span style="color:#f60">4</span>;
+&lt; <span style="color:#f60">7</span>
 </code></pre></div><p>에지 트리거링 관점에서 위 연산은 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">add <span style="color:#bd93f9">4</span> to a
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">add <span style="color:#f60">4</span> to a
 </code></pre></div><p>더하는 순간 한 번 발생합니다.</p>
 <p>레벨 트리거링 관점에서는 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">a is <span style="color:#bd93f9">7</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">a is <span style="color:#f60">7</span>
 </code></pre></div><p>더할 때부터 다음 이벤트가 발생할 때까지 계속 이러한 상태가 유지됩니다.</p>
 <h2 id="분산-시스템에서-에지-트리거링과-레벨-트리거링">분산 시스템에서 에지 트리거링과 레벨 트리거링</h2>
 <p>추상적으로는 에지 트리거링과 레벨 트리거링 사이에 명확한 차이가 없습니다.
@@ -547,16 +547,16 @@ if (!doNotTrack) {
 하강하는 신호가 가려지면 레벨 트리거 시스템은 대부분 다시 교정하지만,
 에지 트리거 시스템은 두 번의 상승만 볼 수 있기 때문에 본래의 신호를 잃어버립니다.</p>
 <p>다시 덧셈 연산으로 레벨 트리거 시스템의 신호를 나타내면 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">2</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">&gt; <span style="color:#f00">let</span> a = <span style="color:#f60">1</span>;
+&gt; a += <span style="color:#f60">1</span>;
+&gt; a -= <span style="color:#f60">1</span>;
+&gt; a += <span style="color:#f60">1</span>;
+&lt; <span style="color:#f60">2</span>
 </code></pre></div><p>그러나 에지 트리거 시스템에서는 아래와 같이 관측됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> a <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> a <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&lt;</span> <span style="color:#bd93f9">3</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">&gt; <span style="color:#f00">let</span> a = <span style="color:#f60">1</span>;
+&gt; a += <span style="color:#f60">1</span>;
+&gt; a += <span style="color:#f60">1</span>;
+&lt; <span style="color:#f60">3</span>
 </code></pre></div><h1 id="희망-상태와-실제-상태-조정하기">희망 상태와 실제 상태 조정하기</h1>
 <p>쿠버네티스는 하나의 신호만 관측하지 않고 <strong>희망하는(desired)</strong> 클러스터
 상태와 <strong>실제(actual)</strong> 클러스터 상태 두 가지를 관측합니다.
@@ -578,9 +578,9 @@ if (!doNotTrack) {
 <p>단일 컨테이너 레플리카로 시작해서 5개의 레플리카로 확장한 후
 2개의 레플리카로 축소하려는 경우,
 에지 트리거 시스템은 희망 상태를 아래와 같이 관측합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#ff79c6">&gt;</span> <span style="color:#8be9fd;font-style:italic">let</span> replicas <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">1</span>;
-<span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">+=</span> <span style="color:#bd93f9">4</span>;
-<span style="color:#ff79c6">&gt;</span> replicas <span style="color:#ff79c6">-=</span> <span style="color:#bd93f9">3</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript">&gt; <span style="color:#f00">let</span> replicas = <span style="color:#f60">1</span>;
+&gt; replicas += <span style="color:#f60">4</span>;
+&gt; replicas -= <span style="color:#f60">3</span>;
 </code></pre></div><p>시스템의 실제 상태는 이러한 명령에 즉시 반응할 수 없습니다.
 위 다이어그램처럼 실행 중인 레플리카가 3개만 있을 때 3개의 레플리카를
 종료할 수도 있습니다. 그럼 레플리카가 하나도 안 남겠죠.</p>

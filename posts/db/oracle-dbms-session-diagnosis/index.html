@@ -443,51 +443,51 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.</p>
 <p>Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html">V$SESSION</a>)에서
 세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql"><span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">*</span>
-<span style="color:#ff79c6">FROM</span> (<span style="color:#ff79c6">SELECT</span> sess.sid,
-             sess.<span style="color:#8be9fd;font-style:italic">serial</span><span style="color:#ff79c6">#</span>,
-             ROUND(sess.wait_time_micro <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">1000</span>, <span style="color:#bd93f9">2</span>)            wait_time_millis,
-             ROUND(sess.time_since_last_wait_micro <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">1000</span>, <span style="color:#bd93f9">2</span>) time_since_last_wait_millis,
-             <span style="color:#ff79c6">CASE</span>
-                 <span style="color:#ff79c6">WHEN</span> sess.status <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;ACTIVE&#39;</span>
-                     <span style="color:#ff79c6">THEN</span> sess.last_call_et
-                 <span style="color:#ff79c6">ELSE</span> <span style="color:#bd93f9">0</span>
-                 <span style="color:#ff79c6">END</span>                                          active_elapsed_time_secs,
-             sess.<span style="color:#ff79c6">state</span>,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql"><span style="color:#f00">SELECT</span> *
+<span style="color:#f00">FROM</span> (<span style="color:#f00">SELECT</span> sess.sid,
+             sess.serial#,
+             ROUND(sess.wait_time_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>)            wait_time_millis,
+             ROUND(sess.time_since_last_wait_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>) time_since_last_wait_millis,
+             <span style="color:#f00">CASE</span>
+                 <span style="color:#f00">WHEN</span> sess.status = <span style="color:#87ceeb">&#39;ACTIVE&#39;</span>
+                     <span style="color:#f00">THEN</span> sess.last_call_et
+                 <span style="color:#f00">ELSE</span> <span style="color:#f60">0</span>
+                 <span style="color:#f00">END</span>                                          active_elapsed_time_secs,
+             sess.<span style="color:#f00">state</span>,
              sess.event,
              sess.username,
              sess.osuser,
              sess.machine,
              sess.program,
-             sess.<span style="color:#ff79c6">type</span>,
+             sess.<span style="color:#f00">type</span>,
              sess.sql_child_number,
              sess.sql_exec_id,
              sess.sql_exec_start,
              sess.sql_id,
-             (<span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">sql</span>.sql_fulltext
-              <span style="color:#ff79c6">FROM</span> v$sql <span style="color:#ff79c6">sql</span>
-              <span style="color:#ff79c6">WHERE</span> sess.sql_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sql</span>.sql_id
-                  <span style="color:#ff79c6">FETCH</span> <span style="color:#ff79c6">FIRST</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ROWS</span> <span style="color:#ff79c6">ONLY</span>) sql_fulltext,
+             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
+              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
+              <span style="color:#f00">WHERE</span> sess.sql_id = <span style="color:#f00">sql</span>.sql_id
+                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) sql_fulltext,
              sess.prev_exec_id,
              sess.prev_exec_start,
              sess.prev_sql_id,
-             (<span style="color:#ff79c6">SELECT</span> <span style="color:#ff79c6">sql</span>.sql_fulltext
-              <span style="color:#ff79c6">FROM</span> v$sql <span style="color:#ff79c6">sql</span>
-              <span style="color:#ff79c6">WHERE</span> sess.prev_sql_id <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">sql</span>.sql_id
-                  <span style="color:#ff79c6">FETCH</span> <span style="color:#ff79c6">FIRST</span> <span style="color:#bd93f9">1</span> <span style="color:#ff79c6">ROWS</span> <span style="color:#ff79c6">ONLY</span>) prev_sql_fulltext,
+             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
+              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
+              <span style="color:#f00">WHERE</span> sess.prev_sql_id = <span style="color:#f00">sql</span>.sql_id
+                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) prev_sql_fulltext,
              blocking_session
-      <span style="color:#ff79c6">FROM</span> v$session sess
-      <span style="color:#ff79c6">WHERE</span> sess.username <span style="color:#ff79c6">!=</span> <span style="color:#f1fa8c">&#39;SYS&#39;</span>
-      <span style="color:#ff79c6">ORDER</span> <span style="color:#ff79c6">BY</span> logon_time <span style="color:#ff79c6">DESC</span>)
-<span style="color:#ff79c6">WHERE</span> (wait_time_millis <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">OR</span> time_since_last_wait_millis <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span>)
-  <span style="color:#6272a4">/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/</span>
-  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;update user$ set spare6=DECODE(to_char(:2, &#39;&#39;YYYY-MM-DD&#39;&#39;), &#39;&#39;0000-00-00&#39;&#39;, to_date(NULL), :2) where user#=:1&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
-  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
-  <span style="color:#ff79c6">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#f1fa8c">&#39;UPDATE &#34;SYSTEM&#34;.&#34;SYS_EXPORT_SCHEMA_01&#34; SET value_n = :1 WHERE process_order = :2&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
-  <span style="color:#ff79c6">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#f1fa8c">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) <span style="color:#ff79c6">!=</span> <span style="color:#bd93f9">0</span>
+      <span style="color:#f00">FROM</span> v$session sess
+      <span style="color:#f00">WHERE</span> sess.username != <span style="color:#87ceeb">&#39;SYS&#39;</span>
+      <span style="color:#f00">ORDER</span> <span style="color:#f00">BY</span> logon_time <span style="color:#f00">DESC</span>)
+<span style="color:#f00">WHERE</span> (wait_time_millis &gt; <span style="color:#f60">0</span> <span style="color:#f00">OR</span> time_since_last_wait_millis &gt; <span style="color:#f60">0</span>)
+  <span style="color:#0f0">/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/</span>
+  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;update user$ set spare6=DECODE(to_char(:2, &#39;&#39;YYYY-MM-DD&#39;&#39;), &#39;&#39;0000-00-00&#39;&#39;, to_date(NULL), :2) where user#=:1&#39;</span>) != <span style="color:#f60">0</span>
+  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&#39;</span>) != <span style="color:#f60">0</span>
+  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;UPDATE &#34;SYSTEM&#34;.&#34;SYS_EXPORT_SCHEMA_01&#34; SET value_n = :1 WHERE process_order = :2&#39;</span>) != <span style="color:#f60">0</span>
+  <span style="color:#f00">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) != <span style="color:#f60">0</span>
 </code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였다.
 이를 Elasticsearch에 저장하려면 식별자가 필요했다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#8be9fd;font-style:italic">id</span> <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">f</span><span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">{</span>prev_exec_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>prev_sql_id<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">{</span>unix_epoch_time(prev_exec_start)<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python">id = <span style="color:#87ceeb">f</span><span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">{</span>prev_exec_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>prev_sql_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>unix_epoch_time(prev_exec_start)<span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
 </code></pre></div><p>먼저 고려했던 식별자는 <code>sql_exec_id</code>와 <code>sql_id</code>다.
 하지만 대기 상태라면 <code>sql_exec_id</code>는 <code>NULL</code>이기 때문에 <code>prev_exec_id</code>와 <code>prev_sql_id</code>를 선택했다.
 어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었다.

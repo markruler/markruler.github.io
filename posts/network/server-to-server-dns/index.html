@@ -412,82 +412,82 @@ if (!doNotTrack) {
 </ul>
 <h1 id="분석-dig-으로-테스트">분석: dig 으로 테스트</h1>
 <h2 id="nameserver-8888-로-지정">nameserver 8.8.8.8 로 지정</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">dig @8.8.8.8 api.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">dig @8.8.8.8 api.example.com
 </code></pre></div><p>첫번째 요청 292 msec</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#bd93f9">292</span> msec
-;; SERVER: 8.8.8.8#53<span style="color:#ff79c6">(</span>8.8.8.8<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">(</span>UDP<span style="color:#ff79c6">)</span>
-;; WHEN: Tue Jun <span style="color:#bd93f9">11</span> 11:00:54 KST <span style="color:#bd93f9">2024</span>
-;; MSG SIZE  rcvd: <span style="color:#bd93f9">154</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#f60">292</span> msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Tue Jun <span style="color:#f60">11</span> 11:00:54 KST <span style="color:#f60">2024</span>
+;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
 </code></pre></div><p>2번째 요청 36 msec</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#bd93f9">36</span> msec
-;; SERVER: 8.8.8.8#53<span style="color:#ff79c6">(</span>8.8.8.8<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">(</span>UDP<span style="color:#ff79c6">)</span>
-;; WHEN: Tue Jun <span style="color:#bd93f9">11</span> 11:00:57 KST <span style="color:#bd93f9">2024</span>
-;; MSG SIZE  rcvd: <span style="color:#bd93f9">154</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#f60">36</span> msec
+;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
+;; WHEN: Tue Jun <span style="color:#f60">11</span> 11:00:57 KST <span style="color:#f60">2024</span>
+;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
 </code></pre></div><h2 id="nameserver는-resolvconf-설정을-따름">nameserver는 <code>resolv.conf</code> 설정을 따름</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># /etc/resolv.conf</span>
-<span style="color:#6272a4"># LG 메인 네임 서버</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># /etc/resolv.conf</span>
+<span style="color:#0f0"># LG 메인 네임 서버</span>
 nameserver 164.124.101.2
-<span style="color:#6272a4"># LG 보조 네임 서버</span>
+<span style="color:#0f0"># LG 보조 네임 서버</span>
 nameserver 203.248.252.2
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">dig api.example.com
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">dig api.example.com
 </code></pre></div><p>첫번째 시도</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#bd93f9">17</span> msec
-;; SERVER: 164.124.101.2#53<span style="color:#ff79c6">(</span>164.124.101.2<span style="color:#ff79c6">)</span>
-;; WHEN: 화  6월 <span style="color:#bd93f9">11</span> 17:14:45 KST <span style="color:#bd93f9">2024</span>
-;; MSG SIZE  rcvd: <span style="color:#bd93f9">154</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#f60">17</span> msec
+;; SERVER: 164.124.101.2#53(164.124.101.2)
+;; WHEN: 화  6월 <span style="color:#f60">11</span> 17:14:45 KST <span style="color:#f60">2024</span>
+;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
 </code></pre></div><p>두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었음.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#bd93f9">230</span> msec
-;; SERVER: 164.124.101.2#53<span style="color:#ff79c6">(</span>164.124.101.2<span style="color:#ff79c6">)</span>
-;; WHEN: 화  6월 <span style="color:#bd93f9">11</span> 17:25:41 KST <span style="color:#bd93f9">2024</span>
-;; MSG SIZE  rcvd: <span style="color:#bd93f9">154</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">;; Query time: <span style="color:#f60">230</span> msec
+;; SERVER: 164.124.101.2#53(164.124.101.2)
+;; WHEN: 화  6월 <span style="color:#f60">11</span> 17:25:41 KST <span style="color:#f60">2024</span>
+;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
 </code></pre></div><h2 id="비교">비교</h2>
 <p><code>LG DNS</code>는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생함.
 (현재 서버가 위치한 IDC 회선이 LG라서 LG DNS 사용)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">watch -n <span style="color:#bd93f9">1</span> <span style="color:#f1fa8c">&#34;dig @164.124.101.2 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
-<span style="color:#6272a4"># ;; Query time: 3 msec</span>
-<span style="color:#6272a4"># ;; Query time: 227 msec</span>
-<span style="color:#6272a4"># ;; Query time: 5 msec</span>
-<span style="color:#6272a4"># ;; Query time: 5 msec</span>
-<span style="color:#6272a4"># ;; Query time: 4 msec</span>
-<span style="color:#6272a4"># ;; Query time: 5 msec</span>
-<span style="color:#6272a4"># ;; Query time: 7 msec</span>
-<span style="color:#6272a4"># ;; Query time: 228 msec</span>
-<span style="color:#6272a4"># ;; Query time: 4 msec</span>
-<span style="color:#6272a4"># ;; Query time: 14 msec</span>
-<span style="color:#6272a4"># ;; Query time: 3 msec</span>
-<span style="color:#6272a4"># ;; Query time: 5 msec</span>
-<span style="color:#6272a4"># ;; Query time: 3 msec</span>
-<span style="color:#6272a4"># ;; Query time: 10 msec</span>
-<span style="color:#6272a4"># ...</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">watch -n <span style="color:#f60">1</span> <span style="color:#87ceeb">&#34;dig @164.124.101.2 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
+<span style="color:#0f0"># ;; Query time: 3 msec</span>
+<span style="color:#0f0"># ;; Query time: 227 msec</span>
+<span style="color:#0f0"># ;; Query time: 5 msec</span>
+<span style="color:#0f0"># ;; Query time: 5 msec</span>
+<span style="color:#0f0"># ;; Query time: 4 msec</span>
+<span style="color:#0f0"># ;; Query time: 5 msec</span>
+<span style="color:#0f0"># ;; Query time: 7 msec</span>
+<span style="color:#0f0"># ;; Query time: 228 msec</span>
+<span style="color:#0f0"># ;; Query time: 4 msec</span>
+<span style="color:#0f0"># ;; Query time: 14 msec</span>
+<span style="color:#0f0"># ;; Query time: 3 msec</span>
+<span style="color:#0f0"># ;; Query time: 5 msec</span>
+<span style="color:#0f0"># ;; Query time: 3 msec</span>
+<span style="color:#0f0"># ;; Query time: 10 msec</span>
+<span style="color:#0f0"># ...</span>
 </code></pre></div><p><code>8.8.8.8</code> 은 더 심함.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">watch -n <span style="color:#bd93f9">1</span> <span style="color:#f1fa8c">&#34;dig @8.8.8.8 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
-<span style="color:#6272a4"># ;; Query time: 303 msec</span>
-<span style="color:#6272a4"># ;; Query time: 121 msec</span>
-<span style="color:#6272a4"># ;; Query time: 342 msec</span>
-<span style="color:#6272a4"># ;; Query time: 49 msec</span>
-<span style="color:#6272a4"># ;; Query time: 239 msec</span>
-<span style="color:#6272a4"># ;; Query time: 305 msec</span>
-<span style="color:#6272a4"># ;; Query time: 49 msec</span>
-<span style="color:#6272a4"># ;; Query time: 239 msec</span>
-<span style="color:#6272a4"># ;; Query time: 129 msec</span>
-<span style="color:#6272a4"># ;; Query time: 120 msec</span>
-<span style="color:#6272a4"># ;; Query time: 50 msec</span>
-<span style="color:#6272a4"># ;; Query time: 39 msec</span>
-<span style="color:#6272a4"># ;; Query time: 162 msec</span>
-<span style="color:#6272a4"># ;; Query time: 48 msec</span>
-<span style="color:#6272a4"># ;; Query time: 37 msec</span>
-<span style="color:#6272a4"># ;; Query time: 37 msec</span>
-<span style="color:#6272a4"># ;; Query time: 277 msec</span>
-<span style="color:#6272a4"># ;; Query time: 173 msec</span>
-<span style="color:#6272a4"># ;; Query time: 50 msec</span>
-<span style="color:#6272a4"># ;; Query time: 334 msec</span>
-<span style="color:#6272a4"># ...</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">watch -n <span style="color:#f60">1</span> <span style="color:#87ceeb">&#34;dig @8.8.8.8 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
+<span style="color:#0f0"># ;; Query time: 303 msec</span>
+<span style="color:#0f0"># ;; Query time: 121 msec</span>
+<span style="color:#0f0"># ;; Query time: 342 msec</span>
+<span style="color:#0f0"># ;; Query time: 49 msec</span>
+<span style="color:#0f0"># ;; Query time: 239 msec</span>
+<span style="color:#0f0"># ;; Query time: 305 msec</span>
+<span style="color:#0f0"># ;; Query time: 49 msec</span>
+<span style="color:#0f0"># ;; Query time: 239 msec</span>
+<span style="color:#0f0"># ;; Query time: 129 msec</span>
+<span style="color:#0f0"># ;; Query time: 120 msec</span>
+<span style="color:#0f0"># ;; Query time: 50 msec</span>
+<span style="color:#0f0"># ;; Query time: 39 msec</span>
+<span style="color:#0f0"># ;; Query time: 162 msec</span>
+<span style="color:#0f0"># ;; Query time: 48 msec</span>
+<span style="color:#0f0"># ;; Query time: 37 msec</span>
+<span style="color:#0f0"># ;; Query time: 37 msec</span>
+<span style="color:#0f0"># ;; Query time: 277 msec</span>
+<span style="color:#0f0"># ;; Query time: 173 msec</span>
+<span style="color:#0f0"># ;; Query time: 50 msec</span>
+<span style="color:#0f0"># ;; Query time: 334 msec</span>
+<span style="color:#0f0"># ...</span>
 </code></pre></div><h1 id="해결-호스트-파일-수정">해결: 호스트 파일 수정</h1>
 <p>server -&gt; L4 Switch -&gt; server는 프록시 없이 설정할 수 없다고 함.
 실제로 호스트 파일(<code>/etc/hosts</code>)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃 발생함.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># &lt;L4_IP_ADDRESS&gt; api.example.com</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># &lt;L4_IP_ADDRESS&gt; api.example.com</span>
 </code></pre></div><p>아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정함.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">127.0.0.1 api.example.com
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">127.0.0.1 api.example.com
 </code></pre></div><p><img src="/images/network/image-20240611-080044.webp" alt="Datadog Timeseries"></p>
 <ul>
 <li>처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인함.</li>

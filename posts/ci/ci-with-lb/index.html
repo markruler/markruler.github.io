@@ -635,33 +635,33 @@ if (!doNotTrack) {
 <li>배포하기 전에 서비스 도메인(<code>d1.markruler.com</code>, <code>d2.markruler.com</code>)에 접속할 수 있는지 확인한다.</li>
 <li>가상 호스트(vhost)에 묶여 있는 <code>s1</code> 서버를 비활성화한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Server Load Balancing Information<span style="color:#6272a4"># /info/slb/virt 1</span>
-  <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> IP4 <span style="color:#ff79c6">&lt;</span>vhost_IP_Address<span style="color:#ff79c6">&gt;</span>,   <span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span>
-  virtual ports<span style="color:#ff79c6">:</span>
-  http<span style="color:#ff79c6">:</span> rport http, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-      real servers<span style="color:#ff79c6">:</span>
-          <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-          <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-  https<span style="color:#ff79c6">:</span> rport https, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-      real servers<span style="color:#ff79c6">:</span>
-          <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-          <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># /cfg/slb/real 1/dis</span>
-Current status<span style="color:#ff79c6">:</span> enabled
-New status<span style="color:#ff79c6">:</span>     disabled
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s">&gt;&gt; Server Load Balancing Information<span style="color:#0f0"># /info/slb/virt 1</span>
+  <span style="color:#f60">1</span>: IP4 &lt;vhost_IP_Address&gt;,   <span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>
+  virtual ports:
+  http: rport http, group <span style="color:#f60">1</span>, backup none, rtspslb none
+      real servers:
+          <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+          <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+  https: rport https, group <span style="color:#f60">1</span>, backup none, rtspslb none
+      real servers:
+          <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+          <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s">&gt;&gt; Main<span style="color:#0f0"># /cfg/slb/real 1/dis</span>
+Current status: enabled
+New status:     disabled
 
-<span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># apply</span>
+&gt;&gt; Main<span style="color:#0f0"># apply</span>
 </code></pre></div><ol start="5">
 <li>다시 3번과 동일하게 서비스 도메인에 접속할 수 있는지 확인한다.</li>
 <li>Bamboo를 사용해서 새로운 버전의 애플리케이션 2개(<code>s1:38888</code>, <code>s1:39999</code>)를 배포한다.</li>
 <li>배포 스크립트에서 별도로 헬스체크를 하지 않기 때문에 수동으로 접속할 수 있는지 확인(&ldquo;새로 고침&rdquo;)한다.</li>
 <li>정상적으로 접속되면 Alteon Switch에서 <code>s1</code> 서버를 활성화한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># /cfg/slb/real 1/ena</span>
-Current status<span style="color:#ff79c6">:</span> disabled
-New status<span style="color:#ff79c6">:</span>     enabled
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s">&gt;&gt; Main<span style="color:#0f0"># /cfg/slb/real 1/ena</span>
+Current status: disabled
+New status:     enabled
 
-<span style="color:#ff79c6">&gt;&gt;</span> Main<span style="color:#6272a4"># apply</span>
+&gt;&gt; Main<span style="color:#0f0"># apply</span>
 </code></pre></div><ol start="9">
 <li>그 후 <code>s2</code> 서버를 비활성화한다. (8번과 동시에 적용하면 Akamai CDN 서비스에서 <a href="#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5"><code>ERR_ZERO_SIZE_OBJECT</code> 에러가 발생할 수 있다</a>)</li>
 <li>다시 3번과 동일하게 서비스 도메인에 접속할 수  있는지 확인한다.</li>
@@ -682,12 +682,12 @@ New status<span style="color:#ff79c6">:</span>     enabled
 <ul>
 <li>
 <p>쉘 스크립트를 활용해 자동으로 새로운 버전의 애플리케이션을 배포하고 헬스체크한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/usr/bin/env bash
-</span><span style="color:#ff79c6"></span>
-<span style="color:#ff79c6">while</span> ! curl --silent --output /dev/null --head --fail --max-time <span style="color:#bd93f9">3</span> --location <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">1</span><span style="color:#f1fa8c">}</span>; <span style="color:#ff79c6">do</span>
-  <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;Healthchecking...</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">1</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
-  sleep <span style="color:#bd93f9">2</span>
-<span style="color:#ff79c6">done</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#e5e5e5">#!/usr/bin/env bash
+</span><span style="color:#e5e5e5"></span>
+<span style="color:#f00">while</span> ! curl --silent --output /dev/null --head --fail --max-time <span style="color:#f60">3</span> --location <span style="color:#87ceeb">${</span><span style="color:#eedd82">1</span><span style="color:#87ceeb">}</span>; <span style="color:#f00">do</span>
+  echo <span style="color:#87ceeb">&#34;Healthchecking...</span><span style="color:#87ceeb">${</span><span style="color:#eedd82">1</span><span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
+  sleep <span style="color:#f60">2</span>
+<span style="color:#f00">done</span>
 </code></pre></div></li>
 </ul>
 </li>
@@ -710,7 +710,7 @@ New status<span style="color:#ff79c6">:</span>     enabled
 </blockquote>
 <p><code>s1</code> 과 <code>s2</code> 서버에는 CentOS 7이 설치되어있다.
 해당 OS에서는 httpd를 <strong>2.4.6 버전</strong>까지만 업데이트 할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; yum info httpd
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; yum info httpd
 ...
 Available Packages
 Name        : httpd
@@ -724,134 +724,134 @@ IDC 물리 서버를 사용하고 있었기 때문에 OS 교체는 상당히 큰
 그래서 컨테이너를 도입하기로 결정했다.</p>
 <p>설정 파일(<code>httpd.conf</code>)은 기존 설정을 최대한 그대로 사용하기로 했다.
 <code>volumes</code> 경로는 어느 환경에서든 동일하도록 가급적 절대 경로를 사용했다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; <span style="color:#8be9fd;font-style:italic">cd</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">HOME</span><span style="color:#f1fa8c">}</span>/httpd
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; cd <span style="color:#87ceeb">${</span><span style="color:#eedd82">HOME</span><span style="color:#87ceeb">}</span>/httpd
 &gt; ls
 docker-compose.yaml  httpd.conf
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># docker-compose.yaml</span>
-<span style="color:#ff79c6">version</span>: <span style="color:#f1fa8c">&#34;3.8&#34;</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#0f0"># docker-compose.yaml</span>
+version: <span style="color:#87ceeb">&#34;3.8&#34;</span>
 
-<span style="color:#ff79c6">services</span>:
-  <span style="color:#ff79c6">slb</span>:
-    <span style="color:#ff79c6">image</span>: httpd:2.4.54-alpine
-    <span style="color:#ff79c6">container_name</span>: slb
-    <span style="color:#ff79c6">hostname</span>: markruler.com
-    <span style="color:#ff79c6">ports</span>:
-      - <span style="color:#bd93f9">80</span>:<span style="color:#bd93f9">80</span>
-      - <span style="color:#bd93f9">443</span>:<span style="color:#bd93f9">443</span>
-    <span style="color:#ff79c6">volumes</span>:
-      <span style="color:#6272a4"># httpd</span>
-      - <span style="color:#f1fa8c">&#39;/home/markruler/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf&#39;</span>
+services:
+  slb:
+    image: httpd:2.4.54-alpine
+    container_name: slb
+    hostname: markruler.com
+    ports:
+      - <span style="color:#f60">80</span>:<span style="color:#f60">80</span>
+      - <span style="color:#f60">443</span>:<span style="color:#f60">443</span>
+    volumes:
+      <span style="color:#0f0"># httpd</span>
+      - <span style="color:#87ceeb">&#39;/home/markruler/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf&#39;</span>
 
-      <span style="color:#6272a4"># logs</span>
-      - <span style="color:#f1fa8c">&#39;/etc/httpd/logs/d1.markruler:/usr/local/apache2/logs/d1.markruler&#39;</span>
+      <span style="color:#0f0"># logs</span>
+      - <span style="color:#87ceeb">&#39;/etc/httpd/logs/d1.markruler:/usr/local/apache2/logs/d1.markruler&#39;</span>
 
-      <span style="color:#6272a4"># SSL</span>
-      - <span style="color:#f1fa8c">&#39;/etc/ssl/certs/d1.crt:/etc/ssl/certs/d1/cert.pem&#39;</span>
-      - <span style="color:#f1fa8c">&#39;/etc/ssl/certs/d1.key:/etc/ssl/certs/d1/privkey.pem&#39;</span>
-      - <span style="color:#f1fa8c">&#39;/etc/ssl/certs/d1.chain.crt:/etc/ssl/certs/d1/chain.pem&#39;</span>
-      - <span style="color:#f1fa8c">&#39;/etc/ssl/certs/CA_AAA_CERTIFICATE_SERVICES.crt:/etc/ssl/certs/d1/ca.pem&#39;</span>
+      <span style="color:#0f0"># SSL</span>
+      - <span style="color:#87ceeb">&#39;/etc/ssl/certs/d1.crt:/etc/ssl/certs/d1/cert.pem&#39;</span>
+      - <span style="color:#87ceeb">&#39;/etc/ssl/certs/d1.key:/etc/ssl/certs/d1/privkey.pem&#39;</span>
+      - <span style="color:#87ceeb">&#39;/etc/ssl/certs/d1.chain.crt:/etc/ssl/certs/d1/chain.pem&#39;</span>
+      - <span style="color:#87ceeb">&#39;/etc/ssl/certs/CA_AAA_CERTIFICATE_SERVICES.crt:/etc/ssl/certs/d1/ca.pem&#39;</span>
 
-      <span style="color:#6272a4"># SSL Key Password</span>
-      - <span style="color:#f1fa8c">&#39;/etc/ssl/certs/key_password.sh:/etc/ssl/certs/d1/key_password.sh&#39;</span>
+      <span style="color:#0f0"># SSL Key Password</span>
+      - <span style="color:#87ceeb">&#39;/etc/ssl/certs/key_password.sh:/etc/ssl/certs/d1/key_password.sh&#39;</span>
 
-<span style="color:#ff79c6">networks</span>:
-  <span style="color:#ff79c6">default</span>:
-    <span style="color:#ff79c6">driver_opts</span>:
-      <span style="color:#ff79c6">com.docker.network.enable_ipv6</span>: <span style="color:#f1fa8c">&#34;false&#34;</span>
-    <span style="color:#ff79c6">ipam</span>:
-      <span style="color:#ff79c6">driver</span>: default
-      <span style="color:#ff79c6">config</span>:
-        - <span style="color:#ff79c6">subnet</span>: <span style="color:#bd93f9">172.18.0.0</span>/16 <span style="color:#6272a4"># 255.255.0.0</span>
-          <span style="color:#ff79c6">gateway</span>: <span style="color:#bd93f9">172.18.0.1</span>
+networks:
+  default:
+    driver_opts:
+      com.docker.network.enable_ipv6: <span style="color:#87ceeb">&#34;false&#34;</span>
+    ipam:
+      driver: default
+      config:
+        - subnet: <span style="color:#f60">172.18.0.0</span>/16 <span style="color:#0f0"># 255.255.0.0</span>
+          gateway: <span style="color:#f60">172.18.0.1</span>
 </code></pre></div><p><code>httpd -t</code> 명령어로 서버 실행 전 설정 파일을 검증할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker compose run --rm slb httpd -t
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker compose run --rm slb httpd -t
 </code></pre></div><p><code>up</code> 명령어로 서버를 실행한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># sudo docker compose up --detach</span>
-sudo docker compose -f <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">HOME</span><span style="color:#f1fa8c">}</span>/httpd/docker-compose.yaml up -d
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># sudo docker compose up --detach</span>
+sudo docker compose -f <span style="color:#87ceeb">${</span><span style="color:#eedd82">HOME</span><span style="color:#87ceeb">}</span>/httpd/docker-compose.yaml up -d
 </code></pre></div><p><code>docker inspect</code> 명령어로 실제 실행된 컨테이너의 정보를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker inspect slb
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker inspect slb
 </code></pre></div><h2 id="iptables-서비스를-다시-시작해야-할-때">iptables 서비스를 다시 시작해야 할 때</h2>
 <p>iptables 서비스를 다시 시작하면 <code>/etc/sysconfig/iptables</code> 파일에
 있는 규칙들만 적용되기 때문에 Docker에서 설정하는 iptables 규칙이 사라진다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; systemctl restart iptables
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; systemctl restart iptables
 </code></pre></div><p>실제로 Docker 도입 사실을 IDC 매니저와 공유하지 않았다가 문제가 발생했다.
 IDC 매니저가 우리 회사 측 요청으로 iptables 규칙을 변경하고 재시작했는데
 해당 서버의 Docker 네트워크 규칙들이 사라져서 컨테이너가 실행되지 못하고 있었다.
 현재는 iptables를 재실행할 때 Docker도 같이 재실행한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; systemctl restart docker
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; systemctl restart docker
 &gt; iptables -nvL
 </code></pre></div><p>추가로 컨테이너에서 각 서비스로 트래픽을 보내기 위해 iptables 규칙을 추가한다.
 Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워크 인터페이스를 사용하는데 IP address range를
 <a href="https://github.com/moby/moby/blob/a77317882d010b884a9101c6ad0b2d7db141082f/libnetwork/docs/network.md">172.17.0.1/16</a> 으로 설정한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; ip -br -c a
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; ip -br -c a
 lo               UNKNOWN        127.0.0.1/8 ::1/128
-docker0          DOWN           172.17.0.1/16 <span style="color:#6272a4"># HERE!</span>
+docker0          DOWN           172.17.0.1/16 <span style="color:#0f0"># HERE!</span>
 </code></pre></div><p>iptables 규칙을 추가하기 위해 해당 네트워크를 고정시켰다.
 <a href="https://docs.docker.com/network/bridge/">bip</a>는 Docker 데몬이 사용할 bridge network IP address range를 지정하는 옵션이다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># 기본 설정</span>
-cat <span style="color:#f1fa8c">&lt;&lt;EOF | sudo tee /etc/docker/daemon.json
-</span><span style="color:#f1fa8c">{
-</span><span style="color:#f1fa8c">  &#34;bip&#34;: &#34;172.17.0.1/16&#34;
-</span><span style="color:#f1fa8c">}
-</span><span style="color:#f1fa8c">EOF</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># 기본 설정</span>
+cat <span style="color:#87ceeb">&lt;&lt;EOF | sudo tee /etc/docker/daemon.json
+</span><span style="color:#87ceeb">{
+</span><span style="color:#87ceeb">  &#34;bip&#34;: &#34;172.17.0.1/16&#34;
+</span><span style="color:#87ceeb">}
+</span><span style="color:#87ceeb">EOF</span>
 </code></pre></div><p>Docker 데몬을 재시작하면 <code>docker0</code> 네트워크 인터페이스가 변경되어 있을 것이다.
 이제 컨테이너에서 웹 애플리케이션으로 패킷을 전달할 수 있도록 iptables 규칙을 추가한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; vi /etc/sysconfig/iptables
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; vi /etc/sysconfig/iptables
 
--A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport <span style="color:#bd93f9">38888</span> -j ACCEPT
--A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport <span style="color:#bd93f9">39999</span> -j ACCEPT
+-A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport <span style="color:#f60">38888</span> -j ACCEPT
+-A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport <span style="color:#f60">39999</span> -j ACCEPT
 </code></pre></div><p><code>172.16.0.0/12</code> 로 설정한 이유는 docker-compose로 컨테이너를 실행할 경우
 이미 있는 인터페이스가 아닌 추가 인터페이스를 생성하기 때문이다.
 만약 <code>docker0</code> 와 동일한 <code>172.17.0.1/16</code> 으로 생성하려고 시도하면 아래와 같은 에러가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">failed to create network httpd_default: Error response from daemon: Pool overlaps with other one on this address space
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">failed to create network httpd_default: Error response from daemon: Pool overlaps with other one on this address space
 </code></pre></div><p>Docker에서 추가 인터페이스를 생성할 때 <code>172.17-31.x.x/16</code>, <code>192.168.x.x/20</code> 범위에서 추가하게 된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#6272a4">// https://github.com/moby/moby/blob/df650a1aeb190a319287c4d26bd3593b5343fb72/libnetwork/ipamutils/utils.go
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">var</span> (
-  <span style="color:#6272a4">// PredefinedLocalScopeDefaultNetworks contains a list of 31 IPv4 private networks with host size 16 and 12
-</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// (172.17-31.x.x/16, 192.168.x.x/20) which do not overlap with the networks in `PredefinedGlobalScopeDefaultNetworks`
-</span><span style="color:#6272a4"></span>  PredefinedLocalScopeDefaultNetworks []<span style="color:#ff79c6">*</span>net.IPNet
-  <span style="color:#6272a4">// PredefinedGlobalScopeDefaultNetworks contains a list of 64K IPv4 private networks with host size 8
-</span><span style="color:#6272a4"></span>  <span style="color:#6272a4">// (10.x.x.x/24) which do not overlap with the networks in `PredefinedLocalScopeDefaultNetworks`
-</span><span style="color:#6272a4"></span>  PredefinedGlobalScopeDefaultNetworks []<span style="color:#ff79c6">*</span>net.IPNet
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go"><span style="color:#0f0">// https://github.com/moby/moby/blob/df650a1aeb190a319287c4d26bd3593b5343fb72/libnetwork/ipamutils/utils.go
+</span><span style="color:#0f0"></span><span style="color:#f00">var</span> (
+  <span style="color:#0f0">// PredefinedLocalScopeDefaultNetworks contains a list of 31 IPv4 private networks with host size 16 and 12
+</span><span style="color:#0f0"></span>  <span style="color:#0f0">// (172.17-31.x.x/16, 192.168.x.x/20) which do not overlap with the networks in `PredefinedGlobalScopeDefaultNetworks`
+</span><span style="color:#0f0"></span>  PredefinedLocalScopeDefaultNetworks []*net.IPNet
+  <span style="color:#0f0">// PredefinedGlobalScopeDefaultNetworks contains a list of 64K IPv4 private networks with host size 8
+</span><span style="color:#0f0"></span>  <span style="color:#0f0">// (10.x.x.x/24) which do not overlap with the networks in `PredefinedLocalScopeDefaultNetworks`
+</span><span style="color:#0f0"></span>  PredefinedGlobalScopeDefaultNetworks []*net.IPNet
   mutex                                sync.Mutex
-  localScopeDefaultNetworks = []<span style="color:#ff79c6">*</span>NetworkToSplit{{<span style="color:#f1fa8c">&#34;172.17.0.0/16&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;172.18.0.0/16&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;172.19.0.0/16&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;172.20.0.0/14&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;172.24.0.0/14&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;172.28.0.0/14&#34;</span>, <span style="color:#bd93f9">16</span>},
-                                                {<span style="color:#f1fa8c">&#34;192.168.0.0/16&#34;</span>, <span style="color:#bd93f9">20</span>}}
-  globalScopeDefaultNetworks = []<span style="color:#ff79c6">*</span>NetworkToSplit{{<span style="color:#f1fa8c">&#34;10.0.0.0/8&#34;</span>, <span style="color:#bd93f9">24</span>}}
+  localScopeDefaultNetworks = []*NetworkToSplit{{<span style="color:#87ceeb">&#34;172.17.0.0/16&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;172.18.0.0/16&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;172.19.0.0/16&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;172.20.0.0/14&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;172.24.0.0/14&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;172.28.0.0/14&#34;</span>, <span style="color:#f60">16</span>},
+                                                {<span style="color:#87ceeb">&#34;192.168.0.0/16&#34;</span>, <span style="color:#f60">20</span>}}
+  globalScopeDefaultNetworks = []*NetworkToSplit{{<span style="color:#87ceeb">&#34;10.0.0.0/8&#34;</span>, <span style="color:#f60">24</span>}}
 )
 
-<span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">init</span>() {
-  <span style="color:#8be9fd;font-style:italic">var</span> err <span style="color:#8be9fd">error</span>
-  <span style="color:#ff79c6">if</span> PredefinedGlobalScopeDefaultNetworks, err = <span style="color:#50fa7b">splitNetworks</span>(globalScopeDefaultNetworks); err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#8be9fd;font-style:italic">panic</span>(<span style="color:#f1fa8c">&#34;failed to initialize the global scope default address pool: &#34;</span> <span style="color:#ff79c6">+</span> err.<span style="color:#50fa7b">Error</span>())
+<span style="color:#f00">func</span> <span style="color:#ff0">init</span>() {
+  <span style="color:#f00">var</span> err <span style="color:#ee82ee">error</span>
+  <span style="color:#f00">if</span> PredefinedGlobalScopeDefaultNetworks, err = <span style="color:#ff0">splitNetworks</span>(globalScopeDefaultNetworks); err != <span style="color:#f00">nil</span> {
+    panic(<span style="color:#87ceeb">&#34;failed to initialize the global scope default address pool: &#34;</span> + err.<span style="color:#ff0">Error</span>())
   }
 
-  <span style="color:#ff79c6">if</span> PredefinedLocalScopeDefaultNetworks, err = <span style="color:#50fa7b">splitNetworks</span>(localScopeDefaultNetworks); err <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">nil</span> {
-    <span style="color:#8be9fd;font-style:italic">panic</span>(<span style="color:#f1fa8c">&#34;failed to initialize the local scope default address pool: &#34;</span> <span style="color:#ff79c6">+</span> err.<span style="color:#50fa7b">Error</span>())
+  <span style="color:#f00">if</span> PredefinedLocalScopeDefaultNetworks, err = <span style="color:#ff0">splitNetworks</span>(localScopeDefaultNetworks); err != <span style="color:#f00">nil</span> {
+    panic(<span style="color:#87ceeb">&#34;failed to initialize the local scope default address pool: &#34;</span> + err.<span style="color:#ff0">Error</span>())
   }
 }
 </code></pre></div><p>만약 범위를 변경하고 싶다면 <a href="https://docs.mirantis.com/mke/3.4/install/plan-deployment/mcr-considerations/default-address-pools.html">Mirantis 문서</a>처럼 <code>default-address-pools</code> 옵션을 직접 추가할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go">{
-  <span style="color:#f1fa8c">&#34;default-address-pools&#34;</span>: [
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.17.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>}, <span style="color:#ff79c6">&lt;--</span> docker0
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.18.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.19.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.20.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.21.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.22.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.23.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.24.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.25.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.26.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.27.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.28.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.29.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;172.30.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">16</span>},
-    {<span style="color:#f1fa8c">&#34;base&#34;</span>:<span style="color:#f1fa8c">&#34;192.168.0.0/16&#34;</span>,<span style="color:#f1fa8c">&#34;size&#34;</span>:<span style="color:#bd93f9">20</span>}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-go" data-lang="go">{
+  <span style="color:#87ceeb">&#34;default-address-pools&#34;</span>: [
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.17.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>}, &lt;-- docker0
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.18.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.19.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.20.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.21.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.22.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.23.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.24.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.25.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.26.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.27.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.28.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.29.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;172.30.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">16</span>},
+    {<span style="color:#87ceeb">&#34;base&#34;</span>:<span style="color:#87ceeb">&#34;192.168.0.0/16&#34;</span>,<span style="color:#87ceeb">&#34;size&#34;</span>:<span style="color:#f60">20</span>}
   ]
 }
 </code></pre></div><p>설정이 끝났다면 iptables를 다시 실행한다.</p>
@@ -862,56 +862,56 @@ cat <span style="color:#f1fa8c">&lt;&lt;EOF | sudo tee /etc/docker/daemon.json
 <p>테스트 환경의 Alteon Switch에서 Layer 4 헬스체크가 잘 되는지 확인해 본다.
 그러고는 <code>s2</code> 서버의 <code>httpd</code> 를 죽여본다.
 <code>FAILED</code> 상태가 되고 트래픽을 보내지 않는다!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Server Load Balancing Information<span style="color:#6272a4"># /info/slb/virt 1</span>
-   <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> IP4 <span style="color:#ff79c6">&lt;</span>vhost_IP_Address<span style="color:#ff79c6">&gt;</span>,   <span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span>
-    virtual ports<span style="color:#ff79c6">:</span>
-    http<span style="color:#ff79c6">:</span> rport http, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, FAILED <span style="color:#6272a4"># HERE!</span>
-    https<span style="color:#ff79c6">:</span> rport https, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, FAILED <span style="color:#6272a4"># HERE!</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s">&gt;&gt; Server Load Balancing Information<span style="color:#0f0"># /info/slb/virt 1</span>
+   <span style="color:#f60">1</span>: IP4 &lt;vhost_IP_Address&gt;,   <span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>
+    virtual ports:
+    http: rport http, group <span style="color:#f60">1</span>, backup none, rtspslb none
+        real servers:
+           <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+           <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, FAILED <span style="color:#0f0"># HERE!</span>
+    https: rport https, group <span style="color:#f60">1</span>, backup none, rtspslb none
+        real servers:
+           <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+           <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, FAILED <span style="color:#0f0"># HERE!</span>
 </code></pre></div><p>다시 <code>httpd</code> 를 살려본다.
 <code>up</code> 상태가 되고 트래픽을 보낸다!</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s"><span style="color:#ff79c6">&gt;&gt;</span> Server Load Balancing Information<span style="color:#6272a4"># /info/slb/virt 1</span>
-   <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> IP4 <span style="color:#ff79c6">&lt;</span>vhost_IP_Address<span style="color:#ff79c6">&gt;</span>,   <span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span><span style="color:#ff79c6">:</span><span style="color:#bd93f9">00</span>
-    virtual ports<span style="color:#ff79c6">:</span>
-    http<span style="color:#ff79c6">:</span> rport http, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none, slowstart
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up <span style="color:#6272a4"># HERE!</span>
-    https<span style="color:#ff79c6">:</span> rport https, group <span style="color:#bd93f9">1</span>, backup none, rtspslb none, slowstart
-        real servers<span style="color:#ff79c6">:</span>
-           <span style="color:#bd93f9">1</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s1_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up
-           <span style="color:#bd93f9">2</span><span style="color:#ff79c6">:</span> <span style="color:#ff79c6">&lt;</span>s2_IP_Address<span style="color:#ff79c6">&gt;</span>, backup none, <span style="color:#bd93f9">0</span> ms, group ena, up <span style="color:#6272a4"># HERE!</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-s" data-lang="s">&gt;&gt; Server Load Balancing Information<span style="color:#0f0"># /info/slb/virt 1</span>
+   <span style="color:#f60">1</span>: IP4 &lt;vhost_IP_Address&gt;,   <span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>:<span style="color:#f60">00</span>
+    virtual ports:
+    http: rport http, group <span style="color:#f60">1</span>, backup none, rtspslb none, slowstart
+        real servers:
+           <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+           <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up <span style="color:#0f0"># HERE!</span>
+    https: rport https, group <span style="color:#f60">1</span>, backup none, rtspslb none, slowstart
+        real servers:
+           <span style="color:#f60">1</span>: &lt;s1_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up
+           <span style="color:#f60">2</span>: &lt;s2_IP_Address&gt;, backup none, <span style="color:#f60">0</span> ms, group ena, up <span style="color:#0f0"># HERE!</span>
 </code></pre></div><h1 id="개선의-여지가-있다">개선의 여지가 있다</h1>
 <p>아래에서 언급할 사항들은 위에서 도입한 기술과 별개로 기존에도 발생하던 문제다.</p>
 <h2 id="sessionrepositoryfilter-에러-페이지-응답"><code>SessionRepositoryFilter</code> 에러 페이지 응답</h2>
 <p>Tomcat Shutdown 직후 일시적으로 응답받을 수 있다. Graceful Shutdown, 요청 재시도(retry) 등을 고려해 볼 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">Type <span style="color:#ff79c6">-</span> Exception report
-Message <span style="color:#ff79c6">-</span> Request processing failed<span style="color:#ff79c6">;</span> nested exception is java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">lang</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">NullPointerException</span>
-Description <span style="color:#ff79c6">-</span> The server encountered an internal error that prevented it from fulfilling <span style="color:#ff79c6">this</span> request<span style="color:#ff79c6">.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">Type - Exception report
+Message - Request processing failed; nested exception is java.lang.NullPointerException
+Description - The server encountered an internal error that prevented it from fulfilling <span style="color:#f00">this</span> request.
 
 Exception
-org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">springframework</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">web</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">util</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">NestedServletException</span><span style="color:#ff79c6">:</span> Request processing failed<span style="color:#ff79c6">;</span> nested exception is java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">lang</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">NullPointerException</span>
-  <span style="color:#ff79c6">...</span>
-  org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">springframework</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">web</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">filter</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">HttpPutFormContentFilter</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilterInternal</span><span style="color:#ff79c6">(</span>HttpPutFormContentFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>105<span style="color:#ff79c6">)</span>
-  <span style="color:#ff79c6">...</span>
-  org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">apache</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">tomcat</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">websocket</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">server</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">WsFilter</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span>WsFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>52<span style="color:#ff79c6">)</span>
-  org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">apache</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">catalina</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">filters</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">HttpHeaderSecurityFilter</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span>HttpHeaderSecurityFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>126<span style="color:#ff79c6">)</span>
-  org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">springframework</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">security</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">web</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">FilterChainProxy$VirtualFilterChain</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">doFilter</span><span style="color:#ff79c6">(</span>FilterChainProxy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>316<span style="color:#ff79c6">)</span>
-  <span style="color:#ff79c6">...</span>
+org.springframework.web.util.NestedServletException: Request processing failed; nested exception is java.lang.NullPointerException
+  ...
+  org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
+  ...
+  org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
+  org.apache.catalina.filters.HttpHeaderSecurityFilter.doFilter(HttpHeaderSecurityFilter.java:126)
+  org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:316)
+  ...
 
 Root Cause
-java<span style="color:#ff79c6">.</span><span style="color:#50fa7b">lang</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">NullPointerException</span>
-  org<span style="color:#ff79c6">.</span><span style="color:#50fa7b">springframework</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">session</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">web</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">http</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">SessionRepositoryFilter$SessionRepositoryRequestWrapper$SessionCommittingRequestDispatcher</span><span style="color:#ff79c6">.</span><span style="color:#50fa7b">forward</span><span style="color:#ff79c6">(</span>SessionRepositoryFilter<span style="color:#ff79c6">.</span><span style="color:#50fa7b">java</span><span style="color:#ff79c6">:</span>447<span style="color:#ff79c6">)</span>
-  <span style="color:#ff79c6">...</span>
+java.lang.NullPointerException
+  org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper$SessionCommittingRequestDispatcher.forward(SessionRepositoryFilter.java:447)
+  ...
 </code></pre></div><h2 id="proxy">Proxy</h2>
 <p>upstream 서버(Tomcat)의 응답이 늦어질 경우 발생할 수 있다.
 <code>mod_proxy</code> 의 timeout 값을 조절하여 응답이 늦어지는 경우를 방지할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="color:#6272a4">&lt;!-- 502 Bad Gateway --&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-html" data-lang="html"><span style="color:#0f0">&lt;!-- 502 Bad Gateway --&gt;</span>
 Proxy Error
 
 The proxy server received an invalid response from an upstream server.
@@ -923,11 +923,11 @@ Reason: Error reading from remote server
 예를 들어, 1번 서버는 <code>disable</code>, 2번 서버는 <code>enable</code> 상태일 때
 1번 서버를 <code>enable</code>, 2번 서버를 <code>disable</code> 상태로 변경한 후 <code>apply</code> 하면
 다음과 같은 에러가 발생할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">Service Unavailable - Zero size object
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">Service Unavailable - Zero size object
 
 The server is temporarily unable to service your request. Please try again later.
 
-Reference <span style="color:#6272a4">#15.6f4bc817.1651592357.1872133</span>
+Reference <span style="color:#0f0">#15.6f4bc817.1651592357.1872133</span>
 </code></pre></div><p>2번 서버로 갔던 패킷이 갑자기 유실되면 CDN에서 받는 응답 데이터가 없어서 발생하는 것으로 추측하고 있다. 🤯
 <a href="https://techdocs.akamai.com/edge-diagnostics/docs/error-codes">Akamai Reference</a>에 따르면 <code>#15.x.x.x</code>는 <code>ERR_ZERO_SIZE_OBJECT</code> 에러다.</p>
 <blockquote>
@@ -940,7 +940,7 @@ Reference <span style="color:#6272a4">#15.6f4bc817.1651592357.1872133</span>
 HAProxy를 선택한 이유는 기본적으로 <a href="https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/">statistics 기능이 Web UI로 제공</a>되면서
 Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.</p>
 <p><img src="/images/web/haproxy-statistics-report.webp" alt="HAProxy"></p>
-<p><strong>무엇보다도 마크업(Markup) 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.</strong>
+<p><strong>무엇보다도 XML 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.</strong>
 또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인
 <a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/">Active Healthcheck가 유료(NGINX Plus) 기능</a>이기 때문이다.</p>
 <h2 id="선언형-배포-gitops">선언형 배포 (GitOps?)</h2>
@@ -948,8 +948,8 @@ Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.</p>
 — <a href="https://confluence.atlassian.com/bamboo/bamboo-yaml-specs-938844479.html">YAML Specs</a>의
 설정 파일에서는 SCP, SSH 등 주요 플러그인들을 지원하지 않기 때문에
 <a href="https://confluence.atlassian.com/bamboo/bamboo-java-specs-941616821.html">Java Specs</a>를 사용하는 것이 좋다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:scptask is not supported yet</span>
-<span style="color:#6272a4"># Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:sshtask is not supported yet</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#0f0"># Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:scptask is not supported yet</span>
+<span style="color:#0f0"># Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:sshtask is not supported yet</span>
 </code></pre></div><p>반면 Jenkins는 사용자가 많기 때문에 비교적 많은 플러그인을 지원하며 레퍼런스도 많다.
 Jenkins Pipeline을 활용하면 <code>Jenkinsfile</code> 을 사용해서 선언형 배포 방식으로 쉽게 이전할 수도 있다.
 그럼 빌드-배포 과정에서 발생할 수 있는 실수를 줄일 수 있고, 설정 정보를 버전 관리할 수 있다는 장점이 있다.</p>

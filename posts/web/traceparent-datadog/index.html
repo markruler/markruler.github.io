@@ -606,71 +606,71 @@ Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병�
 <p>이 방법은 APM Trace와 Log Collection에 로그가 있어야 한다.</p>
 <h2 id="1-browser에서-요청-시-traceparent-헤더-추가하기">1. Browser에서 요청 시 Traceparent 헤더 추가하기</h2>
 <p>요청 시 아래 스크립트로 생성한 값을 <code>Traceparent</code> 헤더와 함께 보낸다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#6272a4">/**
-</span><span style="color:#6272a4"> * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
-</span><span style="color:#6272a4"> */</span>
-<span style="color:#ff79c6">class</span> Traceparent {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-javascript" data-lang="javascript"><span style="color:#0f0">/**
+</span><span style="color:#0f0"> * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
+</span><span style="color:#0f0"> */</span>
+<span style="color:#f00">class</span> Traceparent {
   constructor(version, traceId, parentId, flags) {
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
-</span><span style="color:#6272a4">     * 
-</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#version
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#ff79c6">this</span>.version <span style="color:#ff79c6">=</span> version;
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
-</span><span style="color:#6272a4">     * 
-</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#trace-id
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#ff79c6">this</span>.traceId <span style="color:#ff79c6">=</span> traceId;
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
-</span><span style="color:#6272a4">     * 
-</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#parent-id
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#ff79c6">this</span>.parentId <span style="color:#ff79c6">=</span> parentId;
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * 2HEXDIGLC   ; 8 bit flags.
-</span><span style="color:#6272a4">     * 
-</span><span style="color:#6272a4">     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#ff79c6">this</span>.flags <span style="color:#ff79c6">=</span> flags;
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
+</span><span style="color:#0f0">     * 
+</span><span style="color:#0f0">     * @see https://www.w3.org/TR/trace-context-2/#version
+</span><span style="color:#0f0">     */</span>
+    <span style="color:#f00">this</span>.version = version;
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
+</span><span style="color:#0f0">     * 
+</span><span style="color:#0f0">     * @see https://www.w3.org/TR/trace-context-2/#trace-id
+</span><span style="color:#0f0">     */</span>
+    <span style="color:#f00">this</span>.traceId = traceId;
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
+</span><span style="color:#0f0">     * 
+</span><span style="color:#0f0">     * @see https://www.w3.org/TR/trace-context-2/#parent-id
+</span><span style="color:#0f0">     */</span>
+    <span style="color:#f00">this</span>.parentId = parentId;
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * 2HEXDIGLC   ; 8 bit flags.
+</span><span style="color:#0f0">     * 
+</span><span style="color:#0f0">     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
+</span><span style="color:#0f0">     */</span>
+    <span style="color:#f00">this</span>.flags = flags;
   }
   toString() {
-    <span style="color:#ff79c6">return</span> <span style="color:#f1fa8c">`</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.version<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.traceId<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.parentId<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">-</span><span style="color:#f1fa8c">${</span><span style="color:#ff79c6">this</span>.flags<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">`</span>;
+    <span style="color:#f00">return</span> <span style="color:#87ceeb">`</span><span style="color:#87ceeb">${</span><span style="color:#f00">this</span>.version<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">${</span><span style="color:#f00">this</span>.traceId<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">${</span><span style="color:#f00">this</span>.parentId<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">${</span><span style="color:#f00">this</span>.flags<span style="color:#87ceeb">}</span><span style="color:#87ceeb">`</span>;
   }
 }
 
-<span style="color:#6272a4">// 랜덤 바이트 생성
-</span><span style="color:#6272a4">// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> randomBytes(size) {
-  <span style="color:#ff79c6">const</span> bytes <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">new</span> Uint8Array(size);
-  <span style="color:#8be9fd;font-style:italic">window</span>.crypto.getRandomValues(bytes);
-  <span style="color:#ff79c6">return</span> bytes;
+<span style="color:#0f0">// 랜덤 바이트 생성
+</span><span style="color:#0f0">// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
+</span><span style="color:#0f0"></span><span style="color:#f00">function</span> randomBytes(size) {
+  <span style="color:#f00">const</span> bytes = <span style="color:#f00">new</span> Uint8Array(size);
+  window.crypto.getRandomValues(bytes);
+  <span style="color:#f00">return</span> bytes;
 }
 
-<span style="color:#6272a4">// 16진수 문자열로 변환
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> bufferHex(buffer) {
-  <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">Array</span>.from(buffer)
-    .map((b) =&gt; b.toString(<span style="color:#bd93f9">16</span>).padStart(<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#34;0&#34;</span>))
-    .join(<span style="color:#f1fa8c">&#34;&#34;</span>);
+<span style="color:#0f0">// 16진수 문자열로 변환
+</span><span style="color:#0f0"></span><span style="color:#f00">function</span> bufferHex(buffer) {
+  <span style="color:#f00">return</span> Array.from(buffer)
+    .map((b) =&gt; b.toString(<span style="color:#f60">16</span>).padStart(<span style="color:#f60">2</span>, <span style="color:#87ceeb">&#34;0&#34;</span>))
+    .join(<span style="color:#87ceeb">&#34;&#34;</span>);
 }
 
-<span style="color:#6272a4">// 10진수 숫자를 16진수 문자열로 변환
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> toHex(number) {
-  <span style="color:#ff79c6">return</span> number.toString(<span style="color:#bd93f9">16</span>).padStart(<span style="color:#bd93f9">2</span>, <span style="color:#f1fa8c">&#34;0&#34;</span>);
+<span style="color:#0f0">// 10진수 숫자를 16진수 문자열로 변환
+</span><span style="color:#0f0"></span><span style="color:#f00">function</span> toHex(number) {
+  <span style="color:#f00">return</span> number.toString(<span style="color:#f60">16</span>).padStart(<span style="color:#f60">2</span>, <span style="color:#87ceeb">&#34;0&#34;</span>);
 }
 
-<span style="color:#6272a4">// 버전, traceId, id, flags 생성
-</span><span style="color:#6272a4"></span><span style="color:#8be9fd;font-style:italic">function</span> make() {
-  <span style="color:#ff79c6">const</span> version <span style="color:#ff79c6">=</span> toHex(<span style="color:#bd93f9">0</span>); <span style="color:#6272a4">// 현재 버전은 항상 `00`이므로 0으로 설정
-</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">const</span> traceId <span style="color:#ff79c6">=</span> bufferHex(randomBytes(<span style="color:#bd93f9">16</span>));
-  <span style="color:#ff79c6">const</span> parentId <span style="color:#ff79c6">=</span> bufferHex(randomBytes(<span style="color:#bd93f9">8</span>));
-  <span style="color:#ff79c6">const</span> traceFlags <span style="color:#ff79c6">=</span> toHex(<span style="color:#bd93f9">1</span>); <span style="color:#6272a4">// Datadog: Sampled (01) / not sampled (00)
-</span><span style="color:#6272a4"></span>  <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> Traceparent(version, traceId, parentId, traceFlags);
+<span style="color:#0f0">// 버전, traceId, id, flags 생성
+</span><span style="color:#0f0"></span><span style="color:#f00">function</span> make() {
+  <span style="color:#f00">const</span> version = toHex(<span style="color:#f60">0</span>); <span style="color:#0f0">// 현재 버전은 항상 `00`이므로 0으로 설정
+</span><span style="color:#0f0"></span>  <span style="color:#f00">const</span> traceId = bufferHex(randomBytes(<span style="color:#f60">16</span>));
+  <span style="color:#f00">const</span> parentId = bufferHex(randomBytes(<span style="color:#f60">8</span>));
+  <span style="color:#f00">const</span> traceFlags = toHex(<span style="color:#f60">1</span>); <span style="color:#0f0">// Datadog: Sampled (01) / not sampled (00)
+</span><span style="color:#0f0"></span>  <span style="color:#f00">return</span> <span style="color:#f00">new</span> Traceparent(version, traceId, parentId, traceFlags);
 }
 
-<span style="color:#ff79c6">export</span> <span style="color:#ff79c6">default</span> {
+<span style="color:#f00">export</span> <span style="color:#f00">default</span> {
   make,
 };
 </code></pre></div><h2 id="2-akamai-cdn에서-traceparent의-값을-로그로-추가하기">2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기</h2>
@@ -693,25 +693,25 @@ _flags %{regex(&quot;[a-zA-Z0-9]*&quot;):traceparent.flags}
 </code></pre><h2 id="3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기">3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기</h2>
 <p>LogFormat에  <code>%{header_name}i</code> 으로 남기면 <a href="https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats">헤더의 값을 로그로 남길 수</a> 있다.
 httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#6272a4">&lt;!-- httpd.conf --&gt;</span>
-<span style="color:#ff79c6">&lt;IfModule</span> log_config_module<span style="color:#ff79c6">&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#0f0">&lt;!-- httpd.conf --&gt;</span>
+&lt;IfModule log_config_module&gt;
   LogFormat &#34;%h %l %u %t \&#34;%r\&#34; %&gt;s %b %D \&#34;%{Referer}i\&#34; \&#34;%{User-Agent}i\&#34; \&#34;%{traceparent}i\&#34; %{BALANCER_WORKER_ROUTE}e&#34; combined
   CustomLog /var/log/httpd/access.log combined
-<span style="color:#ff79c6">&lt;/IfModule&gt;</span>
+&lt;/IfModule&gt;
 </code></pre></div><pre tabindex="0"><code class="language-grok" data-lang="grok"># Grok Parser
 _traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{word:traceparent.parent_id})?(-%{data:traceparent.flags})?
 </code></pre><h2 id="4-java-application-spring-boot">4. Java Application (Spring Boot)</h2>
 <p><code>dd.trace.propagation.style</code> 속성의 기본값은 <code>datadog,tracecontext</code>으로 Datadog의 Trace ID가 우선한다.
 이를 <code>tracecontext,datadog</code>으로 변경하면 W3C Trace ID를 우선한다.
 물론 여기서는 클라이언트에서 전달한 Trace ID를 사용한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">nohup ~/.jdk/temurin-17.0.6/bin/java <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  -Ddd.service.name<span style="color:#ff79c6">=</span>my-service <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  -Ddd.trace.propagation.style<span style="color:#ff79c6">=</span>tracecontext,datadog <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  -jar <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">ARTIFACT_PATH</span><span style="color:#f1fa8c">}</span>/app.jar <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>  --spring.profiles.active<span style="color:#ff79c6">=</span>prod <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>&gt; /dev/null &amp;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">nohup ~/.jdk/temurin-17.0.6/bin/java <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  -Ddd.service.name=my-service <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  -Ddd.trace.propagation.style=tracecontext,datadog <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  -jar <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  <span style="color:#87ceeb">${</span><span style="color:#eedd82">ARTIFACT_PATH</span><span style="color:#87ceeb">}</span>/app.jar <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>  --spring.profiles.active=prod <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>&gt; /dev/null &amp;
 </code></pre></div><ul>
 <li><a href="https://github.com/DataDog/dd-trace-java/releases">dd-java-agent 다운로드</a></li>
 <li>W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,

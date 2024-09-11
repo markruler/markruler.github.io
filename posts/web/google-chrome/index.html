@@ -549,28 +549,28 @@ if (!doNotTrack) {
 <p>북마클릿은 1990년대 후반에 등장했으며,
 특히 브라우저에서 반복적인 작업을 자동화하거나 웹 페이지를 개인화하기 위한 도구로 널리 사용되었다.
 그 후로 웹 개발자들과 사용자들 사이에서 인기를 끌게 되었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// background를 노란색으로 변경
-</span><span style="color:#6272a4"></span>javascript<span style="color:#ff79c6">:</span> (<span style="color:#8be9fd;font-style:italic">function</span> () {
-  <span style="color:#8be9fd;font-style:italic">document</span>.body.style.backgroundColor <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;yellow&#34;</span>;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// background를 노란색으로 변경
+</span><span style="color:#0f0"></span>javascript: (<span style="color:#f00">function</span> () {
+  document.body.style.backgroundColor = <span style="color:#87ceeb">&#34;yellow&#34;</span>;
 })();
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 3000ms(3초) 후에 이미지에 빨간 테두리 추가
-</span><span style="color:#6272a4"></span>javascript<span style="color:#ff79c6">:</span> (<span style="color:#ff79c6">async</span> () =&gt; {
-  <span style="color:#ff79c6">async</span> <span style="color:#8be9fd;font-style:italic">function</span> sleep() {
-    <span style="color:#ff79c6">return</span> <span style="color:#ff79c6">new</span> <span style="color:#8be9fd;font-style:italic">Promise</span>((r) =&gt; setTimeout(r, <span style="color:#bd93f9">3000</span>));
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// 3000ms(3초) 후에 이미지에 빨간 테두리 추가
+</span><span style="color:#0f0"></span>javascript: (<span style="color:#f00">async</span> () =&gt; {
+  <span style="color:#f00">async</span> <span style="color:#f00">function</span> sleep() {
+    <span style="color:#f00">return</span> <span style="color:#f00">new</span> Promise((r) =&gt; setTimeout(r, <span style="color:#f60">3000</span>));
   }
-  <span style="color:#ff79c6">await</span> sleep().then(() =&gt; {
-    <span style="color:#ff79c6">const</span> images <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">document</span>.querySelectorAll(<span style="color:#f1fa8c">&#34;img&#34;</span>);
+  <span style="color:#f00">await</span> sleep().then(() =&gt; {
+    <span style="color:#f00">const</span> images = document.querySelectorAll(<span style="color:#87ceeb">&#34;img&#34;</span>);
     images.forEach((img) =&gt; {
-      img.style.border <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;2px solid red&#34;</span>;
+      img.style.border = <span style="color:#87ceeb">&#34;2px solid red&#34;</span>;
     });
   });
 })();
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// 탭 복제
-</span><span style="color:#6272a4"></span>javascript<span style="color:#ff79c6">:</span><span style="color:#ff79c6">void</span>(<span style="color:#8be9fd;font-style:italic">window</span>.open(location));
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// wayback machine에 현재 페이지 저장
-</span><span style="color:#6272a4"></span>javascript<span style="color:#ff79c6">:</span><span style="color:#ff79c6">void</span>(<span style="color:#8be9fd;font-style:italic">window</span>.open(<span style="color:#f1fa8c">&#34;https://web.archive.org/save/&#34;</span><span style="color:#ff79c6">+</span><span style="color:#8be9fd;font-style:italic">document</span>.location.href));
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// decoded URI 복사
-</span><span style="color:#6272a4"></span>javascript<span style="color:#ff79c6">:</span>console.log(prompt(<span style="color:#f1fa8c">&#39;copy (Control+C) this link:&#39;</span>, <span style="color:#8be9fd;font-style:italic">decodeURIComponent</span>(<span style="color:#8be9fd;font-style:italic">window</span>.location)))
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// 탭 복제
+</span><span style="color:#0f0"></span>javascript:<span style="color:#f00">void</span>(window.open(location));
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// wayback machine에 현재 페이지 저장
+</span><span style="color:#0f0"></span>javascript:<span style="color:#f00">void</span>(window.open(<span style="color:#87ceeb">&#34;https://web.archive.org/save/&#34;</span>+document.location.href));
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// decoded URI 복사
+</span><span style="color:#0f0"></span>javascript:console.log(prompt(<span style="color:#87ceeb">&#39;copy (Control+C) this link:&#39;</span>, decodeURIComponent(window.location)))
 </code></pre></div><h2 id="자바스크립트-스니펫">자바스크립트 스니펫</h2>
 <ul>
 <li><a href="https://goo.gle/devtools-snippets">자바스크립트 스니펫 실행</a> | Run snippets of JavaScript
@@ -691,15 +691,15 @@ if (!doNotTrack) {
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js">Warning<span style="color:#ff79c6">:</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js">Warning:
 Don’t paste code into the DevTools Console that you don’t understand or haven’t reviewed yourself.
-This could allow attackers to steal your identity or take control <span style="color:#ff79c6">of</span> your computer.
+This could allow attackers to steal your identity or take control <span style="color:#f00">of</span> your computer.
 Please type ‘allow pasting’ below and hit Enter to allow pasting.
 </code></pre></div><p>웹 브라우저에 따라 입력하는 것이 다르다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// Google Chrome
-</span><span style="color:#6272a4"></span>allow pasting
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#6272a4">// Microsoft Edge
-</span><span style="color:#6272a4"></span>console.profile()
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// Google Chrome
+</span><span style="color:#0f0"></span>allow pasting
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-js" data-lang="js"><span style="color:#0f0">// Microsoft Edge
+</span><span style="color:#0f0"></span>console.profile()
 </code></pre></div><h1 id="참조">참조</h1>
 <ul>
 <li>ChatGPT</li>

@@ -425,21 +425,21 @@ if (!doNotTrack) {
 <p>해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>를 조회하는 기능이 가장 먼저 수행되고 있다.
 국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스다.
 대략적인 코드는 다음과 같다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Cacheable<span style="color:#ff79c6">(</span>value <span style="color:#ff79c6">=</span> CacheName<span style="color:#ff79c6">.</span><span style="color:#50fa7b">IPAPI_COUNTRY_CODE</span><span style="color:#ff79c6">,</span> key <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;#ipAddress&#34;</span><span style="color:#ff79c6">)</span>
-<span style="color:#8be9fd;font-style:italic">public</span> Geolocation <span style="color:#50fa7b">findIsoCountryCode</span><span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">final</span> String ipAddress<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>isPrivate<span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">korea</span><span style="color:#ff79c6">();</span>
-    <span style="color:#ff79c6">}</span>
-    var ipapi <span style="color:#ff79c6">=</span> ipapiFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPAPI_ACCESS_KEY<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ipapi <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">from</span><span style="color:#ff79c6">(</span>ipapi<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">}</span>
-    var ipInfoDB <span style="color:#ff79c6">=</span> ipInfoDBFeignClient<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findGeolocationByIpAddress</span><span style="color:#ff79c6">(</span>ipAddress<span style="color:#ff79c6">,</span> IPINFODB_ACCESS_KEY<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>ipInfoDB <span style="color:#ff79c6">!=</span> <span style="color:#ff79c6">null</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">from</span><span style="color:#ff79c6">(</span>ipInfoDB<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">return</span> Geolocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">korea</span><span style="color:#ff79c6">();</span>
-<span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Cacheable(value = CacheName.IPAPI_COUNTRY_CODE, key = <span style="color:#87ceeb">&#34;#ipAddress&#34;</span>)
+<span style="color:#f00">public</span> Geolocation <span style="color:#ff0">findIsoCountryCode</span>(<span style="color:#f00">final</span> String ipAddress) {
+    <span style="color:#f00">if</span> (isPrivate(ipAddress)) {
+        <span style="color:#f00">return</span> Geolocation.korea();
+    }
+    var ipapi = ipapiFeignClient.findGeolocationByIpAddress(ipAddress, IPAPI_ACCESS_KEY);
+    <span style="color:#f00">if</span> (ipapi != <span style="color:#f00">null</span>) {
+        <span style="color:#f00">return</span> Geolocation.from(ipapi);
+    }
+    var ipInfoDB = ipInfoDBFeignClient.findGeolocationByIpAddress(ipAddress, IPINFODB_ACCESS_KEY);
+    <span style="color:#f00">if</span> (ipInfoDB != <span style="color:#f00">null</span>) {
+        <span style="color:#f00">return</span> Geolocation.from(ipInfoDB);
+    }
+    <span style="color:#f00">return</span> Geolocation.korea();
+}
 </code></pre></div><p>문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것이다.</p>
 <h1 id="해결">해결</h1>
 <p>이를 해결하기 위해 캐싱도 해봤지만 처음 접속한 IP의 경우 조회가 발생할 수 밖에 없었고,
@@ -453,59 +453,59 @@ CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻
 <li><strong>Amazon CloudFront</strong>는 <code>CloudFront-Viewer-Country</code> 헤더로 확인할 수 있다고 한다.<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></li>
 </ul>
 <h2 id="구현-방법-spring-framework">구현 방법 (Spring Framework)</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Target<span style="color:#ff79c6">(</span>ElementType<span style="color:#ff79c6">.</span><span style="color:#50fa7b">PARAMETER</span><span style="color:#ff79c6">)</span>
-@Retention<span style="color:#ff79c6">(</span>RetentionPolicy<span style="color:#ff79c6">.</span><span style="color:#50fa7b">RUNTIME</span><span style="color:#ff79c6">)</span>
-<span style="color:#8be9fd;font-style:italic">public</span> @interface GeoLocation <span style="color:#ff79c6">{</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Aspect
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+<span style="color:#f00">public</span> @interface GeoLocation {
+}
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@Aspect
 @Component
 @RequiredArgsConstructor
-<span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">GeoLocationAspect</span> <span style="color:#ff79c6">{</span>
-    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> HttpServletRequest request<span style="color:#ff79c6">;</span>
-    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd;font-style:italic">final</span> GeoLocationService service<span style="color:#ff79c6">;</span>
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * &lt;code&gt;@annotation(GeoLocation)&lt;/code&gt;와 같은 방식은
-</span><span style="color:#6272a4">     * &lt;code&gt;@GeoLocation&lt;/code&gt; 애노테이션이 붙은 메서드에만 적용됩니다.
-</span><span style="color:#6272a4">     */</span>
-    @Pointcut<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.GetMapping) || &#34;</span>
-            <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.PostMapping) || &#34;</span>
-            <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34;@annotation(org.springframework.web.bind.annotation.RequestMapping)&#34;</span><span style="color:#ff79c6">)</span>
-    <span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">mappingAnnotations</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-    <span style="color:#ff79c6">}</span>
-    @Around<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#34;mappingAnnotations()&#34;</span><span style="color:#ff79c6">)</span>
-    <span style="color:#8be9fd;font-style:italic">public</span> Object <span style="color:#50fa7b">injectGeoLocation</span><span style="color:#ff79c6">(</span>ProceedingJoinPoint joinPoint<span style="color:#ff79c6">)</span> <span style="color:#8be9fd;font-style:italic">throws</span> Throwable <span style="color:#ff79c6">{</span>
-        MethodSignature signature <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>MethodSignature<span style="color:#ff79c6">)</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSignature</span><span style="color:#ff79c6">();</span>
-        Method method <span style="color:#ff79c6">=</span> signature<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getMethod</span><span style="color:#ff79c6">();</span>
-        Object<span style="color:#ff79c6">[]</span> args <span style="color:#ff79c6">=</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getArgs</span><span style="color:#ff79c6">();</span>
-        Parameter<span style="color:#ff79c6">[]</span> parameters <span style="color:#ff79c6">=</span> method<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getParameters</span><span style="color:#ff79c6">();</span>
-        <span style="color:#ff79c6">for</span> <span style="color:#ff79c6">(</span><span style="color:#8be9fd">int</span> i <span style="color:#ff79c6">=</span> 0<span style="color:#ff79c6">;</span> i <span style="color:#ff79c6">&lt;</span> parameters<span style="color:#ff79c6">.</span><span style="color:#50fa7b">length</span><span style="color:#ff79c6">;</span> i<span style="color:#ff79c6">++)</span> <span style="color:#ff79c6">{</span>
-            <span style="color:#ff79c6">if</span> <span style="color:#ff79c6">(</span>parameters<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">].</span><span style="color:#50fa7b">isAnnotationPresent</span><span style="color:#ff79c6">(</span>GeoLocation<span style="color:#ff79c6">.</span><span style="color:#50fa7b">class</span><span style="color:#ff79c6">))</span> <span style="color:#ff79c6">{</span>
-                Location geoLocation <span style="color:#ff79c6">=</span> getGeoLocationFromRequest<span style="color:#ff79c6">();</span>
-                <span style="color:#6272a4">// @GeoLocation 파라미터에 위치 정보를 주입합니다.
-</span><span style="color:#6272a4"></span>                args<span style="color:#ff79c6">[</span>i<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">=</span> geoLocation<span style="color:#ff79c6">;</span>
-            <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>
-        <span style="color:#6272a4">// 메서드 호출을 진행합니다.
-</span><span style="color:#6272a4"></span>        <span style="color:#ff79c6">return</span> joinPoint<span style="color:#ff79c6">.</span><span style="color:#50fa7b">proceed</span><span style="color:#ff79c6">(</span>args<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">}</span>
-    <span style="color:#6272a4">/**
-</span><span style="color:#6272a4">     * CDN, ipapi, IPInfoDB 순으로 접속 국가 코드 조회
-</span><span style="color:#6272a4">     *
-</span><span style="color:#6272a4">     * @return Geolocation
-</span><span style="color:#6272a4">     */</span>
-    <span style="color:#8be9fd;font-style:italic">private</span> Location <span style="color:#50fa7b">getGeoLocationFromRequest</span><span style="color:#ff79c6">()</span> <span style="color:#ff79c6">{</span>
-        <span style="color:#ff79c6">return</span> service<span style="color:#ff79c6">.</span><span style="color:#50fa7b">findLocation</span><span style="color:#ff79c6">(</span>request<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@GetMapping
-<span style="color:#8be9fd;font-style:italic">public</span> Response<span style="color:#ff79c6">&lt;</span>Items<span style="color:#ff79c6">&gt;</span> <span style="color:#50fa7b">control</span><span style="color:#ff79c6">(</span>
-        @GeoLocation <span style="color:#8be9fd;font-style:italic">final</span> Location location<span style="color:#ff79c6">,</span>
-        @AuthenticationPrincipal <span style="color:#8be9fd;font-style:italic">final</span> PrincipalDetailDto user<span style="color:#ff79c6">,</span>
-        @RequestBody @Valid <span style="color:#8be9fd;font-style:italic">final</span> RequestDto requestDto
-<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-    log<span style="color:#ff79c6">.</span><span style="color:#50fa7b">debug</span><span style="color:#ff79c6">(</span>location<span style="color:#ff79c6">);</span>
-    <span style="color:#ff79c6">return</span> success<span style="color:#ff79c6">(</span>service<span style="color:#ff79c6">.</span><span style="color:#50fa7b">process</span><span style="color:#ff79c6">(</span>requestDto<span style="color:#ff79c6">));</span>
-<span style="color:#ff79c6">}</span>
+<span style="color:#f00">public</span> <span style="color:#f00">class</span> GeoLocationAspect {
+    <span style="color:#f00">private</span> <span style="color:#f00">final</span> HttpServletRequest request;
+    <span style="color:#f00">private</span> <span style="color:#f00">final</span> GeoLocationService service;
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * &lt;code&gt;@annotation(GeoLocation)&lt;/code&gt;와 같은 방식은
+</span><span style="color:#0f0">     * &lt;code&gt;@GeoLocation&lt;/code&gt; 애노테이션이 붙은 메서드에만 적용됩니다.
+</span><span style="color:#0f0">     */</span>
+    @Pointcut(<span style="color:#87ceeb">&#34;@annotation(org.springframework.web.bind.annotation.GetMapping) || &#34;</span>
+            + <span style="color:#87ceeb">&#34;@annotation(org.springframework.web.bind.annotation.PostMapping) || &#34;</span>
+            + <span style="color:#87ceeb">&#34;@annotation(org.springframework.web.bind.annotation.RequestMapping)&#34;</span>)
+    <span style="color:#f00">public</span> <span style="color:#ee82ee">void</span> <span style="color:#ff0">mappingAnnotations</span>() {
+    }
+    @Around(<span style="color:#87ceeb">&#34;mappingAnnotations()&#34;</span>)
+    <span style="color:#f00">public</span> Object <span style="color:#ff0">injectGeoLocation</span>(ProceedingJoinPoint joinPoint) <span style="color:#f00">throws</span> Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        Method method = signature.getMethod();
+        Object[] args = joinPoint.getArgs();
+        Parameter[] parameters = method.getParameters();
+        <span style="color:#f00">for</span> (<span style="color:#ee82ee">int</span> i = 0; i &lt; parameters.length; i++) {
+            <span style="color:#f00">if</span> (parameters[i].isAnnotationPresent(GeoLocation.class)) {
+                Location geoLocation = getGeoLocationFromRequest();
+                <span style="color:#0f0">// @GeoLocation 파라미터에 위치 정보를 주입합니다.
+</span><span style="color:#0f0"></span>                args[i] = geoLocation;
+            }
+        }
+        <span style="color:#0f0">// 메서드 호출을 진행합니다.
+</span><span style="color:#0f0"></span>        <span style="color:#f00">return</span> joinPoint.proceed(args);
+    }
+    <span style="color:#0f0">/**
+</span><span style="color:#0f0">     * CDN, ipapi, IPInfoDB 순으로 접속 국가 코드 조회
+</span><span style="color:#0f0">     *
+</span><span style="color:#0f0">     * @return Geolocation
+</span><span style="color:#0f0">     */</span>
+    <span style="color:#f00">private</span> Location <span style="color:#ff0">getGeoLocationFromRequest</span>() {
+        <span style="color:#f00">return</span> service.findLocation(request);
+    }
+}
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">@GetMapping
+<span style="color:#f00">public</span> Response&lt;Items&gt; <span style="color:#ff0">control</span>(
+        @GeoLocation <span style="color:#f00">final</span> Location location,
+        @AuthenticationPrincipal <span style="color:#f00">final</span> PrincipalDetailDto user,
+        @RequestBody @Valid <span style="color:#f00">final</span> RequestDto requestDto
+) {
+    log.debug(location);
+    <span style="color:#f00">return</span> success(service.process(requestDto));
+}
 </code></pre></div><h1 id="덤으로-얻은-정확성">덤으로 얻은 정확성?</h1>
 <p>추가로 해결되었던 점은 정확성이었다.</p>
 <p>현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔다.
@@ -562,14 +562,14 @@ in order to weed out bad data and increase the probability of the location we ch
 프록시 서버들의 IP는 모두 빠지고 Client IP만 남는다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>
 그래서 해당 설정을 제거했다.</p>
 <p><em>다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 한다.</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#ff79c6">&lt;VirtualHost</span> *:443<span style="color:#ff79c6">&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml">&lt;VirtualHost *:443&gt;
     ServerName www.example.com
     ProxyRequests Off
     ProxyVia Off
     ProxyPreserveHost On
     # RemoteIPHeader X-Forwarded-For
     ProxyAddHeaders On
-<span style="color:#ff79c6">&lt;/VirtualHost&gt;</span>
+&lt;/VirtualHost&gt;
 </code></pre></div><h1 id="참조">참조</h1>
 <ul>
 <li>True-Client-IP 헤더

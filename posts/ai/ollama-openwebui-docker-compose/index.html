@@ -377,66 +377,66 @@ if (!doNotTrack) {
 이 2가지 도구를 간단하게 사용해보자.</p>
 <h1 id="docker-없이-ollma-실행해보기">Docker 없이 Ollma 실행해보기</h1>
 <p>먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">pip install langchain-community<span style="color:#ff79c6">==</span>0.2.11
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> langchain_community.chat_models <span style="color:#ff79c6">import</span> ChatOllama
-<span style="color:#ff79c6">from</span> langchain_core.prompts <span style="color:#ff79c6">import</span> ChatPromptTemplate
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">pip install langchain-community==0.2.11
+</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#f00">from</span> langchain_community.chat_models <span style="color:#f00">import</span> ChatOllama
+<span style="color:#f00">from</span> langchain_core.prompts <span style="color:#f00">import</span> ChatPromptTemplate
 
-<span style="color:#6272a4"># Initialize the prompt with system message</span>
-initial_prompt <span style="color:#ff79c6">=</span> [
+<span style="color:#0f0"># Initialize the prompt with system message</span>
+initial_prompt = [
     (
-        <span style="color:#f1fa8c">&#34;system&#34;</span>,
-        <span style="color:#f1fa8c">&#34;너는 중고차 판매를 도와주는 어시스턴트야.&#34;</span> <span style="color:#ff79c6">+</span>
-        <span style="color:#f1fa8c">&#34;이름은 AMI야.&#34;</span> <span style="color:#ff79c6">+</span>
-        <span style="color:#f1fa8c">&#34;존댓말을 해야 해.&#34;</span> <span style="color:#ff79c6">+</span>
-        <span style="color:#f1fa8c">&#34;human이 우리 서비스의 자동차를 구매하도록 유도하고 관련 질문 아니면 대답해줄 수 없다고 해.&#34;</span>,
+        <span style="color:#87ceeb">&#34;system&#34;</span>,
+        <span style="color:#87ceeb">&#34;너는 중고차 판매를 도와주는 어시스턴트야.&#34;</span> +
+        <span style="color:#87ceeb">&#34;이름은 AMI야.&#34;</span> +
+        <span style="color:#87ceeb">&#34;존댓말을 해야 해.&#34;</span> +
+        <span style="color:#87ceeb">&#34;human이 우리 서비스의 자동차를 구매하도록 유도하고 관련 질문 아니면 대답해줄 수 없다고 해.&#34;</span>,
     )
 ]
 
 
-<span style="color:#6272a4"># Function to create a prompt with message history</span>
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">create_prompt_with_history</span>(history, new_message):
-    <span style="color:#ff79c6">return</span> ChatPromptTemplate<span style="color:#ff79c6">.</span>from_messages(history <span style="color:#ff79c6">+</span> [(<span style="color:#f1fa8c">&#34;human&#34;</span>, new_message)])
+<span style="color:#0f0"># Function to create a prompt with message history</span>
+<span style="color:#f00">def</span> <span style="color:#ff0">create_prompt_with_history</span>(history, new_message):
+    <span style="color:#f00">return</span> ChatPromptTemplate.from_messages(history + [(<span style="color:#87ceeb">&#34;human&#34;</span>, new_message)])
 
 
-<span style="color:#6272a4"># Initialize the model</span>
-llm <span style="color:#ff79c6">=</span> ChatOllama(
-    model<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;llama3.1:8b&#34;</span>,
-    temperature<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>,
+<span style="color:#0f0"># Initialize the model</span>
+llm = ChatOllama(
+    model=<span style="color:#87ceeb">&#34;llama3.1:8b&#34;</span>,
+    temperature=<span style="color:#f60">0</span>,
 )
 
-<span style="color:#6272a4"># Conversation history</span>
-conversation_history <span style="color:#ff79c6">=</span> initial_prompt<span style="color:#ff79c6">.</span>copy()
+<span style="color:#0f0"># Conversation history</span>
+conversation_history = initial_prompt.copy()
 
 
-<span style="color:#6272a4"># Function to process new user input</span>
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">process_input</span>(input_text):
-    <span style="color:#ff79c6">global</span> conversation_history
-    prompt <span style="color:#ff79c6">=</span> create_prompt_with_history(conversation_history, input_text)
-    chain <span style="color:#ff79c6">=</span> prompt <span style="color:#ff79c6">|</span> llm
-    response <span style="color:#ff79c6">=</span> chain<span style="color:#ff79c6">.</span>invoke({<span style="color:#f1fa8c">&#34;input&#34;</span>: input_text})
+<span style="color:#0f0"># Function to process new user input</span>
+<span style="color:#f00">def</span> <span style="color:#ff0">process_input</span>(input_text):
+    <span style="color:#f00">global</span> conversation_history
+    prompt = create_prompt_with_history(conversation_history, input_text)
+    chain = prompt | llm
+    response = chain.invoke({<span style="color:#87ceeb">&#34;input&#34;</span>: input_text})
 
-    <span style="color:#6272a4"># Add the new messages to the conversation history</span>
-    conversation_history<span style="color:#ff79c6">.</span>append((<span style="color:#f1fa8c">&#34;human&#34;</span>, input_text))
-    conversation_history<span style="color:#ff79c6">.</span>append((<span style="color:#f1fa8c">&#34;assistant&#34;</span>, response<span style="color:#ff79c6">.</span>content))
+    <span style="color:#0f0"># Add the new messages to the conversation history</span>
+    conversation_history.append((<span style="color:#87ceeb">&#34;human&#34;</span>, input_text))
+    conversation_history.append((<span style="color:#87ceeb">&#34;assistant&#34;</span>, response.content))
 
-    <span style="color:#ff79c6">return</span> response<span style="color:#ff79c6">.</span>content
+    <span style="color:#f00">return</span> response.content
 
 
-<span style="color:#6272a4"># Main loop to handle console input</span>
-<span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;__main__&#34;</span>:
-    <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &#39;exit&#39;을 입력하면 종료됩니다.&#34;</span>)
+<span style="color:#0f0"># Main loop to handle console input</span>
+<span style="color:#f00">if</span> __name__ == <span style="color:#87ceeb">&#34;__main__&#34;</span>:
+    print(<span style="color:#87ceeb">&#34;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &#39;exit&#39;을 입력하면 종료됩니다.&#34;</span>)
 
-    <span style="color:#ff79c6">while</span> <span style="color:#ff79c6">True</span>:
-        user_input <span style="color:#ff79c6">=</span> <span style="color:#8be9fd;font-style:italic">input</span>(<span style="color:#f1fa8c">&#34;You: &#34;</span>)
+    <span style="color:#f00">while</span> <span style="color:#f00">True</span>:
+        user_input = input(<span style="color:#87ceeb">&#34;You: &#34;</span>)
 
-        <span style="color:#ff79c6">if</span> user_input<span style="color:#ff79c6">.</span>lower() <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;exit&#39;</span>:
-            <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;대화를 종료합니다.&#34;</span>)
-            <span style="color:#ff79c6">break</span>
+        <span style="color:#f00">if</span> user_input.lower() == <span style="color:#87ceeb">&#39;exit&#39;</span>:
+            print(<span style="color:#87ceeb">&#34;대화를 종료합니다.&#34;</span>)
+            <span style="color:#f00">break</span>
 
-        response <span style="color:#ff79c6">=</span> process_input(user_input)
-        <span style="color:#8be9fd;font-style:italic">print</span>(<span style="color:#f1fa8c">&#34;Assistant:&#34;</span>, response)
+        response = process_input(user_input)
+        print(<span style="color:#87ceeb">&#34;Assistant:&#34;</span>, response)
 </code></pre></div><p>위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">중고차 판매 어시스턴트 AMI와 대화를 시작합니다. <span style="color:#f1fa8c">&#39;exit&#39;</span>을 입력하면 종료됩니다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">중고차 판매 어시스턴트 AMI와 대화를 시작합니다. <span style="color:#87ceeb">&#39;exit&#39;</span>을 입력하면 종료됩니다.
 &gt; You: Hyundai 차 추천해줘.
 Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
 
@@ -448,7 +448,7 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 
 이러한 정보는 구매자에게 도움이 될 수 있습니다. 그러나, 구매자는 직접 자동차를 방문하고 테스트해 보아야 합니다.
 
-&gt; You: <span style="color:#8be9fd;font-style:italic">exit</span>
+&gt; You: exit
 대화를 종료합니다.
 </code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp" alt="GPU 사용하는 프로그램"></p>
@@ -459,52 +459,52 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 <p>확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용한다.
 <a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image">Ollama 문서</a>를
 참조해서 GPU를 사용하도록 설정해보자.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#6272a4"># Docker로 실행할 경우</span>
-docker run -d --gpus<span style="color:#ff79c6">=</span>all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># Docker로 실행할 경우</span>
+docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 </code></pre></div><p>Docker Compose로 실행할 때도 <a href="https://docs.docker.com/compose/gpu-support/">공식 문서</a>를 참조해서 옵션을 추가할 수 있었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Docker Compose로 실행할 경우</span>
-<span style="color:#ff79c6">services</span>:
-  <span style="color:#ff79c6">ollama</span>:
-    <span style="color:#ff79c6">volumes</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-yaml" data-lang="yaml"><span style="color:#0f0"># Docker Compose로 실행할 경우</span>
+services:
+  ollama:
+    volumes:
       - ollama:/root/.ollama
-    <span style="color:#ff79c6">container_name</span>: ollama
-    <span style="color:#ff79c6">pull_policy</span>: always
-    <span style="color:#ff79c6">tty</span>: <span style="color:#ff79c6">true</span>
-    <span style="color:#ff79c6">restart</span>: unless-stopped
-    <span style="color:#ff79c6">image</span>: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
-    <span style="color:#6272a4"># 추가한 옵션 [deploy](https://docs.docker.com/compose/gpu-support/)</span>
-    <span style="color:#ff79c6">deploy</span>:
-      <span style="color:#ff79c6">resources</span>:
-        <span style="color:#ff79c6">reservations</span>:
-          <span style="color:#ff79c6">devices</span>:
-            - <span style="color:#ff79c6">driver</span>: nvidia
-              <span style="color:#ff79c6">count</span>: <span style="color:#bd93f9">1</span>
-              <span style="color:#ff79c6">capabilities</span>: [gpu]
+    container_name: ollama
+    pull_policy: always
+    tty: <span style="color:#f00">true</span>
+    restart: unless-stopped
+    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
+    <span style="color:#0f0"># 추가한 옵션 [deploy](https://docs.docker.com/compose/gpu-support/)</span>
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: <span style="color:#f60">1</span>
+              capabilities: [gpu]
 
-  <span style="color:#ff79c6">open-webui</span>:
-    <span style="color:#ff79c6">build</span>:
-      <span style="color:#ff79c6">context</span>: .
-      <span style="color:#ff79c6">args</span>:
-        <span style="color:#ff79c6">OLLAMA_BASE_URL</span>: <span style="color:#f1fa8c">&#39;/ollama&#39;</span>
-      <span style="color:#ff79c6">dockerfile</span>: Dockerfile
-    <span style="color:#ff79c6">image</span>: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
-    <span style="color:#ff79c6">container_name</span>: open-webui
-    <span style="color:#ff79c6">volumes</span>:
+  open-webui:
+    build:
+      context: .
+      args:
+        OLLAMA_BASE_URL: <span style="color:#87ceeb">&#39;/ollama&#39;</span>
+      dockerfile: Dockerfile
+    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
+    container_name: open-webui
+    volumes:
       - open-webui:/app/backend/data
-    <span style="color:#ff79c6">depends_on</span>:
+    depends_on:
       - ollama
-    <span style="color:#ff79c6">ports</span>:
+    ports:
       - ${OPEN_WEBUI_PORT-3000}:8080
-    <span style="color:#ff79c6">environment</span>:
-      - <span style="color:#f1fa8c">&#39;OLLAMA_BASE_URL=http://ollama:11434&#39;</span>
-      - <span style="color:#f1fa8c">&#39;WEBUI_SECRET_KEY=&#39;</span>
-    <span style="color:#ff79c6">extra_hosts</span>:
+    environment:
+      - <span style="color:#87ceeb">&#39;OLLAMA_BASE_URL=http://ollama:11434&#39;</span>
+      - <span style="color:#87ceeb">&#39;WEBUI_SECRET_KEY=&#39;</span>
+    extra_hosts:
       - host.docker.internal:host-gateway
-    <span style="color:#ff79c6">restart</span>: unless-stopped
+    restart: unless-stopped
 
-<span style="color:#ff79c6">volumes</span>:
-  <span style="color:#ff79c6">ollama</span>: {}
-  <span style="color:#ff79c6">open-webui</span>: {}
+volumes:
+  ollama: {}
+  open-webui: {}
 </code></pre></div><p>실행 후 <code>3000</code>번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp" alt="Open WebUI 화면"></p>
 <p>GPU를 사용하는 것도 확인할 수 있다.</p>

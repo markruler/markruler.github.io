@@ -508,7 +508,7 @@ PDFmyURL을 이용하는 서비스가 반나절동안 중단되었다.
 <h1 id="1차-시도-wkhtmltopdf">1차 시도: wkhtmltopdf</h1>
 <p>이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤다.
 가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/">wkhtmltopdf</a> 였다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했다.</span>
 apt-get -y install fonts-nanum wkhtmltopdf
 </code></pre></div><p>빠르게 시작하기 위해 Python의 <code>pdfkit</code>과
 오픈 소스 PDF 변환 툴인 <code>wkhtmltopdf</code>를 사용해서 Flask 앱을 만들었다.
@@ -524,16 +524,16 @@ Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었다
 <h1 id="2차-시도-pyppeteer">2차 시도: pyppeteer</h1>
 <p>기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 <a href="https://github.com/puppeteer/puppeteer">puppeteer</a>
 대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer">pyppeteer</a>을 사용했다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
-apt-get update <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> apt-get install -y wget gnupg <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> sh -c <span style="color:#f1fa8c">&#39;echo &#34;deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main&#34; &gt;&gt; /etc/apt/sources.list.d/google.list&#39;</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> apt-get update <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>      --no-install-recommends <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> rm -rf /var/lib/apt/lists/* <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#ff79c6">&amp;&amp;</span> groupadd -r pptruser <span style="color:#ff79c6">&amp;&amp;</span> useradd -rm -g pptruser -G audio,video pptruser
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
+apt-get update <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; apt-get install -y wget gnupg <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; sh -c <span style="color:#87ceeb">&#39;echo &#34;deb [arch=amd64 signed-by=/usr/share/keyrings/googlechrome-linux-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main&#34; &gt;&gt; /etc/apt/sources.list.d/google.list&#39;</span> <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; apt-get update <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; apt-get install -y google-chrome-stable fonts-ipafont-gothic fonts-wqy-zenhei fonts-thai-tlwg fonts-khmeros fonts-kacst fonts-freefont-ttf libxss1 <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>      --no-install-recommends <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; rm -rf /var/lib/apt/lists/* <span style="color:#87ceeb">\
+</span><span style="color:#87ceeb"></span>    &amp;&amp; groupadd -r pptruser &amp;&amp; useradd -rm -g pptruser -G audio,video pptruser
 </code></pre></div><p><code>google-chrome</code>을 headless 모드로 실행해서 프린트하면
 출력물이 브라우저 프린트(<code>window.print()</code>)와 동일하게 나왔다.
 (팀원 모두 Edge 아니면 Chrome을 사용함)
@@ -560,82 +560,82 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 <a href="https://playwright.dev/docs/puppeteer">puppeteer와 인터페이스를 유사하게 만들었기</a>
 때문에 변경하는 데에 많은 리소스가 들지 않았다.</p>
 <p>다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#6272a4"># python3 -m pip install playwright</span>
-<span style="color:#6272a4"># python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/</span>
-<span style="color:#6272a4"># python3 main.py</span>
-<span style="color:#ff79c6">import</span> logging
-<span style="color:#ff79c6">import</span> asyncio
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python"><span style="color:#0f0"># python3 -m pip install playwright</span>
+<span style="color:#0f0"># python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/</span>
+<span style="color:#0f0"># python3 main.py</span>
+<span style="color:#f00">import</span> logging
+<span style="color:#f00">import</span> asyncio
 
-<span style="color:#ff79c6">from</span> playwright.async_api <span style="color:#ff79c6">import</span> async_playwright, Playwright, PlaywrightContextManager, Browser, BrowserContext
+<span style="color:#f00">from</span> playwright.async_api <span style="color:#f00">import</span> async_playwright, Playwright, PlaywrightContextManager, Browser, BrowserContext
 
-<span style="color:#ff79c6">async</span> <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">core_file</span>():
-    playwright_context_manager: PlaywrightContextManager <span style="color:#ff79c6">=</span> async_playwright()
+<span style="color:#f00">async</span> <span style="color:#f00">def</span> <span style="color:#ff0">core_file</span>():
+    playwright_context_manager: PlaywrightContextManager = async_playwright()
 
-    <span style="color:#6272a4"># https://playwright.dev/python/docs/api/class-playwright</span>
-    playwright: Playwright <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">await</span> playwright_context_manager<span style="color:#ff79c6">.</span>start()
+    <span style="color:#0f0"># https://playwright.dev/python/docs/api/class-playwright</span>
+    playwright: Playwright = <span style="color:#f00">await</span> playwright_context_manager.start()
 
-    <span style="color:#6272a4"># https://playwright.dev/python/docs/api/class-browsertype#browser-type-launch</span>
-    browser: Browser <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">await</span> playwright<span style="color:#ff79c6">.</span>chromium<span style="color:#ff79c6">.</span>launch(
-        headless<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>,
-        timeout<span style="color:#ff79c6">=</span><span style="color:#bd93f9">10_000</span>,  <span style="color:#6272a4"># (ms)</span>
-        args<span style="color:#ff79c6">=</span>[
-            <span style="color:#6272a4"># https://peter.sh/experiments/chromium-command-line-switches/</span>
-            <span style="color:#f1fa8c">&#34;--no-sandbox&#34;</span>,
-            <span style="color:#f1fa8c">&#34;--single-process&#34;</span>,
-            <span style="color:#f1fa8c">&#34;--disable-dev-shm-usage&#34;</span>,
-            <span style="color:#f1fa8c">&#34;--disable-gpu&#34;</span>,
-            <span style="color:#f1fa8c">&#34;--no-zygote&#34;</span>,
+    <span style="color:#0f0"># https://playwright.dev/python/docs/api/class-browsertype#browser-type-launch</span>
+    browser: Browser = <span style="color:#f00">await</span> playwright.chromium.launch(
+        headless=<span style="color:#f00">True</span>,
+        timeout=<span style="color:#f60">10_000</span>,  <span style="color:#0f0"># (ms)</span>
+        args=[
+            <span style="color:#0f0"># https://peter.sh/experiments/chromium-command-line-switches/</span>
+            <span style="color:#87ceeb">&#34;--no-sandbox&#34;</span>,
+            <span style="color:#87ceeb">&#34;--single-process&#34;</span>,
+            <span style="color:#87ceeb">&#34;--disable-dev-shm-usage&#34;</span>,
+            <span style="color:#87ceeb">&#34;--disable-gpu&#34;</span>,
+            <span style="color:#87ceeb">&#34;--no-zygote&#34;</span>,
         ],
-        <span style="color:#6272a4"># avoid &#34;signal only works in main thread of the main interpreter&#34;</span>
-        handle_sigint<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
-        handle_sigterm<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
-        handle_sighup<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
+        <span style="color:#0f0"># avoid &#34;signal only works in main thread of the main interpreter&#34;</span>
+        handle_sigint=<span style="color:#f00">False</span>,
+        handle_sigterm=<span style="color:#f00">False</span>,
+        handle_sighup=<span style="color:#f00">False</span>,
     )
 
-    <span style="color:#6272a4"># https://playwright.dev/python/docs/api/class-browser#browser-new-context</span>
-    logging<span style="color:#ff79c6">.</span>debug(<span style="color:#f1fa8c">&#39;new_context:new_page&#39;</span>)
-    context: BrowserContext <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">await</span> browser<span style="color:#ff79c6">.</span>new_context()
-    page <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">await</span> context<span style="color:#ff79c6">.</span>new_page()
+    <span style="color:#0f0"># https://playwright.dev/python/docs/api/class-browser#browser-new-context</span>
+    logging.debug(<span style="color:#87ceeb">&#39;new_context:new_page&#39;</span>)
+    context: BrowserContext = <span style="color:#f00">await</span> browser.new_context()
+    page = <span style="color:#f00">await</span> context.new_page()
 
-    <span style="color:#6272a4"># https://playwright.dev/python/docs/api/class-page#page-goto</span>
-    logging<span style="color:#ff79c6">.</span>debug(<span style="color:#f1fa8c">&#39;set_content&#39;</span>)
-    <span style="color:#ff79c6">await</span> page<span style="color:#ff79c6">.</span>set_content(
-        html<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;&lt;div&gt;&lt;span&gt;Test&lt;/span&gt; Text&lt;/div&gt;&#39;</span>,
-        timeout<span style="color:#ff79c6">=</span><span style="color:#bd93f9">10_000</span>,
-        <span style="color:#6272a4"># load로 해야 img.src가 로드됨.</span>
-        wait_until<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;load&#39;</span>  <span style="color:#6272a4"># domcontentloaded, load, networkidle</span>
+    <span style="color:#0f0"># https://playwright.dev/python/docs/api/class-page#page-goto</span>
+    logging.debug(<span style="color:#87ceeb">&#39;set_content&#39;</span>)
+    <span style="color:#f00">await</span> page.set_content(
+        html=<span style="color:#87ceeb">&#39;&lt;div&gt;&lt;span&gt;Test&lt;/span&gt; Text&lt;/div&gt;&#39;</span>,
+        timeout=<span style="color:#f60">10_000</span>,
+        <span style="color:#0f0"># load로 해야 img.src가 로드됨.</span>
+        wait_until=<span style="color:#87ceeb">&#39;load&#39;</span>  <span style="color:#0f0"># domcontentloaded, load, networkidle</span>
     )
 
-    logging<span style="color:#ff79c6">.</span>info(<span style="color:#f1fa8c">&#39;add_style_tag&#39;</span>)
-    <span style="color:#ff79c6">await</span> page<span style="color:#ff79c6">.</span>add_style_tag(
-        content<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;span{color:red;}&#39;</span>
+    logging.info(<span style="color:#87ceeb">&#39;add_style_tag&#39;</span>)
+    <span style="color:#f00">await</span> page.add_style_tag(
+        content=<span style="color:#87ceeb">&#39;span{color:red;}&#39;</span>
     )
 
-    <span style="color:#6272a4"># https://playwright.dev/python/docs/api/class-page#page-pdf</span>
-    logging<span style="color:#ff79c6">.</span>debug(<span style="color:#f1fa8c">&#39;Generate PDF&#39;</span>)
-    _pdf <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">await</span> page<span style="color:#ff79c6">.</span>pdf(
-        <span style="color:#8be9fd;font-style:italic">format</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;A4&#39;</span>,
-        landscape<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
-        print_background<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>,
-        display_header_footer<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>,
-        margin<span style="color:#ff79c6">=</span>{
-            <span style="color:#f1fa8c">&#39;top&#39;</span>: <span style="color:#f1fa8c">&#39;10mm&#39;</span>,
-            <span style="color:#f1fa8c">&#39;bottom&#39;</span>: <span style="color:#f1fa8c">&#39;10mm&#39;</span>,
-            <span style="color:#f1fa8c">&#39;left&#39;</span>: <span style="color:#f1fa8c">&#39;10mm&#39;</span>,
-            <span style="color:#f1fa8c">&#39;right&#39;</span>: <span style="color:#f1fa8c">&#39;10mm&#39;</span>,
+    <span style="color:#0f0"># https://playwright.dev/python/docs/api/class-page#page-pdf</span>
+    logging.debug(<span style="color:#87ceeb">&#39;Generate PDF&#39;</span>)
+    _pdf = <span style="color:#f00">await</span> page.pdf(
+        format=<span style="color:#87ceeb">&#39;A4&#39;</span>,
+        landscape=<span style="color:#f00">False</span>,
+        print_background=<span style="color:#f00">True</span>,
+        display_header_footer=<span style="color:#f00">False</span>,
+        margin={
+            <span style="color:#87ceeb">&#39;top&#39;</span>: <span style="color:#87ceeb">&#39;10mm&#39;</span>,
+            <span style="color:#87ceeb">&#39;bottom&#39;</span>: <span style="color:#87ceeb">&#39;10mm&#39;</span>,
+            <span style="color:#87ceeb">&#39;left&#39;</span>: <span style="color:#87ceeb">&#39;10mm&#39;</span>,
+            <span style="color:#87ceeb">&#39;right&#39;</span>: <span style="color:#87ceeb">&#39;10mm&#39;</span>,
         }
     )
 
-    <span style="color:#8be9fd;font-style:italic">print</span>(_pdf)
+    print(_pdf)
 
-    <span style="color:#ff79c6">await</span> context<span style="color:#ff79c6">.</span>close()  <span style="color:#6272a4"># don&#39;t forget to close the context, or it will create a core.{number} file.</span>
-    <span style="color:#ff79c6">await</span> browser<span style="color:#ff79c6">.</span>close()
-    <span style="color:#ff79c6">await</span> playwright<span style="color:#ff79c6">.</span>stop()
+    <span style="color:#f00">await</span> context.close()  <span style="color:#0f0"># don&#39;t forget to close the context, or it will create a core.{number} file.</span>
+    <span style="color:#f00">await</span> browser.close()
+    <span style="color:#f00">await</span> playwright.stop()
 
 
-<span style="color:#6272a4"># python3 main.py</span>
-<span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;__main__&#39;</span>:
-    asyncio<span style="color:#ff79c6">.</span>run(core_file())
+<span style="color:#0f0"># python3 main.py</span>
+<span style="color:#f00">if</span> __name__ == <span style="color:#87ceeb">&#39;__main__&#39;</span>:
+    asyncio.run(core_file())
 </code></pre></div><h1 id="구현-시-참고-사항">구현 시 참고 사항</h1>
 <ul>
 <li>CSS attribute 중 <code>page-break-***</code> 를 사용하면 페이지를 원하는 부분에서 분리할 수 있다.

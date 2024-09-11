@@ -867,8 +867,8 @@ if (!doNotTrack) {
 <li>cgroupfs</li>
 <li>systemd</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker info -f <span style="color:#f1fa8c">&#39;{{json .}}&#39;</span> | jq <span style="color:#f1fa8c">&#39;. | .CgroupDriver&#39;</span>
-<span style="color:#6272a4"># &#34;cgroupfs&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">sudo docker info -f <span style="color:#87ceeb">&#39;{{json .}}&#39;</span> | jq <span style="color:#87ceeb">&#39;. | .CgroupDriver&#39;</span>
+<span style="color:#0f0"># &#34;cgroupfs&#34;</span>
 </code></pre></div><h3 id="cgroupfs-컨트롤-그룹-파일-시스템">cgroupfs (컨트롤 그룹 파일 시스템)</h3>
 <ul>
 <li><code>memory</code> 중에서도 <a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/memory.html#benefits-and-purpose-of-the-memory-controller">일부분만 갈무리</a>해봤습니다.</li>

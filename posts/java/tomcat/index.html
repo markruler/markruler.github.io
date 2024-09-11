@@ -566,39 +566,39 @@ if (!doNotTrack) {
                     <h1 id="architecture">Architecture</h1>
 <p><img src="/images/java/tomcat-architecture.png" alt="Tomcat Architecture"></p>
 <p><em><a href="https://www.datadoghq.com/blog/tomcat-architecture-and-performance/">이미지 출처 - Datadog</a></em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#6272a4">&lt;!-- server.xml --&gt;</span>
-<span style="color:#ff79c6">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
-<span style="color:#ff79c6">&lt;Server</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8005&#34;</span> <span style="color:#50fa7b">shutdown=</span><span style="color:#f1fa8c">&#34;SHUTDOWN&#34;</span><span style="color:#ff79c6">&gt;</span>
-  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.AprLifecycleListener&#34;</span> <span style="color:#50fa7b">SSLEngine=</span><span style="color:#f1fa8c">&#34;on&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JasperListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;Listener</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;GlobalNamingResources&gt;</span>
-    <span style="color:#ff79c6">&lt;Resource</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span>
-              <span style="color:#50fa7b">auth=</span><span style="color:#f1fa8c">&#34;Container&#34;</span>
-              <span style="color:#50fa7b">type=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.UserDatabase&#34;</span>
-              <span style="color:#50fa7b">description=</span><span style="color:#f1fa8c">&#34;User database that can be updated and saved&#34;</span>
-              <span style="color:#50fa7b">factory=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.users.MemoryUserDatabaseFactory&#34;</span>
-              <span style="color:#50fa7b">pathname=</span><span style="color:#f1fa8c">&#34;conf/tomcat-users.xml&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-  <span style="color:#ff79c6">&lt;/GlobalNamingResources&gt;</span>
-  <span style="color:#ff79c6">&lt;Service</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span><span style="color:#ff79c6">&gt;</span>
-    <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8080&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#50fa7b">connectionTimeout=</span><span style="color:#f1fa8c">&#34;20000&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-    <span style="color:#ff79c6">&lt;Connector</span> <span style="color:#50fa7b">port=</span><span style="color:#f1fa8c">&#34;8009&#34;</span> <span style="color:#50fa7b">protocol=</span><span style="color:#f1fa8c">&#34;AJP/1.3&#34;</span> <span style="color:#50fa7b">redirectPort=</span><span style="color:#f1fa8c">&#34;8443&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-    <span style="color:#ff79c6">&lt;Engine</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;Catalina&#34;</span> <span style="color:#50fa7b">defaultHost=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span><span style="color:#ff79c6">&gt;</span>
-      <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.LockOutRealm&#34;</span><span style="color:#ff79c6">&gt;</span>
-        <span style="color:#ff79c6">&lt;Realm</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.realm.UserDatabaseRealm&#34;</span> <span style="color:#50fa7b">resourceName=</span><span style="color:#f1fa8c">&#34;UserDatabase&#34;</span><span style="color:#ff79c6">/&gt;</span>
-      <span style="color:#ff79c6">&lt;/Realm&gt;</span>
-      <span style="color:#ff79c6">&lt;Host</span> <span style="color:#50fa7b">name=</span><span style="color:#f1fa8c">&#34;localhost&#34;</span>  <span style="color:#50fa7b">appBase=</span><span style="color:#f1fa8c">&#34;webapps&#34;</span>
-            <span style="color:#50fa7b">unpackWARs=</span><span style="color:#f1fa8c">&#34;true&#34;</span> <span style="color:#50fa7b">autoDeploy=</span><span style="color:#f1fa8c">&#34;true&#34;</span><span style="color:#ff79c6">&gt;</span>
-        <span style="color:#ff79c6">&lt;Valve</span> <span style="color:#50fa7b">className=</span><span style="color:#f1fa8c">&#34;org.apache.catalina.valves.AccessLogValve&#34;</span>
-              <span style="color:#50fa7b">directory=</span><span style="color:#f1fa8c">&#34;logs&#34;</span>
-              <span style="color:#50fa7b">prefix=</span><span style="color:#f1fa8c">&#34;localhost_access_log.&#34;</span> <span style="color:#50fa7b">suffix=</span><span style="color:#f1fa8c">&#34;.txt&#34;</span>
-              <span style="color:#50fa7b">pattern=</span><span style="color:#f1fa8c">&#34;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&#34;</span> <span style="color:#ff79c6">/&gt;</span>
-      <span style="color:#ff79c6">&lt;/Host&gt;</span>
-    <span style="color:#ff79c6">&lt;/Engine&gt;</span>
-  <span style="color:#ff79c6">&lt;/Service&gt;</span>
-<span style="color:#ff79c6">&lt;/Server&gt;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-xml" data-lang="xml"><span style="color:#0f0">&lt;!-- server.xml --&gt;</span>
+<span style="color:#e5e5e5">&lt;?xml version=&#39;1.0&#39; encoding=&#39;utf-8&#39;?&gt;</span>
+&lt;Server port=<span style="color:#87ceeb">&#34;8005&#34;</span> shutdown=<span style="color:#87ceeb">&#34;SHUTDOWN&#34;</span>&gt;
+  &lt;Listener className=<span style="color:#87ceeb">&#34;org.apache.catalina.core.AprLifecycleListener&#34;</span> SSLEngine=<span style="color:#87ceeb">&#34;on&#34;</span> /&gt;
+  &lt;Listener className=<span style="color:#87ceeb">&#34;org.apache.catalina.core.JasperListener&#34;</span> /&gt;
+  &lt;Listener className=<span style="color:#87ceeb">&#34;org.apache.catalina.core.JreMemoryLeakPreventionListener&#34;</span> /&gt;
+  &lt;Listener className=<span style="color:#87ceeb">&#34;org.apache.catalina.mbeans.GlobalResourcesLifecycleListener&#34;</span> /&gt;
+  &lt;Listener className=<span style="color:#87ceeb">&#34;org.apache.catalina.core.ThreadLocalLeakPreventionListener&#34;</span> /&gt;
+  &lt;GlobalNamingResources&gt;
+    &lt;Resource name=<span style="color:#87ceeb">&#34;UserDatabase&#34;</span>
+              auth=<span style="color:#87ceeb">&#34;Container&#34;</span>
+              type=<span style="color:#87ceeb">&#34;org.apache.catalina.UserDatabase&#34;</span>
+              description=<span style="color:#87ceeb">&#34;User database that can be updated and saved&#34;</span>
+              factory=<span style="color:#87ceeb">&#34;org.apache.catalina.users.MemoryUserDatabaseFactory&#34;</span>
+              pathname=<span style="color:#87ceeb">&#34;conf/tomcat-users.xml&#34;</span> /&gt;
+  &lt;/GlobalNamingResources&gt;
+  &lt;Service name=<span style="color:#87ceeb">&#34;Catalina&#34;</span>&gt;
+    &lt;Connector port=<span style="color:#87ceeb">&#34;8080&#34;</span> protocol=<span style="color:#87ceeb">&#34;HTTP/1.1&#34;</span> redirectPort=<span style="color:#87ceeb">&#34;8443&#34;</span> connectionTimeout=<span style="color:#87ceeb">&#34;20000&#34;</span> /&gt;
+    &lt;Connector port=<span style="color:#87ceeb">&#34;8009&#34;</span> protocol=<span style="color:#87ceeb">&#34;AJP/1.3&#34;</span> redirectPort=<span style="color:#87ceeb">&#34;8443&#34;</span> /&gt;
+    &lt;Engine name=<span style="color:#87ceeb">&#34;Catalina&#34;</span> defaultHost=<span style="color:#87ceeb">&#34;localhost&#34;</span>&gt;
+      &lt;Realm className=<span style="color:#87ceeb">&#34;org.apache.catalina.realm.LockOutRealm&#34;</span>&gt;
+        &lt;Realm className=<span style="color:#87ceeb">&#34;org.apache.catalina.realm.UserDatabaseRealm&#34;</span> resourceName=<span style="color:#87ceeb">&#34;UserDatabase&#34;</span>/&gt;
+      &lt;/Realm&gt;
+      &lt;Host name=<span style="color:#87ceeb">&#34;localhost&#34;</span>  appBase=<span style="color:#87ceeb">&#34;webapps&#34;</span>
+            unpackWARs=<span style="color:#87ceeb">&#34;true&#34;</span> autoDeploy=<span style="color:#87ceeb">&#34;true&#34;</span>&gt;
+        &lt;Valve className=<span style="color:#87ceeb">&#34;org.apache.catalina.valves.AccessLogValve&#34;</span>
+              directory=<span style="color:#87ceeb">&#34;logs&#34;</span>
+              prefix=<span style="color:#87ceeb">&#34;localhost_access_log.&#34;</span> suffix=<span style="color:#87ceeb">&#34;.txt&#34;</span>
+              pattern=<span style="color:#87ceeb">&#34;%h %l %u %t &amp;quot;%r&amp;quot; %s %b&#34;</span> /&gt;
+      &lt;/Host&gt;
+    &lt;/Engine&gt;
+  &lt;/Service&gt;
+&lt;/Server&gt;
 </code></pre></div><h2 id="server">Server</h2>
 <p>카탈리나 서버(Catalina Server)는 Tomcat 아키텍처 전체를 나타내며 서블릿 컨테이너를 말한다.
 즉, 서블릿을 실행하기 위한 환경을 제공한다.
@@ -628,12 +628,12 @@ JSP 파일을 서블릿(Servlet)으로 변환하여 클라이언트의 HTML 페�
 이 이름이 사용자가 속한 인터넷 도메인을 관리하는 DNS(도메인 이름 서비스) 서버에 등록되어 있어야 한다.
 만약 Apache HTTP Server, NGINX와 같은 웹 프록시 서버를 사용한다면 불필요할 수 있다.
 — 기본적으로 <code>localhost</code> 로 입력되어 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">GET http:<span style="color:#6272a4">//www.testwebapp.com/sample/
-</span><span style="color:#6272a4"></span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">GET http:<span style="color:#0f0">//www.testwebapp.com/sample/
+</span><span style="color:#0f0"></span>
 Request Headers:
 Connection: keep-alive
 Host: www.testwebapp.com
-User-Agent: Apache-HttpClient/<span style="color:#bd93f9">4.5</span>.<span style="color:#bd93f9">5</span> (Java/<span style="color:#bd93f9">10.0</span>.<span style="color:#bd93f9">1</span>)
+User-Agent: Apache-HttpClient/<span style="color:#f60">4.5</span>.<span style="color:#f60">5</span> (Java/<span style="color:#f60">10.0</span>.<span style="color:#f60">1</span>)
 </code></pre></div><p>위와 같은 HTTP 요청은 <code>Host</code> 헤더와 일치하는 호스트에 매핑한다.</p>
 <p><code>CATALINA_BASE</code> 변수를 사용하여 여러 Tomcat 인스턴스를 구성한 경우<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>가 아니라면
 <code>CATALINA_BASE</code> 는 Tomcat을 설치한 디렉토리인 <code>CATALINA_HOME</code> 의 값으로 설정된다.</p>
@@ -648,14 +648,14 @@ User-Agent: Apache-HttpClient/<span style="color:#bd93f9">4.5</span>.<span style
 — 엔진의 수명 주기를 관리하는 <code>LifecycleListener</code> 와 다르다.
 <code>LifecycleListener</code> 를 구현한 <code>JasperListener</code> 를 사용해서 Jasper 엔진을 관리하고,
 Jasper 엔진을 사용해서 servlet을 관리한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#8be9fd;font-style:italic">public</span> <span style="color:#8be9fd;font-style:italic">final</span> <span style="color:#8be9fd;font-style:italic">class</span> <span style="color:#50fa7b">MyServletListener</span> <span style="color:#8be9fd;font-style:italic">implements</span> ServletContextListener <span style="color:#ff79c6">{</span>
-    <span style="color:#8be9fd;font-style:italic">private</span> <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">addLifeCycleListener</span><span style="color:#ff79c6">(</span>ServletContextEvent event<span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-        ApplicationContextFacade source <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">(</span>ApplicationContextFacade<span style="color:#ff79c6">)</span> event<span style="color:#ff79c6">.</span><span style="color:#50fa7b">getSource</span><span style="color:#ff79c6">();</span>
-        ApplicationContext applicationContext <span style="color:#ff79c6">=</span> get<span style="color:#ff79c6">(</span>source<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;context&#34;</span><span style="color:#ff79c6">);</span>
-        StandardContext standardContext <span style="color:#ff79c6">=</span> get<span style="color:#ff79c6">(</span>applicationContext<span style="color:#ff79c6">,</span> <span style="color:#f1fa8c">&#34;context&#34;</span><span style="color:#ff79c6">);</span>
-        standardContext<span style="color:#ff79c6">.</span><span style="color:#50fa7b">addLifecycleListener</span><span style="color:#ff79c6">(</span><span style="color:#ff79c6">new</span> LifecycleListenerImpl<span style="color:#ff79c6">());</span>
-    <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#f00">public</span> <span style="color:#f00">final</span> <span style="color:#f00">class</span> MyServletListener <span style="color:#f00">implements</span> ServletContextListener {
+    <span style="color:#f00">private</span> <span style="color:#ee82ee">void</span> <span style="color:#ff0">addLifeCycleListener</span>(ServletContextEvent event) {
+        ApplicationContextFacade source = (ApplicationContextFacade) event.getSource();
+        ApplicationContext applicationContext = get(source, <span style="color:#87ceeb">&#34;context&#34;</span>);
+        StandardContext standardContext = get(applicationContext, <span style="color:#87ceeb">&#34;context&#34;</span>);
+        standardContext.addLifecycleListener(<span style="color:#f00">new</span> LifecycleListenerImpl());
+    }
+}
 </code></pre></div><h3 id="valve">Valve</h3>
 <p>밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터다.
 밸브는 톰캣에서만 쓸 수 있는 기술이고,

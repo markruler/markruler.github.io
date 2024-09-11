@@ -418,26 +418,26 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
 <p>특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 <strong>2</strong>단계로 표시되어 있다.</p>
 <p>요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.</p>
 <p>예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 <code>projectCaribou</code> 네임스페이스에서만 파드를 읽을 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
-    <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
-    <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;Policy&#34;</span>,
-    <span style="color:#ff79c6">&#34;spec&#34;</span>: {
-        <span style="color:#ff79c6">&#34;user&#34;</span>: <span style="color:#f1fa8c">&#34;bob&#34;</span>,
-        <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
-        <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>,
-        <span style="color:#ff79c6">&#34;readonly&#34;</span>: <span style="color:#ff79c6">true</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
+    &#34;apiVersion&#34;: <span style="color:#87ceeb">&#34;abac.authorization.kubernetes.io/v1beta1&#34;</span>,
+    &#34;kind&#34;: <span style="color:#87ceeb">&#34;Policy&#34;</span>,
+    &#34;spec&#34;: {
+        &#34;user&#34;: <span style="color:#87ceeb">&#34;bob&#34;</span>,
+        &#34;namespace&#34;: <span style="color:#87ceeb">&#34;projectCaribou&#34;</span>,
+        &#34;resource&#34;: <span style="color:#87ceeb">&#34;pods&#34;</span>,
+        &#34;readonly&#34;: <span style="color:#f00">true</span>
     }
 }
 </code></pre></div><p>Bob이 다음과 같은 요청을 하면 &lsquo;projectCaribou&rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
-  <span style="color:#ff79c6">&#34;apiVersion&#34;</span>: <span style="color:#f1fa8c">&#34;authorization.k8s.io/v1beta1&#34;</span>,
-  <span style="color:#ff79c6">&#34;kind&#34;</span>: <span style="color:#f1fa8c">&#34;SubjectAccessReview&#34;</span>,
-  <span style="color:#ff79c6">&#34;spec&#34;</span>: {
-    <span style="color:#ff79c6">&#34;resourceAttributes&#34;</span>: {
-      <span style="color:#ff79c6">&#34;namespace&#34;</span>: <span style="color:#f1fa8c">&#34;projectCaribou&#34;</span>,
-      <span style="color:#ff79c6">&#34;verb&#34;</span>: <span style="color:#f1fa8c">&#34;get&#34;</span>,
-      <span style="color:#ff79c6">&#34;group&#34;</span>: <span style="color:#f1fa8c">&#34;unicorn.example.org&#34;</span>,
-      <span style="color:#ff79c6">&#34;resource&#34;</span>: <span style="color:#f1fa8c">&#34;pods&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-json" data-lang="json">{
+  &#34;apiVersion&#34;: <span style="color:#87ceeb">&#34;authorization.k8s.io/v1beta1&#34;</span>,
+  &#34;kind&#34;: <span style="color:#87ceeb">&#34;SubjectAccessReview&#34;</span>,
+  &#34;spec&#34;: {
+    &#34;resourceAttributes&#34;: {
+      &#34;namespace&#34;: <span style="color:#87ceeb">&#34;projectCaribou&#34;</span>,
+      &#34;verb&#34;: <span style="color:#87ceeb">&#34;get&#34;</span>,
+      &#34;group&#34;: <span style="color:#87ceeb">&#34;unicorn.example.org&#34;</span>,
+      &#34;resource&#34;: <span style="color:#87ceeb">&#34;pods&#34;</span>
     }
   }
 }
