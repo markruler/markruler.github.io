@@ -1,6 +1,6 @@
 ---
 draft: true
-date: 2024-09-08T21:59:00+09:00
+date: 2024-09-11T12:59:00+09:00
 lastmod: 2024-09-12T18:00:00+09:00
 title: "Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"
 description: "@HaxRob"
@@ -13,10 +13,12 @@ categories:
   - translate
 ---
 
-> - HaxRob의 [How did Facebook intercept their competitor's encrypted mobile app traffic?](https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/)를 번역한 글입니다.
-> - 원글의 작성일은 2024년 4월 14일입니다.
-> - 저자의 허락을 받고 번역했습니다.
-> - 각주는 역주입니다.
+- [How did Facebook intercept their competitor's encrypted mobile app traffic?](https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/)
+  | [HaxRob](https://x.com/HaxRob), 2024년 4월 14일
+- 저자의 허락을 받고 번역했습니다.
+- 각주는 역주입니다.
+
+---
 
 이 글은 Facebook 집단 소송에서 밝혀진 정보에 대한 기술적 조사입니다.
 Facebook은 인사이트를 얻기 위해 Onavo Protect 앱이 실행중인 사용자의 디바이스에서 암호화된 트래픽을 도청했었습니다.
@@ -30,6 +32,10 @@ Facebook은 인사이트를 얻기 위해 Onavo Protect 앱이 실행중인 사�
 이 글은 [법원 문서](https://www.documentcloud.org/documents/24520332-merged-fb)와
 보관된 Android 용 Onavo Protect 앱 패키지의 리버스 엔지니어링을 근거하여 작성되었습니다.
 
+![Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1](https://doubleagent.net/content/images/2024/07/image-1.png)
+
+*\*Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1*
+
 Facebook은 [MITM 공격](https://en.wikipedia.org/wiki/Man-in-the-middle_attack)으로
 간주될 수 있는 기법을 사용하여 사용자의 암호화된 HTTPS 트래픽을 가로챈 것으로 알려져 있습니다.
 Facebook은 이 기법을 "ssl bump"라고 부릅니다.
@@ -38,26 +44,10 @@ Facebook은 이 기법을 "ssl bump"라고 부릅니다.
 transparent proxy [기능 (ssl_bump)](https://www.squid-cache.org/Doc/config/ssl_bump/)의 이름을 따서 붙인 것입니다.
 이 사건에 대한 자세한 배경은 최근 [TechCrunch](https://techcrunch.com/2024/03/26/facebook-secret-project-snooped-snapchat-user-traffic/) 기사를 참조하시기 바랍니다.
 
-<p style="display:none;">
-> [2024-07-28] - Note this is different to what TechCrunch [had revealed in 2019](https://techcrunch.com/2019/01/29/facebook-project-atlas/)
-> in which Facebook were paying teenagers to gather data on usage habits.
-> That resulted in the Onavo app being pulled from the app stores and [fines](https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data).
-> With the new MITM information revealed:
-> what is currently unclear is if all app users had their traffic "intercepted" or just a subset of users.
-</p>
-
 > [2024-07-28] - 이는 [2019년에 TechCrunch가 폭로한](https://techcrunch.com/2019/01/29/facebook-project-atlas/)
 > Facebook이 청소년에게 돈을 주고 사용 습관에 대한 데이터를 수집한 것과는 다른 내용입니다.
 > 이로 인해 Onavo 앱이 앱 스토어에서 삭제되고 [벌금이 부과되었습니다](https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data).
 > 새로운 MITM 정보가 공개되면서 현재 모든 앱 사용자가 트래픽을 '가로챘는지' 아니면 일부 사용자만 트래픽을 가로챘는지 여부는 불분명해졌습니다.
-
-<p style="display:none;">
-> *A HN user [clarifies](https://news.ycombinator.com/item?id=41091505&ref=doubleagent.net):\
->\
-> "This is not a wiretapping case.
-> It's an antitrust case; the claims are all for violations of the Sherman Act.
-> Plaintiffs' attorneys _incidentally_ found evidence during discovery that Facebook may have breached the Wiretap Act."
-</p>
 
 > *한 HN 사용자는 다음과 같이 [명확히 합니다](https://news.ycombinator.com/item?id=41091505&ref=doubleagent.net).\
 > \
@@ -66,16 +56,12 @@ transparent proxy [기능 (ssl_bump)](https://www.squid-cache.org/Doc/config/ssl
 
 [^1]: [셔먼법(Sherman Antitrust Act)](https://en.wikipedia.org/wiki/Sherman_Antitrust_Act)은 미국의 반독점법이다.
 
-![Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1](https://doubleagent.net/content/images/2024/07/image-1.png)
-
-*\*Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1*
-
 > 제한적이고 국소적인 정보로 인해 이 글은 일부 사실이 부정확하거나 불완전할 수 있습니다.
 > 따라서 이 글은 수정이 필요하거나 새로운 사실이 발견될 경우 업데이트될 수 있습니다.
 > [저자의 블로그](https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/)를 구독하여 받은 편지함으로 새로운 콘텐츠를 받아보거나
 > [저자의 X](https://twitter.com/haxrob)를 팔로우하세요.
 
-- [요약](#요약)
+- [개요](#개요)
 - [동기](#동기)
 - [분석](#분석)
 - [CA 인증서와 함께](#ca-인증서와-함께)
@@ -83,14 +69,8 @@ transparent proxy [기능 (ssl_bump)](https://www.squid-cache.org/Doc/config/ssl
 - [또 있나요?](#또-있나요)
 - [마무리](#마무리)
 
-# 요약
+# 개요
 
-- A review of an old Snapchat app shows that it's analytics domain did not employ certificate pinning,
-  meaning that MITM / "ssl bumping" would have worked as described.
-- In addition to the core functionality of gathering other app's usage statistics
-  through abusing a permission granted by the user,
-  there also appears to be other functionality to obtain questionable sensitive data,
-  such as the subscriber [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity).
 - [1,000만 개](https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship)가 넘는
   안드로이드 설치 수를 기록한 [Onavo Protect 안드로이드 앱](https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship)에는
   기기의 사용자 인증 저장소(user trust store)에 "Facebook Research"에서 발급한 CA(인증 기관) 인증서를 설치하도록 유도하는 코드가 포함되어 있었습니다.
@@ -101,128 +81,81 @@ transparent proxy [기능 (ssl_bump)](https://www.squid-cache.org/Doc/config/ssl
 - Protect 앱에 "ssl bump" 기능이 배포된 직후
   안드로이드의 새 버전이 출시되었으며, 이 버전에는 보안 제어 기능(security controls)이 개선되어
   새로운 운영 체제가 설치된 기기에서는 이 방법을 사용할 수 없게 되었습니다.
-- 이전 Snapchat 앱을 검토한 결과, 분석 도메인에 인증서 고정이 사용되지 않았으며,
-  이는 설명대로 MITM / "ssl bumping"이 작동했을 것임을 의미합니다.
-- 구 버전의 Snapchat 앱을 검토한 결과, 해당 앱의 분석 도메인(analytics domain)이 인증서 고정을 사용하지 않았습니다.
-  이는 MITM(중간자 공격) 또는 "SSL bumping"이 앞서 설명한 대로 작동했을 수 있음을 의미합니다.
-- 사용자가 부여한 권한을 남용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도
-  가입자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같이
-  의심스러운 민감한 데이터를 획득하는 다른 기능도 있는 것으로 보입니다.
+- 이전 Snapchat 앱을 검토한 결과, 분석 도메인(analytics domain)에 인증서 고정[^2]이 사용되지 않았으며,
+  이는 MITM(중간자 공격) 또는 "ssl bumping"이 앞서 설명한 대로 작동했을 수 있음을 의미합니다.
+- 사용자로부터 부여된 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
+  가입자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같은
+  민감한 데이터를 획득하는 의심스러운 기능도 존재하는 것으로 보입니다.
 
-The setup most likely would have looked something the following diagram:
+[^2]: **인증서 고정(Certificate Pinning)**은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법입니다.
+이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한합니다.
+이 방식은 중간자 공격(MITM)을 방지하는 데 효과적입니다.
 
-아마도 구성은 다음 그림과 비슷했을 것입니다:
+아마도 구성은 다음 그림과 비슷했을 것입니다.
 
 ![An interpretation of FB's setup based on court documents and app analysis](https://doubleagent.net/content/images/2024/04/fb1-3-1.png)
 
-Here we have a trusted cert installed on the device,
-all device traffic going over a VPN to Facebook controlled infrastructure,
-traffic redirected into a Squid caching proxy setup as a transparent proxy with the 'ssl bump' feature configured.
-We know from the documents that various domains belonging to Snapchat, Amazon and Youtube were of interest.
-It's not known if any other user traffic was intercepted, or just proxied on.
-This type of information we can't obtain from looking at the archived Onavo Protect apps,
-rather for the time being, we have to rely on the content in the court documents made available to the public.
+신뢰할 수 있는 인증서가 기기에 설치되어 있으며,
+디바이스의 모든 트래픽이 VPN을 통해 Facebook이 관리하는 인프라로 전송되고,
+트래픽은 'ssl bump' 기능이 설정된 traceparent proxy로 구성된 Squid 캐싱 프록시로 리다이렉션됩니다.
+문서에 따르면 Snapchat, Amazon, YouTube에 속한 다양한 도메인들이 관심 대상이었습니다.
+다른 사용자 트래픽이 가로채졌는지 아니면 단순히 프록시 처리만 되었는지는 알 수 없습니다.
+이러한 정보는 아카이브된 Onavo Protect 앱을 살펴봐도 얻을 수 없으며,
+현재로서는 공개된 법원 문서에 의존할 수밖에 없습니다.
 
-여기에는 디바이스에 신뢰할 수 있는 인증서가 설치되어 있고,
-모든 디바이스 트래픽이 VPN을 통해 Facebook 제어 인프라로 이동하며,
-트래픽이 'ssl bump' 기능이 구성된 투명 프록시로 설정된 Squid 캐싱 프록시로 리디렉션됩니다.
-문서를 통해 Snapchat, Amazon, Youtube에 속한 다양한 도메인이 관심 대상이었다는 것을 알 수 있습니다.
-다른 사용자 트래픽이 가로챈 것인지, 아니면 그냥 프록시된 것인지는 알 수 없습니다.
-이러한 유형의 정보는 보관된 Onavo Protect 앱을 살펴봐서는 얻을 수 없으며 당분간은 일반에 공개된 법원 문서에 있는 내용에 의존해야 합니다.
-
-Over time the success of their strategy to employ a transparent TLS proxy was diminishing due to improved security controls in Android.
-Additionally certificate pinning adoption was said to be an issue.
-As an alterative, Facebook were considering using the Accessibility API as an alternative.
-
-시간이 지남에 따라 Android의 보안 제어 기능이 향상되면서 투명한 TLS 프록시를 사용하려는 전략의 성공이 줄어들고 있었습니다.
-또한 인증서 고정 채택도 문제가 되고 있었습니다.
-이에 대한 대안으로 Facebook은 접근성 API 사용을 고려하고 있었습니다.
+시간이 지나면서 transparent TLS 프록시를 사용하는 그들의 전략은
+Android의 보안 제어(security controls)가 개선됨에 따라 성공률이 감소하고 있었습니다.
+또한 인증서 고정의 도입도 문제가 된다고 했습니다.
+이에 대한 대안으로 Facebook은 접근성(Accessibility) API를 사용하는 방안을 고려하고 있었습니다.
 
 ![Page 3 - Case 3:20-cv-08570-JD Document 736](https://doubleagent.net/content/images/2024/04/image-14.png)
 
-This is what Google has to say about using the accessibility features on their operating system:
+Google이 자사의 운영 체제에서 접근성 기능 사용에 대해 다음과 같이 말하고 있습니다.
 
-운영 체제에서 접근성 기능을 사용하는 방법에 대한 Google의 답변입니다:
+> "장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다."
 
-> *"only services that are designed to help people with disabilities access their device or otherwise overcome challenges stemming from their disabilities are eligible to declare that they are accessibility tools."*
-
-> *"장애인이 기기에 액세스하거나 장애로 인한 문제를 극복하는 데 도움이 되도록 설계된 서비스만 접근성 도구라고 선언할 수 있습니다."*
-
-It's somewhat telling of a company that would consider abusing features designed
-to support people with disabilities for a competitive advantage.
-Generally, Android accessibility functionality misuse is attributed to malicious applications
-such as [banking malware](https://blog.pradeo.com/accessibility-services-mobile-analysis-malware).
-
-장애인을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업의 의도를 짐작할 수 있는 대목입니다.
-일반적으로 Android 접근성 기능 오용은
-[뱅킹 멀웨어](https://blog.pradeo.com/accessibility-services-mobile-analysis-malware)와 같은 악성 애플리케이션에 의해 발생합니다.
+장애가 있는 사람들을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업이 있다는 것을 짐작할 수 있습니다.
+Android 접근성 기능의 남용은 주로
+[뱅킹 멀웨어](https://blog.pradeo.com/accessibility-services-mobile-analysis-malware)와 같은 악성 애플리케이션에 의해 발생하는 것으로 알려져 있습니다.
 
 # 동기
 
-Mark Zuckerberg states the need for "*reliable analytics*" on Snapchat:
-
-마크 주커버그(Mark Zuckerberg)는 스냅챗에서 "*신뢰할 수 있는 분석*"의 필요성을 언급합니다:
+마크 주커버그(Mark Zuckerberg)는 스냅챗에서 "*신뢰할 수 있는 분석*"의 필요성을 언급합니다.
 
 ![Mark Zuckerberg PX2255](https://doubleagent.net/content/images/2024/04/image-4.png)
 
-The solution? "*Kits that can be installed on iOS and Android that intercept traffic for specific sub-domains*":
-
-해결책은? "*특정 하위 도메인의 트래픽을 가로채는 iOS 및 Android에 설치할 수 있는 키트*"입니다:
+해결책은? "*특정 하위 도메인의 트래픽을 가로채기 위해 iOS 및 Android에 설치할 수 있는 키트*"입니다:
 
 ![Danny Ferrante](https://doubleagent.net/content/images/size/w1000/2024/04/image-6.png)
 
-My take on the above is that in addition to utilizing the Onavo Protect VPN app
-to intercept traffic for specific domains,
-there was an intention to rebrand the core technology and having it distributed in other applications.
-Facebook had [acquired](https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/)
-Onavo for approximately $120M USD in 2013 and needed to put this technology in good use.
-That price point should give a clear indication on the value they placed on the ability
-to gain competitor intelligence from people's phones and tablets.
-
-제가 생각하기에는 특정 도메인의 트래픽을 가로채는 데 Onavo Protect VPN 앱을 활용하는 것 외에도
-핵심 기술을 리브랜딩하여 다른 애플리케이션에 배포하려는 의도가 있었다고 생각합니다.
-Facebook은 2013년에 약 1억 2천만 달러에 Onavo를 [인수했고](https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/)
+제 생각에는 특정 도메인의 트래픽을 가로채기 위해 Onavo Protect VPN 앱을 활용하는 것 외에도
+핵심 기술을 리브랜딩하여 다른 애플리케이션에 배포하려는 의도가 있었습니다.
+Facebook은 2013년에 약 1억 2천만 달러에 Onavo를 [인수했으며](https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/)
 이 기술을 잘 활용할 필요가 있었습니다.
-이 가격대는 사람들의 휴대폰과 태블릿에서 경쟁사 정보를 얻을 수 있는 능력에 대한 가치를 명확하게 보여줄 수 있습니다.
+이 가격은 사람들이 사용하는 휴대폰과 태블릿에서 경쟁사 정보를 얻는 능력에 대해 그들이 얼마나 높은 가치를 두었는지 명확하게 보여줍니다.
 
-[Prior research](https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0) on the iOS version
-notes that the Onavo VPN app was collecting some usage telemetry from iPhones.
-On Android we can see the app was pulling much more fine grained statistics
-from their user's devices by utilizing permissions granted under the pretext of showing the user app data usage
-(we will see how this looked in an embedded video below).
-But that was not enough, Facebook wanted to take this one step further
-and intercept encrypted traffic towards specific competitor's analytics domains in order to obtain data on the "**in-app actions**".
+iOS 버전에 대한 [이전 연구](https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0)에서는
+Onavo VPN 앱이 iPhone에서 일부 사용 정보를 수집하고 있었음을 지적하고 있습니다.
+Android에서는 이 앱이 사용자에게 앱 데이터 사용량을 보여준다는 명목으로 부여된 권한을 활용하여
+사용자 기기에서 훨씬 더 세밀한 통계를 수집하고 있음을 확인할 수 있습니다(아래에 포함된 영상에서 이 모습이 어떻게 나타났는지 확인할 수 있습니다).
+그러나 이것만으로는 충분하지 않았고, Facebook은 한 걸음 더 나아가
+특정 경쟁사의 분석 도메인으로 향하는 암호화된 트래픽을 가로채어 "**앱 내 행동 (in-app actions)**"에 대한 데이터를 얻으려 했습니다.
 
-iOS 버전에 대한 [이전 연구](https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0)에 따르면
-Onavo VPN 앱은 아이폰에서 일부 사용량 원격 분석을 수집하고 있었습니다.
-Android에서는 앱이 사용자 앱 데이터 사용량을 표시한다는 구실로 부여된 권한을 활용하여
-사용자 기기에서 훨씬 더 세분화된 통계를 가져오는 것을 확인할 수 있었습니다(아래 embedded 영상에서 그 모습을 확인할 수 있습니다).
-하지만 그것만으로는 충분하지 않았고, Facebook은 한 걸음 더 나아가 '**인앱 행동 (in-app actions)**'에 대한 데이터를 얻기 위해
-특정 경쟁사의 분석 도메인으로 향하는 암호화된 트래픽을 가로채고자 했습니다.
+그들이 해야 할 일은 사용자가 사용자 휴대폰의 신뢰 저장소(trust store)에 커스텀 인증서를 설치하도록
+(그리고 특정 Android 버전을 사용)하는 것뿐이었습니다.
 
-All they would need to do is to get the user to install a custom certificate
-into the user's phone's trust store (and be on specific Android releases).
-
-사용자가 사용자 휴대폰의 신뢰 저장소에 사용자 지정 인증서를 설치하도록 하기만 하면 됩니다(특정 Android 릴리스에 있어야 함).
-
-> The wiretapping information is new and perhaps not to be confused with what occured prior:\
+> 도청 정보는 새로운 것이며, 이전에 발생한 사건과 혼동해서는 안 됩니다.\
 >\
-> In 2023, two subsidiaries of Facebook was ordered to pay a total of $20M by the Australian Federal Court for "engaging in conduct liable to mislead in breach of the Australian Consumer Law", according to the [ACCC](https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data).\
+> [ACCC](https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data)에 따르면,
+> 2023년에 Facebook의 두 자회사는 호주 연방법원으로부터
+> "호주 소비자법을 위반하여 오해를 일으킬 수 있는 행위를 한" 혐의로 총 2천만 호주달러의 벌금이 부과되었습니다.\
 >\
-> Facebook had shutdown Onavo in 2019 after an [investigation](https://techcrunch.com/2019/01/29/facebook-project-atlas/) revealed they had been paying teenagers to use the app to track them.
-> Also that year, Apple went as far as to [revoke Facebook's developer program certificates](https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app), sending a clear message.\
+> Facebook은 2019년에 Onavo를 폐쇄했는데, 이는 청소년들이 앱을 사용하도록 유도하여
+> 그들의 활동을 추적하고 있었다는 [조사](https://techcrunch.com/2019/01/29/facebook-project-atlas/)가 밝혀졌기 때문입니다.
+> 또한 그해 Apple은 [Facebook의 개발자 프로그램 인증서를 철회하는](https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app)
+> 강력한 조치를 취해 분명한 메시지를 전달했습니다.\
 >\
-> Despite the apps being taken offline, we are able to find old archived versions which enabled the technical insights offered in this post.
-
-> 도청 정보는 새로운 정보이므로 이전에 발생한 것과 혼동하지 마세요:\
->\
-> [ACCC](https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data)에 따르면 2023년,
-> Facebook의 두 자회사는 "호주 소비자법을 위반하여 오해를 불러일으킬 수 있는 행위를 했다"는 이유로 호주 연방법원으로부터 총 2천만 달러의 배상금을 지불하라는 명령을 받았습니다.\
-> \
-> Facebook은 2019년에 청소년에게 돈을 주고 앱을 사용해 청소년을 [추적한 사실](https://techcrunch.com/2019/01/29/facebook-project-atlas/)이 밝혀진 후 Onavo를 폐쇄했습니다.
-> 또한 그 해에 애플은 [Facebook의 개발자 프로그램 인증서를 무효화(revoke)](https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app)하여 분명한 메시지를 보냈습니다.\
-> \
-> 앱이 오프라인 상태임에도 불구하고 이 게시물에서 제공하는 기술적 인사이트를 가능하게 하는 오래된 아카이브 버전을 찾을 수 있었습니다.
+> 서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.
 
 # 분석
 
@@ -237,6 +170,15 @@ Corporations may also do this as a means of inspecting outbound traffic from emp
 Security testers may also do this on their own devices.
 There are legitimate reasons for doing this.
 The question here is if what Facebook did was legitimate, meaning, was it legal or not.
+
+최종 사용자 디바이스의 웹사이트와 애플리케이션은 디바이스 내 신뢰 저장소에 저장된 공인 인증서를 통해
+HTTPS/TLS를 사용하는 원격 웹사이트나 서버를 신뢰합니다.
+이러한 "인증 기관" 인증서는 애플리케이션이 의도된 상대방과 통신하고 있음을 확인하기 위해 의존하는 "신뢰 앵커"입니다.
+이 인증서는 일반적으로 운영 체제에 의해 배포되고 저장됩니다.
+신뢰 저장소에 자체 서명한 인증서를 추가하면 종종 암호화된 TLS 트래픽을 가로챌 수 있습니다.
+기업은 직원 기기에서 나가는 트래픽을 검사하기 위해 이 방법을 사용할 수 있으며, 보안 테스터들도 자신의 기기에서 이를 수행할 수 있습니다.
+이러한 작업에는 합법적인 이유가 있을 수 있습니다.
+여기서 중요한 질문은 Facebook이 한 일이 합법적이었는지, 즉 법적으로 문제가 없었는지 여부입니다.
 
 최종 사용자 디바이스의 웹사이트와 애플리케이션은 디바이스의 신뢰 저장소에 저장된 공인 인증서로 인해 HTTPS/TLS를 통해 원격 웹사이트 또는 서버를 신뢰합니다.
 이러한 "인증 기관(certificate authority)" 인증서는 애플리케이션이 의도한 상대방과 통신하는지 확인하기 위해 의존하는 "신뢰 앵커(trust anchor)"입니다.
