@@ -90,7 +90,7 @@ categories:
 
 신뢰할 수 있는 인증서가 기기에 설치되어 있으며,
 디바이스의 모든 트래픽이 VPN을 통해 페이스북이 관리하는 인프라로 전송되고,
-트래픽은 'ssl bump' 기능이 설정된 traceparent proxy로 구성된 Squid 캐싱 프록시로 리다이렉션됩니다.
+트래픽은 'ssl bump' 기능이 설정된 transparent proxy[^3]로 구성된 Squid 캐싱 프록시로 리다이렉션됩니다.
 문서에 따르면 스냅챗, 아마존, 유튜브에 속한 다양한 도메인들이 관심 대상이었습니다.
 다른 사용자 트래픽이 가로채졌는지 아니면 단순히 프록시 처리만 되었는지는 알 수 없습니다.
 이러한 정보는 아카이브된 Onavo Protect 앱을 살펴봐도 얻을 수 없으며,
@@ -350,6 +350,10 @@ Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는
 [원저자의 X](https://x.com/haxrob)를 팔로우하세요.
 
 [^1]: [셔먼법(Sherman Antitrust Act)](https://en.wikipedia.org/wiki/Sherman_Antitrust_Act)은 미국의 반독점법이다.
-[^2]: [인증서 고정(Certificate Pinning)](https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning)은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법입니다.
-이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한합니다.
-이 방식은 중간자 공격(MITM)을 방지하는 데 효과적입니다.
+[^2]: [인증서 고정(Certificate Pinning)](https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning)은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법이다.
+이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한한다.
+이 방식은 중간자 공격(MITM)을 방지하는 데 효과적이다.
+[^3]: [투명 프록시(transparent proxy)](https://www.haproxy.com/glossary/what-is-a-transparent-proxy)는 클라이언트와 서버 사이에 위치해서 요청과 응답을 중계하는 프록시 서버다.
+뒤의 두 프록시와 달리 클라이언트의 요청을 수정하지 않고, 클라이언트 IP 주소를 HTTP 요청 헤더에 그대로 노출시키기 때문에 투명하다고 부른다.
+[포워드 프록시(forward proxy)](https://docs.trafficserver.apache.org/en/latest/admin-guide/configuration/transparent-forward-proxying.en.html)는 클라이언트 측에서,
+[리버스 프록시(reverse proxy)](https://www.haproxy.com/glossary/what-is-a-reverse-proxy)는 서버 측에서 중계하는 프록시 서버다.
