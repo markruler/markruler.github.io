@@ -12,6 +12,7 @@
     - [PowerShell](#powershell)
   - [Theme 변경](#theme-변경)
     - [submodule 삭제](#submodule-삭제)
+  - [Make](#make)
 
 ## 로컬 환경
 
@@ -135,4 +136,15 @@ rm -rf .git/modules/themes/hugo-theme-diary
 git submodule deinit -f themes/hugo-theme-diary
 rm -rf .git/modules/themes/hugo-theme-diary
 git rm -f themes/hugo-theme-diary
+```
+
+## Make
+
+- [Windows 11](https://gnuwin32.sourceforge.net/packages/make.htm)
+- 설치 후 환경 변수 추가
+  - `sysdm.cpl` > 시스템 변수
+  - `Path`: `C:\Program Files (x86)\GnuWin32\bin`
+
+```sh
+make -v
 ```

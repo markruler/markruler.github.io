@@ -453,7 +453,7 @@ Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.
 
 ![HAProxy](/images/web/haproxy-statistics-report.webp)
 
-**무엇보다도 마크업(Markup) 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.**
+**무엇보다도 XML 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.**
 또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인
 [Active Healthcheck가 유료(NGINX Plus) 기능](https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/)이기 때문이다.
 
