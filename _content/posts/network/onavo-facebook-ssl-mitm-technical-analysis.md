@@ -3,11 +3,12 @@ draft: false
 date: 2024-09-12T00:17:00+09:00
 lastmod: 2024-09-12T00:17:00+09:00
 title: "Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"
-description: "@HaxRob"
+description: "Onavo Protect, SSL Bump 그리고 Certificate Pinning"
 featured_image: "/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"
 images: ["/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"]
 tags:
   - network
+  - security
   - mitm
 categories:
   - translate
@@ -68,21 +69,20 @@ categories:
 
 # 개요
 
-- [1,000만 개](https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship)가 넘는
-  안드로이드 설치 수를 기록한 [Onavo Protect 안드로이드 앱](https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship)에는
-  기기의 사용자 인증 저장소(user trust store)에 "Facebook Research"에서 발급한 CA(인증 기관) 인증서를 설치하도록 유도하는 코드가 포함되어 있었습니다.
-  이 인증서는 페이스북이 TLS 트래픽을 해독하는 데 필요했습니다.
-- 일부 구 버전의 앱에는 2016년에 배포된 앱에 embedded assets으로 Facebook Research CA 인증서가 포함되어 있습니다.
+- [1,000만 건](https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship)이 넘는
+  안드로이드 설치를 기록한 [Onavo Protect 안드로이드 앱](https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship)에는
+  기기의 사용자 신뢰 저장소(user trust store)에 "Facebook Research"에서 발급한 CA(인증 기관) 인증서를 설치하도록 유도하는 코드가 포함되어 있었습니다.
+  이 인증서는 페이스북이 TLS 트래픽을 복호화하기 위해 필요했습니다.
+- 2016년에 배포된 일부 구 버전 앱에는 embedded assets으로 Facebook Research CA 인증서가 포함되어 있습니다.
   그 중 하나의 인증서는 2027년까지 유효합니다.
-  법원 문서의 데이터 발견(Data discovery) 내용에 따르면 인증서는 "서버에서 생성되어 기기로 전송"된다고 명시되어 있습니다.
-- Protect 앱에 "ssl bump" 기능이 배포된 직후
-  안드로이드의 새 버전이 출시되었으며, 이 버전에는 보안 제어 기능(security controls)이 개선되어
-  새로운 운영 체제가 설치된 기기에서는 이 방법을 사용할 수 없게 되었습니다.
-- 이전 스냅챗 앱을 검토한 결과, 분석 도메인(analytics domain)에 인증서 고정[^2]이 사용되지 않았으며,
-  이는 MITM(중간자 공격) 또는 "ssl bumping"이 앞서 설명한 대로 작동했을 수 있음을 의미합니다.
-- 사용자로부터 부여된 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
-  가입자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같은
-  민감한 데이터를 획득하는 의심스러운 기능도 존재하는 것으로 보입니다.
+  법원 문서의 자료 조사 내용에 따르면, 인증서는 "서버에서 생성되어 기기로 전송된다"고 명시되어 있습니다.
+- "ssl bump" 기능이 Protect 앱에 도입된 직후, 최신 버전의 안드로이드가 출시되었으며,
+  이 버전에는 향상된 보안 제어 기능이 포함되어 있어 이 방법이 최신 운영체제를 사용하는 기기에서는 더 이상 작동하지 않게 되었습니다.
+- 이전 스냅챗 앱을 검토한 결과, 해당 앱의 분석 도메인(analytics domain)은 인증서 고정[^2]을 적용하지 않았음을 알 수 있었습니다.
+  이는 중간자 공격(MITM) 또는 "ssl bumping"이 앞서 설명한 대로 작동했을 가능성이 있음을 의미합니다.
+- 사용자가 부여한 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
+  구독자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같은
+  민감한 데이터를 수집하는 의심스러운 기능이 추가로 있는 것으로 보입니다.
 
 아마도 구성은 다음 그림과 비슷했을 것입니다.
 
@@ -244,7 +244,7 @@ Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는
 
 어쨌든 이 기능은 이전 버전과 최신 버전 모두에 남아 있었으며, 2019년에 마지막으로 게시된 앱까지 유지되었습니다.
 실제 MITM 인증서는 2017년에 제거되었습니다.
-법원 문서에 따르면 그에 대한 타당한 설명이 있을 수 있습니다.
+법원 문서에서 이에 대한 그럴듯한 이유를 확인할 수 있습니다.
 
 > *SSL bump에 사용되는 키는 어디에서 생성되며, 어떻게 남용으로부터 보호되나요?
 > (예: 기기에서 생성되어, 해당 기기에만 사용되고, 기기를 벗어나지 않는지, 혹은 앱과 함께 다운로드되어 설치되는 공유 키가 있는지)*\
