@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<title>Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="G-FFMDWZ27TN">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="@HaxRob">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?" />
+<meta property="og:description" content="@HaxRob" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/onavo-facebook-ssl-mitm-technical-analysis/" /><meta property="og:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-09-12T00:17:00+09:00" />
+<meta property="article:modified_time" content="2024-09-12T00:17:00+09:00" />
+
+
+
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"/>
+
+<meta name="twitter:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"/>
+<meta name="twitter:description" content="@HaxRob"/>
+
+
+
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
+}
+</script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8f%99%ea%b8%b0" class="nav-동기">
+									동기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%84%ec%84%9d" class="nav-분석">
+									분석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ca-%ec%9d%b8%ec%a6%9d%ec%84%9c" class="nav-ca-인증서">
+									CA 인증서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b5%ec%8b%ac-%ec%a7%88%eb%ac%b8%ec%9c%bc%eb%a1%9c-%eb%8f%8c%ec%95%84%ea%b0%80%ec%84%9c" class="nav-핵심-질문으로-돌아가서">
+									핵심 질문으로 돌아가서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%98%90-%eb%ac%b4%ec%97%87%ec%9d%b4-%ec%9e%88%ec%9d%84%ea%b9%8c%ec%9a%94" class="nav-또-무엇이-있을까요">
+									또 무엇이 있을까요?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%eb%ac%b4%eb%a6%ac" class="nav-마무리">
+									마무리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp')"
+                    
+                
+            >
+                <div class="post-title">
+                    Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?
+                    
+                    <div class="post-subtitle">
+                        @HaxRob
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-09-12 00:17
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/">[translate]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/mitm">mitm</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <ul>
+<li><a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/">How did Facebook intercept their competitor&rsquo;s encrypted mobile app traffic?</a>
+| <a href="https://x.com/haxrob">HaxRob</a>, 2024년 4월 14일</li>
+<li>저자의 허락을 받고 번역했습니다.</li>
+<li>각주는 역주입니다.</li>
+</ul>
+<hr>
+<p>이 글은 페이스북(Facebook) 집단 소송에서 밝혀진 정보를 바탕으로 한 기술 조사입니다.
+페이스북은 경쟁사의 정보를 얻기 위해 Onavo Protect 앱을 실행 중인 사용자 기기에서 암호화된 트래픽을 도청했었다는 이유로 재판이 진행 중입니다.</p>
+<p><img src="/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp" alt="How did Facebook intercept their competitor&rsquo;s encrypted mobile app traffic?"></p>
+<p><em>2024년 7월 28일 - 👋Hello <a href="https://news.ycombinator.com/item?id=41090304">Hackernews</a>!</em></p>
+<p>현재 메타(Meta)를 상대로 한 집단 소송이 진행 중이며,
+법원 문서에 따르면* 메타가 <a href="https://en.wikipedia.org/wiki/Electronic_Communications_Privacy_Act">도청법(Wiretap Act)</a>을 위반했을 가능성이 있다고 언급되어 있습니다.
+이 글에서의 분석은 <a href="https://www.documentcloud.org/documents/24520332-merged-fb">법원 문서</a> 내용과
+안드로이드(Android) 용 Onavo Protect 앱 패키지의 아카이브된 버전을 리버스 엔지니어링한 결과를 바탕으로 하고 있습니다.</p>
+<p>법원 문서에 따르면, 페이스북이 사용자의 암호화된 HTTPS 트래픽을 가로채기 위해
+<a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">중간자 공격(MITM)</a>으로 간주될 수 있는 방법을 사용했다고 합니다.
+페이스북은 이 기술을 &ldquo;ssl bump&quot;라고 불렀으며,
+이는 <a href="https://www.squid-cache.org/">Squid 캐싱</a> 프록시 소프트웨어의 transparent proxy <a href="https://www.squid-cache.org/Doc/config/ssl_bump/">기능 (ssl_bump)</a>에서 유래된 이름입니다.
+해당 기술은 스냅챗(Snapchat), 유튜브(YouTube), 아마존(Amazon)의 특정 도메인을 (추정컨대) 복호화하는 데 사용되었다고 합니다.
+이 사건에 대한 추가 배경 정보는 최근 <a href="https://techcrunch.com/2024/03/26/facebook-secret-project-snooped-snapchat-user-traffic/">TechCrunch</a> 기사를 읽어볼 것을 권장합니다.</p>
+<blockquote>
+<p>[2024-07-28] - 이는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/">2019년에 TechCrunch가 공개한</a> 내용과 다릅니다.
+당시 페이스북은 10대 청소년들에게 사용 습관 데이터를 수집하기 위해 돈을 지불했고,
+그 결과 Onavo 앱은 앱 스토어에서 삭제되고 <a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data">벌금이 부과되었습니다</a>.
+이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &ldquo;가로채기&rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.</p>
+</blockquote>
+<blockquote>
+<p>*한 HN 사용자는 다음과 같이 <a href="https://news.ycombinator.com/item?id=41091505&amp;ref=doubleagent.net">명확히 합니다</a>.<br>
+<br>
+&ldquo;이것은 도청법 위반 소송이 아닙니다. 독점 금지 소송으로, 청구 내용은 모두 셔먼법<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 위반에 관한 것입니다.
+원고 측 변호사들이 자료 조사 과정에서 페이스북이 도청법을 위반했을 가능성이 있다는 증거를 <em>우연히</em> 발견했습니다.&rdquo;</p>
+</blockquote>
+<p><img src="https://doubleagent.net/content/images/2024/07/image-1.png" alt="Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1"></p>
+<p><em>*Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1</em></p>
+<blockquote>
+<p>이 글은 제한적이고 부분적인 정보로 인해 일부 사실이 부정확하거나 불완전할 수 있습니다.
+따라서 수정이 필요하거나 새로운 사실이 발견될 경우 이 글은 업데이트될 수 있습니다.
+새로운 콘텐츠를 받아보고 싶으시면 <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/">저자의 블로그</a>를 구독하시거나
+<a href="https://twitter.com/haxrob">저자의 X</a>를 팔로우하세요.</p>
+</blockquote>
+<ul>
+<li><a href="#%EA%B0%9C%EC%9A%94">개요</a></li>
+<li><a href="#%EB%8F%99%EA%B8%B0">동기</a></li>
+<li><a href="#%EB%B6%84%EC%84%9D">분석</a>
+<ul>
+<li><a href="#ca-%EC%9D%B8%EC%A6%9D%EC%84%9C">CA 인증서</a></li>
+<li><a href="#%ED%95%B5%EC%8B%AC-%EC%A7%88%EB%AC%B8%EC%9C%BC%EB%A1%9C-%EB%8F%8C%EC%95%84%EA%B0%80%EC%84%9C">핵심 질문으로 돌아가서</a></li>
+</ul>
+</li>
+<li><a href="#%EB%98%90-%EB%AC%B4%EC%97%87%EC%9D%B4-%EC%9E%88%EC%9D%84%EA%B9%8C%EC%9A%94">또 무엇이 있을까요?</a></li>
+<li><a href="#%EB%A7%88%EB%AC%B4%EB%A6%AC">마무리</a></li>
+</ul>
+<h1 id="개요">개요</h1>
+<ul>
+<li><a href="https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship">1,000만 개</a>가 넘는
+안드로이드 설치 수를 기록한 <a href="https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship">Onavo Protect 안드로이드 앱</a>에는
+기기의 사용자 인증 저장소(user trust store)에 &ldquo;Facebook Research&quot;에서 발급한 CA(인증 기관) 인증서를 설치하도록 유도하는 코드가 포함되어 있었습니다.
+이 인증서는 페이스북이 TLS 트래픽을 해독하는 데 필요했습니다.</li>
+<li>일부 구 버전의 앱에는 2016년에 배포된 앱에 embedded assets으로 Facebook Research CA 인증서가 포함되어 있습니다.
+그 중 하나의 인증서는 2027년까지 유효합니다.
+법원 문서의 데이터 발견(Data discovery) 내용에 따르면 인증서는 &ldquo;서버에서 생성되어 기기로 전송&quot;된다고 명시되어 있습니다.</li>
+<li>Protect 앱에 &ldquo;ssl bump&rdquo; 기능이 배포된 직후
+안드로이드의 새 버전이 출시되었으며, 이 버전에는 보안 제어 기능(security controls)이 개선되어
+새로운 운영 체제가 설치된 기기에서는 이 방법을 사용할 수 없게 되었습니다.</li>
+<li>이전 스냅챗 앱을 검토한 결과, 분석 도메인(analytics domain)에 인증서 고정<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>이 사용되지 않았으며,
+이는 MITM(중간자 공격) 또는 &ldquo;ssl bumping&quot;이 앞서 설명한 대로 작동했을 수 있음을 의미합니다.</li>
+<li>사용자로부터 부여된 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
+가입자 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity">IMSI</a>와 같은
+민감한 데이터를 획득하는 의심스러운 기능도 존재하는 것으로 보입니다.</li>
+</ul>
+<p>아마도 구성은 다음 그림과 비슷했을 것입니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/fb1-3-1.png" alt="An interpretation of FB&rsquo;s setup based on court documents and app analysis"></p>
+<p>신뢰할 수 있는 인증서가 기기에 설치되어 있으며,
+디바이스의 모든 트래픽이 VPN을 통해 페이스북이 관리하는 인프라로 전송되고,
+트래픽은 &lsquo;ssl bump&rsquo; 기능이 설정된 traceparent proxy로 구성된 Squid 캐싱 프록시로 리다이렉션됩니다.
+문서에 따르면 스냅챗, 아마존, 유튜브에 속한 다양한 도메인들이 관심 대상이었습니다.
+다른 사용자 트래픽이 가로채졌는지 아니면 단순히 프록시 처리만 되었는지는 알 수 없습니다.
+이러한 정보는 아카이브된 Onavo Protect 앱을 살펴봐도 얻을 수 없으며,
+현재로서는 공개된 법원 문서에 의존할 수밖에 없습니다.</p>
+<p>시간이 지나면서 transparent TLS 프록시를 사용하는 그들의 전략은
+안드로이드의 보안 제어(security controls)가 개선됨에 따라 성공률이 감소하고 있었습니다.
+또한 인증서 고정의 도입도 문제가 된다고 했습니다.
+이에 대한 대안으로 페이스북은 접근성(Accessibility) API를 사용하는 방안을 고려하고 있었습니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/image-14.png" alt="Page 3 - Case 3:20-cv-08570-JD Document 736"></p>
+<p><em>Page 3 - Case 3:20-cv-08570-JD Document 736</em></p>
+<p>구글(Google)이 자사의 운영 체제에서 접근성 기능 사용에 대해 다음과 같이 말하고 있습니다.</p>
+<blockquote>
+<p>&ldquo;장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다.&rdquo;</p>
+</blockquote>
+<p>장애가 있는 사람들을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업이 있다는 것을 짐작할 수 있습니다.
+Android 접근성 기능의 남용은 주로
+<a href="https://blog.pradeo.com/accessibility-services-mobile-analysis-malware">뱅킹 멀웨어</a>와 같은 악성 애플리케이션에 의해 발생하는 것으로 알려져 있습니다.</p>
+<h1 id="동기">동기</h1>
+<p>마크 주커버그(Mark Zuckerberg)는 스냅챗에서 &ldquo;<em>신뢰할 수 있는 분석</em>&ldquo;의 필요성을 언급합니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/image-4.png" alt="Mark Zuckerberg PX2255"></p>
+<p>해결책은? &ldquo;<em>특정 하위 도메인의 트래픽을 가로채기 위해 iOS 및 Android에 설치할 수 있는 키트</em>&rdquo;.</p>
+<p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-6.png" alt="Danny Ferrante"></p>
+<p>제 생각에는 특정 도메인의 트래픽을 가로채기 위해 Onavo Protect VPN 앱을 활용하는 것 외에도
+핵심 기술을 리브랜딩하여 다른 애플리케이션에 배포하려는 의도가 있었습니다.
+페이스북은 2013년에 약 1억 2천만 달러에 Onavo를 <a href="https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/">인수했으며</a>
+이 기술을 잘 활용할 필요가 있었습니다.
+이 가격은 사람들이 사용하는 휴대폰과 태블릿에서 경쟁사 정보를 얻는 능력에 대해 그들이 얼마나 높은 가치를 두었는지 명확하게 보여줍니다.</p>
+<p>iOS 버전에 대한 <a href="https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0">이전 연구</a>에서는
+Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 있었음을 지적하고 있습니다.
+안드로이드에서는 이 앱이 사용자에게 앱 데이터 사용량을 보여준다는 명목으로 부여된 권한을 활용하여
+사용자 기기에서 훨씬 더 세밀한 통계를 수집하고 있음을 확인할 수 있습니다(아래에 포함된 영상에서 이 모습이 어떻게 나타났는지 확인할 수 있습니다).
+그러나 이것만으로는 충분하지 않았고, 페이스북은 한 걸음 더 나아가
+특정 경쟁사의 분석 도메인으로 향하는 암호화된 트래픽을 가로채어 &ldquo;<strong>인앱 액션(in-app actions)</strong>&ldquo;에 대한 데이터를 얻으려 했습니다.</p>
+<p>그들이 해야 할 일은 사용자가 사용자 휴대폰의 신뢰 저장소(trust store)에 커스텀 인증서를 설치하도록
+(그리고 특정 안드로이드 버전을 사용)하는 것뿐이었습니다.</p>
+<blockquote>
+<p>도청 정보는 새로운 것이며, 이전에 발생한 사건과 혼동해서는 안 됩니다.<br>
+<br>
+<a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data">ACCC</a>에 따르면,
+2023년에 페이스북의 두 자회사는 호주 연방법원으로부터
+&ldquo;호주 소비자법을 위반하여 오해를 일으킬 수 있는 행위를 한&rdquo; 혐의로 총 2천만 호주달러의 벌금이 부과되었습니다.<br>
+<br>
+페이스북은 2019년에 Onavo를 폐쇄했는데, 이는 청소년들이 앱을 사용하도록 유도하여
+그들의 활동을 추적하고 있었다는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/">조사</a>가 밝혀졌기 때문입니다.
+또한 그해 애플(Apple)은 <a href="https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app">페이스북의 개발자 프로그램 인증서를 철회하는</a>
+강력한 조치를 취해 분명한 메시지를 전달했습니다.<br>
+<br>
+서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.</p>
+</blockquote>
+<h1 id="분석">분석</h1>
+<p>최종 사용자 디바이스의 웹사이트와 애플리케이션은 디바이스 내 신뢰 저장소에 저장된 public 인증서를 통해 HTTPS/TLS를 사용하는 원격 웹사이트나 서버를 신뢰합니다.
+이러한 &ldquo;인증 기관(CA)&rdquo; 인증서는 애플리케이션이 신뢰할 수 있는 상대방과 통신하고 있음을 확인해 주는 &ldquo;신뢰 앵커(trust anchor)&rdquo; 역할을 합니다.
+이 인증서는 일반적으로 운영 체제에 의해 배포되고 저장됩니다.
+신뢰 저장소에 자체 서명한 인증서(self-signed certificate)를 추가하면 암호화된 TLS 트래픽을 가로챌 수 있습니다.
+기업은 직원의 디바이스에서 나가는 트래픽(outbound traffic)을 검사하기 위해 이 방법을 사용할 수 있으며, 보안 테스터들도 자신의 기기에서 이를 활용할 수 있습니다.
+이러한 것들은 모두 적법한 작업입니다.
+여기서 중요한 질문은 페이스북이 한 행위가 적법했냐는 것입니다.</p>
+<blockquote>
+<p>페이스북이 도청을 위해 사용했다고 알려진 소프트웨어의 문서에 다음과 같은 경고가 포함되어 있다는 점은 약간 아이러니합니다.<br>
+<br>
+&ldquo;<em>HTTPS는 사용자에게 개인정보보호 및 보안을 제공하기 위해 설계되었습니다.
+사용자 동의나 인지 없이 HTTPS 터널을 복호화하는 것은 윤리 규범을 위반할 수 있으며,
+관할 지역에서 불법일 수 있습니다.</em>&rdquo;</p>
+</blockquote>
+<p>아이폰의 iOS와 달리 구글은 대부분의 모바일 애플리케이션에서 신뢰할 수 있는 CA 인증서를 설치하기가 매우 어렵도록 수많은 변경 사항을 적용했습니다.
+2020년 9월에 출시된 안드로이드 11에서는 앱이 사용자에게 인증서를 설치하라는 메시지를 표시하는 메커니즘을 완전히 차단했습니다.
+그리고 어떤 애플리케이션도 기본적으로 사용자 저장소에 있는 인증서를 신뢰하지 않습니다.</p>
+<blockquote>
+<p>사람들은 &ldquo;<em>인증서 고정(Certificate Pinning)이 뭐죠? 이건 MITM을 막을 수 없었을까요?</em>&ldquo;라고 질문합니다.<br>
+<br>
+나중에 살펴보겠지만, 당시 스냅챗 앱은 분석 도메인에 대한 인증서 고정을 구현하지 않았습니다.
+이는 다른 앱 도메인의 경우에도 마찬가지일 것입니다.
+따라서 페이스북은 경쟁사의 이러한 기술적 제한/실수를 이용한 것으로 보입니다.</p>
+</blockquote>
+<p>현재는 2016년부터 2019년까지 페이스북이 했던 일을 하는 것은 기술적으로 불가능합니다.
+하지만 그들은 어떻게 해냈을까요?
+다행히도 우리는 안드로이드와 Play 스토어 생태계를 통해 오래된 안드로이드 앱 패키지를 종종 찾을 수 있습니다.</p>
+<p>먼저 테스트 단말기에 Onavo 앱을 설치하여 사용자가 앱과 어떻게 상호 작용하는지 확인했습니다.
+VPN 연결이 작동하지 않고 실제 백엔드 서비스가 중단된 상태입니다.
+하지만 이 애플리케이션이 사용자에게 여러 권한을 강제로 허용하도록 어떻게 강제하는지 엿볼 수 있었습니다:</p>
+<p><video src="https://doubleagent.net/content/media/2024/04/zszPzD8NSHAFb9W1.mp4" width="480" height="852" controls></video></p>
+<p>여기서 우리가 확인할 수 있는 것은 사용자 &lsquo;보호&rsquo;를 제공한다는 구실로 요구하는 2가지 특정 권한이 문제가 된다는 점입니다.</p>
+<ul>
+<li>다른 앱 위에 표시 (Display over other apps)</li>
+<li>과거 및 삭제된 앱 사용 내역에 액세스 (Access past and deleted app usage)</li>
+</ul>
+<blockquote>
+<p><em>&ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&quot;</em></p>
+</blockquote>
+<p>그들이 설명하지 않은 것은 이 기능이 앱을 설치한 사용자를 위한 것이 아니라 실제로는 Onavo/Facebook을 위한 것이라는 점입니다.
+이러한 정보는 매우 가치가 있으며, 이는 페이스북이 인수에 지불한 1억 2천만 달러라는 금액만 보더라도 알 수 있습니다.</p>
+<p><img src="https://pbs.twimg.com/media/GJpCkIEbkAAsckm?format=jpg&amp;name=small" alt="Onavo App Permissions"></p>
+<p>안드로이드 매니페스트(manifest)에는 <code>uses-permission</code> 지시어인 <code>android.permission.PACKAGE_USAGE_STATS</code>가 포함되어 있으며,
+이는 위 스크린샷에서 우리가 동의한 권한입니다.</p>
+<p><img src="https://pbs.twimg.com/media/GJptvfla8AA0rVZ?format=png&amp;name=medium" alt="PACKAGE_USAGE_STATS"></p>
+<p>&ldquo;애플리케이션 통계&rdquo; 기능(원래의 핵심 기능으로 추정됨)을 계속 살펴보면,
+모바일 기기의 로컬 데이터베이스 스키마를 덤프하면 기기가 실제로 수집한 데이터를 정확히 파악할 수 있습니다.</p>
+<p><img src="https://pbs.twimg.com/media/GJpyTakbIAAeD_A?format=png&amp;name=large" alt="collecting on the device"></p>
+<p>대개 다른 애플리케이션의 사용 통계와 네트워크 트래픽 사용량만 얻을 수 있었던 것으로 보입니다.
+이것은 여전히 다소 높은 수준의 통계이며, 법원 문서의 이메일 중 하나에서 암시된 것처럼 마크 주커버그가 원했던 세부 사항에는 미치지 못했습니다.
+반면에 다양한 경쟁사의 분석 도메인으로 향하는 실제 암호화된 트래픽을 가로챌 수 있다면 목적을 달성할 수 있었을 것입니다.
+이를 위해 페이스북은 어떻게든 기기에 CA 인증서를 설치해야 했습니다.</p>
+<p>하지만 인증서 설치를 요청하는 메시지(prompt)는 나타나지 않았습니다.
+이는 VPN이 원격 서비스에 성공적으로 연결되지 않았기 때문이며, 이는 전제 조건인 것으로 보입니다.
+시간이 나거나 관심이 생기면 인증서 설치 메시지를 어떻게 활성화할 수 있는지 다시 확인해볼 생각입니다.</p>
+<p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/GJo--s8aQAAYwtL.png" alt="Connections timing out, and a tcpdump shows that all traffic from the device is dropped after the VPN connection is initiated"></p>
+<h2 id="ca-인증서">CA 인증서</h2>
+<p>앱을 디컴파일해보니 해당 기능이 존재하는 것을 확인할 수 있었습니다.
+다음 이미지에서 하이라이트된 메서드는 <code>KeyChain.createInstallIntent()</code>를 호출하여 인증서를 설치합니다.
+여기서 &ldquo;Facebook Research&quot;라는 이름으로 사용자에게 권한을 요청하는 팝업이 나타날 것입니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/GJpP7rmaAAAQDKI.png" alt="KeyChain.createInstallIntent"></p>
+<p><code>KeyChain.createInstallIntent()</code>는 Android 7(Nougat)에서 <a href="https://commonsware.com/R/pages/chap-security-004.html">더 이상 작동하지 않게 되었습니다</a>.
+사용자가 인증서를 수동으로 설치해야 합니다.
+이제 Facebook의 CA 인증서를 앱 내에서 직접 설치하는 것은 불가능해졌습니다.</p>
+<p>Android 7에서 주목할 만한 또 다른 변경 사항은 <a href="https://developer.android.com/privacy-and-security/security-config">Android 문서</a>에 따르면 다음과 같습니다(강조는 필자).</p>
+<blockquote>
+<p><em>기본적으로 모든 앱의 보안 연결(TLS 및 HTTPS와 같은 프로토콜 사용)은 사전 설치된 시스템 CA를 신뢰하며, <strong>Android 6.0(API 레벨 23) 이하를 대상으로 하는 앱은 기본적으로 사용자가 추가한 CA 저장소도 신뢰합니다</strong>.</em></p>
+</blockquote>
+<p>즉, Android Marshmallow(Android 6)와 그 이전 버전에서는 다른 앱들이 사용자 저장소에 있는 인증서를 신뢰했지만,
+2016년 8월 22일에 출시된 Android 7부터는 앱의 매니페스트 파일에 보안 구성(security configuration)이 있는 경우를 제외하고는 다른 앱에서 더 이상 이를 신뢰하지 않게 되었습니다.</p>
+<p>Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는 한 어떤 방법으로도 시스템 저장소에 인증서를 설치할 수 없게 되었다는 점입니다.</p>
+<p>어쨌든 이 기능은 이전 버전과 최신 버전 모두에 남아 있었으며, 2019년에 마지막으로 게시된 앱까지 유지되었습니다.
+실제 MITM 인증서는 2017년에 제거되었습니다.
+법원 문서에 따르면 그에 대한 타당한 설명이 있을 수 있습니다.</p>
+<blockquote>
+<p><em>SSL bump에 사용되는 키는 어디에서 생성되며, 어떻게 남용으로부터 보호되나요?
+(예: 기기에서 생성되어, 해당 기기에만 사용되고, 기기를 벗어나지 않는지, 혹은 앱과 함께 다운로드되어 설치되는 공유 키가 있는지)</em><br>
+<br>
+<strong>인증서는 서버에서 생성되어 기기로 전송됩니다.</strong></p>
+</blockquote>
+<p><img src="https://doubleagent.net/content/images/2024/04/image-15.png" alt="Page 3 - Case 3:20-cv-08570-JD Document 736"></p>
+<p>따라서 2019년 이전의 훨씬 더 오래된 버전으로 돌아가야 하며, 특히 2017년 9월 버전이 필요합니다.
+이 버전에서는 &ldquo;<code>old_ca.cer</code>&ldquo;와 &ldquo;<code>new_ca.cer</code>&ldquo;라는 이름의 인증서가 <code>assets</code>에 포함되어 있습니다.
+관련 코드는 <code>ResearchCertificateManager</code> 클래스에서 찾을 수 있습니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/image-7.png" alt="ResearchCertificateManager"></p>
+<p><code>.apk</code> 파일을 zip 파일로 압축 해제할 경우 이 파일들은 <code>assets</code> 폴더 아래에서 찾을 수 있습니다.
+이는 JADX에서 확인되었습니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/image-9.png" alt="assets folder"></p>
+<p>또한, 인증서가 설치되었는지 여부를 확인하는 루틴도 관찰되었습니다.</p>
+<p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-8.png" alt="check if the certificates have been installed or not"></p>
+<p>그렇다면 왜 두 개의 인증서가 있을까요? (<code>old</code>와 <code>new</code>)
+여기 한 버전의 앱에서 추출된 두 개의 인증서가 있습니다.
+첫 번째 인증서를 생성한 사람은 유효 기간을 1년으로만 설정했습니다.
+만약 이것이 실수였다면, 만료 전에 이를 해결한 것으로 보입니다.</p>
+<p><img src="https://doubleagent.net/content/images/2024/04/GJq8BYsbUAAiREe.png" alt="old_ca.cer"></p>
+<p><img src="https://doubleagent.net/content/images/2024/04/GJq8JjeaAAA59Ec.png" alt="new_ca.cer"></p>
+<p><em>old_va.cer(위) vs new_ca.cer(아래)</em></p>
+<p>온라인에서 모든 버전의 <code>.apk</code> 파일을 찾을 수는 없었지만, 충분한 자료를 통해 다음과 같은 결론을 도출할 수 있었습니다.</p>
+<ul>
+<li>첫 번째 인증서는 2016년 9월 8일부터 유효했으며, 이는 마크 주커버그가 스냅챗에 대한 추가 정보를 얻기 위해 요청을 보낸 시점(2016년 6월 9일자 이메일)보다 몇 달 뒤의 일입니다.</li>
+<li>두 번째 인증서는 첫 번째 인증서와 함께 추가되었으며, 2017년 6월 8일부터 유효합니다. 이 인증서는 2027년 6월 8일까지 유효합니다.</li>
+<li>최소 2027년 10월 19일부터는 인증서가 없으며, 두 번째 인증서는 앱에서 완전히 삭제되었습니다.
+앞서 언급했듯이 법원 문서에 따르면 인증서는 서버에서 얻어진 것으로 설명되어 있습니다.
+아카이브에서 확보한 앱들에서는 이와 관련된 기능을 아직 찾지 못했으며, 이에 대한 추가 작업이 필요합니다.</li>
+</ul>
+<p>각각의 핑거프린트와 함께 인증서가 발견된 버전들:</p>
+<p><img src="https://pbs.twimg.com/media/GJrEPLeaEAAhjQM?format=png&amp;name=900x900" alt="Versions with certificates found with their respective fingerprints"></p>
+<p>법원 문서에 따르면 이후 유튜브(Youtube)와 아마존(Amazon)에 대한 추가적인 도청이 있었다고 합니다.
+어떤 앱에서 어떻게 도청이 이루어졌는지는 더 자세히 조사해봐야 알 수 있을 것 같습니다:</p>
+<p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-12.png" alt="Page 2, case 3:20-cv-08570-JD Document 735"></p>
+<h2 id="핵심-질문으로-돌아가서">핵심 질문으로 돌아가서</h2>
+<p>완전히 인증서 고정(full certificate pinning)을 수행하는 앱은 이 기법을 방지했을 것입니다.
+문제의 시기 동안 스냅챗은 일부분 인증서 고정(some certificate pinning)을 수행하고 있었지만, 모든 곳에서 적용된 것은 아니었습니다.</p>
+<p>직접 확인하기 위해 이전 버전의 스냅챗 앱을 다시 가져와서 검사할 수 있습니다.
+법원 문서에서 발견된 자료에 따르면, 해당 도메인은 <code>sc-analytics.appspot.com</code>이었습니다.</p>
+<p><img src="https://pbs.twimg.com/media/GKBeIsTbgAAdHpH?format=png&amp;name=small" alt="Snapchat certificate pinning"></p>
+<p>그리고 이전 버전의 스냅챗 앱을 디컴파일한 결과, 이 도메인으로의 트래픽은 인증서 고정을 사용하지 않았습니다.</p>
+<p><img src="https://pbs.twimg.com/media/GKBnQNdb0AA2M8t?format=png&amp;name=medium" alt="old Snapchat did not use certificate pinning"></p>
+<p>앞서 논의한 것처럼, 페이스북은 안드로이드의 보안 강화 및 인증서 고정의 광범위한 도입을 인지하고 있었으며, 이에 대한 언급이 포함되어 있습니다. (이전 <code>Page 3 - Case 3:20-cv-08570-JD Document 736</code> 참조)</p>
+<blockquote>
+<p><em>인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.</em></p>
+</blockquote>
+<h1 id="또-무엇이-있을까요">또 무엇이 있을까요?</h1>
+<p>제 눈에 띈 것은 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity">구독자 IMSI</a>를 얻으려는 요청이었습니다.
+이는 매우 민감한 데이터입니다.</p>
+<p><img src="https://pbs.twimg.com/media/GJp7AoJaQAA5E-N?format=png&amp;name=medium" alt="subscriber IMSI"></p>
+<p>처음에는 이것이 어떻게 가능한지 궁금했는데, 당시에는 실제로 <code>READ_PHONE_STATE</code> 권한을 통해 가능했던 것으로 보입니다.</p>
+<p><img src="https://pbs.twimg.com/media/GJqOvKmbwAAmL_p?format=png&amp;name=medium" alt="Device Identifiers"></p>
+<p>물론 이는 앱의 매니페스트에 정의되어 있었습니다.</p>
+<p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-10.png" alt="app&rsquo;s manifest"></p>
+<p><em><a href="https://source.android.com/docs/core/connect/device-identifiers">Device identifiers | Android</a></em></p>
+<p>이걸 보면 아마도 조사할 것이 더 있을 겁니다.</p>
+<h1 id="마무리">마무리</h1>
+<p>이 모든 것이 몇 년 전에 일어난 &ldquo;오래된 뉴스&quot;이긴 하지만,
+기술적인 관점에서 보면 애플리케이션 개발자들, 심지어 페이스북 같은 회사들이 모바일 폰의 권한 모델을 얼마나 악용할 수 있었는지를 보는 것은 흥미롭습니다.</p>
+<p>그리고 CA 인증서 설치 절차를 트리거하는 루틴, 2017년 이후에 인증서가 어떻게 추가되었는지, Onavo 애플리케이션이 수집한 다른 데이터는 무엇인지 등 더 깊이 알아봐야 할 것들이 분명히 있습니다.
+또한, 아이폰 버전의 애플리케이션도 찾을 수 있다면 좋을 텐데, 이를 찾을 수 있는 곳을 아는 사람이 있다면 도움이 될 것입니다.</p>
+<p>그리고 CA 설치 절차를 트리거하는 루틴, 2017년 이후에 인증서가 추가되는 방법, Onavo 애플리케이션이 수집하는 다른 항목 등 더 알아봐야 할 것이 분명히 있습니다.
+또한 사본을 어디서 찾을 수 있는지 아는 사람이 있다면 아이폰 버전의 애플리케이션을 찾는 것도 좋을 것입니다.</p>
+<p>집단 소송이 흥미로운 방향으로 진행된다면, 이는 조사를 계속할 동기가 될 수 있을 것입니다.</p>
+<p>추가 업데이트를 받고 싶으시다면, <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/">원본 사이트에서 이메일 구독</a>을 등록하거나
+<a href="https://x.com/haxrob">원저자의 X</a>를 팔로우하세요.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p><a href="https://en.wikipedia.org/wiki/Sherman_Antitrust_Act">셔먼법(Sherman Antitrust Act)</a>은 미국의 반독점법이다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><a href="https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning">인증서 고정(Certificate Pinning)</a>은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법입니다.
+이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한합니다.
+이 방식은 중간자 공격(MITM)을 방지하는 데 효과적입니다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2024-09-12</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
+                
+                
+                
+                <a class="older-posts" href="/posts/os/swap-memory/">
+			이전글<br>일상에서의 스왑 메모리 (Swap Memory)
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8f%99%ea%b8%b0" class="nav-동기">
+									동기
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b6%84%ec%84%9d" class="nav-분석">
+									분석
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#ca-%ec%9d%b8%ec%a6%9d%ec%84%9c" class="nav-ca-인증서">
+									CA 인증서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%95%b5%ec%8b%ac-%ec%a7%88%eb%ac%b8%ec%9c%bc%eb%a1%9c-%eb%8f%8c%ec%95%84%ea%b0%80%ec%84%9c" class="nav-핵심-질문으로-돌아가서">
+									핵심 질문으로 돌아가서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%98%90-%eb%ac%b4%ec%97%87%ec%9d%b4-%ec%9e%88%ec%9d%84%ea%b9%8c%ec%9a%94" class="nav-또-무엇이-있을까요">
+									또 무엇이 있을까요?
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%a7%88%eb%ac%b4%eb%a6%ac" class="nav-마무리">
+									마무리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

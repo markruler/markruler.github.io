@@ -9,9 +9,1801 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 05 Sep 2024 21:13:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 12 Sep 2024 00:17:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>CLI 환경에서 소스 코드 관리하기</title>
+        <link>https://markruler.github.io/posts/shell/git-commands/</link>
+        <pubDate>Wed, 01 Dec 2021 23:28:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/shell/git-commands/</guid>
+        <description>임창수 https://markruler.github.io/posts/shell/git-commands/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#git-internal&#34;&gt;Git Internal&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%A8%EC%9D%B4%EA%B0%80-%EC%95%84%EB%8B%88%EB%9D%BC-%EC%8A%A4%EB%83%85%EC%83%B7&#34;&gt;차이가 아니라 스냅샷&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%9D%98-%EB%AC%B4%EA%B2%B0%EC%84%B1&#34;&gt;데이터의 무결성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EC%9D%98-%EC%84%B8-%EA%B0%80%EC%A7%80-%EB%8B%A8%EA%B3%84&#34;&gt;Git 프로젝트의 세 가지 단계&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git-directory&#34;&gt;Git directory&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#head&#34;&gt;HEAD&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#refs&#34;&gt;refs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#info&#34;&gt;info&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#objects&#34;&gt;objects&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#tree&#34;&gt;tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#blob-binary-large-object&#34;&gt;blob (binary large object)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#commit&#34;&gt;commit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#tag&#34;&gt;tag&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#index&#34;&gt;index&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#hash-function&#34;&gt;Hash Function&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#config&#34;&gt;config&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#scm-source-code-management&#34;&gt;SCM: Source Code Management&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%8F%AC%EC%85%80%EB%A6%B0porcelain-%EB%AA%85%EB%A0%B9%EC%96%B4&#34;&gt;포셀린(Porcelain) 명령어&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#init&#34;&gt;init&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#clone&#34;&gt;clone&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#submodule&#34;&gt;submodule&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#subtree&#34;&gt;subtree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#branch&#34;&gt;branch&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#xargs&#34;&gt;xargs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#tag-1&#34;&gt;tag&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#switch&#34;&gt;switch&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#upstream&#34;&gt;upstream&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#status&#34;&gt;status&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#add&#34;&gt;add&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#fetch&#34;&gt;fetch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#commit-1&#34;&gt;commit&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#merge&#34;&gt;merge&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#pull&#34;&gt;pull&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#rebase&#34;&gt;rebase&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#squash%EC%99%80-fixup&#34;&gt;squash와 fixup&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cherry-pick&#34;&gt;cherry-pick&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#stash&#34;&gt;stash&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#how-git-stash-works&#34;&gt;How git stash works&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#reset&#34;&gt;reset&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#restore&#34;&gt;restore&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#revert&#34;&gt;revert&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0&#34;&gt;Git으로 버그 찾기&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#blame&#34;&gt;blame&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#bisect&#34;&gt;bisect&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#show&#34;&gt;show&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#log&#34;&gt;log&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#triple-dot&#34;&gt;Triple Dot(&amp;hellip;)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#reflog-reference-logs&#34;&gt;reflog: Reference logs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#diff&#34;&gt;diff&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#push&#34;&gt;push&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%94%8C%EB%9F%AC%EB%B0%8Dplumbing-%EB%AA%85%EB%A0%B9%EC%96%B4&#34;&gt;플러밍(Plumbing) 명령어&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#rev-parse&#34;&gt;rev-parse&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#hash-object&#34;&gt;hash-object&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ls-tree&#34;&gt;ls-tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ls-files&#34;&gt;ls-files&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cat-file&#34;&gt;cat-file&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#write-tree&#34;&gt;write-tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#commit-tree&#34;&gt;commit-tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#read-tree&#34;&gt;read-tree&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#update-index&#34;&gt;update-index&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#advanced&#34;&gt;Advanced&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#git-hooks&#34;&gt;Git Hooks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#garbage-collection&#34;&gt;Garbage Collection&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#packfiles&#34;&gt;Packfiles&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#gc&#34;&gt;gc&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#prune&#34;&gt;prune&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git-server&#34;&gt;Git Server&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#fork&#34;&gt;Fork&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#branch-protection-rules&#34;&gt;Branch protection rules&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EA%B3%A0&#34;&gt;참고&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
+GUI 프로그램의 대부분은 Git 기능 중 일부만 구현하기 때문에 비교적 단순하다.
+CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하지 않는다. -
+&amp;lt;&lt;a href=&#34;https://git-scm.com/book/en/v2&#34;&gt;Pro Git&lt;/a&gt;&amp;gt; Scott Chacon, Ben Straub&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;git-internal&#34;&gt;Git Internal&lt;/h1&gt;
+&lt;h2 id=&#34;차이가-아니라-스냅샷&#34;&gt;차이가 아니라 스냅샷&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/&#34;&gt;Commits are snapshots, not diffs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/storing-data-as-changes.png&#34; alt=&#34;Storing data as changes to a base version of each file&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F&#34;&gt;Storing data as changes to a base version of each file&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Git은 데이터를 스냅샷의 스트림처럼 취급한다. 파일이 달라지지 않았으면 이전 상태의 파일에 대한 링크만 저장한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/storing-data-as-snapshots.png&#34; alt=&#34;Storing data as snapshots of the project over time&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F&#34;&gt;Storing data as snapshots of the project over time&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;데이터의-무결성&#34;&gt;데이터의 무결성&lt;/h2&gt;
+&lt;p&gt;Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash function을 사용해서 체크섬을 계산하는 것이다.
+그리고 이 체크섬으로 데이터를 관리한다.&lt;/p&gt;
+&lt;p&gt;왜 데이터의 무결성을 검사해야 할까?
+&lt;a href=&#34;https://www.youtube.com/watch?v=4XpnKHJAok8&amp;amp;t=56m25s&#34;&gt;데이터를 신뢰하기 위해서다&lt;/a&gt;.
+예를 들어 내가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt; &amp;gt; test.txt
+$ git hash-object test.txt
+9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 파일명을 변경하더라도 체크섬은 바뀌지 않는다.&lt;/span&gt;
+$ mv test.txt test2.md
+$ git hash-object test2.md
+9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 내용을 변경하면 체크섬은 바뀐다.&lt;/span&gt;
+$ echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt; &amp;gt;&amp;gt; test2.md
+$ git hash-object test2.md
+d698e83c7a0b75a29e815371e584973062b4cab9
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
+만든 체크섬은 40자 길이의 16진수 문자열이다.
+파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구한다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0&#34;&gt;Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
+정말 그렇게 되면 어떤 일이 벌어질까?&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용한다.
+그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 된다.&lt;/p&gt;
+&lt;p&gt;그러나 해시 값이 중복되는 일은 일어나기 어렵다.
+SHA-1 값의 크기는 20 Bytes(160 Bits)다.
+해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80이다.&lt;/p&gt;
+&lt;p&gt;(&lt;a href=&#34;https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/&#34;&gt;2018년부터 SHA-256으로 전환하고 있고&lt;/a&gt;, Git 2.29부터 지원하고 있다)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.&lt;/span&gt;
+$ git ls-tree ee85
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 앞부분이 중복된다면 아래와 같은 에러가 발생한다.&lt;/span&gt;
+ferror: short object ID ee85 is ambiguous
+hint: The candidates are:
+hint:   ee8597496 commit 2022-01-12 - 제가 작성한 커밋 메시지입니다
+hint:   ee85c50d6 tree
+hint:   ee8574581 blob
+fatal: Not a valid object name ee85
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 몇 글자를 더 입력해주면 정상적으로 동작한다.&lt;/span&gt;
+$ git ls-tree ee859
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;git-프로젝트의-세-가지-단계&#34;&gt;Git 프로젝트의 세 가지 단계&lt;/h2&gt;
+&lt;p&gt;Git은 파일을 세 가지 상태로 관리한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/lifecycle-file-status.png&#34; alt=&#34;The lifecycle of the status of your files&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository&#34;&gt;The lifecycle of the status of your files&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Modified - 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 상태다.&lt;/li&gt;
+&lt;li&gt;Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태다.
+파일을 Stage하면 Git 저장소에 파일을 Blob으로 저장하고 Staging Area에 해당 파일의 체크섬을 저장한다.
+&lt;ul&gt;
+&lt;li&gt;Tracked - 관리 대상에 있는 파일이다. 이미 스냅샷에 포함되어 있던 파일이다.&lt;/li&gt;
+&lt;li&gt;Untracked - Unmodified, Modified, Staged 상태가 아닌 나머지 파일은 모두 Untracked 파일이다.
+다시 말해서 Staging Area(index)에도 포함되지 않았고 스냅샷으로 저장되어 있지 않은 파일이다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Committed - 데이터가 로컬 데이터베이스에 안전하게 저장된 상태다.
+루트 디렉토리와 각 하위 디렉토리의 트리 객체(Object)를 체크섬과 함께 저장소에 저장한다.
+그 후 커밋 객체를 만들고 메타데이터와 루트 디렉터리 트리 객체를 가리키는 포인터 정보를 커밋 객체에 넣어 저장한다.
+그래서 필요하면 언제든지 스냅샷을 다시 만들 수 있다.&lt;/li&gt;
+&lt;li&gt;아래는 커밋의 객체들을 나타낸다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/commit-and-its-tree.png&#34; alt=&#34;A commit and its tree&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell&#34;&gt;A commit and its tree&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;아래는 커밋과 이전 커밋들을 나타낸다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/commit-and-its-parent.png&#34; alt=&#34;Commits and their parents&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell&#34;&gt;Commits and their parents&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;파일의 세 가지 상태는 Git 프로젝트의 세 가지 단계와 연결된다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/git-three-step.png&#34; alt=&#34;Working tree, staging area, and Git directory&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states&#34;&gt;Working tree, staging area, and Git directory&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Working Tree - 프로젝트의 특정 버전을 Checkout 한 것이다.
+Git Directory 안에 압축된 DB에서 파일을 가져와 워킹 트리를 만든다.&lt;/li&gt;
+&lt;li&gt;Staging Area - 곧 커밋할 파일에 대한 정보를 담고 있으며 Git Directory 안(&lt;code&gt;.git/index&lt;/code&gt;)에 저장된다.
+Index라고도 불리지만 Staging Area가 거의 표준이다.
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;stage&lt;/code&gt;라는 용어는 두루 쓰이기 때문에 한번 생각해 볼 만하다.
+stage는 &amp;ldquo;과정이나 발전, 성장 등의 단계&amp;quot;라는 뜻을 가지고 있다.
+그래서 &amp;ldquo;목표로 하는 것의 직전 단계&amp;quot;라고 생각하면 쉽다.
+Git에서의 staging area는 저장소에 커밋되기 직전 단계이고,
+배포 환경에서의 staging 서버는 production 서버에 배포하기 직전 단계에 있는 서버다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Git으로 하는 일은 기본적으로 아래와 같다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Working Tree에서 파일을 수정한다.&lt;/li&gt;
+&lt;li&gt;Staging Area에 파일을 Stage 해서 커밋할 스냅샷을 만든다.&lt;/li&gt;
+&lt;li&gt;Staging Area에 있는 파일들을 커밋해서 Git Direcoty에 영구적인 스냅샷으로 저장한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;git-directory&#34;&gt;Git directory&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;.git/&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳이다.
+description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ tree -L &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; .git
+
+.git
+├── branches
+├── COMMIT_EDITMSG
+├── config
+├── description
+├── FETCH_HEAD
+├── HEAD
+├── hooks
+│   ├── commit-msg.sample
+│   ├── prepare-commit-msg.sample
+│   ├── pre-push.sample
+│   ├── ...
+├── index
+├── info
+│   └── exclude
+├── logs
+│   ├── HEAD
+│   └── refs
+├── objects
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;01&lt;/span&gt;
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;02&lt;/span&gt;
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;03&lt;/span&gt;
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;04&lt;/span&gt;
+│   ├── &lt;span style=&#34;color:#f60&#34;&gt;05&lt;/span&gt;
+│   ├── ...
+│   ├── info
+│   └── pack
+├── ORIG_HEAD
+├── packed-refs
+└── refs
+    ├── heads
+    ├── remotes
+    ├── stash
+    └── tags
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;head&#34;&gt;HEAD&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ cat HEAD
+ref: refs/heads/main
+
+$ cat refs/heads/main
+4436e4b582c7a8c942f11746d54cf4338325442c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;이름&lt;/th&gt;
+&lt;th&gt;설명&lt;/th&gt;
+&lt;th&gt;파일 내용&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;HEAD&lt;/td&gt;
+&lt;td&gt;지금 작업하고 있는 로컬 브랜치를 가리키는 포인터. 로컬 브랜치는 해당 브랜치의 마지막 커밋을 가리킨다.&lt;/td&gt;
+&lt;td&gt;ref: refs/heads/main&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;ORIG_HEAD&lt;/td&gt;
+&lt;td&gt;HEAD의 이전 커밋을 백업&lt;/td&gt;
+&lt;td&gt;ec2a7f1e03bca5485627b8af6b76129aa3f49b8a&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;FETCH_HEAD&lt;/td&gt;
+&lt;td&gt;가장 최근에 fetch한 브랜치와 그 브랜치의 HEAD&lt;/td&gt;
+&lt;td&gt;2a6464fe3e243a15ceeef19c32e930374481e87f not-for-merge branch &amp;lsquo;main&amp;rsquo; of github.com:markruler/markruler.github.io&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;MERGE_HEAD, CHERRY_PICK_HEAD, REVERT_HEAD, BISECT_HEAD, &amp;hellip;&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;td&gt;-&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;refs&#34;&gt;refs&lt;/h2&gt;
+&lt;p&gt;commit 객체의 포인터를 저장한다.&lt;/p&gt;
+&lt;h2 id=&#34;info&#34;&gt;info&lt;/h2&gt;
+&lt;p&gt;저장소에 관한 추가 정보들은 이 디렉터리 안에 저장된다.
+&lt;code&gt;.gitignore&lt;/code&gt; 파일처럼 무시할 파일의 패턴을 적어둘 수 있다.
+다만 &lt;code&gt;.git/info/exclude&lt;/code&gt;은 &lt;code&gt;.git&lt;/code&gt; 디렉토리 안에 있기 때문에 동료와 공유할 수 없다.&lt;/p&gt;
+&lt;h2 id=&#34;objects&#34;&gt;objects&lt;/h2&gt;
+&lt;p&gt;다른 VCS의 저장소처럼 Git의 저장소는 파일에 대한 유지, 복제, 수정 등의 이력을 관리하는데 필요한 모든 데이터를 포함하는 데이터베이스다.
+하지만 Git의 이런 작업들을 처리하는 방식은 다른 VCS들과 차별화되어 있다.&lt;/p&gt;
+&lt;p&gt;Git은 유입되는 모든 것을 Object로 간주한다.
+주요 Object 유형으로 blob, tree, commit, tag가 있다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/simple-git-data-model.png&#34; alt=&#34;Simple version of the Git data model&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Internals-Git-Objects&#34;&gt;Simple version of the Git data model&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;tree&#34;&gt;tree&lt;/h3&gt;
+&lt;p&gt;Git은 유닉스 파일 시스템과 비슷한 방법으로 저장하지만 좀 더 단순하다.
+모든 것을 tree와 blob 객체로 저장한다.
+tree는 유닉스의 디렉토리에 대응되고 blob은 inode나 일반 파일에 대응된다.
+tree 객체 하나는 항목을 여러 개 가질 수 있다.
+그리고 그 항목에는 blob 객체나 하위 tree 객체를 가리키는 SHA-1 포인터, 파일 모드, 객체 타입, 파일 이름이 들어 있다. &lt;code&gt;write-tree&lt;/code&gt; 명령으로 생성한다.&lt;/p&gt;
+&lt;h3 id=&#34;blob-binary-large-object&#34;&gt;blob (binary large object)&lt;/h3&gt;
+&lt;p&gt;blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
+파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여기서 blob의 파일 모드는 보통의 파일을 나타내는 &lt;code&gt;100644&lt;/code&gt;,
+실행파일을 나타내는 &lt;code&gt;100755&lt;/code&gt;,
+심볼릭 링크를 나타내는 &lt;code&gt;120000&lt;/code&gt; 세 가지만 사용한다.&lt;/p&gt;
+&lt;h3 id=&#34;commit&#34;&gt;commit&lt;/h3&gt;
+&lt;p&gt;스냅샷에 관한 모든 메타 데이터를 보유하는 객체다.
+메타 데이터는 스냅샷을 누가, 언제, 왜 저장했는지에 대한 정보를 포함한다.
+&lt;code&gt;commit-tree&lt;/code&gt; 명령으로 생성한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/reachable-objects.png&#34; alt=&#34;All the reachable objects in your Git directory&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Internals-Git-Objects&#34;&gt;All the reachable objects in your Git directory&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;tag&#34;&gt;tag&lt;/h3&gt;
+&lt;p&gt;커밋 객체를 쉽게 참조할 수 있도록 도와주는 labeling 객체다.&lt;/p&gt;
+&lt;h2 id=&#34;index&#34;&gt;index&lt;/h2&gt;
+&lt;p&gt;Staging Area에 관한 정보가 저장되어 있다.
+즉, 저장소에 커밋할 파일을 보관하는 장소다.&lt;/p&gt;
+&lt;h2 id=&#34;hash-function&#34;&gt;Hash Function&lt;/h2&gt;
+&lt;p&gt;체크섬을 계산한다.&lt;/p&gt;
+&lt;h2 id=&#34;config&#34;&gt;config&lt;/h2&gt;
+&lt;p&gt;git 설정을 저장한다.
+설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용된다.
+Local (&lt;code&gt;.git/config&lt;/code&gt;) &amp;gt; Global (&lt;code&gt;$HOME/.gitconfig&lt;/code&gt;) &amp;gt; System (&lt;code&gt;/etc/gitconfig&lt;/code&gt;) 순서다.
+config 파일은 INI file(&lt;code&gt;.ini&lt;/code&gt;) 형식이다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;macOS에서는 Local 설정보다 Keychain이 우선하나? TODO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# $HOME/.gitconfig&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[user]&lt;/span&gt;
+  email = &lt;span style=&#34;color:#87ceeb&#34;&gt;imcxsu@gmail.com
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  name = Changsu Im&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[core]&lt;/span&gt;
+  editor = &lt;span style=&#34;color:#87ceeb&#34;&gt;vim&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[diff]&lt;/span&gt;
+  tool = &lt;span style=&#34;color:#87ceeb&#34;&gt;vimdiff&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[difftool]&lt;/span&gt;
+  prompt = &lt;span style=&#34;color:#87ceeb&#34;&gt;false
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  # Be able to abort all diffs with `:cq` or `:qa!`
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  # `:cq` to quit without saving and make Vim return non-zero error (i.e. exit with error)
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  # `:qa` to quit all (short for :quitall)
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  trustExitCode = true&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[alias]&lt;/span&gt;
+  fix = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;!git commit --fixup $(git log -n 20 --pretty=format:&amp;#39;%Cred%h - %s&amp;#39; --graph --abbrev-commit | fzf --reverse | awk &amp;#39;{print $2}&amp;#39;)&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  lg = log --graph --format=format:&amp;#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)    +++ %d%C(reset)%n&amp;#39;L&amp;#39;          %C(white)%s %C(dim white)- %an&amp;#39; --all&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# .git/config&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[core]&lt;/span&gt;
+  repositoryformatversion = &lt;span style=&#34;color:#87ceeb&#34;&gt;0
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  filemode = true
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  bare = false
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  logallrefupdates = true&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[remote &amp;#34;origin&amp;#34;]&lt;/span&gt;
+  url = &lt;span style=&#34;color:#87ceeb&#34;&gt;git@github.com:okbut/corporate-library-api.git
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  fetch = +refs/heads/*:refs/remotes/origin/*&lt;/span&gt;
+&lt;span style=&#34;color:#f00&#34;&gt;[branch &amp;#34;main&amp;#34;]&lt;/span&gt;
+  remote = &lt;span style=&#34;color:#87ceeb&#34;&gt;origin
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  merge = refs/heads/main&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git config --global user.name Changsu Im
+$ git config --global user.email imcxsu@gmail.com
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# config 목록 출력&lt;/span&gt;
+$ git config --list
+$ git config --list --global
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;scm-source-code-management&#34;&gt;SCM: Source Code Management&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/source-code-management&#34;&gt;Source code management&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;What? 코드 변경 사항을 추적하고 관리하는 방법이다. &amp;lsquo;Version Control System&amp;rsquo;으로도 불린다.&lt;/li&gt;
+&lt;li&gt;Why? 팀의 커뮤니케이션 오버헤드를 줄이고 릴리스 속도를 높일 수 있다.&lt;/li&gt;
+&lt;li&gt;How? Git Commands
+&lt;ul&gt;
+&lt;li&gt;포셀린(Porcelain) 명령어는 사용자에게 이해하기 쉬운 명령어다.&lt;/li&gt;
+&lt;li&gt;플러밍(Plumbing) 명령어는 저수준 명령어다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;포셀린porcelain-명령어&#34;&gt;포셀린(Porcelain) 명령어&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/&#34;&gt;&amp;lsquo;CS Visualized: 유용한 깃(Git) 명령어&amp;rsquo;&lt;/a&gt;를 함께 읽는다.&lt;/p&gt;
+&lt;h2 id=&#34;init&#34;&gt;init&lt;/h2&gt;
+&lt;p&gt;현재 디렉토리에 &lt;code&gt;.git&lt;/code&gt; 디렉터리를 생성하고 Git 프로젝트로 초기화한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git init
+Initialized empty Git repository in /home/markruler/toy/.git/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;clone&#34;&gt;clone&lt;/h2&gt;
+&lt;p&gt;remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제한다. 그 과정은 다음과 같다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;대상 디렉토리가 존재하지 않는다면 생성하고, 대상 디렉토리를 GIt 디렉토리로 초기화한다.&lt;/li&gt;
+&lt;li&gt;대상 디렉토리 안에 소스 저장소의 브랜치와 동일한 추적 브랜치들을 설정한다. (git remote)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.git&lt;/code&gt; 디렉토리 내부에 objects와 references를 연결한다.&lt;/li&gt;
+&lt;li&gt;최신 버전을 checkout한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git clone &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;origin&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;
+Cloning into &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;my-origin-repo&amp;#39;&lt;/span&gt;...
+remote: Enumerating objects: 22940, &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+remote: Counting objects: 100% (1929/1929), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+remote: Compressing objects: 100% (780/780), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+remote: Total &lt;span style=&#34;color:#f60&#34;&gt;22940&lt;/span&gt; (delta 1277), reused &lt;span style=&#34;color:#f60&#34;&gt;1675&lt;/span&gt; (delta 1131), pack-reused &lt;span style=&#34;color:#f60&#34;&gt;21011&lt;/span&gt;
+Receiving objects: 100% (22940/22940), 41.19 MiB | 9.49 MiB/s, &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Resolving deltas: 100% (16109/16109), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;submodule&#34;&gt;submodule&lt;/h2&gt;
+&lt;p&gt;submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
+submodule을 추가하면 &lt;code&gt;.gitmodules&lt;/code&gt; 파일이 생성된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# submodule을 새로 추가하는 경우&lt;/span&gt;
+$ git submodule add https://github.com/markruler/repository
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 의존하는 submodule 리포지터리를 clone한다&lt;/span&gt;
+$ git submodule update --init --recursive
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;subtree&#34;&gt;subtree&lt;/h2&gt;
+&lt;p&gt;submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 &lt;code&gt;.gitmodule&lt;/code&gt;과 같은 메타 데이터없이 데이터를 그대로 복제한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;왜 submodule 대신 subtree를 사용해야 할까?
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-subtree&#34;&gt;Git subtree: the alternative to Git submodule&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/&#34;&gt;Why your company shouldn&amp;rsquo;t use Git submodules&lt;/a&gt; - Amber&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/tree-subtree-concept.png&#34; alt=&#34;tree-subtree-concept&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://opensource.com/article/20/5/git-submodules-subtrees&#34;&gt;일반적인 Tree 개념&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;branch&#34;&gt;branch&lt;/h2&gt;
+&lt;p&gt;브랜치(branch)는 나뭇가지나 지점, 분기를 뜻한다. Git의 브랜치는 커밋 사이를 가볍게 이동할 수 있는 포인터 같은 것이다. 흔히 말하는 master, main 브랜치는 트렁크(trunk, 줄기) 브랜치라고 불리는데 소스 코드 통합의 중심이 되는 브랜치이기 때문이다.&lt;/p&gt;
+&lt;p&gt;branch 명령을 실행하면 다음의 단계를 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;.git/refs/heads/&lt;/code&gt;에서 모든 브랜치명을 수집한다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.git/HEAD&lt;/code&gt;에 위치한 HEAD를 참조해 현재 작업 중인 브랜치를 찾는다.&lt;/li&gt;
+&lt;li&gt;모든 브랜치를 오름차순으로 정렬하고, 현재 작업 중인 브랜치에 별표(*)를 표시한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git branch
+* feature
+  master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;xargs&#34;&gt;xargs&lt;/h3&gt;
+&lt;p&gt;eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용하다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/linux/xargs&#34;&gt;When to Use xargs&lt;/a&gt; - Baeldung&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ echo {0..9} | xargs -n &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;9&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;branch 명령과 xargs 명령을 파이프(&lt;code&gt;|&lt;/code&gt;)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# master, stable, main, 현재 브랜치 외 모든 브랜치 삭제&lt;/span&gt;
+$ git branch | grep -v &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;master\|stable\|main\|\*&amp;#34;&lt;/span&gt; | xargs git branch -D
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 브랜치 제외하고 삭제&lt;/span&gt;
+$ git branch | grep -v &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;\*&amp;#34;&lt;/span&gt; | xargs git branch -D
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 모두 삭제&lt;/span&gt;
+$ git branch | grep -v &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;^*&amp;#39;&lt;/span&gt; | xargs git branch -D
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 정규표현식으로 특정 브랜치 삭제&lt;/span&gt;
+$ git branch | grep -Eo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/.*&amp;#39;&lt;/span&gt; | xargs git branch -D
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tag-1&#34;&gt;tag&lt;/h2&gt;
+&lt;p&gt;커밋을 참조하기 쉽도록 꼬리표(tag)를 붙인다. Lightweight 태그와 Annotated 태그 두 종류가 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lightweight 태그는 단순히 특정 커밋에 대한 포인터일 뿐이다.&lt;/li&gt;
+&lt;li&gt;Annotated 태그는 Git 데이터베이스에 태그를 만든 사람의 이름, 이메일과 태그를 만든 날짜, 그리고 태그 메시지도 저장한다.
+GPG(GNU Privacy Guard)로 서명할 수도 있다.
+일반적으로 Annotated 태그를 만들어 이 모든 정보를 사용할 수 있도록 하는 것이 좋다.
+하지만 임시로 생성하는 태그거나 이러한 정보를 유지할 필요가 없는 경우에는 Lightweight 태그를 사용할 수도 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Annotated tag&lt;/span&gt;
+$ git tag -a 1.0.0 -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test tag&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# tag 목록&lt;/span&gt;
+$ git tag
+1.0.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tag 내용 확인&lt;/span&gt;
+$ git show 1.0.0
+tag 1.0.0
+Tagger: Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;
+Date:   Sat Jan &lt;span style=&#34;color:#f60&#34;&gt;15&lt;/span&gt; 20:38:46 &lt;span style=&#34;color:#f60&#34;&gt;2022&lt;/span&gt; +0900
+
+test tag
+
+commit 49ef168385a2fe63f6e47055c1da79a0465039dc (HEAD -&amp;gt; master, tag: 1.0.0)
+...
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git show-ref --tags
+02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;tag 명령어를 실행하면 다음과 같은 단계를 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;커밋이 참조하고 있는 체크섬을 가져온다.&lt;/li&gt;
+&lt;li&gt;존재하는 태그명들 중 주어진 태그명을 검증한다.&lt;/li&gt;
+&lt;li&gt;새로운 태그명이라면 naming convention을 검증한다.&lt;/li&gt;
+&lt;li&gt;태그 객체가 생성된다. (&lt;code&gt;.git/refs/tags/&lt;/code&gt;)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;switch&#34;&gt;switch&lt;/h2&gt;
+&lt;p&gt;브랜치를 변경한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61&#34;&gt;git@v2.23.0&lt;/a&gt; 부터 &lt;code&gt;checkout&lt;/code&gt; 명령어는 &lt;code&gt;git-switch&lt;/code&gt;와 &lt;code&gt;git-restore&lt;/code&gt;로 분리되었다.
+이유는 checkout이 하는 기능이 많기 때문이다.
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.blog/2019-08-16-highlights-from-git-2-23/&#34;&gt;Highlights from Git 2.23&lt;/a&gt; - GitHub Blog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.infoq.com/news/2019/08/git-2-23-switch-restore/&#34;&gt;Git 2.23 Adds Switch and Restore Commands&lt;/a&gt; - Sergio De Simone&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 1. 원격 리포지터리에서 해결하려는 Issue에 맞는 브랜치를 생성한다.&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# 2. 로컬 환경에서 원격 리포지터리의 업데이트 사항을 가져온다.&lt;/span&gt;
+$ git fetch --all
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 3. 해당 브랜치를 tracking하는 로컬 브랜치를 생성한다.&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git switch -c &amp;lt;branch&amp;gt; -t[--track] &amp;lt;remote&amp;gt;/&amp;lt;branch&amp;gt;&lt;/span&gt;
+$ git switch -c feature/local-test -t origin/feature/remote-test
+Branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/local-test&amp;#39;&lt;/span&gt; set up to track remote branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/remote-test&amp;#39;&lt;/span&gt; from &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;origin&amp;#39;&lt;/span&gt;.
+Switched to a new branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/local-test&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 브랜치를 Local에서 먼저 생성하는 경우도 있다.&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# 1. 브랜치를 생성한다.&lt;/span&gt;
+$ git switch -c test-rebase
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 2. upstream을 지정한다.&lt;/span&gt;
+$ git branch --set-upstream-to=origin/test-rebase test-rebase
+Branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;test-rebase&amp;#39;&lt;/span&gt; set up to track remote branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;test-rebase&amp;#39;&lt;/span&gt; from &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;origin&amp;#39;&lt;/span&gt;.
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 3. rebase&lt;/span&gt;
+$ git rebase
+First, rewinding head to replay your work on top of it...
+Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;upstream&#34;&gt;upstream&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/triangular-workflow.png&#34; alt=&#34;Triangular Workflow&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/&#34;&gt;Triangular Workflow&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;upstream이라는 용어는 헷갈릴 수 있다.
+협업 프로젝트에서 보통 위와 같은 원본 저장소를 &lt;code&gt;upstream&lt;/code&gt;이라고 부르고
+그것을 &lt;a href=&#34;#fork&#34;&gt;fork&lt;/a&gt;한 저장소를 &lt;code&gt;origin&lt;/code&gt;,
+upstream에서 fetch한 나의 로컬 환경을 &lt;code&gt;local&lt;/code&gt;이라고 부른다.
+아래 명령어는 지정한 &lt;code&gt;upstream&lt;/code&gt; 브랜치로 push하도록 한다.&lt;/p&gt;
+&lt;p&gt;잠깐. fork한 &lt;code&gt;origin&lt;/code&gt; 저장소가 아니라 &lt;code&gt;upstream&lt;/code&gt;으로 push한다?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git push --set-upstream origin feature/test-upstream
+&lt;span style=&#34;color:#0f0&#34;&gt;# push 후&lt;/span&gt;
+Branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/test-upstream&amp;#39;&lt;/span&gt; set up to track remote branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;feature/test-upstream&amp;#39;&lt;/span&gt; from &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;origin&amp;#39;&lt;/span&gt;.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
+흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어다.
+예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고, downstream은 그 반대다.
+즉, upload/download의 방향을 말하며 Git에서 upstream은 push하려는 방향을 말한다.&lt;/p&gt;
+&lt;p&gt;여기서 중요한 점은 Git에서 절대적인 upstream/downstream이 없다는 것이다.
+Git은 DVCS(Distributed Version Control System)다.
+다시 말해서 origin이 upstream일 수 있고, upstream은 또 다른 저장소의 downstream일 수 있다.
+Triangular Workflow는 하나의 효과적인 방식일 뿐이다.&lt;/p&gt;
+&lt;h2 id=&#34;status&#34;&gt;status&lt;/h2&gt;
+&lt;p&gt;index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git status -sb
+&lt;span style=&#34;color:#0f0&#34;&gt;## feature...master [ahead 2, behind 1]&lt;/span&gt;
+D  README.md
+D  a.c
+D  c.c
+?? README.md
+?? a-1.c
+?? test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;add&#34;&gt;add&lt;/h2&gt;
+&lt;p&gt;Working Directory의 변경 사항들을 Staging Area에 포함시킨다.
+index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과정은 다음과 같다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;컨텐츠에 대한 SHA-1 체크섬을 계산한다.&lt;/li&gt;
+&lt;li&gt;기존의 blob 객체에 새로운 컨텐츠나 링크를 만들지 여부를 결정한다.&lt;/li&gt;
+&lt;li&gt;실제로 생성하거나 blob에 연결한다.&lt;/li&gt;
+&lt;li&gt;컨텐츠에 위치를 추적할 tree 객체를 생성한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 변경 사항을 staging area에 추가&lt;/span&gt;
+$ git add -A
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 디렉토리의 변경 사항을 staging area에 추가&lt;/span&gt;
+$ git add .
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 변경 사항만 추가&lt;/span&gt;
+$ git add &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;*Detail.java&amp;#39;&lt;/span&gt;
+$ git add src/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fetch&#34;&gt;fetch&lt;/h2&gt;
+&lt;p&gt;커밋, 파일 및 참조를 원격 저장소에서 로컬 저장소로 다운로드한다.
+다른 사람들이 작업한 것을 보고 싶을 때 사용할 수 있다.
+다음과 같은 단계를 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;URL이나 원격 저장소 이름을 검증하고, 지정된 저장소에 대한 유효성을 확인한다.&lt;/li&gt;
+&lt;li&gt;정의된 것이 없다면 설정 파일을 읽어서 기본 설정된 원격 저장소를 찾는다.&lt;/li&gt;
+&lt;li&gt;찾았다면 원격 저장소로부터 이름이 지정된 참조(heads와 tags)와 관련된 객체들까지 가져온다.&lt;/li&gt;
+&lt;li&gt;복구 가능한 참조들은 나중에 병합이 가능하도록 &lt;code&gt;.git/FETCH_HEAD&lt;/code&gt;에 저장한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git fetch &amp;lt;branch&amp;gt;
+$ git fetch --all &lt;span style=&#34;color:#0f0&#34;&gt;# Fetch all remotes.&lt;/span&gt;
+Fetching origin
+
+$ git merge &amp;lt;origin/branch&amp;gt; &amp;lt;commit&amp;gt;
+$ git merge FETCH_HEAD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;commit-1&#34;&gt;commit&lt;/h2&gt;
+&lt;p&gt;관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영한다.
+즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
+그렇다고 working tree나 staging area의 내용들을 지우지 않는다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git commit
+$ git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;commit message&amp;#34;&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 마지막 커밋의 author를 변경할 수 있다.&lt;/span&gt;
+$ git commit --amend --author=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 커밋의 author를 변경하고 싶다면 rebase를 사용한다.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;merge&#34;&gt;merge&lt;/h2&gt;
+&lt;p&gt;소스 코드를 병합한다.
+다음과 같은 단계를 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;지정된 파라미터를 기반으로 &lt;code&gt;.git/refs/heads&lt;/code&gt; 디렉토리로부터 병합 후보들을 식별한다.&lt;/li&gt;
+&lt;li&gt;모든 heads의 공통된 조상을 찾아 메모리에 있는 모든 대상 객체들을 로드한다.&lt;/li&gt;
+&lt;li&gt;공통 조상과 HEAD 사이의 차이를 판별한다.&lt;/li&gt;
+&lt;li&gt;두 head를 비교한다.&lt;/li&gt;
+&lt;li&gt;head 사이의 공통된 영역에서 변경 사항이 있다면 마커를 통해 충돌을 표시하고 사용자에게 안내한다.&lt;/li&gt;
+&lt;li&gt;충돌한 곳이 없다면, 콘텐츠를 병합하고, 병합을 기술한 메타데이터를 커밋한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# feature 브랜치에서 main 브랜치`를` 병합한다.&lt;/span&gt;
+$ git switch feature
+$ git merge main
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 위 명령어들은 한 줄로 실행할 수 있다.&lt;/span&gt;
+$ git merge feature main
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.&lt;/span&gt;
+$ git merge --abort
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/merging-main-into-the-feature-branch.png&#34; alt=&#34;Merging main into the feature branch&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/merging-vs-rebasing&#34;&gt;Merging main into the feature branch&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;병합은 두 가지 방식이 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# fast-forward&lt;/span&gt;
+$ git merge --ff
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 Fast Forward 방식이다.
+현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
+별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# no-fast-forward&lt;/span&gt;
+$ git merge --no-ff
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;두 번째는 &lt;a href=&#34;https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge&#34;&gt;3-way-merge&lt;/a&gt; 방식을 사용한 No Fast Forward 방식이다.
+현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합한다.
+단순히 브랜치 포인터를 최신 커밋으로 옮기는 게 아니라 3-way-merge의 결과를
+별도의 &lt;strong&gt;Merge 커밋&lt;/strong&gt;으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킨다.
+이 Merge 커밋은 부모 커밋을 2개 가진다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;*   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
+|&lt;span style=&#34;color:#87ceeb&#34;&gt;\ &lt;/span&gt; Merge: be1dacb bf50160 &lt;span style=&#34;color:#0f0&#34;&gt;# 부모 커밋이 2개&lt;/span&gt;
+| | Author: Changsu &amp;lt;imcxsu@gmail.com&amp;gt;
+| | Date:   Wed Dec &lt;span style=&#34;color:#f60&#34;&gt;15&lt;/span&gt; 05:46:44 &lt;span style=&#34;color:#f60&#34;&gt;2021&lt;/span&gt; +0900
+| |
+| |     Merge pull request &lt;span style=&#34;color:#0f0&#34;&gt;#16 from markruler/test-merge-branch&lt;/span&gt;
+| |
+| |     Testing merge commit
+| |
+| * commit bf50160af864cab37ba8eca54c97c6e448886b62 (test-merge-branch)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;만약 병합하는 두 브랜치에서 같은 파일의 같은 부분을 동시에 수정하고 병합하면 GIt은 해당 부분을 병합하지 못한다.
+3-way-merge가 실패하고 충돌(Conflict)이 발생한다.
+&lt;code&gt;git mergetool&lt;/code&gt;을 활용하면 간편하게 충돌을 해결할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git mergetool
+
+This message is displayed because &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;merge.tool&amp;#39;&lt;/span&gt; is not configured.
+See &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;git mergetool --tool-help&amp;#39;&lt;/span&gt; or &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;git help config&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; more details.
+&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;git mergetool&amp;#39;&lt;/span&gt; will now attempt to use one of the following tools:
+opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare smerge emerge vimdiff nvimdiff
+No files need merging
+
+$ git mergetool --tool-help
+
+&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;git mergetool --tool=&amp;lt;tool&amp;gt;&amp;#39;&lt;/span&gt; may be set to one of the following:
+    vimdiff
+    vimdiff2
+    vimdiff3
+
+The following tools are valid, but not currently available:
+    araxis
+    bc
+    bc3
+    codecompare
+    deltawalker
+    diffmerge
+    diffuse
+    ecmerge
+    emerge
+    examdiff
+    guiffy
+    gvimdiff
+    gvimdiff2
+    gvimdiff3
+    kdiff3
+    meld
+    opendiff
+    p4merge
+    smerge
+    tkdiff
+    tortoisemerge
+    winmerge
+    xxdiff
+
+Some of the tools listed above only work in a windowed
+environment. If run in a terminal-only session, they will fail.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;pull&#34;&gt;pull&lt;/h2&gt;
+&lt;p&gt;해당 명령은 내부적으로 다음의 과정을 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;주어진 파라미터를 가지고 &lt;code&gt;git fetch&lt;/code&gt;를 수행한다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git merge&lt;/code&gt;를 호출해 현재 브랜치의 HEAD와 지정한 브랜치의 HEAD를 병합한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Git 서버의 Pull Request는 협업 과정에서 &amp;ldquo;제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~&amp;ldquo;라고 하는 것과 같다.&lt;/p&gt;
+&lt;h2 id=&#34;rebase&#34;&gt;rebase&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.facebook.com/photo?fbid=4291246567585200&#34;&gt;rebase는 Git의 꽃이다.&lt;/a&gt; - 이규원&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive 명령이다.
+반면 rebase는 내용은 같지만 새로운 commit 객체를 생성해서 HEAD에 배치한다.
+그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없다.&lt;/p&gt;
+&lt;p&gt;rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다르다.
+보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# oldBase 브랜치에서 newBase 브랜치로 rebase한다.&lt;/span&gt;
+$ git rebase &amp;lt;newBase&amp;gt; &amp;lt;oldBase&amp;gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# feature 브랜치에서 main 브랜치`로` 재배치(rebase)한다.&lt;/span&gt;
+$ git switch feature
+
+       A---B---C feature
+      /
+ D---E---F---G main
+
+$ git rebase main
+$ git rebase main feature
+
+               A&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;--B&amp;#39;&lt;/span&gt;--C&amp;#39; feature
+              /
+ D---E---F---G main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/rebasing-the-feature-branch-onto-main.png&#34; alt=&#34;Rebasing the feature branch onto main&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/merging-vs-rebasing&#34;&gt;Rebasing the feature branch onto main&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;o---o---o---o---o  main
+        &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;         o---o---o---o---o  featureA
+              &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;               o---o---o  featureB
+
+$ git rebase --onto main featureA featureB
+
+                      o---o---o  featureB
+                     /
+    o---o---o---o---o  main
+     &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;      o---o---o---o---o  featureA
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&amp;gt; git rebase -i &amp;lt;commit&amp;gt;^
+&amp;gt; git rebase --interactive &amp;lt;commit&amp;gt;^
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;아래와 같은 하위 명령어들이 있다.
+나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# p, pick &amp;lt;commit&amp;gt; = use commit&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# r, reword &amp;lt;commit&amp;gt; = use commit, but edit the commit message&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# e, edit &amp;lt;commit&amp;gt; = use commit, but stop for amending&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# s, squash &amp;lt;commit&amp;gt; = use commit, but meld into previous commit&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# f, fixup &amp;lt;commit&amp;gt; = like &amp;#34;squash&amp;#34;, but discard this commit&amp;#39;s log message&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# x, exec &amp;lt;command&amp;gt; = run command (the rest of the line) using shell&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# b, break = stop here (continue rebase later with &amp;#39;git rebase --continue&amp;#39;)&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# d, drop &amp;lt;commit&amp;gt; = remove commit&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# l, label &amp;lt;label&amp;gt; = label current HEAD with a name&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# t, reset &amp;lt;label&amp;gt; = reset HEAD to a label&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# m, merge [-C &amp;lt;commit&amp;gt; | -c &amp;lt;commit&amp;gt;] &amp;lt;label&amp;gt; [# &amp;lt;oneline&amp;gt;]&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# .       create a merge commit using the original merge commit&amp;#39;s&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# .       message (or the oneline, if no original merge commit was&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# .       specified). Use -c &amp;lt;commit&amp;gt; to reword the commit message.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;squash와-fixup&#34;&gt;squash와 fixup&lt;/h3&gt;
+&lt;p&gt;squash는 &lt;strong&gt;커밋 메시지를 확인하고 편집한 후&lt;/strong&gt; squash and merge한다.
+대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git --no-pager log --oneline
+399e2ef (HEAD -&amp;gt; squash) &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+ea37b52 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 지금 staged 파일들을 squash 커밋으로 만든다.&lt;/span&gt;
+$ git commit --squash ea37b52
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# squash 커밋은 대상 커밋 메시지 앞에 &amp;#34;squash!&amp;#34;이 붙는다.&lt;/span&gt;
+$ git --no-pager log --oneline
+d927a64 (HEAD -&amp;gt; squash) squash! &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+399e2ef &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+ea37b52 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.&lt;/span&gt;
+$ git rebase -i --autosquash main
+pick ea37b52 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+squash d927a64 squash! &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+pick 399e2ef &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+
+[detached HEAD 6f530b5] &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+ Date: Mon Jan &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt; 02:05:58 &lt;span style=&#34;color:#f60&#34;&gt;2022&lt;/span&gt; +0900
+ &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; files changed, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; insertions(+), &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; deletions(-)
+ create mode &lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; b
+ create mode &lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; d
+Successfully rebased and updated refs/heads/squash.
+
+$ git --no-pager log --oneline
+ea3b05e (HEAD -&amp;gt; squash) &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# 이후의 커밋들도 다시 저장한다.&lt;/span&gt;
+6f530b5 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;fixup은 squash와 결과가 동일하지만,
+original 커밋 메시지만 남기고 fixup 커밋의 메시지들은 &lt;strong&gt;자동으로 버린다&lt;/strong&gt;.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git --no-pager log --oneline
+ffdc929 (HEAD -&amp;gt; fixup) &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+ea53497 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 지금 staged 파일들을 fixup 커밋으로 만든다.&lt;/span&gt;
+$ git commit --fixup ea53497
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# fixup 커밋은 대상 커밋 메시지 앞에 &amp;#34;fixup!&amp;#34;이 붙는다.&lt;/span&gt;
+$ git --no-pager log --oneline
+202953c (HEAD -&amp;gt; fixup) fixup! &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+ffdc929 &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+ea53497 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# fixup 커밋들은 자동으로 squash and merge가 된다.&lt;/span&gt;
+$ git rebase -i --autosquash main
+pick ea53497 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+fixup 202953c fixup! &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+pick ffdc929 &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# fixup 커밋의 메시지들은 자동으로 버린다.&lt;/span&gt;
+Successfully rebased and updated refs/heads/fixup.
+
+$ git --no-pager log --oneline
+449ed00 (HEAD -&amp;gt; fixup) &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt;
+000a709 &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+7f1a625 (main) &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;cherry-pick&#34;&gt;cherry-pick&lt;/h2&gt;
+&lt;p&gt;어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
+&lt;strong&gt;커밋 체크섬은 달라진다&lt;/strong&gt;는 것에 유의한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git cherry-pick &amp;lt;commit&amp;gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# --no-commit 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않는다.&lt;/span&gt;
+$ git cherry-pick &amp;lt;commit&amp;gt; --no-commit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stash&#34;&gt;stash&lt;/h2&gt;
+&lt;p&gt;stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있다.
+stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해준다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 변경 사항을 Stack에 저장한다. 아무런 하위 명령어를 입력하지 않으면 default.&lt;/span&gt;
+$ git stash push
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# Stack이기 때문에 stash@{0}부터 작업 데이터를 꺼낸 후 drop한다.&lt;/span&gt;
+$ git stash pop
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않는다.&lt;/span&gt;
+$ git stash apply
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# stash@{0}을 제거한다.&lt;/span&gt;
+$ git stash drop
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 stash 데이터를 제거한다.&lt;/span&gt;
+$ git stash clear
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# stash 목록을 보여준다.&lt;/span&gt;
+$ git stash list
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# stash@{0}과 HEAD의 diff를 보여준다.&lt;/span&gt;
+$ git stash show
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# stash@{2}와 HEAD의 diff를 보여준다.&lt;/span&gt;
+$ git stash show -p[--patch] &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 상태를 저장한다.&lt;/span&gt;
+$ git stash save &amp;lt;message&amp;gt;
+$ git stash save &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;haha&amp;#34;&lt;/span&gt;
+Saved working directory and index state On master: haha
+
+$ git stash list
+stash@{0}: On master: haha
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/git-stash-options.png&#34; alt=&#34;git stash options&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/saving-changes/git-stash&#34;&gt;git stash options&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;how-git-stash-works&#34;&gt;How git stash works&lt;/h3&gt;
+&lt;p&gt;stash된 상태는 실제로 로컬 저장소에 커밋 객체처럼 인코딩되어 저장됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline --graph stash@{0}
+*   3bd5af8 (refs/stash) On master: haha
+|&lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;| * 09162cd index on master: 49ef168 test
+|/
+* 49ef168 (HEAD -&amp;gt; master) test
+
+$ cat .git/refs/stash
+3bd5af85bcbfaf7b031972dc41b016c4eb463028
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reset&#34;&gt;reset&lt;/h2&gt;
+&lt;p&gt;HEAD를 특정 상태로 되돌린다.
+다양한 mode 옵션이 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--soft&lt;/code&gt; - 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--mixed&lt;/code&gt; - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo &lt;code&gt;add&lt;/code&gt;)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git reset HEAD^
+$ git reset --mixed HEAD^
+Unstaged changes after reset:
+M package-lock.json
+M package.json
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--hard&lt;/code&gt; - 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git reset --hard HEAD^
+HEAD is now at 955b01b7 chore: renew mac certificates (&lt;span style=&#34;color:#0f0&#34;&gt;#12)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;--merge&lt;/code&gt; — 워킹 트리에서 merge를 undo 할 수 있다. (Undo &lt;code&gt;merge&lt;/code&gt;/&lt;code&gt;pull&lt;/code&gt;)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git pull
+ Auto-merging nitfol
+ Merge made by recursive.
+  nitfol                |   &lt;span style=&#34;color:#f60&#34;&gt;20&lt;/span&gt; +++++----
+  ...
+
+$ git reset --merge ORIG_HEAD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;restore&#34;&gt;restore&lt;/h2&gt;
+&lt;p&gt;워킹 트리를 복구한다. &lt;code&gt;--staged&lt;/code&gt; 옵션을 지정하면 스테이징된 스냅샷도 되돌릴 수 있다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61&#34;&gt;git@v2.23.0&lt;/a&gt; 부터 &lt;code&gt;checkout&lt;/code&gt; 명령어에서 분리되었다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# git checkout -- ${file_name}&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git restore --staged ${file_name}&lt;/span&gt;
+$ git restore --staged * &lt;span style=&#34;color:#0f0&#34;&gt;# git reset --mixed HEAD&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;revert&#34;&gt;revert&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;reset&lt;/code&gt;처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git revert &amp;lt;commit&amp;gt;
+
+Revert &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;4ea42dbe의 커밋 메시지&amp;#34;&lt;/span&gt;
+
+This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;git으로-버그-찾기&#34;&gt;Git으로 버그 찾기&lt;/h2&gt;
+&lt;h3 id=&#34;blame&#34;&gt;blame&lt;/h3&gt;
+&lt;p&gt;파일의 라인마다 마지막 수정 정보를 확인할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git blame README.md
+0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) &lt;span style=&#34;color:#0f0&#34;&gt;### Bash&lt;/span&gt;
+dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) 
+dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) &lt;span style=&#34;color:#87ceeb&#34;&gt;```&lt;/span&gt;bash
+
+$ git blame -L 69,82 README.md
+$ git blame -L &lt;span style=&#34;color:#f60&#34;&gt;69&lt;/span&gt; README.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;bisect&#34;&gt;bisect&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination&#34;&gt;A beginner&amp;rsquo;s guide to GIT BISECT&lt;/a&gt; - Tony Rost&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
+운영 서버에 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있다.
+이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 테스트 프로젝트 생성&lt;/span&gt;
+mkdir git-bisect-tests
+cd git-bisect-tests
+git init
+
+echo row &amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding first row&amp;#34;&lt;/span&gt;
+echo row &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding second row&amp;#34;&lt;/span&gt;
+echo row &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding third row&amp;#34;&lt;/span&gt;
+echo your &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;your&amp;#39;&amp;#34;&lt;/span&gt;
+echo boat &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;boat&amp;#39;&amp;#34;&lt;/span&gt;
+echo gently &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;gently&amp;#39;&amp;#34;&lt;/span&gt;
+sed -i -e &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;s/boat/bug/g&amp;#39;&lt;/span&gt; test.txt 
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Changing the word &amp;#39;boat&amp;#39; to &amp;#39;bug&amp;#39;&amp;#34;&lt;/span&gt;
+echo down &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;down&amp;#39;&amp;#34;&lt;/span&gt;
+echo the &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;the&amp;#39;&amp;#34;&lt;/span&gt;
+echo stream &amp;gt;&amp;gt; test.txt
+git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;stream&amp;#39;&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ cat test.txt
+row
+row
+row
+your
+bug &lt;span style=&#34;color:#0f0&#34;&gt;# bug를 찾을 것이다.&lt;/span&gt;
+gently
+down
+the
+stream
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;bisect를 시작한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git bisect start
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;버그가 있는 현재 커밋을 기록한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git bisect bad
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;버그 없이 멀쩡했던 커밋을 기록한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline
+d4a701f (HEAD -&amp;gt; master, refs/bisect/bad) Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;stream&amp;#39;&lt;/span&gt;
+eedf347 Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;the&amp;#39;&lt;/span&gt;
+9a12012 Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;down&amp;#39;&lt;/span&gt;
+f937601 Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+759ea63 Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;gently&amp;#39;&lt;/span&gt;
+850323e Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt;
+222f64a Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;your&amp;#39;&lt;/span&gt;
+c608f80 Adding third row
+60532d0 Adding second row
+106eb10 Adding first row
+
+$ git bisect good c608f80
+Bisecting: &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; revisions left to test after this (roughly &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; steps)
+[759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;gently&amp;#39;&lt;/span&gt;
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/git-bisect.png&#34; alt=&#34;git-bisect&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datree.io/resources/git-bisect-debugging-with-git&#34;&gt;Git bisect - debugging with git, Noaa Barki&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;이제부터 버그를 찾아나선다.
+Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
+현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 &lt;code&gt;bad&lt;/code&gt;로 기록하고 &lt;code&gt;good&lt;/code&gt; 커밋 방향으로 범위를 좁힌다.
+버그가 없으면 &lt;code&gt;good&lt;/code&gt;으로 기록하고 &lt;code&gt;bad&lt;/code&gt; 커밋 방향으로 범위를 좁힌다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 히스토리 확인&lt;/span&gt;
+$ git log --oneline
+759ea63 (HEAD) Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;gently&amp;#39;&lt;/span&gt;
+850323e Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt;
+222f64a Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;your&amp;#39;&lt;/span&gt;
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+...
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 버그가 없다면 good 기록&lt;/span&gt;
+$ cat test.txt
+row
+row
+row
+your
+boat
+gently
+
+$ git bisect good
+Bisecting: &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; revision left to test after this (roughly &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; step)
+[9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;down&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;good&lt;/code&gt;으로 기록하면 &lt;code&gt;bad&lt;/code&gt; 커밋 방향으로 이진탐색한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline
+9a12012 (HEAD) Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;down&amp;#39;&lt;/span&gt;
+f937601 Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;gently&amp;#39;&lt;/span&gt;
+850323e Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt;
+222f64a Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;your&amp;#39;&lt;/span&gt;
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 버그를 발견했다면 bad 기록&lt;/span&gt;
+$ cat test.txt
+row
+row
+row
+your
+bug &lt;span style=&#34;color:#0f0&#34;&gt;# 버그다!!!&lt;/span&gt;
+gently
+down
+
+$ git bisect bad
+Bisecting: &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; revisions left to test after this (roughly &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; steps)
+[f9376015d4721390c942c0cd0064467b51495094] Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;bad&lt;/code&gt;로 기록하면 &lt;code&gt;good&lt;/code&gt; 커밋 방향으로 이진탐색한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline
+f937601 (HEAD) Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;gently&amp;#39;&lt;/span&gt;
+850323e Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt;
+222f64a Adding the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;your&amp;#39;&lt;/span&gt;
+c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그 다음 커밋도 &lt;code&gt;bad&lt;/code&gt;로 기록하고
+&lt;code&gt;good&lt;/code&gt; 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
+해당 &lt;code&gt;bad&lt;/code&gt; 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git bisect bad
+f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
+commit f9376015d4721390c942c0cd0064467b51495094
+Author: Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;
+Date:   Thu Feb &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt; 03:21:28 &lt;span style=&#34;color:#f60&#34;&gt;2022&lt;/span&gt; +0900
+
+    Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+
+ test.txt | &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; +-
+ &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; file changed, &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; insertion(+), &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; deletion(-)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이진탐색하는 동안 &lt;code&gt;.git&lt;/code&gt; 디렉토리에 bisect를 위한 파일들이 생성된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ cat .git/BISECT_ANCESTORS_OK
+
+$ cat .git/BISECT_EXPECTED_REV
+f9376015d4721390c942c0cd0064467b51495094
+
+$ cat .git/BISECT_LOG
+git bisect start
+&lt;span style=&#34;color:#0f0&#34;&gt;# bad: [d4a701f370a2489c8976eb0ce9f7ccbc358e640d] Adding the word &amp;#39;stream&amp;#39;&lt;/span&gt;
+git bisect bad d4a701f370a2489c8976eb0ce9f7ccbc358e640d
+&lt;span style=&#34;color:#0f0&#34;&gt;# good: [c608f8011e4bfa3d1f1e9f537cc148769f158669] Adding third row&lt;/span&gt;
+git bisect good c608f8011e4bfa3d1f1e9f537cc148769f158669
+&lt;span style=&#34;color:#0f0&#34;&gt;# good: [759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word &amp;#39;gently&amp;#39;&lt;/span&gt;
+git bisect good 759ea6356258b687ad8b12178b2934ab5ad830bf
+&lt;span style=&#34;color:#0f0&#34;&gt;# bad: [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word &amp;#39;down&amp;#39;&lt;/span&gt;
+git bisect bad 9a120127fabd58d0f54786cf015528f77d9a9f17
+&lt;span style=&#34;color:#0f0&#34;&gt;# bad: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &amp;#39;boat&amp;#39; to &amp;#39;bug&amp;#39;&lt;/span&gt;
+git bisect bad f9376015d4721390c942c0cd0064467b51495094
+&lt;span style=&#34;color:#0f0&#34;&gt;# first bad commit: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &amp;#39;boat&amp;#39; to &amp;#39;bug&amp;#39;&lt;/span&gt;
+
+$ cat .git/BISECT_NAMES
+
+$ cat .git/BISECT_START
+master
+
+$ cat .git/BISECT_TERMS
+bad
+good
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;bisect를 끝낼 때는 &lt;code&gt;.git/BISECT_START&lt;/code&gt;로 다시 checkout 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git bisect reset
+Previous HEAD position was f937601 Changing the word &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;boat&amp;#39;&lt;/span&gt; to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;bug&amp;#39;&lt;/span&gt;
+Switched to branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;show&#34;&gt;show&lt;/h2&gt;
+&lt;p&gt;Git Object를 확인한다. (blob, tree, tag, commit)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# git show ${object}&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# tag&lt;/span&gt;
+$ git show v1.0.0
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# tree&lt;/span&gt;
+$ git show v1.0.0^{tree}
+$ git show v1.0.0^{tree}
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# commit, blob, tree 등의 체크섬&lt;/span&gt;
+$ git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 어떤 커밋이 브랜치의 가장 최신 커밋이라면 간단히 브랜치 이름으로 커밋을 가리킬 수 있다.&lt;/span&gt;
+$ git show master:README.md
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;log&#34;&gt;log&lt;/h2&gt;
+&lt;p&gt;커밋 이력을 조회한다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-log#_pretty_formats&#34;&gt;pretty formats&lt;/a&gt;을 사용해서 출력 형식을 정할 수 있다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--abbrev-commit&lt;/code&gt; — 짧고 중복되지 않는 해시 값을 보여준다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여준다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline --graph
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 날짜 출력&lt;/span&gt;
+$ git log --graph --pretty=format:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;%C(auto)%h%d (%cr) %cn &amp;lt;%ce&amp;gt; %s&amp;#39;&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 브랜치 로그 출력&lt;/span&gt;
+$ git log --graph --format=format:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&amp;#39;&lt;/span&gt;L&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;          %C(white)%s %C(dim white)- %an&amp;#39;&lt;/span&gt; --all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# alias 지정&lt;/span&gt;
+$ git config --global alias.lg &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;log --graph --format=format:&amp;#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&amp;#39;L&amp;#39;          %C(white)%s %C(dim white)- %an&amp;#39; --all&amp;#34;&lt;/span&gt;
+$ git lg
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;triple-dot&#34;&gt;Triple Dot(&amp;hellip;)&lt;/h3&gt;
+&lt;p&gt;Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여준다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log master...feature --oneline --left-right
+&amp;gt; 2fe25f7 (HEAD -&amp;gt; feature) q
+&amp;gt; a611f28 feature commit message
+&amp;lt; 106047f (master) first
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;reflog-reference-logs&#34;&gt;reflog: Reference logs&lt;/h2&gt;
+&lt;p&gt;Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 &lt;code&gt;reflog&lt;/code&gt;라고 부른다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# git reflog show HEAD@{0}&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git reflog show HEAD&lt;/span&gt;
+$ git reflog
+734713b HEAD@{0}: commit: fixed refs handling, added gc auto, updated
+d921970 HEAD@{1}: merge phedders/rdocs: Merge made by the &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;recursive&amp;#39;&lt;/span&gt; strategy.
+1c002dd HEAD@{2}: commit: added some blame and merge stuff
+1c36188 HEAD@{3}: rebase -i (squash): updating HEAD
+95df984 HEAD@{4}: commit: &lt;span style=&#34;color:#0f0&#34;&gt;# This is a combination of two commits.&lt;/span&gt;
+1c36188 HEAD@{5}: rebase -i (squash): updating HEAD
+7e05da5 HEAD@{6}: rebase -i (pick): updating HEAD
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;특정 브랜치의 reflog만 확인할 수도 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# git reflog show main@{0}&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git reflog show main&lt;/span&gt;
+$ git reflog main
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장한다.
+그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있다.
+&lt;code&gt;@{n}&lt;/code&gt; 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git show HEAD@{5}
+
+commit a66e752aa1fccaefe115460dc761c0411d578ed5
+Author: Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;
+Date:   Wed Dec &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; 23:51:01 &lt;span style=&#34;color:#f60&#34;&gt;2021&lt;/span&gt; +0900
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;순서뿐 아니라 시간도 사용할 수 있다. 어제 날짜의 &lt;code&gt;master&lt;/code&gt; 브랜치를 보고 싶으면 아래와 같이 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git show main@{1.minute.ago}
+$ git show main@{1.hour.ago}
+$ git show main@{1.day.ago}
+$ git show main@{yesterday}
+$ git show main@{1.week.ago}
+$ git show main@{1.month.ago}
+$ git show main@{1.year.ago}
+$ git show main@{2021-12-02.23:00:00}
+
+commit c23bcca5542f7eefa939dc47e3f843bb3b5b70f6 (HEAD -&amp;gt; main, origin/main, origin/HEAD)
+Author: Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;
+Date:   Thu Dec &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; 21:27:17 &lt;span style=&#34;color:#f60&#34;&gt;2021&lt;/span&gt; +0900
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 명령은 특정 시간에 &lt;code&gt;main&lt;/code&gt; 브랜치가 가리키고 있던 것이 무엇인지 보여준다.
+reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 커밋은 조회할 수 없다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;tilde&lt;/th&gt;
+&lt;th&gt;caret&lt;/th&gt;
+&lt;th&gt;at-sign (reflog)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;HEAD&lt;/td&gt;
+&lt;td&gt;HEAD~0&lt;/td&gt;
+&lt;td&gt;HEAD@{0}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;HEAD^&lt;/td&gt;
+&lt;td&gt;HEAD~1&lt;/td&gt;
+&lt;td&gt;HEAD@{1}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;HEAD^^&lt;/td&gt;
+&lt;td&gt;HEAD~2&lt;/td&gt;
+&lt;td&gt;HEAD@{4}&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;diff&#34;&gt;diff&lt;/h2&gt;
+&lt;p&gt;변경 사항을 비교한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git diff &amp;lt;before&amp;gt; &amp;lt;after&amp;gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 마지막 커밋과 그 전 커밋을 비교한다.&lt;/span&gt;
+$ git diff HEAD~1 HEAD~0
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.&lt;/span&gt;
+$ git diff HEAD^
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 직전 커밋과 비교해서 변경 사항을 확인한다.&lt;/span&gt;
+$ git diff &amp;lt;commit&amp;gt;~ &amp;lt;commit&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;push&#34;&gt;push&lt;/h2&gt;
+&lt;p&gt;local 저장소의 내용을 remote 저장소에 반영한다.
+히스토리가 일치하지 않으면 push할 수 없다.
+rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
+다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# origin 저장소의 main 브랜치로 push&lt;/span&gt;
+$ git push origin main
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 HEAD와 같은 브랜치로 push&lt;/span&gt;
+$ git push origin HEAD
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 현재 브랜치의 upstream 브랜치 지정 및 push&lt;/span&gt;
+$ git push --set-upstream origin feature/test-upstream
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;push 명령을 실행하면 다음 과정을 수행한다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;현재 브랜치를 확인한다.&lt;/li&gt;
+&lt;li&gt;설정 파일에 기본 원격 저장소가 존재하는지 탐색한다.&lt;/li&gt;
+&lt;li&gt;알고 있는 원격 저장소 URL과 추적 중인 heads(브랜치)를 가져온다.&lt;/li&gt;
+&lt;li&gt;원격지의 변화가 생긴 마지막 시간 이후에 변경된 내용이 있는지 확인한다.
+&lt;ol&gt;
+&lt;li&gt;원격 저장소로부터 reference 목록을 가져온다(&lt;code&gt;git ls-remote&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;로컬 저장소와 원격 저장소의 커밋 이력(history)을 확인한다. 만약 다르다면 fetch 혹은 pull을 수행한다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git push
+fatal: The upstream branch of your current branch does not match
+the name of your current branch.  To push to the upstream branch
+on the remote, use
+
+    git push origin HEAD:main
+
+To push to the branch of the same name on the remote, use
+
+    git push origin HEAD
+
+To choose either option permanently, see push.default in &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;git help config&amp;#39;&lt;/span&gt;.
+
+$ git push origin branch-name
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;플러밍plumbing-명령어&#34;&gt;플러밍(Plumbing) 명령어&lt;/h1&gt;
+&lt;h2 id=&#34;rev-parse&#34;&gt;rev-parse&lt;/h2&gt;
+&lt;p&gt;Git 데이터베이스에 있는 Object의 체크섬을 조회한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git log --oneline -n &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+2fe25f7 (HEAD -&amp;gt; feature) commit-msg
+
+$ git rev-parse feature
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;hash-object&#34;&gt;hash-object&lt;/h2&gt;
+&lt;p&gt;데이터를 &lt;code&gt;.git&lt;/code&gt; 디렉토리에 저장하고 체크섬을 계산한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git hash-object -w READM.me
+76e579ae4c9106f3b62fb9203ec5b49d8014d87c
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;ls-tree&#34;&gt;ls-tree&lt;/h2&gt;
+&lt;p&gt;tree 객체의 내용들을 보여준다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# commit hash: ee85974962b9645d757bc71dd773effb67d3594f&lt;/span&gt;
+$ git ls-tree ee85
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore
+&lt;span style=&#34;color:#f60&#34;&gt;040000&lt;/span&gt; tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent
+&lt;span style=&#34;color:#f60&#34;&gt;040000&lt;/span&gt; tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml
+&lt;span style=&#34;color:#f60&#34;&gt;040000&lt;/span&gt; tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;ls-files&#34;&gt;ls-files&lt;/h2&gt;
+&lt;p&gt;index(스테이징된 파일)의 내용들을 체크섬과 함께 보여준다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git ls-files -s                                                                                           ✭ ✱
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; 396865b39e3f04c5ca6369999fd886dbae7441d0 &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; .gitignore
+...
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; dcdb07b5dfb81d995509aecad3bf202ee3a1d690 &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; __test__/price.test.js
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; a823b374191cec985963bb821803a78a13ff89f2 &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; jest.config.json
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; f496d9afc494b5312dd6efd73f43b5b5e40e5e63 &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; pom.xml
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; e148a4810619ea951091909d82ef0955fe3e0e8f &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; src/main/resources-dev/logback.xml
+&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 파일 출력&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;cat-file&#34;&gt;cat-file&lt;/h2&gt;
+&lt;p&gt;저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 해당 체크섬을 가진 객체의 타입을 알려준다.&lt;/span&gt;
+$ git cat-file -t &amp;lt;checksum&amp;gt;
+blob
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 해당 체크섬을 가진 객체의 사이즈를 알려준다.&lt;/span&gt;
+$ git cat-file -s &amp;lt;checksum&amp;gt;
+&lt;span style=&#34;color:#f60&#34;&gt;13&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# bytes&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# 객체의 타입을 알고 있다면 파일의 내용을 표시해준다.&lt;/span&gt;
+$ git cat-file &amp;lt;type&amp;gt; &amp;lt;checksum&amp;gt;
+이것은 내용입니다.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;write-tree&#34;&gt;write-tree&lt;/h2&gt;
+&lt;p&gt;현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git write-tree
+174592b10bb329e6f4664cbc03fd2c4869d12cdc
+
+$ git ls-tree &lt;span style=&#34;color:#f60&#34;&gt;17459&lt;/span&gt;
+&lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;commit-tree&#34;&gt;commit-tree&lt;/h2&gt;
+&lt;p&gt;특정 tree 객체로 새로운 커밋을 만든다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git commit-tree HEAD^{tree} -p main -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test commit&amp;#34;&lt;/span&gt;
+d5fc19ea68a8556383d46a79177395b563a8a483
+
+$ git show d5fc
+commit d5fc19ea68a8556383d46a79177395b563a8a483
+Author: Changsu Im &amp;lt;imcxsu@gmail.com&amp;gt;
+Date:   Sat Jan &lt;span style=&#34;color:#f60&#34;&gt;15&lt;/span&gt; 22:59:25 &lt;span style=&#34;color:#f60&#34;&gt;2022&lt;/span&gt; +0900
+
+    test
+
+$ git merge --ff-only d5fc
+Updating 5fe0db6..d5fc19e
+Fast-forward
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;read-tree&#34;&gt;read-tree&lt;/h2&gt;
+&lt;p&gt;특정 tree 객체를 index에 포함시킨다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git read-tree HEAD^
+$ git status
+Changes to be committed:
+...
+
+$ git read-tree HEAD
+$ git status
+nothing to commit, working tree clean
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;update-index&#34;&gt;update-index&lt;/h2&gt;
+&lt;p&gt;woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;update-ref&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;master 브랜치를 지정한 커밋 객체로 업데이트한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git update-ref refs/heads/master &lt;span style=&#34;color:#f60&#34;&gt;992379&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;symbolic-ref&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;또 다른 reference를 가리키도록 reference(일반적으로 HEAD)를 업데이트한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;ls-remote&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;원격 저장소의 references를 나열한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git ls-remote
+From .
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD
+2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature
+106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;advanced&#34;&gt;Advanced&lt;/h1&gt;
+&lt;h2 id=&#34;git-hooks&#34;&gt;Git Hooks&lt;/h2&gt;
+&lt;p&gt;Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행되는 스크립트다.
+스크립트들은 기본적으로 &lt;code&gt;.git/hooks/*&lt;/code&gt; 에 위치한다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/hook-symlink-script.png&#34; alt=&#34;Maintaining a hook using a symlink to version-controlled script&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-hooks&#34;&gt;Maintaining a hook using a symlink to version-controlled script&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;예를 들어, 아래와 같은 &lt;code&gt;pre-push&lt;/code&gt; hook은 &lt;code&gt;git push&lt;/code&gt; 명령어를 실행시켰을 때 &lt;code&gt;push&lt;/code&gt; 가 실행되기 전 &lt;code&gt;gradle test&lt;/code&gt; 명령어가 먼저 실행된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# 해당 스크립트의 실행 권한을 부여한다.&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# chmod +x .githooks/pre-push&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# hooks 경로를 .githooks로 변경한다.&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git config core.hookspath .githooks&lt;/span&gt;
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# `pre-push` hook은 `git push` 전 항상 실행되는 스크립트다.&lt;/span&gt;
+gradle test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;garbage-collection&#34;&gt;Garbage Collection&lt;/h2&gt;
+&lt;h3 id=&#34;packfiles&#34;&gt;Packfiles&lt;/h3&gt;
+&lt;p&gt;Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
+여러 개의 loose objects를 Packfile(&lt;code&gt;./git/objects/pack/*&lt;/code&gt;)이라 불리는 단일 바이너리 내에 압축(pack)한다.
+&lt;code&gt;git gc&lt;/code&gt; 명령을 실행하면 &lt;code&gt;git repack&lt;/code&gt;을 실행하고 &lt;code&gt;git pack-objects&lt;/code&gt; 명령을 실행한다.
+&lt;a href=&#34;https://git-scm.com/docs/git-pack-objects&#34;&gt;pack-objects 명령&lt;/a&gt;은 default로
+zlib을 사용해서 packfile(&lt;code&gt;.pack&lt;/code&gt;)과 pack의 index 파일(&lt;code&gt;.idx&lt;/code&gt;)을 생성한다.
+packfile은 객체들을 효율적으로 주고받고, 빠르게 읽기 위해 사용한다.
+packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;구현 측면&lt;/th&gt;
+&lt;th&gt;프로세스 호출&lt;/th&gt;
+&lt;th&gt;설명&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Server&lt;/td&gt;
+&lt;td&gt;Upload-pack&lt;/td&gt;
+&lt;td&gt;git fetch-pack에 의해 호출되며, 다른 측면에 없는 객체를 확인해 압축한 후 전송한다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Client&lt;/td&gt;
+&lt;td&gt;Fetch-pack&lt;/td&gt;
+&lt;td&gt;다른 저장소로부터 소실된 패키지를 능동적으로 받는다. 이 명령은 일반적으로 최종 사용자에 의해 호출되지 않고 이 명령을 상위 수준으로 감싼 git fetch가 실행된다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Server&lt;/td&gt;
+&lt;td&gt;Receive-pack&lt;/td&gt;
+&lt;td&gt;git send-pack에 의해 호출되며, 저장소 안에 push된 것들을 받는다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Client&lt;/td&gt;
+&lt;td&gt;Send-pack&lt;/td&gt;
+&lt;td&gt;다른 저장소에 대해 git 프로토콜을 이용해 객체들을 push한다. 이 명령은 일반적으로 최종 사용자에 의해 직접 호출되지 않고, 이 명령을 상위 수준으로 감싼 git push가 대신 실행된다.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Packfile을 열어 압축한 내용을 확인해볼 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
+...
+.git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;gc&#34;&gt;gc&lt;/h3&gt;
+&lt;p&gt;Garbage Collection을 실행한다.
+Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
+예를 들어 orphan 브랜치, 어떤 커밋에도 추가되지 않은 dangling 객체, 어떤 커밋도 가리키지 않고 압축되지 않은 blob 객체 등이다.
+&lt;code&gt;git prune&lt;/code&gt;, &lt;code&gt;git repack&lt;/code&gt;, &lt;code&gt;git pack&lt;/code&gt;, &lt;code&gt;git rerere&lt;/code&gt; 등 다른 내부 하위 명령어를 같이 실행한다.
+&lt;code&gt;git gc&lt;/code&gt; 명령으로도 실행할 수 있지만 push, pull, merge, rebase, commit 명령에서 자동으로 실행된다.&lt;/p&gt;
+&lt;p&gt;Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# touch test and git add&lt;/span&gt;
+$ git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;
+[master (root-commit) fd5e183] test
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# touch test2 and git add&lt;/span&gt;
+$ git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test2&amp;#34;&lt;/span&gt;
+[master (root-commit) 291b5c6] test
+
+$ git log --oneline
+291b5c6 (HEAD -&amp;gt; master) test2
+fd5e183 test
+
+$ git reset --hard HEAD^
+HEAD is now at fd5e183 test
+
+$ git gc
+
+$ git fsck --lost-found
+Checking object directories: 100% (256/256), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4
+
+$ git merge 291b5c6
+Updating fd5e183..291b5c6
+Fast-forward
+ test2 | &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+ &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; file changed, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; insertions(+), &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; deletions(-)
+ create mode &lt;span style=&#34;color:#f60&#34;&gt;100644&lt;/span&gt; test2
+
+$ git log --oneline
+291b5c6 (HEAD -&amp;gt; master) test2
+fd5e183 test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;orphan 브랜치를 직접 만들어보자&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ touch test
+$ git add .
+$ git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;
+[master (root-commit) c2864f0] test
+
+$ git switch --orphan empty
+Switched to a new branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;empty&amp;#39;&lt;/span&gt;
+
+$ git log
+fatal: your current branch &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;empty&amp;#39;&lt;/span&gt; does not have any commits yet
+
+$ git log --oneline --all
+c2864f0 (master) test
+
+&lt;span style=&#34;color:#0f0&#34;&gt;# git rm --cached -r .&lt;/span&gt;
+&lt;span style=&#34;color:#0f0&#34;&gt;# git clean -f&lt;/span&gt;
+
+$ git commit --allow-empty -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;empty commit&amp;#34;&lt;/span&gt;
+[empty (root-commit) 02116ce] empty commit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;prune&#34;&gt;prune&lt;/h2&gt;
+&lt;p&gt;연결할 수 없는 orphan 객체를 제거한다.
+일반적으로 직접 실행되지 않고 &lt;code&gt;gc&lt;/code&gt;의 하위 명령으로 gc의 기준에 따라 사용된다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fsck&lt;/code&gt; 명령으로 dangling 객체를 확인할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git fsck
+Checking object directories: 100% (256/256), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Checking objects: 100% (573/573), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+dangling blob c319a9963957cb51e3cb692ac44a4831ea529992
+dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92
+dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99
+dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6
+dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814
+dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c
+dangling blob bcfc949b6572079aa54db963abc59b48232813ed
+dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8
+dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f
+dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796
+dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957
+dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e
+dangling blob 002f663c650d708e29d75524630bc5cf97403039
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;--dry-run&lt;/code&gt; 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 한다.
+확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ git prune --dry-run --verbose
+
+002f663c650d708e29d75524630bc5cf97403039 blob
+091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob
+0a56b32d98fea47ca5228e3b62ee1fc189408796 blob
+0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob
+4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob
+524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob
+5ca654e778f2cceb0207dc9311c8961107caa17e blob
+7f3ced9d3dad92439949d98ad2d92125be07764c blob
+879b261622ca54bd28f8fa2be6330fe9ebfba814 blob
+bcfc949b6572079aa54db963abc59b48232813ed blob
+c319a9963957cb51e3cb692ac44a4831ea529992 blob
+e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob
+f16c37ff355844ac388d101e5bba46e698a4deb8 blob
+f4d5466af82d891b81ad792b0e74e2341e46312f blob
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;GIT_TRACE=true&lt;/code&gt; 환경 변수와 함께 &lt;code&gt;gc&lt;/code&gt;를 실행하면 &lt;code&gt;prune&lt;/code&gt; 명령이 실행된다는 것을 알 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;$ &lt;span style=&#34;color:#eedd82&#34;&gt;GIT_TRACE&lt;/span&gt;=true git gc
+21:48:42.368350 git.c:439               trace: built-in: git gc
+21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune
+21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune
+21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all
+21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all
+21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable=2.weeks.ago
+21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable=2.weeks.ago
+21:48:42.384316 run-command.c:663       trace: run_command: &lt;span style=&#34;color:#eedd82&#34;&gt;GIT_REF_PARANOIA&lt;/span&gt;=&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
+21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
+Enumerating objects: 573, &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Counting objects: 100% (573/573), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Delta compression using up to &lt;span style=&#34;color:#f60&#34;&gt;12&lt;/span&gt; threads
+Compressing objects: 100% (256/256), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Writing objects: 100% (573/573), &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;.
+Total &lt;span style=&#34;color:#f60&#34;&gt;573&lt;/span&gt; (delta 133), reused &lt;span style=&#34;color:#f60&#34;&gt;573&lt;/span&gt; (delta 133)
+21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago
+21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago
+21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago
+21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago
+21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc
+21:48:42.409708 git.c:439               trace: built-in: git rerere gc
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;git-server&#34;&gt;Git Server&lt;/h1&gt;
+&lt;h2 id=&#34;fork&#34;&gt;Fork&lt;/h2&gt;
+&lt;p&gt;Fork는 서버에 저장소의 복사본을 만든다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/git/fork-repository.svg&#34; alt=&#34;fork-repository&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://coderefinery.github.io/git-collaborative/03-distributed/&#34;&gt;Distributed version control and forking workflow&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
+&lt;ul&gt;
+&lt;li&gt;fork 리포지토리에서 &lt;code&gt;push --force&lt;/code&gt;를 하든 말든 상관없다.&lt;/li&gt;
+&lt;li&gt;remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있다.&lt;/li&gt;
+&lt;li&gt;공유지의 비극을 피할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;upstream 리포지토리의 메인테이너를 제한할 수 있다.&lt;/li&gt;
+&lt;li&gt;upstream 리포지토리의 안 쓰는 브랜치들을 따로 정리할 필요가 없다.&lt;/li&gt;
+&lt;li&gt;진정한 의미의 DVCS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;branch-protection-rules&#34;&gt;Branch protection rules&lt;/h2&gt;
+&lt;p&gt;Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;git --no-optional-locks -c color.branch=false -c color.diff=false -c color.status=false -c diff.mnemonicprefix=false -c core.quotepath=false -c credential.helper=sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
+Pushing to https://bitbucket.markruler.com/scm/mark/test-pr.git
+POST git-receive-pack (&lt;span style=&#34;color:#f60&#34;&gt;990&lt;/span&gt; bytes)
+remote:                             *%%%%%.
+remote:                         %%%         %%%
+remote:                      ,%#               %%
+remote:                     %%                   %%
+remote:                    %#                     %%
+remote:                   %%                       %
+remote:                   %(                       %%
+remote:                   %%%%%%%%%%%%%%%%%%%%%%%%%%%
+remote:                 %#%*%#///////%# %%///////%%%%%%
+remote:                ,% %*%%******%#   %%******%(%%,%
+remote:                  %%/ %%/**%%/%%%%%%%(**#%( %%#
+remote:                   %%          %%%          %(
+remote:                    %                      .%
+remote:                    *%        %%%%%       .%
+remote:                      %#                 %%
+remote:                       .%%            .%%
+remote:                       .%%.%%,     %%%.%%/
+remote:                 %%%%%%##%.  &lt;span style=&#34;color:#0f0&#34;&gt;#%%%%%.  .%((%%%%%%&lt;/span&gt;
+remote:             %%#(((((((((%%,         &lt;span style=&#34;color:#0f0&#34;&gt;#%%(((((((((#%%.&lt;/span&gt;
+remote:       %%%((((((((((((((((((%%%, .%%%((((((((((((((((((&lt;span style=&#34;color:#0f0&#34;&gt;#%%*&lt;/span&gt;
+remote:     %%(((((((((((((((((((((((((%(((((((((((((((((((((((((&lt;span style=&#34;color:#0f0&#34;&gt;#%.&lt;/span&gt;
+remote:   ,%(((((((((((((((((((((((((((((((((((((((((((((((((((((((%#
+remote:   %#((((((((((((((((((((((((((((((((((((((((((((((((((((((((%
+remote:   %%%%%%%%%%%%%(((((((((((((((((((((((((((((((((%%%%%%%%%%%%%
+remote:  %%            %####((((((&lt;span style=&#34;color:#0f0&#34;&gt;###%%%%%%%%#(((((((((%            ,%&lt;/span&gt;
+remote: ,%             %%%%%%#.               %%%((((((%*            %%
+remote: &lt;span style=&#34;color:#0f0&#34;&gt;#%                                       %%%#                %%&lt;/span&gt;
+remote: .%                             .%%%%%%%%%                    %#
+remote:  %                         &lt;span style=&#34;color:#0f0&#34;&gt;#%%%                              %&lt;/span&gt;
+remote:  %                     %%%%                                  %*
+remote: /%************/#%%%%%%######%%*                        ..,*/(%%
+remote:               %%######(((((((&lt;span style=&#34;color:#0f0&#34;&gt;##################%%&lt;/span&gt;
+remote:               %%######(((((((((((((((((((((((((%%
+remote: //////////////%%%%%%%%#########################%%/////////  ///
+remote: ----------------------------------------------------
+remote: Branch refs/heads/develop can only be modified through pull requests.
+remote: Check your branch permissions configuration with the project administrator.
+remote: ----------------------------------------------------
+remote:
+remote:
+To https://bitbucket.markruler.com/scm/mark/test-pr.git ! [remote rejected] develop -&amp;gt; develop (pre-receive hook declined)
+error: failed to push some refs to &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://bitbucket.markruler.com/scm/mark/test-pr.git&amp;#39;&lt;/span&gt;
+Completed with errors, see above
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참고&#34;&gt;참고&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Books
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2&#34;&gt;Pro Git&lt;/a&gt; (2/e) - Scott Chacon, Ben Straub&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials&#34;&gt;Git Tutorials&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git-guides/&#34;&gt;Git Guide&lt;/a&gt; - GitHub&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960775473&#34;&gt;Git을 이용한 버전 관리&lt;/a&gt; - 라비산카 소마순다람&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Git Internal
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/&#34;&gt;CS Visualized: 유용한 깃(Git) 명령어&lt;/a&gt; - Lydia Hallie&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.udemy.com/course/git-and-github-complete-guide/&#34;&gt;The Complete Git Guide: Understand and master Git and GitHub&lt;/a&gt; - Bogdan Stashchuk&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037&#34;&gt;A Visualized Intro to Git Internals — Objects and Branches&lt;/a&gt; - Omer Rosenbaum&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c&#34;&gt;Getting Hardcore — Creating a Repo From Scratch&lt;/a&gt; - Omer Rosenbaum&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://swimm.io/blog/a-hands-on-intro-to-git-internals-creating-a-repo-from-scratch/&#34;&gt;A Hands-On Intro to Git Internals: Creating a Repo From Scratch&lt;/a&gt; - swimm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/hash-function-transition/&#34;&gt;Hash Function&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4&#34;&gt;objects&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;refs
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/gitrevisions&#34;&gt;gitrevisions&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/refs-and-the-reflog&#34;&gt;Refs and the Reflog&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;index
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/&#34;&gt;Make your monorepo feel small with Git&amp;rsquo;s sparse index&lt;/a&gt; - Derrick Stolee&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mincong.io/2018/04/28/git-index/&#34;&gt;Git: Understanding the Index File&lt;/a&gt; - Mincong Huang&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shafiul.github.io//gitbook/7_the_git_index.html&#34;&gt;The Git Index&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;config
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-config&#34;&gt;git-scm&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;tag
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8&#34;&gt;tag&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Commands
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/git.c#L487&#34;&gt;struct cmd_struct commands[]&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;submodule &amp;amp; subtree
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-submodule&#34;&gt;submodule&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-subtree&#34;&gt;subtree&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88&#34;&gt;git-submodule&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-subtree&#34;&gt;Git subtree: the alternative to Git submodule&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/&#34;&gt;Why your company shouldn&amp;rsquo;t use Git submodules&lt;/a&gt; - Amber&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://openclassrooms.com/en/courses/5671626-manage-your-code-project-with-git-github/6152286-use-subtrees-and-submodules-to-add-a-public-repo-to-your-project&#34;&gt;Use subtrees and submodules to add a public repo to your project&lt;/a&gt; - OpenClassrooms&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.developer.atlassian.com/the-power-of-git-subtree/&#34;&gt;The power of Git subtree&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.rhostem.com/posts/2020-01-03-code-sharing-with-git-subtree&#34;&gt;Git subtree를 활용한 코드 공유&lt;/a&gt; - rhostem&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.three-snakes.com/git/git-subtree&#34;&gt;Subtree 사용법&lt;/a&gt; - ThreeSnakes&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://homoefficio.github.io/2015/07/18/git-subtree/&#34;&gt;git subtree - 프로젝트 안의 또 다른 프로젝트&lt;/a&gt; - HomoEfficio&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;status
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/commit.c#L1475&#34;&gt;int cmd_status(int argc, const char **argv, const char *prefix)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/master/wt-status.c#L807&#34;&gt;wt_status_collect(struct wt_status *s)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kwoncheol.me/posts/git-rename-inference&#34;&gt;git은 폴더경로가 변경된 것을 어떻게 알 수 있을까?&lt;/a&gt; - kwoncheol&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;fetch
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-fetch&#34;&gt;git-fetch&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/syncing/git-fetch&#34;&gt;git fetch&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;add
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/add.c#L491&#34;&gt;int cmd_add(int argc, const char **argv, const char *prefix)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;merge
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging&#34;&gt;Basic Branching and Merging&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/J0W-WA0aYJI&#34;&gt;3 way merge - 지옥에서 온 Git&lt;/a&gt; - 생활코딩&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.plasticscm.com/2016/02/three-way-merging-look-under-hood.html&#34;&gt;Three-way merging: A look under the hood&lt;/a&gt; - Plastic SCM&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.npcode.com/2012/09/29/3-way-merge-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EC%97%90-%EB%8C%80%ED%95%B4/&#34;&gt;3-way merge 알고리즘에 대해&lt;/a&gt; - 이응준&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;rebase
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Branching-Rebasing&#34;&gt;Rebasing&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/merging-vs-rebasing&#34;&gt;Merging vs. Rebasing&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;stash
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/saving-changes/git-stash#how-git-stash-works&#34;&gt;git stash&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1769&#34;&gt;int cmd_stash(int argc, const char **argv, const char *prefix)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c#L1082&#34;&gt;static int check_changes(const struct pathspec *ps, int include_untracked, struct strbuf *untracked_files)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;reset
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things&#34;&gt;Undoing Things&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting&#34;&gt;Resetting, Checking Out &amp;amp; Reverting&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0&#34;&gt;Git으로 버그 찾기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;reflog
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog&#34;&gt;git reflog&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0#_git_reflog&#34;&gt;Revision Selection&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;diff
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/saving-changes/git-diff&#34;&gt;Git diff&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-diff&#34;&gt;git-diff&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;cherry-pick
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/cherry-pick&#34;&gt;Git Cherry Pick&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-cherry-pick&#34;&gt;git-cherry-pick&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;push
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/git-push&#34;&gt;git-push&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/syncing/git-push&#34;&gt;git push&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;hooks
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-hooks&#34;&gt;Git Hooks&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/docs/githooks&#34;&gt;githooks&lt;/a&gt; - git-scm&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;packfile
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://git-scm.com/book/en/v2/Git-Internals-Packfiles&#34;&gt;Packfiles&lt;/a&gt; - Pro Git&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://shafiul.github.io/gitbook/7_the_packfile.html&#34;&gt;The Packfile&lt;/a&gt; - Git Community Book&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;gc
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-gc&#34;&gt;git gc&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/git-prune&#34;&gt;git prune&lt;/a&gt; - Atlassian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;orphan
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/&#34;&gt;Git 저장소에서 빈 고아 브랜치를 만드는 방법&lt;/a&gt; - LainyZine&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;fork
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow&#34;&gt;Forking Workflow&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks&#34;&gt;About forks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.outsider.ne.kr/865&#34;&gt;Github를 이용하는 전체 흐름 이해하기 #1&lt;/a&gt; - 아웃사이더&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/shell/git-commands/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -2483,91 +4275,6 @@ set showbreak=+++\
 &lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;o&lt;/code&gt; only one window&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/shell/vim-editor-shortcuts/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>NFV 도커 컨테이너 초심자 가이드</title>
-        <link>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</link>
-        <pubDate>Mon, 16 Nov 2020 22:40:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</guid>
-        <description>임창수 https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ -&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to Docker Container in NFV&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
-&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;li&gt;2016년 3월 3일에 쓰여진 글로 현재와 다를 수 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;새롭게 등장한 도커(Docker) 컨테이너는 NFV를 혁신할 수 있는 잠재력을 가지고 있습니다.&lt;/p&gt;
-&lt;p&gt;무엇보다 도커 컨테이너는 가상 머신에 비해 가볍고, 적은 오버헤드와 리소스만을 요구하며, 동일한 운영 체제에서 실행되는 애플리케이션을 격리시킬 수 있습니다.&lt;/p&gt;
-&lt;p&gt;즉, NFV의 VNF(가상 네트워크 기능)를 완전히 격리시켜 도커 컨테이너에서 실행할 수 있다면 가상 머신이 필요 없을 지도 모릅니다.&lt;/p&gt;
-&lt;p&gt;하지만 그게 쉬울까요?&lt;/p&gt;
-&lt;p&gt;가상 머신의 미래는 어떨까요?&lt;/p&gt;
-&lt;p&gt;실제로 도커 컨테이너가 아직은 성장하는 단계에 있기 때문에 가상 머신의 미래에 대해 뭐라고 말하기에는 너무 이릅니다(NFV도 마찬가지입니다 😊).&lt;/p&gt;
-&lt;p&gt;하지만 여러분이 이 글을 끝까지 읽는다면 현재 모든 사람들이 이야기하는 도커 컨테이너를 특별하게 만드는 것이 무엇인지 알 수 있습니다.&lt;/p&gt;
-&lt;p&gt;본 가이드의 주목적은 도커 컨테이너의 아키텍처를 이해하는 데 있어 단계별로 안내하는 것입니다. 이 과정에서 하이퍼바이저 및 가상 머신의 기초도 이해하게 됩니다.&lt;/p&gt;
-&lt;p&gt;이러한 개념들은 가상 머신 및 하이퍼바이저에 대한 사전 지식이 전혀 없다고 가정하여 설명됩니다.&lt;/p&gt;
-&lt;h1 id=&#34;컨테이너란-무엇인가요&#34;&gt;컨테이너란 무엇인가요?&lt;/h1&gt;
-&lt;p&gt;과거에는 보다 유연하고 민첩한 방식의 애플리케이션 실행 방법으로 컨테이너가 등장했습니다. 리눅스 컨테이너는 리눅스 운영체제 내에서 직접 경량 애플리케이션을 실행할 수 있도록 해주었습니다. 하이퍼바이저와 가상 머신이 없어도 동일한 운영 체제에서 애플리케이션을 격리하여 실행할 수 있습니다.&lt;/p&gt;
-&lt;h1 id=&#34;도커-컨테이너란-무엇인가요&#34;&gt;도커 컨테이너란 무엇인가요?&lt;/h1&gt;
-&lt;p&gt;구글(Google)은 데이터 센터에서 2006년부터 리눅스(Linux) 컨테이너를 사용하고 있습니다. 하지만 컨테이너는 2013년에 도커 컨테이너가 나오면서 더 유명해졌습니다. 이는 이전 버전의 컨테이너에 비해 컨테이너를 보다 단순하고 표준적인 방식으로 실행할 수 있는 방법입니다.&lt;/p&gt;
-&lt;p&gt;도커 컨테이너는 리눅스에서도 실행됩니다. 하지만 도커만이 컨테이너를 운영하는 유일한 방법은 아닙니다. LXC는 컨테이너를 실행하는 또 다른 방법입니다. LXC와 도커는 모두 리눅스에 뿌리를 두고 있습니다.&lt;/p&gt;
-&lt;p&gt;도커 컨테이너가 LXC와 같은 경쟁 컨테이너에 비해 더 인기 있는 이유 중 하나는 호스트 운영 체제에서 간단하고 빠르게 &amp;ldquo;이미지&amp;quot;로 불러올 수 있기 때문입니다. 도커는 클라우드에 이미지로 저장되며, 필요한 경우 간단한 방법으로 사용자가 실행을 요청합니다.&lt;/p&gt;
-&lt;p&gt;앞으로 &amp;ldquo;컨테이너&amp;quot;와 &amp;ldquo;도커 컨테이너&amp;quot;라는 단어를 동일한 의미처럼 사용하겠습니다.&lt;/p&gt;
-&lt;p&gt;NFV에서의 도커 컨테이너를 이해하기 위해 단계별로 안내합니다.&lt;/p&gt;
-&lt;p&gt;가상 머신은 좋지만 다음과 같은 문제점이 있습니다.&lt;/p&gt;
-&lt;p&gt;전용 운영 체제가 필요합니다. 또한 가상화를 구현하려면 가상 머신을 분리하는 하이퍼바이저가 필요합니다.&lt;/p&gt;
-&lt;p&gt;애플리케이션이  많을수록 소프트웨어 오버헤드가 증가하고 비용이 많이 들며 업데이트 상태를 유지해야 합니다.&lt;/p&gt;
-&lt;p&gt;하지만 NFV 아키텍처에는 가상 머신이 필요합니다. NFV 아키텍처를 살펴보겠습니다.&lt;/p&gt;
-&lt;h2 id=&#34;1단계-nfv-아키텍처의-하이퍼바이저부터-살펴보겠습니다&#34;&gt;1단계: NFV 아키텍처의 하이퍼바이저부터 살펴보겠습니다.&lt;/h2&gt;
-&lt;p&gt;아래 다이어그램에 NFV 아키텍처가 있는데, 아마 여러 번 보셨을 것입니다. (모르시는 분은 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;여기를 확인해주세요&lt;/a&gt;)&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-in-nfv.png&#34; alt=&#34;hypervisor-in-nfv&#34;&gt;&lt;/p&gt;
-&lt;p&gt;이 논의를 위해 세 가지 고유한 구성 요소가 있는 NFVI(NFV Infrastructure)만 살펴보겠습니다.&lt;/p&gt;
-&lt;p&gt;하이퍼바이저 도메인, 컴퓨팅 도메인 및 네트워크 인프라 도메인입니다.&lt;/p&gt;
-&lt;p&gt;가상화 계층(Virtualization Layer)은 실제로 컴퓨팅 도메인(물리적 서버 및 x86 서버)의 하드웨어 리소스 분리를 담당하는 하이퍼바이저입니다. 예를 들어 단일 물리 서버(물리 메모리 및 물리 컴퓨팅)가 있을 수 있지만 하이퍼바이저는 각 엔터티가 독립하는 방식으로 이를 여러 가상 메모리 및 가상 컴퓨팅으로 파티셔닝할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;가상 리소스와 함께 (하이퍼바이저라고 하는) 가상화 계층을 &amp;ldquo;하이퍼바이저 도메인&amp;quot;이라고 합니다.&lt;/p&gt;
-&lt;h2 id=&#34;2단계-가상-머신을-자세히-살펴보겠습니다&#34;&gt;2단계: 가상 머신을 자세히 살펴보겠습니다.&lt;/h2&gt;
-&lt;p&gt;이제 가상 머신을 이해하기 위해 하이퍼바이저 도메인을 확장하여 이 도메인 내에 무엇이 있는지 보여드리겠습니다.&lt;/p&gt;
-&lt;p&gt;아래 두 번째 그림을 확인하세요.&lt;/p&gt;
-&lt;p&gt;위의 첫 번째 그림과 동일한 하이퍼바이저 도메인이 왼쪽에 있습니다. 오른쪽 그림에는 하이퍼바이저 도메인을 확장하여 가상 머신이 있습니다. 즉, 하이퍼바이저 도메인의 가상 리소스가 이제 가상 머신으로 표시됩니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-domain-with-vm.png&#34; alt=&#34;hypervisor-domain-with-vm&#34;&gt;&lt;/p&gt;
-&lt;p&gt;간단하게 설명하기 위해 왼쪽의 가상 네트워크 블록 및 네트워크 블록을 제거했습니다. 이 블록들은 여기서 중요하지 않습니다.&lt;/p&gt;
-&lt;p&gt;가상화 계층이 리소스 관리자 및 네트워크 관리자가 되었습니다. 가상 컴퓨팅 및 가상 메모리가 가상 머신이 되었습니다.&lt;/p&gt;
-&lt;p&gt;그렇다면 가상 머신이란 무엇일까요?&lt;/p&gt;
-&lt;p&gt;가상 머신은 VNF(가상 네트워크 기능)가 실행되는 환경을 제공합니다.&lt;/p&gt;
-&lt;p&gt;다이어그램을 보면 각 가상 머신이 VNF에 연결됩니다.&lt;/p&gt;
-&lt;p&gt;명확하게 하기 위해 예를 들어 설명하겠습니다. Virtual CPE라는 VNF1과 Virtual Firewall이라는 VNF2가 있습니다. 위의 예에서 각각 고유한 가상 머신으로 실행됩니다. 그런 다음 하이퍼바이저 도메인을 통해 체인으로 연결하고 내부적으로 연결할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;또한 가상 머신은 논리적으로 서로 분리되어 있습니다. 따라서 각 가상 머신에서 독립적인 운영 체제를 실행할 수 있습니다. 예를 들어 게스트 운영 체제 OS1은 리눅스일 수 있고 게스트 OS2는 솔라리스일 수 있습니다.&lt;/p&gt;
-&lt;p&gt;또한 게스트 운영 체제 외에도 하이퍼바이저가 실행되는 환경인 호스트 운영 체제가 필요합니다. 다음 단락에서 컨테이너에 대해 논의할 때 이 중요한 점을 명심하세요.&lt;/p&gt;
-&lt;p&gt;이제 가상 머신을 제거해 보겠습니다.&lt;/p&gt;
-&lt;h2 id=&#34;3단계-가상-머신을-제거하고-컨테이너를-도입하세요&#34;&gt;3단계: 가상 머신을 제거하고 컨테이너를 도입하세요!&lt;/h2&gt;
-&lt;p&gt;이제 가상 머신 대신 완전히 새로운 구성 요소 컨테이너를 도입합니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/vm-replaced-with-container.png&#34; alt=&#34;vm-replaced-with-container&#34;&gt;&lt;/p&gt;
-&lt;p&gt;이제 VNF1은 컨테이너 1에서 실행되고 VNF2는 가상 머신과 동일한 기능을 제공하는 컨테이너 2에서 실행됩니다.&lt;/p&gt;
-&lt;p&gt;가상 머신과 동일한 기능을 제공하지만 동일한 OS (여기서는 리눅스) 내에서 제공합니다.&lt;/p&gt;
-&lt;p&gt;이제 게스트 OS가 필요하지 않다는 것을 알아차리셨나요?&lt;/p&gt;
-&lt;p&gt;단순한 아키텍처입니다. 그렇죠?&lt;/p&gt;
-&lt;h2 id=&#34;컨테이너로-무엇을-달성했나요&#34;&gt;컨테이너로 무엇을 달성했나요?&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;호스트 OS가 리눅스인 것을 알 수 있으므로 컨테이너 환경에 게스트 OS가 필요하지 않습니다. 따라서 가상 머신에 비해 가볍고 오버헤드가 적습니다.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;현재 컨테이너가 동일한 호스트 OS 내의 OS 수준에서 충분히 격리 상태를 유지할 수 있으므로 하이퍼바이저를 제거하여 아키텍처를 단순화합니다.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;가상 머신(VM)은 하드웨어 레벨 가상화를 제공하므로 기존의 가상 머신이 하이퍼바이저 소프트웨어를 통해 호스트를 가져오고 파티션을 분할합니다. 이는 기본적으로 VM이 호스트 머신의 OS에서 분리됨을 의미합니다. 리눅스 운영 체제에서 윈도우즈(Windows) 호스트를 실행할 수 있습니다. 반면에 컨테이너는 OS 수준 가상화를 제공합니다. 즉, 동일한 OS에서 애플리케이션은 자체적으로 격리될 수 있습니다. 이는 전체 OS가 중복되지 않기 때문에 VM에 비해 훨씬 적은 오버헤드입니다.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;컨테이너 얘기는 여기까지입니다.&lt;/p&gt;
-&lt;h2 id=&#34;nfv용-컨테이너의-미래&#34;&gt;NFV용 컨테이너의 미래&lt;/h2&gt;
-&lt;p&gt;현실을 보면 현재의 NFV 아키텍처와 표준은 가상 머신을 기반으로 합니다.&lt;/p&gt;
-&lt;p&gt;컨테이너는 아직 NFV에서 새로운 개념입니다. 특히 보안 측면에서 여전히 많은 개발이 진행되고 있습니다. 보시다시피 호스트 OS가 모든 컨테이너에 노출되어 있어 멀티 테넌시 보안 문제가 발생할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;그러나 컨테이너 환경에서 VNF를 쉽고 간단하게 실행할 수 있다는 것을 고려할 때 좋은 미래가 있을 것 같습니다. 또한 가상 머신에서 전체 VNF를 실행하는 대신 마이크로 서비스를 실행할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;예를 들어 가상 CPE(vCPE, Virtual Customer Premises Equipment)의 경우 많은 구성요소를 작은 컨테이너로 분해하여 체인으로 연결할 수 있습니다. 이 기능을 분해하면 소규모 소프트웨어 벤더가 적은 오버헤드로 VNF의 작은 기능을 쉽게 개발할 수 있습니다.&lt;/p&gt;
-- https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - Im Changsu 2020 - 2024</description>
         </item>
     
     
