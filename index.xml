@@ -1126,7 +1126,7 @@ volumes:
     
     
         <item>
-        <title>웹 개발자가 알면 유용한 구글 크롬(Google Chrome)의 기능</title>
+        <title>유용한 구글 크롬(Google Chrome)의 기능</title>
         <link>https://markruler.github.io/posts/web/google-chrome/</link>
         <pubDate>Mon, 29 Jul 2024 00:51:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
@@ -1135,17 +1135,28 @@ volumes:
 &lt;li&gt;&lt;a href=&#34;#chrome-urls&#34;&gt;Chrome URLs&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%B6%81%EB%A7%88%ED%81%B4%EB%A6%BF-bookmarklet&#34;&gt;북마클릿 Bookmarklet&lt;/a&gt;
 &lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9C%A0%EC%9A%A9%ED%95%9C-%EB%B6%81%EB%A7%88%ED%81%B4%EB%A6%BF&#34;&gt;유용한 북마클릿&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%8A%A4%EB%8B%88%ED%8E%AB&#34;&gt;자바스크립트 스니펫&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#performance-%ED%8C%A8%EB%84%90&#34;&gt;Performance 패널&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#network-%ED%8C%A8%EB%84%90&#34;&gt;Network 패널&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EB%B0%9C%EC%9E%90-%EB%8F%84%EA%B5%AC-devtools&#34;&gt;개발자 도구 DevTools&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#chrome-62&#34;&gt;Chrome 62&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#chrome-65&#34;&gt;Chrome 65&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#chrome-66&#34;&gt;Chrome 66&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#chrome-126&#34;&gt;Chrome 126&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#performance-%ED%8C%A8%EB%84%90&#34;&gt;Performance 패널&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#network-%ED%8C%A8%EB%84%90&#34;&gt;Network 패널&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#network-log&#34;&gt;Network Log&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#network-conditions&#34;&gt;Network Conditions&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#html-%EB%AC%B8%EC%84%9C-%EC%83%9D%EB%AA%85%EC%A3%BC%EA%B8%B0&#34;&gt;HTML 문서 생명주기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#network-%ED%8C%A8%EB%84%90%EC%97%90%EC%84%9C-har-%EA%B0%80%EC%A0%B8%EC%98%A4%EA%B8%B0&#34;&gt;Network 패널에서 HAR 가져오기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#sources-%ED%8C%A8%EB%84%90&#34;&gt;Sources 패널&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A1%9C%EC%BB%AC-%EC%9E%AC%EC%A0%95%EC%9D%98-local-overrides&#34;&gt;로컬 재정의 (Local Overrides)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#override-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EC%A0%80%EC%9E%A5%ED%95%A0-%ED%8F%B4%EB%8D%94-%EC%A7%80%EC%A0%95&#34;&gt;Override 파일을 저장할 폴더 지정&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#console&#34;&gt;Console&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
@@ -1171,7 +1182,7 @@ volumes:
 &lt;/ul&gt;
 &lt;h1 id=&#34;북마클릿-bookmarklet&#34;&gt;북마클릿 Bookmarklet&lt;/h1&gt;
 &lt;p&gt;북마클릿(Bookmarklet)이라는 단어는 북마크(Bookmark)와 애플릿(Applet)의 합성어다.
-이 단어는 다음과 같은 이유로 만들어졌다:&lt;/p&gt;
+이 단어는 다음과 같은 이유로 만들어졌다.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;북마크(Bookmark)
 &lt;ul&gt;
@@ -1181,9 +1192,8 @@ volumes:
 &lt;/li&gt;
 &lt;li&gt;애플릿(Applet)
 &lt;ul&gt;
-&lt;li&gt;작은 애플리케이션 프로그램을 의미하는 단어로,
-보통 웹 브라우저 내에서 실행되는 작은 자바 프로그램을 의미한다.
-그러나 &amp;ldquo;애플릿&amp;quot;은 여기서 작은 규모의 프로그램 또는 스크립트를 의미한다.&lt;/li&gt;
+&lt;li&gt;플러그인의 일종으로, 웹 브라우저나 제어판 등의 프로그램에서 실행되는 작은 응용 프로그램이다.
+전용 위젯 엔진이나 더 큰 프로그램 범위 내에서 특정한 작업을 수행하며, 독립적으로 사용되지 않는다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
@@ -1193,14 +1203,11 @@ volumes:
 &lt;p&gt;북마클릿은 1990년대 후반에 등장했으며,
 특히 브라우저에서 반복적인 작업을 자동화하거나 웹 페이지를 개인화하기 위한 도구로 널리 사용되었다.
 그 후로 웹 개발자들과 사용자들 사이에서 인기를 끌게 되었다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// background를 노란색으로 변경
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; () {
-  document.body.style.backgroundColor = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;yellow&amp;#34;&lt;/span&gt;;
-})();
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 3000ms(3초) 후에 이미지에 빨간 테두리 추가
+&lt;h2 id=&#34;유용한-북마클릿&#34;&gt;유용한 북마클릿&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
 &lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
   &lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; sleep() {
-    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Promise((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#f60&#34;&gt;3000&lt;/span&gt;));
+    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Promise((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#f60&#34;&gt;1_000&lt;/span&gt;));
   }
   &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; sleep().then(() =&amp;gt; {
     &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; images = document.querySelectorAll(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;img&amp;#34;&lt;/span&gt;);
@@ -1209,12 +1216,20 @@ volumes:
     });
   });
 })();
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 탭 복제
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 현재 탭 복제
 &lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(location));
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// wayback machine에 현재 페이지 저장
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// wayback - wayback machine에 현재 페이지 저장
 &lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://web.archive.org/save/&amp;#34;&lt;/span&gt;+document.location.href));
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// decoded URI 복사
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:console.log(prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;copy (Control+C) this link:&amp;#39;&lt;/span&gt;, decodeURIComponent(window.location)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Decoded URL - 현재 페이지의 디코딩된 URL를 복사한다.
+&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:console.log(prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;copy (Control+C) this link:&amp;#39;&lt;/span&gt;, decodeURIComponent(window.location)));
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Webpage Stats - 페이지 통계
+&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; el=document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;script&amp;#39;&lt;/span&gt;);el.type=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;text/javascript&amp;#39;&lt;/span&gt;;el.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#39;&lt;/span&gt;;el.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Looks like the Content Security Policy directive is blocking the use of bookmarklets\n\nYou can copy and paste the content of:\n\n\&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js\&amp;#34;\n\ninto your console instead\n\n(link is in console already)&amp;#34;&lt;/span&gt;);console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#34;&lt;/span&gt;);};document.getElementsByTagName(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;].appendChild(el);})();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// PageSpeed Insights - 현재 페이지 분석
+&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://pagespeed.web.dev/analysis?url=&amp;#39;&lt;/span&gt; + encodeURIComponent(location.href)));
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// EyeDropper - 색상의 HEX 코드를 찾을 수 있는 Eye Dropper를 실행
+&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt;()=&amp;gt;{&lt;span style=&#34;color:#f00&#34;&gt;try&lt;/span&gt;{prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;Selected HEX color:&amp;#39;&lt;/span&gt;,(&lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; EyeDropper().open()).sRGBHex);}&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(e){alert(e);}})();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 3D Webpage - 현재 페이지를 3D로 보여준다.
+&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; js=document.body.appendChild(document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;script&amp;#34;&lt;/span&gt;));js.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Error! The Script Could Not Be Loaded!&amp;#34;&lt;/span&gt;)};js.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://rawgit.com/Krazete/bookmarklets/master/tri.js&amp;#34;&lt;/span&gt;})();
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;자바스크립트-스니펫&#34;&gt;자바스크립트 스니펫&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://goo.gle/devtools-snippets&#34;&gt;자바스크립트 스니펫 실행&lt;/a&gt; | Run snippets of JavaScript
@@ -1225,27 +1240,20 @@ volumes:
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/the-devtools-documentatio-b98254f550319_856.png&#34; alt=&#34;Run snippets of JavaScript&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;개발자-도구-devtools&#34;&gt;개발자 도구 DevTools&lt;/h1&gt;
 &lt;h2 id=&#34;performance-패널&#34;&gt;Performance 패널&lt;/h2&gt;
 &lt;p&gt;브라우저에서 페이지 성능을 체크할 수 있다.
 아래 스크린샷처럼 Core Web Vitals(CWV)도 함께 확인할 수 있다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/performance-panel.webp&#34; alt=&#34;Performance Panel&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;network-패널&#34;&gt;Network 패널&lt;/h2&gt;
 &lt;p&gt;아마 가장 많이 사용하는 패널이 아닌가 싶다.&lt;/p&gt;
+&lt;h3 id=&#34;network-log&#34;&gt;Network Log&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://developer.chrome.com/static/docs/devtools/network/image/the-network-log-f17acc2e02c0a_856.png&#34; alt=&#34;Network Log&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/network&#34;&gt;Inspect network activity&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Preserve log
 &lt;ul&gt;
 &lt;li&gt;새로고침을 하더라도 이전 로그를 유지한다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Disable cache
-&lt;ul&gt;
-&lt;li&gt;캐시를 비활성화하고 새로고침을 하면 캐시를 사용하지 않는다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;throttling
-&lt;ul&gt;
-&lt;li&gt;네트워크 속도를 조절할 수 있다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Slow 4G&lt;/code&gt;, &lt;code&gt;Fast 4G&lt;/code&gt;, &lt;code&gt;3G&lt;/code&gt;, &lt;code&gt;Offline&lt;/code&gt; 등&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Filter 활용법
@@ -1264,6 +1272,28 @@ volumes:
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;h3 id=&#34;network-conditions&#34;&gt;Network Conditions&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Disable cache
+&lt;ul&gt;
+&lt;li&gt;캐시를 비활성화하고 새로고침을 하면 캐시를 사용하지 않는다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;User agent
+&lt;ul&gt;
+&lt;li&gt;요청 User-Agent 헤더를 커스텀 할 수 있다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Network throttling
+&lt;ul&gt;
+&lt;li&gt;네트워크 속도를 조절할 수 있다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Slow 4G&lt;/code&gt;, &lt;code&gt;Fast 4G&lt;/code&gt;, &lt;code&gt;3G&lt;/code&gt;, &lt;code&gt;Offline&lt;/code&gt; 등.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/more-network-conditions.png&#34; alt=&#34;More network conditions&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/network-conditions.png&#34; alt=&#34;network conditions&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;html-문서-생명주기&#34;&gt;HTML 문서 생명주기&lt;/h3&gt;
 &lt;p&gt;네트워크 성능을 체크할 때
 &lt;a href=&#34;https://ko.javascript.info/onload-ondomcontentloaded&#34;&gt;HTML 문서 생명주기&lt;/a&gt;를 알아두면 도움이 된다.&lt;/p&gt;
 &lt;ul&gt;
@@ -1291,14 +1321,10 @@ volumes:
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;개발자-도구-devtools&#34;&gt;개발자 도구 DevTools&lt;/h1&gt;
-&lt;h2 id=&#34;chrome-62&#34;&gt;Chrome 62&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-62?hl=ko#har-imports&#34;&gt;Network 패널에서 HAR 가져오기&lt;/a&gt; | HAR imports in the Network panel
+&lt;h3 id=&#34;network-패널에서-har-가져오기&#34;&gt;Network 패널에서 HAR 가져오기&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/network/reference?hl=ko#export&#34;&gt;자세한 내용&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-62?hl=ko#har-imports&#34;&gt;Chrome 62&lt;/a&gt; | HAR imports in the Network panel&lt;/li&gt;
 &lt;li&gt;HAR 파일을 가져와서 Network 패널에 로드하면 동일한 요청-응답 정보를 다시 볼 수 있다.
 &lt;ul&gt;
 &lt;li&gt;그럼 주고 받은 요청-응답 정보를 다른 사람과 공유하거나, 본인도 나중에 다시 확인 수 있다.&lt;/li&gt;
@@ -1306,34 +1332,26 @@ volumes:
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/selecting-save-as-har-c-543367c2a7051_856.png&#34; alt=&#34;Save all network requests to a HAR file&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;chrome-65&#34;&gt;Chrome 65&lt;/h2&gt;
+&lt;h2 id=&#34;sources-패널&#34;&gt;Sources 패널&lt;/h2&gt;
+&lt;h3 id=&#34;로컬-재정의-local-overrides&#34;&gt;로컬 재정의 (Local Overrides)&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-65?hl=ko#overrides&#34;&gt;로컬 재정의 (Local Overrides)&lt;/a&gt;
-&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-65?hl=ko#overrides&#34;&gt;Chrome 65&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/overrides?hl=ko&#34;&gt;더 자세한 내용&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;개발자 도구 Source 패널에서 정적 파일을 수정 후 해당 페이지를 새로고침하면 모두 리로드된다.&lt;/li&gt;
 &lt;li&gt;Local Override는 Source 패널에서 수정 후 저장하면, 이후 해당 페이지를 새로고침해도 수정한 내용이 유지된다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/persisting-css-change-ac-3da090318c534.gif&#34; alt=&#34;Local Overrides&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;chrome-66&#34;&gt;Chrome 66&lt;/h2&gt;
+&lt;h3 id=&#34;override-파일을-저장할-폴더-지정&#34;&gt;Override 파일을 저장할 폴더 지정&lt;/h3&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-66?hl=ko#overrides&#34;&gt;Override 파일을 저장할 폴더 지정&lt;/a&gt;
-&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-66?hl=ko#overrides&#34;&gt;Chrome 66&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;위 로컬 재정의 기능에서 파일 수정 후 저장하면 해당 경로로 파일이 저장된다.&lt;/li&gt;
 &lt;li&gt;이후 해당 페이지는 항상 Override된 파일을 참조하기 때문에 디버깅 후 해당 파일을 삭제하는 것이 좋다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/google-chrome/an-example-styles-define-a24be5796e36a_856.png&#34; alt=&#34;Local Overrides now works with some styles defined in HTML&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;chrome-126&#34;&gt;Chrome 126&lt;/h2&gt;
+&lt;h2 id=&#34;console&#34;&gt;Console&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;Console에 자바스크립트 코드를 붙여넣으면 발생하는 &lt;a href=&#34;https://developer.chrome.com/blog/self-xss&#34;&gt;self-XSS 경고&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-126#self-xss-flag&#34;&gt;self-XSS 경고 비활성화&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-126#self-xss-flag&#34;&gt;Chrome 126&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Console에 자바스크립트 코드를 붙여넣으면 발생하는 &lt;a href=&#34;https://developer.chrome.com/blog/self-xss&#34;&gt;self-XSS 경고&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;Warning:
 Don’t paste code into the DevTools Console that you don’t understand or haven’t reviewed yourself.
@@ -1346,7 +1364,6 @@ Please type ‘allow pasting’ below and hit Enter to allow pasting.
 &lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;console.profile()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;ChatGPT&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/news?hl=ko&#34;&gt;DevTools의 새로운 기능&lt;/a&gt; | What&amp;rsquo;s New in DevTools&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/web/google-chrome/ - Im Changsu 2020 - 2024</description>
