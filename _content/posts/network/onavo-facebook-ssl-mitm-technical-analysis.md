@@ -81,7 +81,7 @@ categories:
 - 이전 스냅챗 앱을 검토한 결과, 해당 앱의 분석 도메인(analytics domain)은 인증서 고정[^2]을 적용하지 않았음을 알 수 있었습니다.
   이는 중간자 공격(MITM) 또는 "ssl bumping"이 앞서 설명한 대로 작동했을 가능성이 있음을 의미합니다.
 - 사용자가 부여한 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
-  구독자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같은
+  모바일 가입자 [IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)와 같은
   민감한 데이터를 수집하는 의심스러운 기능이 추가로 있는 것으로 보입니다.
 
 아마도 구성은 다음 그림과 비슷했을 것입니다.
@@ -319,7 +319,7 @@ Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는
 
 # 또 무엇이 있을까요?
 
-제 눈에 띈 것은 [구독자 IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)를 얻으려는 요청이었습니다.
+제 눈에 띈 것은 [모바일 가입자 IMSI](https://en.wikipedia.org/wiki/International_mobile_subscriber_identity)를 얻으려는 요청이었습니다.
 이는 매우 민감한 데이터입니다.
 
 ![subscriber IMSI](https://pbs.twimg.com/media/GJp7AoJaQAA5E-N?format=png&name=medium)
