@@ -4,8 +4,8 @@ date: 2024-11-24T23:32:00+09:00
 lastmod: 2024-11-24T23:32:00+09:00
 title: "웹 페이지 응답 방법과 프레임워크"
 description: "서버 응답 속도가 빨라도 웹 페이지 응답이 느려서야"
-featured_image: "/images/web/respond-web-page/bottleneck.jpg"
-images: ["/images/web/respond-web-page/bottleneck.jpg"]
+featured_image: "/images/web/respond-web-page/bottleneck.webp"
+images: ["/images/web/respond-web-page/bottleneck.webp"]
 tags:
   - network
   - web
