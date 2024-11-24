@@ -9,9 +9,184 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 12 Sep 2024 00:17:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 24 Nov 2024 23:32:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>VIM 에디터 명령어 정리</title>
+        <link>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</link>
+        <pubDate>Mon, 07 Dec 2020 00:44:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</guid>
+        <description>임창수 https://markruler.github.io/posts/shell/vim-editor-shortcuts/ -&lt;blockquote&gt;
+&lt;p&gt;업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
+VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;설정&#34;&gt;설정&lt;/h1&gt;
+&lt;p&gt;설정 파일인 &lt;code&gt;~/.vimrc&lt;/code&gt;에서 큰따옴표(&lt;code&gt;&amp;quot;&lt;/code&gt;, double quote)가 앞에 있다면 주석(comment)이 된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;syntax&lt;/span&gt; on &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;구문강조 사용&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;colorscheme&lt;/span&gt; desert &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;color 폴더에 colorscheme 설치 필요&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; background=dark &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;하이라이팅 lihgt / dark&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autoindent
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; shiftwidth=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;autoindent width&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ts=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;tabstop, width&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; softtabstop=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cindent &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;C Language indent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; nu &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;number&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cul &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;Highlight current line&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; hls &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;hlsearch, 검색어 강조&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; incsearch &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;키워드 입력시 점진적 검색&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ic &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;ignorecase, 검색시 대소문자 무시&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; expandtab &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;탭 대신 스페이스&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; laststatus=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;status line&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; nowrapscan &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;검색할 때 문서의 끝에서 처음으로 안돌아감&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; visualbell &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;키를 잘못눌렀을 때 화면 프레시&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ruler &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;화면 우측 하단에 현재 커서의 위치(줄,칸) 표시&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; fileencoding=utf&lt;span style=&#34;color:#f60&#34;&gt;-8&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;파일저장인코딩&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tenc=utf&lt;span style=&#34;color:#f60&#34;&gt;-8&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;터미널 인코딩&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; history=&lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;vi 편집기록 기억갯수 .viminfo에 기록&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showbreak=+++\
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;입력-모드-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;i&lt;/code&gt; 현재 커서에서 편집
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Shift + i&lt;/code&gt; 현재 줄의 처음으로 커서를 옮긴 후 편집&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;s&lt;/code&gt; 현재 커서 한 글자 삭제 후 바로 입력 모드
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Shift + s&lt;/code&gt; 현재 줄 삭제 후 바로 입력 모드&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt; 다음 칸으로 커서를 옮긴 후 편집
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Shift + a&lt;/code&gt; 현재 줄의 끝으로 커서를 옮긴 후 편집&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;o&lt;/code&gt; 다음 줄로 커서를 옮긴 후 편집
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Shift + o&lt;/code&gt; 이전 줄로 커서를 옮긴 후 편집&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;마지막-행-모드-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/h1&gt;
+&lt;h2 id=&#34;last-line-command-&#34;&gt;Last Line Command (:)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;:q&lt;/code&gt; 종료&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:q!&lt;/code&gt; 강제 종료&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:w&lt;/code&gt; 저장&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:%s/old/new/gi&lt;/code&gt; 문자열 교체 (old -&amp;gt; new)
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;g&lt;/code&gt; 옵션을 빼면 해당 줄의 첫 번째 문자열만 교체&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:!&lt;/code&gt; 명령어 실행
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;:!ls&lt;/code&gt; 현재 디렉토리 파일 목록 출력&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:!pwd&lt;/code&gt; 현재 디렉토리 경로 출력&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:!date&lt;/code&gt; 현재 시간 출력&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:tabnew [file]&lt;/code&gt; 새로운 탭 열기 (file이 없으면 빈 탭)
+&lt;ul&gt;
+&lt;li&gt;실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gt&lt;/code&gt; 다음 탭으로 이동하기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gT&lt;/code&gt; 이전 탭으로 이동하기&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;search-mode--&#34;&gt;Search mode (/, ?)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;/regex-pattern&lt;/code&gt; (&lt;code&gt;?regex-pattern&lt;/code&gt;) 검색
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;n&lt;/code&gt; 다음 단어 (?는 반대)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;N&lt;/code&gt; 이전 단어 (?는 반대)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;명령-모드-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;u&lt;/code&gt; - undo&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;control + r&lt;/code&gt; - redo&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.&lt;/code&gt; - 이전 명령 다시 실행&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;이동&#34;&gt;이동&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;hjkl&lt;/code&gt; 좌하상우 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + b&lt;/code&gt; 이전 페이지로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + f&lt;/code&gt; 다음 페이지로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + u&lt;/code&gt; 이전 half page로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + d&lt;/code&gt; 다음 half page로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gg&lt;/code&gt; 문서 맨 앞으로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;G&lt;/code&gt; 문서 맨 뒤로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;^&lt;/code&gt; 현재 줄 앞으로 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$&lt;/code&gt; 현재 줄 끝으로 이동&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;간단한-편집&#34;&gt;간단한 편집&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;y&lt;/code&gt; 복사 (yank)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;p&lt;/code&gt; 붙여넣기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;&lt;/code&gt; 들여쓰기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;lt;&lt;/code&gt; 내어쓰기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Shift + j&lt;/code&gt; 현재 줄과 다음 줄 합치기&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;삭제&#34;&gt;삭제&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;r&lt;/code&gt; 현재 커서 한 글자 교체(replace)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;x&lt;/code&gt; 현재 커서 한 글자 삭제 (delete)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Shift + x&lt;/code&gt; 현재 커서 앞에 한 글자 삭제 (backspace)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:1,.d&lt;/code&gt; 첫 번째 줄부터 현재 커서까지 삭제 (LLM)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;:5,10d&lt;/code&gt; 5번 줄부터 10번 줄까지 삭제 (LLM)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)
+&lt;ul&gt;
+&lt;li&gt;이동키와 조합해 삭제할 수도 있다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;5dd&lt;/code&gt; 현재 줄 포함 아래로 5줄 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dgg&lt;/code&gt; 현재 커서에서 첫 줄까지 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dG&lt;/code&gt; 현재 커서에서 마지막 줄까지 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d$&lt;/code&gt; 현재 커서에서 현재 줄 마지막 단어까지 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d^&lt;/code&gt; 현재 커서에서 현재 줄 첫 단어까지 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;dw&lt;/code&gt; 현재 커서에서 현재 단어까지 삭제&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;비주얼-모드visual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;v&lt;/code&gt; 비주얼 모드&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;shift + v&lt;/code&gt; 비주얼 라인&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Ctrl + v&lt;/code&gt; 비주얼 블록
+&lt;ul&gt;
+&lt;li&gt;비주얼 블록 모드에서 &lt;code&gt;Shift + i&lt;/code&gt;를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환된다.&lt;/li&gt;
+&lt;li&gt;입력을 마치고 &lt;code&gt;ESC&lt;/code&gt;를 누르면 블록의 모든 줄에 입력한 내용이 삽입된다. (여러 줄을 주석 처리할 때 유용)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;화면-분할&#34;&gt;화면 분할&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;탭 기능과 동일하게 터미널 자체 기능을 선호하는 편.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;s&lt;/code&gt; horizontal split
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;new&lt;/code&gt; horizontal split한 후 새로운 창 생성&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;v&lt;/code&gt; vertical split
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;vs&lt;/code&gt; vertical split한 후 현재 창 복제&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;방향키&lt;/code&gt; 분할된 창 간 이동&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;&amp;gt;&lt;/code&gt; 창 폭 늘리기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;&amp;lt;&lt;/code&gt; 창 폭 줄이기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;+&lt;/code&gt; 창 높이 늘리기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;-&lt;/code&gt; 창 높이 줄이기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;=&lt;/code&gt; 창 폭, 높이 원래 상태로&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;o&lt;/code&gt; only one window&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/shell/vim-editor-shortcuts/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -114,172 +289,172 @@
 &lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md&#34;&gt;kubernetes/build/README.md&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;사용할-명령어&#34;&gt;사용할 명령어&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# master 브랜치&lt;/span&gt;
-git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; https://github.com/kubernetes/kubernetes.git
-&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 브랜치&lt;/span&gt;
-git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
-
-&lt;span style=&#34;color:#0f0&#34;&gt;# cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...&lt;/span&gt;
-make all &lt;span style=&#34;color:#eedd82&#34;&gt;WHAT&lt;/span&gt;=cmd/kubectl &lt;span style=&#34;color:#eedd82&#34;&gt;GOFLAGS&lt;/span&gt;=-v
-
-&lt;span style=&#34;color:#0f0&#34;&gt;# 그냥 간단히 go build 명령도 가능하다.&lt;/span&gt;
-go build -o k cmd/kubectl
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;빌드-실행-따라가기&#34;&gt;빌드 실행 따라가기&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# master 브랜치&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; https://github.com/kubernetes/kubernetes.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 브랜치&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make all &lt;span style=&#34;color:#eedd82&#34;&gt;WHAT&lt;/span&gt;=cmd/kubectl &lt;span style=&#34;color:#eedd82&#34;&gt;GOFLAGS&lt;/span&gt;=-v
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 그냥 간단히 go build 명령도 가능하다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go build -o k cmd/kubectl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;빌드-실행-따라가기&#34;&gt;빌드 실행 따라가기&lt;/h2&gt;
 &lt;h3 id=&#34;makefile&#34;&gt;Makefile&lt;/h3&gt;
 &lt;ul&gt;
 &lt;li&gt;make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;build/root/Makefile
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;실제로-빌드되는-makefile&#34;&gt;실제로 빌드되는 Makefile&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;build/root/Makefile
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;실제로-빌드되는-makefile&#34;&gt;실제로 빌드되는 Makefile&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile&#34;&gt;build/root/Makefile&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build code.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Args:
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   WHAT: Directory names to build.  If any of these directories has a &amp;#39;main&amp;#39;
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     package, the build will produce executable files under $(OUT_DIR)/bin.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     If not specified, &amp;#34;everything&amp;#34; will be built.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOFLAGS: Extra flags to pass to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOLDFLAGS: Extra linking flags passed to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOGCFLAGS: Additional go compile flags passed to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Example:
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all WHAT=cmd/kubelet GOFLAGS=-v
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all GOLDFLAGS=&amp;#34;&amp;#34;
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           to &amp;#34;-s -w&amp;#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           are documented at https://golang.org/cmd/link/
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;endef
-&lt;span style=&#34;color:#ff0&#34;&gt;.PHONY&lt;/span&gt;: all
-ifeq (&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PRINT_HELP&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;,y)
-&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;:
-	@echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$$&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;ALL_HELP_INFO&amp;#34;&lt;/span&gt;
-else
-&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;: generated_files
-	hack/make-rules/build.sh &lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;WHAT&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
-endif
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;all-generated_files&#34;&gt;all: generated_files&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build code.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Args:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   WHAT: Directory names to build.  If any of these directories has a &amp;#39;main&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     package, the build will produce executable files under $(OUT_DIR)/bin.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     If not specified, &amp;#34;everything&amp;#34; will be built.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOFLAGS: Extra flags to pass to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOLDFLAGS: Extra linking flags passed to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOGCFLAGS: Additional go compile flags passed to &amp;#39;go&amp;#39; when building.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Example:
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all WHAT=cmd/kubelet GOFLAGS=-v
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all GOLDFLAGS=&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           to &amp;#34;-s -w&amp;#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           are documented at https://golang.org/cmd/link/
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;endef
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;.PHONY&lt;/span&gt;: all
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ifeq (&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PRINT_HELP&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;,y)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$$&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;ALL_HELP_INFO&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;else
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;: generated_files
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	hack/make-rules/build.sh &lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;WHAT&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endif
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;all-generated_files&#34;&gt;all: generated_files&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh&#34;&gt;hack/make-rules/build.sh&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
-&lt;/span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# This script sets up a go workspace locally and builds all go components.&lt;/span&gt;
-
-set -o errexit
-set -o nounset
-set -o pipefail
-
-&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;/../..
-&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-source &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/hack/lib/init.sh&amp;#34;&lt;/span&gt;
-
-&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/golang.sh&lt;/span&gt;
-kube::golang::build_binaries &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-kube::golang::place_bins
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubegolang&#34;&gt;kube::golang::&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This script sets up a go workspace locally and builds all go components.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o errexit
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o nounset
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o pipefail
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;/../..
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/hack/lib/init.sh&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/golang.sh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::build_binaries &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::place_bins
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubegolang&#34;&gt;kube::golang::&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh&#34;&gt;hack/lib/golang.sh&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build binaries targets specified&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# Input:&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#   $@ - targets and go flags.  If no targets are set then all binaries targets&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#     are built.&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#     then just the host architecture is built.&lt;/span&gt;
-kube::golang::build_binaries() {
-  ...
-}
-
-&lt;span style=&#34;color:#0f0&#34;&gt;# This will take binaries from $GOPATH/bin and copy them to the appropriate&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# place in ${KUBE_OUTPUT_BINDIR}&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# Ideally this wouldn&amp;#39;t be necessary and we could just set GOBIN to&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# KUBE_OUTPUT_BINDIR but that won&amp;#39;t work in the face of cross compilation.  &amp;#39;go&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# install&amp;#39; will place binaries that match the host platform directly in $GOBIN&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# while placing cross compiled binaries into `platform_arch` subdirs.  This&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# complicates pretty much everything else we do around packaging and such.&lt;/span&gt;
-kube::golang::place_bins() {
-  ...
-  &lt;span style=&#34;color:#0f0&#34;&gt;# V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}&lt;/span&gt;
-  &lt;span style=&#34;color:#0f0&#34;&gt;# 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.&lt;/span&gt;
-  &lt;span style=&#34;color:#0f0&#34;&gt;# &amp;gt; [%m%d %H:%M:%S] /home/kubernetes/kubernetes/_output/local/bin&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;로그-레벨&#34;&gt;로그 레벨&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build binaries targets specified&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Input:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   $@ - targets and go flags.  If no targets are set then all binaries targets&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     are built.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     then just the host architecture is built.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::build_binaries() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This will take binaries from $GOPATH/bin and copy them to the appropriate&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# place in ${KUBE_OUTPUT_BINDIR}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Ideally this wouldn&amp;#39;t be necessary and we could just set GOBIN to&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# KUBE_OUTPUT_BINDIR but that won&amp;#39;t work in the face of cross compilation.  &amp;#39;go&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# install&amp;#39; will place binaries that match the host platform directly in $GOBIN&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# while placing cross compiled binaries into `platform_arch` subdirs.  This&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# complicates pretty much everything else we do around packaging and such.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::place_bins() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# &amp;gt; [%m%d %H:%M:%S] /home/kubernetes/kubernetes/_output/local/bin&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;로그-레벨&#34;&gt;로그 레벨&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh&#34;&gt;hack/lib/logging.sh&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This controls the verbosity of the build. Higher numbers mean more output.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt; ?= &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
-&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/logging.sh
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;kube&lt;/span&gt;::log::status() {
-  local &lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; [[ &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; ]]; &lt;span style=&#34;color:#f00&#34;&gt;then&lt;/span&gt;
-    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt;
-  &lt;span style=&#34;color:#f00&#34;&gt;fi&lt;/span&gt;
-
-  &lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;date +&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;[%m%d %H:%M:%S]&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
-  echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;+++ &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-  shift
-  &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; message; &lt;span style=&#34;color:#f00&#34;&gt;do&lt;/span&gt;
-    echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;    &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;message&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cmdkubectl&#34;&gt;cmd/kubectl&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This controls the verbosity of the build. Higher numbers mean more output.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt; ?= &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/logging.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;kube&lt;/span&gt;::log::status() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  local &lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; [[ &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; ]]; &lt;span style=&#34;color:#f00&#34;&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;date +&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;[%m%d %H:%M:%S]&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;+++ &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  shift
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; message; &lt;span style=&#34;color:#f00&#34;&gt;do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;    &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;message&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cmdkubectl&#34;&gt;cmd/kubectl&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go&#34;&gt;kubectl.go&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#f00&#34;&gt;package&lt;/span&gt; main
-
-&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; (
-	goflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;flag&amp;#34;&lt;/span&gt;
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;math/rand&amp;#34;&lt;/span&gt;
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
-
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;github.com/spf13/pflag&amp;#34;&lt;/span&gt;
-
-	cliflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/component-base/cli/flag&amp;#34;&lt;/span&gt;
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubectl/pkg/util/logs&amp;#34;&lt;/span&gt;
-	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubernetes/pkg/kubectl/cmd&amp;#34;&lt;/span&gt;
-
-	&lt;span style=&#34;color:#0f0&#34;&gt;// Import to initialize client auth plugins.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	_ &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/client-go/plugin/pkg/client/auth&amp;#34;&lt;/span&gt;
-)
-
-&lt;span style=&#34;color:#f00&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;main&lt;/span&gt;() {
-	rand.&lt;span style=&#34;color:#ff0&#34;&gt;Seed&lt;/span&gt;(time.&lt;span style=&#34;color:#ff0&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#ff0&#34;&gt;UnixNano&lt;/span&gt;())
-
-	command := cmd.&lt;span style=&#34;color:#ff0&#34;&gt;NewDefaultKubectlCommand&lt;/span&gt;()
-
-	&lt;span style=&#34;color:#0f0&#34;&gt;// TODO: once we switch everything over to Cobra commands, we can go back to calling
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// normalize func and add the go flag set by hand.
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;SetNormalizeFunc&lt;/span&gt;(cliflag.WordSepNormalizeFunc)
-	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;AddGoFlagSet&lt;/span&gt;(goflag.CommandLine)
-	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags()
-&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	logs.&lt;span style=&#34;color:#ff0&#34;&gt;InitLogs&lt;/span&gt;()
-	&lt;span style=&#34;color:#f00&#34;&gt;defer&lt;/span&gt; logs.&lt;span style=&#34;color:#ff0&#34;&gt;FlushLogs&lt;/span&gt;()
-
-	&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err := command.&lt;span style=&#34;color:#ff0&#34;&gt;Execute&lt;/span&gt;(); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-		os.&lt;span style=&#34;color:#ff0&#34;&gt;Exit&lt;/span&gt;(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;)
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo&#34;&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;package&lt;/span&gt; main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	goflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;flag&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;math/rand&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;github.com/spf13/pflag&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	cliflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/component-base/cli/flag&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubectl/pkg/util/logs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubernetes/pkg/kubectl/cmd&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// Import to initialize client auth plugins.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	_ &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/client-go/plugin/pkg/client/auth&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rand.&lt;span style=&#34;color:#ff0&#34;&gt;Seed&lt;/span&gt;(time.&lt;span style=&#34;color:#ff0&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#ff0&#34;&gt;UnixNano&lt;/span&gt;())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	command := cmd.&lt;span style=&#34;color:#ff0&#34;&gt;NewDefaultKubectlCommand&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// TODO: once we switch everything over to Cobra commands, we can go back to calling
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// normalize func and add the go flag set by hand.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;SetNormalizeFunc&lt;/span&gt;(cliflag.WordSepNormalizeFunc)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;AddGoFlagSet&lt;/span&gt;(goflag.CommandLine)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;	logs.&lt;span style=&#34;color:#ff0&#34;&gt;InitLogs&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f00&#34;&gt;defer&lt;/span&gt; logs.&lt;span style=&#34;color:#ff0&#34;&gt;FlushLogs&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err := command.&lt;span style=&#34;color:#ff0&#34;&gt;Execute&lt;/span&gt;(); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		os.&lt;span style=&#34;color:#ff0&#34;&gt;Exit&lt;/span&gt;(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo&#34;&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;&lt;/h3&gt;
 &lt;h2 id=&#34;디버깅&#34;&gt;디버깅&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.&lt;/p&gt;
@@ -287,22 +462,22 @@ kube::golang::place_bins() {
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/docs/editor/debugging&#34;&gt;launch.json&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
-  &amp;#34;version&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0.2.0&amp;#34;&lt;/span&gt;,
-  &amp;#34;configurations&amp;#34;: [
-    {
-      &amp;#34;type&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;go&amp;#34;&lt;/span&gt;,
-      &amp;#34;request&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;launch&amp;#34;&lt;/span&gt;,
-      &amp;#34;name&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;kubectl&amp;#34;&lt;/span&gt;,
-      &amp;#34;program&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;${workspaceFolder}/cmd/kubectl/kubectl.go&amp;#34;&lt;/span&gt;,
-      &amp;#34;args&amp;#34;: [
-        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;config&amp;#34;&lt;/span&gt;,
-        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;view&amp;#34;&lt;/span&gt;
-      ]
-    }
-  ]
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/vscode-debugging-golang.png&#34; alt=&#34;vscode-debugging-golang&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;version&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0.2.0&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;configurations&amp;#34;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;type&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;go&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;request&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;launch&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;name&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;kubectl&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;program&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;${workspaceFolder}/cmd/kubectl/kubectl.go&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;args&amp;#34;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;config&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;view&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/vscode-debugging-golang.png&#34; alt=&#34;vscode-debugging-golang&#34;&gt;&lt;/p&gt;
 - https://markruler.github.io/posts/kubernetes/local-build-kube/ - Im Changsu 2020 - 2024</description>
         </item>
     
@@ -351,38 +526,38 @@ kube::golang::place_bins() {
 &lt;/ul&gt;
 &lt;h2 id=&#34;logging--tracing&#34;&gt;Logging : Tracing&lt;/h2&gt;
 &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Event logging&lt;/th&gt;
-&lt;th&gt;Software tracing&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Consumed primarily by system administrators&lt;/td&gt;
-&lt;td&gt;Consumed primarily by developers&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Logs &amp;ldquo;high level&amp;rdquo; information (e.g. failed installation of a program)&lt;/td&gt;
-&lt;td&gt;Logs &amp;ldquo;low level&amp;rdquo; information (e.g. a thrown exception)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Must not be too &amp;ldquo;noisy&amp;rdquo; (containing many duplicate events or information that is not helpful for its intended audience)&lt;/td&gt;
-&lt;td&gt;Can be noisy&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;A standards-based output format is often desirable, sometimes even required&lt;/td&gt;
-&lt;td&gt;Few limitations on output format&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Event log messages are often localized&lt;/td&gt;
-&lt;td&gt;Localization is rarely a concern&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Addition of new types of events, as well as new event messages, need not be agile&lt;/td&gt;
-&lt;td&gt;Addition of new tracing messages must be agile&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Event logging&lt;/th&gt;
+          &lt;th&gt;Software tracing&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Consumed primarily by system administrators&lt;/td&gt;
+          &lt;td&gt;Consumed primarily by developers&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Logs &amp;ldquo;high level&amp;rdquo; information (e.g. failed installation of a program)&lt;/td&gt;
+          &lt;td&gt;Logs &amp;ldquo;low level&amp;rdquo; information (e.g. a thrown exception)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Must not be too &amp;ldquo;noisy&amp;rdquo; (containing many duplicate events or information that is not helpful for its intended audience)&lt;/td&gt;
+          &lt;td&gt;Can be noisy&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;A standards-based output format is often desirable, sometimes even required&lt;/td&gt;
+          &lt;td&gt;Few limitations on output format&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Event log messages are often localized&lt;/td&gt;
+          &lt;td&gt;Localization is rarely a concern&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Addition of new types of events, as well as new event messages, need not be agile&lt;/td&gt;
+          &lt;td&gt;Addition of new tracing messages must be agile&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2 id=&#34;trace--track&#34;&gt;Trace : Track&lt;/h2&gt;
 &lt;ul&gt;
@@ -897,30 +1072,30 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.&lt;/p&gt;
 &lt;p&gt;특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 &lt;strong&gt;2&lt;/strong&gt;단계로 표시되어 있다.&lt;/p&gt;
 &lt;p&gt;요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.&lt;/p&gt;
 &lt;p&gt;예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에서만 파드를 읽을 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
-    &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;abac.authorization.kubernetes.io/v1beta1&amp;#34;&lt;/span&gt;,
-    &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Policy&amp;#34;&lt;/span&gt;,
-    &amp;#34;spec&amp;#34;: {
-        &amp;#34;user&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;bob&amp;#34;&lt;/span&gt;,
-        &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
-        &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;,
-        &amp;#34;readonly&amp;#34;: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 다음과 같은 요청을 하면 &amp;lsquo;projectCaribou&amp;rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;{
-  &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;authorization.k8s.io/v1beta1&amp;#34;&lt;/span&gt;,
-  &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;SubjectAccessReview&amp;#34;&lt;/span&gt;,
-  &amp;#34;spec&amp;#34;: {
-    &amp;#34;resourceAttributes&amp;#34;: {
-      &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
-      &amp;#34;verb&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;,
-      &amp;#34;group&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;unicorn.example.org&amp;#34;&lt;/span&gt;,
-      &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;
-    }
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에 있는 오브젝트에 쓰기(&lt;code&gt;create&lt;/code&gt; 또는 &lt;code&gt;update&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 &lt;code&gt;projectFish&lt;/code&gt;처럼 다른 네임스페이스의 오브젝트 읽기(&lt;code&gt;get&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;abac.authorization.kubernetes.io/v1beta1&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Policy&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;spec&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;user&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;bob&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;readonly&amp;#34;: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 다음과 같은 요청을 하면 &amp;lsquo;projectCaribou&amp;rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;authorization.k8s.io/v1beta1&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;SubjectAccessReview&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;spec&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;resourceAttributes&amp;#34;: {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;verb&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;group&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;unicorn.example.org&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에 있는 오브젝트에 쓰기(&lt;code&gt;create&lt;/code&gt; 또는 &lt;code&gt;update&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 &lt;code&gt;projectFish&lt;/code&gt;처럼 다른 네임스페이스의 오브젝트 읽기(&lt;code&gt;get&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다.&lt;/p&gt;
 &lt;p&gt;쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.&lt;/p&gt;
 &lt;p&gt;쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).&lt;/p&gt;
 &lt;p&gt;인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz//authorization/&#34;&gt;인가 개요&lt;/a&gt;를 참조하십시오.&lt;/p&gt;
@@ -1147,20 +1322,20 @@ CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 �
 &lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;ETSI GS MEC 002 V1.1.1 (2016-03)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;ETSI GS MEC 003 V2.1.1 (2019-01)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
 &lt;p&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;Mobile Edge Computing&lt;/a&gt; 의 줄임말이었지만 현재는 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;Multi-access Edge Computing&lt;/a&gt;입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;사용자 장비(UE, User Equipment)는 휴대폰을 의미할 수 있습니다. 모바일 동글이 있는 노트북을 의미하기도 합니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/FCAPS&#34;&gt;FCAPS&lt;/a&gt;: &lt;strong&gt;F&lt;/strong&gt;ault(장애), &lt;strong&gt;C&lt;/strong&gt;onfiguration(구성), &lt;strong&gt;A&lt;/strong&gt;ccounting(계정), &lt;strong&gt;P&lt;/strong&gt;erformance(성능), &lt;strong&gt;S&lt;/strong&gt;ecurity(보안)&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/section&gt;
+&lt;/div&gt;
 - https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/ - Im Changsu 2020 - 2024</description>
         </item>
     

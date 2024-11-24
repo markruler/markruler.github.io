@@ -16,41 +16,49 @@
 
 
 
-<meta property="og:title" content="엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략" />
-<meta property="og:description" content="검색 성능을 개선한 e커머스 서비스 사례" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/" /><meta property="og:image" content="https://markruler.github.io/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-12-21T22:20:00+09:00" />
-<meta property="article:modified_time" content="2024-09-08T10:55:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략">
+  <meta property="og:description" content="검색 성능을 개선한 e커머스 서비스 사례">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-12-21T22:20:00+09:00">
+    <meta property="article:modified_time" content="2024-09-08T10:55:00+09:00">
+    <meta property="article:tag" content="Elasticsearch">
+    <meta property="article:tag" content="Batch">
+    <meta property="og:image" content="https://markruler.github.io/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"/>
-
-<meta name="twitter:title" content="엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략"/>
-<meta name="twitter:description" content="검색 성능을 개선한 e커머스 서비스 사례"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png">
+  <meta name="twitter:title" content="엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략">
+  <meta name="twitter:description" content="검색 성능을 개선한 e커머스 서비스 사례">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +78,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -382,7 +390,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[case]</a>
+                                <a href="/categories/case">[case]</a>
                                 &nbsp;
                         
 
@@ -515,33 +523,33 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 </ul>
 </li>
 </ul>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p>Logstash 사용 시 고려했던 성능 관련 <a href="https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html">문서1</a>,
 <a href="https://www.elastic.co/guide/en/logstash/7.17/resiliency.html">문서2</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a href="https://youtu.be/1hpfNvcEbYQ?t=862">동일한 사례</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><strong>Hard Delete</strong>란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말한다. SQL에서는 <code>DELETE</code>.
 이와 반대로 <strong>Soft Delete</strong>는 삭제 플래그(ex: <code>is_deleted</code>)만 수정하고 데이터를 삭제하지 않는다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:4" role="doc-endnote">
+<li id="fn:4">
 <p>Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었다.
 또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었다.
 <a href="https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/">Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&hellip;</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:5" role="doc-endnote">
+<li id="fn:5">
 <p>Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:6" role="doc-endnote">
+<li id="fn:6">
 <p>Datadog RUM 측정 기준&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
                     
                     <HR width="100%" id="EOF">

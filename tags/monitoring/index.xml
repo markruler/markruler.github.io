@@ -1,77 +1,57 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>monitoring on 임창수</title>
+    <title>Monitoring on 임창수</title>
     <link>https://markruler.github.io/tags/monitoring/</link>
-    <description>Recent content in monitoring on 임창수</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Monitoring on 임창수</description>
+    <generator>Hugo</generator>
     <language>ko-kr</language>
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 22 Aug 2024 18:00:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/monitoring/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Sep 2024 21:47:00 +0900</lastBuildDate>
+    <atom:link href="https://markruler.github.io/tags/monitoring/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
       <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>
-      <pubDate>Thu, 22 Aug 2024 18:00:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Thu, 22 Aug 2024 18:00:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/web/traceparent-datadog/</guid>
-      <description>개요 모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었다. 해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았다. 에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달했다. 서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었다. 클라이언트 이벤트는 연결되어 있지 않기 때문이다.
-또 다른 문제가 있었다. 서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만 클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었다.</description>
+      <description>&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;&#xA;&lt;p&gt;모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었다.&#xA;해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았다.&#xA;에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달했다.&#xA;서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었다.&#xA;클라이언트 이벤트는 연결되어 있지 않기 때문이다.&lt;/p&gt;&#xA;&lt;p&gt;또 다른 문제가 있었다.&#xA;서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만&#xA;클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었다.&#xA;그리고 모든 요청이 아닌 전체 요청의 5% 정도에서만 발생하고 있었다.&#xA;하지만 국가, Edge IP, User Agent, 요청 URL 등을 확인해봐도 특정 패턴을 보이는 것이 없어서 원인을 알 수 없었다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>APM만큼 중요한 네트워크 모니터링</title>
       <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
-      <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</guid>
-      <description>APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다. 우리팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있다. (인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)
-문제 어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다. 또한 서비스 전체에 영향이 있었다.
-분석: 쉽게 간과했던 문제 Oracle Session 히스토리를 남겨서 확인했을 때 DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었다. DB 문제는 아니었다.
-발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.</description>
+      <description>&lt;p&gt;APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다.&#xA;우리팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있다.&#xA;(인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)&lt;/p&gt;&#xA;&lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/first.png&#34; alt=&#34;First&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했다.&#xA;또한 서비스 전체에 영향이 있었다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;분석-쉽게-간과했던-문제&#34;&gt;분석: 쉽게 간과했던 문제&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/&#34;&gt;Oracle Session 히스토리&lt;/a&gt;를 남겨서 확인했을 때&#xA;DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었다.&#xA;DB 문제는 아니었다.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/oracle-session.webp&#34; alt=&#34;Oracle Session 히스토리&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.&#xA;이 시점에는 이게 문제라고 생각하지 않았다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>네트워크 장비 모니터링을 위한 SNMP</title>
       <link>https://markruler.github.io/posts/network/snmp/</link>
-      <pubDate>Tue, 23 Jul 2024 19:08:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Tue, 23 Jul 2024 19:08:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/network/snmp/</guid>
-      <description>개요 주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.
-전제 조건  IP 네트워크 환경이 있다. 관리용 서버(SNMP 서버)가 있다. SNMP 프로토콜을 지원하는 기기다.  구성 요소  매니저 (SNMP 서버)  네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어   에이전트 (네트워크 기기/서버)  네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능   SNMP 프로토콜 (TCP/IP)  UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.</description>
+      <description>&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;&#xA;&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;전제-조건&#34;&gt;전제 조건&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;IP 네트워크 환경이 있다.&lt;/li&gt;&#xA;&lt;li&gt;관리용 서버(SNMP 서버)가 있다.&lt;/li&gt;&#xA;&lt;li&gt;SNMP 프로토콜을 지원하는 기기다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;구성-요소&#34;&gt;구성 요소&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;매니저 (SNMP 서버)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;에이전트 (네트워크 기기/서버)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;SNMP 프로토콜 (TCP/IP)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;MIB (Management Information Base)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1156&#34;&gt;RFC 1156&lt;/a&gt;으로 규정된 MIB1, &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1213&#34;&gt;RFC 1213&lt;/a&gt;으로 규정된 MIB2&lt;/li&gt;&#xA;&lt;li&gt;MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있다.&lt;/li&gt;&#xA;&lt;li&gt;MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타낸다. 이 번호열을 OID(Object ID)라고 한다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;매니저-에이전트-역할&#34;&gt;매니저-에이전트 역할&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;정보의 요청과 응답&#xA;&lt;ul&gt;&#xA;&lt;li&gt;매니저가 에이전트에게 대상 기기의 정보를 요청 → 에이전트는 정보를 매니저에게 응답&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;설정의 요청과 응답&#xA;&lt;ul&gt;&#xA;&lt;li&gt;매니저가 에이전트에게 대상 기기의 설정 변경을 요청 → 에이전트는 설정을 변경하며 그 결과를 매니저에게 응답&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;상태 변화의 통보&#xA;&lt;ul&gt;&#xA;&lt;li&gt;에이전트가 매니저에게 대상 기기의 상태 변화를 통보&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;매니저-에이전트-통신-방식&#34;&gt;매니저-에이전트 통신 방식&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;폴링 (Polling)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;매니저가 정기적으로 에이전트로부터 관리 정보를 추출&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;트랩 (Trap)&#xA;&lt;ul&gt;&#xA;&lt;li&gt;에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;커뮤니티-이름&#34;&gt;커뮤니티 이름&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;매니저와 에이전트는 커뮤니티 이름으로 그룹화한다.&lt;/li&gt;&#xA;&lt;li&gt;매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신한다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;버전별-차이&#34;&gt;버전별 차이&lt;/h1&gt;&#xA;&lt;h2 id=&#34;v1&#34;&gt;v1&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;커뮤니티 이름이 포함된 패킷을 평문으로 전달함.&lt;/li&gt;&#xA;&lt;li&gt;기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용함.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;v2&#34;&gt;v2&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;커뮤니티 이름이 포함된 패킷을 암호화해서 전달함.&lt;/li&gt;&#xA;&lt;li&gt;추가된 PDU 타입(예: &lt;a href=&#34;http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&#34;&gt;GetBulkRequest&lt;/a&gt;)을 통해 대량의 데이터를 한 번에 전송할 수 있음.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;v2c&#34;&gt;v2c&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달하도록 원복함.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;v3&#34;&gt;v3&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;(username, password) 인증 기능이 추가됨.&lt;/li&gt;&#xA;&lt;li&gt;이 외 다양한 보안 기능 추가됨.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;관련-명령어-도구&#34;&gt;관련 명령어 도구&lt;/h1&gt;&#xA;&lt;h2 id=&#34;snmpget&#34;&gt;snmpget&lt;/h2&gt;&#xA;&lt;p&gt;정확한 OID를 입력해야 해서 난 잘 사용하지 않음.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>오라클 DBMS SE2 세션 사후 진단</title>
       <link>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</link>
-      <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
-      <description>개요 현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다. 이 라이센스는 프로세서 최대 2개, CPU Threads 최대 16개까지 사용 가능하다. 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만, 트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다. 하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다. SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은 Oracle Diagnostics Pack을 사용할 수 없다.
-DB 진단 도구가 필요하다 연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.</description>
+      <description>&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;&#xA;&lt;p&gt;현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.&#xA;이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용 가능하다.&#xA;만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,&#xA;트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.&#xA;&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다.&lt;/strong&gt;&#xA;SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은&#xA;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35&#34;&gt;Oracle Diagnostics Pack&lt;/a&gt;을&#xA;사용할 수 없다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;db-진단-도구가-필요하다&#34;&gt;DB 진단 도구가 필요하다&lt;/h1&gt;&#xA;&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.&#xA;검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>JVM 모니터링</title>
       <link>https://markruler.github.io/posts/java/jvm-monitoring/</link>
-      <pubDate>Mon, 23 May 2022 00:09:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Mon, 23 May 2022 00:09:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/java/jvm-monitoring/</guid>
-      <description>모니터링과 타임아웃의 중요성은 아무리 강조해도 지나치지 않는다. 최근 회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 트래픽이 발생하는데도 2년동안 방치되고 있었다. 이런 레거시는 유지 보수할 일이 없다면 개발팀에서도 확인하기 어렵다. 사용자가 리포팅해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋다. 심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.
- 먼저 알아두면 좋은 명령어가 있다. jps는 JVM Process Status를 출력하는 명령어로 현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.</description>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/java-timeout-monitoring/&#34;&gt;모니터링과 타임아웃의 중요성&lt;/a&gt;은 아무리 강조해도 지나치지 않는다.&#xA;최근 회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 트래픽이 발생하는데도 2년동안 방치되고 있었다.&#xA;이런 레거시는 유지 보수할 일이 없다면 개발팀에서도 확인하기 어렵다.&#xA;사용자가 리포팅해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋다.&#xA;심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;먼저 알아두면 좋은 명령어가 있다.&#xA;&lt;code&gt;jps&lt;/code&gt;는 JVM Process Status를 출력하는 명령어로&#xA;현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>모니터링과 타임아웃의 중요성</title>
       <link>https://markruler.github.io/posts/java/java-timeout-monitoring/</link>
-      <pubDate>Wed, 11 May 2022 02:19:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Wed, 11 May 2022 02:19:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/java/java-timeout-monitoring/</guid>
-      <description>Observability 용어 정리
- 상황  현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다. 계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다. 장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.  RedisSystemException은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다. 만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.
-분석 시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다. 설정하지 않으면 default 값은 -1 로 타임아웃이 발생하지 않는다.</description>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/cloud/monitor-trace-log-metric/&#34;&gt;Observability 용어 정리&lt;/a&gt;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h1 id=&#34;상황&#34;&gt;상황&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.&lt;/li&gt;&#xA;&lt;li&gt;계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다.&lt;/li&gt;&#xA;&lt;li&gt;장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/datadog/transaction-deadlock.png&#34; alt=&#34;transaction-deadlock&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;em&gt;&lt;code&gt;RedisSystemException&lt;/code&gt;은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다.&#xA;만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.&lt;/em&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;분석&#34;&gt;분석&lt;/h2&gt;&#xA;&lt;p&gt;시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다.&#xA;설정하지 않으면 &lt;strong&gt;default 값은 -1&lt;/strong&gt; 로 타임아웃이 발생하지 않는다.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

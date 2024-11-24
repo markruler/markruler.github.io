@@ -16,41 +16,51 @@
 
 
 
-<meta property="og:title" content="JVM 모니터링" />
-<meta property="og:description" content="이게 왜 죽지..?" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/java/jvm-monitoring/" /><meta property="og:image" content="https://markruler.github.io/images/java/jvm-monitoring/visualgc-with-visualvm.png" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-05-23T00:09:00+09:00" />
-<meta property="article:modified_time" content="2022-05-23T00:09:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/java/jvm-monitoring/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="JVM 모니터링">
+  <meta property="og:description" content="이게 왜 죽지..?">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-05-23T00:09:00+09:00">
+    <meta property="article:modified_time" content="2022-05-23T00:09:00+09:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="Spring">
+    <meta property="article:tag" content="Tomcat">
+    <meta property="article:tag" content="Monitoring">
+    <meta property="og:image" content="https://markruler.github.io/images/java/jvm-monitoring/visualgc-with-visualvm.png">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/java/jvm-monitoring/visualgc-with-visualvm.png"/>
-
-<meta name="twitter:title" content="JVM 모니터링"/>
-<meta name="twitter:description" content="이게 왜 죽지..?"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/java/jvm-monitoring/visualgc-with-visualvm.png">
+  <meta name="twitter:title" content="JVM 모니터링">
+  <meta name="twitter:description" content="이게 왜 죽지..?">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +80,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -730,7 +740,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[how-to]</a>
+                                <a href="/categories/how-to">[how-to]</a>
                                 &nbsp;
                         
 
@@ -769,9 +779,9 @@ if (!doNotTrack) {
 <p>먼저 알아두면 좋은 명령어가 있다.
 <code>jps</code>는 JVM Process Status를 출력하는 명령어로
 현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jps -v
-<span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> Bootstrap -Djava...
-</code></pre></div><h1 id="thread-dump">Thread Dump</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jps -v
+</span></span><span style="display:flex;"><span><span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> Bootstrap -Djava...
+</span></span></code></pre></div><h1 id="thread-dump">Thread Dump</h1>
 <blockquote>
 <p>A thread dump is a snapshot of the state of all threads that are part of the process.
 (<a href="https://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/geninfo/diagnos/using_threaddumps.html">Oracle Docs</a>)</p>
@@ -782,15 +792,15 @@ if (!doNotTrack) {
 <p>쓰레드 덤프에 메서드 콜 스택 정보를 가진 스택 프레임(Stack Frame)은 없다.</p>
 <p><img src="/images/java/jvm-monitoring/debugging-in-intellij.png" alt="Debugging in IntelliJ"></p>
 <p><em>IntelliJ에서 디버깅하면 볼 수 있는 스택 프레임</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">Thread1   Thread2   Thread3
-+-------+ +-------+ +-------+
-|       | |       | |       |
-|       | |       | | frame |
-|       | |       | | frame |
-| frame | |       | | frame |
-| frame | | frame | | frame |
-+-------+ +-------+ +-------+
-</code></pre></div><h2 id="daemon-thread">Daemon Thread</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>Thread1   Thread2   Thread3
+</span></span><span style="display:flex;"><span>+-------+ +-------+ +-------+
+</span></span><span style="display:flex;"><span>|       | |       | |       |
+</span></span><span style="display:flex;"><span>|       | |       | | frame |
+</span></span><span style="display:flex;"><span>|       | |       | | frame |
+</span></span><span style="display:flex;"><span>| frame | |       | | frame |
+</span></span><span style="display:flex;"><span>| frame | | frame | | frame |
+</span></span><span style="display:flex;"><span>+-------+ +-------+ +-------+
+</span></span></code></pre></div><h2 id="daemon-thread">Daemon Thread</h2>
 <ul>
 <li>Daemon Thread
 <ul>
@@ -809,10 +819,10 @@ if (!doNotTrack) {
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#0f0">// java.lang.Thread
-</span><span style="color:#0f0"></span><span style="color:#0f0">/* Whether or not the thread is a daemon thread. */</span>
-<span style="color:#f00">private</span> <span style="color:#ee82ee">boolean</span> daemon = <span style="color:#f00">false</span>;
-</code></pre></div><h2 id="tool">Tool</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// java.lang.Thread</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">/* Whether or not the thread is a daemon thread. */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">private</span> <span style="color:#ee82ee">boolean</span> daemon = <span style="color:#f00">false</span>;
+</span></span></code></pre></div><h2 id="tool">Tool</h2>
 <p>나는 주로 쓰레드 간 교착 현상(deadlock)이나
 단일 쓰레드의 병목 현상이 의심될 때 사용한다.
 하지만 NAVER D2에 올라온 글 &lsquo;<a href="https://d2.naver.com/helloworld/10963">스레드 덤프 분석하기</a>&lsquo;를 보면
@@ -820,15 +830,15 @@ if (!doNotTrack) {
 쓰레드 덤프 분석이 처음이라면 해당 글을 정독해보자.</p>
 <h3 id="jstack">jstack</h3>
 <p>쓰레드 스택(Java Thread Stack)을 확인할 수 있는 CLI 도구다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jstack -l <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> &gt; thread_dump.txt
-</code></pre></div><h3 id="visualvm">VisualVM</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jstack -l <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> &gt; thread_dump.txt
+</span></span></code></pre></div><h3 id="visualvm">VisualVM</h3>
 <p>VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할 수 있다.</p>
 <p><img src="/images/java/jvm-monitoring/visualvm-tomcat-threads.png" alt="visualvm-tomcat-threads"></p>
 <p><em>VisualVM에서 확인한 Thread Stack. OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생했었다.</em></p>
 <p>공식 홈페이지에서 다운로드한 후 <code>bin</code> 디렉토리의 실행 파일을 실행하면 된다.
 실행하면 로컬 환경의 모든 JVM 프로세스를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">bin/visualvm
-</code></pre></div><p>IntelliJ 플러그인 <a href="https://plugins.jetbrains.com/plugin/7115-visualvm-launcher">VisualVM Launcher</a>도 있긴 하지만,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>bin/visualvm
+</span></span></code></pre></div><p>IntelliJ 플러그인 <a href="https://plugins.jetbrains.com/plugin/7115-visualvm-launcher">VisualVM Launcher</a>도 있긴 하지만,
 기본적으로 실행했을 때 모든 JVM 프로세스를 확인할 수 있어서
 VisualVM을 사용하는 데에 큰 불편함이 없었다.</p>
 <h1 id="heap-dump">Heap Dump</h1>
@@ -848,55 +858,55 @@ VisualVM을 사용하는 데에 큰 불편함이 없었다.</p>
 <li><code>-XX:+PrintClassHistogramAfterFullGC</code>, <code>-XX:+PrintClassHistogramBeforeFullGC</code> 등의 옵션으로
 Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">-XX:+HeapDumpOnOutOfMemoryError <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>-XX:HeapDumpPath=jvm.hprof
-</code></pre></div><h2 id="tool-1">Tool</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>-XX:+HeapDumpOnOutOfMemoryError <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>-XX:HeapDumpPath=jvm.hprof
+</span></span></code></pre></div><h2 id="tool-1">Tool</h2>
 <p><code>OutOfMemoryError</code>가 발생한 게 아니라면 <code>jmap</code>을 사용해서 힙 덤프를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># jmap -dump:format=b,file=/path/app.hprof ${PID}</span>
-jmap -dump:file=/path/app.hprof <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span>
-Dumping heap to /path/app.hprof ...
-Heap dump file created
-
-&gt; file /path/app.hprof
-app.hprof: Java HPROF dump, created Tue May <span style="color:#f60">17</span> 01:15:39 <span style="color:#f60">2022</span>
-</code></pre></div><h3 id="eclipse-memory-analyzer-mat">Eclipse Memory Analyzer (MAT)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># jmap -dump:format=b,file=/path/app.hprof ${PID}</span>
+</span></span><span style="display:flex;"><span>jmap -dump:file=/path/app.hprof <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span>
+</span></span><span style="display:flex;"><span>Dumping heap to /path/app.hprof ...
+</span></span><span style="display:flex;"><span>Heap dump file created
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt; file /path/app.hprof
+</span></span><span style="display:flex;"><span>app.hprof: Java HPROF dump, created Tue May <span style="color:#f60">17</span> 01:15:39 <span style="color:#f60">2022</span>
+</span></span></code></pre></div><h3 id="eclipse-memory-analyzer-mat">Eclipse Memory Analyzer (MAT)</h3>
 <p><a href="https://www.eclipse.org/mat/">MAT</a>는 힙 덤프를 분석할 수 있게 도와주는 프로그램이다.</p>
 <ul>
 <li>JDK를 찾지 못하는 경우 아래와 같이 옵션을 추가한다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># ${MAT_HOME}/MemoryAnalyzer.ini</span>
--vm
-<span style="color:#87ceeb">${</span><span style="color:#eedd82">JAVA_HOME</span><span style="color:#87ceeb">}</span>/bin
-
-<span style="color:#0f0"># -vmargs 보다 위에 추가해야 한다.</span>
--vmargs
-...
-</code></pre></div><p>기본 Heap Size가 1024m이다. Heap Dump 파일이 이보다 큰 경우 Parsing할 때 아래와 같은 에러가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">An internal error occurred during:
-    <span style="color:#87ceeb">&#34;Parsing heap dump from &#39;/path/java_pid1234.hprof&#39;&#34;</span>.
-Java heap space
-</code></pre></div><p>설정 파일에 JVM 옵션을 추가하면 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># ${MAT_HOME}/MemoryAnalyzer.ini</span>
--vmargs
-<span style="color:#0f0">#-Xmx1024m</span>
--Xms6g
--Xmx6g
-</code></pre></div><h3 id="visualvm-1">VisualVM</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># ${MAT_HOME}/MemoryAnalyzer.ini</span>
+</span></span><span style="display:flex;"><span>-vm
+</span></span><span style="display:flex;"><span><span style="color:#87ceeb">${</span><span style="color:#eedd82">JAVA_HOME</span><span style="color:#87ceeb">}</span>/bin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># -vmargs 보다 위에 추가해야 한다.</span>
+</span></span><span style="display:flex;"><span>-vmargs
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>기본 Heap Size가 1024m이다. Heap Dump 파일이 이보다 큰 경우 Parsing할 때 아래와 같은 에러가 발생한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>An internal error occurred during:
+</span></span><span style="display:flex;"><span>    <span style="color:#87ceeb">&#34;Parsing heap dump from &#39;/path/java_pid1234.hprof&#39;&#34;</span>.
+</span></span><span style="display:flex;"><span>Java heap space
+</span></span></code></pre></div><p>설정 파일에 JVM 옵션을 추가하면 확인할 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># ${MAT_HOME}/MemoryAnalyzer.ini</span>
+</span></span><span style="display:flex;"><span>-vmargs
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#-Xmx1024m</span>
+</span></span><span style="display:flex;"><span>-Xms6g
+</span></span><span style="display:flex;"><span>-Xmx6g
+</span></span></code></pre></div><h3 id="visualvm-1">VisualVM</h3>
 <p><a href="https://visualvm.github.io/download.html">VisualVM</a>은 애플리케이션을 <strong>실시간으로 분석</strong>하는 데 주로 사용한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># $VISUALVM_HOME/etc/visualvm.conf</span>
-<span style="color:#0f0"># Default location of JDK:</span>
-<span style="color:#0f0">#</span>
-<span style="color:#0f0"># It can be overridden on command line by using --jdkhome &lt;dir&gt;</span>
-<span style="color:#0f0"># Be careful when changing jdkhome.</span>
-<span style="color:#0f0"># There are two VisualVM launchers for Windows (32-bit and 64-bit) and</span>
-<span style="color:#0f0"># installer points to one of those in the VisualVM application shortcut </span>
-<span style="color:#0f0"># based on the Java version selected at installation time.</span>
-<span style="color:#0f0">#</span>
-<span style="color:#0f0">#visualvm_jdkhome=&#34;/path/to/jdk&#34;</span>
-<span style="color:#eedd82">visualvm_jdkhome</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$JAVA_HOME</span><span style="color:#87ceeb">&#34;</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># 실행</span>
-./bin/visualvm
-</code></pre></div><p>아래 기능으로 힙 덤프를 간략히 확인할 수도 있다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># $VISUALVM_HOME/etc/visualvm.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Default location of JDK:</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># It can be overridden on command line by using --jdkhome &lt;dir&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Be careful when changing jdkhome.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># There are two VisualVM launchers for Windows (32-bit and 64-bit) and</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># installer points to one of those in the VisualVM application shortcut </span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># based on the Java version selected at installation time.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#visualvm_jdkhome=&#34;/path/to/jdk&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">visualvm_jdkhome</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$JAVA_HOME</span><span style="color:#87ceeb">&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 실행</span>
+</span></span><span style="display:flex;"><span>./bin/visualvm
+</span></span></code></pre></div><p>아래 기능으로 힙 덤프를 간략히 확인할 수도 있다.
 하지만 기능이 다양한 <a href="#eclipse-memory-analyzer-mat">MAT</a>가 있기 때문에
 VisualVM은 실시간으로 확인하는 용도로 사용한다.</p>
 <ul>
@@ -906,31 +916,31 @@ VisualVM은 실시간으로 확인하는 용도로 사용한다.</p>
 <p><em>VisuamVM에서 확인한 Heap Dump</em></p>
 <p>Remote에서 모니터링하기 위해서는 JVM 애플리케이션에 JMX 옵션을 추가해야 한다.
 <a href="https://archive.apache.org/dist/tomcat/">Apache Tomcat</a>을 사용한다면 아래와 같이 추가한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># Tomcat 다운로드</span>
-curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#87ceeb">${</span><span style="color:#eedd82">CATALINA_HOME</span><span style="color:#87ceeb">}</span>/bin/catalina.sh version
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#87ceeb">${</span><span style="color:#eedd82">CATALINA_HOME</span><span style="color:#87ceeb">}</span>/bin/catalina.sh start <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.local.only=false <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.port=<span style="color:#f60">1099</span> <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.rmi.port=<span style="color:#f60">1099</span> <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>
-  -Dcom.sun.management.jmxremote.ssl=false <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>
-  -Dcom.sun.management.jmxremote.authenticate=false <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.authenticate=true \</span>
-  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.password.file=$CATALINA_BASE/conf/jmxremote.password \</span>
-  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.access.file=$CATALINA_BASE/conf/jmxremote.access \</span>
-
-  <span style="color:#0f0"># -Djava.rmi.server.hostname=${REAL_HOST} \</span>
-  -Djava.rmi.server.hostname=255.255.255.255 <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>
-  -jar
-</code></pre></div><p>이후 VisualVM에서 다음과 같이 설정한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Tomcat 다운로드</span>
+</span></span><span style="display:flex;"><span>curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#87ceeb">${</span><span style="color:#eedd82">CATALINA_HOME</span><span style="color:#87ceeb">}</span>/bin/catalina.sh version
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#87ceeb">${</span><span style="color:#eedd82">CATALINA_HOME</span><span style="color:#87ceeb">}</span>/bin/catalina.sh start <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.local.only=false <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.port=<span style="color:#f60">1099</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -Dcom.sun.management.jmxremote.rmi.port=<span style="color:#f60">1099</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>
+</span></span><span style="display:flex;"><span>  -Dcom.sun.management.jmxremote.ssl=false <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>
+</span></span><span style="display:flex;"><span>  -Dcom.sun.management.jmxremote.authenticate=false <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.authenticate=true \</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.password.file=$CATALINA_BASE/conf/jmxremote.password \</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0"># -Dcom.sun.management.jmxremote.access.file=$CATALINA_BASE/conf/jmxremote.access \</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0"># -Djava.rmi.server.hostname=${REAL_HOST} \</span>
+</span></span><span style="display:flex;"><span>  -Djava.rmi.server.hostname=255.255.255.255 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>
+</span></span><span style="display:flex;"><span>  -jar
+</span></span></code></pre></div><p>이후 VisualVM에서 다음과 같이 설정한다.</p>
 <blockquote>
 <p>File &gt; Add JMX Connection</p>
 </blockquote>
-<p><img src="/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png" alt="File > Add JMX Connection"></p>
+<p><img src="/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png" alt="File &gt; Add JMX Connection"></p>
 <p>JVM 옵션으로 추가한 RMI(Remote Method Invocation) HOST와 PORT를 입력한다.</p>
 <p><img src="/images/java/jvm-monitoring/visualvm-setting-jmx-connection.png" alt="Setting JMX Connection"></p>
 <p>추가하면 다음과 같이 스레드를 실시간으로 모니터링 할 수 있다.
@@ -948,54 +958,54 @@ curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/cata
 <li>JVM Statistics Monitoring</li>
 <li><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html">공식 문서</a></li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash"><span style="color:#0f0"># 1초마다 gc 확인</span>
-&gt; jstat -gc &lt;PID&gt; <span style="color:#f60">1000</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jstat -options
-</code></pre></div><table>
-<thead>
-<tr>
-<th>옵션</th>
-<th>기능</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>gc</strong></td>
-<td>각 힙(heap) 영역의 현재 크기와 현재 사용량(Eden 영역, Survivor 영역, Old 영역등), 총 GC 수행 횟수, 누적 GC 소요 시간을 보여 준다.</td>
-</tr>
-<tr>
-<td><strong>gccapactiy</strong></td>
-<td>각 힙 영역의 최소 크기(ms), 최대 크기(mx), 현재 크기, 각 영역별 GC 수행 횟수를 알 수 있는 정보를 보여 준다. 단, 현재 사용량과 누적 GC 소요 시간은 알 수 없다.</td>
-</tr>
-<tr>
-<td><strong>gccause</strong></td>
-<td>-gcutil 옵션이 제공하는 정보와 함께 마지막 GC 원인과 현재 발생하고 있는 GC의 원인을 알 수 있는 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td>gcnew</td>
-<td>New 영역에 대한 GC 수행 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td>gcnewcapacity</td>
-<td>New 영역의 크기에 대한 통계 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td>gcold</td>
-<td>Old 영역에 대한 GC 수행 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td>gcoldcapacity</td>
-<td>Old 영역의 크기에 대한 통계 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td>gcpermcapacity</td>
-<td>Permanent 영역에 대한 통계 정보를 보여 준다.</td>
-</tr>
-<tr>
-<td><strong>gcutil</strong></td>
-<td>각 힙 영역에 대한 사용 정도를 백분율로 보여 준다. 아울러 총 GC 수행 횟수와 누적 GC 시간을 알 수 있다.</td>
-</tr>
-</tbody>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 1초마다 gc 확인</span>
+</span></span><span style="display:flex;"><span>&gt; jstat -gc &lt;PID&gt; <span style="color:#f60">1000</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jstat -options
+</span></span></code></pre></div><table>
+  <thead>
+      <tr>
+          <th>옵션</th>
+          <th>기능</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>gc</strong></td>
+          <td>각 힙(heap) 영역의 현재 크기와 현재 사용량(Eden 영역, Survivor 영역, Old 영역등), 총 GC 수행 횟수, 누적 GC 소요 시간을 보여 준다.</td>
+      </tr>
+      <tr>
+          <td><strong>gccapactiy</strong></td>
+          <td>각 힙 영역의 최소 크기(ms), 최대 크기(mx), 현재 크기, 각 영역별 GC 수행 횟수를 알 수 있는 정보를 보여 준다. 단, 현재 사용량과 누적 GC 소요 시간은 알 수 없다.</td>
+      </tr>
+      <tr>
+          <td><strong>gccause</strong></td>
+          <td>-gcutil 옵션이 제공하는 정보와 함께 마지막 GC 원인과 현재 발생하고 있는 GC의 원인을 알 수 있는 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td>gcnew</td>
+          <td>New 영역에 대한 GC 수행 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td>gcnewcapacity</td>
+          <td>New 영역의 크기에 대한 통계 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td>gcold</td>
+          <td>Old 영역에 대한 GC 수행 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td>gcoldcapacity</td>
+          <td>Old 영역의 크기에 대한 통계 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td>gcpermcapacity</td>
+          <td>Permanent 영역에 대한 통계 정보를 보여 준다.</td>
+      </tr>
+      <tr>
+          <td><strong>gcutil</strong></td>
+          <td>각 힙 영역에 대한 사용 정도를 백분율로 보여 준다. 아울러 총 GC 수행 횟수와 누적 GC 시간을 알 수 있다.</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="visual-gc">Visual GC</h3>
 <p>JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.</p>
@@ -1012,77 +1022,77 @@ curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/cata
 <ul>
 <li>jcmd: 성능 관련 카운터 조회</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jcmd <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> PerfCounter.print
-java.threads.daemon=<span style="color:#f60">42</span>
-java.threads.live=<span style="color:#f60">49</span>
-java.threads.livePeak=<span style="color:#f60">52</span>
-java.threads.started=<span style="color:#f60">3951</span>
-...
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jcmd <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span> PerfCounter.print
+</span></span><span style="display:flex;"><span>java.threads.daemon=<span style="color:#f60">42</span>
+</span></span><span style="display:flex;"><span>java.threads.live=<span style="color:#f60">49</span>
+</span></span><span style="display:flex;"><span>java.threads.livePeak=<span style="color:#f60">52</span>
+</span></span><span style="display:flex;"><span>java.threads.started=<span style="color:#f60">3951</span>
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><ul>
 <li>jmap: JVM Heap 조회</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jmap -heap <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span>
-Attaching to process ID 3838860, please wait...
-Debugger attached successfully.
-Server compiler detected.
-JVM version is 25.292-b10
-
-using thread-local object allocation.
-Parallel GC with <span style="color:#f60">10</span> thread(s)
-
-Heap Configuration:
-   <span style="color:#eedd82">MinHeapFreeRatio</span>         = <span style="color:#f60">0</span>
-   <span style="color:#eedd82">MaxHeapFreeRatio</span>         = <span style="color:#f60">100</span>
-   <span style="color:#eedd82">MaxHeapSize</span>              = <span style="color:#f60">8348762112</span> (7962.0MB)
-   <span style="color:#eedd82">NewSize</span>                  = <span style="color:#f60">174063616</span> (166.0MB)
-   <span style="color:#eedd82">MaxNewSize</span>               = <span style="color:#f60">2782920704</span> (2654.0MB)
-   <span style="color:#eedd82">OldSize</span>                  = <span style="color:#f60">348127232</span> (332.0MB)
-   <span style="color:#eedd82">NewRatio</span>                 = <span style="color:#f60">2</span>
-   <span style="color:#eedd82">SurvivorRatio</span>            = <span style="color:#f60">8</span>
-   <span style="color:#eedd82">MetaspaceSize</span>            = <span style="color:#f60">21807104</span> (20.796875MB)
-   <span style="color:#eedd82">CompressedClassSpaceSize</span> = <span style="color:#f60">1073741824</span> (1024.0MB)
-   <span style="color:#eedd82">MaxMetaspaceSize</span>         = <span style="color:#f60">17592186044415</span> MB
-   <span style="color:#eedd82">G1HeapRegionSize</span>         = <span style="color:#f60">0</span> (0.0MB)
-
-Heap Usage:
-PS Young Generation
-Eden Space:
-   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">2094006272</span> (1997.0MB)
-   <span style="color:#eedd82">used</span>     = <span style="color:#f60">398200696</span> (379.75377655029297MB)
-   <span style="color:#eedd82">free</span>     = <span style="color:#f60">1695805576</span> (1617.246223449707MB)
-   19.0162131472355% used
-From Space:
-   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">82837504</span> (79.0MB)
-   <span style="color:#eedd82">used</span>     = <span style="color:#f60">0</span> (0.0MB)
-   <span style="color:#eedd82">free</span>     = <span style="color:#f60">82837504</span> (79.0MB)
-   0.0% used
-To Space:
-   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">78643200</span> (75.0MB)
-   <span style="color:#eedd82">used</span>     = <span style="color:#f60">0</span> (0.0MB)
-   <span style="color:#eedd82">free</span>     = <span style="color:#f60">78643200</span> (75.0MB)
-   0.0% used
-PS Old Generation
-   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">467140608</span> (445.5MB)
-   <span style="color:#eedd82">used</span>     = <span style="color:#f60">107232904</span> (102.26526641845703MB)
-   <span style="color:#eedd82">free</span>     = <span style="color:#f60">359907704</span> (343.23473358154297MB)
-   22.955166423896078% used
-
-<span style="color:#f60">47952</span> interned Strings occupying <span style="color:#f60">5230216</span> bytes.
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jmap -heap <span style="color:#87ceeb">${</span><span style="color:#eedd82">PID</span><span style="color:#87ceeb">}</span>
+</span></span><span style="display:flex;"><span>Attaching to process ID 3838860, please wait...
+</span></span><span style="display:flex;"><span>Debugger attached successfully.
+</span></span><span style="display:flex;"><span>Server compiler detected.
+</span></span><span style="display:flex;"><span>JVM version is 25.292-b10
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>using thread-local object allocation.
+</span></span><span style="display:flex;"><span>Parallel GC with <span style="color:#f60">10</span> thread(s)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Heap Configuration:
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MinHeapFreeRatio</span>         = <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MaxHeapFreeRatio</span>         = <span style="color:#f60">100</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MaxHeapSize</span>              = <span style="color:#f60">8348762112</span> (7962.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">NewSize</span>                  = <span style="color:#f60">174063616</span> (166.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MaxNewSize</span>               = <span style="color:#f60">2782920704</span> (2654.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">OldSize</span>                  = <span style="color:#f60">348127232</span> (332.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">NewRatio</span>                 = <span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">SurvivorRatio</span>            = <span style="color:#f60">8</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MetaspaceSize</span>            = <span style="color:#f60">21807104</span> (20.796875MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">CompressedClassSpaceSize</span> = <span style="color:#f60">1073741824</span> (1024.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">MaxMetaspaceSize</span>         = <span style="color:#f60">17592186044415</span> MB
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">G1HeapRegionSize</span>         = <span style="color:#f60">0</span> (0.0MB)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Heap Usage:
+</span></span><span style="display:flex;"><span>PS Young Generation
+</span></span><span style="display:flex;"><span>Eden Space:
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">2094006272</span> (1997.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">used</span>     = <span style="color:#f60">398200696</span> (379.75377655029297MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">free</span>     = <span style="color:#f60">1695805576</span> (1617.246223449707MB)
+</span></span><span style="display:flex;"><span>   19.0162131472355% used
+</span></span><span style="display:flex;"><span>From Space:
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">82837504</span> (79.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">used</span>     = <span style="color:#f60">0</span> (0.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">free</span>     = <span style="color:#f60">82837504</span> (79.0MB)
+</span></span><span style="display:flex;"><span>   0.0% used
+</span></span><span style="display:flex;"><span>To Space:
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">78643200</span> (75.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">used</span>     = <span style="color:#f60">0</span> (0.0MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">free</span>     = <span style="color:#f60">78643200</span> (75.0MB)
+</span></span><span style="display:flex;"><span>   0.0% used
+</span></span><span style="display:flex;"><span>PS Old Generation
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">capacity</span> = <span style="color:#f60">467140608</span> (445.5MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">used</span>     = <span style="color:#f60">107232904</span> (102.26526641845703MB)
+</span></span><span style="display:flex;"><span>   <span style="color:#eedd82">free</span>     = <span style="color:#f60">359907704</span> (343.23473358154297MB)
+</span></span><span style="display:flex;"><span>   22.955166423896078% used
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f60">47952</span> interned Strings occupying <span style="color:#f60">5230216</span> bytes.
+</span></span></code></pre></div><ul>
 <li>jhat: Java Heap Analyzer Tool
 <ul>
 <li>JDK 9에서 제거되었다.</li>
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">&gt; jhat -J-Xmx6g -port <span style="color:#f60">7000</span> /path/app.hprof
-</code></pre></div><h2 id="datadog">Datadog</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; jhat -J-Xmx6g -port <span style="color:#f60">7000</span> /path/app.hprof
+</span></span></code></pre></div><h2 id="datadog">Datadog</h2>
 <ul>
 <li><a href="https://docs.datadoghq.com/tracing/profiler/enabling/java/">Enabling the Java Profiler</a></li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">-Ddd.profiling.enabled=true <span style="color:#87ceeb">\
-</span><span style="color:#87ceeb"></span>-XX:FlightRecorderOptions=<span style="color:#eedd82">stackdepth</span>=<span style="color:#f60">256</span>
-</code></pre></div><h2 id="이-외의-도구들">이 외의 도구들</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>-Ddd.profiling.enabled=true <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>-XX:FlightRecorderOptions=<span style="color:#eedd82">stackdepth</span>=<span style="color:#f60">256</span>
+</span></span></code></pre></div><h2 id="이-외의-도구들">이 외의 도구들</h2>
 <ul>
 <li><a href="https://www.oracle.com/java/technologies/jdk-mission-control.html">JDK Mission Control</a> - Oracle</li>
 <li><a href="https://github.com/pinpoint-apm/pinpoint">Pinpoint</a> - NAVER에서 만든 오픈소스 APM</li>

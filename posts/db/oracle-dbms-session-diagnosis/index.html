@@ -16,41 +16,50 @@
 
 
 
-<meta property="og:title" content="오라클 DBMS SE2 세션 사후 진단" />
-<meta property="og:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/" /><meta property="og:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-04-30T23:58:00+09:00" />
-<meta property="article:modified_time" content="2023-04-30T23:58:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="오라클 DBMS SE2 세션 사후 진단">
+  <meta property="og:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-04-30T23:58:00+09:00">
+    <meta property="article:modified_time" content="2023-04-30T23:58:00+09:00">
+    <meta property="article:tag" content="Oracle">
+    <meta property="article:tag" content="Dbms">
+    <meta property="article:tag" content="Monitoring">
+    <meta property="og:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png"/>
-
-<meta name="twitter:title" content="오라클 DBMS SE2 세션 사후 진단"/>
-<meta name="twitter:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/db/oracle-dbms-session-kibana.png">
+  <meta name="twitter:title" content="오라클 DBMS SE2 세션 사후 진단">
+  <meta name="twitter:description" content="Standard Edition 2는 Diagnostics Pack을 사용할 수 없다">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +79,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -400,7 +409,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[how-to]</a>
+                                <a href="/categories/how-to">[how-to]</a>
                                 &nbsp;
                         
 
@@ -443,52 +452,52 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.</p>
 <p>Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(<a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html">V$SESSION</a>)에서
 세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sql" data-lang="sql"><span style="color:#f00">SELECT</span> *
-<span style="color:#f00">FROM</span> (<span style="color:#f00">SELECT</span> sess.sid,
-             sess.serial#,
-             ROUND(sess.wait_time_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>)            wait_time_millis,
-             ROUND(sess.time_since_last_wait_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>) time_since_last_wait_millis,
-             <span style="color:#f00">CASE</span>
-                 <span style="color:#f00">WHEN</span> sess.status = <span style="color:#87ceeb">&#39;ACTIVE&#39;</span>
-                     <span style="color:#f00">THEN</span> sess.last_call_et
-                 <span style="color:#f00">ELSE</span> <span style="color:#f60">0</span>
-                 <span style="color:#f00">END</span>                                          active_elapsed_time_secs,
-             sess.<span style="color:#f00">state</span>,
-             sess.event,
-             sess.username,
-             sess.osuser,
-             sess.machine,
-             sess.program,
-             sess.<span style="color:#f00">type</span>,
-             sess.sql_child_number,
-             sess.sql_exec_id,
-             sess.sql_exec_start,
-             sess.sql_id,
-             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
-              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
-              <span style="color:#f00">WHERE</span> sess.sql_id = <span style="color:#f00">sql</span>.sql_id
-                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) sql_fulltext,
-             sess.prev_exec_id,
-             sess.prev_exec_start,
-             sess.prev_sql_id,
-             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
-              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
-              <span style="color:#f00">WHERE</span> sess.prev_sql_id = <span style="color:#f00">sql</span>.sql_id
-                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) prev_sql_fulltext,
-             blocking_session
-      <span style="color:#f00">FROM</span> v$session sess
-      <span style="color:#f00">WHERE</span> sess.username != <span style="color:#87ceeb">&#39;SYS&#39;</span>
-      <span style="color:#f00">ORDER</span> <span style="color:#f00">BY</span> logon_time <span style="color:#f00">DESC</span>)
-<span style="color:#f00">WHERE</span> (wait_time_millis &gt; <span style="color:#f60">0</span> <span style="color:#f00">OR</span> time_since_last_wait_millis &gt; <span style="color:#f60">0</span>)
-  <span style="color:#0f0">/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/</span>
-  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;update user$ set spare6=DECODE(to_char(:2, &#39;&#39;YYYY-MM-DD&#39;&#39;), &#39;&#39;0000-00-00&#39;&#39;, to_date(NULL), :2) where user#=:1&#39;</span>) != <span style="color:#f60">0</span>
-  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&#39;</span>) != <span style="color:#f60">0</span>
-  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;UPDATE &#34;SYSTEM&#34;.&#34;SYS_EXPORT_SCHEMA_01&#34; SET value_n = :1 WHERE process_order = :2&#39;</span>) != <span style="color:#f60">0</span>
-  <span style="color:#f00">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) != <span style="color:#f60">0</span>
-</code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f00">SELECT</span> *
+</span></span><span style="display:flex;"><span><span style="color:#f00">FROM</span> (<span style="color:#f00">SELECT</span> sess.sid,
+</span></span><span style="display:flex;"><span>             sess.serial#,
+</span></span><span style="display:flex;"><span>             ROUND(sess.wait_time_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>)            wait_time_millis,
+</span></span><span style="display:flex;"><span>             ROUND(sess.time_since_last_wait_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>) time_since_last_wait_millis,
+</span></span><span style="display:flex;"><span>             <span style="color:#f00">CASE</span>
+</span></span><span style="display:flex;"><span>                 <span style="color:#f00">WHEN</span> sess.status = <span style="color:#87ceeb">&#39;ACTIVE&#39;</span>
+</span></span><span style="display:flex;"><span>                     <span style="color:#f00">THEN</span> sess.last_call_et
+</span></span><span style="display:flex;"><span>                 <span style="color:#f00">ELSE</span> <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>                 <span style="color:#f00">END</span>                                          active_elapsed_time_secs,
+</span></span><span style="display:flex;"><span>             sess.<span style="color:#f00">state</span>,
+</span></span><span style="display:flex;"><span>             sess.event,
+</span></span><span style="display:flex;"><span>             sess.username,
+</span></span><span style="display:flex;"><span>             sess.osuser,
+</span></span><span style="display:flex;"><span>             sess.machine,
+</span></span><span style="display:flex;"><span>             sess.program,
+</span></span><span style="display:flex;"><span>             sess.<span style="color:#f00">type</span>,
+</span></span><span style="display:flex;"><span>             sess.sql_child_number,
+</span></span><span style="display:flex;"><span>             sess.sql_exec_id,
+</span></span><span style="display:flex;"><span>             sess.sql_exec_start,
+</span></span><span style="display:flex;"><span>             sess.sql_id,
+</span></span><span style="display:flex;"><span>             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
+</span></span><span style="display:flex;"><span>              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f00">WHERE</span> sess.sql_id = <span style="color:#f00">sql</span>.sql_id
+</span></span><span style="display:flex;"><span>                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) sql_fulltext,
+</span></span><span style="display:flex;"><span>             sess.prev_exec_id,
+</span></span><span style="display:flex;"><span>             sess.prev_exec_start,
+</span></span><span style="display:flex;"><span>             sess.prev_sql_id,
+</span></span><span style="display:flex;"><span>             (<span style="color:#f00">SELECT</span> <span style="color:#f00">sql</span>.sql_fulltext
+</span></span><span style="display:flex;"><span>              <span style="color:#f00">FROM</span> v$sql <span style="color:#f00">sql</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f00">WHERE</span> sess.prev_sql_id = <span style="color:#f00">sql</span>.sql_id
+</span></span><span style="display:flex;"><span>                  <span style="color:#f00">FETCH</span> <span style="color:#f00">FIRST</span> <span style="color:#f60">1</span> <span style="color:#f00">ROWS</span> <span style="color:#f00">ONLY</span>) prev_sql_fulltext,
+</span></span><span style="display:flex;"><span>             blocking_session
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">FROM</span> v$session sess
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">WHERE</span> sess.username != <span style="color:#87ceeb">&#39;SYS&#39;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">ORDER</span> <span style="color:#f00">BY</span> logon_time <span style="color:#f00">DESC</span>)
+</span></span><span style="display:flex;"><span><span style="color:#f00">WHERE</span> (wait_time_millis &gt; <span style="color:#f60">0</span> <span style="color:#f00">OR</span> time_since_last_wait_millis &gt; <span style="color:#f60">0</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;update user$ set spare6=DECODE(to_char(:2, &#39;&#39;YYYY-MM-DD&#39;&#39;), &#39;&#39;0000-00-00&#39;&#39;, to_date(NULL), :2) where user#=:1&#39;</span>) != <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&#39;</span>) != <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">AND</span> dbms_lob.compare(prev_sql_fulltext, <span style="color:#87ceeb">&#39;UPDATE &#34;SYSTEM&#34;.&#34;SYS_EXPORT_SCHEMA_01&#34; SET value_n = :1 WHERE process_order = :2&#39;</span>) != <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) != <span style="color:#f60">0</span>
+</span></span></code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였다.
 이를 Elasticsearch에 저장하려면 식별자가 필요했다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-python" data-lang="python">id = <span style="color:#87ceeb">f</span><span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">{</span>prev_exec_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>prev_sql_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>unix_epoch_time(prev_exec_start)<span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
-</code></pre></div><p>먼저 고려했던 식별자는 <code>sql_exec_id</code>와 <code>sql_id</code>다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>id = <span style="color:#87ceeb">f</span><span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">{</span>prev_exec_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>prev_sql_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>unix_epoch_time(prev_exec_start)<span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
+</span></span></code></pre></div><p>먼저 고려했던 식별자는 <code>sql_exec_id</code>와 <code>sql_id</code>다.
 하지만 대기 상태라면 <code>sql_exec_id</code>는 <code>NULL</code>이기 때문에 <code>prev_exec_id</code>와 <code>prev_sql_id</code>를 선택했다.
 어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었다.
 하지만 만에 하나를 위해 <code>prev_exec_start</code>도 추가했다.
@@ -542,29 +551,29 @@ Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은
 <li>오라클 성능 고도화 - 원리와 해법 1, 조시형</li>
 </ul>
 <h1 id="각주">각주</h1>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0">resmgr:cpu quantum</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a href="https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07">enq: TX - row lock contention</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p>DML 테이블 Lock 경합 시 발생한다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:4" role="doc-endnote">
+<li id="fn:4">
 <p>DML 로우 Lock 경합 시 발생한다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:5" role="doc-endnote">
+<li id="fn:5">
 <p>오라클 성능 고도화 - 원리와 해법 1, 100쪽&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:6" role="doc-endnote">
+<li id="fn:6">
 <p>적정 기술&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
                     
                     <HR width="100%" id="EOF">

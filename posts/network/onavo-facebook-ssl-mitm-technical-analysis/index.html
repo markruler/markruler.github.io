@@ -16,41 +16,50 @@
 
 
 
-<meta property="og:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?" />
-<meta property="og:description" content="Onavo Protect, SSL Bump 그리고 Certificate Pinning" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/network/onavo-facebook-ssl-mitm-technical-analysis/" /><meta property="og:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-09-12T00:17:00+09:00" />
-<meta property="article:modified_time" content="2024-09-12T00:17:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/onavo-facebook-ssl-mitm-technical-analysis/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?">
+  <meta property="og:description" content="Onavo Protect, SSL Bump 그리고 Certificate Pinning">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-12T00:17:00+09:00">
+    <meta property="article:modified_time" content="2024-09-12T00:17:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Security">
+    <meta property="article:tag" content="Mitm">
+    <meta property="og:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"/>
-
-<meta name="twitter:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"/>
-<meta name="twitter:description" content="Onavo Protect, SSL Bump 그리고 Certificate Pinning"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp">
+  <meta name="twitter:title" content="Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?">
+  <meta name="twitter:description" content="Onavo Protect, SSL Bump 그리고 Certificate Pinning">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +79,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -382,7 +391,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[translate]</a>
+                                <a href="/categories/translate">[translate]</a>
                                 &nbsp;
                         
 
@@ -573,7 +582,7 @@ controls></video></p>
 <li>과거 및 삭제된 앱 사용 내역에 액세스 (Access past and deleted app usage)</li>
 </ul>
 <blockquote>
-<p><em>&ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&quot;</em></p>
+<p><em>&ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&rdquo;</em></p>
 </blockquote>
 <p>그들이 설명하지 않은 것은 이 기능이 앱을 설치한 사용자를 위한 것이 아니라 실제로는 Onavo/Facebook을 위한 것이라는 점입니다.
 이러한 정보는 매우 가치가 있으며, 이는 페이스북이 인수에 지불한 1억 2천만 달러라는 금액만 보더라도 알 수 있습니다.</p>
@@ -678,25 +687,25 @@ controls></video></p>
 <p>집단 소송이 흥미로운 방향으로 진행된다면, 이는 조사를 계속할 동기가 될 수 있을 것입니다.</p>
 <p>추가 업데이트를 받고 싶으시다면, <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/">원본 사이트에서 이메일 구독</a>을 등록하거나
 <a href="https://x.com/haxrob">원저자의 X</a>를 팔로우하세요.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a href="https://en.wikipedia.org/wiki/Sherman_Antitrust_Act">셔먼법(Sherman Antitrust Act)</a>은 미국의 반독점법이다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a href="https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning">인증서 고정(Certificate Pinning)</a>은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법이다.
 이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한한다.
 이 방식은 중간자 공격(MITM)을 방지하는 데 효과적이다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><a href="https://www.haproxy.com/glossary/what-is-a-transparent-proxy">투명 프록시(transparent proxy)</a>는 클라이언트와 서버 사이에 위치해서 요청과 응답을 중계하는 프록시 서버다.
 뒤의 두 프록시와 달리 클라이언트의 요청을 수정하지 않고, 클라이언트 IP 주소를 HTTP 요청 헤더에 그대로 노출시키기 때문에 투명하다고 부른다.
 <a href="https://docs.trafficserver.apache.org/en/latest/admin-guide/configuration/transparent-forward-proxying.en.html">포워드 프록시(forward proxy)</a>는 클라이언트 측에서,
 <a href="https://www.haproxy.com/glossary/what-is-a-reverse-proxy">리버스 프록시(reverse proxy)</a>는 서버 측에서 중계하는 프록시 서버다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
                     
                     <HR width="100%" id="EOF">
@@ -709,9 +718,9 @@ controls></video></p>
             <nav class="post-pagination">
 
                 
-                <div class="newer-posts">
-			다음글<br>다음글이 없습니다.
-                </div>
+                <a class="newer-posts" href="/posts/web/respond-web-page/">
+			다음글<br>웹 페이지 응답 방법과 프레임워크
+                </a>
                 
                 
                 

@@ -16,41 +16,50 @@
 
 
 
-<meta property="og:title" content="Too many open files" />
-<meta property="og:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/java/too-many-open-files/" /><meta property="og:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-03-20T21:58:00+09:00" />
-<meta property="article:modified_time" content="2023-03-20T21:58:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/java/too-many-open-files/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="Too many open files">
+  <meta property="og:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-20T21:58:00+09:00">
+    <meta property="article:modified_time" content="2023-03-20T21:58:00+09:00">
+    <meta property="article:tag" content="Socket">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="File">
+    <meta property="og:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg"/>
-
-<meta name="twitter:title" content="Too many open files"/>
-<meta name="twitter:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg">
+  <meta name="twitter:title" content="Too many open files">
+  <meta name="twitter:description" content="소켓 &#39;파일&#39;을 몰랐을 때의 위험">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +79,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -364,7 +373,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[case]</a>
+                                <a href="/categories/case">[case]</a>
                                 &nbsp;
                         
 
@@ -398,12 +407,12 @@ if (!doNotTrack) {
 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, <code>Too many open files</code> 에러가 발생했다.
 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
 IDC에 위치한 서버(CentOS 7)에서는 <code>OutOfMemoryError</code>가 발생하면서 동작하지 않았다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">java.lang.OutOfMemoryError: unable to create new native thread
-...
-java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
-...
-Caused by: java.net.SocketException: Too many open files
-</code></pre></div><p><code>SocketException</code>인데 <code>Too many open files</code>? <strong>이게 OOM</strong>?
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>java.lang.OutOfMemoryError: unable to create new native thread
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>Caused by: java.net.SocketException: Too many open files
+</span></span></code></pre></div><p><code>SocketException</code>인데 <code>Too many open files</code>? <strong>이게 OOM</strong>?
 이해되지 않았다.</p>
 <p>문제를 정의하기 위해 먼저 이해부터 해야 했다.</p>
 <h1 id="분석">분석</h1>
@@ -411,56 +420,56 @@ Caused by: java.net.SocketException: Too many open files
 <p>근본적인 원인이 되는 <code>Too many open files</code>는
 프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생한다.
 로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># 우선 별도의 세션을 연다.</span>
-bash
-</code></pre></div><p><code>prlimit</code>를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
-</code></pre></div><p>기본적으로 <strong>4096</strong>이 설정되어 있었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
-NOFILE   max number of open files <span style="color:#f60">4096</span> <span style="color:#f60">1048576</span> files
-</code></pre></div><p><code>ulimit</code>를 이용해 열 수 있는 파일 디스크립터 수를 제한한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ulimit -n <span style="color:#f60">0</span>
-</code></pre></div><p>그리고 <code>cat</code> 명령어를 실행하면 <code>Too many open files</code>가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
-<span style="color:#0f0"># ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24</span>
-</code></pre></div><p>다시 나갔다가 새로운 세션을 연다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 우선 별도의 세션을 연다.</span>
+</span></span><span style="display:flex;"><span>bash
+</span></span></code></pre></div><p><code>prlimit</code>를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
+</span></span></code></pre></div><p>기본적으로 <strong>4096</strong>이 설정되어 있었다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
+</span></span><span style="display:flex;"><span>NOFILE   max number of open files <span style="color:#f60">4096</span> <span style="color:#f60">1048576</span> files
+</span></span></code></pre></div><p><code>ulimit</code>를 이용해 열 수 있는 파일 디스크립터 수를 제한한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">0</span>
+</span></span></code></pre></div><p>그리고 <code>cat</code> 명령어를 실행하면 <code>Too many open files</code>가 발생한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24</span>
+</span></span></code></pre></div><p>다시 나갔다가 새로운 세션을 연다.
 limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
 하지만 에러가 발생한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ulimit -n <span style="color:#f60">4</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
-<span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
-<span style="color:#0f0"># ...</span>
-</code></pre></div><p>5로 설정하면 에러가 발생하지 않고 정상적으로 출력된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">ulimit -n <span style="color:#f60">5</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/os-release
-<span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
-<span style="color:#0f0"># ...</span>
-</code></pre></div><p>이유가 무엇일까?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">4</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
+</span></span></code></pre></div><p>5로 설정하면 에러가 발생하지 않고 정상적으로 출력된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">5</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
+</span></span></code></pre></div><p>이유가 무엇일까?</p>
 <h2 id="파일-디스크립터-file-descriptor">파일 디스크립터 (File descriptor)</h2>
 <p>리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
 반환된 파일 디스크립터는 <code>fdtable</code>의 참조값을 나타내며, 파일을 읽고 쓰는데 사용된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
-</span><span style="color:#0f0"></span>stuct task_struct {
-    ...
-  <span style="color:#0f0">/* Filesystem information: */</span>
-  <span style="color:#f00">struct</span> fs_struct    *fs;
-
-  <span style="color:#0f0">/* Open file information: */</span>
-  <span style="color:#f00">struct</span> files_struct *files;
-  ...
-};
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-c" data-lang="c"><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
-</span><span style="color:#0f0"></span><span style="color:#0f0">/*
-</span><span style="color:#0f0"> * Open file table structure
-</span><span style="color:#0f0"> */</span>
-<span style="color:#f00">struct</span> files_struct {
-  <span style="color:#f00">struct</span> fdtable __rcu *fdt;
-  ...
-  <span style="color:#f00">struct</span> file __rcu * fd_array[NR_OPEN_DEFAULT];
-};
-</code></pre></div><p><em>정확히 fd를 어떻게 찾는지는 확인하지 않았다. 나중에 <a href="https://m.blog.naver.com/arcyze/60048807080">이 블로그</a> 참고해서 공부하자.</em></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>stuct task_struct {
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">/* Filesystem information: */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">struct</span> fs_struct    *fs;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">/* Open file information: */</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">struct</span> files_struct *files;
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#0f0">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"> * Open file table structure
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">struct</span> files_struct {
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">struct</span> fdtable __rcu *fdt;
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">struct</span> file __rcu * fd_array[NR_OPEN_DEFAULT];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p><em>정확히 fd를 어떻게 찾는지는 확인하지 않았다. 나중에 <a href="https://m.blog.naver.com/arcyze/60048807080">이 블로그</a> 참고해서 공부하자.</em></p>
 <p><code>fdtable</code>의 0번 fd는 표준 입력(<code>stdin</code>), 1번 fd는 표준 출력(<code>stdout</code>).
 2번 fd는 표준 에러(<code>stderr</code>)다.
 3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
@@ -470,19 +479,19 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
 그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
 시스템 제한을 초과하면 <code>Too many open files</code> 에러가 발생하는 것이다.</p>
 <p>문제가 발생했던 서버의 시스템 제한을 확인해봤다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">prlimit -n
-</code></pre></div><p>SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">RESOURCE DESCRIPTION              SOFT    HARD UNITS
-NOFILE   max number of open files <span style="color:#f60">1024</span> <span style="color:#f60">1048576</span> files
-</code></pre></div><p>이 제한을 늘리면 문제가 해결될 것 같았다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
+</span></span></code></pre></div><p>SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
+</span></span><span style="display:flex;"><span>NOFILE   max number of open files <span style="color:#f60">1024</span> <span style="color:#f60">1048576</span> files
+</span></span></code></pre></div><p>이 제한을 늘리면 문제가 해결될 것 같았다.
 그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였다.
 갑자기 요청이 늘어난 원인이 무엇일까?</p>
 <p>혼자가 아닌 함께 개발할 때,
 내가 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
 해당 소스 코드를 복사해서 사용하는 경우가 많았다.
 <code>OkHttpClient</code>도 그대로 복사해서 사용했었다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java">OkHttpClient client = <span style="color:#f00">new</span> OkHttpClient();
-</code></pre></div><p>하지만 <code>OkHttpClient</code>를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성된다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>OkHttpClient client = <span style="color:#f00">new</span> OkHttpClient();
+</span></span></code></pre></div><p>하지만 <code>OkHttpClient</code>를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성된다.
 파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트해봤다.</p>
 <p><a href="https://markruler.github.io/posts/java/jvm-monitoring/#visualvm">VisualVM</a>을 사용해서 스레드를 확인해봤다.</p>
 <p><img src="/images/java/too-many-open-files/visualvm-bad-okhttp-connectionpool.png" alt="visualvm-bad-okhttp-connectionpool"></p>
@@ -502,36 +511,36 @@ This is because each client holds its own connection pool and thread pools.
 Reusing connections and threads reduces latency and saves memory.
 Conversely, creating a client for each request wastes resources on idle pools.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#f00">import</span> okhttp3.OkHttpClient;
-<span style="color:#f00">import</span> org.springframework.context.annotation.Bean;
-<span style="color:#f00">import</span> org.springframework.context.annotation.Configuration;
-
-@Configuration
-<span style="color:#f00">public</span> <span style="color:#f00">class</span> OkHttpConfig {
-
-    @Bean
-    <span style="color:#f00">public</span> OkHttpClient <span style="color:#ff0">okHttpClient</span>() {
-        <span style="color:#f00">return</span> <span style="color:#f00">new</span> OkHttpClient();
-    }
-
-}
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-java" data-lang="java"><span style="color:#f00">import</span> okhttp3.OkHttpClient;
-<span style="color:#f00">import</span> org.springframework.beans.factory.annotation.Autowired;
-<span style="color:#f00">import</span> org.springframework.stereotype.Component;
-
-@Component
-<span style="color:#f00">public</span> <span style="color:#f00">class</span> MyHttpClient {
-
-    <span style="color:#f00">private</span> <span style="color:#f00">final</span> OkHttpClient httpClient;
-
-    @Autowired
-    <span style="color:#f00">public</span> <span style="color:#ff0">MyHttpClient</span>(OkHttpClient httpClient) {
-        <span style="color:#f00">this</span>.httpClient = httpClient;
-    }
-
-    <span style="color:#0f0">// ...
-</span><span style="color:#0f0"></span>}
-</code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
+</span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.context.annotation.Bean;
+</span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@Configuration
+</span></span><span style="display:flex;"><span><span style="color:#f00">public</span> <span style="color:#f00">class</span> OkHttpConfig {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Bean
+</span></span><span style="display:flex;"><span>    <span style="color:#f00">public</span> OkHttpClient <span style="color:#ff0">okHttpClient</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#f00">return</span> <span style="color:#f00">new</span> OkHttpClient();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
+</span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.beans.factory.annotation.Autowired;
+</span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.stereotype.Component;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@Component
+</span></span><span style="display:flex;"><span><span style="color:#f00">public</span> <span style="color:#f00">class</span> MyHttpClient {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f00">private</span> <span style="color:#f00">final</span> OkHttpClient httpClient;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @Autowired
+</span></span><span style="display:flex;"><span>    <span style="color:#f00">public</span> <span style="color:#ff0">MyHttpClient</span>(OkHttpClient httpClient) {
+</span></span><span style="display:flex;"><span>        <span style="color:#f00">this</span>.httpClient = httpClient;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#0f0">// ...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>다시 4,000개의 요청을 보내도록 테스트했다.</p>
 <p><img src="/images/java/too-many-open-files/visualvm-okhttpclient-bean.png" alt="visualvm okhttpclient bean"></p>
 <p>더 이상 불필요하게 스레드가 늘어나지 않았고,
 스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.

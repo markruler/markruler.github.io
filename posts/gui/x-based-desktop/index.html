@@ -16,41 +16,51 @@
 
 
 
-<meta property="og:title" content="X Window System" />
-<meta property="og:description" content="리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/gui/x-based-desktop/" /><meta property="og:image" content="https://markruler.github.io/images/gui/xdg/dall-e-x-window-system.webp" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-08-21T23:04:00+09:00" />
-<meta property="article:modified_time" content="2024-07-29T01:04:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/gui/x-based-desktop/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="X Window System">
+  <meta property="og:description" content="리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2022-08-21T23:04:00+09:00">
+    <meta property="article:modified_time" content="2024-07-29T01:04:00+09:00">
+    <meta property="article:tag" content="Xdg">
+    <meta property="article:tag" content="X.org">
+    <meta property="article:tag" content="Linux">
+    <meta property="article:tag" content="GUI">
+    <meta property="og:image" content="https://markruler.github.io/images/gui/xdg/dall-e-x-window-system.webp">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/gui/xdg/dall-e-x-window-system.webp"/>
-
-<meta name="twitter:title" content="X Window System"/>
-<meta name="twitter:description" content="리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/gui/xdg/dall-e-x-window-system.webp">
+  <meta name="twitter:title" content="X Window System">
+  <meta name="twitter:description" content="리눅스 데스크탑을 사용하면 계속 xdg 어쩌구가 나오는데, 이건 뭐지?">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +80,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -448,7 +458,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[note]</a>
+                                <a href="/categories/note">[note]</a>
                                 &nbsp;
                         
 
@@ -517,32 +527,32 @@ freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 
 <li><a href="https://www.freedesktop.org/wiki/Software/xdg-user-dirs/">xdg-user-dirs</a> is a tool to handle well known directories in the users homedir.</li>
 <li><a href="https://wiki.archlinux.org/title/XDG_user_directories">XDG user directories</a> - archilinux</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">printenv | grep XDG_
-<span style="color:#0f0"># XDG_SESSION_ID=57404</span>
-<span style="color:#0f0"># XDG_RUNTIME_DIR=/run/user/1000</span>
-<span style="color:#0f0"># XDG_SESSION_TYPE=tty</span>
-<span style="color:#0f0"># XDG_SESSION_CLASS=user</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">man xdg-user-dirs-update
-<span style="color:#0f0"># xdg-user-dirs-update - Update XDG user dir configuration</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">man xdg-user-dir
-<span style="color:#0f0"># xdg-user-dir - Find an XDG user dir</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">xdg-user-dir DESKTOP
-<span style="color:#0f0"># /home/markruler/Desktop</span>
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/xdg/user-dirs.conf
-...
-<span style="color:#0f0"># the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this</span>
-<span style="color:#eedd82">enabled</span>=True
-<span style="color:#eedd82">filename_encoding</span>=UTF-8
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">cat /etc/xdg/user-dirs.defaults
-<span style="color:#0f0"># DESKTOP=Desktop</span>
-<span style="color:#0f0"># DOWNLOAD=Downloads</span>
-<span style="color:#0f0"># TEMPLATES=Templates</span>
-<span style="color:#0f0"># PUBLICSHARE=Public</span>
-<span style="color:#0f0"># DOCUMENTS=Documents</span>
-<span style="color:#0f0"># MUSIC=Music</span>
-<span style="color:#0f0"># PICTURES=Pictures</span>
-<span style="color:#0f0"># VIDEOS=Videos</span>
-</code></pre></div><h2 id="x-window-system">X Window System</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>printenv | grep XDG_
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># XDG_SESSION_ID=57404</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># XDG_RUNTIME_DIR=/run/user/1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># XDG_SESSION_TYPE=tty</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># XDG_SESSION_CLASS=user</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>man xdg-user-dirs-update
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># xdg-user-dirs-update - Update XDG user dir configuration</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>man xdg-user-dir
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># xdg-user-dir - Find an XDG user dir</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>xdg-user-dir DESKTOP
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># /home/markruler/Desktop</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/xdg/user-dirs.conf
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">enabled</span>=True
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">filename_encoding</span>=UTF-8
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/xdg/user-dirs.defaults
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># DESKTOP=Desktop</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># DOWNLOAD=Downloads</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># TEMPLATES=Templates</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># PUBLICSHARE=Public</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># DOCUMENTS=Documents</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># MUSIC=Music</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># PICTURES=Pictures</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># VIDEOS=Videos</span>
+</span></span></code></pre></div><h2 id="x-window-system">X Window System</h2>
 <ul>
 <li><a href="http://www.x.org/">X.Org</a> is an implementation of the X Window System<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, known as X11.</li>
 </ul>
@@ -550,35 +560,35 @@ freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 
 <h2 id="gui-도구">GUI 도구</h2>
 <p><a href="https://www.kernelpanic.kr/25">출처</a></p>
 <table>
-<thead>
-<tr>
-<th></th>
-<th>GTK</th>
-<th>QT</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>지원언어</td>
-<td>C, C++, Python 등</td>
-<td>C++, Python 등</td>
-</tr>
-<tr>
-<td>플랫폼</td>
-<td>Linux, Windows, MacOS</td>
-<td>Linux, WIndows, MacOS</td>
-</tr>
-<tr>
-<td>라이센스</td>
-<td>LGPL2.1</td>
-<td>LGPL, GPL, 상용 라이센스</td>
-</tr>
-<tr>
-<td>대표 데스크탑 환경</td>
-<td>Gnome, Xfce</td>
-<td>KDE</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th></th>
+          <th>GTK</th>
+          <th>QT</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>지원언어</td>
+          <td>C, C++, Python 등</td>
+          <td>C++, Python 등</td>
+      </tr>
+      <tr>
+          <td>플랫폼</td>
+          <td>Linux, Windows, MacOS</td>
+          <td>Linux, WIndows, MacOS</td>
+      </tr>
+      <tr>
+          <td>라이센스</td>
+          <td>LGPL2.1</td>
+          <td>LGPL, GPL, 상용 라이센스</td>
+      </tr>
+      <tr>
+          <td>대표 데스크탑 환경</td>
+          <td>Gnome, Xfce</td>
+          <td>KDE</td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="gnome-desktop">GNOME Desktop</h2>
 <p>The <a href="https://www.freedesktop.org/wiki/GNOME/">GNOME Desktop</a> is an attractive and useful desktop environment created by the GNU project.</p>
@@ -591,27 +601,27 @@ freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-bash" data-lang="bash">gnome-shell --version
-<span style="color:#0f0"># GNOME Shell 41.8.1</span>
-
-gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
-gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.2
-gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED <span style="color:#0f0"># 투명도 모드</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6 <span style="color:#0f0"># 배경 투명도</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style DASHES <span style="color:#0f0"># 실행 중인 앱 표시 형태</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock intellihide-mode FOCUS_APPLICATION_WINDOWS
-gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size <span style="color:#f60">32</span> <span style="color:#0f0"># 범위: 16-64</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false <span style="color:#0f0"># 화면에 아이콘이 꽉 차지 않을 때 여백을 두지 않음</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock show-windows-preview true
-gsettings set org.gnome.shell.extensions.dash-to-dock show-favorites true
-gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
-gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts true
-gsettings set org.gnome.shell.extensions.dash-to-dock multi-monitor true <span style="color:#0f0"># 모니터가 여러 개일 때 어느 모니터에서든 dock을 볼 수 있음</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action cycle-windows <span style="color:#0f0"># 아이콘 위에서 마우스 스크롤하면 여러 윈도우를 이동할 수 있음</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys true <span style="color:#0f0"># `super`+`num`</span>
-gsettings set org.gnome.shell.extensions.dash-to-dock hotkeys-show-dock true
-gsettings set org.gnome.shell.extensions.dash-to-dock force-straight-corner false
-</code></pre></div><h3 id="gtk-gimp-toolkit">GTK: GIMP ToolKit</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>gnome-shell --version
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># GNOME Shell 41.8.1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.2
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED <span style="color:#0f0"># 투명도 모드</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6 <span style="color:#0f0"># 배경 투명도</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style DASHES <span style="color:#0f0"># 실행 중인 앱 표시 형태</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock intellihide-mode FOCUS_APPLICATION_WINDOWS
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size <span style="color:#f60">32</span> <span style="color:#0f0"># 범위: 16-64</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false <span style="color:#0f0"># 화면에 아이콘이 꽉 차지 않을 때 여백을 두지 않음</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock show-windows-preview true
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock show-favorites true
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts true
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock multi-monitor true <span style="color:#0f0"># 모니터가 여러 개일 때 어느 모니터에서든 dock을 볼 수 있음</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action cycle-windows <span style="color:#0f0"># 아이콘 위에서 마우스 스크롤하면 여러 윈도우를 이동할 수 있음</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys true <span style="color:#0f0"># `super`+`num`</span>
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock hotkeys-show-dock true
+</span></span><span style="display:flex;"><span>gsettings set org.gnome.shell.extensions.dash-to-dock force-straight-corner false
+</span></span></code></pre></div><h3 id="gtk-gimp-toolkit">GTK: GIMP ToolKit</h3>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/GTK">Wikipedia</a></li>
 </ul>
@@ -624,20 +634,20 @@ gsettings set org.gnome.shell.extensions.dash-to-dock force-straight-corner fals
 서버용 콘솔과 명령 줄 도구와 같은 CLI 프로그램 개발에도 사용된다.
 그래픽 사용자 인터페이스를 사용하는 경우에는 Qt를
 <a href="https://en.wikipedia.org/wiki/Widget_toolkit">Widget toolkit</a>으로 분류한다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p><a href="https://en.wikipedia.org/wiki/X_Window_System">Wikipedia: X Windows System</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><a href="https://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them">Ask Ubuntu</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p><a href="https://en.wikipedia.org/wiki/Qt_(software)">Wikipedia: Qt</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
                     
                     <HR width="100%" id="EOF">

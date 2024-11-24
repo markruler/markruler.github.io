@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>jenkins on 임창수</title>
+    <title>Jenkins on 임창수</title>
     <link>https://markruler.github.io/tags/jenkins/</link>
-    <description>Recent content in jenkins on 임창수</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Jenkins on 임창수</description>
+    <generator>Hugo</generator>
     <language>ko-kr</language>
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 14 Nov 2022 00:38:00 +0900</lastBuildDate>
+    <atom:link href="https://markruler.github.io/tags/jenkins/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Jenkins Workspace 동시성 문제</title>
       <link>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</link>
-      <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Mon, 14 Nov 2022 00:38:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</guid>
-      <description>개요 Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해 triggers directive를 사용했다.
-pipeline { agent any triggers { cron(&amp;#34;* * * * *&amp;#34;) // HERE  } stages {...} post { always { cleanWs(cleanWhenNotBuilt: false, deleteDirs: true, disableDeferredWipeout: true, notFailBuild: true, patterns: [ [pattern: &amp;#39;.git/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.gitignore&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], [pattern: &amp;#39;.meta/**&amp;#39;, type: &amp;#39;EXCLUDE&amp;#39;], ] ) } } } 해당 Job은 빌드 간 메타데이터(.meta/)를 공유해야 했기 때문에 cleanWs 플러그인에서도 .git 디렉토리와 함께 삭제되지 않도록 설정했다.</description>
+      <description>&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;&#xA;&lt;p&gt;Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해&#xA;&lt;a href=&#34;https://www.jenkins.io/doc/book/pipeline/syntax/#triggers&#34;&gt;triggers&lt;/a&gt; directive를 사용했다.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pipeline {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    agent any&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    triggers {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        cron(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;* * * * *&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#0f0&#34;&gt;// HERE&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;    }&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    stages {...}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    post {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        always {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cleanWs(cleanWhenNotBuilt: &lt;span style=&#34;color:#f00&#34;&gt;false&lt;/span&gt;,&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    deleteDirs: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;,&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    disableDeferredWipeout: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;,&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    notFailBuild: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;,&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    patterns: [&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        [pattern: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;.git/**&amp;#39;&lt;/span&gt;, type: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;],&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        [pattern: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;.gitignore&amp;#39;&lt;/span&gt;, type: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;],&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        [pattern: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;.meta/**&amp;#39;&lt;/span&gt;, type: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;EXCLUDE&amp;#39;&lt;/span&gt;],&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    ]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            )&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;해당 Job은 빌드 간 메타데이터(&lt;code&gt;.meta/&lt;/code&gt;)를 공유해야 했기 때문에&#xA;&lt;a href=&#34;https://plugins.jenkins.io/ws-cleanup/&#34;&gt;cleanWs&lt;/a&gt; 플러그인에서도&#xA;&lt;code&gt;.git&lt;/code&gt; 디렉토리와 함께 삭제되지 않도록 설정했다.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -16,41 +16,50 @@
 
 
 
-<meta property="og:title" content="APM만큼 중요한 네트워크 모니터링" />
-<meta property="og:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/" /><meta property="og:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-07-25T01:22:00+09:00" />
-<meta property="article:modified_time" content="2024-07-25T01:22:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="APM만큼 중요한 네트워크 모니터링">
+  <meta property="og:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-07-25T01:22:00+09:00">
+    <meta property="article:modified_time" content="2024-07-25T01:22:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Monitoring">
+    <meta property="article:tag" content="APM">
+    <meta property="og:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp"/>
-
-<meta name="twitter:title" content="APM만큼 중요한 네트워크 모니터링"/>
-<meta name="twitter:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp">
+  <meta name="twitter:title" content="APM만큼 중요한 네트워크 모니터링">
+  <meta name="twitter:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +79,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -300,7 +309,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[case]</a>
+                                <a href="/categories/case">[case]</a>
                                 &nbsp;
                         
 
@@ -341,7 +350,7 @@ DB 문제는 아니었다.</p>
 <p>발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했다.
 이 시점에는 이게 문제라고 생각하지 않았다.</p>
 <blockquote>
-<p><strong>&ldquo;Private IP로 요청하면 더 빠른 거 아냐?&quot;</strong></p>
+<p><strong>&ldquo;Private IP로 요청하면 더 빠른 거 아냐?&rdquo;</strong></p>
 </blockquote>
 <p>모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었다.
 혹시 몰라서 라우터 장비에 <a href="/posts/network/snmp/">SNMP</a> 모니터링을 추가했다.

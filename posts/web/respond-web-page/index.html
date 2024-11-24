@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<title>웹 페이지 응답 방법과 프레임워크</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="G-FFMDWZ27TN">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="서버 응답 속도가 빨라도 웹 페이지 응답이 느려서야">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:url" content="https://markruler.github.io/posts/web/respond-web-page/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="웹 페이지 응답 방법과 프레임워크">
+  <meta property="og:description" content="서버 응답 속도가 빨라도 웹 페이지 응답이 느려서야">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-11-24T23:32:00+09:00">
+    <meta property="article:modified_time" content="2024-11-24T23:32:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Web">
+    <meta property="article:tag" content="Frontend">
+    <meta property="og:image" content="https://markruler.github.io/images/web/respond-web-page/bottleneck.jpg">
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/web/respond-web-page/bottleneck.jpg">
+  <meta name="twitter:title" content="웹 페이지 응답 방법과 프레임워크">
+  <meta name="twitter:description" content="서버 응답 속도가 빨라도 웹 페이지 응답이 느려서야">
+
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cgi-common-gateway-interface" class="nav-cgi-common-gateway-interface">
+									CGI (Common Gateway Interface)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ssr-server-side-rendering" class="nav-ssr-server-side-rendering">
+									SSR (Server-Side Rendering)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%9c%eb%b2%84-%ed%85%9c%ed%94%8c%eb%a6%bf-%ec%97%94%ec%a7%84" class="nav-서버-템플릿-엔진">
+									서버 템플릿 엔진
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#csr-client-side-rendering" class="nav-csr-client-side-rendering">
+									CSR (Client-side Rendering)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spa-single-page-application" class="nav-spa-single-page-application">
+									SPA (Single Page Application)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#web-api-web-component" class="nav-web-api-web-component">
+									Web API: Web Component
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pwa-progressive-web-apps" class="nav-pwa-progressive-web-apps">
+									PWA (Progressive Web Apps)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ssg-static-site-generation" class="nav-ssg-static-site-generation">
+									SSG (Static Site Generation)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cms-content-management-system" class="nav-cms-content-management-system">
+									CMS (Content Management System)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#micro-frontend-architecture-mfa" class="nav-micro-frontend-architecture-mfa">
+									Micro Frontend Architecture (MFA)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%95%84%ec%9d%bc%eb%9e%9c%eb%93%9c-%ec%95%84%ed%82%a4%ed%85%8d%ec%b3%90-island-architecture" class="nav-아일랜드-아키텍쳐-island-architecture">
+									아일랜드 아키텍쳐 Island Architecture
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9b%b9%eb%b7%b0webview---%eb%aa%a8%eb%b0%94%ec%9d%bc-%ec%95%b1%ec%97%90%ec%84%9c" class="nav-웹뷰webview---모바일-앱에서">
+									웹뷰(WebView) - 모바일 앱에서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/web/respond-web-page/bottleneck.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    웹 페이지 응답 방법과 프레임워크
+                    
+                    <div class="post-subtitle">
+                        서버 응답 속도가 빨라도 웹 페이지 응답이 느려서야
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-11-24 23:32
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/note">[note]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/web">web</a>
+                                &nbsp;
+                            
+                                <a href="/tags/frontend">frontend</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <ul>
+<li><a href="#cgi-common-gateway-interface">CGI (Common Gateway Interface)</a></li>
+<li><a href="#ssr-server-side-rendering">SSR (Server-Side Rendering)</a></li>
+<li><a href="#%EC%84%9C%EB%B2%84-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%97%94%EC%A7%84">서버 템플릿 엔진</a></li>
+<li><a href="#csr-client-side-rendering">CSR (Client-side Rendering)</a>
+<ul>
+<li><a href="#spa-single-page-application">SPA (Single Page Application)</a></li>
+<li><a href="#web-api-web-component">Web API: Web Component</a></li>
+<li><a href="#pwa-progressive-web-apps">PWA (Progressive Web Apps)</a></li>
+</ul>
+</li>
+<li><a href="#ssg-static-site-generation">SSG (Static Site Generation)</a></li>
+<li><a href="#cms-content-management-system">CMS (Content Management System)</a></li>
+<li><a href="#micro-frontend-architecture-mfa">Micro Frontend Architecture (MFA)</a></li>
+<li><a href="#%EC%95%84%EC%9D%BC%EB%9E%9C%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90-island-architecture">아일랜드 아키텍쳐 Island Architecture</a></li>
+<li><a href="#%EC%9B%B9%EB%B7%B0webview---%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%95%B1%EC%97%90%EC%84%9C">웹뷰(WebView) - 모바일 앱에서</a></li>
+<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC">더 읽을거리</a></li>
+</ul>
+<h1 id="cgi-common-gateway-interface">CGI (Common Gateway Interface)</h1>
+<p>웹 서버와 외부 프로그램(애플리케이션) 간에 데이터를 주고받기 위한 인터페이스다.
+웹 서버가 클라이언트(브라우저)로부터 요청을 받으면, CGI 프로그램을 호출하여 동적으로 콘텐츠를 생성한 뒤, 그 결과를 클라이언트에 반환한다.</p>
+<h1 id="ssr-server-side-rendering">SSR (Server-Side Rendering)</h1>
+<p>서버에서 콘텐츠를 렌더링하여 완전한 HTML을 클라이언트에게 전달한다.</p>
+<ul>
+<li>여기서 렌더링한다는 의미는 화면을 그린다는 게 아니라 DOM 구조를 만든다는 것이다.</li>
+<li>렌더링을 서버에서 수행하기 때문에 CSR에 비해 상대적으로 최초 페이지 응답 속도가 느리다.
+<ul>
+<li>서버가 한국에 있고 클라이언트가 해외에 있다면 빈 페이지도 받지 못하고 오래 기다리게 된다.</li>
+</ul>
+</li>
+<li>검색 엔진 봇이 완전한 HTML을 받기 때문에 SEO에 유리하다.</li>
+</ul>
+<h1 id="서버-템플릿-엔진">서버 템플릿 엔진</h1>
+<ul>
+<li>Tomcat의 Jasper
+<ul>
+<li>JSP(JavaServer Pages) 파일을 서블릿 코드로 변환하고 컴파일하는 데 사용되는 JSP 엔진이다.</li>
+<li>include 지시어를 사용해서 여러 부분으로 코드 조각을 나눌 수 있다.</li>
+<li>static include 방식을 이용해 빌드된 React, Vue 프로젝트의 <code>index.html</code>을 포함시킬 수도 있다.</li>
+</ul>
+</li>
+<li>Microsoft의 Razor
+<ul>
+<li>C# 코드와 HTML을 결합한다.</li>
+</ul>
+</li>
+<li>Twig, Smarty, Blade
+<ul>
+<li>PHP 템플릿 엔진들이다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="csr-client-side-rendering">CSR (Client-side Rendering)</h1>
+<p>클라이언트(브라우저)에서 콘텐츠를 렌더링한다.</p>
+<ul>
+<li>물을 부어 보충한다는 의미로 Hydration이라고도 한다. 초기 렌더링(SSR)과 구분지어 표현하기 위해 사용하는 듯하다.</li>
+<li>서버에서 HTML 문서를 응답받아서 브라우저가 DOM을 렌더링 한 후 추가로 렌더링한다.</li>
+<li>경우에 따라 오리진 서버에서 받을 필요가 없기 때문에 캐시된 문서를 받을 수 있다.</li>
+<li>동일한 페이지라면 서버에서 렌더링하는 SSR보다 페이지 응답 속도가 빠르다.</li>
+<li>검색 엔진 봇이 크롤링할 때 빈 페이지로 보인다.</li>
+</ul>
+<h2 id="spa-single-page-application">SPA (Single Page Application)</h2>
+<ul>
+<li>Vue, React, Angular</li>
+<li>사용자가 웹 애플리케이션 상호 작용할 때 전체 페이지를 새로 고치지 않고, 필요한 데이터만 서버와 교환하여 동적으로 콘텐츠를 업데이트하는 웹 애플리케이션 구조다.</li>
+<li>Vue를 JSP와 비교해서 예를 들면,
+<ul>
+<li>Vue App
+<ul>
+<li>JSP 페이지 하나와 동일.</li>
+<li>컴포넌트들의 모임.</li>
+<li>여러 JSP로 분리시켜서 include한다면 include 지시어가 명시된 root 페이지가 app</li>
+<li>정확하게는 다름. JSP는 Component 단위별로 분리하는 것이 아니라 head, footer, 공통 스크립트 등으로 분리하는 경우가 많음.</li>
+</ul>
+</li>
+<li>Vue Component
+<ul>
+<li>공통 컴포넌트.</li>
+<li>분리된 JSP.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="web-api-web-component">Web API: Web Component</h2>
+<ul>
+<li>그 기능을 나머지 코드로부터 캡슐화하여 재사용 가능한 커스텀 엘리먼트를 생성하고 웹 앱에서 활용할 수 있도록 해주는 다양한 기술들의 모음.</li>
+<li>표준이기 때문에 React, Vue와 같은 프레임워크에 종속되지 않는다.</li>
+</ul>
+<h2 id="pwa-progressive-web-apps">PWA (Progressive Web Apps)</h2>
+<p>단일 코드베이스로 모든 기기의 모든 웹 사용자에게 도달하는 동시에 향상된 기능을 제공하기 위해 최신 API로 빌드되고 향상된 웹 앱이다.</p>
+<ul>
+<li>캐시된 페이지를 기반으로 오프라인에서도 동작할 수 있다.</li>
+<li>웹 앱이지만 모바일 앱처럼 설치할 수 있다.</li>
+</ul>
+<h1 id="ssg-static-site-generation">SSG (Static Site Generation)</h1>
+<ul>
+<li>Gatsby(Javascript), Hugo(Go), Jekyll(Ruby)</li>
+<li>주로 템플릿을 활용해서 정적 웹 페이지를 생성 후 웹 서버로 서빙한다.</li>
+<li>동적 데이터가 필요없는 경우 사용할 수 있다.</li>
+<li><a href="https://markruler.github.io/">블로그</a>나 <a href="https://beott.kr/">웹진</a>, 혹은 회사 소개 페이지 등에 사용할 수 있다.</li>
+</ul>
+<h1 id="cms-content-management-system">CMS (Content Management System)</h1>
+<p>웹사이트나 애플리케이션의 콘텐츠를 생성, 수정, 관리, 출판할 수 있는 시스템이다.</p>
+<ul>
+<li>구축되면 개발자가 아닌 사람도 쉽게 글을 작성할 수 있다.</li>
+<li>잼스택(JAMStack)
+<ul>
+<li>DB 없이 JavaScript, API, Markup을 기반으로 하는 웹 아키텍처.</li>
+<li>내 블로그처럼 Hugo로 빌드한 웹 사이트를 GitHub Pages로 배포한 것도 JAMStack에 해당한다.</li>
+</ul>
+</li>
+<li>DB 사용
+<ul>
+<li>스트라피(Strapi), 워드프레스(WordPress), 줌라(Joomla), 드루팔(Drupal)</li>
+<li>CMS를 위한 별도 DB와 서버를 사용한다.</li>
+</ul>
+</li>
+</ul>
+<h1 id="micro-frontend-architecture-mfa">Micro Frontend Architecture (MFA)</h1>
+<p>각 &lsquo;마이크로-프론트엔드&rsquo;는 독립적으로 개발 및 배포가 가능하다.</p>
+<ul>
+<li>각자 다른 기술 스택을 사용할 수도 있다.</li>
+<li>대규모 프로젝트에서 서로 다른 팀들이 각각의 프론트엔드 파트를 개발하는 데 적합하다.</li>
+<li>하나의 app(페이지)에 여러 app 혹은 component가 포함된다.</li>
+<li>혹은 하나의 프로젝트에 여러 app이 포함된다.
+<ul>
+<li>어떤 페이지는 JSP, 어떤 페이지는 React, 어떤 페이지는 Vue.</li>
+</ul>
+</li>
+</ul>
+<h1 id="아일랜드-아키텍쳐-island-architecture">아일랜드 아키텍쳐 Island Architecture</h1>
+<ul>
+<li>웹페이지의 필요에 따라 일부는 SSG로 렌더링하고, 일부는 Progressive Hydration(Re-hydration)한다.
+<ul>
+<li>필요할 때만 자바스크립트를 로드하여 성능을 최적화한다.</li>
+<li>전체 페이지가 아니라 개별 컴포넌트 단위로 자바스크립트를 실행해 불필요한 코드 로드를 방지한다.</li>
+<li>하나의 app(페이지)에 여러 프레임워크의 Component가 있을 수 있다.</li>
+</ul>
+</li>
+<li>대표적으로 Astro, Ebay의 Marko 같은 도구가 Island Architecture를 지원한다.</li>
+</ul>
+<h1 id="웹뷰webview---모바일-앱에서">웹뷰(WebView) - 모바일 앱에서</h1>
+<p>웹뷰란 네이티브 앱에 내재되어 있는 웹 브라우저다.</p>
+<ul>
+<li>특별한 경우가 아니라면 앱 스토어의 검수를 받을 필요가 없기 때문에 자주 업데이트 할 수 있다.</li>
+<li>네이티브 앱은 서버에서 웹 페이지를 응답 받을 필요없이 디바이스에서 바로 렌더링한다. 반면 웹뷰는 서버에서 웹 페이지를 받아야 하기 때문에 레이턴시가 발생한다.</li>
+<li>네이티브 앱은 수정 사항을 배포할 때 앱 스토어의 검수가 필요하다. (약 1~3일 소요)</li>
+<li>웹뷰만으로 구성된 앱은 스토어 심사가 어려울 수도 있다.</li>
+<li>추가로 고려해야 할 부분: 웹뷰 간 이동, 웹뷰-네이티브 간 이동, 뒤로가기 제스처나 버튼, DeepLink</li>
+</ul>
+<h1 id="더-읽을거리">더 읽을거리</h1>
+<ul>
+<li><a href="https://patterns-dev-kr.github.io/">모던 웹 앱 디자인 패턴</a> | Patterns.dev.kr
+<ul>
+<li><a href="https://www.patterns.dev/">origin</a> | Patterns.dev</li>
+</ul>
+</li>
+<li>CMS
+<ul>
+<li><a href="https://medium.com/pinkfong/strapi-1%EB%85%84%EC%9D%B4%EB%A9%B4-%ED%92%80%EC%8A%A4%ED%83%9D%EC%9D%84-%EC%9D%8A%EB%8A%94%EB%8B%A4-part-1-2-5641f5651097">Strapi 1년이면 풀스택을 읊는다</a> | 더핑크퐁컴퍼니</li>
+</ul>
+</li>
+<li>PWA
+<ul>
+<li><a href="https://web.dev/articles/what-are-pwas">What are Progressive Web Apps?</a> | web.dev</li>
+</ul>
+</li>
+<li>Web Components
+<ul>
+<li><a href="https://developer.mozilla.org/ko/docs/Web/API/Web_components">Web Components</a> | MDN Web Docs</li>
+<li><a href="https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_custom_elements">Using custom elements</a> | MDN Web Docs</li>
+<li><a href="https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_shadow_DOM">Using shadow DOM</a> | MDN Web Docs</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots">Using templates and slots</a> | MDN Web Docs</li>
+<li><a href="https://ui.toast.com/posts/ko_20171215">웹 컴포넌트(5) - lit-html로 React 처럼 코딩하기</a> | TOAST UI</li>
+</ul>
+</li>
+<li>아일랜드 아키텍쳐
+<ul>
+<li><a href="https://patterns-dev-kr.github.io/rendering-patterns/the-island-architecture/">The Island Architecture</a> | Patterns.dev.kr</li>
+</ul>
+</li>
+<li>웹뷰
+<ul>
+<li><a href="https://docs.tosspayments.com/resources/glossary/webview">웹뷰(WebView)</a> | Toss Payments 용어 사전</li>
+<li><a href="https://youtu.be/4UD4EB00AME">아니, 여기도 웹뷰였어요?</a> | 2024 당근 테크 밋업</li>
+<li><a href="https://boostbrothers.github.io/hospital-detail-webview/">병원 상세 웹뷰 통신 및 크로스 브라우징</a> | BBROS</li>
+</ul>
+</li>
+</ul>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2024-11-24</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/onavo-facebook-ssl-mitm-technical-analysis/">
+			이전글<br>Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cgi-common-gateway-interface" class="nav-cgi-common-gateway-interface">
+									CGI (Common Gateway Interface)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ssr-server-side-rendering" class="nav-ssr-server-side-rendering">
+									SSR (Server-Side Rendering)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%9c%eb%b2%84-%ed%85%9c%ed%94%8c%eb%a6%bf-%ec%97%94%ec%a7%84" class="nav-서버-템플릿-엔진">
+									서버 템플릿 엔진
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#csr-client-side-rendering" class="nav-csr-client-side-rendering">
+									CSR (Client-side Rendering)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#spa-single-page-application" class="nav-spa-single-page-application">
+									SPA (Single Page Application)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#web-api-web-component" class="nav-web-api-web-component">
+									Web API: Web Component
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#pwa-progressive-web-apps" class="nav-pwa-progressive-web-apps">
+									PWA (Progressive Web Apps)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#ssg-static-site-generation" class="nav-ssg-static-site-generation">
+									SSG (Static Site Generation)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#cms-content-management-system" class="nav-cms-content-management-system">
+									CMS (Content Management System)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#micro-frontend-architecture-mfa" class="nav-micro-frontend-architecture-mfa">
+									Micro Frontend Architecture (MFA)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%95%84%ec%9d%bc%eb%9e%9c%eb%93%9c-%ec%95%84%ed%82%a4%ed%85%8d%ec%b3%90-island-architecture" class="nav-아일랜드-아키텍쳐-island-architecture">
+									아일랜드 아키텍쳐 Island Architecture
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9b%b9%eb%b7%b0webview---%eb%aa%a8%eb%b0%94%ec%9d%bc-%ec%95%b1%ec%97%90%ec%84%9c" class="nav-웹뷰webview---모바일-앱에서">
+									웹뷰(WebView) - 모바일 앱에서
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

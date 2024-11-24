@@ -1,46 +1,36 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>linux on 임창수</title>
+    <title>Linux on 임창수</title>
     <link>https://markruler.github.io/tags/linux/</link>
-    <description>Recent content in linux on 임창수</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Linux on 임창수</description>
+    <generator>Hugo</generator>
     <language>ko-kr</language>
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Thu, 05 Sep 2024 21:13:00 +0900</lastBuildDate><atom:link href="https://markruler.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 Sep 2024 21:13:00 +0900</lastBuildDate>
+    <atom:link href="https://markruler.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>일상에서의 스왑 메모리 (Swap Memory)</title>
       <link>https://markruler.github.io/posts/os/swap-memory/</link>
-      <pubDate>Thu, 05 Sep 2024 21:13:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Thu, 05 Sep 2024 21:13:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/os/swap-memory/</guid>
-      <description>스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역이다. 고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법이다. 이 글은 Ubuntu에서 스왑 메모리를 file로 설정하고, 나의 환경에 맞게 조정하기 위해 모니터링 하는 방법을 설명한다.
-먼저 스왑 메모리 설정을 확인한다.
-sudo swapon --show 설정되어 있지 않다면 아무것도 출력되지 않는다. Ubuntu 24.04 기준으로는 기본적으로 다음과 같이 /swap.img가 설정되어 있다. 하지만 이 글은 설정되어 있지 않다는 전제로 진행한다.</description>
+      <description>&lt;p&gt;&lt;strong&gt;스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역&lt;/strong&gt;이다.&#xA;고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법이다.&#xA;이 글은 &lt;strong&gt;Ubuntu&lt;/strong&gt;에서 &lt;strong&gt;스왑 메모리를 file로 설정&lt;/strong&gt;하고, 나의 환경에 맞게 조정하기 위해 &lt;strong&gt;모니터링 하는 방법&lt;/strong&gt;을 설명한다.&lt;/p&gt;&#xA;&lt;p&gt;먼저 스왑 메모리 설정을 확인한다.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon --show&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정되어 있지 않다면 아무것도 출력되지 않는다.&#xA;&lt;em&gt;Ubuntu 24.04 기준&lt;/em&gt;으로는 기본적으로 다음과 같이 &lt;code&gt;/swap.img&lt;/code&gt;가 설정되어 있다.&#xA;하지만 이 글은 설정되어 있지 않다는 전제로 진행한다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>Too many open files</title>
       <link>https://markruler.github.io/posts/java/too-many-open-files/</link>
-      <pubDate>Mon, 20 Mar 2023 21:58:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Mon, 20 Mar 2023 21:58:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/java/too-many-open-files/</guid>
-      <description>커버 이미지 출처: Stable diffusion &amp;ldquo;swimming pool lane pattern&amp;rdquo;
- 증상 Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다. 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, Too many open files 에러가 발생했다. 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이 IDC에 위치한 서버(CentOS 7)에서는 OutOfMemoryError가 발생하면서 동작하지 않았다.
-java.lang.OutOfMemoryError: unable to create new native thread ... java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error ... Caused by: java.net.SocketException: Too many open files SocketException인데 Too many open files?</description>
+      <description>&lt;blockquote&gt;&#xA;&lt;p&gt;커버 이미지 출처: &lt;a href=&#34;https://stablediffusionweb.com/&#34;&gt;Stable diffusion&lt;/a&gt; &amp;ldquo;swimming pool lane pattern&amp;rdquo;&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;h1 id=&#34;증상&#34;&gt;증상&lt;/h1&gt;&#xA;&lt;p&gt;Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다.&#xA;요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생했다.&#xA;작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이&#xA;IDC에 위치한 서버(CentOS 7)에서는 &lt;code&gt;OutOfMemoryError&lt;/code&gt;가 발생하면서 동작하지 않았다.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.lang.OutOfMemoryError: unable to create new native thread&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Caused by: java.net.SocketException: Too many open files&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;SocketException&lt;/code&gt;인데 &lt;code&gt;Too many open files&lt;/code&gt;? &lt;strong&gt;이게 OOM&lt;/strong&gt;?&#xA;이해되지 않았다.&lt;/p&gt;</description>
     </item>
-    
     <item>
       <title>X Window System</title>
       <link>https://markruler.github.io/posts/gui/x-based-desktop/</link>
-      <pubDate>Sun, 21 Aug 2022 23:04:00 +0900</pubDate>
-      <author>imcxsu@gmail.com (Im Changsu)</author>
+      <pubDate>Sun, 21 Aug 2022 23:04:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/gui/x-based-desktop/</guid>
-      <description>참조 freedesktop.org 관련 소프트웨어  XDG user directories X Window System GUI 도구 GNOME Desktop  GTK: GIMP ToolKit   KDE: K(ool) Desktop Environment  Qt      참조  ChatGPT freedesktop.org - Wikipedia  freedesktop.org XDG는 X Desktop Group의 약자로, freedesktop.org의 옛 이름이다.
- freedesktop.org hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.</description>
+      <description>&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#freedesktoporg&#34;&gt;freedesktop.org&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#%EA%B4%80%EB%A0%A8-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4&#34;&gt;관련 소프트웨어&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#xdg-user-directories&#34;&gt;XDG user directories&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#x-window-system&#34;&gt;X Window System&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#gui-%EB%8F%84%EA%B5%AC&#34;&gt;GUI 도구&lt;/a&gt;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#gnome-desktop&#34;&gt;GNOME Desktop&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#gtk-gimp-toolkit&#34;&gt;GTK: GIMP ToolKit&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#kde-kool-desktop-environment&#34;&gt;KDE: K(ool) Desktop Environment&lt;/a&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;a href=&#34;#qt&#34;&gt;Qt&lt;/a&gt;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;ChatGPT&lt;/li&gt;&#xA;&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Freedesktop.org&#34;&gt;freedesktop.org&lt;/a&gt; - Wikipedia&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;freedesktoporg&#34;&gt;freedesktop.org&lt;/h1&gt;&#xA;&lt;p&gt;XDG는 &lt;code&gt;X Desktop Group&lt;/code&gt;의 약자로, &lt;a href=&#34;https://freedesktop.org&#34;&gt;freedesktop.org&lt;/a&gt;의 옛 이름이다.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;freedesktop.org hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.&#xA;&lt;br&gt;&#xA;&lt;br&gt;&#xA;freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 상호 운용성과 공유 기술에 중점을 둔 무료 및 오픈 소스 소프트웨어의 개발을 주도합니다.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

@@ -16,41 +16,49 @@
 
 
 
-<meta property="og:title" content="네트워크 장비 모니터링을 위한 SNMP" />
-<meta property="og:description" content="Simple Network Management Protocol" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://markruler.github.io/posts/network/snmp/" /><meta property="og:image" content="https://markruler.github.io/images/network/snmp/pexels-googledeepmind-17485706.webp" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-07-23T19:08:00+09:00" />
-<meta property="article:modified_time" content="2024-07-23T19:08:00+09:00" />
+<meta property="og:url" content="https://markruler.github.io/posts/network/snmp/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="네트워크 장비 모니터링을 위한 SNMP">
+  <meta property="og:description" content="Simple Network Management Protocol">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-07-23T19:08:00+09:00">
+    <meta property="article:modified_time" content="2024-07-23T19:08:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Monitoring">
+    <meta property="og:image" content="https://markruler.github.io/images/network/snmp/pexels-googledeepmind-17485706.webp">
 
 
 
 
 
 
-<meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:image" content="https://markruler.github.io/images/network/snmp/pexels-googledeepmind-17485706.webp"/>
-
-<meta name="twitter:title" content="네트워크 장비 모니터링을 위한 SNMP"/>
-<meta name="twitter:description" content="Simple Network Management Protocol"/>
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/network/snmp/pexels-googledeepmind-17485706.webp">
+  <meta name="twitter:title" content="네트워크 장비 모니터링을 위한 SNMP">
+  <meta name="twitter:description" content="Simple Network Management Protocol">
 
 
 
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-FFMDWZ27TN', { 'anonymize_ip': false });
-}
-</script>
 
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
 
 
 
@@ -70,7 +78,7 @@ if (!doNotTrack) {
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.02a482ebb330e36958a54ca8d1e6175b37fb0742710c08f013d129155839e07c.css" integrity="sha256-AqSC67Mw42lYpUyo0eYXWzf7B0JxDAjwE9EpFVg54Hw=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
 
 
 <link rel="stylesheet"
@@ -682,7 +690,7 @@ if (!doNotTrack) {
 
                         
                             <i class="material-icons" style="">folder</i>
-                                <a href="/categories/">[how-to]</a>
+                                <a href="/categories/how-to">[how-to]</a>
                                 &nbsp;
                         
 
@@ -798,15 +806,15 @@ if (!doNotTrack) {
 <h1 id="관련-명령어-도구">관련 명령어 도구</h1>
 <h2 id="snmpget">snmpget</h2>
 <p>정확한 OID를 입력해야 해서 난 잘 사용하지 않음.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
-</code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh"><span style="color:#0f0"># output</span>
-iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
-</span><span style="color:#87ceeb">Technical Support: http://www.cisco.com/techsupport
-</span><span style="color:#87ceeb">Copyright (c) 1986-2011 by Cisco Systems, Inc.
-</span><span style="color:#87ceeb">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
-</code></pre></div><h2 id="snmpwalk">snmpwalk</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; [OID]
-</code></pre></div><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># output</span>
+</span></span><span style="display:flex;"><span>iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Technical Support: http://www.cisco.com/techsupport
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Copyright (c) 1986-2011 by Cisco Systems, Inc.
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
+</span></span></code></pre></div><h2 id="snmpwalk">snmpwalk</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; [OID]
+</span></span></code></pre></div><ul>
 <li>도움말
 <ul>
 <li><code>-h</code> : help</li>
@@ -817,8 +825,8 @@ iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Softwar
 <li><code>-l</code> : security level (<code>noAuthNoPriv</code> | <code>authNoPriv</code> | <code>authPriv</code>)</li>
 <li><code>-c</code> : the community string</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2"><code class="language-sh" data-lang="sh">snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
-</code></pre></div><h1 id="mib-2-oid-object-id">MIB-2 OID (Object ID)</h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
+</span></span></code></pre></div><h1 id="mib-2-oid-object-id">MIB-2 OID (Object ID)</h1>
 <p><img src="https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&amp;v=beta&amp;t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY" alt="OID Tree"></p>
 <p><em><a href="https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari">SNMP Explained: What You Must Know About Monitoring via MIB and OIDs</a></em></p>
 <h2 id="ex-136121-분해">ex: 1.3.6.1.2.1 분해</h2>
@@ -862,176 +870,176 @@ iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Softwar
 </ul>
 <h2 id="1361211-system">1.3.6.1.2.1.1 system</h2>
 <table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Object</th>
-<th>Description</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>1.3.6.1.2.1.1.1</code></td>
-<td>sysDescr</td>
-<td>System Description</td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.1.1">oidref</a></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.2</code></td>
-<td>sysObjectID</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.3</code></td>
-<td>sysUpTime</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.4</code></td>
-<td>sysContact</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.5</code></td>
-<td>sysName</td>
-<td></td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.1.5">oidref</a></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.6</code></td>
-<td>sysLocation</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.1.7</code></td>
-<td>sysServices</td>
-<td></td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.1.7">oidref</a></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.1</code></td>
+          <td>sysDescr</td>
+          <td>System Description</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.1">oidref</a></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.2</code></td>
+          <td>sysObjectID</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.3</code></td>
+          <td>sysUpTime</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.4</code></td>
+          <td>sysContact</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.5</code></td>
+          <td>sysName</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.5">oidref</a></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.6</code></td>
+          <td>sysLocation</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.7</code></td>
+          <td>sysServices</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.7">oidref</a></td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="1361212-interfaces">1.3.6.1.2.1.2 interfaces</h2>
 <table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Object</th>
-<th>Description</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>1.3.6.1.2.1.2.2.1.2</code></td>
-<td>ifDescr</td>
-<td>Interface Description</td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.2">oidref</a></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.2.2.1.4</code></td>
-<td>ifMtu</td>
-<td></td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.4">oidref</a></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.2.2.1.5</code></td>
-<td>ifSpeed</td>
-<td></td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.5">oidref</a></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.2.2.1.10</code></td>
-<td>ifInOctets</td>
-<td></td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.10">oidref</a></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.2</code></td>
+          <td>ifDescr</td>
+          <td>Interface Description</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.2">oidref</a></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.4</code></td>
+          <td>ifMtu</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.4">oidref</a></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.5</code></td>
+          <td>ifSpeed</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.5">oidref</a></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.10</code></td>
+          <td>ifInOctets</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.10">oidref</a></td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="1361213-at---address-translation">1.3.6.1.2.1.3 at - Address Translation</h2>
 <table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Object</th>
-<th>Description</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>1.3.6.1.2.1.3</code></td>
-<td>at</td>
-<td>Address translation</td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.3">oidref</a></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.3</code></td>
+          <td>at</td>
+          <td>Address translation</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.3">oidref</a></td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="1361214-ip---internet-protocol">1.3.6.1.2.1.4 ip - Internet Protocol</h2>
 <table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Object</th>
-<th>Description</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>1.3.6.1.2.1.4.22</code></td>
-<td>ipNetToMediaTable</td>
-<td>SEQUENCE OF IpNetToMediaEntry</td>
-<td><a href="https://oidref.com/1.3.6.1.2.1.4.22">oidref</a></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.4.22</code></td>
+          <td>ipNetToMediaTable</td>
+          <td>SEQUENCE OF IpNetToMediaEntry</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.4.22">oidref</a></td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="13612131-ifmib">1.3.6.1.2.1.31 ifMIB</h2>
 <table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Object</th>
-<th>Description</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>1.3.6.1.2.1.31.1</code></td>
-<td>ifMIBObjects</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.31.1.1</code></td>
-<td>ifXTable</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.31.1.1.1</code></td>
-<td>ifXEntry</td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.31.1.1.1.6</code></td>
-<td>ifHCInOctets</td>
-<td>인터페이스의 입력 바이트 수</td>
-<td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L505">ifBandwidthInUsage</a>라는 별칭을 씀.</td>
-</tr>
-<tr>
-<td><code>1.3.6.1.2.1.31.1.1.1.10</code></td>
-<td>ifHCOutOctets</td>
-<td>인터페이스의 출력 바이트 수</td>
-<td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L506">ifBandwidthOutUsage</a>라는 별칭을 씀.</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1</code></td>
+          <td>ifMIBObjects</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1</code></td>
+          <td>ifXTable</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1</code></td>
+          <td>ifXEntry</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1.6</code></td>
+          <td>ifHCInOctets</td>
+          <td>인터페이스의 입력 바이트 수</td>
+          <td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L505">ifBandwidthInUsage</a>라는 별칭을 씀.</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1.10</code></td>
+          <td>ifHCOutOctets</td>
+          <td>인터페이스의 출력 바이트 수</td>
+          <td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10">CNRS</a>. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L506">ifBandwidthOutUsage</a>라는 별칭을 씀.</td>
+      </tr>
+  </tbody>
 </table>
 <h1 id="참조">참조</h1>
 <ul>
