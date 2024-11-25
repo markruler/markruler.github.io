@@ -146,14 +146,14 @@ _출처: [educative](https://www.educative.io/edpresso/what-are-kernel-namespace
 
 | 네임스페이스            | 플래그            | 경로                                                  | 매뉴얼                                                                                   | 격리 대상                            |
 | ----------------------- | ----------------- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------ |
-| Cgroup                  | `CLONE_NEWCGROUP` | /proc/[pid]/ns/cgroup                                 | [cgroup_namespaces(7)](https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html)   | Cgroup root directory                |
-| IPC                     | `CLONE_NEWIPC`    | /proc/[pid]/ns/ipc                                    | [ipc_namespaces(7)](https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html)         | System V IPC, POSIX message queues   |
-| Network                 | `CLONE_NEWNET`    | /proc/[pid]/ns/net                                    | [network_namespaces(7)](https://man7.org/linux/man-pages/man7/network_namespaces.7.html) | Network devices, stacks, ports, etc. |
-| Mount                   | `CLONE_NEWNS`     | /proc/[pid]/ns/mnt                                    | [mount_namespaces(7)](https://man7.org/linux/man-pages/man7/mount_namespaces.7.html)     | Mount points                         |
-| PID                     | `CLONE_NEWPID`    | /proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children   | [pid_namespaces(7)](https://man7.org/linux/man-pages/man7/pid_namespaces.7.html)         | Process IDs                          |
-| Time                    | `CLONE_NEWTIME`   | /proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children | [time_namespaces(7)](https://man7.org/linux/man-pages/man7/time_namespaces.7.html)       | Boot and monotonic clocks            |
-| User                    | `CLONE_NEWUSER`   | /proc/[pid]/ns/user                                   | [user_namespaces(7)](https://man7.org/linux/man-pages/man7/user_namespaces.7.html)       | User and group IDs                   |
-| UTS (UNIX Time Sharing) | `CLONE_NEWUTS`    | /proc/[pid]/ns/uts                                    | [uts_namespaces(7)](https://man7.org/linux/man-pages/man7/uts_namespaces.7.html)         | Hostname and NIS domain name         |
+| Cgroup                  | CLONE_NEWCGROUP | /proc/[pid]/ns/cgroup                                 | [cgroup_namespaces(7)](https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html)   | Cgroup root directory                |
+| IPC                     | CLONE_NEWIPC    | /proc/[pid]/ns/ipc                                    | [ipc_namespaces(7)](https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html)         | System V IPC, POSIX message queues   |
+| Network                 | CLONE_NEWNET    | /proc/[pid]/ns/net                                    | [network_namespaces(7)](https://man7.org/linux/man-pages/man7/network_namespaces.7.html) | Network devices, stacks, ports, etc. |
+| Mount                   | CLONE_NEWNS     | /proc/[pid]/ns/mnt                                    | [mount_namespaces(7)](https://man7.org/linux/man-pages/man7/mount_namespaces.7.html)     | Mount points                         |
+| PID                     | CLONE_NEWPID    | /proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children   | [pid_namespaces(7)](https://man7.org/linux/man-pages/man7/pid_namespaces.7.html)         | Process IDs                          |
+| Time                    | CLONE_NEWTIME   | /proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children | [time_namespaces(7)](https://man7.org/linux/man-pages/man7/time_namespaces.7.html)       | Boot and monotonic clocks            |
+| User                    | CLONE_NEWUSER   | /proc/[pid]/ns/user                                   | [user_namespaces(7)](https://man7.org/linux/man-pages/man7/user_namespaces.7.html)       | User and group IDs                   |
+| UTS (UNIX Time Sharing) | CLONE_NEWUTS    | /proc/[pid]/ns/uts                                    | [uts_namespaces(7)](https://man7.org/linux/man-pages/man7/uts_namespaces.7.html)         | Hostname and NIS domain name         |
 
 - 네임스페이스 관련 API
 
@@ -209,15 +209,15 @@ sudo docker info -f '{{json .}}' | jq '. | .CgroupDriver'
 
 | 컨트롤러                                                                                                          | 커널 설정 옵션              | 설명                                                                                                  |
 | ----------------------------------------------------------------------------------------------------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------- |
-| [blkio](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst)    | `CONFIG_BLK_CGROUP`         | 블록 IO 제어                                                                                          |
-| [cpuacct](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst)           | `CONFIG_CGROUP_CPUACCT`     | 프로세스 그룹 CPU 사용량 계산                                                                         |
-| [cpuset](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst)            | `CONFIG_CPUSETS`            | 특정 CPU나 NUMA 노드 할당                                                                             |
-| [devices](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst)           | `CONFIG_CGROUP_DEVICE`      | [`mknod`](https://man7.org/linux/man-pages/man2/mknod.2.html)를 통해 디바이스를 관리할 수 있는지 결정 |
-| [freezer](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst) | `CONFIG_CGROUP_FREEZER`     | 프로세스 일시 정지-재개                                                                               |
-| [memory](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst)             | `CONFIG_MEMCG`              | 사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리                                               |
-| [net_cls](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst)           | `CONFIG_CGROUP_NET_CLASSID` | 트래픽 제어에 쓰이는 classid 관리                                                                     |
-| [net_prio](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst)         | `CONFIG_CGROUP_NET_PRIO`    | 네트워크 인터페이스 우선순위(priorities) 관리                                                         |
-| [pids](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst)                 | `CONFIG_CGROUP_PIDS`        | 생성할 수 있는 프로세스 수 관리                                                                       |
+| [blkio](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst)    | CONFIG_BLK_CGROUP         | 블록 IO 제어                                                                                          |
+| [cpuacct](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst)           | CONFIG_CGROUP_CPUACCT     | 프로세스 그룹 CPU 사용량 계산                                                                         |
+| [cpuset](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst)            | CONFIG_CPUSETS            | 특정 CPU나 NUMA 노드 할당                                                                             |
+| [devices](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst)           | CONFIG_CGROUP_DEVICE      | [mknod](https://man7.org/linux/man-pages/man2/mknod.2.html)를 통해 디바이스를 관리할 수 있는지 결정 |
+| [freezer](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst) | CONFIG_CGROUP_FREEZER     | 프로세스 일시 정지-재개                                                                               |
+| [memory](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst)             | CONFIG_MEMCG              | 사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리                                               |
+| [net_cls](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst)           | CONFIG_CGROUP_NET_CLASSID | 트래픽 제어에 쓰이는 classid 관리                                                                     |
+| [net_prio](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst)         | CONFIG_CGROUP_NET_PRIO    | 네트워크 인터페이스 우선순위(priorities) 관리                                                         |
+| [pids](https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst)                 | CONFIG_CGROUP_PIDS        | 생성할 수 있는 프로세스 수 관리                                                                       |
 | ...                                                                                                               | ...                         | ...                                                                                                   |
 
 ### Control Group v2
