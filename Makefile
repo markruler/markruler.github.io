@@ -85,5 +85,5 @@ deploy: build
 
 run:
 	@echo "Run the site..."
-	hugo server --contentDir _content
+	hugo server --contentDir _content --bind=0.0.0.0
 .PHONY: run
