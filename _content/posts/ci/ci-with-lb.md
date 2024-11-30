@@ -9,7 +9,6 @@ socialshare: true
 tags:
   - ci
   - cd
-  - git
   - devops
 categories:
   - blog

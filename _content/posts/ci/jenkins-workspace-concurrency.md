@@ -9,7 +9,6 @@ tags:
   - ci
   - cd
   - jenkins
-  - git
   - devops
 categories:
   - blog

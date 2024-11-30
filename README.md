@@ -1,124 +1,57 @@
-# GitHub Page와 Hugo를 이용한 블로그
+# GitHub Pages와 Hugo를 이용한 블로그
 
-- [GitHub Page와 Hugo를 이용한 블로그](#github-page와-hugo를-이용한-블로그)
-  - [로컬 환경](#로컬-환경)
-  - [콘텐츠 추가](#콘텐츠-추가)
-    - [Docker](#docker)
-    - [Linux](#linux)
-      - [Latest extended](#latest-extended)
-      - [v0.92](#v092)
-    - [Windows](#windows)
-  - [실행](#실행)
+- [GitHub Pages와 Hugo를 이용한 블로그](#github-pages와-hugo를-이용한-블로그)
+  - [Install Hugo](#install-hugo)
+  - [Install Dart Sass](#install-dart-sass)
+  - [로컬 실행](#로컬-실행)
   - [배포](#배포)
-    - [Bash](#bash)
-    - [PowerShell](#powershell)
   - [Theme 변경](#theme-변경)
     - [submodule 삭제](#submodule-삭제)
-  - [Make](#make)
+  - [Install Make](#install-make)
 
-## 로컬 환경
+## Install Hugo
 
-- [Hugo 설치](https://gohugo.io/getting-started/installing/)
-- version <= 0.92.0
-  - [0.93.0](https://github.com/gohugoio/hugo/releases/tag/v0.93.0)부터는 SCSS가 빌드되지 않는데 원인을 모름.
-
-## 콘텐츠 추가
-
-- about 페이지: `_content/about/`
-- 포스트: `_content/posts/`
-- 이미지: `_content/images/`
+- [Linux](https://gohugo.io/installation/linux/)
 
 ```sh
-# AI 이미지 생성
-중앙에 케이블이 여러개 연결된 이미지를 그려줘.
-검은색 배경에 노란색으로 강조해.
-미니멀리즘 스타일로 그려줘.
-결과 이미지 비율은 4:3으로 만들어.
-```
-
-### Docker
-
-```sh
-# User가 root이기 때문에 실행만 하고 빌드는 하지 않는다.
-docker run --rm -it \
-  -v $(pwd)/_blog:/src \
-  -p 1313:1313 \
-  klakegg/hugo:0.92.0 \
-  server
-```
-
-### Linux
-
-#### Latest extended
-
-```sh
-# https://gohugo.io/hugo-pipes/transpile-sass-to-css/
-sudo snap install dart-sass
-
-# https://gohugo.io/installation/linux/
 sudo snap install hugo
 ```
 
-#### v0.92
+- [macOS](https://gohugo.io/installation/macos/)
 
 ```sh
-cd /tmp
-wget https://github.com/gohugoio/hugo/releases/download/v0.92.0/hugo_0.92.0_Linux-64bit.tar.gz
-tar -xvf hugo_0.92.0_Linux-64bit.tar.gz
+brew install hugo
 ```
 
-```sh
-echo $PATH
-# /usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/var/lib/snapd/snap/bin:...
-sudo mv hugo /usr/local/bin
-```
-
-```sh
-hugo version
-# hugo v0.92.0-B3549403 linux/amd64 BuildDate=2022-01-12T08:23:18Z VendorInfo=gohugoio
-```
-
-### Windows
+- [Windows](https://gohugo.io/installation/windows/)
 
 ```ps1
+choco install hugo-extended
+```
+
+## Install Dart Sass
+
+- [link](https://gohugo.io/hugo-pipes/transpile-sass-to-css/#installing-in-a-development-environment)
+
+```sh
+# Linux
+sudo snap install dart-sass
+# macOS
+brew install sass/sass/sass
 # Windows
-choco list hugo -a -r
-choco install hugo --version=0.92.0
+choco install sass
 ```
 
-```ps1
-hugo version
-# hugo v0.92.0-B3549403 windows/amd64 BuildDate=2022-01-12T08:23:18Z VendorInfo=gohugoio
-```
+## 로컬 실행
 
-```ps1
-choco upgrade hugo --version=0.92.0 --allow-downgrade
-```
-
-## 실행
-
-```bash
-cd _blog
-
-./scripts/startup.sh
+```sh
+make run
 ```
 
 ## 배포
 
-### Bash
-
-```bash
-cd _blog
-
-./scripts/deploy.sh
-```
-
-### PowerShell
-
-```ps1
-cd _blog
-
-./scripts/windows.deploy.ps1
+```sh
+make deploy
 ```
 
 ## Theme 변경
@@ -152,7 +85,7 @@ rm -rf .git/modules/themes/hugo-theme-diary
 git rm -f themes/hugo-theme-diary
 ```
 
-## Make
+## Install Make
 
 - [Windows 11](https://gnuwin32.sourceforge.net/packages/make.htm)
 - 설치 후 환경 변수 추가
