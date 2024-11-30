@@ -9,7 +9,7 @@ tags:
   - container
   - translate
 categories:
-  - how-to
+  - wiki
 ---
 
 > - Ahmet Alp Balkan의 [Building container images in Go](https://ahmet.im/blog/building-container-images-in-go/)를 번역한 글입니다.

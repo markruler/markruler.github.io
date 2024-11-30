@@ -10,7 +10,7 @@ tags:
   - linux
   - memory
 categories:
-  - how-to
+  - wiki
 ---
 
 **스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역**이다.

@@ -11,7 +11,7 @@ tags:
   - docker-compose
   - GPU
 categories:
-  - how-to
+  - wiki
 ---
 
 # 대형 언어 모델 (LLM, Large Language Model)

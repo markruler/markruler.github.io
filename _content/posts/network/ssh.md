@@ -10,7 +10,7 @@ tags:
   - shell
   - security
 categories:
-  - how-to
+  - wiki
 ---
 
 - [SSH key 생성](#ssh-key-생성)

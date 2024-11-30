@@ -10,7 +10,7 @@ tags:
   - xdg
   - GUI
 categories:
-  - note
+  - wiki
 ---
 
 - [freedesktop.org](#freedesktoporg)

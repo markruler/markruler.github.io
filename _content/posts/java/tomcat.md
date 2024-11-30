@@ -9,7 +9,7 @@ tags:
   - web
   - java
 categories:
-  - note
+  - wiki
 ---
 
 # Architecture

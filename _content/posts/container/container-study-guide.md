@@ -10,7 +10,7 @@ tags:
   - kubernetes
   - docker
 categories:
-  - note
+  - wiki
 ---
 
 # 거두절미

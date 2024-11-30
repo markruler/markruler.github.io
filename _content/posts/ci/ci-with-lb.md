@@ -12,7 +12,7 @@ tags:
   - git
   - devops
 categories:
-  - case
+  - blog
 ---
 
 - [개요](#개요)

@@ -10,7 +10,7 @@ tags:
   - dbms
   - monitoring
 categories:
-  - how-to
+  - wiki
 ---
 
 # 개요

@@ -11,7 +11,7 @@ tags:
   - web
   - browser
 Categories:
-  - how-to
+  - wiki
 ---
 
 - [Chrome URLs](#chrome-urls)

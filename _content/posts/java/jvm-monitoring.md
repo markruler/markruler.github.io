@@ -11,7 +11,7 @@ tags:
   - tomcat
   - monitoring
 categories:
-  - how-to
+  - wiki
 ---
 
 > [모니터링과 타임아웃의 중요성](/posts/java/java-timeout-monitoring/)은 아무리 강조해도 지나치지 않는다.

@@ -11,7 +11,7 @@ tags:
   - web
   - frontend
 categories:
-  - note
+  - wiki
 ---
 
 - [CGI (Common Gateway Interface)](#cgi-common-gateway-interface)

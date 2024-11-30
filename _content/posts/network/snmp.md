@@ -9,7 +9,7 @@ tags:
   - network
   - monitoring
 categories:
-  - how-to
+  - wiki
 ---
 
 # 개요

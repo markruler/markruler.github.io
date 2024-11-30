@@ -10,7 +10,7 @@ tags:
   - shell
   - translate
 Categories:
-  - how-to
+  - wiki
 ---
 
 > - [Maciej Radzikowski](https://twitter.com/radzikowski_m)가 작성한 [Minimal safe Bash script template (2020-12-14)](https://betterdev.blog/minimal-safe-bash-script-template/)를 번역한 글입니다.

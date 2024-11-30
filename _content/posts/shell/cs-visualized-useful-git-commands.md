@@ -10,7 +10,7 @@ tags:
   - shell
   - translate
 Categories:
-  - how-to
+  - wiki
 ---
 
 > - 리디아 할리(Lydia Hallie, [@lydiahallie](https://twitter.com/lydiahallie))가 쓴 [CS Visualized: Useful Git Commands](https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1)를 번역한 글입니다.

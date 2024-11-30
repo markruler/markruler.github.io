@@ -11,7 +11,7 @@ tags:
   - vim
   - shell
 categories:
-  - how-to
+  - wiki
 ---
 
 > 업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,

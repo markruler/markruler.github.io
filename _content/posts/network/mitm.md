@@ -11,5 +11,5 @@ tags:
   - security
   - mitm
 categories:
-  - how-to
+  - wiki
 ---

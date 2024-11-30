@@ -10,7 +10,7 @@ tags:
   - monitoring
   - APM
 categories:
-  - case
+  - blog
 ---
 
 APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)이다.

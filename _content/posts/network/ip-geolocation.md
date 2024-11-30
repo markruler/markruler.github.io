@@ -10,7 +10,7 @@ tags:
   - ip
   - geolocation
 categories:
-  - case
+  - blog
 ---
 
 # 현상

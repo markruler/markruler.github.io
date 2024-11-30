@@ -10,7 +10,7 @@ tags:
   - elasticsearch
   - batch
 categories:
-  - case
+  - blog
 ---
 
 엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공한다.

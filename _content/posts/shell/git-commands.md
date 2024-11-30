@@ -10,7 +10,7 @@ tags:
   - git
   - shell
 Categories:
-  - how-to
+  - wiki
 ---
 
 - [Git Internal](#git-internal)

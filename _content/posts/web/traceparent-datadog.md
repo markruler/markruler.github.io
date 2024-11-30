@@ -11,7 +11,7 @@ tags:
   - APM
   - trace
 categories:
-  - case
+  - blog
 ---
 
 # 개요

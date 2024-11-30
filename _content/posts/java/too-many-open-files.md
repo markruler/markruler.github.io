@@ -10,7 +10,7 @@ tags:
   - linux
   - file
 categories:
-  - case
+  - blog
 ---
 
 > 커버 이미지 출처: [Stable diffusion](https://stablediffusionweb.com/) "swimming pool lane pattern"

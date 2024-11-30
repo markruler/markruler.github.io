@@ -12,7 +12,7 @@ tags:
   - timeout
   - datadog
 categories:
-  - how-to
+  - wiki
 ---
 
 > [Observability 용어 정리](/posts/cloud/monitor-trace-log-metric/)

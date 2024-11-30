@@ -11,7 +11,7 @@ tags:
   - network
   - latency
 Categories:
-  - case
+  - blog
 ---
 
 - [배경](#배경)
