@@ -78,7 +78,7 @@
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.1dfa1ae10a7c8157077b5399a088d33e9f0372b5c0440d4dadf9e4e7a00829ba.css" integrity="sha256-Hfoa4Qp8gVcHe1OZoIjTPp8DcrXARA1Nrfnk56AIKbo=" media="screen">
 
 
 <link rel="stylesheet"
@@ -228,8 +228,26 @@
 						
 						
 							<li>
-								<a href="#xdg-user-directories" class="nav-xdg-user-directories">
-									XDG user directories
+								<a href="#xdg-user-dirs-xdg-user-directories" class="nav-xdg-user-dirs-xdg-user-directories">
+									xdg-user-dirs (XDG user directories)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xdg-open-open" class="nav-xdg-open-open">
+									xdg-open (open)
 								</a>
 							</li>
 						
@@ -555,7 +573,8 @@
 <li><a href="#freedesktoporg">freedesktop.org</a></li>
 <li><a href="#%EA%B4%80%EB%A0%A8-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4">관련 소프트웨어</a>
 <ul>
-<li><a href="#xdg-user-directories">XDG user directories</a></li>
+<li><a href="#xdg-user-dirs-xdg-user-directories">xdg-user-dirs (XDG user directories)</a></li>
+<li><a href="#xdg-open-open">xdg-open (open)</a></li>
 <li><a href="#x-window-system">X Window System</a>
 <ul>
 <li><a href="#x11-forwarding">X11 Forwarding</a></li>
@@ -587,7 +606,10 @@
 freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 상호 운용성과 공유 기술에 중점을 둔 무료 및 오픈 소스 소프트웨어의 개발을 주도합니다.</p>
 </blockquote>
 <h1 id="관련-소프트웨어">관련 소프트웨어</h1>
-<h2 id="xdg-user-directories">XDG user directories</h2>
+<ul>
+<li><a href="https://www.freedesktop.org/wiki/Software/">Software</a> - <code>freedesktop.org</code></li>
+</ul>
+<h2 id="xdg-user-dirs-xdg-user-directories">xdg-user-dirs (XDG user directories)</h2>
 <ul>
 <li><a href="https://www.freedesktop.org/wiki/Software/xdg-user-dirs/">xdg-user-dirs</a>는 사용자 홈 디렉터리에서 &ldquo;well known&rdquo; 디렉토리를 관리하기 위한 도구입니다.
 <ul>
@@ -607,20 +629,73 @@ freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># xdg-user-dir - Find an XDG user dir</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>xdg-user-dir DESKTOP
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># /home/markruler/Desktop</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/xdg/user-dirs.conf
-</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>전역 설정</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/xdg/user-dirs.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this</span>
 </span></span><span style="display:flex;"><span><span style="color:#eedd82">enabled</span>=True
 </span></span><span style="display:flex;"><span><span style="color:#eedd82">filename_encoding</span>=UTF-8
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/xdg/user-dirs.defaults
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># DESKTOP=Desktop</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># DOWNLOAD=Downloads</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># TEMPLATES=Templates</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># PUBLICSHARE=Public</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># DOCUMENTS=Documents</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># MUSIC=Music</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># PICTURES=Pictures</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># VIDEOS=Videos</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/xdg/user-dirs.defaults</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Default settings for user directories</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># The values are relative pathnames from the home directory and</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># will be translated on a per-path-element basis into the users locale</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">DESKTOP</span>=Desktop
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">DOWNLOAD</span>=Downloads
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">TEMPLATES</span>=Templates
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">PUBLICSHARE</span>=Public
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">DOCUMENTS</span>=Documents
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">MUSIC</span>=Music
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">PICTURES</span>=Pictures
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">VIDEOS</span>=Videos
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Another alternative is:</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#MUSIC=Documents/Music</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#PICTURES=Documents/Pictures</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#VIDEOS=Documents/Videos</span>
+</span></span></code></pre></div><p>유저 설정</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># ~/.config/user-dirs.dirs</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># This file is written by xdg-user-dirs-update</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># If you want to change or add directories, just edit the line you&#39;re</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># interested in. All local changes will be retained on the next run.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Format is XDG_xxx_DIR=&#34;$HOME/yyy&#34;, where yyy is a shell-escaped</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># homedir-relative path, or XDG_xxx_DIR=&#34;/yyy&#34;, where /yyy is an</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># absolute path. No other format is supported.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># </span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_DESKTOP_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Desktop&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_DOWNLOAD_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Downloads&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_TEMPLATES_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Templates&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_PUBLICSHARE_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Public&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_DOCUMENTS_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Documents&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_MUSIC_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Music&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_PICTURES_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Pictures&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#eedd82">XDG_VIDEOS_DIR</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$HOME</span><span style="color:#87ceeb">/Videos&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># ~/.config/user-dirs.locale</span>
+</span></span><span style="display:flex;"><span>en_US
+</span></span></code></pre></div><h2 id="xdg-open-open">xdg-open (open)</h2>
+<ul>
+<li><a href="https://www.freedesktop.org/wiki/Software/xdg-utils/">xdg-open</a>은 주어진 파일이나 URL을 사용자의 기본 애플리케이션으로 열어주는 도구다.</li>
+</ul>
+<p>디렉토리를 가리키면 파일 관리자가 열린다.</p>
+<ul>
+<li>간혹 열리지 않는 경우가 있는데 GNOME 데스크탑 환경에서는 파일 관리자인 <code>nautilus</code> 패키지를 설치해야 한다.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>xdg-open .
+</span></span><span style="display:flex;"><span>open .
+</span></span></code></pre></div><p>파일을 가리키면 지정된 MIME 타입에 따라 알맞은 프로그램이 실행된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># ~/.config/mimeapps.list</span>
+</span></span><span style="display:flex;"><span>[Default Applications]
+</span></span><span style="display:flex;"><span>text/html=google-chrome.desktop
+</span></span><span style="display:flex;"><span>x-scheme-handler/http=google-chrome.desktop
+</span></span><span style="display:flex;"><span>x-scheme-handler/https=google-chrome.desktop
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>[Added Associations]
+</span></span><span style="display:flex;"><span>image/png=gimp_gimp.desktop;pinta_pinta.desktop;shotwell-viewer.desktop;
+</span></span><span style="display:flex;"><span>text/x-csrc=code.desktop;
+</span></span><span style="display:flex;"><span>image/jpeg=shotwell-viewer.desktop;
+</span></span><span style="display:flex;"><span>application/sql=code.desktop;
+</span></span><span style="display:flex;"><span>text/markdown=code.desktop;
+</span></span><span style="display:flex;"><span>text/html=google-chrome.desktop;code.desktop;microsoft-edge.desktop;
+</span></span><span style="display:flex;"><span>text/plain=code.desktop;
 </span></span></code></pre></div><h2 id="x-window-system">X Window System</h2>
 <ul>
 <li><a href="http://www.x.org/">X.Org</a>은 <a href="https://en.wikipedia.org/wiki/X_Window_System">X 윈도우 시스템</a>(X Window System, X11)을 만들었다.</li>
@@ -983,8 +1058,26 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#xdg-user-directories" class="nav-xdg-user-directories">
-									XDG user directories
+								<a href="#xdg-user-dirs-xdg-user-directories" class="nav-xdg-user-dirs-xdg-user-directories">
+									xdg-user-dirs (XDG user directories)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xdg-open-open" class="nav-xdg-open-open">
+									xdg-open (open)
 								</a>
 							</li>
 						

@@ -5,6 +5,8 @@
   - [콘텐츠 추가](#콘텐츠-추가)
     - [Docker](#docker)
     - [Linux](#linux)
+      - [Latest extended](#latest-extended)
+      - [v0.92](#v092)
     - [Windows](#windows)
   - [실행](#실행)
   - [배포](#배포)
@@ -46,6 +48,18 @@ docker run --rm -it \
 ```
 
 ### Linux
+
+#### Latest extended
+
+```sh
+# https://gohugo.io/hugo-pipes/transpile-sass-to-css/
+sudo snap install dart-sass
+
+# https://gohugo.io/installation/linux/
+sudo snap install hugo
+```
+
+#### v0.92
 
 ```sh
 cd /tmp

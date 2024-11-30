@@ -15,7 +15,8 @@ categories:
 
 - [freedesktop.org](#freedesktoporg)
 - [관련 소프트웨어](#관련-소프트웨어)
-  - [XDG user directories](#xdg-user-directories)
+  - [xdg-user-dirs (XDG user directories)](#xdg-user-dirs-xdg-user-directories)
+  - [xdg-open (open)](#xdg-open-open)
   - [X Window System](#x-window-system)
     - [X11 Forwarding](#x11-forwarding)
   - [GNOME Desktop](#gnome-desktop)
@@ -38,7 +39,9 @@ XDG는 `X Desktop Group`의 약자로, [freedesktop.org](https://freedesktop.org
 
 # 관련 소프트웨어
 
-## XDG user directories
+- [Software](https://www.freedesktop.org/wiki/Software/) - `freedesktop.org`
+
+## xdg-user-dirs (XDG user directories)
 
 - [xdg-user-dirs](https://www.freedesktop.org/wiki/Software/xdg-user-dirs/)는 사용자 홈 디렉터리에서 "well known" 디렉토리를 관리하기 위한 도구입니다.
   - well known 디렉토리? Downloads, Documents, Music, Pictures, Videos 등 사용자 홈 디렉터리에 자주 사용되는 디렉토리를 말한다.
@@ -67,24 +70,92 @@ xdg-user-dir DESKTOP
 # /home/markruler/Desktop
 ```
 
+전역 설정
+
 ```sh
-cat /etc/xdg/user-dirs.conf
-...
+# /etc/xdg/user-dirs.conf
+# ...
 # the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this
 enabled=True
 filename_encoding=UTF-8
 ```
 
 ```sh
-cat /etc/xdg/user-dirs.defaults
-# DESKTOP=Desktop
-# DOWNLOAD=Downloads
-# TEMPLATES=Templates
-# PUBLICSHARE=Public
-# DOCUMENTS=Documents
-# MUSIC=Music
-# PICTURES=Pictures
-# VIDEOS=Videos
+# /etc/xdg/user-dirs.defaults
+# Default settings for user directories
+#
+# The values are relative pathnames from the home directory and
+# will be translated on a per-path-element basis into the users locale
+DESKTOP=Desktop
+DOWNLOAD=Downloads
+TEMPLATES=Templates
+PUBLICSHARE=Public
+DOCUMENTS=Documents
+MUSIC=Music
+PICTURES=Pictures
+VIDEOS=Videos
+# Another alternative is:
+#MUSIC=Documents/Music
+#PICTURES=Documents/Pictures
+#VIDEOS=Documents/Videos
+```
+
+유저 설정
+
+```sh
+# ~/.config/user-dirs.dirs
+# This file is written by xdg-user-dirs-update
+# If you want to change or add directories, just edit the line you're
+# interested in. All local changes will be retained on the next run.
+# Format is XDG_xxx_DIR="$HOME/yyy", where yyy is a shell-escaped
+# homedir-relative path, or XDG_xxx_DIR="/yyy", where /yyy is an
+# absolute path. No other format is supported.
+# 
+XDG_DESKTOP_DIR="$HOME/Desktop"
+XDG_DOWNLOAD_DIR="$HOME/Downloads"
+XDG_TEMPLATES_DIR="$HOME/Templates"
+XDG_PUBLICSHARE_DIR="$HOME/Public"
+XDG_DOCUMENTS_DIR="$HOME/Documents"
+XDG_MUSIC_DIR="$HOME/Music"
+XDG_PICTURES_DIR="$HOME/Pictures"
+XDG_VIDEOS_DIR="$HOME/Videos"
+```
+
+```sh
+# ~/.config/user-dirs.locale
+en_US
+```
+
+## xdg-open (open)
+
+- [xdg-open](https://www.freedesktop.org/wiki/Software/xdg-utils/)은 주어진 파일이나 URL을 사용자의 기본 애플리케이션으로 열어주는 도구다.
+
+디렉토리를 가리키면 파일 관리자가 열린다.
+
+- 간혹 열리지 않는 경우가 있는데 GNOME 데스크탑 환경에서는 파일 관리자인 `nautilus` 패키지를 설치해야 한다.
+
+```sh
+xdg-open .
+open .
+```
+
+파일을 가리키면 지정된 MIME 타입에 따라 알맞은 프로그램이 실행된다.
+
+```sh
+# ~/.config/mimeapps.list
+[Default Applications]
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+...
+[Added Associations]
+image/png=gimp_gimp.desktop;pinta_pinta.desktop;shotwell-viewer.desktop;
+text/x-csrc=code.desktop;
+image/jpeg=shotwell-viewer.desktop;
+application/sql=code.desktop;
+text/markdown=code.desktop;
+text/html=google-chrome.desktop;code.desktop;microsoft-edge.desktop;
+text/plain=code.desktop;
 ```
 
 ## X Window System
