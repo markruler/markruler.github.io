@@ -143,7 +143,7 @@ public final class MyServletListener implements ServletContextListener {
 
 ![HTTP Servlet Request](/images/java/http-servlet-request-flow.png)
 
-*[Demonstration](https://github.com/xpdojo/java/blob/main/request-lifecycle-servlet/)*
+*[Demonstration](https://github.com/xpdojo/java/tree/study/request-lifecycle-servlet/)*
 
 # Versions
 

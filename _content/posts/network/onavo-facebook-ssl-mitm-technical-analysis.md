@@ -188,7 +188,6 @@ VPN 연결이 작동하지 않고 실제 백엔드 서비스가 중단된 상태
 
 <video
   src="https://doubleagent.net/content/media/2024/04/zszPzD8NSHAFb9W1.mp4"
-  style="width:100%;height:auto;max-width:500px;"
   controls></video>
 
 여기서 우리가 확인할 수 있는 것은 사용자 '보호'를 제공한다는 구실로 요구하는 2가지 특정 권한이 문제가 된다는 점입니다.
