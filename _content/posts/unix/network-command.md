@@ -96,6 +96,8 @@ sar -n TCP,ETCP 1
 
 ## iftop
 
+네트워크 인터페이스 정보를 확인할 수 있습니다.
+
 ```sh
 # sudo apt install iftop
 sudo iftop
@@ -110,6 +112,35 @@ nethogs
 # To run nethogs without being root you need to enable capabilities on the program (cap_net_admin, cap_net_raw), see the documentation for details.
 
 sudo nethogs
+```
+
+## iperf
+
+네트워크 대역폭을 측정할 수 있습니다.
+
+```sh
+# server
+iperf -s -p 5050
+# ------------------------------------------------------------
+# Server listening on TCP port 5050
+# TCP window size: 85.3 KByte (default)
+# ------------------------------------------------------------
+# [  4] local 10.10.10.175 port 5050 connected with 111.222.111.222 port 42250 (peer 2.1.5)
+# [ ID] Interval       Transfer     Bandwidth
+# [  4]  0.0-10.0 sec   493 MBytes   413 Mbits/sec
+```
+
+```sh
+# client
+iperf -c 10.10.10.175 -p 5050
+# ------------------------------------------------------------
+# Client connecting to 61.111.18.175, TCP port 5050
+# TCP window size: 64.0 KByte (default)
+# ------------------------------------------------------------
+# [  1] local 192.168.0.33 port 42250 connected with 61.111.18.175 port 5050
+# [ ID] Interval       Transfer     Bandwidth
+# [  1] 0.0000-10.0399 sec   493 MBytes   412 Mbits/sec
+
 ```
 
 # TCP/IP
