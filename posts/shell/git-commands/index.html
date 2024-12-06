@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>CLI 환경에서 소스 코드 관리하기</title>
+<title>깃(Git) CLI 환경에서 소스 코드 관리하기</title>
 
 
 
@@ -18,7 +18,7 @@
 
 <meta property="og:url" content="https://markruler.github.io/posts/shell/git-commands/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="CLI 환경에서 소스 코드 관리하기">
+  <meta property="og:title" content="깃(Git) CLI 환경에서 소스 코드 관리하기">
   <meta property="og:description" content="자주 쓰는 Git 명령어">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
@@ -36,7 +36,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://markruler.github.io/images/shell/git-logo-2color.png">
-  <meta name="twitter:title" content="CLI 환경에서 소스 코드 관리하기">
+  <meta name="twitter:title" content="깃(Git) CLI 환경에서 소스 코드 관리하기">
   <meta name="twitter:description" content="자주 쓰는 Git 명령어">
 
 
@@ -1644,7 +1644,7 @@
                 
             >
                 <div class="post-title">
-                    CLI 환경에서 소스 코드 관리하기
+                    깃(Git) CLI 환경에서 소스 코드 관리하기
                     
                     <div class="post-subtitle">
                         자주 쓰는 Git 명령어
@@ -2233,9 +2233,9 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 upstream에서 fetch한 나의 로컬 환경을 <code>local</code>이라고 부른다.
 아래 명령어는 지정한 <code>upstream</code> 브랜치로 push하도록 한다.</p>
 <p>잠깐. fork한 <code>origin</code> 저장소가 아니라 <code>upstream</code>으로 push한다?</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git push --set-upstream origin feature/test-upstream
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push --set-upstream origin feature/test-upstream
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># push 후</span>
-</span></span><span style="display:flex;"><span>Branch <span style="color:#87ceeb">&#39;feature/test-upstream&#39;</span> set up to track remote branch <span style="color:#87ceeb">&#39;feature/test-upstream&#39;</span> from <span style="color:#87ceeb">&#39;origin&#39;</span>.
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Branch &#39;feature/test-upstream&#39; set up to track remote branch &#39;feature/test-upstream&#39; from &#39;origin&#39;.</span>
 </span></span></code></pre></div><p>사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
 흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어다.
 예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고, downstream은 그 반대다.
@@ -2246,8 +2246,8 @@ Git은 DVCS(Distributed Version Control System)다.
 Triangular Workflow는 하나의 효과적인 방식일 뿐이다.</p>
 <h2 id="status">status</h2>
 <p>index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git status -sb
-</span></span><span style="display:flex;"><span><span style="color:#0f0">## feature...master [ahead 2, behind 1]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git status -sb
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0">## feature...master [ahead 2, behind 1]</span>
 </span></span><span style="display:flex;"><span>D  README.md
 </span></span><span style="display:flex;"><span>D  a.c
 </span></span><span style="display:flex;"><span>D  c.c
@@ -2292,12 +2292,11 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 <p>관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영한다.
 즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
 그렇다고 working tree나 staging area의 내용들을 지우지 않는다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git commit
-</span></span><span style="display:flex;"><span>$ git commit -m <span style="color:#87ceeb">&#34;commit message&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋의 author를 변경할 수 있다.</span>
-</span></span><span style="display:flex;"><span>$ git commit --amend --author=<span style="color:#87ceeb">&#34;Changsu Im &lt;imcxsu@gmail.com&gt;&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git commit
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#87ceeb">&#34;commit message&#34;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋의 author를 변경할 수 있다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 특정 커밋의 author를 변경하고 싶다면 rebase를 사용한다.</span>
+</span></span><span style="display:flex;"><span>git commit --amend --author=<span style="color:#87ceeb">&#34;Changsu Im &lt;imcxsu@gmail.com&gt;&#34;</span>
 </span></span></code></pre></div><h2 id="merge">merge</h2>
 <p>소스 코드를 병합한다.
 다음과 같은 단계를 수행한다.</p>
@@ -2309,25 +2308,23 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 <li>head 사이의 공통된 영역에서 변경 사항이 있다면 마커를 통해 충돌을 표시하고 사용자에게 안내한다.</li>
 <li>충돌한 곳이 없다면, 콘텐츠를 병합하고, 병합을 기술한 메타데이터를 커밋한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># feature 브랜치에서 main 브랜치`를` 병합한다.</span>
-</span></span><span style="display:flex;"><span>$ git switch feature
-</span></span><span style="display:flex;"><span>$ git merge main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 위 명령어들은 한 줄로 실행할 수 있다.</span>
-</span></span><span style="display:flex;"><span>$ git merge feature main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.</span>
-</span></span><span style="display:flex;"><span>$ git merge --abort
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># feature 브랜치에서 main 브랜치`를` 병합한다.</span>
+</span></span><span style="display:flex;"><span>git switch feature
+</span></span><span style="display:flex;"><span>git merge main
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 위 명령어들은 한 줄로 실행할 수 있다.</span>
+</span></span><span style="display:flex;"><span>git merge feature main
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.</span>
+</span></span><span style="display:flex;"><span>git merge --abort
 </span></span></code></pre></div><p><img src="/images/shell/git/merging-main-into-the-feature-branch.png" alt="Merging main into the feature branch"></p>
 <p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging main into the feature branch</a></em></p>
 <p>병합은 두 가지 방식이 있다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># fast-forward</span>
-</span></span><span style="display:flex;"><span>$ git merge --ff
+</span></span><span style="display:flex;"><span>git merge --ff
 </span></span></code></pre></div><p>먼저 Fast Forward 방식이다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
 별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># no-fast-forward</span>
-</span></span><span style="display:flex;"><span>$ git merge --no-ff
+</span></span><span style="display:flex;"><span>git merge --no-ff
 </span></span></code></pre></div><p>두 번째는 <a href="https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge">3-way-merge</a> 방식을 사용한 No Fast Forward 방식이다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합한다.
 단순히 브랜치 포인터를 최신 커밋으로 옮기는 게 아니라 3-way-merge의 결과를
@@ -2404,40 +2401,39 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없다.</p>
 <p>rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다르다.
 보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># oldBase 브랜치에서 newBase 브랜치로 rebase한다.</span>
-</span></span><span style="display:flex;"><span>$ git rebase &lt;newBase&gt; &lt;oldBase&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># feature 브랜치에서 main 브랜치`로` 재배치(rebase)한다.</span>
-</span></span><span style="display:flex;"><span>$ git switch feature
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>       A---B---C feature
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># oldBase 브랜치에서 newBase 브랜치로 rebase한다.</span>
+</span></span><span style="display:flex;"><span>git rebase &lt;newBase&gt; &lt;oldBase&gt;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># feature 브랜치에서 main 브랜치`로` 재배치(rebase)한다.</span>
+</span></span><span style="display:flex;"><span>git switch feature
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>       A---B---C feature
 </span></span><span style="display:flex;"><span>      /
 </span></span><span style="display:flex;"><span> D---E---F---G main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git rebase main
-</span></span><span style="display:flex;"><span>$ git rebase main feature
-</span></span><span style="display:flex;"><span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rebase main
+</span></span><span style="display:flex;"><span>git rebase main feature
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>               A<span style="color:#87ceeb">&#39;--B&#39;</span>--C&#39; feature
 </span></span><span style="display:flex;"><span>              /
 </span></span><span style="display:flex;"><span> D---E---F---G main
 </span></span></code></pre></div><p><img src="/images/shell/git/rebasing-the-feature-branch-onto-main.png" alt="Rebasing the feature branch onto main"></p>
 <p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Rebasing the feature branch onto main</a></em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>o---o---o---o---o  main
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>o---o---o---o---o  main
 </span></span><span style="display:flex;"><span>        <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>         o---o---o---o---o  featureA
 </span></span><span style="display:flex;"><span>              <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>               o---o---o  featureB
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git rebase --onto main featureA featureB
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>                      o---o---o  featureB
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rebase --onto main featureA featureB
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>                      o---o---o  featureB
 </span></span><span style="display:flex;"><span>                     /
 </span></span><span style="display:flex;"><span>    o---o---o---o---o  main
 </span></span><span style="display:flex;"><span>     <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>      o---o---o---o---o  featureA
 </span></span></code></pre></div><p>interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; git rebase -i &lt;commit&gt;^
-</span></span><span style="display:flex;"><span>&gt; git rebase --interactive &lt;commit&gt;^
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 돌아가고 싶은 커밋의 직전 커밋까지</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># -i 옵션은 --interactive의 short option</span>
+</span></span><span style="display:flex;"><span>git rebase -i &lt;commit&gt;^
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># root 커밋부터</span>
+</span></span><span style="display:flex;"><span>git rebase -i --root
 </span></span></code></pre></div><p>아래와 같은 하위 명령어들이 있다.
 나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># p, pick &lt;commit&gt; = use commit</span>
@@ -2471,8 +2467,7 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span><span style="display:flex;"><span>399e2ef <span style="color:#f60">3</span>
 </span></span><span style="display:flex;"><span>ea37b52 <span style="color:#f60">2</span>
 </span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.</span>
 </span></span><span style="display:flex;"><span>$ git rebase -i --autosquash main
 </span></span><span style="display:flex;"><span>pick ea37b52 <span style="color:#f60">2</span>
 </span></span><span style="display:flex;"><span>squash d927a64 squash! <span style="color:#f60">2</span>
@@ -2484,8 +2479,7 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span><span style="display:flex;"><span> create mode <span style="color:#f60">100644</span> b
 </span></span><span style="display:flex;"><span> create mode <span style="color:#f60">100644</span> d
 </span></span><span style="display:flex;"><span>Successfully rebased and updated refs/heads/squash.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git --no-pager log --oneline
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git --no-pager log --oneline
 </span></span><span style="display:flex;"><span>ea3b05e (HEAD -&gt; squash) <span style="color:#f60">3</span> <span style="color:#0f0"># 이후의 커밋들도 다시 저장한다.</span>
 </span></span><span style="display:flex;"><span>6f530b5 <span style="color:#f60">2</span>
 </span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>

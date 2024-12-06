@@ -1,7 +1,7 @@
 ---
 date: 2021-12-01T23:28:00+09:00
 lastmod: 2022-02-17T01:39:05+09:00
-title: "CLI 환경에서 소스 코드 관리하기"
+title: "깃(Git) CLI 환경에서 소스 코드 관리하기"
 description: "자주 쓰는 Git 명령어"
 featured_image: "/images/shell/git-logo-2color.png"
 images: ["/images/shell/git-logo-2color.png"]
@@ -608,9 +608,9 @@ upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
 잠깐. fork한 `origin` 저장소가 아니라 `upstream`으로 push한다?
 
 ```bash
-$ git push --set-upstream origin feature/test-upstream
+git push --set-upstream origin feature/test-upstream
 # push 후
-Branch 'feature/test-upstream' set up to track remote branch 'feature/test-upstream' from 'origin'.
+# Branch 'feature/test-upstream' set up to track remote branch 'feature/test-upstream' from 'origin'.
 ```
 
 사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
@@ -627,8 +627,11 @@ Triangular Workflow는 하나의 효과적인 방식일 뿐이다.
 
 index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시한다.
 
-```bash
-$ git status -sb
+```sh
+git status -sb
+```
+
+```sh
 ## feature...master [ahead 2, behind 1]
 D  README.md
 D  a.c
@@ -687,12 +690,14 @@ $ git merge FETCH_HEAD
 그렇다고 working tree나 staging area의 내용들을 지우지 않는다.
 
 ```bash
-$ git commit
-$ git commit -m "commit message"
+git commit
+git commit -m "commit message"
+```
 
+```sh
 # 마지막 커밋의 author를 변경할 수 있다.
-$ git commit --amend --author="Changsu Im <imcxsu@gmail.com>"
 # 특정 커밋의 author를 변경하고 싶다면 rebase를 사용한다.
+git commit --amend --author="Changsu Im <imcxsu@gmail.com>"
 ```
 
 ## merge
@@ -707,16 +712,20 @@ $ git commit --amend --author="Changsu Im <imcxsu@gmail.com>"
 5. head 사이의 공통된 영역에서 변경 사항이 있다면 마커를 통해 충돌을 표시하고 사용자에게 안내한다.
 6. 충돌한 곳이 없다면, 콘텐츠를 병합하고, 병합을 기술한 메타데이터를 커밋한다.
 
-```bash
+```sh
 # feature 브랜치에서 main 브랜치`를` 병합한다.
-$ git switch feature
-$ git merge main
+git switch feature
+git merge main
+```
 
+```sh
 # 위 명령어들은 한 줄로 실행할 수 있다.
-$ git merge feature main
+git merge feature main
+```
 
+```sh
 # merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.
-$ git merge --abort
+git merge --abort
 ```
 
 ![Merging main into the feature branch](/images/shell/git/merging-main-into-the-feature-branch.png)
@@ -727,7 +736,7 @@ $ git merge --abort
 
 ```bash
 # fast-forward
-$ git merge --ff
+git merge --ff
 ```
 
 먼저 Fast Forward 방식이다.
@@ -736,7 +745,7 @@ $ git merge --ff
 
 ```bash
 # no-fast-forward
-$ git merge --no-ff
+git merge --no-ff
 ```
 
 두 번째는 [3-way-merge](<https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge>) 방식을 사용한 No Fast Forward 방식이다.
@@ -827,19 +836,28 @@ merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive
 rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다르다.
 보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용한다.
 
-```bash
+```sh
 # oldBase 브랜치에서 newBase 브랜치로 rebase한다.
-$ git rebase <newBase> <oldBase>
+git rebase <newBase> <oldBase>
+```
 
+```sh
 # feature 브랜치에서 main 브랜치`로` 재배치(rebase)한다.
-$ git switch feature
+git switch feature
+```
 
+```sh
        A---B---C feature
       /
  D---E---F---G main
+```
 
-$ git rebase main
-$ git rebase main feature
+```sh
+git rebase main
+git rebase main feature
+```
+
+```sh
 
                A'--B'--C' feature
               /
@@ -850,15 +868,19 @@ $ git rebase main feature
 
 *[Rebasing the feature branch onto main](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)*
 
-```bash
+```sh
 o---o---o---o---o  main
         \
          o---o---o---o---o  featureA
               \
                o---o---o  featureB
+```
 
-$ git rebase --onto main featureA featureB
+```sh
+git rebase --onto main featureA featureB
+```
 
+```sh
                       o---o---o  featureB
                      /
     o---o---o---o---o  main
@@ -868,9 +890,13 @@ $ git rebase --onto main featureA featureB
 
 interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.
 
-```bash
-> git rebase -i <commit>^
-> git rebase --interactive <commit>^
+```sh
+# 돌아가고 싶은 커밋의 직전 커밋까지
+# -i 옵션은 --interactive의 short option
+git rebase -i <commit>^
+
+# root 커밋부터
+git rebase -i --root
 ```
 
 아래와 같은 하위 명령어들이 있다.
@@ -913,7 +939,9 @@ d927a64 (HEAD -> squash) squash! 2
 399e2ef 3
 ea37b52 2
 7f1a625 (main) 1
+```
 
+```sh
 # squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.
 $ git rebase -i --autosquash main
 pick ea37b52 2
@@ -926,7 +954,9 @@ pick 399e2ef 3
  create mode 100644 b
  create mode 100644 d
 Successfully rebased and updated refs/heads/squash.
+```
 
+```sh
 $ git --no-pager log --oneline
 ea3b05e (HEAD -> squash) 3 # 이후의 커밋들도 다시 저장한다.
 6f530b5 2

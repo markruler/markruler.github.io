@@ -1,5 +1,6 @@
 ---
 date: 2022-08-23T02:45:00+09:00
+lastmod: 2022-08-23T02:45:00+09:00
 title: "Tomcat 이해하기"
 description: "Servlet Container"
 featured_image: "/images/java/http-servlet-request-flow.png"
