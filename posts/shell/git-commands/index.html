@@ -1819,19 +1819,17 @@ CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하�
 <p>왜 데이터의 무결성을 검사해야 할까?
 <a href="https://www.youtube.com/watch?v=4XpnKHJAok8&amp;t=56m25s">데이터를 신뢰하기 위해서다</a>.
 예를 들어 내가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo <span style="color:#87ceeb">&#34;test&#34;</span> &gt; test.txt
-</span></span><span style="display:flex;"><span>$ git hash-object test.txt
-</span></span><span style="display:flex;"><span>9daeafb9864cf43055ae93beb0afd6c7d144bfa4
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 파일명을 변경하더라도 체크섬은 바뀌지 않는다.</span>
-</span></span><span style="display:flex;"><span>$ mv test.txt test2.md
-</span></span><span style="display:flex;"><span>$ git hash-object test2.md
-</span></span><span style="display:flex;"><span>9daeafb9864cf43055ae93beb0afd6c7d144bfa4
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 내용을 변경하면 체크섬은 바뀐다.</span>
-</span></span><span style="display:flex;"><span>$ echo <span style="color:#87ceeb">&#34; &#34;</span> &gt;&gt; test2.md
-</span></span><span style="display:flex;"><span>$ git hash-object test2.md
-</span></span><span style="display:flex;"><span>d698e83c7a0b75a29e815371e584973062b4cab9
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo <span style="color:#87ceeb">&#34;test&#34;</span> &gt; test.txt
+</span></span><span style="display:flex;"><span>git hash-object test.txt
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 9daeafb9864cf43055ae93beb0afd6c7d144bfa4</span>
+</span></span></code></pre></div><p>파일명을 변경하더라도 체크섬은 바뀌지 않는다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>mv test.txt test2.md
+</span></span><span style="display:flex;"><span>git hash-object test2.md
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 9daeafb9864cf43055ae93beb0afd6c7d144bfa4</span>
+</span></span></code></pre></div><p>내용을 변경하면 체크섬은 바뀐다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo <span style="color:#87ceeb">&#34; &#34;</span> &gt;&gt; test2.md
+</span></span><span style="display:flex;"><span>git hash-object test2.md
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># d698e83c7a0b75a29e815371e584973062b4cab9</span>
 </span></span></code></pre></div><p>Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
 만든 체크섬은 40자 길이의 16진수 문자열이다.
 파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구한다.</p>
@@ -1845,19 +1843,17 @@ CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하�
 SHA-1 값의 크기는 20 Bytes(160 Bits)다.
 해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80이다.</p>
 <p>(<a href="https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/">2018년부터 SHA-256으로 전환하고 있고</a>, Git 2.29부터 지원하고 있다)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.</span>
-</span></span><span style="display:flex;"><span>$ git ls-tree ee85
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 앞부분이 중복된다면 아래와 같은 에러가 발생한다.</span>
-</span></span><span style="display:flex;"><span>ferror: short object ID ee85 is ambiguous
+<p>해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git ls-tree ee85
+</span></span></code></pre></div><p>앞부분이 중복된다면 아래와 같은 에러가 발생한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ferror: short object ID ee85 is ambiguous
 </span></span><span style="display:flex;"><span>hint: The candidates are:
 </span></span><span style="display:flex;"><span>hint:   ee8597496 commit 2022-01-12 - 제가 작성한 커밋 메시지입니다
 </span></span><span style="display:flex;"><span>hint:   ee85c50d6 tree
 </span></span><span style="display:flex;"><span>hint:   ee8574581 blob
 </span></span><span style="display:flex;"><span>fatal: Not a valid object name ee85
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 몇 글자를 더 입력해주면 정상적으로 동작한다.</span>
-</span></span><span style="display:flex;"><span>$ git ls-tree ee859
+</span></span></code></pre></div><p>몇 글자를 더 입력해주면 정상적으로 동작한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git ls-tree ee859
 </span></span></code></pre></div><h2 id="git-프로젝트의-세-가지-단계">Git 프로젝트의 세 가지 단계</h2>
 <p>Git은 파일을 세 가지 상태로 관리한다.</p>
 <p><img src="/images/shell/git/lifecycle-file-status.png" alt="The lifecycle of the status of your files"></p>
@@ -1912,9 +1908,8 @@ Git에서의 staging area는 저장소에 커밋되기 직전 단계이고,
 <p><code>.git/</code></p>
 <p>Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳이다.
 description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ tree -L <span style="color:#f60">2</span> .git
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>.git
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tree -L <span style="color:#f60">2</span> .git
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>.git
 </span></span><span style="display:flex;"><span>├── branches
 </span></span><span style="display:flex;"><span>├── COMMIT_EDITMSG
 </span></span><span style="display:flex;"><span>├── config
@@ -1950,11 +1945,10 @@ description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 
 </span></span><span style="display:flex;"><span>    ├── stash
 </span></span><span style="display:flex;"><span>    └── tags
 </span></span></code></pre></div><h2 id="head">HEAD</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cat HEAD
-</span></span><span style="display:flex;"><span>ref: refs/heads/main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat refs/heads/main
-</span></span><span style="display:flex;"><span>4436e4b582c7a8c942f11746d54cf4338325442c
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat HEAD
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ref: refs/heads/main</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat refs/heads/main
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 4436e4b582c7a8c942f11746d54cf4338325442c</span>
 </span></span></code></pre></div><table>
   <thead>
       <tr>
@@ -2008,8 +2002,8 @@ tree 객체 하나는 항목을 여러 개 가질 수 있다.
 <h3 id="blob-binary-large-object">blob (binary large object)</h3>
 <p>blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
 파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt</span>
 </span></span></code></pre></div><p>여기서 blob의 파일 모드는 보통의 파일을 나타내는 <code>100644</code>,
 실행파일을 나타내는 <code>100755</code>,
 심볼릭 링크를 나타내는 <code>120000</code> 세 가지만 사용한다.</p>
@@ -2064,12 +2058,11 @@ config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 </span></span><span style="display:flex;"><span><span style="color:#f00">[branch &#34;main&#34;]</span>
 </span></span><span style="display:flex;"><span>  remote = <span style="color:#87ceeb">origin
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">  merge = refs/heads/main</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git config --global user.name Changsu Im
-</span></span><span style="display:flex;"><span>$ git config --global user.email imcxsu@gmail.com
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># config 목록 출력</span>
-</span></span><span style="display:flex;"><span>$ git config --list
-</span></span><span style="display:flex;"><span>$ git config --list --global
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git config --global user.name Changsu Im
+</span></span><span style="display:flex;"><span>git config --global user.email imcxsu@gmail.com
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># config 목록 출력</span>
+</span></span><span style="display:flex;"><span>git config --list
+</span></span><span style="display:flex;"><span>git config --list --global
 </span></span></code></pre></div><h1 id="scm-source-code-management">SCM: Source Code Management</h1>
 <ul>
 <li><a href="https://www.atlassian.com/git/tutorials/source-code-management">Source code management</a> - Atlassian</li>
@@ -2083,11 +2076,14 @@ config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 </li>
 </ul>
 <h1 id="포셀린porcelain-명령어">포셀린(Porcelain) 명령어</h1>
-<p><a href="https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/">&lsquo;CS Visualized: 유용한 깃(Git) 명령어&rsquo;</a>를 함께 읽는다.</p>
+<p>사용자 친화적인 명령어 모음입니다.
+Git을 관리하는 <strong>상위 수준의 인터페이스</strong>입니다.
+명령어 사용 시 시스템 내부의 복잡한 동작은 숨겨지고 직관적인 결과만 보여줍니다.</p>
+<p><a href="../cs-visualized-useful-git-commands/">&lsquo;CS Visualized: 유용한 깃(Git) 명령어&rsquo;</a>를 함께 읽으면 도움됩니다.</p>
 <h2 id="init">init</h2>
 <p>현재 디렉토리에 <code>.git</code> 디렉터리를 생성하고 Git 프로젝트로 초기화한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git init
-</span></span><span style="display:flex;"><span>Initialized empty Git repository in /home/markruler/toy/.git/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Initialized empty Git repository in /home/markruler/toy/.git/</span>
 </span></span></code></pre></div><h2 id="clone">clone</h2>
 <p>remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제한다. 그 과정은 다음과 같다.</p>
 <ol>
@@ -2096,8 +2092,8 @@ config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 <li><code>.git</code> 디렉토리 내부에 objects와 references를 연결한다.</li>
 <li>최신 버전을 checkout한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git clone <span style="color:#87ceeb">${</span><span style="color:#eedd82">origin</span><span style="color:#87ceeb">}</span>
-</span></span><span style="display:flex;"><span>Cloning into <span style="color:#87ceeb">&#39;my-origin-repo&#39;</span>...
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git clone <span style="color:#87ceeb">${</span><span style="color:#eedd82">origin</span><span style="color:#87ceeb">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Cloning into <span style="color:#87ceeb">&#39;my-origin-repo&#39;</span>...
 </span></span><span style="display:flex;"><span>remote: Enumerating objects: 22940, <span style="color:#f00">done</span>.
 </span></span><span style="display:flex;"><span>remote: Counting objects: 100% (1929/1929), <span style="color:#f00">done</span>.
 </span></span><span style="display:flex;"><span>remote: Compressing objects: 100% (780/780), <span style="color:#f00">done</span>.
@@ -2107,11 +2103,10 @@ config 파일은 INI file(<code>.ini</code>) 형식이다.</p>
 </span></span></code></pre></div><h2 id="submodule">submodule</h2>
 <p>submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
 submodule을 추가하면 <code>.gitmodules</code> 파일이 생성된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># submodule을 새로 추가하는 경우</span>
-</span></span><span style="display:flex;"><span>$ git submodule add https://github.com/markruler/repository
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 의존하는 submodule 리포지터리를 clone한다</span>
-</span></span><span style="display:flex;"><span>$ git submodule update --init --recursive
+<p>submodule을 새로 추가하는 경우</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git submodule add https://github.com/markruler/repository
+</span></span></code></pre></div><p>의존하는 submodule 리포지터리를 clone한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git submodule update --init --recursive
 </span></span></code></pre></div><h2 id="subtree">subtree</h2>
 <p>submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 <code>.gitmodule</code>과 같은 메타 데이터없이 데이터를 그대로 복제한다.</p>
 <ul>
@@ -2132,32 +2127,29 @@ submodule을 추가하면 <code>.gitmodules</code> 파일이 생성된다.</p>
 <li><code>.git/HEAD</code>에 위치한 HEAD를 참조해 현재 작업 중인 브랜치를 찾는다.</li>
 <li>모든 브랜치를 오름차순으로 정렬하고, 현재 작업 중인 브랜치에 별표(*)를 표시한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git branch
-</span></span><span style="display:flex;"><span>* feature
-</span></span><span style="display:flex;"><span>  master
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git branch
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>* feature
+</span></span><span style="display:flex;"><span> master
 </span></span></code></pre></div><h3 id="xargs">xargs</h3>
 <p>eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용하다.</p>
 <ul>
 <li><a href="https://www.baeldung.com/linux/xargs">When to Use xargs</a> - Baeldung</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ echo {0..9} | xargs -n <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">0</span> <span style="color:#f60">1</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">2</span> <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">4</span> <span style="color:#f60">5</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">6</span> <span style="color:#f60">7</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">8</span> <span style="color:#f60">9</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo {0..9} | xargs -n <span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 0 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 4 5</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 6 7</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 8 9</span>
 </span></span></code></pre></div><p>branch 명령과 xargs 명령을 파이프(<code>|</code>)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># master, stable, main, 현재 브랜치 외 모든 브랜치 삭제</span>
-</span></span><span style="display:flex;"><span>$ git branch | grep -v <span style="color:#87ceeb">&#34;master\|stable\|main\|\*&#34;</span> | xargs git branch -D
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 현재 브랜치 제외하고 삭제</span>
-</span></span><span style="display:flex;"><span>$ git branch | grep -v <span style="color:#87ceeb">&#34;\*&#34;</span> | xargs git branch -D
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 모두 삭제</span>
-</span></span><span style="display:flex;"><span>$ git branch | grep -v <span style="color:#87ceeb">&#39;^*&#39;</span> | xargs git branch -D
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 정규표현식으로 특정 브랜치 삭제</span>
-</span></span><span style="display:flex;"><span>$ git branch | grep -Eo <span style="color:#87ceeb">&#39;feature/.*&#39;</span> | xargs git branch -D
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># master, stable, main, 현재 브랜치 외 모든 브랜치 삭제</span>
+</span></span><span style="display:flex;"><span>git branch | grep -v <span style="color:#87ceeb">&#34;master\|stable\|main\|\*&#34;</span> | xargs git branch -D
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 브랜치 제외하고 삭제</span>
+</span></span><span style="display:flex;"><span>git branch | grep -v <span style="color:#87ceeb">&#34;\*&#34;</span> | xargs git branch -D
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-s" data-lang="s"><span style="display:flex;"><span><span style="color:#0f0"># 모두 삭제</span>
+</span></span><span style="display:flex;"><span>git branch | grep -v <span style="color:#87ceeb">&#39;^*&#39;</span> | xargs git branch -D
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 정규표현식으로 특정 브랜치 삭제</span>
+</span></span><span style="display:flex;"><span>git branch | grep -Eo <span style="color:#87ceeb">&#39;feature/.*&#39;</span> | xargs git branch -D
 </span></span></code></pre></div><h2 id="tag-1">tag</h2>
 <p>커밋을 참조하기 쉽도록 꼬리표(tag)를 붙인다. Lightweight 태그와 Annotated 태그 두 종류가 있다.</p>
 <ul>
@@ -2167,15 +2159,14 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 일반적으로 Annotated 태그를 만들어 이 모든 정보를 사용할 수 있도록 하는 것이 좋다.
 하지만 임시로 생성하는 태그거나 이러한 정보를 유지할 필요가 없는 경우에는 Lightweight 태그를 사용할 수도 있다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># Annotated tag</span>
-</span></span><span style="display:flex;"><span>$ git tag -a 1.0.0 -m <span style="color:#87ceeb">&#34;test tag&#34;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># tag 목록</span>
-</span></span><span style="display:flex;"><span>$ git tag
-</span></span><span style="display:flex;"><span>1.0.0
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># tag 내용 확인</span>
-</span></span><span style="display:flex;"><span>$ git show 1.0.0
-</span></span><span style="display:flex;"><span>tag 1.0.0
+<p>태그 달기(Annotated tag)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git tag -a 1.0.0 -m <span style="color:#87ceeb">&#34;test tag&#34;</span>
+</span></span></code></pre></div><p>tag 목록 확인하기</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git tag
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 1.0.0</span>
+</span></span></code></pre></div><p>tag 내용 확인</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show 1.0.0
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tag 1.0.0
 </span></span><span style="display:flex;"><span>Tagger: Changsu Im &lt;imcxsu@gmail.com&gt;
 </span></span><span style="display:flex;"><span>Date:   Sat Jan <span style="color:#f60">15</span> 20:38:46 <span style="color:#f60">2022</span> +0900
 </span></span><span style="display:flex;"><span>
@@ -2183,8 +2174,8 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>commit 49ef168385a2fe63f6e47055c1da79a0465039dc (HEAD -&gt; master, tag: 1.0.0)
 </span></span><span style="display:flex;"><span>...
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git show-ref --tags
-</span></span><span style="display:flex;"><span>02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show-ref --tags
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0</span>
 </span></span></code></pre></div><p>tag 명령어를 실행하면 다음과 같은 단계를 수행한다.</p>
 <ol>
 <li>커밋이 참조하고 있는 체크섬을 가져온다.</li>
@@ -2203,27 +2194,23 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 </ul>
 </li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 1. 원격 리포지터리에서 해결하려는 Issue에 맞는 브랜치를 생성한다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 1. 원격 리포지터리에서 해결하려는 Issue에 맞는 브랜치를 생성한다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 2. 로컬 환경에서 원격 리포지터리의 업데이트 사항을 가져온다.</span>
-</span></span><span style="display:flex;"><span>$ git fetch --all
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 3. 해당 브랜치를 tracking하는 로컬 브랜치를 생성한다.</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># git switch -c &lt;branch&gt; -t[--track] &lt;remote&gt;/&lt;branch&gt;</span>
-</span></span><span style="display:flex;"><span>$ git switch -c feature/local-test -t origin/feature/remote-test
-</span></span><span style="display:flex;"><span>Branch <span style="color:#87ceeb">&#39;feature/local-test&#39;</span> set up to track remote branch <span style="color:#87ceeb">&#39;feature/remote-test&#39;</span> from <span style="color:#87ceeb">&#39;origin&#39;</span>.
-</span></span><span style="display:flex;"><span>Switched to a new branch <span style="color:#87ceeb">&#39;feature/local-test&#39;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 브랜치를 Local에서 먼저 생성하는 경우도 있다.</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 1. 브랜치를 생성한다.</span>
-</span></span><span style="display:flex;"><span>$ git switch -c test-rebase
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2. upstream을 지정한다.</span>
-</span></span><span style="display:flex;"><span>$ git branch --set-upstream-to=origin/test-rebase test-rebase
-</span></span><span style="display:flex;"><span>Branch <span style="color:#87ceeb">&#39;test-rebase&#39;</span> set up to track remote branch <span style="color:#87ceeb">&#39;test-rebase&#39;</span> from <span style="color:#87ceeb">&#39;origin&#39;</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 3. rebase</span>
-</span></span><span style="display:flex;"><span>$ git rebase
-</span></span><span style="display:flex;"><span>First, rewinding head to replay your work on top of it...
-</span></span><span style="display:flex;"><span>Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
+</span></span><span style="display:flex;"><span>git fetch --all
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 3. 해당 브랜치를 tracking하는 로컬 브랜치를 생성한다.</span>
+</span></span><span style="display:flex;"><span>git switch -c feature/local-test -t origin/feature/remote-test
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Branch &#39;feature/local-test&#39; set up to track remote branch &#39;feature/remote-test&#39; from &#39;origin&#39;.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Switched to a new branch &#39;feature/local-test&#39;</span>
+</span></span></code></pre></div><p>브랜치를 Local에서 먼저 생성하는 경우도 있다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 1. 브랜치를 생성한다.</span>
+</span></span><span style="display:flex;"><span>git switch -c test-rebase
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 2. upstream을 지정한다.</span>
+</span></span><span style="display:flex;"><span>git branch --set-upstream-to=origin/test-rebase test-rebase
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Branch &#39;test-rebase&#39; set up to track remote branch &#39;test-rebase&#39; from &#39;origin&#39;.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 3. rebase</span>
+</span></span><span style="display:flex;"><span>git rebase
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># First, rewinding head to replay your work on top of it...</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.</span>
 </span></span></code></pre></div><h3 id="upstream">upstream</h3>
 <p><img src="/images/shell/git/triangular-workflow.png" alt="Triangular Workflow"></p>
 <p><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/">Triangular Workflow</a></p>
@@ -2233,7 +2220,7 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 upstream에서 fetch한 나의 로컬 환경을 <code>local</code>이라고 부른다.
 아래 명령어는 지정한 <code>upstream</code> 브랜치로 push하도록 한다.</p>
 <p>잠깐. fork한 <code>origin</code> 저장소가 아니라 <code>upstream</code>으로 push한다?</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push --set-upstream origin feature/test-upstream
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git push --set-upstream origin feature/test-upstream
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># push 후</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Branch &#39;feature/test-upstream&#39; set up to track remote branch &#39;feature/test-upstream&#39; from &#39;origin&#39;.</span>
 </span></span></code></pre></div><p>사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
@@ -2263,15 +2250,13 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 <li>실제로 생성하거나 blob에 연결한다.</li>
 <li>컨텐츠에 위치를 추적할 tree 객체를 생성한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 모든 변경 사항을 staging area에 추가</span>
-</span></span><span style="display:flex;"><span>$ git add -A
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 현재 디렉토리의 변경 사항을 staging area에 추가</span>
-</span></span><span style="display:flex;"><span>$ git add .
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 특정 변경 사항만 추가</span>
-</span></span><span style="display:flex;"><span>$ git add <span style="color:#87ceeb">&#39;*Detail.java&#39;</span>
-</span></span><span style="display:flex;"><span>$ git add src/
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 모든 변경 사항을 staging area에 추가</span>
+</span></span><span style="display:flex;"><span>git add -A
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 디렉토리의 변경 사항을 staging area에 추가</span>
+</span></span><span style="display:flex;"><span>git add .
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 특정 변경 사항만 추가</span>
+</span></span><span style="display:flex;"><span>git add <span style="color:#87ceeb">&#39;*Detail.java&#39;</span>
+</span></span><span style="display:flex;"><span>git add src/
 </span></span></code></pre></div><h2 id="fetch">fetch</h2>
 <p>커밋, 파일 및 참조를 원격 저장소에서 로컬 저장소로 다운로드한다.
 다른 사람들이 작업한 것을 보고 싶을 때 사용할 수 있다.
@@ -2282,17 +2267,16 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 <li>찾았다면 원격 저장소로부터 이름이 지정된 참조(heads와 tags)와 관련된 객체들까지 가져온다.</li>
 <li>복구 가능한 참조들은 나중에 병합이 가능하도록 <code>.git/FETCH_HEAD</code>에 저장한다.</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git fetch &lt;branch&gt;
-</span></span><span style="display:flex;"><span>$ git fetch --all <span style="color:#0f0"># Fetch all remotes.</span>
-</span></span><span style="display:flex;"><span>Fetching origin
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git merge &lt;origin/branch&gt; &lt;commit&gt;
-</span></span><span style="display:flex;"><span>$ git merge FETCH_HEAD
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git fetch &lt;branch&gt;
+</span></span><span style="display:flex;"><span>git fetch --all <span style="color:#0f0"># Fetch all remotes.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Fetching origin</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git merge &lt;origin/branch&gt; &lt;commit&gt;
+</span></span><span style="display:flex;"><span>git merge FETCH_HEAD
 </span></span></code></pre></div><h2 id="commit-1">commit</h2>
 <p>관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영한다.
 즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
 그렇다고 working tree나 staging area의 내용들을 지우지 않는다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git commit
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git commit
 </span></span><span style="display:flex;"><span>git commit -m <span style="color:#87ceeb">&#34;commit message&#34;</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋의 author를 변경할 수 있다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 특정 커밋의 author를 변경하고 싶다면 rebase를 사용한다.</span>
@@ -2318,19 +2302,19 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span></code></pre></div><p><img src="/images/shell/git/merging-main-into-the-feature-branch.png" alt="Merging main into the feature branch"></p>
 <p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Merging main into the feature branch</a></em></p>
 <p>병합은 두 가지 방식이 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># fast-forward</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># fast-forward</span>
 </span></span><span style="display:flex;"><span>git merge --ff
 </span></span></code></pre></div><p>먼저 Fast Forward 방식이다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
 별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># no-fast-forward</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># no-fast-forward</span>
 </span></span><span style="display:flex;"><span>git merge --no-ff
 </span></span></code></pre></div><p>두 번째는 <a href="https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge">3-way-merge</a> 방식을 사용한 No Fast Forward 방식이다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합한다.
 단순히 브랜치 포인터를 최신 커밋으로 옮기는 게 아니라 3-way-merge의 결과를
 별도의 <strong>Merge 커밋</strong>으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킨다.
 이 Merge 커밋은 부모 커밋을 2개 가진다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>*   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>*   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
 </span></span><span style="display:flex;"><span>|<span style="color:#87ceeb">\ </span> Merge: be1dacb bf50160 <span style="color:#0f0"># 부모 커밋이 2개</span>
 </span></span><span style="display:flex;"><span>| | Author: Changsu &lt;imcxsu@gmail.com&gt;
 </span></span><span style="display:flex;"><span>| | Date:   Wed Dec <span style="color:#f60">15</span> 05:46:44 <span style="color:#f60">2021</span> +0900
@@ -2343,17 +2327,14 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span></code></pre></div><p>만약 병합하는 두 브랜치에서 같은 파일의 같은 부분을 동시에 수정하고 병합하면 GIt은 해당 부분을 병합하지 못한다.
 3-way-merge가 실패하고 충돌(Conflict)이 발생한다.
 <code>git mergetool</code>을 활용하면 간편하게 충돌을 해결할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git mergetool
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>This message is displayed because <span style="color:#87ceeb">&#39;merge.tool&#39;</span> is not configured.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git mergetool
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>This message is displayed because <span style="color:#87ceeb">&#39;merge.tool&#39;</span> is not configured.
 </span></span><span style="display:flex;"><span>See <span style="color:#87ceeb">&#39;git mergetool --tool-help&#39;</span> or <span style="color:#87ceeb">&#39;git help config&#39;</span> <span style="color:#f00">for</span> more details.
 </span></span><span style="display:flex;"><span><span style="color:#87ceeb">&#39;git mergetool&#39;</span> will now attempt to use one of the following tools:
 </span></span><span style="display:flex;"><span>opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare smerge emerge vimdiff nvimdiff
 </span></span><span style="display:flex;"><span>No files need merging
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git mergetool --tool-help
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#87ceeb">&#39;git mergetool --tool=&lt;tool&gt;&#39;</span> may be set to one of the following:
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git mergetool --tool-help
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#87ceeb">&#39;git mergetool --tool=&lt;tool&gt;&#39;</span> may be set to one of the following:
 </span></span><span style="display:flex;"><span>    vimdiff
 </span></span><span style="display:flex;"><span>    vimdiff2
 </span></span><span style="display:flex;"><span>    vimdiff3
@@ -2436,7 +2417,7 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span><span style="display:flex;"><span>git rebase -i --root
 </span></span></code></pre></div><p>아래와 같은 하위 명령어들이 있다.
 나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># p, pick &lt;commit&gt; = use commit</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># p, pick &lt;commit&gt; = use commit</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># r, reword &lt;commit&gt; = use commit, but edit the commit message</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># e, edit &lt;commit&gt; = use commit, but stop for amending</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># s, squash &lt;commit&gt; = use commit, but meld into previous commit</span>
@@ -2453,118 +2434,104 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 </span></span></code></pre></div><h3 id="squash와-fixup">squash와 fixup</h3>
 <p>squash는 <strong>커밋 메시지를 확인하고 편집한 후</strong> squash and merge한다.
 대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>399e2ef (HEAD -&gt; squash) <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>ea37b52 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 399e2ef (HEAD -&gt; squash) 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ea37b52 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
+</span></span></code></pre></div><p>지금 staged 파일들을 squash 커밋으로 만든다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git commit --squash ea37b52
+</span></span></code></pre></div><p>squash 커밋은 대상 커밋 메시지 앞에 &ldquo;squash!&ldquo;가 붙는다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># d927a64 (HEAD -&gt; squash) squash! 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 399e2ef 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ea37b52 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
+</span></span></code></pre></div><p>squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rebase -i --autosquash main
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># pick ea37b52 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># squash d927a64 squash! 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># pick 399e2ef 3</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 지금 staged 파일들을 squash 커밋으로 만든다.</span>
-</span></span><span style="display:flex;"><span>$ git commit --squash ea37b52
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># squash 커밋은 대상 커밋 메시지 앞에 &#34;squash!&#34;이 붙는다.</span>
-</span></span><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>d927a64 (HEAD -&gt; squash) squash! <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>399e2ef <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>ea37b52 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.</span>
-</span></span><span style="display:flex;"><span>$ git rebase -i --autosquash main
-</span></span><span style="display:flex;"><span>pick ea37b52 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>squash d927a64 squash! <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>pick 399e2ef <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>[detached HEAD 6f530b5] <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span> Date: Mon Jan <span style="color:#f60">17</span> 02:05:58 <span style="color:#f60">2022</span> +0900
-</span></span><span style="display:flex;"><span> <span style="color:#f60">2</span> files changed, <span style="color:#f60">0</span> insertions(+), <span style="color:#f60">0</span> deletions(-)
-</span></span><span style="display:flex;"><span> create mode <span style="color:#f60">100644</span> b
-</span></span><span style="display:flex;"><span> create mode <span style="color:#f60">100644</span> d
-</span></span><span style="display:flex;"><span>Successfully rebased and updated refs/heads/squash.
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>ea3b05e (HEAD -&gt; squash) <span style="color:#f60">3</span> <span style="color:#0f0"># 이후의 커밋들도 다시 저장한다.</span>
-</span></span><span style="display:flex;"><span>6f530b5 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
-</span></span></code></pre></div><p>fixup은 squash와 결과가 동일하지만,
-original 커밋 메시지만 남기고 fixup 커밋의 메시지들은 <strong>자동으로 버린다</strong>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>ffdc929 (HEAD -&gt; fixup) <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>ea53497 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 지금 staged 파일들을 fixup 커밋으로 만든다.</span>
-</span></span><span style="display:flex;"><span>$ git commit --fixup ea53497
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># fixup 커밋은 대상 커밋 메시지 앞에 &#34;fixup!&#34;이 붙는다.</span>
-</span></span><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>202953c (HEAD -&gt; fixup) fixup! <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>ffdc929 <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>ea53497 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># fixup 커밋들은 자동으로 squash and merge가 된다.</span>
-</span></span><span style="display:flex;"><span>$ git rebase -i --autosquash main
-</span></span><span style="display:flex;"><span>pick ea53497 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>fixup 202953c fixup! <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>pick ffdc929 <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># fixup 커밋의 메시지들은 자동으로 버린다.</span>
-</span></span><span style="display:flex;"><span>Successfully rebased and updated refs/heads/fixup.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git --no-pager log --oneline
-</span></span><span style="display:flex;"><span>449ed00 (HEAD -&gt; fixup) <span style="color:#f60">3</span>
-</span></span><span style="display:flex;"><span>000a709 <span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span>7f1a625 (main) <span style="color:#f60">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [detached HEAD 6f530b5] 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  Date: Mon Jan 17 02:05:58 2022 +0900</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  2 files changed, 0 insertions(+), 0 deletions(-)</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  create mode 100644 b</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  create mode 100644 d</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Successfully rebased and updated refs/heads/squash.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ea3b05e (HEAD -&gt; squash) 3 # 이후의 커밋들도 다시 저장한다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 6f530b5 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
+</span></span></code></pre></div><p><strong>fixup</strong>은 squash와 결과가 동일하지만,
+original 커밋 메시지만 남기고 <strong>fixup 커밋의 메시지들은 버린다</strong>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ffdc929 (HEAD -&gt; fixup) 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ea53497 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
+</span></span></code></pre></div><p>지금 staged 파일들을 fixup 커밋으로 만든다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git commit --fixup ea53497
+</span></span></code></pre></div><p>fixup 커밋은 대상 커밋 메시지 앞에 &ldquo;fixup!&ldquo;이 붙는다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 202953c (HEAD -&gt; fixup) fixup! 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ffdc929 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ea53497 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
+</span></span></code></pre></div><p>fixup 커밋들은 자동으로 squash and merge가 된다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rebase -i --autosquash main
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># pick ea53497 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># fixup 202953c fixup! 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># pick ffdc929 3</span>
+</span></span></code></pre></div><p>fixup 커밋의 메시지들은 자동으로 버린다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Successfully rebased and updated refs/heads/fixup.
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-pager log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 449ed00 (HEAD -&gt; fixup) 3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 000a709 2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f1a625 (main) 1</span>
 </span></span></code></pre></div><h2 id="cherry-pick">cherry-pick</h2>
-<p>어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
-<strong>커밋 체크섬은 달라진다</strong>는 것에 유의한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git cherry-pick &lt;commit&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># --no-commit 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않는다.</span>
-</span></span><span style="display:flex;"><span>$ git cherry-pick &lt;commit&gt; --no-commit
+<p>어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 <code>HEAD</code>에 반영합니다.
+<strong>커밋 체크섬은 달라진다</strong>는 것에 유의합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cherry-pick &lt;commit&gt;
+</span></span></code></pre></div><p><code>--no-commit</code> 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cherry-pick &lt;commit&gt; --no-commit
 </span></span></code></pre></div><h2 id="stash">stash</h2>
-<p>stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있다.
-stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해준다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 변경 사항을 Stack에 저장한다. 아무런 하위 명령어를 입력하지 않으면 default.</span>
-</span></span><span style="display:flex;"><span>$ git stash push
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># Stack이기 때문에 stash@{0}부터 작업 데이터를 꺼낸 후 drop한다.</span>
-</span></span><span style="display:flex;"><span>$ git stash pop
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않는다.</span>
-</span></span><span style="display:flex;"><span>$ git stash apply
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># stash@{0}을 제거한다.</span>
-</span></span><span style="display:flex;"><span>$ git stash drop
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 모든 stash 데이터를 제거한다.</span>
-</span></span><span style="display:flex;"><span>$ git stash clear
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># stash 목록을 보여준다.</span>
-</span></span><span style="display:flex;"><span>$ git stash list
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># stash@{0}과 HEAD의 diff를 보여준다.</span>
-</span></span><span style="display:flex;"><span>$ git stash show
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># stash@{2}와 HEAD의 diff를 보여준다.</span>
-</span></span><span style="display:flex;"><span>$ git stash show -p[--patch] <span style="color:#f60">2</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 현재 상태를 저장한다.</span>
-</span></span><span style="display:flex;"><span>$ git stash save &lt;message&gt;
-</span></span><span style="display:flex;"><span>$ git stash save <span style="color:#87ceeb">&#34;haha&#34;</span>
-</span></span><span style="display:flex;"><span>Saved working directory and index state On master: haha
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git stash list
-</span></span><span style="display:flex;"><span>stash@{0}: On master: haha
+<p>stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있습니다.
+stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해줍니다.</p>
+<p>변경 사항을 Stack에 저장합니다.
+아무런 하위 명령어를 입력하지 않으면 default 옵션입니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash push
+</span></span></code></pre></div><p>Stack이기 때문에 <code>pop</code>은 <code>stash@{0}</code>부터 작업 데이터를 꺼낸 후 drop 합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash pop
+</span></span></code></pre></div><p><code>apply</code>는 pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash apply
+</span></span></code></pre></div><p><code>drop</code>은 <code>stash@{0}</code>을 제거한다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash drop
+</span></span></code></pre></div><p><code>clear</code>는 모든 stash 데이터를 제거합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash clear
+</span></span></code></pre></div><p><code>list</code>는 stash 목록을 조회합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash list
+</span></span></code></pre></div><p><code>show</code>는 <code>stash@{0}</code>과 <code>HEAD</code>의 diff를 보여줍니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash show
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># --patch 옵션은 stash@{2}와 HEAD의 diff를 보여줍니다.</span>
+</span></span><span style="display:flex;"><span>git stash show -p[--patch] <span style="color:#f60">2</span>
+</span></span></code></pre></div><p><code>save</code>는 현재 상태를 저장합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># git stash save &lt;message&gt;</span>
+</span></span><span style="display:flex;"><span>git stash save <span style="color:#87ceeb">&#34;haha&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Saved working directory and index state On master: haha</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git stash list
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># stash@{0}: On master: haha</span>
 </span></span></code></pre></div><p>기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있다.</p>
 <p><img src="/images/shell/git/git-stash-options.png" alt="git stash options"></p>
 <p><em><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash">git stash options</a></em></p>
 <h3 id="how-git-stash-works">How git stash works</h3>
 <p>stash된 상태는 실제로 로컬 저장소에 커밋 객체처럼 인코딩되어 저장됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline --graph stash@{0}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline --graph stash@{0}
 </span></span><span style="display:flex;"><span>*   3bd5af8 (refs/stash) On master: haha
 </span></span><span style="display:flex;"><span>|<span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>| * 09162cd index on master: 49ef168 test
 </span></span><span style="display:flex;"><span>|/
 </span></span><span style="display:flex;"><span>* 49ef168 (HEAD -&gt; master) test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/refs/stash
-</span></span><span style="display:flex;"><span>3bd5af85bcbfaf7b031972dc41b016c4eb463028
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/refs/stash
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 3bd5af85bcbfaf7b031972dc41b016c4eb463028</span>
 </span></span></code></pre></div><h2 id="reset">reset</h2>
 <p>HEAD를 특정 상태로 되돌린다.
 다양한 mode 옵션이 있다.</p>
@@ -2573,27 +2540,28 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 <p><code>--soft</code> - 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.</p>
 </li>
 <li>
-<p><code>--mixed</code> - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo <code>add</code>)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git reset HEAD^
-</span></span><span style="display:flex;"><span>$ git reset --mixed HEAD^
-</span></span><span style="display:flex;"><span>Unstaged changes after reset:
-</span></span><span style="display:flex;"><span>M package-lock.json
-</span></span><span style="display:flex;"><span>M package.json
+<p><code>--mixed</code> - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reset HEAD^
+</span></span><span style="display:flex;"><span>git reset --mixed HEAD^
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Unstaged changes after reset:</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># M package-lock.json</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># M package.json</span>
 </span></span></code></pre></div></li>
 <li>
 <p><code>--hard</code> - 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git reset --hard HEAD^
-</span></span><span style="display:flex;"><span>HEAD is now at 955b01b7 chore: renew mac certificates (<span style="color:#0f0">#12)</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reset --hard HEAD^
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># HEAD is now at 955b01b7 chore: renew mac certificates (#12)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 첫 커밋 제외하고 전부 Hard Reset</span>
+</span></span><span style="display:flex;"><span>git reset --hard <span style="color:#f00">$(</span>git rev-list --max-parents=<span style="color:#f60">0</span> HEAD<span style="color:#f00">)</span>
 </span></span></code></pre></div></li>
 <li>
 <p><code>--merge</code> — 워킹 트리에서 merge를 undo 할 수 있다. (Undo <code>merge</code>/<code>pull</code>)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git pull
-</span></span><span style="display:flex;"><span> Auto-merging nitfol
-</span></span><span style="display:flex;"><span> Merge made by recursive.
-</span></span><span style="display:flex;"><span>  nitfol                |   <span style="color:#f60">20</span> +++++----
-</span></span><span style="display:flex;"><span>  ...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git reset --merge ORIG_HEAD
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git pull
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Auto-merging nitfol</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Merge made by recursive.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  nitfol                |   20 +++++----</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  ...</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reset --merge ORIG_HEAD
 </span></span></code></pre></div></li>
 </ul>
 <h2 id="restore">restore</h2>
@@ -2601,34 +2569,32 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 <ul>
 <li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61">git@v2.23.0</a> 부터 <code>checkout</code> 명령어에서 분리되었다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># git checkout -- ${file_name}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># git checkout -- ${file_name}</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># git restore --staged ${file_name}</span>
-</span></span><span style="display:flex;"><span>$ git restore --staged * <span style="color:#0f0"># git reset --mixed HEAD</span>
+</span></span><span style="display:flex;"><span>git restore --staged * <span style="color:#0f0"># git reset --mixed HEAD</span>
 </span></span></code></pre></div><h2 id="revert">revert</h2>
 <p><code>reset</code>처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git revert &lt;commit&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Revert <span style="color:#87ceeb">&#34;4ea42dbe의 커밋 메시지&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git revert &lt;commit&gt;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Revert <span style="color:#87ceeb">&#34;4ea42dbe의 커밋 메시지&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 </span></span></code></pre></div><h2 id="git으로-버그-찾기">Git으로 버그 찾기</h2>
 <h3 id="blame">blame</h3>
 <p>파일의 라인마다 마지막 수정 정보를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git blame README.md
-</span></span><span style="display:flex;"><span>0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) <span style="color:#0f0">### Bash</span>
-</span></span><span style="display:flex;"><span>dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) 
-</span></span><span style="display:flex;"><span>dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) <span style="color:#87ceeb">```</span>bash
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git blame -L 69,82 README.md
-</span></span><span style="display:flex;"><span>$ git blame -L <span style="color:#f60">69</span> README.md
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git blame README.md
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) </span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git blame -L 69,82 README.md
+</span></span><span style="display:flex;"><span>git blame -L <span style="color:#f60">69</span> README.md
 </span></span></code></pre></div><h3 id="bisect">bisect</h3>
 <ul>
 <li><a href="https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination">A beginner&rsquo;s guide to GIT BISECT</a> - Tony Rost</li>
 </ul>
-<p>이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
-운영 서버에 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있다.
-이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 테스트 프로젝트 생성</span>
+<p>이진 탐색을 이용해 버그가 발생한 커밋을 찾습니다.
+운영 환경에서 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있습니다.
+이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와줍니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 테스트 프로젝트 생성</span>
 </span></span><span style="display:flex;"><span>mkdir git-bisect-tests
 </span></span><span style="display:flex;"><span>cd git-bisect-tests
 </span></span><span style="display:flex;"><span>git init
@@ -2653,23 +2619,22 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 </span></span><span style="display:flex;"><span>git add -A &amp;&amp; git commit -m <span style="color:#87ceeb">&#34;Adding the word &#39;the&#39;&#34;</span>
 </span></span><span style="display:flex;"><span>echo stream &gt;&gt; test.txt
 </span></span><span style="display:flex;"><span>git add -A &amp;&amp; git commit -m <span style="color:#87ceeb">&#34;Adding the word &#39;stream&#39;&#34;</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cat test.txt
-</span></span><span style="display:flex;"><span>row
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat test.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>your
-</span></span><span style="display:flex;"><span>bug <span style="color:#0f0"># bug를 찾을 것이다.</span>
+</span></span><span style="display:flex;"><span>bug <span style="color:#0f0"># 이 bug를 찾을 겁니다.</span>
 </span></span><span style="display:flex;"><span>gently
 </span></span><span style="display:flex;"><span>down
 </span></span><span style="display:flex;"><span>the
 </span></span><span style="display:flex;"><span>stream
-</span></span></code></pre></div><p>bisect를 시작한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git bisect start
-</span></span></code></pre></div><p>버그가 있는 현재 커밋을 기록한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git bisect bad
-</span></span></code></pre></div><p>버그 없이 멀쩡했던 커밋을 기록한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>d4a701f (HEAD -&gt; master, refs/bisect/bad) Adding the word <span style="color:#87ceeb">&#39;stream&#39;</span>
+</span></span></code></pre></div><p><code>bisect</code>를 시작합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect start
+</span></span></code></pre></div><p>가장 먼저 버그를 발견한 현재 커밋을 기록합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect bad
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>d4a701f (HEAD -&gt; master, refs/bisect/bad) Adding the word <span style="color:#87ceeb">&#39;stream&#39;</span>
 </span></span><span style="display:flex;"><span>eedf347 Adding the word <span style="color:#87ceeb">&#39;the&#39;</span>
 </span></span><span style="display:flex;"><span>9a12012 Adding the word <span style="color:#87ceeb">&#39;down&#39;</span>
 </span></span><span style="display:flex;"><span>f937601 Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
@@ -2679,87 +2644,82 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 </span></span><span style="display:flex;"><span>c608f80 Adding third row
 </span></span><span style="display:flex;"><span>60532d0 Adding second row
 </span></span><span style="display:flex;"><span>106eb10 Adding first row
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git bisect good c608f80
-</span></span><span style="display:flex;"><span>Bisecting: <span style="color:#f60">3</span> revisions left to test after this (roughly <span style="color:#f60">2</span> steps)
+</span></span></code></pre></div><p>버그 없이 멀쩡했던 커밋을 기록합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect good c608f80
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Bisecting: <span style="color:#f60">3</span> revisions left to test after this (roughly <span style="color:#f60">2</span> steps)
 </span></span><span style="display:flex;"><span>[759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p><img src="/images/shell/git/git-bisect.png" alt="git-bisect"></p>
 <p><em><a href="https://www.datree.io/resources/git-bisect-debugging-with-git">Git bisect - debugging with git, Noaa Barki</a></em></p>
-<p>이제부터 버그를 찾아나선다.
-Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 <code>bad</code>로 기록하고 <code>good</code> 커밋 방향으로 범위를 좁힌다.
-버그가 없으면 <code>good</code>으로 기록하고 <code>bad</code> 커밋 방향으로 범위를 좁힌다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 히스토리 확인</span>
-</span></span><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>759ea63 (HEAD) Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
+<p>이제부터 버그를 찾아나섭니다.
+Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해줍니다.
+현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 <code>bad</code>로 기록하고 <code>good</code> 커밋 방향으로 범위를 좁혀 갑니다.
+버그가 없으면 <code>good</code>으로 기록하고 <code>bad</code> 커밋 방향으로 범위를 좁혀 갑니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 히스토리 확인</span>
+</span></span><span style="display:flex;"><span>git log --oneline
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>759ea63 (HEAD) Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
 </span></span><span style="display:flex;"><span>850323e Adding the word <span style="color:#87ceeb">&#39;boat&#39;</span>
 </span></span><span style="display:flex;"><span>222f64a Adding the word <span style="color:#87ceeb">&#39;your&#39;</span>
 </span></span><span style="display:flex;"><span>c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 버그가 없다면 good 기록</span>
-</span></span><span style="display:flex;"><span>$ cat test.txt
-</span></span><span style="display:flex;"><span>row
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 버그가 없다면 good 기록</span>
+</span></span><span style="display:flex;"><span>cat test.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>your
 </span></span><span style="display:flex;"><span>boat
 </span></span><span style="display:flex;"><span>gently
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git bisect good
-</span></span><span style="display:flex;"><span>Bisecting: <span style="color:#f60">1</span> revision left to test after this (roughly <span style="color:#f60">1</span> step)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect good
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Bisecting: <span style="color:#f60">1</span> revision left to test after this (roughly <span style="color:#f60">1</span> step)
 </span></span><span style="display:flex;"><span>[9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word <span style="color:#87ceeb">&#39;down&#39;</span>
 </span></span></code></pre></div><p><code>good</code>으로 기록하면 <code>bad</code> 커밋 방향으로 이진탐색한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>9a12012 (HEAD) Adding the word <span style="color:#87ceeb">&#39;down&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>9a12012 (HEAD) Adding the word <span style="color:#87ceeb">&#39;down&#39;</span>
 </span></span><span style="display:flex;"><span>f937601 Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
 </span></span><span style="display:flex;"><span>759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
 </span></span><span style="display:flex;"><span>850323e Adding the word <span style="color:#87ceeb">&#39;boat&#39;</span>
 </span></span><span style="display:flex;"><span>222f64a Adding the word <span style="color:#87ceeb">&#39;your&#39;</span>
 </span></span><span style="display:flex;"><span>c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 </span></span><span style="display:flex;"><span>...
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 버그를 발견했다면 bad 기록</span>
-</span></span><span style="display:flex;"><span>$ cat test.txt
-</span></span><span style="display:flex;"><span>row
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 버그를 발견했다면 bad 기록</span>
+</span></span><span style="display:flex;"><span>cat test.txt
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>row
 </span></span><span style="display:flex;"><span>your
-</span></span><span style="display:flex;"><span>bug <span style="color:#0f0"># 버그다!!!</span>
+</span></span><span style="display:flex;"><span>bug <span style="color:#0f0"># 버그!!!</span>
 </span></span><span style="display:flex;"><span>gently
 </span></span><span style="display:flex;"><span>down
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git bisect bad
-</span></span><span style="display:flex;"><span>Bisecting: <span style="color:#f60">0</span> revisions left to test after this (roughly <span style="color:#f60">0</span> steps)
-</span></span><span style="display:flex;"><span>[f9376015d4721390c942c0cd0064467b51495094] Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect bad
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Bisecting: 0 revisions left to test after this (roughly 0 steps)</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [f9376015d4721390c942c0cd0064467b51495094] Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
 </span></span></code></pre></div><p><code>bad</code>로 기록하면 <code>good</code> 커밋 방향으로 이진탐색한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>f937601 (HEAD) Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
-</span></span><span style="display:flex;"><span>759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
-</span></span><span style="display:flex;"><span>850323e Adding the word <span style="color:#87ceeb">&#39;boat&#39;</span>
-</span></span><span style="display:flex;"><span>222f64a Adding the word <span style="color:#87ceeb">&#39;your&#39;</span>
-</span></span><span style="display:flex;"><span>c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># f937601 (HEAD) Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word &#39;gently&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 850323e Adding the word &#39;boat&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 222f64a Adding the word &#39;your&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row</span>
 </span></span></code></pre></div><p>그 다음 커밋도 <code>bad</code>로 기록하고
 <code>good</code> 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
 해당 <code>bad</code> 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git bisect bad
-</span></span><span style="display:flex;"><span>f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
-</span></span><span style="display:flex;"><span>commit f9376015d4721390c942c0cd0064467b51495094
-</span></span><span style="display:flex;"><span>Author: Changsu Im &lt;imcxsu@gmail.com&gt;
-</span></span><span style="display:flex;"><span>Date:   Thu Feb <span style="color:#f60">17</span> 03:21:28 <span style="color:#f60">2022</span> +0900
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect bad
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># f9376015d4721390c942c0cd0064467b51495094 is the first bad commit</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># commit f9376015d4721390c942c0cd0064467b51495094</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Author: Changsu Im &lt;imcxsu@gmail.com&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Date:   Thu Feb 17 03:21:28 2022 +0900</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#     Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span> test.txt | <span style="color:#f60">2</span> +-
-</span></span><span style="display:flex;"><span> <span style="color:#f60">1</span> file changed, <span style="color:#f60">1</span> insertion(+), <span style="color:#f60">1</span> deletion(-)
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  test.txt | 2 +-</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  1 file changed, 1 insertion(+), 1 deletion(-)</span>
 </span></span></code></pre></div><p>이진탐색하는 동안 <code>.git</code> 디렉토리에 bisect를 위한 파일들이 생성된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ cat .git/BISECT_ANCESTORS_OK
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/BISECT_EXPECTED_REV
-</span></span><span style="display:flex;"><span>f9376015d4721390c942c0cd0064467b51495094
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/BISECT_LOG
-</span></span><span style="display:flex;"><span>git bisect start
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/BISECT_ANCESTORS_OK
+</span></span><span style="display:flex;"><span>cat .git/BISECT_EXPECTED_REV
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># f9376015d4721390c942c0cd0064467b51495094</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/BISECT_LOG
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect start
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># bad: [d4a701f370a2489c8976eb0ce9f7ccbc358e640d] Adding the word &#39;stream&#39;</span>
 </span></span><span style="display:flex;"><span>git bisect bad d4a701f370a2489c8976eb0ce9f7ccbc358e640d
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># good: [c608f8011e4bfa3d1f1e9f537cc148769f158669] Adding third row</span>
@@ -2771,93 +2731,82 @@ Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># bad: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
 </span></span><span style="display:flex;"><span>git bisect bad f9376015d4721390c942c0cd0064467b51495094
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># first bad commit: [f9376015d4721390c942c0cd0064467b51495094] Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/BISECT_NAMES
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/BISECT_START
-</span></span><span style="display:flex;"><span>master
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ cat .git/BISECT_TERMS
-</span></span><span style="display:flex;"><span>bad
-</span></span><span style="display:flex;"><span>good
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/BISECT_NAMES
+</span></span><span style="display:flex;"><span>cat .git/BISECT_START
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># master</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/BISECT_TERMS
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># bad</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># good</span>
 </span></span></code></pre></div><p>bisect를 끝낼 때는 <code>.git/BISECT_START</code>로 다시 checkout 한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git bisect reset
-</span></span><span style="display:flex;"><span>Previous HEAD position was f937601 Changing the word <span style="color:#87ceeb">&#39;boat&#39;</span> to <span style="color:#87ceeb">&#39;bug&#39;</span>
-</span></span><span style="display:flex;"><span>Switched to branch <span style="color:#87ceeb">&#39;master&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git bisect reset
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Previous HEAD position was f937601 Changing the word &#39;boat&#39; to &#39;bug&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Switched to branch &#39;master&#39;</span>
 </span></span></code></pre></div><h2 id="show">show</h2>
 <p>Git Object를 확인한다. (blob, tree, tag, commit)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># git show ${object}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># tag</span>
-</span></span><span style="display:flex;"><span>$ git show v1.0.0
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># tree</span>
-</span></span><span style="display:flex;"><span>$ git show v1.0.0^{tree}
-</span></span><span style="display:flex;"><span>$ git show v1.0.0^{tree}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># commit, blob, tree 등의 체크섬</span>
-</span></span><span style="display:flex;"><span>$ git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 어떤 커밋이 브랜치의 가장 최신 커밋이라면 간단히 브랜치 이름으로 커밋을 가리킬 수 있다.</span>
-</span></span><span style="display:flex;"><span>$ git show master:README.md
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show <span style="color:#87ceeb">${</span><span style="color:#eedd82">object</span><span style="color:#87ceeb">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tag</span>
+</span></span><span style="display:flex;"><span>git show v1.0.0
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tree</span>
+</span></span><span style="display:flex;"><span>git show v1.0.0^{tree}
+</span></span><span style="display:flex;"><span>git show v1.0.0^{tree}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># commit, blob, tree 등의 체크섬</span>
+</span></span><span style="display:flex;"><span>git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 어떤 커밋이 브랜치의 가장 최신 커밋이라면 간단히 브랜치 이름으로 커밋을 가리킬 수 있다.</span>
+</span></span><span style="display:flex;"><span>git show master:README.md
 </span></span></code></pre></div><h2 id="log">log</h2>
 <p>커밋 이력을 조회한다.</p>
 <ul>
 <li><a href="https://git-scm.com/docs/git-log#_pretty_formats">pretty formats</a>을 사용해서 출력 형식을 정할 수 있다.</li>
 <li><code>--abbrev-commit</code> — 짧고 중복되지 않는 해시 값을 보여준다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여준다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline --graph
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 날짜 출력</span>
-</span></span><span style="display:flex;"><span>$ git log --graph --pretty=format:<span style="color:#87ceeb">&#39;%C(auto)%h%d (%cr) %cn &lt;%ce&gt; %s&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 모든 브랜치 로그 출력</span>
-</span></span><span style="display:flex;"><span>$ git log --graph --format=format:<span style="color:#87ceeb">&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;</span>L<span style="color:#87ceeb">&#39;          %C(white)%s %C(dim white)- %an&#39;</span> --all
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># alias 지정</span>
-</span></span><span style="display:flex;"><span>$ git config --global alias.lg <span style="color:#87ceeb">&#34;log --graph --format=format:&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;L&#39;          %C(white)%s %C(dim white)- %an&#39; --all&#34;</span>
-</span></span><span style="display:flex;"><span>$ git lg
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline --graph
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 날짜 출력</span>
+</span></span><span style="display:flex;"><span>git log --graph --pretty=format:<span style="color:#87ceeb">&#39;%C(auto)%h%d (%cr) %cn &lt;%ce&gt; %s&#39;</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 모든 브랜치 로그 출력</span>
+</span></span><span style="display:flex;"><span>git log --graph --format=format:<span style="color:#87ceeb">&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;</span>L<span style="color:#87ceeb">&#39;          %C(white)%s %C(dim white)- %an&#39;</span> --all
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># alias 지정</span>
+</span></span><span style="display:flex;"><span>git config --global alias.lg <span style="color:#87ceeb">&#34;log --graph --format=format:&#39;%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n&#39;L&#39;          %C(white)%s %C(dim white)- %an&#39; --all&#34;</span>
+</span></span><span style="display:flex;"><span>git lg
 </span></span></code></pre></div><h3 id="triple-dot">Triple Dot(&hellip;)</h3>
 <p>Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여준다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log master...feature --oneline --left-right
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log master...feature --oneline --left-right
 </span></span><span style="display:flex;"><span>&gt; 2fe25f7 (HEAD -&gt; feature) q
 </span></span><span style="display:flex;"><span>&gt; a611f28 feature commit message
 </span></span><span style="display:flex;"><span>&lt; 106047f (master) first
 </span></span></code></pre></div><h2 id="reflog-reference-logs">reflog: Reference logs</h2>
 <p>Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 <code>reflog</code>라고 부른다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># git reflog show HEAD@{0}</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># git reflog show HEAD</span>
-</span></span><span style="display:flex;"><span>$ git reflog
-</span></span><span style="display:flex;"><span>734713b HEAD@{0}: commit: fixed refs handling, added gc auto, updated
-</span></span><span style="display:flex;"><span>d921970 HEAD@{1}: merge phedders/rdocs: Merge made by the <span style="color:#87ceeb">&#39;recursive&#39;</span> strategy.
-</span></span><span style="display:flex;"><span>1c002dd HEAD@{2}: commit: added some blame and merge stuff
-</span></span><span style="display:flex;"><span>1c36188 HEAD@{3}: rebase -i (squash): updating HEAD
-</span></span><span style="display:flex;"><span>95df984 HEAD@{4}: commit: <span style="color:#0f0"># This is a combination of two commits.</span>
-</span></span><span style="display:flex;"><span>1c36188 HEAD@{5}: rebase -i (squash): updating HEAD
-</span></span><span style="display:flex;"><span>7e05da5 HEAD@{6}: rebase -i (pick): updating HEAD
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reflog
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 734713b HEAD@{0}: commit: fixed refs handling, added gc auto, updated</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># d921970 HEAD@{1}: merge phedders/rdocs: Merge made by the &#39;recursive&#39; strategy.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 1c002dd HEAD@{2}: commit: added some blame and merge stuff</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 1c36188 HEAD@{3}: rebase -i (squash): updating HEAD</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 95df984 HEAD@{4}: commit: # This is a combination of two commits.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 1c36188 HEAD@{5}: rebase -i (squash): updating HEAD</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7e05da5 HEAD@{6}: rebase -i (pick): updating HEAD</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reflog show HEAD@{0}
+</span></span><span style="display:flex;"><span>git reflog show HEAD
 </span></span></code></pre></div><p>특정 브랜치의 reflog만 확인할 수도 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># git reflog show main@{0}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># git reflog show main@{0}</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># git reflog show main</span>
-</span></span><span style="display:flex;"><span>$ git reflog main
+</span></span><span style="display:flex;"><span>git reflog main
 </span></span></code></pre></div><p>Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장한다.
 그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있다.
 <code>@{n}</code> 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git show HEAD@{5}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>commit a66e752aa1fccaefe115460dc761c0411d578ed5
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show HEAD@{5}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>commit a66e752aa1fccaefe115460dc761c0411d578ed5
 </span></span><span style="display:flex;"><span>Author: Changsu Im &lt;imcxsu@gmail.com&gt;
 </span></span><span style="display:flex;"><span>Date:   Wed Dec <span style="color:#f60">1</span> 23:51:01 <span style="color:#f60">2021</span> +0900
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p>순서뿐 아니라 시간도 사용할 수 있다. 어제 날짜의 <code>master</code> 브랜치를 보고 싶으면 아래와 같이 한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git show main@{1.minute.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{1.hour.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{1.day.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{yesterday}
-</span></span><span style="display:flex;"><span>$ git show main@{1.week.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{1.month.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{1.year.ago}
-</span></span><span style="display:flex;"><span>$ git show main@{2021-12-02.23:00:00}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>commit c23bcca5542f7eefa939dc47e3f843bb3b5b70f6 (HEAD -&gt; main, origin/main, origin/HEAD)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show main@{1.minute.ago}
+</span></span><span style="display:flex;"><span>git show main@{1.hour.ago}
+</span></span><span style="display:flex;"><span>git show main@{1.day.ago}
+</span></span><span style="display:flex;"><span>git show main@{yesterday}
+</span></span><span style="display:flex;"><span>git show main@{1.week.ago}
+</span></span><span style="display:flex;"><span>git show main@{1.month.ago}
+</span></span><span style="display:flex;"><span>git show main@{1.year.ago}
+</span></span><span style="display:flex;"><span>git show main@{2021-12-02.23:00:00}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>commit c23bcca5542f7eefa939dc47e3f843bb3b5b70f6 (HEAD -&gt; main, origin/main, origin/HEAD)
 </span></span><span style="display:flex;"><span>Author: Changsu Im &lt;imcxsu@gmail.com&gt;
 </span></span><span style="display:flex;"><span>Date:   Thu Dec <span style="color:#f60">2</span> 21:27:17 <span style="color:#f60">2021</span> +0900
 </span></span><span style="display:flex;"><span>...
@@ -2891,29 +2840,24 @@ reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 �
 </table>
 <h2 id="diff">diff</h2>
 <p>변경 사항을 비교한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git diff &lt;before&gt; &lt;after&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋과 그 전 커밋을 비교한다.</span>
-</span></span><span style="display:flex;"><span>$ git diff HEAD~1 HEAD~0
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.</span>
-</span></span><span style="display:flex;"><span>$ git diff HEAD^
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 직전 커밋과 비교해서 변경 사항을 확인한다.</span>
-</span></span><span style="display:flex;"><span>$ git diff &lt;commit&gt;~ &lt;commit&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git diff &lt;before&gt; &lt;after&gt;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋과 그 전 커밋을 비교한다.</span>
+</span></span><span style="display:flex;"><span>git diff HEAD~1 HEAD~0
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.</span>
+</span></span><span style="display:flex;"><span>git diff HEAD^
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 직전 커밋과 비교해서 변경 사항을 확인한다.</span>
+</span></span><span style="display:flex;"><span>git diff &lt;commit&gt;~ &lt;commit&gt;
 </span></span></code></pre></div><h2 id="push">push</h2>
 <p>local 저장소의 내용을 remote 저장소에 반영한다.
 히스토리가 일치하지 않으면 push할 수 없다.
 rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
 다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># origin 저장소의 main 브랜치로 push</span>
-</span></span><span style="display:flex;"><span>$ git push origin main
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 현재 HEAD와 같은 브랜치로 push</span>
-</span></span><span style="display:flex;"><span>$ git push origin HEAD
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 현재 브랜치의 upstream 브랜치 지정 및 push</span>
-</span></span><span style="display:flex;"><span>$ git push --set-upstream origin feature/test-upstream
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># origin 저장소의 main 브랜치로 push</span>
+</span></span><span style="display:flex;"><span>git push origin main
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 HEAD와 같은 브랜치로 push</span>
+</span></span><span style="display:flex;"><span>git push origin HEAD
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 브랜치의 upstream 브랜치 지정 및 push</span>
+</span></span><span style="display:flex;"><span>git push --set-upstream origin feature/test-upstream
 </span></span></code></pre></div><p>push 명령을 실행하면 다음 과정을 수행한다.</p>
 <ol>
 <li>현재 브랜치를 확인한다.</li>
@@ -2927,7 +2871,8 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 </li>
 </ol>
 <p>remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git push
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git push
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>fatal: The upstream branch of your current branch does not match
 </span></span><span style="display:flex;"><span>the name of your current branch.  To push to the upstream branch
 </span></span><span style="display:flex;"><span>on the remote, use
@@ -2939,85 +2884,79 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 </span></span><span style="display:flex;"><span>    git push origin HEAD
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>To choose either option permanently, see push.default in <span style="color:#87ceeb">&#39;git help config&#39;</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git push origin branch-name
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git push origin branch-name
 </span></span></code></pre></div><h1 id="플러밍plumbing-명령어">플러밍(Plumbing) 명령어</h1>
+<p>Git의 내부 동작을 제어하는 명령어입니다.
+Git의 내부 데이터 구조를 조작하거나 확인하는 <strong>저수준 명령어</strong>입니다.</p>
 <h2 id="rev-parse">rev-parse</h2>
-<p>Git 데이터베이스에 있는 Object의 체크섬을 조회한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git log --oneline -n <span style="color:#f60">1</span>
-</span></span><span style="display:flex;"><span>2fe25f7 (HEAD -&gt; feature) commit-msg
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git rev-parse feature
-</span></span><span style="display:flex;"><span>2fe25f72fca431a3b1aabb863b3ca6e04ddccb77
+<p>Git 데이터베이스에 있는 Object의 체크섬을 조회합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline -n <span style="color:#f60">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2fe25f7 (HEAD -&gt; feature) commit-msg</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rev-parse feature
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77</span>
 </span></span></code></pre></div><h2 id="hash-object">hash-object</h2>
 <p>데이터를 <code>.git</code> 디렉토리에 저장하고 체크섬을 계산한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git hash-object -w READM.me
-</span></span><span style="display:flex;"><span>76e579ae4c9106f3b62fb9203ec5b49d8014d87c
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git hash-object -w READM.me
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 76e579ae4c9106f3b62fb9203ec5b49d8014d87c</span>
 </span></span></code></pre></div><h2 id="ls-tree">ls-tree</h2>
 <p>tree 객체의 내용들을 보여준다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># commit hash: ee85974962b9645d757bc71dd773effb67d3594f</span>
-</span></span><span style="display:flex;"><span>$ git ls-tree ee85
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore
-</span></span><span style="display:flex;"><span><span style="color:#f60">040000</span> tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent
-</span></span><span style="display:flex;"><span><span style="color:#f60">040000</span> tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml
-</span></span><span style="display:flex;"><span><span style="color:#f60">040000</span> tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># commit hash: ee85974962b9645d757bc71dd773effb67d3594f</span>
+</span></span><span style="display:flex;"><span>git ls-tree ee85
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 040000 tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 040000 tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 040000 tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src</span>
 </span></span></code></pre></div><h2 id="ls-files">ls-files</h2>
 <p>index(스테이징된 파일)의 내용들을 체크섬과 함께 보여준다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git ls-files -s                                                                                           ✭ ✱
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> 396865b39e3f04c5ca6369999fd886dbae7441d0 <span style="color:#f60">0</span> .gitignore
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> dcdb07b5dfb81d995509aecad3bf202ee3a1d690 <span style="color:#f60">0</span> __test__/price.test.js
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> a823b374191cec985963bb821803a78a13ff89f2 <span style="color:#f60">0</span> jest.config.json
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> f496d9afc494b5312dd6efd73f43b5b5e40e5e63 <span style="color:#f60">0</span> pom.xml
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> e148a4810619ea951091909d82ef0955fe3e0e8f <span style="color:#f60">0</span> src/main/resources-dev/logback.xml
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git ls-files -s
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 396865b39e3f04c5ca6369999fd886dbae7441d0 0 .gitignore</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 dcdb07b5dfb81d995509aecad3bf202ee3a1d690 0 __test__/price.test.js</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 a823b374191cec985963bb821803a78a13ff89f2 0 jest.config.json</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 f496d9afc494b5312dd6efd73f43b5b5e40e5e63 0 pom.xml</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 e148a4810619ea951091909d82ef0955fe3e0e8f 0 src/main/resources-dev/logback.xml</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 모든 파일 출력</span>
 </span></span></code></pre></div><h2 id="cat-file">cat-file</h2>
 <p>저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 해당 체크섬을 가진 객체의 타입을 알려준다.</span>
-</span></span><span style="display:flex;"><span>$ git cat-file -t &lt;checksum&gt;
-</span></span><span style="display:flex;"><span>blob
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 해당 체크섬을 가진 객체의 사이즈를 알려준다.</span>
-</span></span><span style="display:flex;"><span>$ git cat-file -s &lt;checksum&gt;
-</span></span><span style="display:flex;"><span><span style="color:#f60">13</span> <span style="color:#0f0"># bytes</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># 객체의 타입을 알고 있다면 파일의 내용을 표시해준다.</span>
-</span></span><span style="display:flex;"><span>$ git cat-file &lt;type&gt; &lt;checksum&gt;
-</span></span><span style="display:flex;"><span>이것은 내용입니다.
+<p><code>&lt;checksum&gt;</code>을 가진 객체의 타입을 알려준다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cat-file -t &lt;checksum&gt;
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># blob</span>
+</span></span></code></pre></div><p><code>&lt;checksum&gt;</code>을 가진 객체의 사이즈를 알려준다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cat-file -s &lt;checksum&gt;
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 13 # bytes</span>
+</span></span></code></pre></div><p>객체의 타입을 알고 있다면 파일의 내용을 표시해준다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git cat-file &lt;type&gt; &lt;checksum&gt;
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 이것은 내용입니다.</span>
 </span></span></code></pre></div><h2 id="write-tree">write-tree</h2>
 <p>현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환한다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git write-tree
-</span></span><span style="display:flex;"><span>174592b10bb329e6f4664cbc03fd2c4869d12cdc
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git ls-tree <span style="color:#f60">17459</span>
-</span></span><span style="display:flex;"><span><span style="color:#f60">100644</span> blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git write-tree
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 174592b10bb329e6f4664cbc03fd2c4869d12cdc</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git ls-tree <span style="color:#f60">17459</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 100644 blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a</span>
 </span></span></code></pre></div><h2 id="commit-tree">commit-tree</h2>
 <p>특정 tree 객체로 새로운 커밋을 만든다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git commit-tree HEAD^{tree} -p main -m <span style="color:#87ceeb">&#34;test commit&#34;</span>
-</span></span><span style="display:flex;"><span>d5fc19ea68a8556383d46a79177395b563a8a483
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git commit-tree HEAD^{tree} -p main -m <span style="color:#87ceeb">&#34;test commit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># d5fc19ea68a8556383d46a79177395b563a8a483</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git show d5fc
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># commit d5fc19ea68a8556383d46a79177395b563a8a483</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Author: Changsu Im &lt;imcxsu@gmail.com&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Date:   Sat Jan 15 22:59:25 2022 +0900</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git show d5fc
-</span></span><span style="display:flex;"><span>commit d5fc19ea68a8556383d46a79177395b563a8a483
-</span></span><span style="display:flex;"><span>Author: Changsu Im &lt;imcxsu@gmail.com&gt;
-</span></span><span style="display:flex;"><span>Date:   Sat Jan <span style="color:#f60">15</span> 22:59:25 <span style="color:#f60">2022</span> +0900
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git merge --ff-only d5fc
-</span></span><span style="display:flex;"><span>Updating 5fe0db6..d5fc19e
-</span></span><span style="display:flex;"><span>Fast-forward
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#     test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git merge --ff-only d5fc
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Updating 5fe0db6..d5fc19e</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Fast-forward</span>
 </span></span></code></pre></div><h2 id="read-tree">read-tree</h2>
 <p>특정 tree 객체를 index에 포함시킨다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git read-tree HEAD^
-</span></span><span style="display:flex;"><span>$ git status
-</span></span><span style="display:flex;"><span>Changes to be committed:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git read-tree HEAD^
+</span></span><span style="display:flex;"><span>git status
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Changes to be committed:</span>
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git read-tree HEAD
-</span></span><span style="display:flex;"><span>$ git status
-</span></span><span style="display:flex;"><span>nothing to commit, working tree clean
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git read-tree HEAD
+</span></span><span style="display:flex;"><span>git status
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># nothing to commit, working tree clean</span>
 </span></span></code></pre></div><h2 id="update-index">update-index</h2>
 <p>woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트합니다.</p>
 <ul>
@@ -3026,7 +2965,7 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 <ul>
 <li>master 브랜치를 지정한 커밋 객체로 업데이트한다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git update-ref refs/heads/master <span style="color:#f60">992379</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git update-ref refs/heads/master <span style="color:#f60">992379</span>
 </span></span></code></pre></div></li>
 <li>
 <p><code>symbolic-ref</code></p>
@@ -3039,11 +2978,11 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 <ul>
 <li>원격 저장소의 references를 나열한다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git ls-remote
-</span></span><span style="display:flex;"><span>From .
-</span></span><span style="display:flex;"><span>2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD
-</span></span><span style="display:flex;"><span>2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature
-</span></span><span style="display:flex;"><span>106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git ls-remote
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># From .</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master</span>
 </span></span></code></pre></div></li>
 </ul>
 <h1 id="advanced">Advanced</h1>
@@ -3053,7 +2992,7 @@ rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(forc
 <p><img src="/images/shell/git/hook-symlink-script.png" alt="Maintaining a hook using a symlink to version-controlled script"></p>
 <p><em><a href="https://www.atlassian.com/git/tutorials/git-hooks">Maintaining a hook using a symlink to version-controlled script</a></em></p>
 <p>예를 들어, 아래와 같은 <code>pre-push</code> hook은 <code>git push</code> 명령어를 실행시켰을 때 <code>push</code> 가 실행되기 전 <code>gradle test</code> 명령어가 먼저 실행된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
 </span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 해당 스크립트의 실행 권한을 부여한다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># chmod +x .githooks/pre-push</span>
@@ -3104,9 +3043,9 @@ packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한�
   </tbody>
 </table>
 <p>Packfile을 열어 압축한 내용을 확인해볼 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>.git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok</span>
 </span></span></code></pre></div><h3 id="gc">gc</h3>
 <p>Garbage Collection을 실행한다.
 Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
@@ -3114,124 +3053,112 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
 <code>git prune</code>, <code>git repack</code>, <code>git pack</code>, <code>git rerere</code> 등 다른 내부 하위 명령어를 같이 실행한다.
 <code>git gc</code> 명령으로도 실행할 수 있지만 push, pull, merge, rebase, commit 명령에서 자동으로 실행된다.</p>
 <p>Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># touch test and git add</span>
-</span></span><span style="display:flex;"><span>$ git commit -m <span style="color:#87ceeb">&#34;test&#34;</span>
-</span></span><span style="display:flex;"><span>[master (root-commit) fd5e183] test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># touch test2 and git add</span>
-</span></span><span style="display:flex;"><span>$ git commit -m <span style="color:#87ceeb">&#34;test2&#34;</span>
-</span></span><span style="display:flex;"><span>[master (root-commit) 291b5c6] test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>291b5c6 (HEAD -&gt; master) test2
-</span></span><span style="display:flex;"><span>fd5e183 test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git reset --hard HEAD^
-</span></span><span style="display:flex;"><span>HEAD is now at fd5e183 test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git gc
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git fsck --lost-found
-</span></span><span style="display:flex;"><span>Checking object directories: 100% (256/256), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git merge 291b5c6
-</span></span><span style="display:flex;"><span>Updating fd5e183..291b5c6
-</span></span><span style="display:flex;"><span>Fast-forward
-</span></span><span style="display:flex;"><span> test2 | <span style="color:#f60">0</span>
-</span></span><span style="display:flex;"><span> <span style="color:#f60">1</span> file changed, <span style="color:#f60">0</span> insertions(+), <span style="color:#f60">0</span> deletions(-)
-</span></span><span style="display:flex;"><span> create mode <span style="color:#f60">100644</span> test2
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git log --oneline
-</span></span><span style="display:flex;"><span>291b5c6 (HEAD -&gt; master) test2
-</span></span><span style="display:flex;"><span>fd5e183 test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># touch test and git add</span>
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#87ceeb">&#34;test&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [master (root-commit) fd5e183] test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># touch test2 and git add</span>
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#87ceeb">&#34;test2&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [master (root-commit) 291b5c6] test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 291b5c6 (HEAD -&gt; master) test2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># fd5e183 test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git reset --hard HEAD^
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># HEAD is now at fd5e183 test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git gc
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git fsck --lost-found
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Checking object directories: 100% (256/256), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git merge 291b5c6
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Updating fd5e183..291b5c6</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Fast-forward</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  test2 | 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  1 file changed, 0 insertions(+), 0 deletions(-)</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#  create mode 100644 test2</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 291b5c6 (HEAD -&gt; master) test2</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># fd5e183 test</span>
 </span></span></code></pre></div><p>orphan 브랜치를 직접 만들어보자</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ touch test
-</span></span><span style="display:flex;"><span>$ git add .
-</span></span><span style="display:flex;"><span>$ git commit -m <span style="color:#87ceeb">&#34;test&#34;</span>
-</span></span><span style="display:flex;"><span>[master (root-commit) c2864f0] test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git switch --orphan empty
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>touch test
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#87ceeb">&#34;test&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [master (root-commit) c2864f0] test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git switch --orphan empty
 </span></span><span style="display:flex;"><span>Switched to a new branch <span style="color:#87ceeb">&#39;empty&#39;</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git log
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log
 </span></span><span style="display:flex;"><span>fatal: your current branch <span style="color:#87ceeb">&#39;empty&#39;</span> does not have any commits yet
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git log --oneline --all
-</span></span><span style="display:flex;"><span>c2864f0 (master) test
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0"># git rm --cached -r .</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline --all
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># c2864f0 (master) test</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># git rm --cached -r .</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># git clean -f</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ git commit --allow-empty -m <span style="color:#87ceeb">&#34;empty commit&#34;</span>
-</span></span><span style="display:flex;"><span>[empty (root-commit) 02116ce] empty commit
+</span></span><span style="display:flex;"><span>git commit --allow-empty -m <span style="color:#87ceeb">&#34;empty commit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># [empty (root-commit) 02116ce] empty commit</span>
 </span></span></code></pre></div><h2 id="prune">prune</h2>
 <p>연결할 수 없는 orphan 객체를 제거한다.
 일반적으로 직접 실행되지 않고 <code>gc</code>의 하위 명령으로 gc의 기준에 따라 사용된다.</p>
 <p><code>fsck</code> 명령으로 dangling 객체를 확인할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git fsck
-</span></span><span style="display:flex;"><span>Checking object directories: 100% (256/256), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>Checking objects: 100% (573/573), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>dangling blob c319a9963957cb51e3cb692ac44a4831ea529992
-</span></span><span style="display:flex;"><span>dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92
-</span></span><span style="display:flex;"><span>dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99
-</span></span><span style="display:flex;"><span>dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6
-</span></span><span style="display:flex;"><span>dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814
-</span></span><span style="display:flex;"><span>dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c
-</span></span><span style="display:flex;"><span>dangling blob bcfc949b6572079aa54db963abc59b48232813ed
-</span></span><span style="display:flex;"><span>dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8
-</span></span><span style="display:flex;"><span>dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
-</span></span><span style="display:flex;"><span>dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f
-</span></span><span style="display:flex;"><span>dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796
-</span></span><span style="display:flex;"><span>dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957
-</span></span><span style="display:flex;"><span>dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e
-</span></span><span style="display:flex;"><span>dangling blob 002f663c650d708e29d75524630bc5cf97403039
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git fsck
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Checking object directories: 100% (256/256), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Checking objects: 100% (573/573), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob c319a9963957cb51e3cb692ac44a4831ea529992</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob bcfc949b6572079aa54db963abc59b48232813ed</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># dangling blob 002f663c650d708e29d75524630bc5cf97403039</span>
 </span></span></code></pre></div><p><code>--dry-run</code> 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 한다.
 확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ git prune --dry-run --verbose
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>002f663c650d708e29d75524630bc5cf97403039 blob
-</span></span><span style="display:flex;"><span>091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob
-</span></span><span style="display:flex;"><span>0a56b32d98fea47ca5228e3b62ee1fc189408796 blob
-</span></span><span style="display:flex;"><span>0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob
-</span></span><span style="display:flex;"><span>4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob
-</span></span><span style="display:flex;"><span>524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob
-</span></span><span style="display:flex;"><span>5ca654e778f2cceb0207dc9311c8961107caa17e blob
-</span></span><span style="display:flex;"><span>7f3ced9d3dad92439949d98ad2d92125be07764c blob
-</span></span><span style="display:flex;"><span>879b261622ca54bd28f8fa2be6330fe9ebfba814 blob
-</span></span><span style="display:flex;"><span>bcfc949b6572079aa54db963abc59b48232813ed blob
-</span></span><span style="display:flex;"><span>c319a9963957cb51e3cb692ac44a4831ea529992 blob
-</span></span><span style="display:flex;"><span>e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob
-</span></span><span style="display:flex;"><span>f16c37ff355844ac388d101e5bba46e698a4deb8 blob
-</span></span><span style="display:flex;"><span>f4d5466af82d891b81ad792b0e74e2341e46312f blob
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git prune --dry-run --verbose
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 002f663c650d708e29d75524630bc5cf97403039 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 0a56b32d98fea47ca5228e3b62ee1fc189408796 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 5ca654e778f2cceb0207dc9311c8961107caa17e blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 7f3ced9d3dad92439949d98ad2d92125be07764c blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 879b261622ca54bd28f8fa2be6330fe9ebfba814 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># bcfc949b6572079aa54db963abc59b48232813ed blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># c319a9963957cb51e3cb692ac44a4831ea529992 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># f16c37ff355844ac388d101e5bba46e698a4deb8 blob</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># f4d5466af82d891b81ad792b0e74e2341e46312f blob</span>
 </span></span></code></pre></div><p><code>GIT_TRACE=true</code> 환경 변수와 함께 <code>gc</code>를 실행하면 <code>prune</code> 명령이 실행된다는 것을 알 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ <span style="color:#eedd82">GIT_TRACE</span>=true git gc
-</span></span><span style="display:flex;"><span>21:48:42.368350 git.c:439               trace: built-in: git gc
-</span></span><span style="display:flex;"><span>21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune
-</span></span><span style="display:flex;"><span>21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune
-</span></span><span style="display:flex;"><span>21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all
-</span></span><span style="display:flex;"><span>21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all
-</span></span><span style="display:flex;"><span>21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable=2.weeks.ago
-</span></span><span style="display:flex;"><span>21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable=2.weeks.ago
-</span></span><span style="display:flex;"><span>21:48:42.384316 run-command.c:663       trace: run_command: <span style="color:#eedd82">GIT_REF_PARANOIA</span>=<span style="color:#f60">1</span> git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
-</span></span><span style="display:flex;"><span>21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
-</span></span><span style="display:flex;"><span>Enumerating objects: 573, <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>Counting objects: 100% (573/573), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>Delta compression using up to <span style="color:#f60">12</span> threads
-</span></span><span style="display:flex;"><span>Compressing objects: 100% (256/256), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>Writing objects: 100% (573/573), <span style="color:#f00">done</span>.
-</span></span><span style="display:flex;"><span>Total <span style="color:#f60">573</span> (delta 133), reused <span style="color:#f60">573</span> (delta 133)
-</span></span><span style="display:flex;"><span>21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago
-</span></span><span style="display:flex;"><span>21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago
-</span></span><span style="display:flex;"><span>21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago
-</span></span><span style="display:flex;"><span>21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago
-</span></span><span style="display:flex;"><span>21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc
-</span></span><span style="display:flex;"><span>21:48:42.409708 git.c:439               trace: built-in: git rerere gc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#eedd82">GIT_TRACE</span>=true git gc
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.368350 git.c:439               trace: built-in: git gc</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable=2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable=2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.384316 run-command.c:663       trace: run_command: GIT_REF_PARANOIA=1 git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Enumerating objects: 573, done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Counting objects: 100% (573/573), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Delta compression using up to 12 threads</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Compressing objects: 100% (256/256), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Writing objects: 100% (573/573), done.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># Total 573 (delta 133), reused 573 (delta 133)</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 21:48:42.409708 git.c:439               trace: built-in: git rerere gc</span>
 </span></span></code></pre></div><h1 id="git-server">Git Server</h1>
 <h2 id="fork">Fork</h2>
 <p>Fork는 서버에 저장소의 복사본을 만든다.</p>
 <p><img src="/images/shell/git/fork-repository.svg" alt="fork-repository"></p>
-<p><em><a href="https://coderefinery.github.io/git-collaborative/03-distributed/">Distributed version control and forking workflow</a></em></p>
+<p><em><a href="https://flatironinstitute.github.io/sciware-git-collaborative/03-distributed/">Distributed version control and forking workflow</a></em></p>
 <ul>
 <li>fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
 <ul>
@@ -3246,7 +3173,7 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
 </ul>
 <h2 id="branch-protection-rules">Branch protection rules</h2>
 <p>Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git --no-optional-locks -c color.branch=false -c color.diff=false -c color.status=false -c diff.mnemonicprefix=false -c core.quotepath=false -c credential.helper=sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git --no-optional-locks -c color.branch=false -c color.diff=false -c color.status=false -c diff.mnemonicprefix=false -c core.quotepath=false -c credential.helper=sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
 </span></span><span style="display:flex;"><span>Pushing to https://bitbucket.markruler.com/scm/mark/test-pr.git
 </span></span><span style="display:flex;"><span>POST git-receive-pack (<span style="color:#f60">990</span> bytes)
 </span></span><span style="display:flex;"><span>remote:                             *%%%%%.

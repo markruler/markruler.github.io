@@ -116,20 +116,26 @@ Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash f
 [데이터를 신뢰하기 위해서다](https://www.youtube.com/watch?v=4XpnKHJAok8&t=56m25s).
 예를 들어 내가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 된다.
 
-```bash
-$ echo "test" > test.txt
-$ git hash-object test.txt
-9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+```sh
+echo "test" > test.txt
+git hash-object test.txt
+# 9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+```
 
-# 파일명을 변경하더라도 체크섬은 바뀌지 않는다.
-$ mv test.txt test2.md
-$ git hash-object test2.md
-9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+파일명을 변경하더라도 체크섬은 바뀌지 않는다.
 
-# 내용을 변경하면 체크섬은 바뀐다.
-$ echo " " >> test2.md
-$ git hash-object test2.md
-d698e83c7a0b75a29e815371e584973062b4cab9
+```sh
+mv test.txt test2.md
+git hash-object test2.md
+# 9daeafb9864cf43055ae93beb0afd6c7d144bfa4
+```
+
+내용을 변경하면 체크섬은 바뀐다.
+
+```sh
+echo " " >> test2.md
+git hash-object test2.md
+# d698e83c7a0b75a29e815371e584973062b4cab9
 ```
 
 Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
@@ -148,20 +154,27 @@ SHA-1 값의 크기는 20 Bytes(160 Bits)다.
 
 ([2018년부터 SHA-256으로 전환하고 있고](https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/), Git 2.29부터 지원하고 있다)
 
-```bash
-# 해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.
-$ git ls-tree ee85
+해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.
 
-# 앞부분이 중복된다면 아래와 같은 에러가 발생한다.
+```sh
+git ls-tree ee85
+```
+
+앞부분이 중복된다면 아래와 같은 에러가 발생한다.
+
+```sh
 ferror: short object ID ee85 is ambiguous
 hint: The candidates are:
 hint:   ee8597496 commit 2022-01-12 - 제가 작성한 커밋 메시지입니다
 hint:   ee85c50d6 tree
 hint:   ee8574581 blob
 fatal: Not a valid object name ee85
+```
 
-# 몇 글자를 더 입력해주면 정상적으로 동작한다.
-$ git ls-tree ee859
+몇 글자를 더 입력해주면 정상적으로 동작한다.
+
+```sh
+git ls-tree ee859
 ```
 
 ## Git 프로젝트의 세 가지 단계
@@ -223,9 +236,11 @@ Git으로 하는 일은 기본적으로 아래와 같다.
 Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳이다.
 description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.
 
-```bash
-$ tree -L 2 .git
+```sh
+tree -L 2 .git
+```
 
+```sh
 .git
 ├── branches
 ├── COMMIT_EDITMSG
@@ -265,12 +280,14 @@ $ tree -L 2 .git
 
 ## HEAD
 
-```bash
-$ cat HEAD
-ref: refs/heads/main
+```sh
+cat HEAD
+# ref: refs/heads/main
+```
 
-$ cat refs/heads/main
-4436e4b582c7a8c942f11746d54cf4338325442c
+```sh
+cat refs/heads/main
+# 4436e4b582c7a8c942f11746d54cf4338325442c
 ```
 
 | 이름                                                        | 설명                                                | 파일 내용                                                                                                        |
@@ -315,9 +332,9 @@ tree 객체 하나는 항목을 여러 개 가질 수 있다.
 blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
 파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.
 
-```bash
-$ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
-100644 blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
+```sh
+git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
+# 100644 blob 83baae61804e65cc73a7201a7252750c76066a30      test.txt
 ```
 
 여기서 blob의 파일 모드는 보통의 파일을 나타내는 `100644`,
@@ -389,13 +406,15 @@ config 파일은 INI file(`.ini`) 형식이다.
   merge = refs/heads/main
 ```
 
-```bash
-$ git config --global user.name Changsu Im
-$ git config --global user.email imcxsu@gmail.com
+```sh
+git config --global user.name Changsu Im
+git config --global user.email imcxsu@gmail.com
+```
 
+```sh
 # config 목록 출력
-$ git config --list
-$ git config --list --global
+git config --list
+git config --list --global
 ```
 
 # SCM: Source Code Management
@@ -409,15 +428,19 @@ $ git config --list --global
 
 # 포셀린(Porcelain) 명령어
 
-['CS Visualized: 유용한 깃(Git) 명령어'](https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/)를 함께 읽는다.
+사용자 친화적인 명령어 모음입니다.
+Git을 관리하는 **상위 수준의 인터페이스**입니다.
+명령어 사용 시 시스템 내부의 복잡한 동작은 숨겨지고 직관적인 결과만 보여줍니다.
+
+['CS Visualized: 유용한 깃(Git) 명령어'](../cs-visualized-useful-git-commands/)를 함께 읽으면 도움됩니다.
 
 ## init
 
 현재 디렉토리에 `.git` 디렉터리를 생성하고 Git 프로젝트로 초기화한다.
 
-```bash
-$ git init
-Initialized empty Git repository in /home/markruler/toy/.git/
+```sh
+git init
+# Initialized empty Git repository in /home/markruler/toy/.git/
 ```
 
 ## clone
@@ -429,8 +452,11 @@ remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 
 3. `.git` 디렉토리 내부에 objects와 references를 연결한다.
 4. 최신 버전을 checkout한다.
 
-```bash
-$ git clone ${origin}
+```sh
+git clone ${origin}
+```
+
+```sh
 Cloning into 'my-origin-repo'...
 remote: Enumerating objects: 22940, done.
 remote: Counting objects: 100% (1929/1929), done.
@@ -445,12 +471,16 @@ Resolving deltas: 100% (16109/16109), done.
 submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
 submodule을 추가하면 `.gitmodules` 파일이 생성된다.
 
-```bash
-# submodule을 새로 추가하는 경우
-$ git submodule add https://github.com/markruler/repository
+submodule을 새로 추가하는 경우
 
-# 의존하는 submodule 리포지터리를 clone한다
-$ git submodule update --init --recursive
+```sh
+git submodule add https://github.com/markruler/repository
+```
+
+의존하는 submodule 리포지터리를 clone한다.
+
+```sh
+git submodule update --init --recursive
 ```
 
 ## subtree
@@ -475,10 +505,13 @@ branch 명령을 실행하면 다음의 단계를 수행한다.
 2. `.git/HEAD`에 위치한 HEAD를 참조해 현재 작업 중인 브랜치를 찾는다.
 3. 모든 브랜치를 오름차순으로 정렬하고, 현재 작업 중인 브랜치에 별표(\*)를 표시한다.
 
-```bash
-$ git branch
+```sh
+git branch
+```
+
+```sh
 * feature
-  master
+ master
 ```
 
 ### xargs
@@ -487,29 +520,35 @@ eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용하�
 
 - [When to Use xargs](https://www.baeldung.com/linux/xargs) - Baeldung
 
-```bash
-$ echo {0..9} | xargs -n 2
-0 1
-2 3
-4 5
-6 7
-8 9
+```sh
+echo {0..9} | xargs -n 2
+# 0 1
+# 2 3
+# 4 5
+# 6 7
+# 8 9
 ```
 
 branch 명령과 xargs 명령을 파이프(`|`)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있다.
 
-```bash
+```sh
 # master, stable, main, 현재 브랜치 외 모든 브랜치 삭제
-$ git branch | grep -v "master\|stable\|main\|\*" | xargs git branch -D
+git branch | grep -v "master\|stable\|main\|\*" | xargs git branch -D
+```
 
+```sh
 # 현재 브랜치 제외하고 삭제
-$ git branch | grep -v "\*" | xargs git branch -D
+git branch | grep -v "\*" | xargs git branch -D
+```
 
+```s
 # 모두 삭제
-$ git branch | grep -v '^*' | xargs git branch -D
+git branch | grep -v '^*' | xargs git branch -D
+```
 
+```sh
 # 정규표현식으로 특정 브랜치 삭제
-$ git branch | grep -Eo 'feature/.*' | xargs git branch -D
+git branch | grep -Eo 'feature/.*' | xargs git branch -D
 ```
 
 ## tag
@@ -522,18 +561,26 @@ $ git branch | grep -Eo 'feature/.*' | xargs git branch -D
   일반적으로 Annotated 태그를 만들어 이 모든 정보를 사용할 수 있도록 하는 것이 좋다.
   하지만 임시로 생성하는 태그거나 이러한 정보를 유지할 필요가 없는 경우에는 Lightweight 태그를 사용할 수도 있다.
 
-```bash
-# Annotated tag
-$ git tag -a 1.0.0 -m "test tag"
+태그 달기(Annotated tag)
 
-# tag 목록
-$ git tag
-1.0.0
+```sh
+git tag -a 1.0.0 -m "test tag"
 ```
 
-```bash
-# tag 내용 확인
-$ git show 1.0.0
+tag 목록 확인하기
+
+```sh
+git tag
+# 1.0.0
+```
+
+tag 내용 확인
+
+```sh
+git show 1.0.0
+```
+
+```sh
 tag 1.0.0
 Tagger: Changsu Im <imcxsu@gmail.com>
 Date:   Sat Jan 15 20:38:46 2022 +0900
@@ -542,12 +589,11 @@ test tag
 
 commit 49ef168385a2fe63f6e47055c1da79a0465039dc (HEAD -> master, tag: 1.0.0)
 ...
-
 ```
 
-```bash
-$ git show-ref --tags
-02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
+```sh
+git show-ref --tags
+# 02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
 ```
 
 tag 명령어를 실행하면 다음과 같은 단계를 수행한다.
@@ -566,31 +612,37 @@ tag 명령어를 실행하면 다음과 같은 단계를 수행한다.
   - [Highlights from Git 2.23](https://github.blog/2019-08-16-highlights-from-git-2-23/) - GitHub Blog
   - [Git 2.23 Adds Switch and Restore Commands](https://www.infoq.com/news/2019/08/git-2-23-switch-restore/) - Sergio De Simone
 
-```bash
+```sh
 # 1. 원격 리포지터리에서 해결하려는 Issue에 맞는 브랜치를 생성한다.
 # 2. 로컬 환경에서 원격 리포지터리의 업데이트 사항을 가져온다.
-$ git fetch --all
-
-# 3. 해당 브랜치를 tracking하는 로컬 브랜치를 생성한다.
-# git switch -c <branch> -t[--track] <remote>/<branch>
-$ git switch -c feature/local-test -t origin/feature/remote-test
-Branch 'feature/local-test' set up to track remote branch 'feature/remote-test' from 'origin'.
-Switched to a new branch 'feature/local-test'
+git fetch --all
 ```
 
-```bash
-# 브랜치를 Local에서 먼저 생성하는 경우도 있다.
+```sh
+# 3. 해당 브랜치를 tracking하는 로컬 브랜치를 생성한다.
+git switch -c feature/local-test -t origin/feature/remote-test
+# Branch 'feature/local-test' set up to track remote branch 'feature/remote-test' from 'origin'.
+# Switched to a new branch 'feature/local-test'
+```
+
+브랜치를 Local에서 먼저 생성하는 경우도 있다.
+
+```sh
 # 1. 브랜치를 생성한다.
-$ git switch -c test-rebase
+git switch -c test-rebase
+```
 
+```sh
 # 2. upstream을 지정한다.
-$ git branch --set-upstream-to=origin/test-rebase test-rebase
-Branch 'test-rebase' set up to track remote branch 'test-rebase' from 'origin'.
+git branch --set-upstream-to=origin/test-rebase test-rebase
+# Branch 'test-rebase' set up to track remote branch 'test-rebase' from 'origin'.
+```
 
+```sh
 # 3. rebase
-$ git rebase
-First, rewinding head to replay your work on top of it...
-Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
+git rebase
+# First, rewinding head to replay your work on top of it...
+# Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 ```
 
 ### upstream
@@ -607,7 +659,7 @@ upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
 
 잠깐. fork한 `origin` 저장소가 아니라 `upstream`으로 push한다?
 
-```bash
+```sh
 git push --set-upstream origin feature/test-upstream
 # push 후
 # Branch 'feature/test-upstream' set up to track remote branch 'feature/test-upstream' from 'origin'.
@@ -651,16 +703,20 @@ index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과
 3. 실제로 생성하거나 blob에 연결한다.
 4. 컨텐츠에 위치를 추적할 tree 객체를 생성한다.
 
-```bash
+```sh
 # 모든 변경 사항을 staging area에 추가
-$ git add -A
+git add -A
+```
 
+```sh
 # 현재 디렉토리의 변경 사항을 staging area에 추가
-$ git add .
+git add .
+```
 
+```sh
 # 특정 변경 사항만 추가
-$ git add '*Detail.java'
-$ git add src/
+git add '*Detail.java'
+git add src/
 ```
 
 ## fetch
@@ -674,13 +730,15 @@ $ git add src/
 3. 찾았다면 원격 저장소로부터 이름이 지정된 참조(heads와 tags)와 관련된 객체들까지 가져온다.
 4. 복구 가능한 참조들은 나중에 병합이 가능하도록 `.git/FETCH_HEAD`에 저장한다.
 
-```bash
-$ git fetch <branch>
-$ git fetch --all # Fetch all remotes.
-Fetching origin
+```sh
+git fetch <branch>
+git fetch --all # Fetch all remotes.
+# Fetching origin
+```
 
-$ git merge <origin/branch> <commit>
-$ git merge FETCH_HEAD
+```sh
+git merge <origin/branch> <commit>
+git merge FETCH_HEAD
 ```
 
 ## commit
@@ -689,7 +747,7 @@ $ git merge FETCH_HEAD
 즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
 그렇다고 working tree나 staging area의 내용들을 지우지 않는다.
 
-```bash
+```sh
 git commit
 git commit -m "commit message"
 ```
@@ -734,7 +792,7 @@ git merge --abort
 
 병합은 두 가지 방식이 있다.
 
-```bash
+```sh
 # fast-forward
 git merge --ff
 ```
@@ -743,7 +801,7 @@ git merge --ff
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
 별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.
 
-```bash
+```sh
 # no-fast-forward
 git merge --no-ff
 ```
@@ -754,7 +812,7 @@ git merge --no-ff
 별도의 **Merge 커밋**으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킨다.
 이 Merge 커밋은 부모 커밋을 2개 가진다.
 
-```bash
+```sh
 *   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
 |\  Merge: be1dacb bf50160 # 부모 커밋이 2개
 | | Author: Changsu <imcxsu@gmail.com>
@@ -771,17 +829,23 @@ git merge --no-ff
 3-way-merge가 실패하고 충돌(Conflict)이 발생한다.
 `git mergetool`을 활용하면 간편하게 충돌을 해결할 수 있다.
 
-```bash
-$ git mergetool
+```sh
+git mergetool
+```
 
+```sh
 This message is displayed because 'merge.tool' is not configured.
 See 'git mergetool --tool-help' or 'git help config' for more details.
 'git mergetool' will now attempt to use one of the following tools:
 opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc codecompare smerge emerge vimdiff nvimdiff
 No files need merging
+```
 
-$ git mergetool --tool-help
+```sh
+git mergetool --tool-help
+```
 
+```sh
 'git mergetool --tool=<tool>' may be set to one of the following:
     vimdiff
     vimdiff2
@@ -902,7 +966,7 @@ git rebase -i --root
 아래와 같은 하위 명령어들이 있다.
 나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.
 
-```bash
+```sh
 # p, pick <commit> = use commit
 # r, reword <commit> = use commit, but edit the commit message
 # e, edit <commit> = use commit, but stop for amending
@@ -924,134 +988,176 @@ git rebase -i --root
 squash는 **커밋 메시지를 확인하고 편집한 후** squash and merge한다.
 대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.
 
-```bash
-$ git --no-pager log --oneline
-399e2ef (HEAD -> squash) 3
-ea37b52 2
-7f1a625 (main) 1
+```sh
+git --no-pager log --oneline
+# 399e2ef (HEAD -> squash) 3
+# ea37b52 2
+# 7f1a625 (main) 1
+```
 
-# 지금 staged 파일들을 squash 커밋으로 만든다.
-$ git commit --squash ea37b52
+지금 staged 파일들을 squash 커밋으로 만든다.
 
-# squash 커밋은 대상 커밋 메시지 앞에 "squash!"이 붙는다.
-$ git --no-pager log --oneline
-d927a64 (HEAD -> squash) squash! 2
-399e2ef 3
-ea37b52 2
-7f1a625 (main) 1
+```sh
+git commit --squash ea37b52
+```
+
+squash 커밋은 대상 커밋 메시지 앞에 "squash!"가 붙는다.
+
+```sh
+git --no-pager log --oneline
+# d927a64 (HEAD -> squash) squash! 2
+# 399e2ef 3
+# ea37b52 2
+# 7f1a625 (main) 1
+```
+
+squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.
+
+```sh
+git rebase -i --autosquash main
+# pick ea37b52 2
+# squash d927a64 squash! 2
+# pick 399e2ef 3
+
+# [detached HEAD 6f530b5] 2
+#  Date: Mon Jan 17 02:05:58 2022 +0900
+#  2 files changed, 0 insertions(+), 0 deletions(-)
+#  create mode 100644 b
+#  create mode 100644 d
+# Successfully rebased and updated refs/heads/squash.
 ```
 
 ```sh
-# squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.
-$ git rebase -i --autosquash main
-pick ea37b52 2
-squash d927a64 squash! 2
-pick 399e2ef 3
-
-[detached HEAD 6f530b5] 2
- Date: Mon Jan 17 02:05:58 2022 +0900
- 2 files changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 b
- create mode 100644 d
-Successfully rebased and updated refs/heads/squash.
+git --no-pager log --oneline
+# ea3b05e (HEAD -> squash) 3 # 이후의 커밋들도 다시 저장한다.
+# 6f530b5 2
+# 7f1a625 (main) 1
 ```
+
+**fixup**은 squash와 결과가 동일하지만,
+original 커밋 메시지만 남기고 **fixup 커밋의 메시지들은 버린다**.
 
 ```sh
-$ git --no-pager log --oneline
-ea3b05e (HEAD -> squash) 3 # 이후의 커밋들도 다시 저장한다.
-6f530b5 2
-7f1a625 (main) 1
+git --no-pager log --oneline
+# ffdc929 (HEAD -> fixup) 3
+# ea53497 2
+# 7f1a625 (main) 1
 ```
 
-fixup은 squash와 결과가 동일하지만,
-original 커밋 메시지만 남기고 fixup 커밋의 메시지들은 **자동으로 버린다**.
+지금 staged 파일들을 fixup 커밋으로 만든다.
 
-```bash
-$ git --no-pager log --oneline
-ffdc929 (HEAD -> fixup) 3
-ea53497 2
-7f1a625 (main) 1
+```sh
+git commit --fixup ea53497
+```
 
-# 지금 staged 파일들을 fixup 커밋으로 만든다.
-$ git commit --fixup ea53497
+fixup 커밋은 대상 커밋 메시지 앞에 "fixup!"이 붙는다.
 
-# fixup 커밋은 대상 커밋 메시지 앞에 "fixup!"이 붙는다.
-$ git --no-pager log --oneline
-202953c (HEAD -> fixup) fixup! 2
-ffdc929 3
-ea53497 2
-7f1a625 (main) 1
+```sh
+git --no-pager log --oneline
+# 202953c (HEAD -> fixup) fixup! 2
+# ffdc929 3
+# ea53497 2
+# 7f1a625 (main) 1
+```
 
-# fixup 커밋들은 자동으로 squash and merge가 된다.
-$ git rebase -i --autosquash main
-pick ea53497 2
-fixup 202953c fixup! 2
-pick ffdc929 3
+fixup 커밋들은 자동으로 squash and merge가 된다.
 
-# fixup 커밋의 메시지들은 자동으로 버린다.
+```sh
+git rebase -i --autosquash main
+# pick ea53497 2
+# fixup 202953c fixup! 2
+# pick ffdc929 3
+```
+
+fixup 커밋의 메시지들은 자동으로 버린다.
+
+```sh
 Successfully rebased and updated refs/heads/fixup.
+```
 
-$ git --no-pager log --oneline
-449ed00 (HEAD -> fixup) 3
-000a709 2
-7f1a625 (main) 1
+```sh
+git --no-pager log --oneline
+# 449ed00 (HEAD -> fixup) 3
+# 000a709 2
+# 7f1a625 (main) 1
 ```
 
 ## cherry-pick
 
-어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 HEAD에 반영한다.
-**커밋 체크섬은 달라진다**는 것에 유의한다.
+어느 브랜치든지 커밋의 체크섬을 알고 있다면 해당 커밋의 변경 사항들을 현재 `HEAD`에 반영합니다.
+**커밋 체크섬은 달라진다**는 것에 유의합니다.
 
-```bash
-$ git cherry-pick <commit>
+```sh
+git cherry-pick <commit>
+```
 
-# --no-commit 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않는다.
-$ git cherry-pick <commit> --no-commit
+`--no-commit` 옵션은 커밋의 변경 내용만 가져오고 커밋하지 않습니다.
+
+```sh
+git cherry-pick <commit> --no-commit
 ```
 
 ## stash
 
-stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있다.
-stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해준다.
+stash는 숨겨둔다는 뜻으로 현재 로컬 브랜치에서 수정한 데이터를 Stack에 임시로 저장해둘 수 있습니다.
+stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 중에 브랜치를 자유롭게 변경할 수 있도록 해줍니다.
 
-```bash
-# 변경 사항을 Stack에 저장한다. 아무런 하위 명령어를 입력하지 않으면 default.
-$ git stash push
+변경 사항을 Stack에 저장합니다.
+아무런 하위 명령어를 입력하지 않으면 default 옵션입니다.
 
-# Stack이기 때문에 stash@{0}부터 작업 데이터를 꺼낸 후 drop한다.
-$ git stash pop
-
-# pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않는다.
-$ git stash apply
+```sh
+git stash push
 ```
 
-```bash
-# stash@{0}을 제거한다.
-$ git stash drop
+Stack이기 때문에 `pop`은 `stash@{0}`부터 작업 데이터를 꺼낸 후 drop 합니다.
 
-# 모든 stash 데이터를 제거한다.
-$ git stash clear
+```sh
+git stash pop
 ```
 
-```bash
-# stash 목록을 보여준다.
-$ git stash list
+`apply`는 pop처럼 작업 데이터를 Stack에서 꺼내지만 Stack에서 drop하지 않습니다.
 
-# stash@{0}과 HEAD의 diff를 보여준다.
-$ git stash show
-
-# stash@{2}와 HEAD의 diff를 보여준다.
-$ git stash show -p[--patch] 2
+```sh
+git stash apply
 ```
 
-```bash
-# 현재 상태를 저장한다.
-$ git stash save <message>
-$ git stash save "haha"
-Saved working directory and index state On master: haha
+`drop`은 `stash@{0}`을 제거한다.
 
-$ git stash list
-stash@{0}: On master: haha
+```sh
+git stash drop
+```
+
+`clear`는 모든 stash 데이터를 제거합니다.
+
+```sh
+git stash clear
+```
+
+`list`는 stash 목록을 조회합니다.
+
+```sh
+git stash list
+```
+
+`show`는 `stash@{0}`과 `HEAD`의 diff를 보여줍니다.
+
+```sh
+git stash show
+# --patch 옵션은 stash@{2}와 HEAD의 diff를 보여줍니다.
+git stash show -p[--patch] 2
+```
+
+`save`는 현재 상태를 저장합니다.
+
+```sh
+# git stash save <message>
+git stash save "haha"
+# Saved working directory and index state On master: haha
+```
+
+```sh
+git stash list
+# stash@{0}: On master: haha
 ```
 
 기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있다.
@@ -1064,16 +1170,18 @@ stash@{0}: On master: haha
 
 stash된 상태는 실제로 로컬 저장소에 커밋 객체처럼 인코딩되어 저장됩니다.
 
-```bash
-$ git log --oneline --graph stash@{0}
+```sh
+git log --oneline --graph stash@{0}
 *   3bd5af8 (refs/stash) On master: haha
 |\
 | * 09162cd index on master: 49ef168 test
 |/
 * 49ef168 (HEAD -> master) test
+```
 
-$ cat .git/refs/stash
-3bd5af85bcbfaf7b031972dc41b016c4eb463028
+```sh
+cat .git/refs/stash
+# 3bd5af85bcbfaf7b031972dc41b016c4eb463028
 ```
 
 ## reset
@@ -1082,33 +1190,40 @@ HEAD를 특정 상태로 되돌린다.
 다양한 mode 옵션이 있다.
 
 - `--soft` - 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.
-- `--mixed` - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다. (Undo `add`)
+- `--mixed` - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다.
 
-  ```bash
-  $ git reset HEAD^
-  $ git reset --mixed HEAD^
-  Unstaged changes after reset:
-  M package-lock.json
-  M package.json
+  ```sh
+  git reset HEAD^
+  git reset --mixed HEAD^
+  # Unstaged changes after reset:
+  # M package-lock.json
+  # M package.json
   ```
 
 - `--hard` - 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.
 
-  ```bash
-  $ git reset --hard HEAD^
-  HEAD is now at 955b01b7 chore: renew mac certificates (#12)
+  ```sh
+  git reset --hard HEAD^
+  # HEAD is now at 955b01b7 chore: renew mac certificates (#12)
+  ```
+
+  ```sh
+  # 첫 커밋 제외하고 전부 Hard Reset
+  git reset --hard $(git rev-list --max-parents=0 HEAD)
   ```
 
 - `--merge` — 워킹 트리에서 merge를 undo 할 수 있다. (Undo `merge`/`pull`)
 
-  ```bash
-  $ git pull
-   Auto-merging nitfol
-   Merge made by recursive.
-    nitfol                |   20 +++++----
-    ...
+  ```sh
+  git pull
+  # Auto-merging nitfol
+  # Merge made by recursive.
+  #  nitfol                |   20 +++++----
+  #  ...
+  ```
 
-  $ git reset --merge ORIG_HEAD
+  ```sh
+  git reset --merge ORIG_HEAD
   ```
 
 ## restore
@@ -1117,19 +1232,21 @@ HEAD를 특정 상태로 되돌린다.
 
 - [git@v2.23.0](https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61) 부터 `checkout` 명령어에서 분리되었다.
 
-```bash
+```sh
 # git checkout -- ${file_name}
 # git restore --staged ${file_name}
-$ git restore --staged * # git reset --mixed HEAD
+git restore --staged * # git reset --mixed HEAD
 ```
 
 ## revert
 
 `reset`처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.
 
-```bash
-$ git revert <commit>
+```sh
+git revert <commit>
+```
 
+```sh
 Revert "4ea42dbe의 커밋 메시지"
 
 This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
@@ -1141,25 +1258,27 @@ This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 
 파일의 라인마다 마지막 수정 정보를 확인할 수 있다.
 
-```bash
-$ git blame README.md
-0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash
-dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) 
-dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash
+```sh
+git blame README.md
+# 0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash
+# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) 
+# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash
+```
 
-$ git blame -L 69,82 README.md
-$ git blame -L 69 README.md
+```sh
+git blame -L 69,82 README.md
+git blame -L 69 README.md
 ```
 
 ### bisect
 
 - [A beginner's guide to GIT BISECT](https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination) - Tony Rost
 
-이진 탐색을 이용해 버그가 발생한 커밋을 찾는다.
-운영 서버에 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있다.
-이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와준다.
+이진 탐색을 이용해 버그가 발생한 커밋을 찾습니다.
+운영 환경에서 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있습니다.
+이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와줍니다.
 
-```bash
+```sh
 # 테스트 프로젝트 생성
 mkdir git-bisect-tests
 cd git-bisect-tests
@@ -1187,35 +1306,39 @@ echo stream >> test.txt
 git add -A && git commit -m "Adding the word 'stream'"
 ```
 
-```bash
-$ cat test.txt
+```sh
+cat test.txt
+```
+
+```sh
 row
 row
 row
 your
-bug # bug를 찾을 것이다.
+bug # 이 bug를 찾을 겁니다.
 gently
 down
 the
 stream
 ```
 
-bisect를 시작한다.
+`bisect`를 시작합니다.
 
-```bash
-$ git bisect start
+```sh
+git bisect start
 ```
 
-버그가 있는 현재 커밋을 기록한다.
+가장 먼저 버그를 발견한 현재 커밋을 기록합니다.
 
-```bash
-$ git bisect bad
+```sh
+git bisect bad
 ```
 
-버그 없이 멀쩡했던 커밋을 기록한다.
+```sh
+git log --oneline
+```
 
-```bash
-$ git log --oneline
+```sh
 d4a701f (HEAD -> master, refs/bisect/bad) Adding the word 'stream'
 eedf347 Adding the word 'the'
 9a12012 Adding the word 'down'
@@ -1226,8 +1349,15 @@ f937601 Changing the word 'boat' to 'bug'
 c608f80 Adding third row
 60532d0 Adding second row
 106eb10 Adding first row
+```
 
-$ git bisect good c608f80
+버그 없이 멀쩡했던 커밋을 기록합니다.
+
+```sh
+git bisect good c608f80
+```
+
+```sh
 Bisecting: 3 revisions left to test after this (roughly 2 steps)
 [759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word 'gently'
 ...
@@ -1237,38 +1367,54 @@ Bisecting: 3 revisions left to test after this (roughly 2 steps)
 
 *[Git bisect - debugging with git, Noaa Barki](https://www.datree.io/resources/git-bisect-debugging-with-git)*
 
-이제부터 버그를 찾아나선다.
-Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해준다.
-현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 `bad`로 기록하고 `good` 커밋 방향으로 범위를 좁힌다.
-버그가 없으면 `good`으로 기록하고 `bad` 커밋 방향으로 범위를 좁힌다.
+이제부터 버그를 찾아나섭니다.
+Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로 Checkout 해줍니다.
+현재 커밋에서 테스트해보고 만약 버그가 계속 발생한다면 `bad`로 기록하고 `good` 커밋 방향으로 범위를 좁혀 갑니다.
+버그가 없으면 `good`으로 기록하고 `bad` 커밋 방향으로 범위를 좁혀 갑니다.
 
-```bash
+```sh
 # 히스토리 확인
-$ git log --oneline
+git log --oneline
+```
+
+```sh
 759ea63 (HEAD) Adding the word 'gently'
 850323e Adding the word 'boat'
 222f64a Adding the word 'your'
 c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 ...
+```
 
+```sh
 # 버그가 없다면 good 기록
-$ cat test.txt
+cat test.txt
+```
+
+```sh
 row
 row
 row
 your
 boat
 gently
+```
 
-$ git bisect good
+```sh
+git bisect good
+```
+
+```sh
 Bisecting: 1 revision left to test after this (roughly 1 step)
 [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word 'down'
 ```
 
 `good`으로 기록하면 `bad` 커밋 방향으로 이진탐색한다.
 
-```bash
-$ git log --oneline
+```sh
+git log --oneline
+```
+
+```sh
 9a12012 (HEAD) Adding the word 'down'
 f937601 Changing the word 'boat' to 'bug'
 759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word 'gently'
@@ -1278,59 +1424,68 @@ c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third
 ...
 ```
 
-```bash
+```sh
 # 버그를 발견했다면 bad 기록
-$ cat test.txt
+cat test.txt
+```
+
+```sh
 row
 row
 row
 your
-bug # 버그다!!!
+bug # 버그!!!
 gently
 down
+```
 
-$ git bisect bad
-Bisecting: 0 revisions left to test after this (roughly 0 steps)
-[f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
+```sh
+git bisect bad
+# Bisecting: 0 revisions left to test after this (roughly 0 steps)
+# [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
 ```
 
 `bad`로 기록하면 `good` 커밋 방향으로 이진탐색한다.
 
-```bash
-$ git log --oneline
-f937601 (HEAD) Changing the word 'boat' to 'bug'
-759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word 'gently'
-850323e Adding the word 'boat'
-222f64a Adding the word 'your'
-c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
+```sh
+git log --oneline
+# f937601 (HEAD) Changing the word 'boat' to 'bug'
+# 759ea63 (refs/bisect/good-759ea6356258b687ad8b12178b2934ab5ad830bf) Adding the word 'gently'
+# 850323e Adding the word 'boat'
+# 222f64a Adding the word 'your'
+# c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
 ```
 
 그 다음 커밋도 `bad`로 기록하고
 `good` 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
 해당 `bad` 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.
 
-```bash
-$ git bisect bad
-f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
-commit f9376015d4721390c942c0cd0064467b51495094
-Author: Changsu Im <imcxsu@gmail.com>
-Date:   Thu Feb 17 03:21:28 2022 +0900
+```sh
+git bisect bad
+# f9376015d4721390c942c0cd0064467b51495094 is the first bad commit
+# commit f9376015d4721390c942c0cd0064467b51495094
+# Author: Changsu Im <imcxsu@gmail.com>
+# Date:   Thu Feb 17 03:21:28 2022 +0900
 
-    Changing the word 'boat' to 'bug'
+#     Changing the word 'boat' to 'bug'
 
- test.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+#  test.txt | 2 +-
+#  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
 이진탐색하는 동안 `.git` 디렉토리에 bisect를 위한 파일들이 생성된다.
 
-```bash
-$ cat .git/BISECT_ANCESTORS_OK
+```sh
+cat .git/BISECT_ANCESTORS_OK
+cat .git/BISECT_EXPECTED_REV
+# f9376015d4721390c942c0cd0064467b51495094
+```
 
-$ cat .git/BISECT_EXPECTED_REV
-f9376015d4721390c942c0cd0064467b51495094
+```sh
+cat .git/BISECT_LOG
+```
 
-$ cat .git/BISECT_LOG
+```sh
 git bisect start
 # bad: [d4a701f370a2489c8976eb0ce9f7ccbc358e640d] Adding the word 'stream'
 git bisect bad d4a701f370a2489c8976eb0ce9f7ccbc358e640d
@@ -1343,44 +1498,55 @@ git bisect bad 9a120127fabd58d0f54786cf015528f77d9a9f17
 # bad: [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
 git bisect bad f9376015d4721390c942c0cd0064467b51495094
 # first bad commit: [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
+```
 
-$ cat .git/BISECT_NAMES
+```sh
+cat .git/BISECT_NAMES
+cat .git/BISECT_START
+# master
+```
 
-$ cat .git/BISECT_START
-master
-
-$ cat .git/BISECT_TERMS
-bad
-good
+```sh
+cat .git/BISECT_TERMS
+# bad
+# good
 ```
 
 bisect를 끝낼 때는 `.git/BISECT_START`로 다시 checkout 한다.
 
-```bash
-$ git bisect reset
-Previous HEAD position was f937601 Changing the word 'boat' to 'bug'
-Switched to branch 'master'
+```sh
+git bisect reset
+# Previous HEAD position was f937601 Changing the word 'boat' to 'bug'
+# Switched to branch 'master'
 ```
 
 ## show
 
 Git Object를 확인한다. (blob, tree, tag, commit)
 
-```bash
-# git show ${object}
+```sh
+git show ${object}
+```
 
+```sh
 # tag
-$ git show v1.0.0
+git show v1.0.0
+```
 
+```sh
 # tree
-$ git show v1.0.0^{tree}
-$ git show v1.0.0^{tree}
+git show v1.0.0^{tree}
+git show v1.0.0^{tree}
+```
 
+```sh
 # commit, blob, tree 등의 체크섬
-$ git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
+git show 077b8fa429b57e299eb2db54ccf66ed6f1f993eb --oneline
+```
 
+```sh
 # 어떤 커밋이 브랜치의 가장 최신 커밋이라면 간단히 브랜치 이름으로 커밋을 가리킬 수 있다.
-$ git show master:README.md
+git show master:README.md
 ```
 
 ## log
@@ -1390,28 +1556,32 @@ $ git show master:README.md
 - [pretty formats](https://git-scm.com/docs/git-log#_pretty_formats)을 사용해서 출력 형식을 정할 수 있다.
 - `--abbrev-commit` — 짧고 중복되지 않는 해시 값을 보여준다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여준다.
 
-```bash
-$ git log --oneline --graph
-
-# 날짜 출력
-$ git log --graph --pretty=format:'%C(auto)%h%d (%cr) %cn <%ce> %s'
-
-# 모든 브랜치 로그 출력
-$ git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all
+```sh
+git log --oneline --graph
 ```
 
-```bash
+```sh
+# 날짜 출력
+git log --graph --pretty=format:'%C(auto)%h%d (%cr) %cn <%ce> %s'
+```
+
+```sh
+# 모든 브랜치 로그 출력
+git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all
+```
+
+```sh
 # alias 지정
-$ git config --global alias.lg "log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all"
-$ git lg
+git config --global alias.lg "log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all"
+git lg
 ```
 
 ### Triple Dot(...)
 
 Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여준다.
 
-```bash
-$ git log master...feature --oneline --left-right
+```sh
+git log master...feature --oneline --left-right
 > 2fe25f7 (HEAD -> feature) q
 > a611f28 feature commit message
 < 106047f (master) first
@@ -1421,34 +1591,39 @@ $ git log master...feature --oneline --left-right
 
 Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 `reflog`라고 부른다.
 
-```bash
-# git reflog show HEAD@{0}
-# git reflog show HEAD
-$ git reflog
-734713b HEAD@{0}: commit: fixed refs handling, added gc auto, updated
-d921970 HEAD@{1}: merge phedders/rdocs: Merge made by the 'recursive' strategy.
-1c002dd HEAD@{2}: commit: added some blame and merge stuff
-1c36188 HEAD@{3}: rebase -i (squash): updating HEAD
-95df984 HEAD@{4}: commit: # This is a combination of two commits.
-1c36188 HEAD@{5}: rebase -i (squash): updating HEAD
-7e05da5 HEAD@{6}: rebase -i (pick): updating HEAD
+```sh
+git reflog
+# 734713b HEAD@{0}: commit: fixed refs handling, added gc auto, updated
+# d921970 HEAD@{1}: merge phedders/rdocs: Merge made by the 'recursive' strategy.
+# 1c002dd HEAD@{2}: commit: added some blame and merge stuff
+# 1c36188 HEAD@{3}: rebase -i (squash): updating HEAD
+# 95df984 HEAD@{4}: commit: # This is a combination of two commits.
+# 1c36188 HEAD@{5}: rebase -i (squash): updating HEAD
+# 7e05da5 HEAD@{6}: rebase -i (pick): updating HEAD
+```
+
+```sh
+git reflog show HEAD@{0}
+git reflog show HEAD
 ```
 
 특정 브랜치의 reflog만 확인할 수도 있다.
 
-```bash
+```sh
 # git reflog show main@{0}
 # git reflog show main
-$ git reflog main
+git reflog main
 ```
 
 Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장한다.
 그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있다.
 `@{n}` 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있다.
 
-```bash
-$ git show HEAD@{5}
+```sh
+git show HEAD@{5}
+```
 
+```sh
 commit a66e752aa1fccaefe115460dc761c0411d578ed5
 Author: Changsu Im <imcxsu@gmail.com>
 Date:   Wed Dec 1 23:51:01 2021 +0900
@@ -1457,16 +1632,18 @@ Date:   Wed Dec 1 23:51:01 2021 +0900
 
 순서뿐 아니라 시간도 사용할 수 있다. 어제 날짜의 `master` 브랜치를 보고 싶으면 아래와 같이 한다.
 
-```bash
-$ git show main@{1.minute.ago}
-$ git show main@{1.hour.ago}
-$ git show main@{1.day.ago}
-$ git show main@{yesterday}
-$ git show main@{1.week.ago}
-$ git show main@{1.month.ago}
-$ git show main@{1.year.ago}
-$ git show main@{2021-12-02.23:00:00}
+```sh
+git show main@{1.minute.ago}
+git show main@{1.hour.ago}
+git show main@{1.day.ago}
+git show main@{yesterday}
+git show main@{1.week.ago}
+git show main@{1.month.ago}
+git show main@{1.year.ago}
+git show main@{2021-12-02.23:00:00}
+```
 
+```sh
 commit c23bcca5542f7eefa939dc47e3f843bb3b5b70f6 (HEAD -> main, origin/main, origin/HEAD)
 Author: Changsu Im <imcxsu@gmail.com>
 Date:   Thu Dec 2 21:27:17 2021 +0900
@@ -1486,17 +1663,23 @@ reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 �
 
 변경 사항을 비교한다.
 
-```bash
-$ git diff <before> <after>
+```sh
+git diff <before> <after>
+```
 
+```sh
 # 마지막 커밋과 그 전 커밋을 비교한다.
-$ git diff HEAD~1 HEAD~0
+git diff HEAD~1 HEAD~0
+```
 
+```sh
 # 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.
-$ git diff HEAD^
+git diff HEAD^
+```
 
+```sh
 # 직전 커밋과 비교해서 변경 사항을 확인한다.
-$ git diff <commit>~ <commit>
+git diff <commit>~ <commit>
 ```
 
 ## push
@@ -1506,15 +1689,19 @@ local 저장소의 내용을 remote 저장소에 반영한다.
 rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
 다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.
 
-```bash
+```sh
 # origin 저장소의 main 브랜치로 push
-$ git push origin main
+git push origin main
+```
 
+```sh
 # 현재 HEAD와 같은 브랜치로 push
-$ git push origin HEAD
+git push origin HEAD
+```
 
+```sh
 # 현재 브랜치의 upstream 브랜치 지정 및 push
-$ git push --set-upstream origin feature/test-upstream
+git push --set-upstream origin feature/test-upstream
 ```
 
 push 명령을 실행하면 다음 과정을 수행한다.
@@ -1528,8 +1715,9 @@ push 명령을 실행하면 다음 과정을 수행한다.
 
 remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있다.
 
-```bash
-$ git push
+```sh
+git push
+
 fatal: The upstream branch of your current branch does not match
 the name of your current branch.  To push to the upstream branch
 on the remote, use
@@ -1541,60 +1729,67 @@ To push to the branch of the same name on the remote, use
     git push origin HEAD
 
 To choose either option permanently, see push.default in 'git help config'.
+```
 
-$ git push origin branch-name
+```sh
+git push origin branch-name
 ```
 
 # 플러밍(Plumbing) 명령어
 
+Git의 내부 동작을 제어하는 명령어입니다.
+Git의 내부 데이터 구조를 조작하거나 확인하는 **저수준 명령어**입니다.
+
 ## rev-parse
 
-Git 데이터베이스에 있는 Object의 체크섬을 조회한다.
+Git 데이터베이스에 있는 Object의 체크섬을 조회합니다.
 
-```bash
-$ git log --oneline -n 1
-2fe25f7 (HEAD -> feature) commit-msg
+```sh
+git log --oneline -n 1
+# 2fe25f7 (HEAD -> feature) commit-msg
+```
 
-$ git rev-parse feature
-2fe25f72fca431a3b1aabb863b3ca6e04ddccb77
+```sh
+git rev-parse feature
+# 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77
 ```
 
 ## hash-object
 
 데이터를 `.git` 디렉토리에 저장하고 체크섬을 계산한다.
 
-```bash
-$ git hash-object -w READM.me
-76e579ae4c9106f3b62fb9203ec5b49d8014d87c
+```sh
+git hash-object -w READM.me
+# 76e579ae4c9106f3b62fb9203ec5b49d8014d87c
 ```
 
 ## ls-tree
 
 tree 객체의 내용들을 보여준다.
 
-```bash
+```sh
 # commit hash: ee85974962b9645d757bc71dd773effb67d3594f
-$ git ls-tree ee85
-100644 blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore
-040000 tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent
-040000 tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__
-100644 blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json
-100644 blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml
-040000 tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src
+git ls-tree ee85
+# 100644 blob 396865b39e3f04c5ca6369999fd886dbae7441d0  .gitignore
+# 040000 tree 03ad58223967ba0494385bf1a1f9dc45783b860d  WebContent
+# 040000 tree 4aefa5dd5e1e60eb883c4ba84d2a68a577692eb0  __test__
+# 100644 blob a823b374191cec985963bb821803a78a13ff89f2  jest.config.json
+# 100644 blob f496d9afc494b5312dd6efd73f43b5b5e40e5e63  pom.xml
+# 040000 tree 59885985da5d1acf846d516fd9722daa1b2a4dd6  src
 ```
 
 ## ls-files
 
 index(스테이징된 파일)의 내용들을 체크섬과 함께 보여준다.
 
-```bash
-$ git ls-files -s                                                                                           ✭ ✱
-100644 396865b39e3f04c5ca6369999fd886dbae7441d0 0 .gitignore
-...
-100644 dcdb07b5dfb81d995509aecad3bf202ee3a1d690 0 __test__/price.test.js
-100644 a823b374191cec985963bb821803a78a13ff89f2 0 jest.config.json
-100644 f496d9afc494b5312dd6efd73f43b5b5e40e5e63 0 pom.xml
-100644 e148a4810619ea951091909d82ef0955fe3e0e8f 0 src/main/resources-dev/logback.xml
+```sh
+git ls-files -s
+# 100644 396865b39e3f04c5ca6369999fd886dbae7441d0 0 .gitignore
+# ...
+# 100644 dcdb07b5dfb81d995509aecad3bf202ee3a1d690 0 __test__/price.test.js
+# 100644 a823b374191cec985963bb821803a78a13ff89f2 0 jest.config.json
+# 100644 f496d9afc494b5312dd6efd73f43b5b5e40e5e63 0 pom.xml
+# 100644 e148a4810619ea951091909d82ef0955fe3e0e8f 0 src/main/resources-dev/logback.xml
 # 모든 파일 출력
 ```
 
@@ -1602,65 +1797,80 @@ $ git ls-files -s                                                               
 
 저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있다.
 
-```bash
-# 해당 체크섬을 가진 객체의 타입을 알려준다.
-$ git cat-file -t <checksum>
-blob
+`<checksum>`을 가진 객체의 타입을 알려준다.
 
-# 해당 체크섬을 가진 객체의 사이즈를 알려준다.
-$ git cat-file -s <checksum>
-13 # bytes
+```sh
+git cat-file -t <checksum>
+# blob
+```
 
-# 객체의 타입을 알고 있다면 파일의 내용을 표시해준다.
-$ git cat-file <type> <checksum>
-이것은 내용입니다.
+`<checksum>`을 가진 객체의 사이즈를 알려준다.
+
+```sh
+git cat-file -s <checksum>
+# 13 # bytes
+```
+
+객체의 타입을 알고 있다면 파일의 내용을 표시해준다.
+
+```sh
+git cat-file <type> <checksum>
+# 이것은 내용입니다.
 ```
 
 ## write-tree
 
 현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환한다.
 
-```bash
-$ git write-tree
-174592b10bb329e6f4664cbc03fd2c4869d12cdc
+```sh
+git write-tree
+# 174592b10bb329e6f4664cbc03fd2c4869d12cdc
+```
 
-$ git ls-tree 17459
-100644 blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a
+```sh
+git ls-tree 17459
+# 100644 blob d474e1b4d626dbf09a9776c778e9f8691bc8b406  a
 ```
 
 ## commit-tree
 
 특정 tree 객체로 새로운 커밋을 만든다.
 
-```bash
-$ git commit-tree HEAD^{tree} -p main -m "test commit"
-d5fc19ea68a8556383d46a79177395b563a8a483
+```sh
+git commit-tree HEAD^{tree} -p main -m "test commit"
+# d5fc19ea68a8556383d46a79177395b563a8a483
+```
 
-$ git show d5fc
-commit d5fc19ea68a8556383d46a79177395b563a8a483
-Author: Changsu Im <imcxsu@gmail.com>
-Date:   Sat Jan 15 22:59:25 2022 +0900
+```sh
+git show d5fc
+# commit d5fc19ea68a8556383d46a79177395b563a8a483
+# Author: Changsu Im <imcxsu@gmail.com>
+# Date:   Sat Jan 15 22:59:25 2022 +0900
 
-    test
+#     test
+```
 
-$ git merge --ff-only d5fc
-Updating 5fe0db6..d5fc19e
-Fast-forward
+```sh
+git merge --ff-only d5fc
+# Updating 5fe0db6..d5fc19e
+# Fast-forward
 ```
 
 ## read-tree
 
 특정 tree 객체를 index에 포함시킨다.
 
-```bash
-$ git read-tree HEAD^
-$ git status
-Changes to be committed:
+```sh
+git read-tree HEAD^
+git status
+# Changes to be committed:
 ...
+```
 
-$ git read-tree HEAD
-$ git status
-nothing to commit, working tree clean
+```sh
+git read-tree HEAD
+git status
+# nothing to commit, working tree clean
 ```
 
 ## update-index
@@ -1670,8 +1880,8 @@ woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트
 - `update-ref`
   - master 브랜치를 지정한 커밋 객체로 업데이트한다.
 
-  ```bash
-  $ git update-ref refs/heads/master 992379
+  ```sh
+  git update-ref refs/heads/master 992379
   ```
 
 - `symbolic-ref`
@@ -1679,12 +1889,12 @@ woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트
 - `ls-remote`
   - 원격 저장소의 references를 나열한다.
 
-  ```bash
-  $ git ls-remote
-  From .
-  2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD
-  2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature
-  106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master
+  ```sh
+  git ls-remote
+  # From .
+  # 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  HEAD
+  # 2fe25f72fca431a3b1aabb863b3ca6e04ddccb77  refs/heads/feature
+  # 106047f0f0c057c28417e790a4ac22aef2b8bcf2  refs/heads/master
   ```
 
 # Advanced
@@ -1700,7 +1910,7 @@ Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행�
 
 예를 들어, 아래와 같은 `pre-push` hook은 `git push` 명령어를 실행시켰을 때 `push` 가 실행되기 전 `gradle test` 명령어가 먼저 실행된다.
 
-```bash
+```sh
 #!/usr/bin/env bash
 
 # 해당 스크립트의 실행 권한을 부여한다.
@@ -1734,10 +1944,10 @@ packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한�
 
 Packfile을 열어 압축한 내용을 확인해볼 수 있다.
 
-```bash
-$ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
-...
-.git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
+```sh
+git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
+# ...
+# .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.pack: ok
 ```
 
 ### gc
@@ -1750,62 +1960,84 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
 
 Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있다.
 
-```bash
+```sh
 # touch test and git add
-$ git commit -m "test"
-[master (root-commit) fd5e183] test
+git commit -m "test"
+# [master (root-commit) fd5e183] test
+```
 
+```sh
 # touch test2 and git add
-$ git commit -m "test2"
-[master (root-commit) 291b5c6] test
+git commit -m "test2"
+# [master (root-commit) 291b5c6] test
+```
 
-$ git log --oneline
-291b5c6 (HEAD -> master) test2
-fd5e183 test
+```sh
+git log --oneline
+# 291b5c6 (HEAD -> master) test2
+# fd5e183 test
+```
 
-$ git reset --hard HEAD^
-HEAD is now at fd5e183 test
+```sh
+git reset --hard HEAD^
+# HEAD is now at fd5e183 test
+```
 
-$ git gc
+```sh
+git gc
+```
 
-$ git fsck --lost-found
-Checking object directories: 100% (256/256), done.
-dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4
+```sh
+git fsck --lost-found
+# Checking object directories: 100% (256/256), done.
+# dangling commit 291b5c685acc9647ecf4330ec261d945078ac4d4
+```
 
-$ git merge 291b5c6
-Updating fd5e183..291b5c6
-Fast-forward
- test2 | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- create mode 100644 test2
+```sh
+git merge 291b5c6
+# Updating fd5e183..291b5c6
+# Fast-forward
+#  test2 | 0
+#  1 file changed, 0 insertions(+), 0 deletions(-)
+#  create mode 100644 test2
+```
 
-$ git log --oneline
-291b5c6 (HEAD -> master) test2
-fd5e183 test
+```sh
+git log --oneline
+# 291b5c6 (HEAD -> master) test2
+# fd5e183 test
 ```
 
 orphan 브랜치를 직접 만들어보자
 
-```bash
-$ touch test
-$ git add .
-$ git commit -m "test"
-[master (root-commit) c2864f0] test
+```sh
+touch test
+git add .
+git commit -m "test"
+# [master (root-commit) c2864f0] test
+```
 
-$ git switch --orphan empty
+```sh
+git switch --orphan empty
 Switched to a new branch 'empty'
+```
 
-$ git log
+```sh
+git log
 fatal: your current branch 'empty' does not have any commits yet
+```
 
-$ git log --oneline --all
-c2864f0 (master) test
+```sh
+git log --oneline --all
+# c2864f0 (master) test
+```
 
+```sh
 # git rm --cached -r .
 # git clean -f
 
-$ git commit --allow-empty -m "empty commit"
-[empty (root-commit) 02116ce] empty commit
+git commit --allow-empty -m "empty commit"
+# [empty (root-commit) 02116ce] empty commit
 ```
 
 ## prune
@@ -1815,73 +2047,72 @@ $ git commit --allow-empty -m "empty commit"
 
 `fsck` 명령으로 dangling 객체를 확인할 수 있다.
 
-```bash
-$ git fsck
-Checking object directories: 100% (256/256), done.
-Checking objects: 100% (573/573), done.
-dangling blob c319a9963957cb51e3cb692ac44a4831ea529992
-dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92
-dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99
-dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6
-dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814
-dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c
-dangling blob bcfc949b6572079aa54db963abc59b48232813ed
-dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8
-dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
-dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f
-dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796
-dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957
-dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e
-dangling blob 002f663c650d708e29d75524630bc5cf97403039
+```sh
+git fsck
+# Checking object directories: 100% (256/256), done.
+# Checking objects: 100% (573/573), done.
+# dangling blob c319a9963957cb51e3cb692ac44a4831ea529992
+# dangling blob 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92
+# dangling blob 091349d97a6ecaeea819fac9fcb3f9d515c87a99
+# dangling blob 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6
+# dangling blob 879b261622ca54bd28f8fa2be6330fe9ebfba814
+# dangling blob 7f3ced9d3dad92439949d98ad2d92125be07764c
+# dangling blob bcfc949b6572079aa54db963abc59b48232813ed
+# dangling blob f16c37ff355844ac388d101e5bba46e698a4deb8
+# dangling blob e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
+# dangling blob f4d5466af82d891b81ad792b0e74e2341e46312f
+# dangling blob 0a56b32d98fea47ca5228e3b62ee1fc189408796
+# dangling blob 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957
+# dangling blob 5ca654e778f2cceb0207dc9311c8961107caa17e
+# dangling blob 002f663c650d708e29d75524630bc5cf97403039
 ```
 
 `--dry-run` 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 한다.
 확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있다.
 
-```bash
-$ git prune --dry-run --verbose
-
-002f663c650d708e29d75524630bc5cf97403039 blob
-091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob
-0a56b32d98fea47ca5228e3b62ee1fc189408796 blob
-0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob
-4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob
-524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob
-5ca654e778f2cceb0207dc9311c8961107caa17e blob
-7f3ced9d3dad92439949d98ad2d92125be07764c blob
-879b261622ca54bd28f8fa2be6330fe9ebfba814 blob
-bcfc949b6572079aa54db963abc59b48232813ed blob
-c319a9963957cb51e3cb692ac44a4831ea529992 blob
-e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob
-f16c37ff355844ac388d101e5bba46e698a4deb8 blob
-f4d5466af82d891b81ad792b0e74e2341e46312f blob
+```sh
+git prune --dry-run --verbose
+# 002f663c650d708e29d75524630bc5cf97403039 blob
+# 091349d97a6ecaeea819fac9fcb3f9d515c87a99 blob
+# 0a56b32d98fea47ca5228e3b62ee1fc189408796 blob
+# 0e062ca2a9130d0bfb9ffcf29a0a43d6f1b65957 blob
+# 4a8aaf3e4ce1c7e8da2764f8b6253a3029664d92 blob
+# 524b1128ed15bfb42eb1b71f93b3fd0fa77adab6 blob
+# 5ca654e778f2cceb0207dc9311c8961107caa17e blob
+# 7f3ced9d3dad92439949d98ad2d92125be07764c blob
+# 879b261622ca54bd28f8fa2be6330fe9ebfba814 blob
+# bcfc949b6572079aa54db963abc59b48232813ed blob
+# c319a9963957cb51e3cb692ac44a4831ea529992 blob
+# e69de29bb2d1d6434b8b29ae775ad8c2e48c5391 blob
+# f16c37ff355844ac388d101e5bba46e698a4deb8 blob
+# f4d5466af82d891b81ad792b0e74e2341e46312f blob
 ```
 
 `GIT_TRACE=true` 환경 변수와 함께 `gc`를 실행하면 `prune` 명령이 실행된다는 것을 알 수 있다.
 
-```bash
-$ GIT_TRACE=true git gc
-21:48:42.368350 git.c:439               trace: built-in: git gc
-21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune
-21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune
-21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all
-21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all
-21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable=2.weeks.ago
-21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable=2.weeks.ago
-21:48:42.384316 run-command.c:663       trace: run_command: GIT_REF_PARANOIA=1 git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
-21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
-Enumerating objects: 573, done.
-Counting objects: 100% (573/573), done.
-Delta compression using up to 12 threads
-Compressing objects: 100% (256/256), done.
-Writing objects: 100% (573/573), done.
-Total 573 (delta 133), reused 573 (delta 133)
-21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago
-21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago
-21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago
-21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago
-21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc
-21:48:42.409708 git.c:439               trace: built-in: git rerere gc
+```sh
+GIT_TRACE=true git gc
+# 21:48:42.368350 git.c:439               trace: built-in: git gc
+# 21:48:42.368555 run-command.c:663       trace: run_command: git pack-refs --all --prune
+# 21:48:42.369748 git.c:439               trace: built-in: git pack-refs --all --prune
+# 21:48:42.376790 run-command.c:663       trace: run_command: git reflog expire --all
+# 21:48:42.377979 git.c:439               trace: built-in: git reflog expire --all
+# 21:48:42.383220 run-command.c:663       trace: run_command: git repack -d -l -A --unpack-unreachable=2.weeks.ago
+# 21:48:42.384183 git.c:439               trace: built-in: git repack -d -l -A --unpack-unreachable=2.weeks.ago
+# 21:48:42.384316 run-command.c:663       trace: run_command: GIT_REF_PARANOIA=1 git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
+# 21:48:42.385307 git.c:439               trace: built-in: git pack-objects --local --delta-base-offset .git/objects/pack/.tmp-57526-pack --keep-true-parents --honor-pack-keep --non-empty --all --reflog --indexed-objects --unpack-unreachable=2.weeks.ago
+# Enumerating objects: 573, done.
+# Counting objects: 100% (573/573), done.
+# Delta compression using up to 12 threads
+# Compressing objects: 100% (256/256), done.
+# Writing objects: 100% (573/573), done.
+# Total 573 (delta 133), reused 573 (delta 133)
+# 21:48:42.402885 run-command.c:663       trace: run_command: git prune --expire 2.weeks.ago
+# 21:48:42.403766 git.c:439               trace: built-in: git prune --expire 2.weeks.ago
+# 21:48:42.407108 run-command.c:663       trace: run_command: git worktree prune --expire 3.months.ago
+# 21:48:42.408258 git.c:439               trace: built-in: git worktree prune --expire 3.months.ago
+# 21:48:42.408495 run-command.c:663       trace: run_command: git rerere gc
+# 21:48:42.409708 git.c:439               trace: built-in: git rerere gc
 ```
 
 # Git Server
@@ -1892,7 +2123,7 @@ Fork는 서버에 저장소의 복사본을 만든다.
 
 ![fork-repository](/images/shell/git/fork-repository.svg)
 
-*[Distributed version control and forking workflow](https://coderefinery.github.io/git-collaborative/03-distributed/)*
+*[Distributed version control and forking workflow](https://flatironinstitute.github.io/sciware-git-collaborative/03-distributed/)*
 
 - fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
   - fork 리포지토리에서 `push --force`를 하든 말든 상관없다.
@@ -1906,7 +2137,7 @@ Fork는 서버에 저장소의 복사본을 만든다.
 
 Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.
 
-```bash
+```sh
 git --no-optional-locks -c color.branch=false -c color.diff=false -c color.status=false -c diff.mnemonicprefix=false -c core.quotepath=false -c credential.helper=sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
 Pushing to https://bitbucket.markruler.com/scm/mark/test-pr.git
 POST git-receive-pack (990 bytes)
