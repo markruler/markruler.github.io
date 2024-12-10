@@ -79,7 +79,7 @@
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
-<link rel="stylesheet" href="/scss/dark-mode.min.d0b8839aea4a869766f4f03b63addd1f474968306d628a2f923204aea4155677.css" integrity="sha256-0LiDmupKhpdm9PA7Y63dH0dJaDBtYoovkjIErqQVVnc=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.e603b127980730d3d655c3f32e6d7b106f0bf0c6f866201a3cdc3111c7e54f29.css" integrity="sha256-5gOxJ5gHMNPWVcPzLm17EG8L8Mb4ZiAaPNwxEcflTyk=" media="screen">
 
 
 <link rel="stylesheet"
@@ -490,9 +490,7 @@ JFIF 파일 포맷일까요?
 </span></span><span style="display:flex;"><span>00000420: 8cc6 606c 97ec ec5e aac7 058f 557b 0c26  ..<span style="color:#87ceeb">`</span>l...^....U{.&amp;
 </span></span><span style="display:flex;"><span>00000430: <span style="color:#f60">4800</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span>  H...............
 </span></span><span style="display:flex;"><span>00000440: <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> 7fff d9                   .........
-</span></span></code></pre></div><p>이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 각 터미널이나 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
-최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&hellip;)</p>
+</span></span></code></pre></div><p>이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 터미널, 브라우저와 같은 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.</p>
 <p>이번엔 HTML 문서를 PDF로 변환해서 응답하는 서버로 테스트 해보겠습니다.
 <a href="https://github.com/markruler/htmltopdf">데모 서버</a>를 실행 후
 다음과 같은 코드로 요청을 보내면 PDF 파일을 받을 수 있습니다.</p>
@@ -517,8 +515,10 @@ JFIF 파일 포맷일까요?
 </span></span><span style="display:flex;"><span>  .then(result =&gt; console.log(result))
 </span></span><span style="display:flex;"><span>  .<span style="color:#f00">catch</span>(error =&gt; console.log(<span style="color:#87ceeb">&#39;error&#39;</span>, error));
 </span></span></code></pre></div><p><code>console.log()</code>로 출력된 응답 데이터는 <code>%PDF</code>라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
-PDF 형식이라는 것을 유추할 수 있습니다.
-반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
+PDF 형식이라는 것을 유추할 수 있습니다.</p>
+<p>반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
+최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&hellip;)
 크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.</p>
 <p><img src="/images/reverse-engineering/file-signature/hex-pdf.png" alt="Hexadecimal PDF"></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>%PDF-1.4

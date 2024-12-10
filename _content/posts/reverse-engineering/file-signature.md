@@ -100,11 +100,7 @@ JFIF 파일 포맷일까요?
 00000440: 0000 0000 0000 7fff d9                   .........
 ```
 
-이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 각 터미널이나 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
-최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.[^1] (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...)
-
-[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
+이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 터미널, 브라우저와 같은 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.
 
 이번엔 HTML 문서를 PDF로 변환해서 응답하는 서버로 테스트 해보겠습니다.
 [데모 서버](https://github.com/markruler/htmltopdf)를 실행 후
@@ -135,8 +131,13 @@ fetch("/pdf/content", requestOptions)
 
 `console.log()`로 출력된 응답 데이터는 `%PDF`라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
 PDF 형식이라는 것을 유추할 수 있습니다.
+
 반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
+최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.[^1] (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...)
 크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.
+
+[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
 
 ![Hexadecimal PDF](/images/reverse-engineering/file-signature/hex-pdf.png)
 
