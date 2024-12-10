@@ -210,15 +210,15 @@ GUI 환경 데스크탑에서는 "파일 확장자(File Extension)"를 지정합
 
 # 파일 카빙
 
-파일 카빙(File Carving)은 저장 매체에서 특정 파일을 추출하는 기술입니다.
-디지털 포렌식에서 파일 복구에 사용됩니다.
-이때 파일 시그니처가 중요한 역할을 합니다.
+파일 카빙(File Carving)은 파일 시그니처 기반으로 저장 매체에서 파일 내용을 복구하는 기술입니다[^2].
 
-- [Digital Forensic Research Center](https://dfrc.korea.ac.kr/) 자료를 참조했습니다.
+[^2]: [(Youtube) 삭제 파일 복구 기술](https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&t=745) - DFRC (Digital Forensic Research Center)
+
+- [DFRC (Digital Forensic Research Center)](https://dfrc.korea.ac.kr/) 자료를 참조했습니다.
   - [파일 복구](https://web.archive.org/web/20180815025824/http://forensic.korea.ac.kr/DFWIKI/index.php/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%B5%EA%B5%AC)
   - [램 슬랙](https://youtu.be/URsDgiD0FwA?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&t=1657)
 
-## 1. 시그니처 기반
+## 1. 시그니처 기반 카빙
 
 - 주요 과정
   - header 시그니처 탐지: 저장 매체의 로우 데이터(raw data)에서 파일 헤더 시그니처를 검색합니다.
@@ -243,12 +243,13 @@ GUI 환경 데스크탑에서는 "파일 확장자(File Extension)"를 지정합
 
 ## 3. 램 슬랙 카빙
 
-파일의 내용을 디스크에 기록할 때 512(bytes) 배수가 되지 않아 생긴 `0x00` 영역을 램 슬랙이라고 합니다.
-대부분 Footer 시그니처 이후에 램 슬랙이 존재해서 이를 바탕으로 Footer 시그니처와 램 슬랙을 확인할 수 있습니다.
+파일의 내용을 디스크에 기록할 때 파일 크기가 512의 배수가 되지 않으면 `0x00`으로 채워지는 영역을 램 슬랙이라고 합니다.
+디스크 섹터의 크기가 512 bytes일 때 파일의 크기가 512의 배수가 아닌 경우 나머지 부분은 램 슬랙으로 채워집니다.
+시그니처 기반 카빙 기법에서 푸터 시그니처와 함께 램 슬랙을 확인하게 되면 많은 오탐을 줄일 수 있습니다.
 
 # 더 읽을거리
 
-- [디지털 데이터의 저장과 표현: 문자 코드와 파일](https://youtu.be/M-_Fdgf9IZo?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L) - Digital Forensic Research Center
+- [(Youtube) 디지털 데이터의 저장과 표현: 문자 코드와 파일](https://youtu.be/M-_Fdgf9IZo?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L) - DFRC (Digital Forensic Research Center)
 - [GCK'S FILE SIGNATURES TABLE](https://www.garykessler.net/library/file_sigs.html)
 - [List of file signatures](https://en.wikipedia.org/wiki/List_of_file_signatures) - Wikipedia
 - [The concept of file signatures recovery](https://www.file-recovery.com/signatures.htm) - Active@ File Recovery
