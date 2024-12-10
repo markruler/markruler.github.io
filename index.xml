@@ -9,9 +9,235 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Fri, 06 Dec 2024 13:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2024 22:46:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유</title>
+        <link>https://markruler.github.io/posts/reverse-engineering/file-signature/</link>
+        <pubDate>Tue, 10 Dec 2024 22:46:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/reverse-engineering/file-signature/</guid>
+        <description>임창수 https://markruler.github.io/posts/reverse-engineering/file-signature/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;다음과 같은 명령어를 실행하면 이상한 문자열이 출력됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Youtube의 빈 썸네일 이미지를 다운로드 받습니다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -L -o - https://i.ytimg.com/
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;����JFIF���
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;�      !�
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;!&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;12ARaBqr��U�����������Qbd�������
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;                                  ?�@��t��2�4�2�4��&amp;amp;`�f�b��*)��6�j�pVZ7՚�ތC:#uf��§���&amp;lt;�Z�W
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;�oMku�@��&amp;lt;\�O����H����M?^_��n
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;                             Z��W�:&amp;gt;vW���ҟ˃lr�h�8e�z*ڷ�zw�ie4�
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;e�C�#:=(���R�&amp;#39;F��0���e�
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;                       �
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;                        ���T���9�p�z�n/1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;                                        �mSV��t�V�&amp;#34;&lt;/span&gt;��U �MI�;w��{O%��q
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                     �[&lt;span style=&#34;color:#eedd82&#34;&gt;$x&lt;/span&gt;�7UV��⫫�t����=6�l�&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;Si)u7	u�^z*UW��[���L�˭��a?
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                                                                            yn��mN���K��:��Z��&amp;amp;_
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                                                                                                ���{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ����j�sj�j-T���U�^m�2&lt;span style=&#34;color:#87ceeb&#34;&gt;\�&lt;/span&gt;O7��M�{�V�v��Vݝz�ԞRe|8��?�4qL5�i��Z��V�2e�ʝ��&amp;#39;����%zV����v�8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;.A.@��F���&amp;gt;�8]�JU��ҕj�z�Vb~��o)*�Ҍ������/�n���{m�Ա��vI��U�qoZ�+U��Z{�&amp;amp;Z��;��B�������k�XЏR�;*t��	|J�-���ku�Kk5_s�[8�te��d�kĮl��%�{]�i���ɩ{5}%Y���in��sYa��*�ɭ��߯ko&amp;gt;��� f��,[��ٷ�h��?X|Yg�j?��1���s��t��� HJ�
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                             �^�f�4��Vނu-m�շ�����&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;l���^���U{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                            &amp;amp;H��%
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;�는 유니코드 replacement character(&lt;code&gt;U+FFFD&lt;/code&gt;)로, 해석할 수 없는 문자를 표시하기 위해 사용됩니다.&lt;/p&gt;
+&lt;p&gt;이번엔 hexdump로 만들어주는 &lt;code&gt;xxd&lt;/code&gt; 명령어를 파이프로 이어보겠습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -L -o - https://i.ytimg.com/ | xxd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;뭔지 모르겠지만 응답 데이터 앞쪽에 &lt;code&gt;JFIF&lt;/code&gt;가 적혀있습니다.
+JFIF 파일 포맷일까요?
+이후엔 또 알 수 없는 문자열이 출력됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                 Dload  Upload   Total   Spent    Left  Speed
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;100&lt;/span&gt;  &lt;span style=&#34;color:#f60&#34;&gt;1097&lt;/span&gt;  &lt;span style=&#34;color:#f60&#34;&gt;100&lt;/span&gt;  &lt;span style=&#34;color:#f60&#34;&gt;1097&lt;/span&gt;    &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;     &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;   &lt;span style=&#34;color:#f60&#34;&gt;4712&lt;/span&gt;      &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; --:--:-- --:--:-- --:--:--  &lt;span style=&#34;color:#f60&#34;&gt;4728&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000000: ffd8 ffe0 &lt;span style=&#34;color:#f60&#34;&gt;0010&lt;/span&gt; 4a46 &lt;span style=&#34;color:#f60&#34;&gt;4946&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0001&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0100&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0001&lt;/span&gt;  ......JFIF......
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000010: &lt;span style=&#34;color:#f60&#34;&gt;0001&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; ffdb &lt;span style=&#34;color:#f60&#34;&gt;0084&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0005&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0304&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0705&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0705&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000020: &lt;span style=&#34;color:#f60&#34;&gt;0505&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0506&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0508&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0506&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0505&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0505&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0805&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0507&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000030: &lt;span style=&#34;color:#f60&#34;&gt;0508&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0505&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0509&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0608&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0905&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0513&lt;/span&gt; 0a1c 0b07  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000040: 081a &lt;span style=&#34;color:#f60&#34;&gt;0908&lt;/span&gt; 050e &lt;span style=&#34;color:#f60&#34;&gt;2118&lt;/span&gt; 1a1d 111f 131f 130b  ......!.........
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000050: &lt;span style=&#34;color:#f60&#34;&gt;2218&lt;/span&gt; 221e 181c &lt;span style=&#34;color:#f60&#34;&gt;1213&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1201&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0505&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0507&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0607&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;.&amp;#34;&lt;/span&gt;.............
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000060: &lt;span style=&#34;color:#f60&#34;&gt;0508&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0805&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1208&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0508&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000070: &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000080: &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000090: &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1212&lt;/span&gt; ffc0 &lt;span style=&#34;color:#f60&#34;&gt;0011&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0800&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000000a0: 5a00 &lt;span style=&#34;color:#f60&#34;&gt;7803&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0122&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0002&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1101&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0311&lt;/span&gt; 01ff c400  Z.x..&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;..........
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;000000b0: 1b00 0100 0203 0101 0000 0000 0000 0000  ................
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;000000c0: 0000 0001 0402 0307 0605 ffc4 003d 1000  .............=..
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;000000d0: 0201 0203 0307 060d 0500 0000 0000 0000  ................
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;000000e0: 0201 0304 0511 1206 1321 0722 3132 4152  .........!.&amp;#34;&lt;/span&gt;12AR
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000000f0: &lt;span style=&#34;color:#f60&#34;&gt;6114&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;4271&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;7292&lt;/span&gt; d215 &lt;span style=&#34;color:#f60&#34;&gt;5581&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;8491&lt;/span&gt; 94b1 c1c2  a.Bqr...U.......
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000100: c3d1 d3f0 &lt;span style=&#34;color:#f60&#34;&gt;1751&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;6264&lt;/span&gt; b3ff c400 &lt;span style=&#34;color:#f60&#34;&gt;1401&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0100&lt;/span&gt;  .....Qbd........
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000110: &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; 00ff  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000120: c400 &lt;span style=&#34;color:#f60&#34;&gt;1411&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0100&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000130: &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; 00ff da00 0c03 &lt;span style=&#34;color:#f60&#34;&gt;0100&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0211&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0311&lt;/span&gt;  ................
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000140: 003f 00ef &lt;span style=&#34;color:#f60&#34;&gt;4000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0098&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;8274&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;8188&lt;/span&gt; 32d0  .?..@......t..2.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000150: &lt;span style=&#34;color:#f60&#34;&gt;3401&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;8832&lt;/span&gt; d034 &lt;span style=&#34;color:#f60&#34;&gt;8188&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;2660&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;8000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt;  4..2.4..&amp;amp;&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;......
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000160: &lt;span style=&#34;color:#f60&#34;&gt;0010&lt;/span&gt; 66aa 62a5 8a2a &lt;span style=&#34;color:#f60&#34;&gt;0129&lt;/span&gt; 1b96 81f2 &lt;span style=&#34;color:#f60&#34;&gt;3683&lt;/span&gt;  ..f.b..*.)....6.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000170: 6aec &lt;span style=&#34;color:#f60&#34;&gt;7056&lt;/span&gt; 5a37 1bda d59a 15da de8c 433a  j.pVZ7........C:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000003b0: 495a 369b c7de cae4 af5a &lt;span style=&#34;color:#f60&#34;&gt;5251&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1297&lt;/span&gt; 7a63  IZ6......ZRQ..zc
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000003c0: &lt;span style=&#34;color:#f60&#34;&gt;5673&lt;/span&gt; 97de 74ba 8c06 a620 &lt;span style=&#34;color:#f60&#34;&gt;4800&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt;  Vs..t.... H.....
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000003d0: 4ac9 000d 9ab5 &lt;span style=&#34;color:#f60&#34;&gt;7359&lt;/span&gt; 61a3 bb2a b31e c9ad  J.....sYa..*....
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000003e0: adad dfaf 6b6f 3eb5 bd19 fc20 &lt;span style=&#34;color:#f60&#34;&gt;6606&lt;/span&gt; a6c3  ....ko&amp;gt;.... f...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;000003f0: 2c5b ad87 d9b7 cd68 fba6 3f04 587c &lt;span style=&#34;color:#f60&#34;&gt;5967&lt;/span&gt;  ,[.....h..?.X|Yg
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000400: f56a 3fa1 bf31 981a d70c b25e ae1f 66bf  .j?..1.....^..f.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000410: 34a3 ee9b 56de &lt;span style=&#34;color:#f60&#34;&gt;8275&lt;/span&gt; 2d6d d3d5 b7a2 bf84  4...V..u-m......
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000420: 8cc6 606c 97ec ec5e aac7 058f 557b 0c26  ..&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;l...^....U{.&amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000430: &lt;span style=&#34;color:#f60&#34;&gt;4800&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt;  H...............
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;00000440: &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0000&lt;/span&gt; 7fff d9                   .........
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 각 터미널이나 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
+최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&amp;hellip;)&lt;/p&gt;
+&lt;p&gt;이번엔 HTML 문서를 PDF로 변환해서 응답하는 서버로 테스트 해보겠습니다.
+&lt;a href=&#34;https://github.com/markruler/htmltopdf&#34;&gt;데모 서버&lt;/a&gt;를 실행 후
+다음과 같은 코드로 요청을 보내면 PDF 파일을 받을 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;let&lt;/span&gt; myHeaders = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Headers();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;myHeaders.append(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Content-Type&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;application/x-www-form-urlencoded&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;let&lt;/span&gt; urlencoded = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; URLSearchParams();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;urlencoded.append(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;html&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;Test&amp;lt;/span&amp;gt; Text&amp;lt;/div&amp;gt;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;urlencoded.append(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;css&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;span{color:red;}span{font-size:30px;}&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;urlencoded.append(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;orientation&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;landscape&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;urlencoded.append(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;filename&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;test-filename&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;let&lt;/span&gt; requestOptions = {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  method: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;POST&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  headers: myHeaders,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  body: urlencoded,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  redirect: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;follow&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;fetch(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;/pdf/content&amp;#34;&lt;/span&gt;, requestOptions)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .then(response =&amp;gt; response.text())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .then(result =&amp;gt; console.log(result))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(error =&amp;gt; console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, error));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;로 출력된 응답 데이터는 &lt;code&gt;%PDF&lt;/code&gt;라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
+PDF 형식이라는 것을 유추할 수 있습니다.
+반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
+크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/hex-pdf.png&#34; alt=&#34;Hexadecimal PDF&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%PDF-1.4
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%����
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Creator (Chromium)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Producer (Skia/PDF m131)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/CreationDate (D:20241210133649+00&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;00&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/ModDate (D:20241210133649+00&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;00&amp;#39;&lt;/span&gt;)&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/ca &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/BM /Normal&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Filter /FlateDecode
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Length 195&amp;gt;&amp;gt; stream
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x�]�AkA����&lt;span style=&#34;color:#87ceeb&#34;&gt;\0&lt;/span&gt;�L6�3 �ֳe�?������a�-�&lt;span style=&#34;color:#87ceeb&#34;&gt;\�&lt;/span&gt;���G4y��X��5�Z��I.b�S&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;�ƪVkBJA�P
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;�_����������}����}�y��d�w�~e�d�6���}W�h�lH�hg���9�R@�Olȡ��ɘ�M�P�Pz|��S|���B������;�h�&amp;#39;��}����°G4
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endstream
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Type /Page
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Resources &amp;lt;&amp;lt;/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/ExtGState &amp;lt;&amp;lt;/G3 &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Font &amp;lt;&amp;lt;/F4 &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/F5 &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/MediaBox [&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; 842.88 595.91998]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Contents &lt;span style=&#34;color:#f60&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/StructParents &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Tabs /S
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Parent &lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Type /Pages
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Count &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...(생략)...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;0000009666&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;00000&lt;/span&gt; n 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;0000009955&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;00000&lt;/span&gt; n 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trailer
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Size &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Root &lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Info &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;startxref
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;10429&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%EOF
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/print-pdf.png&#34; alt=&#34;Print PDF&#34;&gt;&lt;/p&gt;
+&lt;p&gt;그렇다면 이 괴상한 문자열들은 어떻게 해석해야 할까요?&lt;/p&gt;
+&lt;h1 id=&#34;파일-시그니처&#34;&gt;파일 시그니처&lt;/h1&gt;
+&lt;p&gt;파일 시그니처(File Signature)는 파일의 특정 부분에 위치한 고유한 바이트 패턴입니다.
+파일이 어떤 포맷인지 알려주는 식별자 역할을 합니다.
+매직 넘버(magic numbers)라고도 부르죠.&lt;/p&gt;
+&lt;p&gt;가장 먼저 봤던 &lt;code&gt;JFIF&lt;/code&gt; 파일이나 &lt;code&gt;%PDF&lt;/code&gt; 모두 파일의 앞쪽에 위치하는 헤더 시그니처입니다.
+무슨 파일인지 바로 알 수 있죠.
+(모든 파일 형식이 이름과 동일하게 시그니처를 정하진 않습니다.)&lt;/p&gt;
+&lt;p&gt;파일의 시그니처를 확인하는 번거로운 작업을 줄이기 위해
+웹에서는 응답 헤더에 &amp;ldquo;Content-Type&amp;quot;을 지정하고
+GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp;ldquo;를 지정합니다.&lt;/p&gt;
+&lt;h1 id=&#34;파일-카빙&#34;&gt;파일 카빙&lt;/h1&gt;
+&lt;p&gt;파일 카빙(File Carving)은 저장 매체에서 특정 파일을 추출하는 기술입니다.
+디지털 포렌식에서 파일 복구에 사용됩니다.
+이때 파일 시그니처가 중요한 역할을 합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://dfrc.korea.ac.kr/&#34;&gt;Digital Forensic Research Center&lt;/a&gt; 자료를 참조했습니다.
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.archive.org/web/20180815025824/http://forensic.korea.ac.kr/DFWIKI/index.php/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%B5%EA%B5%AC&#34;&gt;파일 복구&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/URsDgiD0FwA?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&amp;amp;t=1657&#34;&gt;램 슬랙&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1-시그니처-기반&#34;&gt;1. 시그니처 기반&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;주요 과정
+&lt;ul&gt;
+&lt;li&gt;header 시그니처 탐지: 저장 매체의 로우 데이터(raw data)에서 파일 헤더 시그니처를 검색합니다.&lt;/li&gt;
+&lt;li&gt;footer 시그니처 탐지: 같은 방식으로 파일의 푸터 시그니처를 검색합니다.&lt;/li&gt;
+&lt;li&gt;데이터 추출: 헤더 시그니처와 푸터 시그니처 사이의 데이터를 추출하여 파일로 복원합니다.&lt;/li&gt;
+&lt;li&gt;파일 검사 및 재구성: 복원된 파일의 무결성과 유효성을 검사하여 제대로 복구되었는지 확인합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;한계점
+&lt;ul&gt;
+&lt;li&gt;조각난 파일(Fragmented File): 파일이 여러 조각으로 분리되어 저장된 경우 복구가 어렵습니다.&lt;/li&gt;
+&lt;li&gt;파일 손상: 데이터 일부가 손실되었거나 덮어씌워진 경우 복원이 불완전할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;정확도: 잘못된 시그니처 탐지로 인해 오탐(False Positive)이 발생할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-파일-구조체-카빙&#34;&gt;2. 파일 구조체 카빙&lt;/h2&gt;
+&lt;p&gt;파일의 내부 구조를 분석하고 검증하여 파일을 복구합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;파일 미리보기 지원하는 파일은 파일 포맷 내부에 실제 내용과 썸네일(Thumbnail)을 포함하는데,
+썸네일도 해당 파일 포맷과 동일한 구조로 되어 있어 시그니처가 2개 이상 존재합니다.&lt;/li&gt;
+&lt;li&gt;ZIP 파일의 경우 헤더 시그니처가 &lt;code&gt;P K 03 04&lt;/code&gt;(hex: &lt;code&gt;50 4B 03 04&lt;/code&gt;)이며, 푸터 시그니처가 &lt;code&gt;P K 05 06&lt;/code&gt;(hex: &lt;code&gt;50 4B 05 06&lt;/code&gt;) 입니다.
+파일 헤더에는 파일 크기와 CRC32 체크섬이 포함된 메타데이터가 있습니다.
+단편화된 파일을 재구성하는 경우 파일 구조를 바탕으로 데이터 블록을 논리적으로 연결합니다.
+이후 메타데이터에서 체크섬을 검증하여 파일의 무결성을 확인합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-램-슬랙-카빙&#34;&gt;3. 램 슬랙 카빙&lt;/h2&gt;
+&lt;p&gt;파일의 내용을 디스크에 기록할 때 512(bytes) 배수가 되지 않아 생긴 &lt;code&gt;0x00&lt;/code&gt; 영역을 램 슬랙이라고 합니다.
+대부분 Footer 시그니처 이후에 램 슬랙이 존재해서 이를 바탕으로 Footer 시그니처와 램 슬랙을 확인할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/M-_Fdgf9IZo?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&#34;&gt;디지털 데이터의 저장과 표현: 문자 코드와 파일&lt;/a&gt; - Digital Forensic Research Center&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.garykessler.net/library/file_sigs.html&#34;&gt;GCK&amp;rsquo;S FILE SIGNATURES TABLE&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/List_of_file_signatures&#34;&gt;List of file signatures&lt;/a&gt; - Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.file-recovery.com/signatures.htm&#34;&gt;The concept of file signatures recovery&lt;/a&gt; - Active@ File Recovery&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/memory-inspector&#34;&gt;Memory Inspector&lt;/a&gt;가 네트워크 패널에도 적용된 것으로 보입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/reverse-engineering/file-signature/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1456,7 +1682,7 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;li&gt;새로고침을 하더라도 이전 로그를 유지한다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Filter 활용법
+&lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/network/reference?#filter&#34;&gt;요청 필터링&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;앞에 &lt;code&gt;-&lt;/code&gt;를 붙이면 해당 조건에 해당하는 요청을 제외한다.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;domain:*.example.com&lt;/code&gt; | example.com 도메인만 필터링&lt;/li&gt;
@@ -1958,269 +2184,6 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/network/snmp/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>일상에서의 SSH</title>
-        <link>https://markruler.github.io/posts/network/ssh/</link>
-        <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/network/ssh/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/ssh/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#ssh-key-%EC%83%9D%EC%84%B1&#34;&gt;SSH key 생성&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#ssh-server&#34;&gt;SSH Server&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#authoized_keys&#34;&gt;authoized_keys&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-server-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Server 설정&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#ssh-client&#34;&gt;SSH Client&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EC%9A%B0%EC%84%A0-%EC%88%9C%EC%9C%84&#34;&gt;설정 파일 우선 순위&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#known_hosts&#34;&gt;known_hosts&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-host-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Host 설정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#git&#34;&gt;Git&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#local-forward&#34;&gt;Local Forward&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;업무에서 자주 사용하는 SSH 설정을 정리합니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;ssh-key-생성&#34;&gt;SSH key 생성&lt;/h1&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RSA&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t rsa -b &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ED25519&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t ed25519 -f &lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;/.ssh/my-ed25519 -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-server&#34;&gt;SSH Server&lt;/h1&gt;
-&lt;p&gt;SSH 데몬 설정 파일은 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;이다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-server
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl status ssh
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치한다.&lt;/li&gt;
-&lt;li&gt;내용: 클라이언트의 공개 키가 저장된다.
-서버는 클라이언트의 접속 시도 시,
-이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.&lt;/li&gt;
-&lt;li&gt;보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
-공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
-특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;SSH 데몬(sshd) 설치 혹은 실행 시 &lt;code&gt;/etc/ssh&lt;/code&gt; 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
-만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
-&lt;code&gt;ssh-keygen&lt;/code&gt; 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; ls /etc/ssh | grep &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;ssh_host&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key.pub
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ed25519_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ed25519_key.pub
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key.pub
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;수동으로 교체하는 명령어는 다음과 같다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 새 키 생성&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key_new
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 새 키를 기존 키로 대체&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_rsa_key_old
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key_new /etc/ssh/ssh_host_rsa_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key.pub /etc/ssh/ssh_host_rsa_key_old.pub
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key_new.pub /etc/ssh/ssh_host_rsa_key.pub
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# SSH 서버 재시작&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl restart sshd
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;주로-사용하는-server-설정&#34;&gt;주로 사용하는 Server 설정&lt;/h2&gt;
-&lt;p&gt;설정 완료 후 데몬 재시작(&lt;code&gt;systemctl restart sshd&lt;/code&gt;)해야 적용된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;## /etc/ssh/sshd_config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This is the sshd server system-wide configuration file.  See&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sshd_config(5) for more information.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# SSH 서버가 Listen할 포트 지정&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Port &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 서버의 호스트 키 파일 경로를 지정&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_rsa_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_ecdsa_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_ed25519_key
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 루트 로그인 허용 여부&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PermitRootLogin no &lt;span style=&#34;color:#0f0&#34;&gt;# yes, prohibit-password&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 허용 여부&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PasswordAuthentication no &lt;span style=&#34;color:#0f0&#34;&gt;# yes&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 공개키 인증 허용 여부&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PubkeyAuthentication yes &lt;span style=&#34;color:#0f0&#34;&gt;# no&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 허용할 사용자 및 그룹&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;AllowUsers user1 user2
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;AllowGroups sshusers
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 거부할 사용자 및 그룹&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DenyUsers user3 user4
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DenyGroups nogroup
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 시도 횟수 제한&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MaxAuthTries &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# default 6&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 시도 간격&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;LoginGraceTime &lt;span style=&#34;color:#f60&#34;&gt;120&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# seconds == 2m&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/hosts.allow&lt;/code&gt; 파일에 허용할 IP를 설정할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 호스트 허용&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: ALL
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 하나의 IP를 허용할 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: 192.168.1.33
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# IP 대역으로 허용할 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: 192.168.1.0/24
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 도메인을 허용할 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: .example.com
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-client&#34;&gt;SSH Client&lt;/h1&gt;
-&lt;p&gt;system-wide 설정 파일은 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;이다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-client
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-파일-우선-순위&#34;&gt;설정 파일 우선 순위&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;명령줄 옵션: 가장 우선한다.&lt;/li&gt;
-&lt;li&gt;환경 변수&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$HOME/.ssh/config&lt;/code&gt;: 사용자별 설정 파일&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;: 전역 설정 파일&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;known_hosts&#34;&gt;known_hosts&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치한다.&lt;/li&gt;
-&lt;li&gt;내용: 서버의 호스트 키 정보가 저장된다.
-클라이언트가 처음 특정 서버에 접속할 때,
-서버의 호스트 키를 확인하고 &lt;code&gt;known_hosts&lt;/code&gt; 파일에 저장한다.
-이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.&lt;/li&gt;
-&lt;li&gt;보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
-이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;주로-사용하는-host-설정&#34;&gt;주로 사용하는 Host 설정&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# $HOME/.ssh/config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host my-host
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 111.222.111.222
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-key.pem
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentitiesOnly yes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host old-host
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 111.222.111.222
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#eedd82&#34;&gt;HostKeyAlgorithms&lt;/span&gt; = +ssh-rsa,ssh-dss
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://cloud.ibm.com/docs/hp-virtual-servers?topic=hp-virtual-servers-generate_ssh&#34;&gt;HostKeyAlgorithms&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;ssh-ed25519&lt;/li&gt;
-&lt;li&gt;ssh-rsa&lt;/li&gt;
-&lt;li&gt;ssh-dss&lt;/li&gt;
-&lt;li&gt;ecdsa-sha2-nistp256&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;git&#34;&gt;Git&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 회사 계정과 분리하고 싶을 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host work.github.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName github.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/github_work_ed25519
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host github.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/github_ed25519
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host bitbucket.org
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/bitbucket_ed25519
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
-새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@work.github.com:xpdojo/kubernetes.git
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# .git/config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;origin&amp;#34;&lt;/span&gt;]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  url = git@work.github.com:xpdojo/kubernetes.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fetch = +refs/heads/*:refs/remotes/origin/*
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;local-forward&#34;&gt;Local Forward&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Bastion Host를 두고 Local Forwarding이 필요한 경우&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host tost
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LocalForward localhost:14000 something.abcd.ap-northeast-2.rds.amazonaws.com:1521
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-rds-key.pem
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -f -N tost
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;커넥션을 끊어야 할 경우 PID을 직접 죽인다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ps -ef | grep tost
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# markrul+   38624    4372  0 08:37 ?        00:00:00 ssh -f -N tost&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kill -TERM &lt;span style=&#34;color:#f60&#34;&gt;38624&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;위 설정과 동일한 명령어&lt;/strong&gt;는 다음과 같다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -vv -f -N &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -i &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;~/.ssh/my-rds-key.pem&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;password-입력-없이-ssh-key로-client에서-server로-접속하기&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/h1&gt;
-&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
-(AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server: SSH Key 생성&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch ~/.ssh/authorized_keys
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 600(rw)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat ~/.ssh/mykey.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server &amp;gt; client private key 전달 (최대한 안전한 방식으로)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# scp ~/.ssh/mykey client@host2:~/.ssh/mykey&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 700(rwx)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;700&lt;/span&gt; ~/.ssh
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 400(r)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;400&lt;/span&gt; ~/.ssh/mykey
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client ~/.ssh/config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host host1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentitiesOnly yes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/mykey
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 192.168.0.10
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Port &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh host1
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;ChatGPT&lt;/li&gt;
-&lt;li&gt;Client
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.ssh.com/academy/ssh/config&#34;&gt;SSH config file for OpenSSH client&lt;/a&gt; - SSH Academy&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/5/ssh_config&#34;&gt;ssh_config(5)&lt;/a&gt; - Linux man page&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Server
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/5/sshd_config&#34;&gt;sshd_config(5)&lt;/a&gt; - Linux man page&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;원리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://naleejang.tistory.com/218&#34;&gt;보안 그리고 암호화 알고리즘&lt;/a&gt; - 장현정(naleejang)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596&#34;&gt;SSH 동작원리 및 EC2 SSH 접속&lt;/a&gt; - redwood&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/&#34;&gt;Managing multiple Bitbucket user SSH keys on one device&lt;/a&gt; - Bitbucket
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.outsider.ne.kr/1448&#34;&gt;Git 계정 여러 개 동시 사용하기&lt;/a&gt; - Outsider&amp;rsquo;s Dev Story&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/network/ssh/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

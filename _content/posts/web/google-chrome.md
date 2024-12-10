@@ -143,7 +143,7 @@ javascript:(function(){var js=document.body.appendChild(document.createElement("
 
 - Preserve log
   - 새로고침을 하더라도 이전 로그를 유지한다.
-- Filter 활용법
+- [요청 필터링](https://developer.chrome.com/docs/devtools/network/reference?#filter)
   - 앞에 `-`를 붙이면 해당 조건에 해당하는 요청을 제외한다.
   - `domain:*.example.com` | example.com 도메인만 필터링
   - `method:POST` | POST 메소드만 필터링

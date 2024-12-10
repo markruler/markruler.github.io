@@ -32,6 +32,7 @@ categories:
 - Chrome
   - https://leetrue.hashnode.dev/04
   - https://so-so.dev/web/browser-rendering-process/
+  - https://nuck.tistory.com/124?category=1260216
 
 # 더 읽을거리
 

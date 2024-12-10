@@ -9,9 +9,272 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Fri, 06 Dec 2024 13:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2024 22:46:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>일상에서의 SSH</title>
+        <link>https://markruler.github.io/posts/network/ssh/</link>
+        <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/ssh/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/ssh/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-key-%EC%83%9D%EC%84%B1&#34;&gt;SSH key 생성&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-server&#34;&gt;SSH Server&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#authoized_keys&#34;&gt;authoized_keys&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-server-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Server 설정&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssh-client&#34;&gt;SSH Client&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EC%9A%B0%EC%84%A0-%EC%88%9C%EC%9C%84&#34;&gt;설정 파일 우선 순위&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#known_hosts&#34;&gt;known_hosts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-host-%EC%84%A4%EC%A0%95&#34;&gt;주로 사용하는 Host 설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#git&#34;&gt;Git&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#local-forward&#34;&gt;Local Forward&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;업무에서 자주 사용하는 SSH 설정을 정리합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;ssh-key-생성&#34;&gt;SSH key 생성&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RSA&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t rsa -b &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ED25519&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t ed25519 -f &lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;/.ssh/my-ed25519 -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-server&#34;&gt;SSH Server&lt;/h1&gt;
+&lt;p&gt;SSH 데몬 설정 파일은 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;이다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-server
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl status ssh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)&lt;/li&gt;
+&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치한다.&lt;/li&gt;
+&lt;li&gt;내용: 클라이언트의 공개 키가 저장된다.
+서버는 클라이언트의 접속 시도 시,
+이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.&lt;/li&gt;
+&lt;li&gt;보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
+공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
+특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;SSH 데몬(sshd) 설치 혹은 실행 시 &lt;code&gt;/etc/ssh&lt;/code&gt; 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
+만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
+&lt;code&gt;ssh-keygen&lt;/code&gt; 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; ls /etc/ssh | grep &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;ssh_host&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ed25519_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ed25519_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;수동으로 교체하는 명령어는 다음과 같다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 새 키 생성&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key_new
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 새 키를 기존 키로 대체&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_rsa_key_old
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key_new /etc/ssh/ssh_host_rsa_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key.pub /etc/ssh/ssh_host_rsa_key_old.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mv /etc/ssh/ssh_host_rsa_key_new.pub /etc/ssh/ssh_host_rsa_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# SSH 서버 재시작&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl restart sshd
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;주로-사용하는-server-설정&#34;&gt;주로 사용하는 Server 설정&lt;/h2&gt;
+&lt;p&gt;설정 완료 후 데몬 재시작(&lt;code&gt;systemctl restart sshd&lt;/code&gt;)해야 적용된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;## /etc/ssh/sshd_config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This is the sshd server system-wide configuration file.  See&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sshd_config(5) for more information.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# SSH 서버가 Listen할 포트 지정&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Port &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 서버의 호스트 키 파일 경로를 지정&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_rsa_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_ecdsa_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HostKey /etc/ssh/ssh_host_ed25519_key
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 루트 로그인 허용 여부&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PermitRootLogin no &lt;span style=&#34;color:#0f0&#34;&gt;# yes, prohibit-password&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 허용 여부&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PasswordAuthentication no &lt;span style=&#34;color:#0f0&#34;&gt;# yes&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 공개키 인증 허용 여부&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PubkeyAuthentication yes &lt;span style=&#34;color:#0f0&#34;&gt;# no&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 허용할 사용자 및 그룹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;AllowUsers user1 user2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;AllowGroups sshusers
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 거부할 사용자 및 그룹&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DenyUsers user3 user4
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DenyGroups nogroup
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 시도 횟수 제한&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;MaxAuthTries &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# default 6&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 시도 간격&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;LoginGraceTime &lt;span style=&#34;color:#f60&#34;&gt;120&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# seconds == 2m&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/hosts.allow&lt;/code&gt; 파일에 허용할 IP를 설정할 수 있다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 호스트 허용&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: ALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 하나의 IP를 허용할 경우&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: 192.168.1.33
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# IP 대역으로 허용할 경우&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: 192.168.1.0/24
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 도메인을 허용할 경우&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: .example.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-client&#34;&gt;SSH Client&lt;/h1&gt;
+&lt;p&gt;system-wide 설정 파일은 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;이다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-client
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-파일-우선-순위&#34;&gt;설정 파일 우선 순위&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;명령줄 옵션: 가장 우선한다.&lt;/li&gt;
+&lt;li&gt;환경 변수&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$HOME/.ssh/config&lt;/code&gt;: 사용자별 설정 파일&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;: 전역 설정 파일&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;known_hosts&#34;&gt;known_hosts&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)&lt;/li&gt;
+&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치한다.&lt;/li&gt;
+&lt;li&gt;내용: 서버의 호스트 키 정보가 저장된다.
+클라이언트가 처음 특정 서버에 접속할 때,
+서버의 호스트 키를 확인하고 &lt;code&gt;known_hosts&lt;/code&gt; 파일에 저장한다.
+이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.&lt;/li&gt;
+&lt;li&gt;보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
+이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;주로-사용하는-host-설정&#34;&gt;주로 사용하는 Host 설정&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# $HOME/.ssh/config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host my-host
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 111.222.111.222
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-key.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host old-host
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 111.222.111.222
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#eedd82&#34;&gt;HostKeyAlgorithms&lt;/span&gt; = +ssh-rsa,ssh-dss
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.ibm.com/docs/hp-virtual-servers?topic=hp-virtual-servers-generate_ssh&#34;&gt;HostKeyAlgorithms&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;ssh-ed25519&lt;/li&gt;
+&lt;li&gt;ssh-rsa&lt;/li&gt;
+&lt;li&gt;ssh-dss&lt;/li&gt;
+&lt;li&gt;ecdsa-sha2-nistp256&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;git&#34;&gt;Git&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 회사 계정과 분리하고 싶을 경우&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host work.github.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName github.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/github_work_ed25519
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host github.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/github_ed25519
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host bitbucket.org
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/bitbucket_ed25519
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
+새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@work.github.com:xpdojo/kubernetes.git
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# .git/config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;origin&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  url = git@work.github.com:xpdojo/kubernetes.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fetch = +refs/heads/*:refs/remotes/origin/*
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;local-forward&#34;&gt;Local Forward&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Bastion Host를 두고 Local Forwarding이 필요한 경우&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host tost
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LocalForward localhost:14000 something.abcd.ap-northeast-2.rds.amazonaws.com:1521
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-rds-key.pem
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -f -N tost
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;커넥션을 끊어야 할 경우 PID을 직접 죽인다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ps -ef | grep tost
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# markrul+   38624    4372  0 08:37 ?        00:00:00 ssh -f -N tost&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kill -TERM &lt;span style=&#34;color:#f60&#34;&gt;38624&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;위 설정과 동일한 명령어&lt;/strong&gt;는 다음과 같다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -vv -f -N &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -i &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;~/.ssh/my-rds-key.pem&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;password-입력-없이-ssh-key로-client에서-server로-접속하기&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/h1&gt;
+&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+(AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server: SSH Key 생성&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 600(rw)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat ~/.ssh/mykey.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server &amp;gt; client private key 전달 (최대한 안전한 방식으로)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# scp ~/.ssh/mykey client@host2:~/.ssh/mykey&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 700(rwx)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;700&lt;/span&gt; ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 400(r)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;400&lt;/span&gt; ~/.ssh/mykey
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client ~/.ssh/config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host host1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/mykey
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 192.168.0.10
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  Port &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh host1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;ChatGPT&lt;/li&gt;
+&lt;li&gt;Client
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.ssh.com/academy/ssh/config&#34;&gt;SSH config file for OpenSSH client&lt;/a&gt; - SSH Academy&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/5/ssh_config&#34;&gt;ssh_config(5)&lt;/a&gt; - Linux man page&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Server
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/5/sshd_config&#34;&gt;sshd_config(5)&lt;/a&gt; - Linux man page&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;원리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://naleejang.tistory.com/218&#34;&gt;보안 그리고 암호화 알고리즘&lt;/a&gt; - 장현정(naleejang)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596&#34;&gt;SSH 동작원리 및 EC2 SSH 접속&lt;/a&gt; - redwood&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/&#34;&gt;Managing multiple Bitbucket user SSH keys on one device&lt;/a&gt; - Bitbucket
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.outsider.ne.kr/1448&#34;&gt;Git 계정 여러 개 동시 사용하기&lt;/a&gt; - Outsider&amp;rsquo;s Dev Story&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/network/ssh/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -135,7 +398,10 @@
         <pubDate>Tue, 12 Dec 2023 22:02:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/pdf/html-to-pdf/</guid>
-        <description>임창수 https://markruler.github.io/posts/pdf/html-to-pdf/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+        <description>임창수 https://markruler.github.io/posts/pdf/html-to-pdf/ -&lt;blockquote&gt;
+&lt;p&gt;데모 서버는 &lt;a href=&#34;https://github.com/markruler/htmltopdf&#34;&gt;markruler/htmltopdf&lt;/a&gt; 저장소를 사용해주세요.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;팀내에서 문서 생성 도구로 &lt;a href=&#34;https://pdfmyurl.com/html-to-pdf-api&#34;&gt;PDFmyURL&lt;/a&gt;과
 &lt;a href=&#34;https://www.forcs.com/kr/oz-e-form/&#34;&gt;OZ e-Form&lt;/a&gt;을 사용하고 있다.
 보통 이런 외부 솔루션은 테스트 할 때 매우 불편하다.&lt;/p&gt;
@@ -1983,393 +2249,6 @@ Jenkins Pipeline을 활용하면 &lt;code&gt;Jenkinsfile&lt;/code&gt; 을 사용
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/ci/ci-with-lb/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>JVM 모니터링</title>
-        <link>https://markruler.github.io/posts/java/jvm-monitoring/</link>
-        <pubDate>Mon, 23 May 2022 00:09:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/java/jvm-monitoring/</guid>
-        <description>임창수 https://markruler.github.io/posts/java/jvm-monitoring/ -&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/java-timeout-monitoring/&#34;&gt;모니터링과 타임아웃의 중요성&lt;/a&gt;은 아무리 강조해도 지나치지 않는다.
-최근 회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 트래픽이 발생하는데도 2년동안 방치되고 있었다.
-이런 레거시는 유지 보수할 일이 없다면 개발팀에서도 확인하기 어렵다.
-사용자가 리포팅해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋다.
-심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;먼저 알아두면 좋은 명령어가 있다.
-&lt;code&gt;jps&lt;/code&gt;는 JVM Process Status를 출력하는 명령어로
-현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jps -v
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PID&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; Bootstrap -Djava...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;thread-dump&#34;&gt;Thread Dump&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A thread dump is a snapshot of the state of all threads that are part of the process.
-(&lt;a href=&#34;https://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/geninfo/diagnos/using_threaddumps.html&#34;&gt;Oracle Docs&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;쓰레드 덤프(Thread Dump)란 모든 쓰레드 상태의 스냅샷이다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/java-thread-state-machine.png&#34; alt=&#34;java-thread-state-machine&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.uml-diagrams.org/java-thread-uml-state-machine-diagram-example.html&#34;&gt;Java Thread States and Life Cycle&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;쓰레드 덤프에 메서드 콜 스택 정보를 가진 스택 프레임(Stack Frame)은 없다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/debugging-in-intellij.png&#34; alt=&#34;Debugging in IntelliJ&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;IntelliJ에서 디버깅하면 볼 수 있는 스택 프레임&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Thread1   Thread2   Thread3
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-------+ +-------+ +-------+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       | |       | |       |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       | |       | | frame |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       | |       | | frame |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| frame | |       | | frame |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| frame | | frame | | frame |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-------+ +-------+ +-------+
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;daemon-thread&#34;&gt;Daemon Thread&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Daemon Thread
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;thread.setDaemon(true)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Daemon Thread는 JVM 종료 시 자동으로 강제 종료한다.&lt;/li&gt;
-&lt;li&gt;언제든지 죽어도 상관없는 작업에 사용한다.&lt;/li&gt;
-&lt;li&gt;Garbage Collector, JMX&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Non-Daemon Thread
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;thread.setDaemon(false)&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Non-Daemon Thread가 실행 중인 경우 JVM은 종료되지 않는다.&lt;/li&gt;
-&lt;li&gt;기본적으로 개발자가 새로 생성하는 쓰레드는 Non-Daemon Thread이다.&lt;/li&gt;
-&lt;li&gt;메인 쓰레드(Main Thread)도 Non-Daemon Thread다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// java.lang.Thread&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;/* Whether or not the thread is a daemon thread. */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#ee82ee&#34;&gt;boolean&lt;/span&gt; daemon = &lt;span style=&#34;color:#f00&#34;&gt;false&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tool&#34;&gt;Tool&lt;/h2&gt;
-&lt;p&gt;나는 주로 쓰레드 간 교착 현상(deadlock)이나
-단일 쓰레드의 병목 현상이 의심될 때 사용한다.
-하지만 NAVER D2에 올라온 글 &amp;lsquo;&lt;a href=&#34;https://d2.naver.com/helloworld/10963&#34;&gt;스레드 덤프 분석하기&lt;/a&gt;&amp;lsquo;를 보면
-이 외의 다양한 상황에서도 쓰레드 덤프를 확인해 볼 수 있다.
-쓰레드 덤프 분석이 처음이라면 해당 글을 정독해보자.&lt;/p&gt;
-&lt;h3 id=&#34;jstack&#34;&gt;jstack&lt;/h3&gt;
-&lt;p&gt;쓰레드 스택(Java Thread Stack)을 확인할 수 있는 CLI 도구다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jstack -l &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PID&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; &amp;gt; thread_dump.txt
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;visualvm&#34;&gt;VisualVM&lt;/h3&gt;
-&lt;p&gt;VisualVM을 사용하면 실시간으로 쓰레드 스택의 상태를 확인할 수 있다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-tomcat-threads.png&#34; alt=&#34;visualvm-tomcat-threads&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;VisualVM에서 확인한 Thread Stack. OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생했었다.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;공식 홈페이지에서 다운로드한 후 &lt;code&gt;bin&lt;/code&gt; 디렉토리의 실행 파일을 실행하면 된다.
-실행하면 로컬 환경의 모든 JVM 프로세스를 확인할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bin/visualvm
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;IntelliJ 플러그인 &lt;a href=&#34;https://plugins.jetbrains.com/plugin/7115-visualvm-launcher&#34;&gt;VisualVM Launcher&lt;/a&gt;도 있긴 하지만,
-기본적으로 실행했을 때 모든 JVM 프로세스를 확인할 수 있어서
-VisualVM을 사용하는 데에 큰 불편함이 없었다.&lt;/p&gt;
-&lt;h1 id=&#34;heap-dump&#34;&gt;Heap Dump&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;A heap dump is a snapshot of all the objects in the Java Virtual Machine (JVM) heap at a certain point in time.
-(&lt;a href=&#34;https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/heapdump.html&#34;&gt;Oracle Docs&lt;/a&gt;)&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;힙 덤프(Heap Dump)란 JVM 힙의 모든 Object를 담은 스냅샷이다.&lt;/p&gt;
-&lt;h2 id=&#34;outofmemoryerror&#34;&gt;OutOfMemoryError&lt;/h2&gt;
-&lt;p&gt;JVM 실행 시 아래 옵션을 추가하면 &lt;code&gt;OutOfMemoryError&lt;/code&gt; 발생으로 JVM이 종료될 때 힙 덤프를 생성한다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-XX:HeapDumpPath&lt;/code&gt;를 생략하면 Java Process를 실행시킨 곳에 &lt;code&gt;java_pid&amp;lt;pid&amp;gt;.hprof&lt;/code&gt; 형태로 파일이 생성된다.
-&lt;blockquote&gt;
-&lt;p&gt;By default the heap dump is created in a file called java_pid.hprof in the working directory of the VM. - &lt;a href=&#34;https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/clopts001.html&#34;&gt;Oracle Docs&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-XX:+PrintClassHistogramAfterFullGC&lt;/code&gt;, &lt;code&gt;-XX:+PrintClassHistogramBeforeFullGC&lt;/code&gt; 등의 옵션으로
-Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-XX:+HeapDumpOnOutOfMemoryError &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;-XX:HeapDumpPath=jvm.hprof
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tool-1&#34;&gt;Tool&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;OutOfMemoryError&lt;/code&gt;가 발생한 게 아니라면 &lt;code&gt;jmap&lt;/code&gt;을 사용해서 힙 덤프를 확인할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# jmap -dump:format=b,file=/path/app.hprof ${PID}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;jmap -dump:file=/path/app.hprof &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PID&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Dumping heap to /path/app.hprof ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Heap dump file created
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; file /path/app.hprof
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;app.hprof: Java HPROF dump, created Tue May &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt; 01:15:39 &lt;span style=&#34;color:#f60&#34;&gt;2022&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;eclipse-memory-analyzer-mat&#34;&gt;Eclipse Memory Analyzer (MAT)&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.eclipse.org/mat/&#34;&gt;MAT&lt;/a&gt;는 힙 덤프를 분석할 수 있게 도와주는 프로그램이다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;JDK를 찾지 못하는 경우 아래와 같이 옵션을 추가한다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ${MAT_HOME}/MemoryAnalyzer.ini&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-vm
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;JAVA_HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/bin
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# -vmargs 보다 위에 추가해야 한다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-vmargs
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;기본 Heap Size가 1024m이다. Heap Dump 파일이 이보다 큰 경우 Parsing할 때 아래와 같은 에러가 발생한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;An internal error occurred during:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Parsing heap dump from &amp;#39;/path/java_pid1234.hprof&amp;#39;&amp;#34;&lt;/span&gt;.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java heap space
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정 파일에 JVM 옵션을 추가하면 확인할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ${MAT_HOME}/MemoryAnalyzer.ini&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-vmargs
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#-Xmx1024m&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-Xms6g
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-Xmx6g
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;visualvm-1&#34;&gt;VisualVM&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://visualvm.github.io/download.html&#34;&gt;VisualVM&lt;/a&gt;은 애플리케이션을 &lt;strong&gt;실시간으로 분석&lt;/strong&gt;하는 데 주로 사용한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# $VISUALVM_HOME/etc/visualvm.conf&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Default location of JDK:&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# It can be overridden on command line by using --jdkhome &amp;lt;dir&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Be careful when changing jdkhome.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# There are two VisualVM launchers for Windows (32-bit and 64-bit) and&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# installer points to one of those in the VisualVM application shortcut &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# based on the Java version selected at installation time.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#visualvm_jdkhome=&amp;#34;/path/to/jdk&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;visualvm_jdkhome&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$JAVA_HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 실행&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;./bin/visualvm
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;아래 기능으로 힙 덤프를 간략히 확인할 수도 있다.
-하지만 기능이 다양한 &lt;a href=&#34;#eclipse-memory-analyzer-mat&#34;&gt;MAT&lt;/a&gt;가 있기 때문에
-VisualVM은 실시간으로 확인하는 용도로 사용한다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;File &amp;gt; Load &amp;gt; *.hprof&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-heap-dump.png&#34; alt=&#34;visualvm-heap-dump&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;VisuamVM에서 확인한 Heap Dump&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;Remote에서 모니터링하기 위해서는 JVM 애플리케이션에 JMX 옵션을 추가해야 한다.
-&lt;a href=&#34;https://archive.apache.org/dist/tomcat/&#34;&gt;Apache Tomcat&lt;/a&gt;을 사용한다면 아래와 같이 추가한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Tomcat 다운로드&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -LO https://archive.apache.org/dist/tomcat/tomcat-8/v8.5.41/bin/extras/catalina-jmx-remote.jar
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;CATALINA_HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/bin/catalina.sh version
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;CATALINA_HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/bin/catalina.sh start &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Dcom.sun.management.jmxremote &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Dcom.sun.management.jmxremote.local.only=false &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Dcom.sun.management.jmxremote.port=&lt;span style=&#34;color:#f60&#34;&gt;1099&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Dcom.sun.management.jmxremote.rmi.port=&lt;span style=&#34;color:#f60&#34;&gt;1099&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -Dcom.sun.management.jmxremote.ssl=false &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -Dcom.sun.management.jmxremote.authenticate=false &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# -Dcom.sun.management.jmxremote.authenticate=true \&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# -Dcom.sun.management.jmxremote.password.file=$CATALINA_BASE/conf/jmxremote.password \&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# -Dcom.sun.management.jmxremote.access.file=$CATALINA_BASE/conf/jmxremote.access \&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# -Djava.rmi.server.hostname=${REAL_HOST} \&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -Djava.rmi.server.hostname=255.255.255.255 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -jar
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이후 VisualVM에서 다음과 같이 설정한다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;File &amp;gt; Add JMX Connection&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png&#34; alt=&#34;File &amp;gt; Add JMX Connection&#34;&gt;&lt;/p&gt;
-&lt;p&gt;JVM 옵션으로 추가한 RMI(Remote Method Invocation) HOST와 PORT를 입력한다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-setting-jmx-connection.png&#34; alt=&#34;Setting JMX Connection&#34;&gt;&lt;/p&gt;
-&lt;p&gt;추가하면 다음과 같이 스레드를 실시간으로 모니터링 할 수 있다.
-스레드와 힙 메모리의 스냅샷을 저장할 수도 있다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-jmx-monitoring.png&#34; alt=&#34;Setting JMX Connection&#34;&gt;&lt;/p&gt;
-&lt;p&gt;설정만 한다면 여러 호스트를 모니터링 할 수 있다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualvm-double-jmx-monitoring.png&#34; alt=&#34;Setting JMX Connection&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;gc-monitoring&#34;&gt;GC Monitoring&lt;/h1&gt;
-&lt;p&gt;GC 모니터링이란 JVM이 어떻게 GC를 수행하고 있는지 알아내는 과정을 말한다.&lt;/p&gt;
-&lt;h2 id=&#34;tool-2&#34;&gt;Tool&lt;/h2&gt;
-&lt;p&gt;처음이라면 NAVER D2에 올라온 글
-&amp;lsquo;&lt;a href=&#34;https://d2.naver.com/helloworld/6043&#34;&gt;Garbage Collection 모니터링 방법&lt;/a&gt;&amp;lsquo;이 굉장히 도움된다.&lt;/p&gt;
-&lt;h3 id=&#34;jstat&#34;&gt;jstat&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;JVM Statistics Monitoring&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html&#34;&gt;공식 문서&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 1초마다 gc 확인&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jstat -gc &amp;lt;PID&amp;gt; &lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jstat -options
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;옵션&lt;/th&gt;
-          &lt;th&gt;기능&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;gc&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;각 힙(heap) 영역의 현재 크기와 현재 사용량(Eden 영역, Survivor 영역, Old 영역등), 총 GC 수행 횟수, 누적 GC 소요 시간을 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;gccapactiy&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;각 힙 영역의 최소 크기(ms), 최대 크기(mx), 현재 크기, 각 영역별 GC 수행 횟수를 알 수 있는 정보를 보여 준다. 단, 현재 사용량과 누적 GC 소요 시간은 알 수 없다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;gccause&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;-gcutil 옵션이 제공하는 정보와 함께 마지막 GC 원인과 현재 발생하고 있는 GC의 원인을 알 수 있는 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;gcnew&lt;/td&gt;
-          &lt;td&gt;New 영역에 대한 GC 수행 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;gcnewcapacity&lt;/td&gt;
-          &lt;td&gt;New 영역의 크기에 대한 통계 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;gcold&lt;/td&gt;
-          &lt;td&gt;Old 영역에 대한 GC 수행 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;gcoldcapacity&lt;/td&gt;
-          &lt;td&gt;Old 영역의 크기에 대한 통계 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;gcpermcapacity&lt;/td&gt;
-          &lt;td&gt;Permanent 영역에 대한 통계 정보를 보여 준다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;strong&gt;gcutil&lt;/strong&gt;&lt;/td&gt;
-          &lt;td&gt;각 힙 영역에 대한 사용 정도를 백분율로 보여 준다. 아울러 총 GC 수행 횟수와 누적 GC 시간을 알 수 있다.&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;visual-gc&#34;&gt;Visual GC&lt;/h3&gt;
-&lt;p&gt;JVM이 어떻게 GC를 수행하고 있는지 확인할 수 있다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualgc-plugin.png&#34; alt=&#34;VisualGC Plugin&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;VisualVM의 Tools &amp;gt; Plugins에서 다운로드 할 수 있다.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jvm-monitoring/visualgc-with-visualvm.png&#34; alt=&#34;visualgc-with-visualvm&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;함께-사용하는-도구들&#34;&gt;함께 사용하는 도구들&lt;/h1&gt;
-&lt;h2 id=&#34;jdk-tools&#34;&gt;JDK Tools&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/javase/8/docs/technotes/tools/index.html&#34;&gt;JDK Tools and Utilities&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/java-conceptual-diagram.png&#34; alt=&#34;Java Platform Standard Edition 8 Documentation&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://docs.oracle.com/javase/8/docs/&#34;&gt;Java Platform Standard Edition 8 Documentation&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;jcmd: 성능 관련 카운터 조회&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jcmd &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PID&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; PerfCounter.print
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.threads.daemon=&lt;span style=&#34;color:#f60&#34;&gt;42&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.threads.live=&lt;span style=&#34;color:#f60&#34;&gt;49&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.threads.livePeak=&lt;span style=&#34;color:#f60&#34;&gt;52&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.threads.started=&lt;span style=&#34;color:#f60&#34;&gt;3951&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;jmap: JVM Heap 조회&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jmap -heap &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PID&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Attaching to process ID 3838860, please wait...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Debugger attached successfully.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Server compiler detected.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JVM version is 25.292-b10
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;using thread-local object allocation.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Parallel GC with &lt;span style=&#34;color:#f60&#34;&gt;10&lt;/span&gt; thread(s)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Heap Configuration:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MinHeapFreeRatio&lt;/span&gt;         = &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MaxHeapFreeRatio&lt;/span&gt;         = &lt;span style=&#34;color:#f60&#34;&gt;100&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MaxHeapSize&lt;/span&gt;              = &lt;span style=&#34;color:#f60&#34;&gt;8348762112&lt;/span&gt; (7962.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;NewSize&lt;/span&gt;                  = &lt;span style=&#34;color:#f60&#34;&gt;174063616&lt;/span&gt; (166.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MaxNewSize&lt;/span&gt;               = &lt;span style=&#34;color:#f60&#34;&gt;2782920704&lt;/span&gt; (2654.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;OldSize&lt;/span&gt;                  = &lt;span style=&#34;color:#f60&#34;&gt;348127232&lt;/span&gt; (332.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;NewRatio&lt;/span&gt;                 = &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;SurvivorRatio&lt;/span&gt;            = &lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MetaspaceSize&lt;/span&gt;            = &lt;span style=&#34;color:#f60&#34;&gt;21807104&lt;/span&gt; (20.796875MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;CompressedClassSpaceSize&lt;/span&gt; = &lt;span style=&#34;color:#f60&#34;&gt;1073741824&lt;/span&gt; (1024.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;MaxMetaspaceSize&lt;/span&gt;         = &lt;span style=&#34;color:#f60&#34;&gt;17592186044415&lt;/span&gt; MB
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;G1HeapRegionSize&lt;/span&gt;         = &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; (0.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Heap Usage:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PS Young Generation
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Eden Space:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;capacity&lt;/span&gt; = &lt;span style=&#34;color:#f60&#34;&gt;2094006272&lt;/span&gt; (1997.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;used&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;398200696&lt;/span&gt; (379.75377655029297MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;free&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;1695805576&lt;/span&gt; (1617.246223449707MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   19.0162131472355% used
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;From Space:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;capacity&lt;/span&gt; = &lt;span style=&#34;color:#f60&#34;&gt;82837504&lt;/span&gt; (79.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;used&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; (0.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;free&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;82837504&lt;/span&gt; (79.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   0.0% used
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;To Space:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;capacity&lt;/span&gt; = &lt;span style=&#34;color:#f60&#34;&gt;78643200&lt;/span&gt; (75.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;used&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; (0.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;free&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;78643200&lt;/span&gt; (75.0MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   0.0% used
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;PS Old Generation
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;capacity&lt;/span&gt; = &lt;span style=&#34;color:#f60&#34;&gt;467140608&lt;/span&gt; (445.5MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;used&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;107232904&lt;/span&gt; (102.26526641845703MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#eedd82&#34;&gt;free&lt;/span&gt;     = &lt;span style=&#34;color:#f60&#34;&gt;359907704&lt;/span&gt; (343.23473358154297MB)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   22.955166423896078% used
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;47952&lt;/span&gt; interned Strings occupying &lt;span style=&#34;color:#f60&#34;&gt;5230216&lt;/span&gt; bytes.
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;jhat: Java Heap Analyzer Tool
-&lt;ul&gt;
-&lt;li&gt;JDK 9에서 제거되었다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; jhat -J-Xmx6g -port &lt;span style=&#34;color:#f60&#34;&gt;7000&lt;/span&gt; /path/app.hprof
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;datadog&#34;&gt;Datadog&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/profiler/enabling/java/&#34;&gt;Enabling the Java Profiler&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-Ddd.profiling.enabled=true &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;-XX:FlightRecorderOptions=&lt;span style=&#34;color:#eedd82&#34;&gt;stackdepth&lt;/span&gt;=&lt;span style=&#34;color:#f60&#34;&gt;256&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;이-외의-도구들&#34;&gt;이 외의 도구들&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.oracle.com/java/technologies/jdk-mission-control.html&#34;&gt;JDK Mission Control&lt;/a&gt; - Oracle&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/pinpoint-apm/pinpoint&#34;&gt;Pinpoint&lt;/a&gt; - NAVER에서 만든 오픈소스 APM&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.yourkit.com/java/profiler&#34;&gt;Java Profiler Features&lt;/a&gt; - YourKit&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.ej-technologies.com/products/jprofiler/overview.html&#34;&gt;JProfiler&lt;/a&gt; (유료)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
-&lt;p&gt;다른 개발자들의 실제 사례를 보면 얻을 수 있는 인사이트가 많다.&lt;/p&gt;
-&lt;h2 id=&#34;thread-stack&#34;&gt;Thread Stack&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/10963&#34;&gt;스레드 덤프 분석하기&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dzone.com/articles/how-to-read-a-thread-dump&#34;&gt;How to Read a Thread Dump&lt;/a&gt; - DZone&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://johngrib.github.io/wiki/jvm-stack/&#34;&gt;JVM stack과 frame&lt;/a&gt; - 기계인간 John Grib&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;heap-memory&#34;&gt;Heap Memory&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/1326256&#34;&gt;하나의 메모리 누수를 잡기까지&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://techblog.woowahan.com/2628/&#34;&gt;도움이 될수도 있는 JVM memory leak 이야기&lt;/a&gt; - 우아한 형제들&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/184615&#34;&gt;자바 애플리케이션 성능 튜닝의 도(道)&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/1286587&#34;&gt;Java 애플리케이션 트러블 슈팅&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://kwonnam.pe.kr/wiki/java/memory&#34;&gt;Java Memory Analysis&lt;/a&gt; - 권남&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.whatap.io/ko/blog/28/&#34;&gt;JVM Crash 문제 해결하기&lt;/a&gt; - 와탭&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://honeymon.io/tech/2019/05/30/java-memory-leak-analysis.html&#34;&gt;자바 메모리누수(with 힙덤프) 분석하기&lt;/a&gt; - 김지헌&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://lng1982.tistory.com/352&#34;&gt;Java Heap Dump 를 이용한 문제 해결&lt;/a&gt; - 탁구치는 개발자&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://sarc.io/index.php/java/1092-jvm-default-heap-size&#34;&gt;JVM의 default Heap Size가 궁금하세요?&lt;/a&gt; - 삵(sarc)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://perfectacle.github.io/2019/04/28/heap-memory-analytics-with-eclipse-mat/&#34;&gt;생애 첫 Heap 메모리 분석기&lt;/a&gt; - 양권성&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://spoqa.github.io/2012/02/06/eclipse-mat.html&#34;&gt;Eclipse Memory Analyzer 소개&lt;/a&gt; - spoqa&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://dzone.com/articles/eclipse-mat-incoming-outgoing-references&#34;&gt;Eclipse MAT — Incoming, Outgoing References&lt;/a&gt; - DZone&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/visualvm-jmx-remote&#34;&gt;Remote Monitoring with VisualVM and JMX&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.lesstif.com/java/apache-tomcat-jmx-monitoring-20776824.html&#34;&gt;아파치 톰캣(Apache Tomcat)을 JMX로 Remote Monitoring 하기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;전문가를 위한 스프링 5 (15장 애플리케이션 모니터링)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;garbage-collection&#34;&gt;Garbage Collection&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&amp;lt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788979145229&#34;&gt;자바 성능을 결정짓는 코딩 습관과 튜닝 이야기&lt;/a&gt;&amp;gt;라는
-책의 저자가 쓰신 글들은 모두 재밌고 유용하다.
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/6043&#34;&gt;Garbage Collection 모니터링 방법&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/4717&#34;&gt;Garbage Collection과 Statement Pool&lt;/a&gt; - NAVER D2
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://zzikjh.tistory.com/entry/DBCP-%EC%82%AC%EC%9A%A9%EC%8B%9C-poolPreparedStatements-%EC%86%8D%EC%84%B1%EC%9D%B4-%EC%84%B1%EB%8A%A5%EC%97%90-%EB%AF%B8%EC%B9%98%EB%8A%94-%EC%98%81%ED%96%A5&#34;&gt;DBCP 사용시 poolPreparedStatements 속성이 성능에 미치는 영향&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;기타&#34;&gt;기타&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.naver.com/pcmola/222064546600&#34;&gt;Java 프로파일링 도구&lt;/a&gt; - 메이커 꾸러기&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.infoq.com/news/2015/12/OpenJDK-9-removal-of-HPROF-jhat/&#34;&gt;OpenJDK 9: Life Without HPROF and jhat&lt;/a&gt; - InfoQ&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/8wHx31mvSLY&#34;&gt;Everything I Ever Learned About JVM Performance Tuning at Twitter&lt;/a&gt; - Attila Szegedi&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/java/jvm-monitoring/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<title>파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="G-FFMDWZ27TN">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="파일 포맷, 데이터의 저장과 표현">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:url" content="https://markruler.github.io/posts/reverse-engineering/file-signature/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유">
+  <meta property="og:description" content="파일 포맷, 데이터의 저장과 표현">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-12-10T22:46:00+09:00">
+    <meta property="article:modified_time" content="2024-12-10T22:46:00+09:00">
+    <meta property="article:tag" content="Reverse-Engineering">
+    <meta property="article:tag" content="File-Signature">
+    <meta property="article:tag" content="File-Carving">
+    <meta property="og:image" content="https://markruler.github.io/images/reverse-engineering/file-signature/hex.png">
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/reverse-engineering/file-signature/hex.png">
+  <meta name="twitter:title" content="파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유">
+  <meta name="twitter:description" content="파일 포맷, 데이터의 저장과 표현">
+
+
+
+
+
+
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-FFMDWZ27TN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FFMDWZ27TN');
+        }
+      </script>
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.d0b8839aea4a869766f4f03b63addd1f474968306d628a2f923204aea4155677.css" integrity="sha256-0LiDmupKhpdm9PA7Y63dH0dJaDBtYoovkjIErqQVVnc=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ec%8b%9c%ea%b7%b8%eb%8b%88%ec%b2%98" class="nav-파일-시그니처">
+									파일 시그니처
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ec%b9%b4%eb%b9%99" class="nav-파일-카빙">
+									파일 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-%ec%8b%9c%ea%b7%b8%eb%8b%88%ec%b2%98-%ea%b8%b0%eb%b0%98" class="nav-1-시그니처-기반">
+									1. 시그니처 기반
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%ed%8c%8c%ec%9d%bc-%ea%b5%ac%ec%a1%b0%ec%b2%b4-%ec%b9%b4%eb%b9%99" class="nav-2-파일-구조체-카빙">
+									2. 파일 구조체 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-%eb%9e%a8-%ec%8a%ac%eb%9e%99-%ec%b9%b4%eb%b9%99" class="nav-3-램-슬랙-카빙">
+									3. 램 슬랙 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <button
+        class="read-random"
+        data-target-prefix="/posts">
+        Navigate to Random Post
+    </button>
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://markruler.github.io/images/reverse-engineering/file-signature/hex.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유
+                    
+                    <div class="post-subtitle">
+                        파일 포맷, 데이터의 저장과 표현
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-12-10 22:46
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/wiki">[wiki]</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/reverse-engineering">reverse-engineering</a>
+                                &nbsp;
+                            
+                                <a href="/tags/file-signature">file-signature</a>
+                                &nbsp;
+                            
+                                <a href="/tags/file-carving">file-carving</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="개요">개요</h1>
+<p>다음과 같은 명령어를 실행하면 이상한 문자열이 출력됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Youtube의 빈 썸네일 이미지를 다운로드 받습니다.</span>
+</span></span><span style="display:flex;"><span>curl -L -o - https://i.ytimg.com/
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>����JFIF���
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>�      !�
+</span></span><span style="display:flex;"><span>!<span style="color:#87ceeb">&#34;12ARaBqr��U�����������Qbd�������
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">                                  ?�@��t��2�4�2�4��&amp;`�f�b��*)��6�j�pVZ7՚�ތC:#uf��§���&lt;�Z�W
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">�oMku�@��&lt;\�O����H����M?^_��n
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">                             Z��W�:&gt;vW���ҟ˃lr�h�8e�z*ڷ�zw�ie4�
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">e�C�#:=(���R�&#39;F��0���e�
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">                       �
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">                        ���T���9�p�z�n/1
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">                                        �mSV��t�V�&#34;</span>��U �MI�;w��{O%��q
+</span></span><span style="display:flex;"><span>                                                                     �[<span style="color:#eedd82">$x</span>�7UV��⫫�t����=6�l�<span style="color:#87ceeb">`</span>Si)u7	u�^z*UW��[���L�˭��a?
+</span></span><span style="display:flex;"><span>                                                                                                                            yn��mN���K��:��Z��&amp;_
+</span></span><span style="display:flex;"><span>                                                                                                                                                ���{
+</span></span><span style="display:flex;"><span>  ����j�sj�j-T���U�^m�2<span style="color:#87ceeb">\�</span>O7��M�{�V�v��Vݝz�ԞRe|8��?�4qL5�i��Z��V�2e�ʝ��&#39;����%zV����v�8
+</span></span><span style="display:flex;"><span>.A.@��F���&gt;�8]�JU��ҕj�z�Vb~��o)*�Ҍ������/�n���{m�Ա��vI��U�qoZ�+U��Z{�&amp;Z��;��B�������k�XЏR�;*t��	|J�-���ku�Kk5_s�[8�te��d�kĮl��%�{]�i���ɩ{5}%Y���in��sYa��*�ɭ��߯ko&gt;��� f��,[��ٷ�h��?X|Yg�j?��1���s��t��� HJ�
+</span></span><span style="display:flex;"><span>                                             �^�f�4��Vނu-m�շ�����<span style="color:#87ceeb">`</span>l���^���U{
+</span></span><span style="display:flex;"><span>                                                                            &amp;H��%
+</span></span></code></pre></div><p>�는 유니코드 replacement character(<code>U+FFFD</code>)로, 해석할 수 없는 문자를 표시하기 위해 사용됩니다.</p>
+<p>이번엔 hexdump로 만들어주는 <code>xxd</code> 명령어를 파이프로 이어보겠습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>curl -L -o - https://i.ytimg.com/ | xxd
+</span></span></code></pre></div><p>뭔지 모르겠지만 응답 데이터 앞쪽에 <code>JFIF</code>가 적혀있습니다.
+JFIF 파일 포맷일까요?
+이후엔 또 알 수 없는 문자열이 출력됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+</span></span><span style="display:flex;"><span>                                 Dload  Upload   Total   Spent    Left  Speed
+</span></span><span style="display:flex;"><span><span style="color:#f60">100</span>  <span style="color:#f60">1097</span>  <span style="color:#f60">100</span>  <span style="color:#f60">1097</span>    <span style="color:#f60">0</span>     <span style="color:#f60">0</span>   <span style="color:#f60">4712</span>      <span style="color:#f60">0</span> --:--:-- --:--:-- --:--:--  <span style="color:#f60">4728</span>
+</span></span><span style="display:flex;"><span>00000000: ffd8 ffe0 <span style="color:#f60">0010</span> 4a46 <span style="color:#f60">4946</span> <span style="color:#f60">0001</span> <span style="color:#f60">0100</span> <span style="color:#f60">0001</span>  ......JFIF......
+</span></span><span style="display:flex;"><span>00000010: <span style="color:#f60">0001</span> <span style="color:#f60">0000</span> ffdb <span style="color:#f60">0084</span> <span style="color:#f60">0005</span> <span style="color:#f60">0304</span> <span style="color:#f60">0705</span> <span style="color:#f60">0705</span>  ................
+</span></span><span style="display:flex;"><span>00000020: <span style="color:#f60">0505</span> <span style="color:#f60">0506</span> <span style="color:#f60">0508</span> <span style="color:#f60">0506</span> <span style="color:#f60">0505</span> <span style="color:#f60">0505</span> <span style="color:#f60">0805</span> <span style="color:#f60">0507</span>  ................
+</span></span><span style="display:flex;"><span>00000030: <span style="color:#f60">0508</span> <span style="color:#f60">0505</span> <span style="color:#f60">0509</span> <span style="color:#f60">0608</span> <span style="color:#f60">0905</span> <span style="color:#f60">0513</span> 0a1c 0b07  ................
+</span></span><span style="display:flex;"><span>00000040: 081a <span style="color:#f60">0908</span> 050e <span style="color:#f60">2118</span> 1a1d 111f 131f 130b  ......!.........
+</span></span><span style="display:flex;"><span>00000050: <span style="color:#f60">2218</span> 221e 181c <span style="color:#f60">1213</span> <span style="color:#f60">1201</span> <span style="color:#f60">0505</span> <span style="color:#f60">0507</span> <span style="color:#f60">0607</span>  <span style="color:#87ceeb">&#34;.&#34;</span>.............
+</span></span><span style="display:flex;"><span>00000060: <span style="color:#f60">0508</span> <span style="color:#f60">0805</span> <span style="color:#f60">1208</span> <span style="color:#f60">0508</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span>  ................
+</span></span><span style="display:flex;"><span>00000070: <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span>  ................
+</span></span><span style="display:flex;"><span>00000080: <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span>  ................
+</span></span><span style="display:flex;"><span>00000090: <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> <span style="color:#f60">1212</span> ffc0 <span style="color:#f60">0011</span> <span style="color:#f60">0800</span>  ................
+</span></span><span style="display:flex;"><span>000000a0: 5a00 <span style="color:#f60">7803</span> <span style="color:#f60">0122</span> <span style="color:#f60">0002</span> <span style="color:#f60">1101</span> <span style="color:#f60">0311</span> 01ff c400  Z.x..<span style="color:#87ceeb">&#34;..........
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">000000b0: 1b00 0100 0203 0101 0000 0000 0000 0000  ................
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">000000c0: 0000 0001 0402 0307 0605 ffc4 003d 1000  .............=..
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">000000d0: 0201 0203 0307 060d 0500 0000 0000 0000  ................
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">000000e0: 0201 0304 0511 1206 1321 0722 3132 4152  .........!.&#34;</span>12AR
+</span></span><span style="display:flex;"><span>000000f0: <span style="color:#f60">6114</span> <span style="color:#f60">4271</span> <span style="color:#f60">7292</span> d215 <span style="color:#f60">5581</span> <span style="color:#f60">8491</span> 94b1 c1c2  a.Bqr...U.......
+</span></span><span style="display:flex;"><span>00000100: c3d1 d3f0 <span style="color:#f60">1751</span> <span style="color:#f60">6264</span> b3ff c400 <span style="color:#f60">1401</span> <span style="color:#f60">0100</span>  .....Qbd........
+</span></span><span style="display:flex;"><span>00000110: <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> 00ff  ................
+</span></span><span style="display:flex;"><span>00000120: c400 <span style="color:#f60">1411</span> <span style="color:#f60">0100</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span>  ................
+</span></span><span style="display:flex;"><span>00000130: <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> 00ff da00 0c03 <span style="color:#f60">0100</span> <span style="color:#f60">0211</span> <span style="color:#f60">0311</span>  ................
+</span></span><span style="display:flex;"><span>00000140: 003f 00ef <span style="color:#f60">4000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0098</span> <span style="color:#f60">8274</span> <span style="color:#f60">8188</span> 32d0  .?..@......t..2.
+</span></span><span style="display:flex;"><span>00000150: <span style="color:#f60">3401</span> <span style="color:#f60">8832</span> d034 <span style="color:#f60">8188</span> <span style="color:#f60">2660</span> <span style="color:#f60">8000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span>  4..2.4..&amp;<span style="color:#87ceeb">`</span>......
+</span></span><span style="display:flex;"><span>00000160: <span style="color:#f60">0010</span> 66aa 62a5 8a2a <span style="color:#f60">0129</span> 1b96 81f2 <span style="color:#f60">3683</span>  ..f.b..*.)....6.
+</span></span><span style="display:flex;"><span>00000170: 6aec <span style="color:#f60">7056</span> 5a37 1bda d59a 15da de8c 433a  j.pVZ7........C:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>000003b0: 495a 369b c7de cae4 af5a <span style="color:#f60">5251</span> <span style="color:#f60">1297</span> 7a63  IZ6......ZRQ..zc
+</span></span><span style="display:flex;"><span>000003c0: <span style="color:#f60">5673</span> 97de 74ba 8c06 a620 <span style="color:#f60">4800</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span>  Vs..t.... H.....
+</span></span><span style="display:flex;"><span>000003d0: 4ac9 000d 9ab5 <span style="color:#f60">7359</span> 61a3 bb2a b31e c9ad  J.....sYa..*....
+</span></span><span style="display:flex;"><span>000003e0: adad dfaf 6b6f 3eb5 bd19 fc20 <span style="color:#f60">6606</span> a6c3  ....ko&gt;.... f...
+</span></span><span style="display:flex;"><span>000003f0: 2c5b ad87 d9b7 cd68 fba6 3f04 587c <span style="color:#f60">5967</span>  ,[.....h..?.X|Yg
+</span></span><span style="display:flex;"><span>00000400: f56a 3fa1 bf31 981a d70c b25e ae1f 66bf  .j?..1.....^..f.
+</span></span><span style="display:flex;"><span>00000410: 34a3 ee9b 56de <span style="color:#f60">8275</span> 2d6d d3d5 b7a2 bf84  4...V..u-m......
+</span></span><span style="display:flex;"><span>00000420: 8cc6 606c 97ec ec5e aac7 058f 557b 0c26  ..<span style="color:#87ceeb">`</span>l...^....U{.&amp;
+</span></span><span style="display:flex;"><span>00000430: <span style="color:#f60">4800</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span>  H...............
+</span></span><span style="display:flex;"><span>00000440: <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> <span style="color:#f60">0000</span> 7fff d9                   .........
+</span></span></code></pre></div><p>이는 이진(binary) 데이터를 16진수(hexadecimal) 혹은 각 터미널이나 실행 프로그램에서 지원하는 문자열로 표현된 것입니다.
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
+최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&hellip;)</p>
+<p>이번엔 HTML 문서를 PDF로 변환해서 응답하는 서버로 테스트 해보겠습니다.
+<a href="https://github.com/markruler/htmltopdf">데모 서버</a>를 실행 후
+다음과 같은 코드로 요청을 보내면 PDF 파일을 받을 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">let</span> myHeaders = <span style="color:#f00">new</span> Headers();
+</span></span><span style="display:flex;"><span>myHeaders.append(<span style="color:#87ceeb">&#34;Content-Type&#34;</span>, <span style="color:#87ceeb">&#34;application/x-www-form-urlencoded&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">let</span> urlencoded = <span style="color:#f00">new</span> URLSearchParams();
+</span></span><span style="display:flex;"><span>urlencoded.append(<span style="color:#87ceeb">&#34;html&#34;</span>, <span style="color:#87ceeb">&#34;&lt;div&gt;&lt;span&gt;Test&lt;/span&gt; Text&lt;/div&gt;&#34;</span>);
+</span></span><span style="display:flex;"><span>urlencoded.append(<span style="color:#87ceeb">&#34;css&#34;</span>, <span style="color:#87ceeb">&#34;span{color:red;}span{font-size:30px;}&#34;</span>);
+</span></span><span style="display:flex;"><span>urlencoded.append(<span style="color:#87ceeb">&#34;orientation&#34;</span>, <span style="color:#87ceeb">&#34;landscape&#34;</span>);
+</span></span><span style="display:flex;"><span>urlencoded.append(<span style="color:#87ceeb">&#34;filename&#34;</span>, <span style="color:#87ceeb">&#34;test-filename&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">let</span> requestOptions = {
+</span></span><span style="display:flex;"><span>  method: <span style="color:#87ceeb">&#39;POST&#39;</span>,
+</span></span><span style="display:flex;"><span>  headers: myHeaders,
+</span></span><span style="display:flex;"><span>  body: urlencoded,
+</span></span><span style="display:flex;"><span>  redirect: <span style="color:#87ceeb">&#39;follow&#39;</span>
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>fetch(<span style="color:#87ceeb">&#34;/pdf/content&#34;</span>, requestOptions)
+</span></span><span style="display:flex;"><span>  .then(response =&gt; response.text())
+</span></span><span style="display:flex;"><span>  .then(result =&gt; console.log(result))
+</span></span><span style="display:flex;"><span>  .<span style="color:#f00">catch</span>(error =&gt; console.log(<span style="color:#87ceeb">&#39;error&#39;</span>, error));
+</span></span></code></pre></div><p><code>console.log()</code>로 출력된 응답 데이터는 <code>%PDF</code>라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
+PDF 형식이라는 것을 유추할 수 있습니다.
+반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
+크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.</p>
+<p><img src="/images/reverse-engineering/file-signature/hex-pdf.png" alt="Hexadecimal PDF"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>%PDF-1.4
+</span></span><span style="display:flex;"><span>%����
+</span></span><span style="display:flex;"><span><span style="color:#f60">1</span> <span style="color:#f60">0</span> obj
+</span></span><span style="display:flex;"><span>&lt;&lt;/Creator (Chromium)
+</span></span><span style="display:flex;"><span>/Producer (Skia/PDF m131)
+</span></span><span style="display:flex;"><span>/CreationDate (D:20241210133649+00<span style="color:#87ceeb">&#39;00&#39;</span>)
+</span></span><span style="display:flex;"><span>/ModDate (D:20241210133649+00<span style="color:#87ceeb">&#39;00&#39;</span>)&gt;&gt;
+</span></span><span style="display:flex;"><span>endobj
+</span></span><span style="display:flex;"><span><span style="color:#f60">3</span> <span style="color:#f60">0</span> obj
+</span></span><span style="display:flex;"><span>&lt;&lt;/ca <span style="color:#f60">1</span>
+</span></span><span style="display:flex;"><span>/BM /Normal&gt;&gt;
+</span></span><span style="display:flex;"><span>endobj
+</span></span><span style="display:flex;"><span><span style="color:#f60">6</span> <span style="color:#f60">0</span> obj
+</span></span><span style="display:flex;"><span>&lt;&lt;/Filter /FlateDecode
+</span></span><span style="display:flex;"><span>/Length 195&gt;&gt; stream
+</span></span><span style="display:flex;"><span>x�]�AkA����<span style="color:#87ceeb">\0</span>�L6�3 �ֳe�?������a�-�<span style="color:#87ceeb">\�</span>���G4y��X��5�Z��I.b�S<span style="color:#87ceeb">`</span>�ƪVkBJA�P
+</span></span><span style="display:flex;"><span>�_����������}����}�y��d�w�~e�d�6���}W�h�lH�hg���9�R@�Olȡ��ɘ�M�P�Pz|��S|���B������;�h�&#39;��}��� °G4
+</span></span><span style="display:flex;"><span>endstream
+</span></span><span style="display:flex;"><span>endobj
+</span></span><span style="display:flex;"><span><span style="color:#f60">2</span> <span style="color:#f60">0</span> obj
+</span></span><span style="display:flex;"><span>&lt;&lt;/Type /Page
+</span></span><span style="display:flex;"><span>/Resources &lt;&lt;/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+</span></span><span style="display:flex;"><span>/ExtGState &lt;&lt;/G3 <span style="color:#f60">3</span> <span style="color:#f60">0</span> R&gt;&gt;
+</span></span><span style="display:flex;"><span>/Font &lt;&lt;/F4 <span style="color:#f60">4</span> <span style="color:#f60">0</span> R
+</span></span><span style="display:flex;"><span>/F5 <span style="color:#f60">5</span> <span style="color:#f60">0</span> R&gt;&gt;&gt;&gt;
+</span></span><span style="display:flex;"><span>/MediaBox [<span style="color:#f60">0</span> <span style="color:#f60">0</span> 842.88 595.91998]
+</span></span><span style="display:flex;"><span>/Contents <span style="color:#f60">6</span> <span style="color:#f60">0</span> R
+</span></span><span style="display:flex;"><span>/StructParents <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>/Tabs /S
+</span></span><span style="display:flex;"><span>/Parent <span style="color:#f60">7</span> <span style="color:#f60">0</span> R&gt;&gt;
+</span></span><span style="display:flex;"><span>endobj
+</span></span><span style="display:flex;"><span><span style="color:#f60">7</span> <span style="color:#f60">0</span> obj
+</span></span><span style="display:flex;"><span>&lt;&lt;/Type /Pages
+</span></span><span style="display:flex;"><span>/Count <span style="color:#f60">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># ...(생략)...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f60">0000009666</span> <span style="color:#f60">00000</span> n 
+</span></span><span style="display:flex;"><span><span style="color:#f60">0000009955</span> <span style="color:#f60">00000</span> n 
+</span></span><span style="display:flex;"><span>trailer
+</span></span><span style="display:flex;"><span>&lt;&lt;/Size <span style="color:#f60">17</span>
+</span></span><span style="display:flex;"><span>/Root <span style="color:#f60">8</span> <span style="color:#f60">0</span> R
+</span></span><span style="display:flex;"><span>/Info <span style="color:#f60">1</span> <span style="color:#f60">0</span> R&gt;&gt;
+</span></span><span style="display:flex;"><span>startxref
+</span></span><span style="display:flex;"><span><span style="color:#f60">10429</span>
+</span></span><span style="display:flex;"><span>%EOF
+</span></span></code></pre></div><p><img src="/images/reverse-engineering/file-signature/print-pdf.png" alt="Print PDF"></p>
+<p>그렇다면 이 괴상한 문자열들은 어떻게 해석해야 할까요?</p>
+<h1 id="파일-시그니처">파일 시그니처</h1>
+<p>파일 시그니처(File Signature)는 파일의 특정 부분에 위치한 고유한 바이트 패턴입니다.
+파일이 어떤 포맷인지 알려주는 식별자 역할을 합니다.
+매직 넘버(magic numbers)라고도 부르죠.</p>
+<p>가장 먼저 봤던 <code>JFIF</code> 파일이나 <code>%PDF</code> 모두 파일의 앞쪽에 위치하는 헤더 시그니처입니다.
+무슨 파일인지 바로 알 수 있죠.
+(모든 파일 형식이 이름과 동일하게 시그니처를 정하진 않습니다.)</p>
+<p>파일의 시그니처를 확인하는 번거로운 작업을 줄이기 위해
+웹에서는 응답 헤더에 &ldquo;Content-Type&quot;을 지정하고
+GUI 환경 데스크탑에서는 &ldquo;파일 확장자(File Extension)&ldquo;를 지정합니다.</p>
+<h1 id="파일-카빙">파일 카빙</h1>
+<p>파일 카빙(File Carving)은 저장 매체에서 특정 파일을 추출하는 기술입니다.
+디지털 포렌식에서 파일 복구에 사용됩니다.
+이때 파일 시그니처가 중요한 역할을 합니다.</p>
+<ul>
+<li><a href="https://dfrc.korea.ac.kr/">Digital Forensic Research Center</a> 자료를 참조했습니다.
+<ul>
+<li><a href="https://web.archive.org/web/20180815025824/http://forensic.korea.ac.kr/DFWIKI/index.php/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%B5%EA%B5%AC">파일 복구</a></li>
+<li><a href="https://youtu.be/URsDgiD0FwA?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&amp;t=1657">램 슬랙</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="1-시그니처-기반">1. 시그니처 기반</h2>
+<ul>
+<li>주요 과정
+<ul>
+<li>header 시그니처 탐지: 저장 매체의 로우 데이터(raw data)에서 파일 헤더 시그니처를 검색합니다.</li>
+<li>footer 시그니처 탐지: 같은 방식으로 파일의 푸터 시그니처를 검색합니다.</li>
+<li>데이터 추출: 헤더 시그니처와 푸터 시그니처 사이의 데이터를 추출하여 파일로 복원합니다.</li>
+<li>파일 검사 및 재구성: 복원된 파일의 무결성과 유효성을 검사하여 제대로 복구되었는지 확인합니다.</li>
+</ul>
+</li>
+<li>한계점
+<ul>
+<li>조각난 파일(Fragmented File): 파일이 여러 조각으로 분리되어 저장된 경우 복구가 어렵습니다.</li>
+<li>파일 손상: 데이터 일부가 손실되었거나 덮어씌워진 경우 복원이 불완전할 수 있습니다.</li>
+<li>정확도: 잘못된 시그니처 탐지로 인해 오탐(False Positive)이 발생할 수 있습니다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-파일-구조체-카빙">2. 파일 구조체 카빙</h2>
+<p>파일의 내부 구조를 분석하고 검증하여 파일을 복구합니다.</p>
+<ul>
+<li>파일 미리보기 지원하는 파일은 파일 포맷 내부에 실제 내용과 썸네일(Thumbnail)을 포함하는데,
+썸네일도 해당 파일 포맷과 동일한 구조로 되어 있어 시그니처가 2개 이상 존재합니다.</li>
+<li>ZIP 파일의 경우 헤더 시그니처가 <code>P K 03 04</code>(hex: <code>50 4B 03 04</code>)이며, 푸터 시그니처가 <code>P K 05 06</code>(hex: <code>50 4B 05 06</code>) 입니다.
+파일 헤더에는 파일 크기와 CRC32 체크섬이 포함된 메타데이터가 있습니다.
+단편화된 파일을 재구성하는 경우 파일 구조를 바탕으로 데이터 블록을 논리적으로 연결합니다.
+이후 메타데이터에서 체크섬을 검증하여 파일의 무결성을 확인합니다.</li>
+</ul>
+<h2 id="3-램-슬랙-카빙">3. 램 슬랙 카빙</h2>
+<p>파일의 내용을 디스크에 기록할 때 512(bytes) 배수가 되지 않아 생긴 <code>0x00</code> 영역을 램 슬랙이라고 합니다.
+대부분 Footer 시그니처 이후에 램 슬랙이 존재해서 이를 바탕으로 Footer 시그니처와 램 슬랙을 확인할 수 있습니다.</p>
+<h1 id="더-읽을거리">더 읽을거리</h1>
+<ul>
+<li><a href="https://youtu.be/M-_Fdgf9IZo?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L">디지털 데이터의 저장과 표현: 문자 코드와 파일</a> - Digital Forensic Research Center</li>
+<li><a href="https://www.garykessler.net/library/file_sigs.html">GCK&rsquo;S FILE SIGNATURES TABLE</a></li>
+<li><a href="https://en.wikipedia.org/wiki/List_of_file_signatures">List of file signatures</a> - Wikipedia</li>
+<li><a href="https://www.file-recovery.com/signatures.htm">The concept of file signatures recovery</a> - Active@ File Recovery</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://developer.chrome.com/docs/devtools/memory-inspector">Memory Inspector</a>가 네트워크 패널에도 적용된 것으로 보입니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">최종 수정: 2024-12-10</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
+                
+                
+                
+                <a class="older-posts" href="/posts/web/respond-web-page/">
+			이전글<br>웹 페이지 응답 방법과 프레임워크
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+    <button
+        class="read-random"
+        data-target-prefix="/posts">
+        Navigate to Random Post
+    </button>
+
+    <div class="nav-footer">
+        
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ec%8b%9c%ea%b7%b8%eb%8b%88%ec%b2%98" class="nav-파일-시그니처">
+									파일 시그니처
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8c%8c%ec%9d%bc-%ec%b9%b4%eb%b9%99" class="nav-파일-카빙">
+									파일 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#1-%ec%8b%9c%ea%b7%b8%eb%8b%88%ec%b2%98-%ea%b8%b0%eb%b0%98" class="nav-1-시그니처-기반">
+									1. 시그니처 기반
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#2-%ed%8c%8c%ec%9d%bc-%ea%b5%ac%ec%a1%b0%ec%b2%b4-%ec%b9%b4%eb%b9%99" class="nav-2-파일-구조체-카빙">
+									2. 파일 구조체 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#3-%eb%9e%a8-%ec%8a%ac%eb%9e%99-%ec%b9%b4%eb%b9%99" class="nav-3-램-슬랙-카빙">
+									3. 램 슬랙 카빙
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu 2020 - 2024
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+    </body>
+</html>

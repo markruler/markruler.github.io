@@ -1,5 +1,6 @@
 ---
 date: 2023-12-12T22:02:00+09:00
+lastmod: 2024-12-10T20:38:00+09:00
 title: "Playwright를 사용해서 HTML 페이지를 PDF로 만들기"
 description: "HTML to PDF"
 featured_image: "/images/pdf/htmltopdf/htmltopdf.webp"
@@ -11,6 +12,8 @@ tags:
 Categories:
   - wiki
 ---
+
+> 데모 서버는 [markruler/htmltopdf](https://github.com/markruler/htmltopdf) 저장소를 사용해주세요.
 
 # 개요
 
