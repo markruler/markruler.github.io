@@ -2,11 +2,11 @@
 draft: false
 socialshare: true
 date: 2024-12-10T22:46:00+09:00
-lastmod: 2024-12-10T22:46:00+09:00
+lastmod: 2024-12-11T13:00:00+09:00
 title: "파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유"
 description: "파일 포맷, 데이터의 저장과 표현"
-featured_image: "/images/reverse-engineering/file-signature/hex.png"
-images: ["/images/reverse-engineering/file-signature/hex.png"]
+featured_image: "/images/reverse-engineering/file-signature/pexels-markusspiske-1089438.jpg"
+images: ["/images/reverse-engineering/file-signature/pexels-markusspiske-1089438.jpg"]
 tags:
   - reverse-engineering
   - file-signature
@@ -200,8 +200,9 @@ startxref
 파일이 어떤 포맷인지 알려주는 식별자 역할을 합니다.
 매직 넘버(magic numbers)라고도 부르죠.
 
+실행 프로그램(Reader)들은 파일 시그니처를 확인하여 파일 포맷을 판별하고,
+해당 파일 포맷에 맞게 데이터를 해석합니다.
 가장 먼저 봤던 `JFIF` 파일이나 `%PDF` 모두 파일의 앞쪽에 위치하는 헤더 시그니처입니다.
-무슨 파일인지 바로 알 수 있죠.
 (모든 파일 형식이 이름과 동일하게 시그니처를 정하진 않습니다.)
 
 파일의 시그니처를 확인하는 번거로운 작업을 줄이기 위해

@@ -1697,6 +1697,9 @@ git push origin main
 ```sh
 # 현재 HEAD와 같은 브랜치로 push
 git push origin HEAD
+
+# local에서 브랜치 생성 후 upstream에 push 및 upstream으로 지정
+git push origin HEAD --set-upstream
 ```
 
 ```sh

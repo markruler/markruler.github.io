@@ -1,12 +1,12 @@
 ---
 draft: true
 socialshare: true
-date: 2024-12-06T13:26:00+09:00
-lastmod: 2024-12-06T13:26:00+09:00
+date: 2024-12-11T12:26:00+09:00
+lastmod: 2024-12-11T12:26:00+09:00
 title: "한국어 미지원 스팀 게임에 대한 비공식 한국어 패치 만들기"
 description: "게임 엔진별 한국어 패치 제작 방법"
-featured_image: "https://upload.wikimedia.org/wikipedia/en/timeline/p5fnoxd13tfvmrtxgy91nph8fruz54p.png"
-images: ["https://upload.wikimedia.org/wikipedia/en/timeline/p5fnoxd13tfvmrtxgy91nph8fruz54p.png"]
+featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
+images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
 tags:
   - reverse-engineering
   - game-localization
@@ -33,22 +33,44 @@ categories:
 
 ## 언팩 도구 사용하기
 
-인기 있는 게임 엔진들은 이미 언팩 도구가 존재합니다.
+인기 있는 게임 엔진들은 이미 언팩(unpack) 도구가 존재합니다.
 
-### Unity
+### 유니티 (Unity)
 
-### Unreal Engine 4
+- [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE): 업데이트 중단
+- [UABEA](https://github.com/nesrak1/UABEA) 사용
 
-### Godot Engine
+### 언리얼 엔진 (Unreal Engine)
 
-### GameMaker Studio 2
+- 5는 시도해보지 못했습니다.
+- [How to unpack and repack Unreal Engine 4 files](https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/) - masagrator
+
+### 고도 (Godot)
+
+- [GDRETools/gdsdecomp](https://github.com/GDRETools/gdsdecomp)
+
+### 게임메이커 (GameMaker Studio 2)
+
+- [UnderminersTeam/UndertaleModTool](https://github.com/UnderminersTeam/UndertaleModTool/releases)
+
+### 렌파이 (Ren'Py, PyGame)
+
+[unrpa](https://github.com/Lattyware/unrpa) 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.
+
+```sh
+python -m pip install unrpa
+# RPA 파일 추출
+python -m unrpa yourfile.rpa
+# 수정 후 패치 파일 리팩
+python -m unrpa -mp .\patch .\patch.rpa
+```
 
 ## 파일 카빙 (File Carving)
 
 만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이는 리버스 엔지니어링 기술이 필요합니다.
+이는 [리버스 엔지니어링 기술](../file-signature/#1-시그니처-기반-카빙)이 필요합니다.
 우선 파일 시그니처(Magic Number)를 확인하고 파일을 추출합니다.
-이후 다시 파일을 재패키징하여 게임에 적용합니다.
+이후 다시 파일을 재패키징(repack)하여 게임에 적용합니다.
 
 ### Love2D
 

@@ -1,12 +1,12 @@
 ---
 draft: false
+socialshare: true
 date: 2024-07-29T00:51:00+09:00
 lastmod: 2024-09-15T23:25:00+09:00
 title: "유용한 구글 크롬(Google Chrome)의 기능"
 description: "개발 편의성을 높일 수 있는 기능을 소개합니다."
 featured_image: "/images/web/google-chrome/google-chrome-1200x630wa.png"
 images: ["/images/web/google-chrome/google-chrome-1200x630wa.png"]
-socialshare: true
 tags:
   - web
   - browser
