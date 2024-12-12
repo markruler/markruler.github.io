@@ -17,7 +17,7 @@ categories:
 
 # 개요
 
-다음과 같은 명령어를 실행하면 이상한 문자열이 출력됩니다.
+이미지를 다운로드하면 응답 데이터로 이상한 문자열이 출력됩니다.
 
 ```sh
 # Youtube의 빈 썸네일 이미지를 다운로드 받습니다.
@@ -48,6 +48,11 @@ e�C�#:=(���R�'F��0���e�
 �는 유니코드 replacement character(`U+FFFD`)로, 해석할 수 없는 문자를 표시하기 위해 사용됩니다.
 
 이번엔 hexdump로 만들어주는 `xxd` 명령어를 파이프로 이어보겠습니다.
+
+```sh
+whatis xxd
+# xxd (1)              - make a hexdump or do the reverse.
+```
 
 ```sh
 curl -L -o - https://i.ytimg.com/ | xxd

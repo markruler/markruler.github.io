@@ -9,7 +9,7 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Wed, 11 Dec 2024 12:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 12 Dec 2024 11:13:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -22,7 +22,7 @@
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/reverse-engineering/file-signature/</guid>
         <description>임창수 https://markruler.github.io/posts/reverse-engineering/file-signature/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;다음과 같은 명령어를 실행하면 이상한 문자열이 출력됩니다.&lt;/p&gt;
+&lt;p&gt;이미지를 다운로드하면 응답 데이터로 이상한 문자열이 출력됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Youtube의 빈 썸네일 이미지를 다운로드 받습니다.&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -L -o - https://i.ytimg.com/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;����JFIF���
@@ -45,7 +45,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                            &amp;amp;H��%
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;�는 유니코드 replacement character(&lt;code&gt;U+FFFD&lt;/code&gt;)로, 해석할 수 없는 문자를 표시하기 위해 사용됩니다.&lt;/p&gt;
 &lt;p&gt;이번엔 hexdump로 만들어주는 &lt;code&gt;xxd&lt;/code&gt; 명령어를 파이프로 이어보겠습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -L -o - https://i.ytimg.com/ | xxd
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;whatis xxd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# xxd (1)              - make a hexdump or do the reverse.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -L -o - https://i.ytimg.com/ | xxd
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;뭔지 모르겠지만 응답 데이터 앞쪽에 &lt;code&gt;JFIF&lt;/code&gt;가 적혀있습니다.
 JFIF 파일 포맷일까요?
 이후엔 또 알 수 없는 문자열이 출력됩니다.&lt;/p&gt;
