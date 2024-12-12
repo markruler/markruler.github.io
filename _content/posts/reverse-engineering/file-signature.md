@@ -137,65 +137,21 @@ fetch("/pdf/content", requestOptions)
 `console.log()`로 출력된 응답 데이터는 `%PDF`라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
 PDF 형식이라는 것을 유추할 수 있습니다.
 
-반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
-최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.[^1] (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...)
-크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.
-
-[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
-
 ![Hexadecimal PDF](/images/reverse-engineering/file-signature/hex-pdf.png)
 
-```sh
-%PDF-1.4
-%����
-1 0 obj
-<</Creator (Chromium)
-/Producer (Skia/PDF m131)
-/CreationDate (D:20241210133649+00'00')
-/ModDate (D:20241210133649+00'00')>>
-endobj
-3 0 obj
-<</ca 1
-/BM /Normal>>
-endobj
-6 0 obj
-<</Filter /FlateDecode
-/Length 195>> stream
-x�]�AkA����\0�L6�3 �ֳe�?������a�-�\����G4y��X��5�Z��I.b�S`�ƪVkBJA�P
-�_����������}����}�y��d�w�~e�d�6���}W�h�lH�hg���9�R@�Olȡ��ɘ�M�P�Pz|��S|���B������;�h�'��}��� °G4
-endstream
-endobj
-2 0 obj
-<</Type /Page
-/Resources <</ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-/ExtGState <</G3 3 0 R>>
-/Font <</F4 4 0 R
-/F5 5 0 R>>>>
-/MediaBox [0 0 842.88 595.91998]
-/Contents 6 0 R
-/StructParents 0
-/Tabs /S
-/Parent 7 0 R>>
-endobj
-7 0 obj
-<</Type /Pages
-/Count 1
+반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.[^1]
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면
+"The request has no response data available."이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
+최근 업데이트[^2] 이후 16진수로 표현하도록 변경되었습니다.
 
-# ...(생략)...
+[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
+[^2]: 정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...
 
-0000009666 00000 n 
-0000009955 00000 n 
-trailer
-<</Size 17
-/Root 8 0 R
-/Info 1 0 R>>
-startxref
-10429
-%EOF
-```
+![google-chrome-123.0.6312.122-network-img-response](/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png)
 
-![Print PDF](/images/reverse-engineering/file-signature/print-pdf.png)
+크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.
+
+![google-chrome-123.0.6312.122-network-img-preview](/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-preview.png)
 
 그렇다면 이 괴상한 문자열들은 어떻게 해석해야 할까요?
 
@@ -216,9 +172,9 @@ GUI 환경 데스크탑에서는 "파일 확장자(File Extension)"를 지정합
 
 # 파일 카빙
 
-파일 카빙(File Carving)은 파일 시그니처 기반으로 저장 매체에서 파일 내용을 복구하는 기술입니다[^2].
+파일 카빙(File Carving)은 파일 시그니처 기반으로 저장 매체에서 파일 내용을 복구하는 기술입니다[^3].
 
-[^2]: [(Youtube) 삭제 파일 복구 기술](https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&t=745) - DFRC (Digital Forensic Research Center)
+[^3]: [(Youtube) 삭제 파일 복구 기술](https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&t=745) - DFRC (Digital Forensic Research Center)
 
 - [DFRC (Digital Forensic Research Center)](https://dfrc.korea.ac.kr/) 자료를 참조했습니다.
   - [파일 복구](https://web.archive.org/web/20180815025824/http://forensic.korea.ac.kr/DFWIKI/index.php/%EB%8D%B0%EC%9D%B4%ED%84%B0_%EB%B3%B5%EA%B5%AC)

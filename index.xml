@@ -117,58 +117,14 @@ JFIF 파일 포맷일까요?
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(error =&amp;gt; console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;error&amp;#39;&lt;/span&gt;, error));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;console.log()&lt;/code&gt;로 출력된 응답 데이터는 &lt;code&gt;%PDF&lt;/code&gt;라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
 PDF 형식이라는 것을 유추할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면 UTF-8 문자로 출력했었습니다.
-최근 업데이트 이후 16진수로 표현하도록 변경되었습니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; (정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&amp;hellip;)
-크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/hex-pdf.png&#34; alt=&#34;Hexadecimal PDF&#34;&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%PDF-1.4
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%����
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Creator (Chromium)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Producer (Skia/PDF m131)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/CreationDate (D:20241210133649+00&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;00&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/ModDate (D:20241210133649+00&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;00&amp;#39;&lt;/span&gt;)&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/ca &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/BM /Normal&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Filter /FlateDecode
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Length 195&amp;gt;&amp;gt; stream
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x�]�AkA����&lt;span style=&#34;color:#87ceeb&#34;&gt;\0&lt;/span&gt;�L6�3 �ֳe�?������a�-�&lt;span style=&#34;color:#87ceeb&#34;&gt;\�&lt;/span&gt;���G4y��X��5�Z��I.b�S&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;�ƪVkBJA�P
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;�_����������}����}�y��d�w�~e�d�6���}W�h�lH�hg���9�R@�Olȡ��ɘ�M�P�Pz|��S|���B������;�h�&amp;#39;��}����°G4
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endstream
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Type /Page
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Resources &amp;lt;&amp;lt;/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/ExtGState &amp;lt;&amp;lt;/G3 &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Font &amp;lt;&amp;lt;/F4 &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/F5 &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/MediaBox [&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; 842.88 595.91998]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Contents &lt;span style=&#34;color:#f60&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/StructParents &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Tabs /S
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Parent &lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endobj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; obj
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Type /Pages
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Count &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...(생략)...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;0000009666&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;00000&lt;/span&gt; n 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;0000009955&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;00000&lt;/span&gt; n 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;trailer
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&amp;lt;/Size &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Root &lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/Info &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; R&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;startxref
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f60&#34;&gt;10429&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;%EOF
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/print-pdf.png&#34; alt=&#34;Print PDF&#34;&gt;&lt;/p&gt;
+&lt;p&gt;반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면
+&amp;ldquo;The request has no response data available.&amp;ldquo;이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
+최근 업데이트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; 이후 16진수로 표현하도록 변경되었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png&#34; alt=&#34;google-chrome-123.0.6312.122-network-img-response&#34;&gt;&lt;/p&gt;
+&lt;p&gt;크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-preview.png&#34; alt=&#34;google-chrome-123.0.6312.122-network-img-preview&#34;&gt;&lt;/p&gt;
 &lt;p&gt;그렇다면 이 괴상한 문자열들은 어떻게 해석해야 할까요?&lt;/p&gt;
 &lt;h1 id=&#34;파일-시그니처&#34;&gt;파일 시그니처&lt;/h1&gt;
 &lt;p&gt;파일 시그니처(File Signature)는 파일의 특정 부분에 위치한 고유한 바이트 패턴입니다.
@@ -182,7 +138,7 @@ PDF 형식이라는 것을 유추할 수 있습니다.&lt;/p&gt;
 웹에서는 응답 헤더에 &amp;ldquo;Content-Type&amp;quot;을 지정하고
 GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp;ldquo;를 지정합니다.&lt;/p&gt;
 &lt;h1 id=&#34;파일-카빙&#34;&gt;파일 카빙&lt;/h1&gt;
-&lt;p&gt;파일 카빙(File Carving)은 파일 시그니처 기반으로 저장 매체에서 파일 내용을 복구하는 기술입니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+&lt;p&gt;파일 카빙(File Carving)은 파일 시그니처 기반으로 저장 매체에서 파일 내용을 복구하는 기술입니다&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://dfrc.korea.ac.kr/&#34;&gt;DFRC (Digital Forensic Research Center)&lt;/a&gt; 자료를 참조했습니다.
 &lt;ul&gt;
@@ -237,7 +193,10 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;p&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/memory-inspector&#34;&gt;Memory Inspector&lt;/a&gt;가 네트워크 패널에도 적용된 것으로 보입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&amp;amp;t=745&#34;&gt;(Youtube) 삭제 파일 복구 기술&lt;/a&gt; - DFRC (Digital Forensic Research Center)&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&amp;hellip;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&amp;amp;t=745&#34;&gt;(Youtube) 삭제 파일 복구 기술&lt;/a&gt; - DFRC (Digital Forensic Research Center)&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
