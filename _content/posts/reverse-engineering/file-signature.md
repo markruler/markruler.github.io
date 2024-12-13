@@ -136,15 +136,16 @@ fetch("/pdf/content", requestOptions)
 
 `console.log()`로 출력된 응답 데이터는 `%PDF`라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
 PDF 형식이라는 것을 유추할 수 있습니다.
+반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.[^1]
+
+[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
 
 ![Hexadecimal PDF](/images/reverse-engineering/file-signature/hex-pdf.png)
 
-반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.[^1]
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면
+크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답받으면
 "The request has no response data available."이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
 최근 업데이트[^2] 이후 16진수로 표현하도록 변경되었습니다.
 
-[^1]: [Memory Inspector](https://developer.chrome.com/docs/devtools/memory-inspector)가 네트워크 패널에도 적용된 것으로 보입니다.
 [^2]: 정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...
 
 ![google-chrome-123.0.6312.122-network-img-response](/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png)
@@ -162,7 +163,7 @@ PDF 형식이라는 것을 유추할 수 있습니다.
 매직 넘버(magic numbers)라고도 부르죠.
 
 실행 프로그램(Reader)들은 파일 시그니처를 확인하여 파일 포맷을 판별하고,
-해당 파일 포맷에 맞게 데이터를 해석합니다.
+해당 파일 포맷에 맞게 데이터를 해석하고 표현합니다.
 가장 먼저 봤던 `JFIF` 파일이나 `%PDF` 모두 파일의 앞쪽에 위치하는 헤더 시그니처입니다.
 (모든 파일 형식이 이름과 동일하게 시그니처를 정하진 않습니다.)
 

@@ -517,10 +517,10 @@ JFIF 파일 포맷일까요?
 </span></span><span style="display:flex;"><span>  .then(result =&gt; console.log(result))
 </span></span><span style="display:flex;"><span>  .<span style="color:#f00">catch</span>(error =&gt; console.log(<span style="color:#87ceeb">&#39;error&#39;</span>, error));
 </span></span></code></pre></div><p><code>console.log()</code>로 출력된 응답 데이터는 <code>%PDF</code>라는 문자를 시작으로 다양한 형식의 데이터가 혼합되어 있습니다.
-PDF 형식이라는 것을 유추할 수 있습니다.</p>
+PDF 형식이라는 것을 유추할 수 있습니다.
+반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <p><img src="/images/reverse-engineering/file-signature/hex-pdf.png" alt="Hexadecimal PDF"></p>
-<p>반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
-크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답 받으면
+<p>크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답받으면
 &ldquo;The request has no response data available.&ldquo;이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
 최근 업데이트<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> 이후 16진수로 표현하도록 변경되었습니다.</p>
 <p><img src="/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png" alt="google-chrome-123.0.6312.122-network-img-response"></p>
@@ -532,7 +532,7 @@ PDF 형식이라는 것을 유추할 수 있습니다.</p>
 파일이 어떤 포맷인지 알려주는 식별자 역할을 합니다.
 매직 넘버(magic numbers)라고도 부르죠.</p>
 <p>실행 프로그램(Reader)들은 파일 시그니처를 확인하여 파일 포맷을 판별하고,
-해당 파일 포맷에 맞게 데이터를 해석합니다.
+해당 파일 포맷에 맞게 데이터를 해석하고 표현합니다.
 가장 먼저 봤던 <code>JFIF</code> 파일이나 <code>%PDF</code> 모두 파일의 앞쪽에 위치하는 헤더 시그니처입니다.
 (모든 파일 형식이 이름과 동일하게 시그니처를 정하진 않습니다.)</p>
 <p>파일의 시그니처를 확인하는 번거로운 작업을 줄이기 위해
