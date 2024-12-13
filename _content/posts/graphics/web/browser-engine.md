@@ -19,13 +19,16 @@ categories:
 ![Browser Engine](https://upload.wikimedia.org/wikipedia/en/timeline/p5fnoxd13tfvmrtxgy91nph8fruz54p.png)
 
 - 브라우저 엔진 (레이아웃 엔진, 렌더링 엔진)
-  - 게코 (Gecko)
-  - KHTML
-  - 웹킷 (WebKit)
-  - 블링크 (Blink)
+  - 게코 (Gecko): Firefox
+  - KHTML: Konqueror
+  - 웹킷 (WebKit): Safari
+  - 블링크 (Blink): Google Chrome
 - 자바스크립트 엔진
-  - V8
+  - V8: Google Chrome
     - Node.js
+  - JavaScriptCore: Safari
+  - SpiderMonkey: Firefox
+  - Chakra: Internet Explorer
 
 # Blink 렌더 파이프라인
 
@@ -39,3 +42,4 @@ categories:
 - [Browser Engine](https://en.wikipedia.org/wiki/Browser_engine)
 - [JavaScript engine](https://en.wikipedia.org/wiki/JavaScript_engine)
 - [Graphics pipeline](https://en.wikipedia.org/wiki/Graphics_pipeline)
+- [Deep Dive into the Browser’s Rendering Pipeline](https://blog.jgerard.dev/deep-dive-into-the-browsers-rendering-pipeline-4c88c91f7bdc)
