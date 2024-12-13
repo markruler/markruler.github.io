@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2024-12-10T22:46:00+09:00
-lastmod: 2024-12-11T13:00:00+09:00
+lastmod: 2024-12-13T11:33:00+09:00
 title: "파일 시그니처와 파일 카빙: 바이너리 데이터가 이상한 문자열로 표현되는 이유"
 description: "파일 포맷, 데이터의 저장과 표현"
 featured_image: "/images/reverse-engineering/file-signature/pexels-markusspiske-1089438.jpg"
