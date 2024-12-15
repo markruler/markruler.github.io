@@ -24,7 +24,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-12-10T22:46:00+09:00">
-    <meta property="article:modified_time" content="2024-12-13T11:33:00+09:00">
+    <meta property="article:modified_time" content="2024-12-15T23:30:00+09:00">
     <meta property="article:tag" content="Reverse-Engineering">
     <meta property="article:tag" content="File-Signature">
     <meta property="article:tag" content="File-Carving">
@@ -571,7 +571,7 @@ GUI 환경 데스크탑에서는 &ldquo;파일 확장자(File Extension)&ldquo;�
 <ul>
 <li>파일 미리보기 지원하는 파일은 파일 포맷 내부에 실제 내용과 썸네일(Thumbnail)을 포함하는데,
 썸네일도 해당 파일 포맷과 동일한 구조로 되어 있어 시그니처가 2개 이상 존재합니다.</li>
-<li>ZIP 파일의 경우 헤더 시그니처가 <code>P K 03 04</code>(hex: <code>50 4B 03 04</code>)이며, 푸터 시그니처가 <code>P K 05 06</code>(hex: <code>50 4B 05 06</code>) 입니다.
+<li>ZIP 파일의 경우 헤더 시그니처가 <code>PK34</code>(hex: <code>50 4B 03 04</code>)이며, 푸터 시그니처가 <code>PK56</code>(hex: <code>50 4B 05 06</code>) 입니다.
 파일 헤더에는 파일 크기와 CRC32 체크섬이 포함된 메타데이터가 있습니다.
 단편화된 파일을 재구성하는 경우 파일 구조를 바탕으로 데이터 블록을 논리적으로 연결합니다.
 이후 메타데이터에서 체크섬을 검증하여 파일의 무결성을 확인합니다.</li>
@@ -604,7 +604,7 @@ GUI 환경 데스크탑에서는 &ldquo;파일 확장자(File Extension)&ldquo;�
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2024-12-13</p>
+		    <p style="color:#777;">최종 수정: 2024-12-15</p>
                     
                 </div>
             </div>

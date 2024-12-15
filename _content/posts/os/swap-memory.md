@@ -121,7 +121,7 @@ NAME      TYPE SIZE USED PRIO
 /swapfile file  16G   0B   -2
 ```
 
-사용되는 부분이 생기면 아래처럼 `USED` 부분에 사이즈가 커짐.
+사용되는 부분이 생기면 아래처럼 `USED` 부분에 사이즈가 커진다.
 
 ```sh
 NAME      TYPE SIZE   USED PRIO
