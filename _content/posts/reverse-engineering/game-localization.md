@@ -1,8 +1,8 @@
 ---
 draft: true
 socialshare: true
-date: 2024-12-15T12:26:00+09:00
-lastmod: 2024-12-15T12:26:00+09:00
+date: 2024-12-16T12:26:00+09:00
+lastmod: 2024-12-16T12:26:00+09:00
 title: "한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기"
 description: "한국어 패치 제작 방식의 종류"
 featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
@@ -14,14 +14,18 @@ categories:
   - wiki
 ---
 
-스팀(Steam) 게임들을 위한 모드나 패치 도구가 많아서 고전게임(ROM에 저장된 패키지 게임: NES, GBA, NEOGEO, PS1)보다 비교적 난이도가 쉽습니다.
+스팀(Steam) 게임들을 위한 모드나 패치 도구가 많아서 고전게임[^1]보다 비교적 난이도가 쉽습니다.
+
+[^1]: 롬 카트리지([ROM cartridge](https://en.wikipedia.org/wiki/ROM_cartridge))에 저장된 패키지 게임.
+예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
+파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.  
 
 # 게임 저작권과 한국어 패치
 
 엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
-배포가 목적이라면 반드시 게임 개발사에 허락을 먼저 받아야 합니다.[^1]
+배포가 목적이라면 반드시 게임 개발사에 허락을 먼저 받아야 합니다.[^2]
 
-[^1]: [제101조의4(프로그램코드역분석)](https://www.law.go.kr/법령/저작권법/(20240828,20358,20240227)/제101조의4)
+[^2]: [제101조의4(프로그램코드역분석)](https://www.law.go.kr/법령/저작권법/(20240828,20358,20240227)/제101조의4)
 
 한국어 패치 제작자들은 호의적으로 패치하는 경우가 대부분이며,
 인디 게임 개발사에서는 번역할 여건이 되지 않아서 이에 호의적으로 반응하는 경우가 많습니다.
@@ -38,9 +42,9 @@ categories:
 
 # 대표적인 게임 엔진별 한국어 패치 제작 방법
 
-> SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.[^2]
+> SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.[^3]
 
-[^2]: [What are games built with and what technologies do they use?](https://steamdb.info/tech/) - SteamDB
+[^3]: [What are games built with and what technologies do they use?](https://steamdb.info/tech/) - SteamDB
 
 기본적으로 제가 패치하는 방법은 다음과 같습니다.
 
@@ -60,26 +64,35 @@ categories:
 
 ### 유니티 (Unity)
 
-[UABEA](https://github.com/nesrak1/UABEA)를 사용합니다.
-원본 패치 툴인 [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE)는 업데이트가 중단되었습니다.
-자세한 사용법은 [Snowyegret](https://snowyegret.tistory.com/21)님의 글을 참고하세요.
+언팩-리팩 과정은 [UABEA](https://github.com/nesrak1/UABEA)를 사용합니다.[^4]
 
-- 폰트 생성 시 Font 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
+[^4]: 원본 패치 툴인 [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE)는 업데이트가 중단되었습니다.
+
+[SDF(Signed Distance Fields)](https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html) 폰트 생성 시
+Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
+자세한 폰트 교체 방법은 [Snowyegret](https://snowyegret.tistory.com/21)님의 글을 참고하세요.
+
+IL2CPP로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
+`catalog.json` 파일을 수정해야 합니다.
+
+```sh
+Example patchcrc catalog.json
+```
 
 ### 언리얼 엔진 (Unreal Engine)
 
 5는 툴이 없어서 시도해보지 못했습니다.
-4는 해외 커뮤니티에서 [masagrator라는 유저가 작성한 글과 툴](https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/)을 참조하시면 됩니다.
+4는 해외 커뮤니티에서 [masagrator라는 유저가 작성한 글과 툴](https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/)을 참고하세요.
 
-유니티와 달리 Epic Games는 언패키지 도구(`UnrealPak`)를 직접 제공합니다.
+다른 게임과 달리 Epic Games는 언팩 도구(`UnrealPak`)를 직접 제공합니다.
 패치 파일을 원본 pak 파일 위치에 `_p`라는 접미사를 붙이면 적용됩니다.
 
 ### 게임메이커 (GameMaker Studio 2)
 
-언더테일 모드 툴인 [UnderminersTeam/UndertaleModTool](https://github.com/UnderminersTeam/UndertaleModTool/releases)을 사용합니다.
-방법은 [Sonwyegret](https://snowyegret.tistory.com/65)님의 글을 참고하세요.
+언팩-리팩 과정은 언더테일 모드 툴인 [UnderminersTeam/UndertaleModTool](https://github.com/UnderminersTeam/UndertaleModTool/releases)을 사용합니다.
 
-- 폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.
+자세한 폰트 교체 방법은 [Sonwyegret](https://snowyegret.tistory.com/65)님의 글을 참고하세요.
+폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.
 
 ### 렌파이 (Ren'Py - PyGame)
 
@@ -103,8 +116,8 @@ python -m unrpa -mp .\patch .\patch.rpa
 ## 파일 카빙 (File Carving)
 
 만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이때 [리버스 엔지니어링](../file-signature/#1-시그니처-기반-카빙)이 필요합니다.
-우선 파일 시그니처(Magic Number)를 확인하고 파일을 추출합니다.
+이때 [파일 카빙](../file-signature/#1-시그니처-기반-카빙)이 필요합니다.
+우선 파일 시그니처를 찾거나 유추해서 파일을 추출합니다.
 이후 파일을 다시 패키징(repack)하여 게임에 적용합니다.
 
 ### Love2D
@@ -124,13 +137,21 @@ Love2D 개발툴을 사용해서 다시 패키징합니다.
 
 ### XUnity Auto Translator
 
-한국어가 없는 신규 출시 유니티 게임에 많이 사용되는 편입니다.
+한국어가 없는 신규 출시 유니티 게임을 플레이하고 싶을 때 유저들이 많이 사용하는 편입니다.
+**BepInEx**을 사용해서 게임 텍스트를 추출하고 치환합니다.
+다만 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.
 
-> 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.
+- [bbepis/XUnity.AutoTranslator](https://github.com/bbepis/XUnity.AutoTranslator)
+  - [사용 방법](https://page.onstove.com/indie/global/view/9835166)
 
-### OCR을 이용한 방식
+### MORT (MonkeyHead's OCR Realtime Translator)
 
-국내 유저가 만들고 계속 업데이트 중인 [MORT (MonkeyHead's OCR Realtime Translator)](https://blog.naver.com/killkimno/223497997082)라는 툴이 있습니다.
+국내 유저가 만들고 계속 업데이트 중인 툴입니다.
+유니티 외 게임에서도 사용할 수 있습니다.
+**OCR**을 사용해서 화면에 출력된 텍스트를 읽는다고 합니다.
+그래서 게임 텍스트 자체를 치환하는 것이 아닌 추가 레이어를 두기 때문에 게임 플레이 시 몰입을 방해할 수 있습니다.
+
+- [MORT](https://blog.naver.com/killkimno/223497997082)
 
 # 더 읽을거리
 

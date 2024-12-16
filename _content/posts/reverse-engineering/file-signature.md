@@ -216,3 +216,4 @@ GUI 환경 데스크탑에서는 "파일 확장자(File Extension)"를 지정합
 - [GCK'S FILE SIGNATURES TABLE](https://www.garykessler.net/library/file_sigs.html)
 - [List of file signatures](https://en.wikipedia.org/wiki/List_of_file_signatures) - Wikipedia
 - [The concept of file signatures recovery](https://www.file-recovery.com/signatures.htm) - Active@ File Recovery
+- [File Carving](https://en.wikipedia.org/wiki/File_carving) - Wikipedia
