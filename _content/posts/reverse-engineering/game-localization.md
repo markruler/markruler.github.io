@@ -4,7 +4,7 @@ socialshare: true
 date: 2024-12-16T12:26:00+09:00
 lastmod: 2024-12-16T12:26:00+09:00
 title: "한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기"
-description: "한국어 패치 제작 방식의 종류"
+description: "한국어 패치 제작자분들 존경합니다"
 featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
 images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
 tags:
@@ -72,8 +72,17 @@ categories:
 Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
 자세한 폰트 교체 방법은 [Snowyegret](https://snowyegret.tistory.com/21)님의 글을 참고하세요.
 
-IL2CPP로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
+IL2CPP[^5]로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
 `catalog.json` 파일을 수정해야 합니다.
+
+[^5]: [IL2CPP](https://docs.unity3d.com/6000.0/Documentation/Manual/scripting-backends-il2cpp.html)는 유니티의 스크립트를 C++로 컴파일하는 기술입니다.
+유니티는 기본적으로 **Mono** 런타임을 사용해 C# 코드를 **Intermediate Language — IL**로 컴파일하고,
+이를 런타임에서 Just-In-Time (JIT) 방식으로 실행합니다.
+**AOT**(Ahead-of-Time Compilation) 컴파일은 런타임에서 코드를 컴파일하는 것이 아니라
+미리 네이티브 코드로 컴파일하는 방식입니다.
+JIT를 사용할 수 없는 플랫폼(ex: iOS, WebGL, Console)에서 사용됩니다.
+IL2CPP는 AOT 방식의 일종으로 IL 코드를 C++ 코드로 변환 후 네이티브 코드로 컴파일합니다.
+C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 사용하면 플랫폼 호환성이 높아집니다.
 
 ```sh
 Example patchcrc catalog.json
