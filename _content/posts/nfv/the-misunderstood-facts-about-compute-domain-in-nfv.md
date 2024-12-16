@@ -1,5 +1,6 @@
 ---
 date: 2020-10-01T22:23:00+09:00
+lastmod: 2020-10-01T22:23:00+09:00
 title: "NFV의 컴퓨팅 도메인에 대한 오해!"
 description: "Faisal Khan"
 featured_image: "/images/nfv/computer-domain-in-nfv.png"

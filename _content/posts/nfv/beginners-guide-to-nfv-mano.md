@@ -1,5 +1,6 @@
 ---
 date: 2020-09-23T00:58:08+09:00
+lastmod: 2020-09-23T00:58:08+09:00
 title: "NFV MANO 초심자 가이드"
 description: "Faisal Khan"
 featured_image: "/images/nfv/mano-in-nfv.png"

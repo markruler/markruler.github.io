@@ -1,5 +1,6 @@
 ---
 date: 2020-09-22T21:58:08+09:00
+lastmod: 2020-09-22T21:58:08+09:00
 title: "\"NFV 아키텍처\" 이해를 위한 치트 시트"
 description: "Faisal Khan"
 featured_image: "/images/nfv/nfv-architecture.png"
@@ -18,7 +19,8 @@ categories:
 
 쉽게 이해할 수 있는 NFV 용어/아키텍처에 대한 빠른 업데이트가 필요하신가요?
 
-그렇다면 NFV 아키텍처를 시작하는 데 필요한 모든 정보를 얻을 수 있는 아래 7가지 주요 블록을 보세요. 블록 번호 및 정의를 따라가세요.
+그렇다면 NFV 아키텍처를 시작하는 데 필요한 모든 정보를 얻을 수 있는 아래 7가지 주요 블록을 보세요.
+블록 번호 및 정의를 따라가세요.
 
 ![nfv-architecture](/images/nfv/nfv-architecture.png)
 
