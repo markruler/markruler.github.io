@@ -9,9 +9,241 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 12:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>CS Visualized: CORS</title>
+        <link>https://markruler.github.io/posts/web/cs-visualized-cors/</link>
+        <pubDate>Sat, 02 Jan 2021 08:50:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/cs-visualized-cors/</guid>
+        <description>임창수 https://markruler.github.io/posts/web/cs-visualized-cors/ -&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;리디아 할리(Lydia Hallie, &lt;a href=&#34;https://twitter.com/lydiahallie&#34;&gt;@lydiahallie&lt;/a&gt;)가 쓴 &lt;a href=&#34;https://dev.to/lydiahallie/cs-visualized-cors-5b8h&#34;&gt;CS Visualized: CORS&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;어쩌다 콘솔에서 &amp;ldquo;fetch 접근이 CORS 정책에 의해 차단되었습니다&amp;quot;라는
+커다란 빨간색 오류를 보면 모든 개발자가 짜증을 느낍니다! 😬
+임시방편이 몇 가지 있긴 하지만 오늘은 그 어떤 것도 사용하지 않겠습니다!
+대신 CORS가 실제로 무엇을 하고 있는지 왜 우리에게 도움이 되는지
+알아보도록 하겠습니다. 👏🏼&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;❗️ 이 글에서는 HTTP 기본에 대해 설명하지 않겠습니다.
+HTTP 요청과 응답에 대해 더 자세히 알고 싶으시다면 제가 얼마 전에
+작성한 &lt;a href=&#34;https://www.lydiahallie.dev/blog/http11&#34;&gt;짧은 글&lt;/a&gt;이
+있습니다. 🙂 제가 사용한 예시에서 HTTP/2 대신 HTTP/1.1을
+사용하지만 CORS에 영향을 미치지는 않습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;우리는 종종 프런트엔드에서 다른 곳에 있는 데이터를 보여주고 싶습니다!
+해당 데이터를 가져오기 위해 브라우저는 먼저 서버에 요청을 해야 하죠!
+이 요청은 서버가 데이터를 클라이언트로 보내기 위해 필요한
+모든 정보를 포함합니다. 🙂&lt;/p&gt;
+&lt;p&gt;예를 들어 웹사이트 &lt;code&gt;www.mywebsite.com&lt;/code&gt;에서 &lt;code&gt;api.website.com&lt;/code&gt; 서버에
+있는 사용자 정보를 가져오려고 합니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/request-same.gif&#34; alt=&#34;request-same&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Perfect! 😃 방금 서버로 HTTP 요청을 보냈습니다.
+그런 다음 서버는 우리가 요청했던 JSON 데이터를 응답했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;동일한&lt;/em&gt; 요청을 &lt;strong&gt;다른 도메인&lt;/strong&gt;에 시도해보겠습니다.
+&lt;code&gt;www.mywebsite.com&lt;/code&gt; 대신
+&lt;code&gt;www.anotherdomain.com&lt;/code&gt;에서 요청하겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/request-another.gif&#34; alt=&#34;request-another&#34;&gt;&lt;/p&gt;
+&lt;p&gt;잠깐, 뭐죠? 우리는 똑같은 요청을 보냈는데 이번에는 브라우저가 이상한 오류가 보여주죠?&lt;/p&gt;
+&lt;p&gt;우리는 방금 CORS가 동작하는 것을 보았습니다! 💪🏼
+그럼 이 오류가 발생한 원인과 정확히 무엇을 뜻하는지 알아보겠습니다.&lt;/p&gt;
+&lt;h1 id=&#34;-같은-출처-정책-same-origin-policy&#34;&gt;✋🏼 같은 출처 정책 (Same-Origin Policy)&lt;/h1&gt;
+&lt;p&gt;웹은 &lt;strong&gt;같은 출처 정책&lt;/strong&gt;이라는 것을 시행합니다. 기본적으로 우리는
+요청을 하는 곳과 &lt;strong&gt;같은 출처&lt;/strong&gt;에 있는 자원만 접근할 수 있습니다! 💪🏼
+예를 들어 &lt;code&gt;https://mywebsite.com&lt;/code&gt;에서 &lt;code&gt;https://mywebsite.com/image1.png&lt;/code&gt;에
+있는 이미지를 불러 오는 것은 괜찮습니다.&lt;/p&gt;
+&lt;p&gt;만약 자원이 다른 (하위)도메인 또는 다른 프로토콜, 다른 포트에 있는 경우
+다른 출처(cross-origin)에 있다고 말합니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/origin.png&#34; alt=&#34;origin&#34;&gt;&lt;/p&gt;
+&lt;p&gt;좋아요, 그런데 왜 같은 출처 정책까지 있는 거죠?&lt;/p&gt;
+&lt;p&gt;만약 같은 출처 정책이 없었고 이모가 페이스북에서 보낸
+수많은 바이러스 링크 중 하나를 실수로 클릭했다고 가정해 보세요.
+이 링크가 여러분을 &amp;ldquo;유해 사이트&amp;quot;로 리다이렉션 시킵니다.
+은행 사이트를 불러 오는 iframe이 내장된 웹사이트로요.
+그리고 설정되어 있던 쿠키를 통해 성공적으로 로그인합니다! 😬&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;유해 사이트&amp;rdquo; 개발자들은 본인 계좌로 돈을 보내기 위해
+웹사이트가 이 iframe에 접근하고 은행 사이트 DOM 콘텐츠에
+접근할 수 있게끔 만들었습니다!&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;역주: 위 공격은 CSRF (Cross-Site Request Forgery) 공격에 해당되며
+XSS (Cross-Site Scripting)도 같은 출처 정책과 관련된 공격입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/wo-same-origin-policy.gif&#34; alt=&#34;wo-same-origin-policy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;맞습니다&amp;hellip; 이건 엄청난 보안 위험이에요! 우리는 그 누구도 접근하지 못하길 바랍니다. 😧&lt;/p&gt;
+&lt;p&gt;운 좋게도 여기서 같은 출처 정책이 우리를 도와줍니다!
+이 정책은 &lt;strong&gt;같은 출처&lt;/strong&gt; 자원만 접근할 수 있도록 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/with-policy.gif&#34; alt=&#34;with-policy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이 경우 &lt;code&gt;www.evilwebsite.com&lt;/code&gt;은 다른 출처인 &lt;code&gt;www.bank.com&lt;/code&gt; 자원에
+접근하려고 했습니다! 같은 출처 정책은 이러한 일이 발생하지 않도록 접근을
+차단하고 유해 사이트 개발자가 우리의 은행 데이터에 접근할 수 없도록 만듭니다. 🥳&lt;/p&gt;
+&lt;p&gt;좋아요, 그럼&amp;hellip; 이것이 CORS와 무슨 관계가 있나요?&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-클라이언트-측-cors&#34;&gt;🔥 클라이언트 측 CORS&lt;/h1&gt;
+&lt;p&gt;같은 출처 정책은 실제로 스크립트에만 적용되지만, 브라우저는 자바스크립트에서
+요청하는 것까지 이 정책을 &amp;ldquo;확장&amp;quot;시킵니다. 기본적으로 우리는 &lt;strong&gt;같은 출처&lt;/strong&gt;에서
+가져온 자원만 접근할 수 있습니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/client-side-cors.gif&#34; alt=&#34;client-side-cors&#34;&gt;&lt;/p&gt;
+&lt;p&gt;흠, 하지만&amp;hellip; 때로는 다른 출처 자원에 접근해야만 합니다. 🤔
+프런트엔드가 데이터를 불러 오기 위해 백엔드 API를 호출해야 할 수도 있습니다.
+그래서 브라우저는 다른 출처 요청을 안전하게 만들기 위해 &lt;strong&gt;CORS&lt;/strong&gt;라는
+메커니즘을 사용합니다! 🥳&lt;/p&gt;
+&lt;p&gt;CORS는 &lt;strong&gt;다른 출처 자원 공유(Cross-Origin Resource Sharing)&lt;/strong&gt; 를 말합니다.
+브라우저가 같은 출처가 아닌 자원에 접근할 수 없게 하지만, CORS를 사용하여
+이러한 보안 제한을 약간 바꿔서 다른 출처 자원에 안전하게 접근할 수 있습니다. 🎉&lt;/p&gt;
+&lt;p&gt;사용자 에이전트(예: 브라우저)는 차단될 &lt;strong&gt;다른 출처 요청을 허용&lt;/strong&gt;하기 위해
+HTTP 응답의 특정 CORS 헤더 값에 따라 CORS 메커니즘을 사용할 수 있습니다! ✅&lt;/p&gt;
+&lt;p&gt;다른 출처 요청을 하면 클라이언트는 자동으로 HTTP 요청에
+&lt;code&gt;Origin&lt;/code&gt; 헤더를 추가합니다. &lt;code&gt;Origin&lt;/code&gt; 헤더 값은 요청을 보낸 출처입니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/origin-header.gif&#34; alt=&#34;origin-header&#34;&gt;&lt;/p&gt;
+&lt;p&gt;브라우저가 다른 출처 자원에 접근할 수 있도록 클라이언트의 &lt;code&gt;Origin&lt;/code&gt; 헤더는
+해당 서버에게 다른 출처 요청 허용 여부를 명시한 응답 헤더를 요구하는 것입니다!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-서버-측-cors&#34;&gt;💻 서버 측 CORS&lt;/h1&gt;
+&lt;p&gt;서버 개발자는 HTTP 응답에 헤더를 추가하여 다른 출처 요청이 허용되는지
+확인시켜줄 수 있습니다. 이 헤더는 모두 &lt;code&gt;Access-Control-*&lt;/code&gt;로 시작합니다. 🔥
+이 CORS 응답 헤더의 값에 따라 브라우저는 일반적으로 같은 출처
+정책에 의해 차단되는 특정 다른 출처 응답을 허용할 수 있습니다!&lt;/p&gt;
+&lt;p&gt;사용할 수 있는 &lt;a href=&#34;https://fetch.spec.whatwg.org/#http-responses&#34;&gt;여러 CORS 헤더&lt;/a&gt;가
+있지만 브라우저가 다른 출처 자원 접근을 허용하기 위해 필요한 헤더는 하나입니다.
+바로 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt;입니다! 🙂 이 헤더 값은 서버의
+&lt;strong&gt;자원에 접근할 수 있는 출처&lt;/strong&gt;를 지정합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;https://mywebsite.com&lt;/code&gt;에서 접근할 서버를 개발 중인 경우
+&lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt; 헤더에 해당 도메인을 추가할 수 있습니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/access-control-allow-origin.gif&#34; alt=&#34;access-control-allow-origin&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Awesome! 🎉 이제 서버가 클라이언트로 보내는 응답에 이 헤더가 추가됩니다.
+그럼 &lt;code&gt;https://mywebsite.com&lt;/code&gt;에서 요청을 보내도 &lt;code&gt;https://api.mywebsite.com&lt;/code&gt;
+&lt;strong&gt;자원을 가져가는 걸 같은 출처 정책이 더 이상 막지 않습니다&lt;/strong&gt;!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/allowed-origins.gif&#34; alt=&#34;allowed-origins&#34;&gt;&lt;/p&gt;
+&lt;p&gt;브라우저 내부 CORS 메커니즘은 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt; 헤더 값이
+요청할 때 보낸 &lt;code&gt;Origin&lt;/code&gt; 값과 동일한지 확인합니다. 🤚🏼&lt;/p&gt;
+&lt;p&gt;이 경우 요청 출처는 &lt;code&gt;https://www.mywebsite.com&lt;/code&gt;으로
+응답 헤더 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt;에 실려 있습니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/response-header.gif&#34; alt=&#34;response-header&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Perfect! 🎉 다른 출처 자원을 성공적으로 받을 수 있습니다!
+그러면 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt; 헤더에 실려 있지 않은
+출처에서 다른 출처 자원에 접근하려고 하면 어떻게 될까요? 🤔&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/cors-error.gif&#34; alt=&#34;cors-error&#34;&gt;&lt;/p&gt;
+&lt;p&gt;맞아요. CORS는 때때로 악명 높은 에러를 던지죠!
+하지만 우리는 이제 이것이 오히려 이치에 맞다는 것을 알게 되었습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;#39;Access-Control-Allow-Origin&amp;#39; 헤더 값이
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;제공된 출처(Origin)와 다른 &amp;#39;https://www.mywebsite.com&amp;#39;입니다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 경우에 제공된 출처는 &lt;code&gt;https://www.anotherwebsite.com&lt;/code&gt;입니다.
+그러나 서버가 보낸 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt; 헤더에는 해당 출처가
+없습니다! CORS가 요청을 차단했고 우리의 코드는 가져온 데이터에 접근할
+수 없습니다. 😃&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;또한 CORS를 사용하면 허용되는 Origin 값으로 와일드카드 &lt;code&gt;*&lt;/code&gt;를
+추가할 수 있습니다. 이것은 모든 출처가 요청된 자원에
+접근할 수 있다는 것이니 주의하세요!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt;은 우리가 제공할 수 있는 수많은 CORS 헤더
+중 하나입니다. 서버 개발자는 특정 요청을 허용하거나 차단하기 위해
+CORS 정책을 수정할 수 있습니다! 💪🏼&lt;/p&gt;
+&lt;p&gt;또 하나 자주 사용되는 헤더는 &lt;code&gt;Access-Control-Allow-Methods&lt;/code&gt;입니다!
+CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/access-control-allow-methods.gif&#34; alt=&#34;access-control-allow-methods&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이 경우 &lt;code&gt;GET&lt;/code&gt;, &lt;code&gt;POST&lt;/code&gt;, &lt;code&gt;PUT&lt;/code&gt; 메서드 요청만 허용됩니다!
+&lt;code&gt;PATCH&lt;/code&gt; 또는 &lt;code&gt;DELETE&lt;/code&gt;와 같은 다른 메서드들은 차단됩니다. ❌&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;다른 CORS 헤더는 무엇이 있으며 어떤 용도로 사용되는지 궁금하다면
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers&#34;&gt;이 목록을 확인해보세요&lt;/a&gt;.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;CORS는 실제로 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;PATCH&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt; 요청에 대해서는
+다르게 처리합니다! 🙃 이렇게 &amp;ldquo;&lt;em&gt;단순하지 않은&lt;/em&gt;&amp;rdquo; 요청은
+&lt;strong&gt;예비 요청&lt;/strong&gt; 이라는 것을 만듭니다!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-예비-요청-preflighted-requests&#34;&gt;🚀 예비 요청 (Preflighted Requests)&lt;/h1&gt;
+&lt;p&gt;CORS에는 &lt;strong&gt;단순 요청&lt;/strong&gt;과 &lt;strong&gt;예비 요청&lt;/strong&gt;이라는 두 가지 요청이 있습니다.
+요청이 단순 요청인지 예비 요청인지는 요청이 가진 일부 값에 따라
+달라집니다(걱정하지 마세요. 이 내용을 외울 필요는 없습니다ㅋㅋㅋ).&lt;/p&gt;
+&lt;p&gt;단순 요청은 &lt;code&gt;GET&lt;/code&gt; 또는 &lt;code&gt;POST&lt;/code&gt; 메서드이고 사용자 정의 헤더가 없는 경우입니다!
+예비 요청은 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;PATCH&lt;/code&gt; 또는 &lt;code&gt;DELETE&lt;/code&gt; 메서드와 같은 다른 모든 요청입니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;단순 요청이 되기 위해 어떤 요구 사항을 충족해야 하는지 궁금하다면 MDN에
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests&#34;&gt;유용한 목록&lt;/a&gt;이 있습니다!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;알겠어요, 근데 &amp;ldquo;예비 요청&amp;quot;은 뭐고 왜 이런 일이 일어나는 건가요?&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;실제 요청을 전송하기 전에 클라이언트는 예비 요청을 생성합니다!
+예비 요청에는 &lt;code&gt;Access-Control-Request-*&lt;/code&gt; 헤더에 실제로 보내려는
+요청 정보가 포함되어 있습니다. 🔥&lt;/p&gt;
+&lt;p&gt;이 헤더는 브라우저가 수행하려는 실제 요청 정보를 서버에 제공합니다.
+여기에는 요청 &lt;strong&gt;메서드&lt;/strong&gt;, &lt;strong&gt;추가 헤더&lt;/strong&gt; 등이 포함됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/preflighted-request.gif&#34; alt=&#34;preflighted-request&#34;&gt;&lt;/p&gt;
+&lt;p&gt;서버는 이 예비 요청을 수신하고 서버 CORS 헤더와 함께 텅 빈 HTTP 응답을 보냅니다!
+브라우저는 CORS 헤더 외에 아무 데이터가 없는 예비 응답을 수신하고
+해당 HTTP 요청이 허용되는지 여부를 확인합니다! ✅&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/preflighted-response.gif&#34; alt=&#34;preflighted-response&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이런 경우 브라우저가 실제 요청을 서버로 보내면
+서버는 요청 받은 데이터를 응답합니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/actual-request.gif&#34; alt=&#34;actual-request&#34;&gt;&lt;/p&gt;
+&lt;p&gt;하지만 허용되지 않을 경우에는 CORS가 예비 요청을 차단하고 실제 요청은
+절대 보내지지 않습니다. ✋🏼 예비 요청은 아직 CORS 정책이 적용되지 않은 서버의
+자원에 접근하거나 수정할 수 없도록 하는 좋은 방법입니다! 서버가 잠재적으로
+원하지 않는 다른 출처 요청으로부터 보호됩니다.😃&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;💡 서버 통신 횟수를 줄이기 위해 CORS 요청에 &lt;code&gt;Access-Control-Max-Age&lt;/code&gt;
+헤더를 추가하여 예비 요청에 대한 응답을 캐시할 수 있습니다!
+그럼 브라우저는 새로운 예비 요청을 보내는 대신 캐시된 응답을
+사용할 수 있습니다!&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;-자격-증명credentials&#34;&gt;🍪 자격 증명(Credentials)&lt;/h1&gt;
+&lt;p&gt;쿠키, 인가 헤더, TLS 인증서는 기본적으로 같은 출처 요청에서만 설정됩니다!
+그러나 이러한 자격 증명을 다른 출처 요청에 사용할 수도 있습니다.
+서버가 사용자를 식별하기 위해 사용하는 쿠키를 요청에 포함시킬 수도 있습니다!&lt;/p&gt;
+&lt;p&gt;기본적으로 CORS에 자격 증명이 포함되어 있지 않지만
+CORS 헤더 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt;를 추가할 수 있습니다! 🎉&lt;/p&gt;
+&lt;p&gt;다른 출처 요청에 쿠키 및 기타 인가 헤더를 포함시키려면
+요청에 &lt;code&gt;withCredentials&lt;/code&gt; 필드를 &lt;code&gt;true&lt;/code&gt;로 설정하고
+응답에 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt; 헤더를 추가해야 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/lydia/access-control-allow-credentials.gif&#34; alt=&#34;access-control-allow-credentials&#34;&gt;&lt;/p&gt;
+&lt;p&gt;준비 끝! 이제 우리는 다른 출처 요청에 자격 증명을 포함시킬 수 있습니다. 🥳&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;제가 생각하기엔 우리 모두 CORS 오류가 가끔 짜증나지만
+브라우저에서 다른 출처 요청을 안전하게 해준다는 것은 놀라울 거에요.
+(좀 더 많은 사랑을 받아야 합니다 ㅋㅋㅋ) ✨&lt;/p&gt;
+&lt;p&gt;제가 이 블로그 포스트에서 다룰 수 있었던 것보다 더 많은 자료들이 있습니다!
+더 궁금하다면 운 좋게도
+&lt;a href=&#34;https://livebook.manning.com/book/cors-in-action/part-1/&#34;&gt;CORS in Action&lt;/a&gt;이나
+&lt;a href=&#34;https://www.w3.org/wiki/CORS_Enabled&#34;&gt;W3 규격&lt;/a&gt;과 같은 좋은 자료들이 있습니다. 💪🏼&lt;/p&gt;
+&lt;p&gt;그리고 언제나 그랬듯이 저(Lydia Hallie)와 소통해요! 😊&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;✨&lt;/th&gt;
+          &lt;th&gt;👩🏽‍💻&lt;/th&gt;
+          &lt;th&gt;💻&lt;/th&gt;
+          &lt;th&gt;💡&lt;/th&gt;
+          &lt;th&gt;📷&lt;/th&gt;
+          &lt;th&gt;💌&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.twitter.com/lydiahallie&#34;&gt;Twitter&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.instagram.com/theavocoder&#34;&gt;Instagram&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.github.com/lydiahallie&#34;&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.linkedin.com/in/lydia-hallie&#34;&gt;LinkedIn&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.youtube.com/channel/UC4EWKIKdKiDtAscQ9BIXwUw&#34;&gt;YouTube&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;mailto:lydiahallie.dev@gmail.com&#34;&gt;Email&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+- https://markruler.github.io/posts/web/cs-visualized-cors/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1767,193 +1999,6 @@ API 서버는 포트 443에서 서비스한다.
 GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 방화벽 규칙이 구성된다.
 이외에 클러스터 설정 방법은 다양하다.&lt;/p&gt;
 - https://markruler.github.io/posts/kubernetes/controlling-access-api/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>MEC 아키텍처 초심자 가이드</title>
-        <link>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/</link>
-        <pubDate>Sun, 13 Sep 2020 20:58:08 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/</guid>
-        <description>임창수 https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/ -&lt;blockquote&gt;
-&lt;p&gt;Faisal Khan의 &lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;Beginners Guide to MEC Architecture (Multi-access Edge Computing)&lt;/a&gt;을 번역한 글입니다.
-저자의 허락을 받아 번역했습니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;MEC&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 아키텍처 가이드에 오신 것을 환영합니다!&lt;/p&gt;
-&lt;p&gt;MEC는 5G의 저지연(low-latency) 서비스를 활용하려는 이동통신사들의 새로운 투자 물결을 가져올 것입니다.
-이는 소비자와 더 가까운 곳, 즉 무선 기지국(radio site)과 가까운 곳에서 서비스를 운영하겠다는 것을 의미합니다.&lt;/p&gt;
-&lt;p&gt;MEC는 서비스 사업자들에게 새로운 서비스 분야와 수익 창출의 수단입니다.
-예를 들어 더 빠른 게임 경험, 증강/가상 현실, 커넥티드 카 등이 있습니다.&lt;/p&gt;
-&lt;p&gt;이러한 잠재력 때문에 Azure, AWS, Google과 같은 웹 스케일러(web scaler)도
-이 흐름에 뛰어들어 갑자기 자신들의 MEC 플랫폼을 구축하는 데 자금을 투입하기 시작한 것입니다.&lt;/p&gt;
-&lt;p&gt;이 MEC 아키텍처 가이드는 사실상 MEC 표준 기구인 ETSI 모델을 기반으로 하고 있습니다.
-MEC 아키텍처를 처음부터 단계적으로 설명하며, 사전 지식이 없더라도 이해할 수 있도록 구성되어 있습니다.&lt;/p&gt;
-&lt;p&gt;MEC 아키텍처를 이해하면&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;서비스 사업자는 표준 기반 MEC 플랫폼/아키텍처로 전환하는 방법을 알게 됩니다.&lt;/li&gt;
-&lt;li&gt;벤더와 개발사는 솔루션 제품이 ETSI MEC 모델에 얼마나 부합하는지 고객에게 설명할 수 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;그럼 바로 시작해 보겠습니다!&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#1-mec%EC%9D%98-%EC%A0%95%EC%9D%98&#34;&gt;1. MEC의 정의&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-etsi%EC%97%90-%EB%94%B0%EB%A5%B8-mec-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-0-%EA%B0%80%EC%83%81%ED%99%94-%EC%9D%B8%ED%94%84%EB%9D%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-mec-host&#34;&gt;2-1. MEC Host&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-1-mec-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98&#34;&gt;2-1-1. MEC 애플리케이션&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC&#34;&gt;2-1-2. MEC 플랫폼&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-1-mec-%EC%84%9C%EB%B9%84%EC%8A%A4&#34;&gt;2-1-2-1. MEC 서비스&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-2-%ED%8A%B8%EB%9E%98%ED%94%BD-%EA%B7%9C%EC%B9%99-%EC%A0%9C%EC%96%B4-traffic-rules-control&#34;&gt;2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-3-dns-%ED%95%B8%EB%93%A4%EB%A7%81&#34;&gt;2-1-2-3. DNS 핸들링&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-mec-platform-manager&#34;&gt;2-2. MEC 플랫폼 매니저 (MEC Platform Manager)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-3-%EB%A9%80%ED%8B%B0-%EC%95%A1%EC%84%B8%EC%8A%A4-%EC%97%90%EC%A7%80-%EC%98%A4%EC%BC%80%EC%8A%A4%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%84%B0-multi-access-edge-orchestrator&#34;&gt;2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#cfs-portal&#34;&gt;CFS Portal&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%88%98%EB%AA%85-%EC%A3%BC%EA%B8%B0-%EA%B4%80%EB%A6%AC-%ED%94%84%EB%A1%9D%EC%8B%9C-user-app-lcm-proxy&#34;&gt;사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;우리는 밑바닥부터 블록 단위로 MEC 아키텍처를 구축할 것입니다. 🙂&lt;/p&gt;
-&lt;h1 id=&#34;1-mec의-정의&#34;&gt;1. MEC의 정의&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.etsi.org/technologies/multi-access-edge-computing&#34;&gt;ETSI&lt;/a&gt;에 따르면 MEC는 다음과 같이 정의됩니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Multi-access Edge Computing (MEC) offers application developers and content providers
-cloud-computing capabilities and an IT service environment at the edge of the network.
-This environment is characterized by ultra-low latency and high bandwidth
-as well as real-time access to radio network information that can be leveraged by applications.&lt;br&gt;
-&lt;br&gt;
-멀티 액세스 에지 컴퓨팅(MEC)은 애플리케이션 개발자와 콘텐츠 제공자에게
-네트워크 에지(edge)에서 클라우드 컴퓨팅 기능과 IT 서비스 환경을 제공합니다.
-이 환경은 초저지연과 고대역폭으로 특정지어지며,
-애플리케이션에서 활용할 수 있는 무선 네트워크 정보에 대한 접근을 제공합니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;2-etsi에-따른-mec-아키텍처&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/h1&gt;
-&lt;p&gt;그럼 아래에 표시된 것처럼 완전한 MEC ETSI 아키텍처를 살펴보겠습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-architecture-according-to-etsi.jpg&#34; alt=&#34;mec-architecture-according-to-etsi&#34;&gt;&lt;/p&gt;
-&lt;p&gt;MEC 호스트, MEC 플랫폼 매니저, MEC 오케스트레이터라는 세 가지 주요 블록(block)이 있습니다.&lt;/p&gt;
-&lt;p&gt;그러나 이 세 블록을 살펴보기 전에 가장 기본적인 블록인
-가상화 인프라 매니저(Virtualization Infrastructure Manager, VIM)부터 시작해보겠습니다.&lt;/p&gt;
-&lt;p&gt;가상 네트워크에서는 항상 서버가 필요하며, 이 서버 위에서 가상 머신(VM)을 구동할 수 있어야 합니다.
-그리고 이러한 VM에는 관리 계층이 필요합니다.&lt;/p&gt;
-&lt;h2 id=&#34;2-0-가상화-인프라-매니저-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)&lt;/h2&gt;
-&lt;p&gt;VIM은 &lt;a href=&#34;../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager&#34;&gt;NFV의 VIM&lt;/a&gt;과 유사한 기능을 합니다.
-물리적 인프라(컴퓨팅, 스토리지, 네트워킹) 위에 VM을 관리하는 것이 목적입니다.
-&amp;lsquo;가상화 인프라&amp;rsquo;의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다.
-왼쪽에는 가상화된 인프라로 전환된 서버가 있고, 오른쪽에는 이러한 서버 위의 가상 자원을 관리하는 VIM이 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/virtualization-infrastructure-manager.jpg&#34; alt=&#34;virtualization-infrastructure-manager&#34;&gt;&lt;/p&gt;
-&lt;p&gt;VIM과 가상 자원을 이해한 후, 이제 그 위에 MEC 플랫폼과 MEC 애플리케이션을 구축해보겠습니다.&lt;/p&gt;
-&lt;h2 id=&#34;2-1-mec-host&#34;&gt;2-1. MEC Host&lt;/h2&gt;
-&lt;p&gt;가상화 인프라, MEC 애플리케이션, MEC 플랫폼을 함께 묶어 MEC 호스트라고 부릅니다.&lt;/p&gt;
-&lt;p&gt;MEC 애플리케이션부터 살펴보겠습니다.&lt;/p&gt;
-&lt;h3 id=&#34;2-1-1-mec-애플리케이션&#34;&gt;2-1-1. MEC 애플리케이션&lt;/h3&gt;
-&lt;p&gt;우리가 MEC를 실행하는 이유는 무엇일까요? 바로 애플리케이션을 실행하기 위해서입니다.&lt;/p&gt;
-&lt;p&gt;MEC 애플리케이션은 MEC에서 VM 위에서 실행되는 실제 애플리케이션입니다.
-쉽게 말해, MEC에서 실행되는 실제 앱들은 게임 애플리케이션이나 가상 현실(VR) 또는 증강 현실(AR)과 같은 것입니다.&lt;/p&gt;
-&lt;p&gt;아래 다이어그램은 가상화 인프라 내의 가상 머신 위에 MEC 애플리케이션을 실행하는 모습을 보여줍니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-application.jpg&#34; alt=&#34;mec-application&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;2-1-2-mec-플랫폼&#34;&gt;2-1-2. MEC 플랫폼&lt;/h3&gt;
-&lt;p&gt;이제 다음 단계로 나아가서 우리의 빌딩 블록에 MEC 플랫폼을 추가해 보겠습니다.
-MEC 플랫폼 안에는 여러 구성 요소가 있습니다.
-그중에서 가장 중요한 것은 &lt;strong&gt;MEC 서비스&lt;/strong&gt;입니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-platform.jpg&#34; alt=&#34;mec-platform&#34;&gt;&lt;/p&gt;
-&lt;h4 id=&#34;2-1-2-1-mec-서비스&#34;&gt;2-1-2-1. MEC 서비스&lt;/h4&gt;
-&lt;p&gt;&amp;lsquo;MEC 서비스&amp;rsquo;는 MEC에서 중요한 블록입니다.
-네트워크 관련 API는 MEC 서비스에 의해 노출되며, 위에 표시된 참조점(Reference Point) &lt;code&gt;Mp1&lt;/code&gt;을 통해 MEC 애플리케이션에 제공됩니다.
-또한 MEC 플랫폼도 이러한 서비스를 사용할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;여전히 헷갈리시나요?&lt;/p&gt;
-&lt;p&gt;MEC ETSI 아키텍처의 장점은 MEC 애플리케이션들이 네트워크 정보를 알고 있다는 점입니다.
-즉, MEC 애플리케이션이 네트워크 상태에 따라 조치를 취할 수 있습니다.
-여기서 MEC 서비스는 API를 통해 네트워크 정보를 노출시켜 도움을 줄 수 있습니다.&lt;/p&gt;
-&lt;p&gt;ETSI에 따르면 &amp;lsquo;MEC 서비스&amp;rsquo;에 의해 적어도 세 가지 유형의 서비스를 노출시켜야 하며,
-이들은 서비스 레지스트리의 일부입니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;무선 네트워크 상태&lt;/li&gt;
-&lt;li&gt;위치 정보 (예: 사용자 장비&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;의 위치)&lt;/li&gt;
-&lt;li&gt;대역폭 관리자 - 이 서비스를 사용하면 MEC 애플리케이션과 관련된 트래픽에 대해 대역폭을 할당하고 우선순위를 지정할 수 있도록 해줍니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;MEC 서비스에 대해 논의한 후, 우리는 MEC 플랫폼의 다른 두 가지 구성요소도 알아야 합니다.&lt;/p&gt;
-&lt;h4 id=&#34;2-1-2-2-트래픽-규칙-제어-traffic-rules-control&#34;&gt;2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)&lt;/h4&gt;
-&lt;p&gt;이것은 MEC 플랫폼의 중요한 부분입니다.
-MEC 플랫폼은 여러 애플리케이션을 동시에 서비스하므로 &amp;lsquo;트래픽 규칙 제어&amp;rsquo; 를 통해 우선순위를 할당할 수 있어야 합니다.&lt;/p&gt;
-&lt;h4 id=&#34;2-1-2-3-dns-핸들링&#34;&gt;2-1-2-3. DNS 핸들링&lt;/h4&gt;
-&lt;p&gt;모바일 에지 플랫폼은 모든 사용자 장비로부터 수신된 DNS 트래픽을
-로컬 DNS 서버/프록시로 라우팅하는 기능을 제공해야 합니다.&lt;/p&gt;
-&lt;p&gt;이것이 왜 중요할까요? MEC의 이점은 많은 정보를 인터넷으로 보내지 않고 MEC 내에서 로컬로 처리하는 것입니다.
-따라서 트래픽이 인터넷으로 전송되는 대신 로컬에서 처리되도록 로컬 DNS 서버에 DNS 리다이렉션을 처리할 수 있는 방법이 있어야 합니다.&lt;/p&gt;
-&lt;p&gt;또한 &lt;code&gt;Mp3&lt;/code&gt; 인터페이스를 통해 기존 MEC 호스트에 연결된 다른 MEC 호스트가 있을 수 있다는 점도 유의해야 합니다.&lt;/p&gt;
-&lt;p&gt;지금까지 VIM, MEC 플랫폼, MEC 애플리케이션을 다뤘지만,
-MEC 플랫폼과 애플리케이션 자체의 관리는 어떻게 이루어질까요?
-여기서 &lt;strong&gt;MEC 플랫폼 매니저&lt;/strong&gt;가 등장합니다.&lt;/p&gt;
-&lt;h2 id=&#34;2-2-mec-플랫폼-매니저-mec-platform-manager&#34;&gt;2-2. MEC 플랫폼 매니저 (MEC Platform Manager)&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-platform-manager.jpg&#34; alt=&#34;mec-platform-manager&#34;&gt;&lt;/p&gt;
-&lt;p&gt;NFV의 VNFM에 대해 알고 있으시죠?&lt;/p&gt;
-&lt;p&gt;MEC 플랫폼 매니저는 VNFM과 동일하거나 더 많은 기능을 수행합니다. 다음과 같은 기능들을 포함합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;MEC 애플리케이션의 수명 주기 관리: VM에서 MEC 애플리케이션을 생성(instantiating), 유지(maintaining), 종료(tearing down)하는 작업&lt;/li&gt;
-&lt;li&gt;요소 관리: MEC 플랫폼의 FCAPS&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 관리&lt;/li&gt;
-&lt;li&gt;애플리케이션 규칙, 트래픽 규칙, DNS 구성 관리&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;지금까지는 MEC 플랫폼을 관리할 수 있게 되었지만 아직 끝난 것이 아닙니다.
-여러 MEC 호스트가 있을 수 있으므로 MEC 플랫폼 관리자도 여러 개 있을 수 있습니다.
-따라서 다양한 MEC 플랫폼 매니저들 간의 조정을 담당할 상위 계층이 필요합니다.
-여기서 &lt;strong&gt;MEC 오케스트레이터&lt;/strong&gt;가 등장하며, 이를 통해 ETSI 아키텍처가 완성됩니다.&lt;/p&gt;
-&lt;h2 id=&#34;2-3-멀티-액세스-에지-오케스트레이터-multi-access-edge-orchestrator&#34;&gt;2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)&lt;/h2&gt;
-&lt;p&gt;MEC 오케스트레이터는 여기서 NFVO 오케스트레이터와 비유할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;다음과 같은 기능을 수행합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;MEC 애플리케이션 수명 주기 관리(MEC 플랫폼 매니저와 비교해보면 유사한 기능을 수행할 수 있습니다).
-오케스트레이터는 MEC 플랫폼 매니저를 통해 애플리케이션과 통신하여 이 기능을 수행합니다.&lt;/li&gt;
-&lt;li&gt;패키지 무결성(integrity) 및 신뢰성(authenticity) 검증 기능을 포함하여
-애플리케이션 패키지를 설치(on-boarding)합니다.&lt;/li&gt;
-&lt;li&gt;지연 시간, 사용 가능한 자원, 제공 가능한 서비스와 같은 제약 조건을 고려하여
-애플리케이션 생성(instantiation)에 적합한 MEC 호스트를 선택합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/multi-access-edge-orchestrator.jpg&#34; alt=&#34;multi-access-edge-orchestrator&#34;&gt;&lt;/p&gt;
-&lt;p&gt;마지막으로 몇 가지 언급해야 할 것들이 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;cfs-portal&#34;&gt;CFS Portal&lt;/h2&gt;
-&lt;p&gt;CFS는 &amp;lsquo;고객 대면 서비스(Customer Facing Service)&amp;lsquo;를 의미합니다.
-CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 주문하거나
-서비스의 SLA(Service Level Agreement, 서비스 수준 계약)를 모니터링할 수 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;사용자-애플리케이션-수명-주기-관리-프록시-user-app-lcm-proxy&#34;&gt;사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)&lt;/h2&gt;
-&lt;p&gt;이것은 MEC 시스템에서 선택적 기능입니다.
-이를 위해 시스템은 &lt;code&gt;UserApps&lt;/code&gt;라는 기능을 지원해야 합니다.&lt;/p&gt;
-&lt;p&gt;모바일 에지 시스템이 &lt;code&gt;UserApps&lt;/code&gt; 기능을 지원할 때,
-시스템은 사용자 장비(디바이스 애플리케이션이 실행되는 장비)와
-특정 모바일 에지 애플리케이션(ME App) 인스턴스 간의 연결을 허용합니다.&lt;/p&gt;
-&lt;p&gt;사용자 애플리케이션 LCM 프록시를 지원한다면
-디바이스 애플리케이션이 사용자 애플리케이션의 설치(on-boarding), 생성(instantiation), 종료(termination)를 요청할 수 있게 해줍니다.&lt;/p&gt;
-&lt;p&gt;간단히 말해, 이 기능이 MEC 시스템에서 지원되면
-사용자는 자신의 디바이스에서 MEC 시스템 내 특정 애플리케이션을 실행할 수 있게 됩니다.&lt;/p&gt;
-&lt;p&gt;이것으로 MEC 아키텍처 초심자 가이드를 마칩니다.
-이제 이 아키텍처에 대해 궁금한 것이 있으면 언제든 질문해 주세요.&lt;/p&gt;
-&lt;h2 id=&#34;참조&#34;&gt;참조&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;ETSI GS MEC 002 V1.1.1 (2016-03)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;ETSI GS MEC 003 V2.1.1 (2019-01)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;Mobile Edge Computing&lt;/a&gt; 의 줄임말이었지만 현재는 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;Multi-access Edge Computing&lt;/a&gt;입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;사용자 장비(UE, User Equipment)는 휴대폰을 의미할 수 있습니다. 모바일 동글이 있는 노트북을 의미하기도 합니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/FCAPS&#34;&gt;FCAPS&lt;/a&gt;: &lt;strong&gt;F&lt;/strong&gt;ault(장애), &lt;strong&gt;C&lt;/strong&gt;onfiguration(구성), &lt;strong&gt;A&lt;/strong&gt;ccounting(계정), &lt;strong&gt;P&lt;/strong&gt;erformance(성능), &lt;strong&gt;S&lt;/strong&gt;ecurity(보안)&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

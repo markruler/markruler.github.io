@@ -1,10 +1,10 @@
 ---
-draft: true
+draft: false
 socialshare: true
-date: 2024-12-16T12:26:00+09:00
-lastmod: 2024-12-16T12:26:00+09:00
+date: 2024-12-16T21:26:00+09:00
+lastmod: 2024-12-16T21:26:00+09:00
 title: "한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기"
-description: "한국어 패치 제작자분들 존경합니다"
+description: "한국어 패치 제작자분들 감사합니다"
 featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
 images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
 tags:
@@ -14,18 +14,14 @@ categories:
   - wiki
 ---
 
-스팀(Steam) 게임들을 위한 모드나 패치 도구가 많아서 고전게임[^1]보다 비교적 난이도가 쉽습니다.
-
-[^1]: 롬 카트리지([ROM cartridge](https://en.wikipedia.org/wiki/ROM_cartridge))에 저장된 패키지 게임.
-예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
-파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.  
+스팀(Steam) 게임들을 위한 모드나 패치 도구가 많아서 고전게임보다 비교적 난이도가 쉽습니다.
 
 # 게임 저작권과 한국어 패치
 
 엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
-배포가 목적이라면 반드시 게임 개발사에 허락을 먼저 받아야 합니다.[^2]
+배포가 목적이라면 반드시 게임 개발사에 허락을 먼저 받아야 합니다.[^1]
 
-[^2]: [제101조의4(프로그램코드역분석)](https://www.law.go.kr/법령/저작권법/(20240828,20358,20240227)/제101조의4)
+[^1]: [제101조의4(프로그램코드역분석)](https://www.law.go.kr/법령/저작권법/(20240828,20358,20240227)/제101조의4)
 
 한국어 패치 제작자들은 호의적으로 패치하는 경우가 대부분이며,
 인디 게임 개발사에서는 번역할 여건이 되지 않아서 이에 호의적으로 반응하는 경우가 많습니다.
@@ -42,9 +38,9 @@ categories:
 
 # 대표적인 게임 엔진별 한국어 패치 제작 방법
 
-> SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.[^3]
+> SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.[^2]
 
-[^3]: [What are games built with and what technologies do they use?](https://steamdb.info/tech/) - SteamDB
+[^2]: [What are games built with and what technologies do they use?](https://steamdb.info/tech/) - SteamDB
 
 기본적으로 제가 패치하는 방법은 다음과 같습니다.
 
@@ -64,18 +60,18 @@ categories:
 
 ### 유니티 (Unity)
 
-언팩-리팩 과정은 [UABEA](https://github.com/nesrak1/UABEA)를 사용합니다.[^4]
+언팩-리팩 과정은 [UABEA](https://github.com/nesrak1/UABEA)를 사용합니다.[^3]
 
-[^4]: 원본 패치 툴인 [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE)는 업데이트가 중단되었습니다.
+[^3]: 원본 패치 툴인 [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE)는 업데이트가 중단되었습니다.
 
 [SDF(Signed Distance Fields)](https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html) 폰트 생성 시
 Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
 자세한 폰트 교체 방법은 [Snowyegret](https://snowyegret.tistory.com/21)님의 글을 참고하세요.
 
-IL2CPP[^5]로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
+IL2CPP[^4]로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
 `catalog.json` 파일을 수정해야 합니다.
 
-[^5]: [IL2CPP](https://docs.unity3d.com/6000.0/Documentation/Manual/scripting-backends-il2cpp.html)는 유니티의 스크립트를 C++로 컴파일하는 기술입니다.
+[^4]: [IL2CPP](https://docs.unity3d.com/6000.0/Documentation/Manual/scripting-backends-il2cpp.html)는 유니티의 스크립트를 C++로 컴파일하는 기술입니다.
 유니티는 기본적으로 **Mono** 런타임을 사용해 C# 코드를 **Intermediate Language — IL**로 컴파일하고,
 이를 런타임에서 Just-In-Time (JIT) 방식으로 실행합니다.
 **AOT**(Ahead-of-Time Compilation) 컴파일은 런타임에서 코드를 컴파일하는 것이 아니라
@@ -108,11 +104,12 @@ Example patchcrc catalog.json
 [unrpa](https://github.com/Lattyware/unrpa) 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.
 
 ```sh
+# unrpa 설치
 python -m pip install unrpa
 # RPA 파일 추출
 python -m unrpa yourfile.rpa
 # 수정 후 패치 파일 리팩
-python -m unrpa -mp .\patch .\patch.rpa
+python -m unrpa -mp patch patch.rpa
 ```
 
 ### 고도 (Godot)
@@ -137,6 +134,14 @@ Love2D 게임은 `.love` 파일로 패키징되어 있습니다.
 패치 도구(Patch)를 만들기 위해 직접 언팩하려면 파일 시그니처를 찾아야 합니다.
 ZIP 포맷의 파일 시그니처는 `PK`이기 때문에 이를 찾아내어 파일을 추출하고,
 Love2D 개발툴을 사용해서 다시 패키징합니다.
+
+### 고전 게임
+
+고전 게임은 롬 카트리지에 저장되어 있습니다.[^5]
+
+[^5]: 롬 카트리지([ROM cartridge](https://en.wikipedia.org/wiki/ROM_cartridge))에 저장된 패키지 게임.
+예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
+파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.  
 
 ## 실시간 번역
 

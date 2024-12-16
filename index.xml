@@ -9,9 +9,154 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 12:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기</title>
+        <link>https://markruler.github.io/posts/reverse-engineering/game-localization/</link>
+        <pubDate>Mon, 16 Dec 2024 21:26:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/reverse-engineering/game-localization/</guid>
+        <description>임창수 https://markruler.github.io/posts/reverse-engineering/game-localization/ -&lt;p&gt;스팀(Steam) 게임들을 위한 모드나 패치 도구가 많아서 고전게임보다 비교적 난이도가 쉽습니다.&lt;/p&gt;
+&lt;h1 id=&#34;게임-저작권과-한국어-패치&#34;&gt;게임 저작권과 한국어 패치&lt;/h1&gt;
+&lt;p&gt;엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
+배포가 목적이라면 반드시 게임 개발사에 허락을 먼저 받아야 합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;한국어 패치 제작자들은 호의적으로 패치하는 경우가 대부분이며,
+인디 게임 개발사에서는 번역할 여건이 되지 않아서 이에 호의적으로 반응하는 경우가 많습니다.
+제가 번역한 게임의 개발사도 크레딧(Credit)에 제 이름을 명시해주겠다는 제의까지 해주었습니다.
+하지만 일부 개발사들은 고소까지 하는 사례도 있다고 하니 법적인 책임은 반드시 숙지해야 합니다.&lt;/p&gt;
+&lt;p&gt;고소까지 하는 게임 개발사의 마음도 충분히 이해됩니다.
+첫번째 이유는 이미 한국어 패치를 계획하고 있다면
+게임 개발사, 유통사, 번역사 모두에게 손해가 발생할 수 있기 때문입니다.
+두번째 이유는 게임 데이터를 얻고 변조한다는 점에서
+한국어 패치 파일을 만든다는 것이 게임 핵을 만드는 것과 한끗 차이이기 때문입니다.
+패치 제작자의 의도에 따라 완전히 다른 패치 프로그램(Patcher)이 만들어지는 것이죠.
+그래서 멀티 게임을 운영하는 개발사에서는 유독 민감하게 반응하는 것 같습니다.&lt;/p&gt;
+&lt;h1 id=&#34;대표적인-게임-엔진별-한국어-패치-제작-방법&#34;&gt;대표적인 게임 엔진별 한국어 패치 제작 방법&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;기본적으로 제가 패치하는 방법은 다음과 같습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;게임 엔진별 언팩 도구를 사용하여 게임 파일을 추출합니다(unpack).&lt;/li&gt;
+&lt;li&gt;스크립트(script 혹은 dialog)를 번역하고 수정합니다.&lt;/li&gt;
+&lt;li&gt;한글을 지원하지 않는 폰트인 경우 폰트를 생성합니다.&lt;/li&gt;
+&lt;li&gt;번역된 스크립트와 폰트를 다시 패키징하여(repack) 게임에 적용합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;한 가지 언어(주로 영어)만 제공하는 게임은 스크립트가 별도로 있지 않고,
+게임 장면에 직접 포함되어 있는 경우가 있습니다.
+이 경우 파일 카빙을 하거나 개발사에 직접 요청해야 합니다.
+폰트도 한글을 지원하지 않는 경우가 많습니다.&lt;/p&gt;
+&lt;h2 id=&#34;언팩-도구-사용하기&#34;&gt;언팩 도구 사용하기&lt;/h2&gt;
+&lt;p&gt;인기 있는 게임 엔진들은 이미 언팩(unpack) 도구가 존재합니다.&lt;/p&gt;
+&lt;h3 id=&#34;유니티-unity&#34;&gt;유니티 (Unity)&lt;/h3&gt;
+&lt;p&gt;언팩-리팩 과정은 &lt;a href=&#34;https://github.com/nesrak1/UABEA&#34;&gt;UABEA&lt;/a&gt;를 사용합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html&#34;&gt;SDF(Signed Distance Fields)&lt;/a&gt; 폰트 생성 시
+Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
+자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/21&#34;&gt;Snowyegret&lt;/a&gt;님의 글을 참고하세요.&lt;/p&gt;
+&lt;p&gt;IL2CPP&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;로 빌드된 유니티 게임은 &lt;a href=&#34;https://github.com/nesrak1/AddressablesTools&#34;&gt;nesrak1/AddressablesTools&lt;/a&gt;을 사용해서
+&lt;code&gt;catalog.json&lt;/code&gt; 파일을 수정해야 합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Example patchcrc catalog.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;언리얼-엔진-unreal-engine&#34;&gt;언리얼 엔진 (Unreal Engine)&lt;/h3&gt;
+&lt;p&gt;5는 툴이 없어서 시도해보지 못했습니다.
+4는 해외 커뮤니티에서 &lt;a href=&#34;https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/&#34;&gt;masagrator라는 유저가 작성한 글과 툴&lt;/a&gt;을 참고하세요.&lt;/p&gt;
+&lt;p&gt;다른 게임과 달리 Epic Games는 언팩 도구(&lt;code&gt;UnrealPak&lt;/code&gt;)를 직접 제공합니다.
+패치 파일을 원본 pak 파일 위치에 &lt;code&gt;_p&lt;/code&gt;라는 접미사를 붙이면 적용됩니다.&lt;/p&gt;
+&lt;h3 id=&#34;게임메이커-gamemaker-studio-2&#34;&gt;게임메이커 (GameMaker Studio 2)&lt;/h3&gt;
+&lt;p&gt;언팩-리팩 과정은 언더테일 모드 툴인 &lt;a href=&#34;https://github.com/UnderminersTeam/UndertaleModTool/releases&#34;&gt;UnderminersTeam/UndertaleModTool&lt;/a&gt;을 사용합니다.&lt;/p&gt;
+&lt;p&gt;자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/65&#34;&gt;Sonwyegret&lt;/a&gt;님의 글을 참고하세요.
+폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;렌파이-renpy---pygame&#34;&gt;렌파이 (Ren&amp;rsquo;Py - PyGame)&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/Lattyware/unrpa&#34;&gt;unrpa&lt;/a&gt; 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# unrpa 설치&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m pip install unrpa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RPA 파일 추출&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m unrpa yourfile.rpa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 수정 후 패치 파일 리팩&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m unrpa -mp patch patch.rpa
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;고도-godot&#34;&gt;고도 (Godot)&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/GDRETools/gdsdecomp&#34;&gt;GDRETools/gdsdecomp&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;translation.csv&lt;/code&gt; 파일 추출을 지원하지 않아서 시도하지 못했었는데,
+&lt;a href=&#34;https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0&#34;&gt;v0.8.0&lt;/a&gt; 버전부터 가능해졌다고 합니다.&lt;/p&gt;
+&lt;h2 id=&#34;파일-카빙-file-carving&#34;&gt;파일 카빙 (File Carving)&lt;/h2&gt;
+&lt;p&gt;만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
+이때 &lt;a href=&#34;../file-signature/#1-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98-%EA%B8%B0%EB%B0%98-%EC%B9%B4%EB%B9%99&#34;&gt;파일 카빙&lt;/a&gt;이 필요합니다.
+우선 파일 시그니처를 찾거나 유추해서 파일을 추출합니다.
+이후 파일을 다시 패키징(repack)하여 게임에 적용합니다.&lt;/p&gt;
+&lt;h3 id=&#34;love2d&#34;&gt;Love2D&lt;/h3&gt;
+&lt;p&gt;Love2D 게임은 &lt;code&gt;.love&lt;/code&gt; 파일로 패키징되어 있습니다.
+&lt;code&gt;.love&lt;/code&gt; 파일은 ZIP 파일 기반의 포맷입니다.
+일반적인 unzip 도구로 압축을 풀면 게임 파일을 확인할 수 있지만,
+패치 도구(Patch)를 만들기 위해 직접 언팩하려면 파일 시그니처를 찾아야 합니다.
+ZIP 포맷의 파일 시그니처는 &lt;code&gt;PK&lt;/code&gt;이기 때문에 이를 찾아내어 파일을 추출하고,
+Love2D 개발툴을 사용해서 다시 패키징합니다.&lt;/p&gt;
+&lt;h3 id=&#34;고전-게임&#34;&gt;고전 게임&lt;/h3&gt;
+&lt;p&gt;고전 게임은 롬 카트리지에 저장되어 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h2 id=&#34;실시간-번역&#34;&gt;실시간 번역&lt;/h2&gt;
+&lt;p&gt;화면에 스크립트가 렌더링되고 텍스트를 추출해서 번역하는 방식입니다.
+그래서 딜레이가 꽤 있습니다.
+번역 방식은 인터넷을 통해 기계 번역하는 방법과 미리 번역된 파일을 활용해서 치환하는 방법이 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;xunity-auto-translator&#34;&gt;XUnity Auto Translator&lt;/h3&gt;
+&lt;p&gt;한국어가 없는 신규 출시 유니티 게임을 플레이하고 싶을 때 유저들이 많이 사용하는 편입니다.
+&lt;strong&gt;BepInEx&lt;/strong&gt;을 사용해서 게임 텍스트를 추출하고 치환합니다.
+다만 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/bbepis/XUnity.AutoTranslator&#34;&gt;bbepis/XUnity.AutoTranslator&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://page.onstove.com/indie/global/view/9835166&#34;&gt;사용 방법&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;mort-monkeyheads-ocr-realtime-translator&#34;&gt;MORT (MonkeyHead&amp;rsquo;s OCR Realtime Translator)&lt;/h3&gt;
+&lt;p&gt;국내 유저가 만들고 계속 업데이트 중인 툴입니다.
+유니티 외 게임에서도 사용할 수 있습니다.
+&lt;strong&gt;OCR&lt;/strong&gt;을 사용해서 화면에 출력된 텍스트를 읽는다고 합니다.
+그래서 게임 텍스트 자체를 치환하는 것이 아닌 추가 레이어를 두기 때문에 게임 플레이 시 몰입을 방해할 수 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.naver.com/killkimno/223497997082&#34;&gt;MORT&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.inven.co.kr/webzine/news/?news=289168&#34;&gt;[인터뷰] 저작권법과 유저 한글패치&lt;/a&gt; - 인벤 &amp;amp; 이철우 게임·엔터테인먼트 전문 변호사&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cafe.naver.com/hansicgu/19375&#34;&gt;더 다양한 한국어 패치 방법&lt;/a&gt; - 한식구&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80_%EC%99%84%EC%84%B1%ED%98%95_%EC%9D%B8%EC%BD%94%EB%94%A9&#34;&gt;한글 완성형 인코딩&lt;/a&gt; - 위키백과&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://namu.wiki/w/%EC%99%84%EC%84%B1%ED%98%95&#34;&gt;완성형 한글&lt;/a&gt; - 나무위키&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C101%EC%A1%B0%EC%9D%984&#34;&gt;제101조의4(프로그램코드역분석)&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://steamdb.info/tech/&#34;&gt;What are games built with and what technologies do they use?&lt;/a&gt; - SteamDB&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;원본 패치 툴인 &lt;a href=&#34;https://github.com/SeriousCache/UABE&#34;&gt;UABE (Unity Asset Bundle Extractor)&lt;/a&gt;는 업데이트가 중단되었습니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.unity3d.com/6000.0/Documentation/Manual/scripting-backends-il2cpp.html&#34;&gt;IL2CPP&lt;/a&gt;는 유니티의 스크립트를 C++로 컴파일하는 기술입니다.
+유니티는 기본적으로 &lt;strong&gt;Mono&lt;/strong&gt; 런타임을 사용해 C# 코드를 &lt;strong&gt;Intermediate Language — IL&lt;/strong&gt;로 컴파일하고,
+이를 런타임에서 Just-In-Time (JIT) 방식으로 실행합니다.
+&lt;strong&gt;AOT&lt;/strong&gt;(Ahead-of-Time Compilation) 컴파일은 런타임에서 코드를 컴파일하는 것이 아니라
+미리 네이티브 코드로 컴파일하는 방식입니다.
+JIT를 사용할 수 없는 플랫폼(ex: iOS, WebGL, Console)에서 사용됩니다.
+IL2CPP는 AOT 방식의 일종으로 IL 코드를 C++ 코드로 변환 후 네이티브 코드로 컴파일합니다.
+C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 사용하면 플랫폼 호환성이 높아집니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;롬 카트리지(&lt;a href=&#34;https://en.wikipedia.org/wiki/ROM_cartridge&#34;&gt;ROM cartridge&lt;/a&gt;)에 저장된 패키지 게임.
+예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
+파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/reverse-engineering/game-localization/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1797,358 +1942,6 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
 &lt;p&gt;순간의 오판으로 시간을 허비했다.
 익숙한 것도 의심하고, 모니터링의 한계점을 파악할 필요가 있다고 느꼈다.&lt;/p&gt;
 - https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>네트워크 장비 모니터링을 위한 SNMP</title>
-        <link>https://markruler.github.io/posts/network/snmp/</link>
-        <pubDate>Tue, 23 Jul 2024 19:08:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/network/snmp/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/snmp/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.&lt;/p&gt;
-&lt;h1 id=&#34;전제-조건&#34;&gt;전제 조건&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;IP 네트워크 환경이 있다.&lt;/li&gt;
-&lt;li&gt;관리용 서버(SNMP 서버)가 있다.&lt;/li&gt;
-&lt;li&gt;SNMP 프로토콜을 지원하는 기기다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;구성-요소&#34;&gt;구성 요소&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;매니저 (SNMP 서버)
-&lt;ul&gt;
-&lt;li&gt;네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;에이전트 (네트워크 기기/서버)
-&lt;ul&gt;
-&lt;li&gt;네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;SNMP 프로토콜 (TCP/IP)
-&lt;ul&gt;
-&lt;li&gt;UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;MIB (Management Information Base)
-&lt;ul&gt;
-&lt;li&gt;SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1156&#34;&gt;RFC 1156&lt;/a&gt;으로 규정된 MIB1, &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1213&#34;&gt;RFC 1213&lt;/a&gt;으로 규정된 MIB2&lt;/li&gt;
-&lt;li&gt;MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있다.&lt;/li&gt;
-&lt;li&gt;MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타낸다. 이 번호열을 OID(Object ID)라고 한다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;매니저-에이전트-역할&#34;&gt;매니저-에이전트 역할&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;정보의 요청과 응답
-&lt;ul&gt;
-&lt;li&gt;매니저가 에이전트에게 대상 기기의 정보를 요청 → 에이전트는 정보를 매니저에게 응답&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;설정의 요청과 응답
-&lt;ul&gt;
-&lt;li&gt;매니저가 에이전트에게 대상 기기의 설정 변경을 요청 → 에이전트는 설정을 변경하며 그 결과를 매니저에게 응답&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;상태 변화의 통보
-&lt;ul&gt;
-&lt;li&gt;에이전트가 매니저에게 대상 기기의 상태 변화를 통보&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;매니저-에이전트-통신-방식&#34;&gt;매니저-에이전트 통신 방식&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;폴링 (Polling)
-&lt;ul&gt;
-&lt;li&gt;매니저가 정기적으로 에이전트로부터 관리 정보를 추출&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;트랩 (Trap)
-&lt;ul&gt;
-&lt;li&gt;에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;커뮤니티-이름&#34;&gt;커뮤니티 이름&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;매니저와 에이전트는 커뮤니티 이름으로 그룹화한다.&lt;/li&gt;
-&lt;li&gt;매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신한다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;버전별-차이&#34;&gt;버전별 차이&lt;/h1&gt;
-&lt;h2 id=&#34;v1&#34;&gt;v1&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;커뮤니티 이름이 포함된 패킷을 평문으로 전달함.&lt;/li&gt;
-&lt;li&gt;기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용함.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;v2&#34;&gt;v2&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;커뮤니티 이름이 포함된 패킷을 암호화해서 전달함.&lt;/li&gt;
-&lt;li&gt;추가된 PDU 타입(예: &lt;a href=&#34;http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&#34;&gt;GetBulkRequest&lt;/a&gt;)을 통해 대량의 데이터를 한 번에 전송할 수 있음.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;v2c&#34;&gt;v2c&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달하도록 원복함.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;v3&#34;&gt;v3&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;(username, password) 인증 기능이 추가됨.&lt;/li&gt;
-&lt;li&gt;이 외 다양한 보안 기능 추가됨.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;관련-명령어-도구&#34;&gt;관련 명령어 도구&lt;/h1&gt;
-&lt;h2 id=&#34;snmpget&#34;&gt;snmpget&lt;/h2&gt;
-&lt;p&gt;정확한 OID를 입력해야 해서 난 잘 사용하지 않음.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# output&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iso.3.6.1.2.1.1.1.0 = STRING: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Technical Support: http://www.cisco.com/techsupport
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Copyright (c) 1986-2011 by Cisco Systems, Inc.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Compiled Thu 21-Jul-11 02:13 by prod_rel_team&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;snmpwalk&#34;&gt;snmpwalk&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpwalk -v2c -l NoAuthNoPriv -c public &amp;lt;ip_address&amp;gt;:&amp;lt;port&amp;gt; [OID]
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;도움말
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-h&lt;/code&gt; : help&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-H&lt;/code&gt; : 사용 가능한 옵션&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-v&lt;/code&gt; : SNMP 버전 (&lt;code&gt;1&lt;/code&gt; | &lt;code&gt;2c&lt;/code&gt; | &lt;code&gt;3&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-l&lt;/code&gt; : security level (&lt;code&gt;noAuthNoPriv&lt;/code&gt; | &lt;code&gt;authNoPriv&lt;/code&gt; | &lt;code&gt;authPriv&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; : the community string&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;mib-2-oid-object-id&#34;&gt;MIB-2 OID (Object ID)&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&amp;amp;v=beta&amp;amp;t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY&#34; alt=&#34;OID Tree&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari&#34;&gt;SNMP Explained: What You Must Know About Monitoring via MIB and OIDs&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;ex-136121-분해&#34;&gt;ex: 1.3.6.1.2.1 분해&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;첫번째 자리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.html&#34;&gt;1: ISO assigned&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;두번째 자리
-&lt;ul&gt;
-&lt;li&gt;0: ISO Standard&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.html&#34;&gt;3: Identified Organization (org)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;세번째 자리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.html&#34;&gt;6: US Department of Defense (dod)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;네번째 자리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.html&#34;&gt;1: Internet&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;다섯번째 자리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.2.html&#34;&gt;2: Management (mgmt)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.4.html&#34;&gt;4: Private&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.4.1.9.html&#34;&gt;1.3.6.1.4.1.9: Cisco&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;여섯번째 자리
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.2.1.html&#34;&gt;1: SNMP MIB-2&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;1361211-system&#34;&gt;1.3.6.1.2.1.1 system&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;ID&lt;/th&gt;
-          &lt;th&gt;Object&lt;/th&gt;
-          &lt;th&gt;Description&lt;/th&gt;
-          &lt;th&gt;Link&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.1&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysDescr&lt;/td&gt;
-          &lt;td&gt;System Description&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.1&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.2&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysObjectID&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.3&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysUpTime&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.4&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysContact&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.5&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysName&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.5&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.6&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysLocation&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.7&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;sysServices&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.7&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;1361212-interfaces&#34;&gt;1.3.6.1.2.1.2 interfaces&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;ID&lt;/th&gt;
-          &lt;th&gt;Object&lt;/th&gt;
-          &lt;th&gt;Description&lt;/th&gt;
-          &lt;th&gt;Link&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.2&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifDescr&lt;/td&gt;
-          &lt;td&gt;Interface Description&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.2&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.4&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifMtu&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.4&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.5&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifSpeed&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.5&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.10&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifInOctets&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.10&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;1361213-at---address-translation&#34;&gt;1.3.6.1.2.1.3 at - Address Translation&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;ID&lt;/th&gt;
-          &lt;th&gt;Object&lt;/th&gt;
-          &lt;th&gt;Description&lt;/th&gt;
-          &lt;th&gt;Link&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.3&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;at&lt;/td&gt;
-          &lt;td&gt;Address translation&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.3&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;1361214-ip---internet-protocol&#34;&gt;1.3.6.1.2.1.4 ip - Internet Protocol&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;ID&lt;/th&gt;
-          &lt;th&gt;Object&lt;/th&gt;
-          &lt;th&gt;Description&lt;/th&gt;
-          &lt;th&gt;Link&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.4.22&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ipNetToMediaTable&lt;/td&gt;
-          &lt;td&gt;SEQUENCE OF IpNetToMediaEntry&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.4.22&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;13612131-ifmib&#34;&gt;1.3.6.1.2.1.31 ifMIB&lt;/h2&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;ID&lt;/th&gt;
-          &lt;th&gt;Object&lt;/th&gt;
-          &lt;th&gt;Description&lt;/th&gt;
-          &lt;th&gt;Link&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifMIBObjects&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifXTable&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifXEntry&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1.6&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifHCInOctets&lt;/td&gt;
-          &lt;td&gt;인터페이스의 입력 바이트 수&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6&#34;&gt;CNRS&lt;/a&gt;. 데이터독에선 &lt;a href=&#34;https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L505&#34;&gt;ifBandwidthInUsage&lt;/a&gt;라는 별칭을 씀.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1.10&lt;/code&gt;&lt;/td&gt;
-          &lt;td&gt;ifHCOutOctets&lt;/td&gt;
-          &lt;td&gt;인터페이스의 출력 바이트 수&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10&#34;&gt;CNRS&lt;/a&gt;. 데이터독에선 &lt;a href=&#34;https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L506&#34;&gt;ifBandwidthOutUsage&lt;/a&gt;라는 별칭을 씀.&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192469287&#34;&gt;&amp;lt;네트워크 운용 및 유지 보수의 모든 것&amp;gt;&lt;/a&gt; - 오카노 신&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://aws-hyoh.tistory.com/179&#34;&gt;SNMP 쉽게 이해하기 #1&lt;/a&gt; - 네트워크 엔지니어 환경&lt;/li&gt;
-&lt;li&gt;OID
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1&#34;&gt;CNRS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/top.html&#34;&gt;Alvestrand Data&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.circitor.fr/Mibs/Html/C/CISCO-STACK-MIB.php&#34;&gt;CISCO-STACK-MIB&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1&#34;&gt;Reference record for OID 1.3.6.1.2.1&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/network/snmp/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

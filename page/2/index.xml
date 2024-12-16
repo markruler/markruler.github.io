@@ -9,9 +9,361 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 12:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>네트워크 장비 모니터링을 위한 SNMP</title>
+        <link>https://markruler.github.io/posts/network/snmp/</link>
+        <pubDate>Tue, 23 Jul 2024 19:08:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/snmp/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/snmp/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.&lt;/p&gt;
+&lt;h1 id=&#34;전제-조건&#34;&gt;전제 조건&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;IP 네트워크 환경이 있다.&lt;/li&gt;
+&lt;li&gt;관리용 서버(SNMP 서버)가 있다.&lt;/li&gt;
+&lt;li&gt;SNMP 프로토콜을 지원하는 기기다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;구성-요소&#34;&gt;구성 요소&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;매니저 (SNMP 서버)
+&lt;ul&gt;
+&lt;li&gt;네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;에이전트 (네트워크 기기/서버)
+&lt;ul&gt;
+&lt;li&gt;네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;SNMP 프로토콜 (TCP/IP)
+&lt;ul&gt;
+&lt;li&gt;UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;MIB (Management Information Base)
+&lt;ul&gt;
+&lt;li&gt;SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1156&#34;&gt;RFC 1156&lt;/a&gt;으로 규정된 MIB1, &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1213&#34;&gt;RFC 1213&lt;/a&gt;으로 규정된 MIB2&lt;/li&gt;
+&lt;li&gt;MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있다.&lt;/li&gt;
+&lt;li&gt;MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타낸다. 이 번호열을 OID(Object ID)라고 한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;매니저-에이전트-역할&#34;&gt;매니저-에이전트 역할&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;정보의 요청과 응답
+&lt;ul&gt;
+&lt;li&gt;매니저가 에이전트에게 대상 기기의 정보를 요청 → 에이전트는 정보를 매니저에게 응답&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;설정의 요청과 응답
+&lt;ul&gt;
+&lt;li&gt;매니저가 에이전트에게 대상 기기의 설정 변경을 요청 → 에이전트는 설정을 변경하며 그 결과를 매니저에게 응답&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;상태 변화의 통보
+&lt;ul&gt;
+&lt;li&gt;에이전트가 매니저에게 대상 기기의 상태 변화를 통보&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;매니저-에이전트-통신-방식&#34;&gt;매니저-에이전트 통신 방식&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;폴링 (Polling)
+&lt;ul&gt;
+&lt;li&gt;매니저가 정기적으로 에이전트로부터 관리 정보를 추출&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;트랩 (Trap)
+&lt;ul&gt;
+&lt;li&gt;에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;커뮤니티-이름&#34;&gt;커뮤니티 이름&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;매니저와 에이전트는 커뮤니티 이름으로 그룹화한다.&lt;/li&gt;
+&lt;li&gt;매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신한다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;버전별-차이&#34;&gt;버전별 차이&lt;/h1&gt;
+&lt;h2 id=&#34;v1&#34;&gt;v1&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;커뮤니티 이름이 포함된 패킷을 평문으로 전달함.&lt;/li&gt;
+&lt;li&gt;기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용함.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;v2&#34;&gt;v2&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;커뮤니티 이름이 포함된 패킷을 암호화해서 전달함.&lt;/li&gt;
+&lt;li&gt;추가된 PDU 타입(예: &lt;a href=&#34;http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&#34;&gt;GetBulkRequest&lt;/a&gt;)을 통해 대량의 데이터를 한 번에 전송할 수 있음.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;v2c&#34;&gt;v2c&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달하도록 원복함.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;v3&#34;&gt;v3&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;(username, password) 인증 기능이 추가됨.&lt;/li&gt;
+&lt;li&gt;이 외 다양한 보안 기능 추가됨.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;관련-명령어-도구&#34;&gt;관련 명령어 도구&lt;/h1&gt;
+&lt;h2 id=&#34;snmpget&#34;&gt;snmpget&lt;/h2&gt;
+&lt;p&gt;정확한 OID를 입력해야 해서 난 잘 사용하지 않음.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# output&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iso.3.6.1.2.1.1.1.0 = STRING: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Technical Support: http://www.cisco.com/techsupport
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Copyright (c) 1986-2011 by Cisco Systems, Inc.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;Compiled Thu 21-Jul-11 02:13 by prod_rel_team&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;snmpwalk&#34;&gt;snmpwalk&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpwalk -v2c -l NoAuthNoPriv -c public &amp;lt;ip_address&amp;gt;:&amp;lt;port&amp;gt; [OID]
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;도움말
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-h&lt;/code&gt; : help&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-H&lt;/code&gt; : 사용 가능한 옵션&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-v&lt;/code&gt; : SNMP 버전 (&lt;code&gt;1&lt;/code&gt; | &lt;code&gt;2c&lt;/code&gt; | &lt;code&gt;3&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-l&lt;/code&gt; : security level (&lt;code&gt;noAuthNoPriv&lt;/code&gt; | &lt;code&gt;authNoPriv&lt;/code&gt; | &lt;code&gt;authPriv&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; : the community string&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;mib-2-oid-object-id&#34;&gt;MIB-2 OID (Object ID)&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&amp;amp;v=beta&amp;amp;t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY&#34; alt=&#34;OID Tree&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari&#34;&gt;SNMP Explained: What You Must Know About Monitoring via MIB and OIDs&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;ex-136121-분해&#34;&gt;ex: 1.3.6.1.2.1 분해&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;첫번째 자리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.html&#34;&gt;1: ISO assigned&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;두번째 자리
+&lt;ul&gt;
+&lt;li&gt;0: ISO Standard&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.html&#34;&gt;3: Identified Organization (org)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;세번째 자리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.html&#34;&gt;6: US Department of Defense (dod)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;네번째 자리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.html&#34;&gt;1: Internet&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;다섯번째 자리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.2.html&#34;&gt;2: Management (mgmt)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.4.html&#34;&gt;4: Private&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.4.1.9.html&#34;&gt;1.3.6.1.4.1.9: Cisco&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;여섯번째 자리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/1.3.6.1.2.1.html&#34;&gt;1: SNMP MIB-2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;1361211-system&#34;&gt;1.3.6.1.2.1.1 system&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Object&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.1&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysDescr&lt;/td&gt;
+          &lt;td&gt;System Description&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.1&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.2&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysObjectID&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.3&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysUpTime&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.4&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysContact&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.5&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysName&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.5&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.6&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysLocation&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.1.7&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;sysServices&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.1.7&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;1361212-interfaces&#34;&gt;1.3.6.1.2.1.2 interfaces&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Object&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.2&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifDescr&lt;/td&gt;
+          &lt;td&gt;Interface Description&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.2&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.4&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifMtu&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.4&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.5&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifSpeed&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.5&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.2.2.1.10&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifInOctets&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.2.2.1.10&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;1361213-at---address-translation&#34;&gt;1.3.6.1.2.1.3 at - Address Translation&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Object&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.3&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;at&lt;/td&gt;
+          &lt;td&gt;Address translation&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.3&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;1361214-ip---internet-protocol&#34;&gt;1.3.6.1.2.1.4 ip - Internet Protocol&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Object&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.4.22&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ipNetToMediaTable&lt;/td&gt;
+          &lt;td&gt;SEQUENCE OF IpNetToMediaEntry&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1.4.22&#34;&gt;oidref&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;13612131-ifmib&#34;&gt;1.3.6.1.2.1.31 ifMIB&lt;/h2&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;ID&lt;/th&gt;
+          &lt;th&gt;Object&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifMIBObjects&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifXTable&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifXEntry&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1.6&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifHCInOctets&lt;/td&gt;
+          &lt;td&gt;인터페이스의 입력 바이트 수&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6&#34;&gt;CNRS&lt;/a&gt;. 데이터독에선 &lt;a href=&#34;https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L505&#34;&gt;ifBandwidthInUsage&lt;/a&gt;라는 별칭을 씀.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;code&gt;1.3.6.1.2.1.31.1.1.1.10&lt;/code&gt;&lt;/td&gt;
+          &lt;td&gt;ifHCOutOctets&lt;/td&gt;
+          &lt;td&gt;인터페이스의 출력 바이트 수&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10&#34;&gt;CNRS&lt;/a&gt;. 데이터독에선 &lt;a href=&#34;https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py#L506&#34;&gt;ifBandwidthOutUsage&lt;/a&gt;라는 별칭을 씀.&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192469287&#34;&gt;&amp;lt;네트워크 운용 및 유지 보수의 모든 것&amp;gt;&lt;/a&gt; - 오카노 신&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://aws-hyoh.tistory.com/179&#34;&gt;SNMP 쉽게 이해하기 #1&lt;/a&gt; - 네트워크 엔지니어 환경&lt;/li&gt;
+&lt;li&gt;OID
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1&#34;&gt;CNRS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alvestrand.no/objectid/top.html&#34;&gt;Alvestrand Data&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.circitor.fr/Mibs/Html/C/CISCO-STACK-MIB.php&#34;&gt;CISCO-STACK-MIB&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://oidref.com/1.3.6.1.2.1&#34;&gt;Reference record for OID 1.3.6.1.2.1&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/network/snmp/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1805,450 +2157,6 @@ freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/gui/x-based-desktop/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Load Balancer를 활용해서 배포 프로세스를 개선해보자</title>
-        <link>https://markruler.github.io/posts/ci/ci-with-lb/</link>
-        <pubDate>Wed, 17 Aug 2022 03:44:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/ci/ci-with-lb/</guid>
-        <description>임창수 https://markruler.github.io/posts/ci/ci-with-lb/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B8%B0%EC%A1%B4-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4&#34;&gt;기존 프로세스&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%84%A0-%ED%94%84%EB%A1%9C%EC%84%B8%EC%8A%A4-continuous-delivery&#34;&gt;개선 프로세스 (Continuous Delivery)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8F%84%EC%9E%85-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%9C-%EB%AC%B8%EC%A0%9C%EB%93%A4&#34;&gt;도입 과정에서 발생한 문제들&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#active-health-check%EA%B0%80-%ED%95%84%EC%9A%94%ED%95%98%EB%8B%A4&#34;&gt;Active Health Check가 필요하다&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#iptables-%EC%84%9C%EB%B9%84%EC%8A%A4%EB%A5%BC-%EB%8B%A4%EC%8B%9C-%EC%8B%9C%EC%9E%91%ED%95%B4%EC%95%BC-%ED%95%A0-%EB%95%8C&#34;&gt;iptables 서비스를 다시 시작해야 할 때&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#httpd%EB%A5%BC-%EB%8B%A4%EC%8B%9C-%EC%8B%A4%ED%96%89%ED%95%B4%EC%95%BC-%ED%95%A0-%EB%95%8C&#34;&gt;httpd를 다시 실행해야 할 때&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%84%A0%EC%9D%98-%EC%97%AC%EC%A7%80%EA%B0%80-%EC%9E%88%EB%8B%A4&#34;&gt;개선의 여지가 있다&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#sessionrepositoryfilter-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5&#34;&gt;&lt;code&gt;SessionRepositoryFilter&lt;/code&gt; 에러 페이지 응답&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#proxy&#34;&gt;Proxy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5&#34;&gt;Akamai 에러 페이지 응답&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#haproxy-%EC%A0%84%ED%99%98&#34;&gt;HAProxy 전환&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%A0%EC%96%B8%ED%98%95-%EB%B0%B0%ED%8F%AC-gitops&#34;&gt;선언형 배포 (GitOps?)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%81%EC%A3%BC&#34;&gt;각주&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;현재 팀에서 빌드-배포 도구로 Bamboo를 사용하고 있다.
-놀랍게도 개발자가 커밋한 소스 코드를 운영 환경에 반영하기까지 14단계의 수동 작업이 필요했다.
-그래서 개발팀 모두가 배포 작업에 많은 부담을 갖고 있었다.
-한번 빌드하고 배포하는데 최소 30분에서 길면 1시간까지 걸리는 이 불필요한 시간을 줄이고 싶었다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ci/old-system-2022.webp&#34; alt=&#34;개발중인 서비스의 기존 시스템&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;화살표 방향은 단순히 요청의 흐름을 나타낸다.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;단일 서버의 처리량(Capacity)을 초과한 대량 요청 트래픽은 속도 저하나 서비스 지연 또는 장애를 유발한다.
-이 상황을 대비해 부하(Load)를 여러 서버로 분산(Balancing)하는 것을 서버 로드 밸런싱(SLB: Server Load Balancing)이라고 한다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
-기존 운영 환경에서는 Alteon Application Switch를 Layer 4 로드 밸런서로 사용하고 있었다.
-하지만 80번 포트에 대한 Layer 4 헬스체크만 하고 있었기 때문에 애플리케이션 배포 시 연결을 비활성화해야 했다.
-배포 작업의 대부분이 이 작업에 의존했다.
-웹 애플리케이션이 실행 중인 서버에 Apache HTTP 서버(&lt;code&gt;httpd&lt;/code&gt;)도 있었기 때문에 가장 빠르고 효과적인 해결책으로 Layer 7 Load Balancing 기능을 생각했다.
-정리하자면 기존 프로세스와 개선 프로세스는 다음과 같다.&lt;/p&gt;
-&lt;h2 id=&#34;기존-프로세스&#34;&gt;기존 프로세스&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;코드 리뷰를 마치고 소스 코드가 배포 브랜치에 병합되면 버튼을 눌러 빌드한다.
-&lt;ul&gt;
-&lt;li&gt;대부분의 이슈들은 2개의 애플리케이션(&lt;code&gt;:38888&lt;/code&gt;, &lt;code&gt;:39999&lt;/code&gt;)에 함께 반영된다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;telnet&lt;/code&gt; 을 사용해서 Alteon Switch에 접속한다.&lt;/li&gt;
-&lt;li&gt;배포하기 전에 서비스 도메인(&lt;code&gt;d1.markruler.com&lt;/code&gt;, &lt;code&gt;d2.markruler.com&lt;/code&gt;)에 접속할 수 있는지 확인한다.&lt;/li&gt;
-&lt;li&gt;가상 호스트(vhost)에 묶여 있는 &lt;code&gt;s1&lt;/code&gt; 서버를 비활성화한다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Server Load Balancing Information&lt;span style=&#34;color:#0f0&#34;&gt;# /info/slb/virt 1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: IP4 &amp;lt;vhost_IP_Address&amp;gt;,   &lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  virtual ports:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  http: rport http, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  https: rport https, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Main&lt;span style=&#34;color:#0f0&#34;&gt;# /cfg/slb/real 1/dis&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Current status: enabled
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;New status:     disabled
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Main&lt;span style=&#34;color:#0f0&#34;&gt;# apply&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;5&#34;&gt;
-&lt;li&gt;다시 3번과 동일하게 서비스 도메인에 접속할 수 있는지 확인한다.&lt;/li&gt;
-&lt;li&gt;Bamboo를 사용해서 새로운 버전의 애플리케이션 2개(&lt;code&gt;s1:38888&lt;/code&gt;, &lt;code&gt;s1:39999&lt;/code&gt;)를 배포한다.&lt;/li&gt;
-&lt;li&gt;배포 스크립트에서 별도로 헬스체크를 하지 않기 때문에 수동으로 접속할 수 있는지 확인(&amp;ldquo;새로 고침&amp;rdquo;)한다.&lt;/li&gt;
-&lt;li&gt;정상적으로 접속되면 Alteon Switch에서 &lt;code&gt;s1&lt;/code&gt; 서버를 활성화한다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Main&lt;span style=&#34;color:#0f0&#34;&gt;# /cfg/slb/real 1/ena&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Current status: disabled
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;New status:     enabled
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Main&lt;span style=&#34;color:#0f0&#34;&gt;# apply&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;9&#34;&gt;
-&lt;li&gt;그 후 &lt;code&gt;s2&lt;/code&gt; 서버를 비활성화한다. (8번과 동시에 적용하면 Akamai CDN 서비스에서 &lt;a href=&#34;#akamai-%EC%97%90%EB%9F%AC-%ED%8E%98%EC%9D%B4%EC%A7%80-%EC%9D%91%EB%8B%B5&#34;&gt;&lt;code&gt;ERR_ZERO_SIZE_OBJECT&lt;/code&gt; 에러가 발생할 수 있다&lt;/a&gt;)&lt;/li&gt;
-&lt;li&gt;다시 3번과 동일하게 서비스 도메인에 접속할 수  있는지 확인한다.&lt;/li&gt;
-&lt;li&gt;Bamboo에서 새로운 버전의 애플리케이션 2개(&lt;code&gt;s2:38888&lt;/code&gt;, &lt;code&gt;s2:39999&lt;/code&gt;)를 배포한다.&lt;/li&gt;
-&lt;li&gt;다시 7번과 동일한 이유로 서비스 도메인에 접속할 수  있는지 확인한다.&lt;/li&gt;
-&lt;li&gt;모두 접속되면 Alteon Switch에서 &lt;code&gt;s2&lt;/code&gt; 서버를 활성화한다.&lt;/li&gt;
-&lt;li&gt;마지막으로 반영 사항을 갈무리해서 업무 메신저에 공유한다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;개선-프로세스-continuous-delivery&#34;&gt;개선 프로세스 (Continuous Delivery)&lt;/h2&gt;
-&lt;p&gt;웹 서버가 동일 머신에 있는 웹 애플리케이션만 바라보는 것이 아니라 다른 머신에 있는 서버도 바라보도록 설정했다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ci/new-system-2022.webp&#34; alt=&#34;개발중인 서비스의 새로운 시스템&#34;&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;총 14단계에서 1단계까지 줄였다.
-먼저 코드 리뷰를 마치고 소스 코드가 통합 브랜치(trunk)에 병합되면 자동으로 빌드된다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ol&gt;
-&lt;li&gt;운영 환경에 반영하기 위해 배포 버튼을 누른다.
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;쉘 스크립트를 활용해 자동으로 새로운 버전의 애플리케이션을 배포하고 헬스체크한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;while&lt;/span&gt; ! curl --silent --output /dev/null --head --fail --max-time &lt;span style=&#34;color:#f60&#34;&gt;3&lt;/span&gt; --location &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;; &lt;span style=&#34;color:#f00&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Healthchecking...&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  sleep &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;del&gt;마지막으로 반영 사항을 갈무리해서 업무 메신저에 공유한다.&lt;/del&gt;
-&lt;ul&gt;
-&lt;li&gt;업무 메신저가 Slack에서 NAVER Works로 변경되고 연동을 못하고 있었는데
-&lt;a href=&#34;https://github.com/markruler/naver-works-plugin&#34;&gt;Jenkins 플러그인&lt;/a&gt;을 직접 만들어서 알림 메시지가 가도록 만들었다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;도입-과정에서-발생한-문제들&#34;&gt;도입 과정에서 발생한 문제들&lt;/h1&gt;
-&lt;h2 id=&#34;active-health-check가-필요하다&#34;&gt;Active Health Check가 필요하다&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/active-health-checks/&#34;&gt;Active Health Check&lt;/a&gt;란
-주기적으로 서버에 연결을 시도하거나 HTTP 요청을 보내서 서버 상태를 확인한다.
-반면 &lt;a href=&#34;https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/passive-health-checks/&#34;&gt;Passive Health Check&lt;/a&gt;는
-오류가 있는지 활성 트래픽(active traffic)만 검사한다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;&lt;code&gt;s1&lt;/code&gt; 과 &lt;code&gt;s2&lt;/code&gt; 서버에는 CentOS 7이 설치되어있다.
-해당 OS에서는 httpd를 &lt;strong&gt;2.4.6 버전&lt;/strong&gt;까지만 업데이트 할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; yum info httpd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Available Packages
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Name        : httpd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Arch        : x86_64
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Version     : 2.4.6
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Layer 7 헬스체크를 위한 &lt;code&gt;mod_proxy_hcheck&lt;/code&gt; 모듈은
-&lt;strong&gt;2.4.21 버전&lt;/strong&gt;부터 사용할 수 있기 때문에 OS 변경이 불가피했다.
-하지만 클라우드 컴퓨트 서비스를 사용하는 것이 아닌
-IDC 물리 서버를 사용하고 있었기 때문에 OS 교체는 상당히 큰 부담이었다.
-그래서 컨테이너를 도입하기로 결정했다.&lt;/p&gt;
-&lt;p&gt;설정 파일(&lt;code&gt;httpd.conf&lt;/code&gt;)은 기존 설정을 최대한 그대로 사용하기로 했다.
-&lt;code&gt;volumes&lt;/code&gt; 경로는 어느 환경에서든 동일하도록 가급적 절대 경로를 사용했다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; cd &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/httpd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; ls
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker-compose.yaml  httpd.conf
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# docker-compose.yaml&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;version: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;3.8&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;services:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  slb:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    image: httpd:2.4.54-alpine
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    container_name: slb
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    hostname: markruler.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ports:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f60&#34;&gt;80&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;80&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#f60&#34;&gt;443&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;443&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    volumes:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#0f0&#34;&gt;# httpd&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/home/markruler/httpd/httpd.conf:/usr/local/apache2/conf/httpd.conf&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#0f0&#34;&gt;# logs&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/httpd/logs/d1.markruler:/usr/local/apache2/logs/d1.markruler&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#0f0&#34;&gt;# SSL&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/ssl/certs/d1.crt:/etc/ssl/certs/d1/cert.pem&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/ssl/certs/d1.key:/etc/ssl/certs/d1/privkey.pem&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/ssl/certs/d1.chain.crt:/etc/ssl/certs/d1/chain.pem&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/ssl/certs/CA_AAA_CERTIFICATE_SERVICES.crt:/etc/ssl/certs/d1/ca.pem&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#0f0&#34;&gt;# SSL Key Password&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/etc/ssl/certs/key_password.sh:/etc/ssl/certs/d1/key_password.sh&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;networks:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  default:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    driver_opts:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      com.docker.network.enable_ipv6: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;false&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ipam:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      driver: default
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      config:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        - subnet: &lt;span style=&#34;color:#f60&#34;&gt;172.18.0.0&lt;/span&gt;/16 &lt;span style=&#34;color:#0f0&#34;&gt;# 255.255.0.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          gateway: &lt;span style=&#34;color:#f60&#34;&gt;172.18.0.1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;httpd -t&lt;/code&gt; 명령어로 서버 실행 전 설정 파일을 검증할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker compose run --rm slb httpd -t
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;up&lt;/code&gt; 명령어로 서버를 실행한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sudo docker compose up --detach&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker compose -f &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/httpd/docker-compose.yaml up -d
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;docker inspect&lt;/code&gt; 명령어로 실제 실행된 컨테이너의 정보를 확인할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker inspect slb
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;iptables-서비스를-다시-시작해야-할-때&#34;&gt;iptables 서비스를 다시 시작해야 할 때&lt;/h2&gt;
-&lt;p&gt;iptables 서비스를 다시 시작하면 &lt;code&gt;/etc/sysconfig/iptables&lt;/code&gt; 파일에
-있는 규칙들만 적용되기 때문에 Docker에서 설정하는 iptables 규칙이 사라진다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; systemctl restart iptables
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;실제로 Docker 도입 사실을 IDC 매니저와 공유하지 않았다가 문제가 발생했다.
-IDC 매니저가 우리 회사 측 요청으로 iptables 규칙을 변경하고 재시작했는데
-해당 서버의 Docker 네트워크 규칙들이 사라져서 컨테이너가 실행되지 못하고 있었다.
-현재는 iptables를 재실행할 때 Docker도 같이 재실행한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; systemctl restart docker
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; iptables -nvL
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;추가로 컨테이너에서 각 서비스로 트래픽을 보내기 위해 iptables 규칙을 추가한다.
-Docker 데몬은 기본적으로 &lt;code&gt;docker0&lt;/code&gt; 라는 브릿지 네트워크 인터페이스를 사용하는데 IP address range를
-&lt;a href=&#34;https://github.com/moby/moby/blob/a77317882d010b884a9101c6ad0b2d7db141082f/libnetwork/docs/network.md&#34;&gt;172.17.0.1/16&lt;/a&gt; 으로 설정한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; ip -br -c a
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lo               UNKNOWN        127.0.0.1/8 ::1/128
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker0          DOWN           172.17.0.1/16 &lt;span style=&#34;color:#0f0&#34;&gt;# HERE!&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;iptables 규칙을 추가하기 위해 해당 네트워크를 고정시켰다.
-&lt;a href=&#34;https://docs.docker.com/network/bridge/&#34;&gt;bip&lt;/a&gt;는 Docker 데몬이 사용할 bridge network IP address range를 지정하는 옵션이다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 기본 설정&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;lt;&amp;lt;EOF | sudo tee /etc/docker/daemon.json
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;  &amp;#34;bip&amp;#34;: &amp;#34;172.17.0.1/16&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;EOF&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Docker 데몬을 재시작하면 &lt;code&gt;docker0&lt;/code&gt; 네트워크 인터페이스가 변경되어 있을 것이다.
-이제 컨테이너에서 웹 애플리케이션으로 패킷을 전달할 수 있도록 iptables 규칙을 추가한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; vi /etc/sysconfig/iptables
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport &lt;span style=&#34;color:#f60&#34;&gt;38888&lt;/span&gt; -j ACCEPT
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport &lt;span style=&#34;color:#f60&#34;&gt;39999&lt;/span&gt; -j ACCEPT
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;172.16.0.0/12&lt;/code&gt; 로 설정한 이유는 docker-compose로 컨테이너를 실행할 경우
-이미 있는 인터페이스가 아닌 추가 인터페이스를 생성하기 때문이다.
-만약 &lt;code&gt;docker0&lt;/code&gt; 와 동일한 &lt;code&gt;172.17.0.1/16&lt;/code&gt; 으로 생성하려고 시도하면 아래와 같은 에러가 발생한다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;failed to create network httpd_default: Error response from daemon: Pool overlaps with other one on this address space
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Docker에서 추가 인터페이스를 생성할 때 &lt;code&gt;172.17-31.x.x/16&lt;/code&gt;, &lt;code&gt;192.168.x.x/20&lt;/code&gt; 범위에서 추가하게 된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// https://github.com/moby/moby/blob/df650a1aeb190a319287c4d26bd3593b5343fb72/libnetwork/ipamutils/utils.go
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; (
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// PredefinedLocalScopeDefaultNetworks contains a list of 31 IPv4 private networks with host size 16 and 12
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// (172.17-31.x.x/16, 192.168.x.x/20) which do not overlap with the networks in `PredefinedGlobalScopeDefaultNetworks`
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  PredefinedLocalScopeDefaultNetworks []*net.IPNet
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// PredefinedGlobalScopeDefaultNetworks contains a list of 64K IPv4 private networks with host size 8
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// (10.x.x.x/24) which do not overlap with the networks in `PredefinedLocalScopeDefaultNetworks`
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  PredefinedGlobalScopeDefaultNetworks []*net.IPNet
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  mutex                                sync.Mutex
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  localScopeDefaultNetworks = []*NetworkToSplit{{&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.17.0.0/16&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.18.0.0/16&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.19.0.0/16&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.20.0.0/14&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.24.0.0/14&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.28.0.0/14&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;192.168.0.0/16&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;20&lt;/span&gt;}}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  globalScopeDefaultNetworks = []*NetworkToSplit{{&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;10.0.0.0/8&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;24&lt;/span&gt;}}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;init&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; err &lt;span style=&#34;color:#ee82ee&#34;&gt;error&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; PredefinedGlobalScopeDefaultNetworks, err = &lt;span style=&#34;color:#ff0&#34;&gt;splitNetworks&lt;/span&gt;(globalScopeDefaultNetworks); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    panic(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;failed to initialize the global scope default address pool: &amp;#34;&lt;/span&gt; + err.&lt;span style=&#34;color:#ff0&#34;&gt;Error&lt;/span&gt;())
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; PredefinedLocalScopeDefaultNetworks, err = &lt;span style=&#34;color:#ff0&#34;&gt;splitNetworks&lt;/span&gt;(localScopeDefaultNetworks); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    panic(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;failed to initialize the local scope default address pool: &amp;#34;&lt;/span&gt; + err.&lt;span style=&#34;color:#ff0&#34;&gt;Error&lt;/span&gt;())
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;만약 범위를 변경하고 싶다면 &lt;a href=&#34;https://docs.mirantis.com/mke/3.4/install/plan-deployment/mcr-considerations/default-address-pools.html&#34;&gt;Mirantis 문서&lt;/a&gt;처럼 &lt;code&gt;default-address-pools&lt;/code&gt; 옵션을 직접 추가할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;default-address-pools&amp;#34;&lt;/span&gt;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.17.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;}, &amp;lt;-- docker0
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.18.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.19.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.20.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.21.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.22.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.23.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.24.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.25.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.26.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.27.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.28.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.29.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;172.30.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;base&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;192.168.0.0/16&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;size&amp;#34;&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;20&lt;/span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정이 끝났다면 iptables를 다시 실행한다.&lt;/p&gt;
-&lt;h2 id=&#34;httpd를-다시-실행해야-할-때&#34;&gt;httpd를 다시 실행해야 할 때&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;httpd 컨테이너를 재실행(restart)하지 않고도 설정 파일을 다시 적용(reload)하는 방법을 아직 찾지 못했다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;테스트 환경의 Alteon Switch에서 Layer 4 헬스체크가 잘 되는지 확인해 본다.
-그러고는 &lt;code&gt;s2&lt;/code&gt; 서버의 &lt;code&gt;httpd&lt;/code&gt; 를 죽여본다.
-&lt;code&gt;FAILED&lt;/code&gt; 상태가 되고 트래픽을 보내지 않는다!&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Server Load Balancing Information&lt;span style=&#34;color:#0f0&#34;&gt;# /info/slb/virt 1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: IP4 &amp;lt;vhost_IP_Address&amp;gt;,   &lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    virtual ports:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    http: rport http, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, FAILED &lt;span style=&#34;color:#0f0&#34;&gt;# HERE!&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    https: rport https, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, FAILED &lt;span style=&#34;color:#0f0&#34;&gt;# HERE!&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 &lt;code&gt;httpd&lt;/code&gt; 를 살려본다.
-&lt;code&gt;up&lt;/code&gt; 상태가 되고 트래픽을 보낸다!&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-s&#34; data-lang=&#34;s&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt;&amp;gt; Server Load Balancing Information&lt;span style=&#34;color:#0f0&#34;&gt;# /info/slb/virt 1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: IP4 &amp;lt;vhost_IP_Address&amp;gt;,   &lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;:&lt;span style=&#34;color:#f60&#34;&gt;00&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    virtual ports:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    http: rport http, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none, slowstart
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up &lt;span style=&#34;color:#0f0&#34;&gt;# HERE!&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    https: rport https, group &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;, backup none, rtspslb none, slowstart
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        real servers:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;: &amp;lt;s1_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;: &amp;lt;s2_IP_Address&amp;gt;, backup none, &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; ms, group ena, up &lt;span style=&#34;color:#0f0&#34;&gt;# HERE!&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;개선의-여지가-있다&#34;&gt;개선의 여지가 있다&lt;/h1&gt;
-&lt;p&gt;아래에서 언급할 사항들은 위에서 도입한 기술과 별개로 기존에도 발생하던 문제다.&lt;/p&gt;
-&lt;h2 id=&#34;sessionrepositoryfilter-에러-페이지-응답&#34;&gt;&lt;code&gt;SessionRepositoryFilter&lt;/code&gt; 에러 페이지 응답&lt;/h2&gt;
-&lt;p&gt;Tomcat Shutdown 직후 일시적으로 응답받을 수 있다. Graceful Shutdown, 요청 재시도(retry) 등을 고려해 볼 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Type - Exception report
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Message - Request processing failed; nested exception is java.lang.NullPointerException
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Description - The server encountered an internal error that prevented it from fulfilling &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt; request.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Exception
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;org.springframework.web.util.NestedServletException: Request processing failed; nested exception is java.lang.NullPointerException
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  org.springframework.web.filter.HttpPutFormContentFilter.doFilterInternal(HttpPutFormContentFilter.java:105)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:52)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  org.apache.catalina.filters.HttpHeaderSecurityFilter.doFilter(HttpHeaderSecurityFilter.java:126)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:316)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Root Cause
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.lang.NullPointerException
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  org.springframework.session.web.http.SessionRepositoryFilter$SessionRepositoryRequestWrapper$SessionCommittingRequestDispatcher.forward(SessionRepositoryFilter.java:447)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;proxy&#34;&gt;Proxy&lt;/h2&gt;
-&lt;p&gt;upstream 서버(Tomcat)의 응답이 늦어질 경우 발생할 수 있다.
-&lt;code&gt;mod_proxy&lt;/code&gt; 의 timeout 값을 조절하여 응답이 늦어지는 경우를 방지할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;lt;!-- 502 Bad Gateway --&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Proxy Error
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The proxy server received an invalid response from an upstream server.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The proxy server could not handle the request
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Reason: Error reading from remote server
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;akamai-에러-페이지-응답&#34;&gt;Akamai 에러 페이지 응답&lt;/h2&gt;
-&lt;p&gt;Layer 4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 경우 응답받을 수 있다.
-예를 들어, 1번 서버는 &lt;code&gt;disable&lt;/code&gt;, 2번 서버는 &lt;code&gt;enable&lt;/code&gt; 상태일 때
-1번 서버를 &lt;code&gt;enable&lt;/code&gt;, 2번 서버를 &lt;code&gt;disable&lt;/code&gt; 상태로 변경한 후 &lt;code&gt;apply&lt;/code&gt; 하면
-다음과 같은 에러가 발생할 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Service Unavailable - Zero size object
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;The server is temporarily unable to service your request. Please try again later.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Reference &lt;span style=&#34;color:#0f0&#34;&gt;#15.6f4bc817.1651592357.1872133&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;2번 서버로 갔던 패킷이 갑자기 유실되면 CDN에서 받는 응답 데이터가 없어서 발생하는 것으로 추측하고 있다. 🤯
-&lt;a href=&#34;https://techdocs.akamai.com/edge-diagnostics/docs/error-codes&#34;&gt;Akamai Reference&lt;/a&gt;에 따르면 &lt;code&gt;#15.x.x.x&lt;/code&gt;는 &lt;code&gt;ERR_ZERO_SIZE_OBJECT&lt;/code&gt; 에러다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;code&gt;ERR_ZERO_SIZE_OBJECT&lt;/code&gt; — A response from the origin server has zero length.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Akamai에 문의 결과 해당 페이지는 커스텀 할 수 없다고 한다.
-버려지는 요청들을 어떻게 처리할지 고민이 필요하다.&lt;/p&gt;
-&lt;h2 id=&#34;haproxy-전환&#34;&gt;HAProxy 전환&lt;/h2&gt;
-&lt;p&gt;이미 부분적으로 HAProxy를 사용해서 서비스를 이중화하고 있었다.
-HAProxy를 선택한 이유는 기본적으로 &lt;a href=&#34;https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/&#34;&gt;statistics 기능이 Web UI로 제공&lt;/a&gt;되면서
-Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/haproxy-statistics-report.webp&#34; alt=&#34;HAProxy&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;무엇보다도 XML 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.&lt;/strong&gt;
-또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인
-&lt;a href=&#34;https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/&#34;&gt;Active Healthcheck가 유료(NGINX Plus) 기능&lt;/a&gt;이기 때문이다.&lt;/p&gt;
-&lt;h2 id=&#34;선언형-배포-gitops&#34;&gt;선언형 배포 (GitOps?)&lt;/h2&gt;
-&lt;p&gt;Bamboo에서는 &lt;a href=&#34;https://confluence.atlassian.com/bamboo/bamboo-specs-894743906.html&#34;&gt;Bamboo Specs&lt;/a&gt;라는 명칭으로 Infrastructure as Code(IaC)를 구현한다.
-— &lt;a href=&#34;https://confluence.atlassian.com/bamboo/bamboo-yaml-specs-938844479.html&#34;&gt;YAML Specs&lt;/a&gt;의
-설정 파일에서는 SCP, SSH 등 주요 플러그인들을 지원하지 않기 때문에
-&lt;a href=&#34;https://confluence.atlassian.com/bamboo/bamboo-java-specs-941616821.html&#34;&gt;Java Specs&lt;/a&gt;를 사용하는 것이 좋다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:scptask is not supported yet&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:sshtask is not supported yet&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;반면 Jenkins는 사용자가 많기 때문에 비교적 많은 플러그인을 지원하며 레퍼런스도 많다.
-Jenkins Pipeline을 활용하면 &lt;code&gt;Jenkinsfile&lt;/code&gt; 을 사용해서 선언형 배포 방식으로 쉽게 이전할 수도 있다.
-그럼 빌드-배포 과정에서 발생할 수 있는 실수를 줄일 수 있고, 설정 정보를 버전 관리할 수 있다는 장점이 있다.&lt;/p&gt;
-&lt;p&gt;또한 Bamboo는 Slack으로 알림을 보내기 위해서는 Instant Message(IM) 서버가 필요하다.
-반면 Jenkins는 Slack 연동 플러그인만 설치하면 쉽게 알림을 보낼 수 있다.
-그럼 배포 작업은 단 1단계로 줄어든다.
-— 다만 기존에는 반영 사항을 공유할 때 Bamboo와 연동되어 있는 Jira 이슈만 간단히 캡처하면 됐지만,
-아직 Jenkins와 Jira를 연동하지 못해서 어떻게 공유해야 할지 고민이 필요하다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;CI/CD
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md&#34;&gt;CI/CD 정리&lt;/a&gt; - markruler&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/continuous-integration.md&#34;&gt;&amp;lt;지속적인 통합&amp;gt; 요약&lt;/a&gt; - markruler&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.banksalad.com/tech/become-an-organization-that-deploys-1000-times-a-day/&#34;&gt;하루에 1000번 배포하는 조직 되기&lt;/a&gt; - Banksalad&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tech.kakaoenterprise.com/113&#34;&gt;Release Note 톺아보기&lt;/a&gt; - kakao enterprise&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Proxy Server
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.lesstif.com/system-admin/forward-proxy-reverse-proxy-21430345.html&#34;&gt;포워드 프록시(forward proxy) 리버스 프록시(reverse proxy)의 차이&lt;/a&gt; - lesstif
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/&#34;&gt;Proxy servers explained&lt;/a&gt; - Cloudflare&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy&#34;&gt;Reverse Proxy vs. Forward Proxy: The Differences&lt;/a&gt; - Oxylabs&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;SLB: Server Load Balancing
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.nginx.com/resources/glossary/layer-7-load-balancing/&#34;&gt;Differences Between Layer 4 and Layer 7 Load Balancing&lt;/a&gt; - NGINX
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.cloudflare.com/high-availability-load-balancers-with-maglev/&#34;&gt;High Availability Load Balancers with Maglev&lt;/a&gt; - Cloudflare&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://vincent.bernat.ch/en/blog/2018-multi-tier-loadbalancer&#34;&gt;Multi-tier load-balancing with Linux&lt;/a&gt; - Vincent Bernat&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.cloudflare.com/a-primer-on-proxies/&#34;&gt;A Primer on Proxies&lt;/a&gt; - Cloudflare&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://levelup.gitconnected.com/l4-vs-l7-load-balancing-d2012e271f56&#34;&gt;L4 vs L7 Load Balancing&lt;/a&gt; - Mohak Puri&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.nowwatersblog.com/backend/serverLoad/L4L7&#34;&gt;L4 &amp;amp; L7&lt;/a&gt; - nowwater&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&amp;lt;인프라/네트워크 엔지니어를 위한 네트워크 이해 및 설계 가이드&amp;gt; - 미야타 히로시&lt;/li&gt;
-&lt;li&gt;&amp;lt;인프라 엔지니어의 교과서: 네트워크 관리편&amp;gt; - 기술평론사 엮음&lt;/li&gt;
-&lt;li&gt;&amp;lt;웹 엔지니어가 알아야 할 인프라의 기본&amp;gt; - 바바 토시아키&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tech.kakao.com/2014/05/30/l4/&#34;&gt;L4 장비의 동작과 서비스 배포시 유의점&lt;/a&gt; - Kakao&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://elky84.github.io/2018/08/19/network_issue/&#34;&gt;L4 스위치 도입시 생겼던 이야기&lt;/a&gt; - elky84&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://meetup.toast.com/posts/189&#34;&gt;Safe Deploy - 안전하게 L4 에서 제외하는 방법&lt;/a&gt; - NHN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://d2.naver.com/helloworld/284659&#34;&gt;L4/L7 스위치의 대안, 오픈 소스 로드 밸런서 HAProxy&lt;/a&gt; - NAVER D2&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Docker
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://subicura.com/2016/06/07/zero-downtime-docker-deployment.html&#34;&gt;도커를 이용한 웹서비스 무중단 배포하기&lt;/a&gt; - subicura&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://straz.to/2021-09-08-docker-address-pools/&#34;&gt;The definitive guide to docker&amp;rsquo;s default-address-pools option&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;각주&#34;&gt;각주&lt;/h2&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&amp;lt;AWS 토폴로지로 이해하는 Amazon VPC&amp;gt; 10장. 분산 제어 - 차정도&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/ci/ci-with-lb/ - Im Changsu 2020 - 2024</description>
         </item>
     
     
