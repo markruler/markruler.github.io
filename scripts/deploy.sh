@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
 # Exit on error
-set -e
+set -ex
 
 git add -A
 msg="rebuilding site $(date '+%Y-%m-%dT%H:%M:%S %Z%z') on Unix-like system"
-echo "$msg"
 git commit -m "$msg"
 
 printf "\033[38;5;46mDeploying updates to GitHub...\033[38;5;15m\n"
