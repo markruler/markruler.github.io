@@ -16,19 +16,19 @@
     
     
         <item>
-        <title>한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기</title>
+        <title>한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기</title>
         <link>https://markruler.github.io/posts/reverse-engineering/game-localization/</link>
         <pubDate>Mon, 16 Dec 2024 21:26:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/reverse-engineering/game-localization/</guid>
-        <description>임창수 https://markruler.github.io/posts/reverse-engineering/game-localization/ -&lt;p&gt;스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 모드나 패치 도구가 꽤 많습니다.
-그래서 콘솔이나 고전게임보다 비교적 난이도가 쉽습니다.
+        <description>임창수 https://markruler.github.io/posts/reverse-engineering/game-localization/ -&lt;p&gt;스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 게임 모드(Mod)나 패치 도구가 꽤 많습니다.
+그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
 한국어 패치 제작에 입문하기 딱 좋은 플랫폼이라고 생각합니다.&lt;/p&gt;
 &lt;h1 id=&#34;게임-저작권과-한국어-패치&#34;&gt;게임 저작권과 한국어 패치&lt;/h1&gt;
 &lt;p&gt;먼저 저작권부터 이야기해야 할 것 같습니다.
 엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
-배포가 목적이라면 반드시 게임 개발사에 허락부터 받아야 합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;한국어 패치 제작자들은 호의적으로 패치하는 경우가 대부분이고,
+당연히 배포가 목적이라면 게임 개발사에 허락을 받아야 합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;한국어 패치 제작자들은 호의로 패치하는 경우가 대부분이고,
 인디 게임 개발사에서는 번역할 여건이 되지 않기 때문에 이에 긍정적으로 반응하는 경우가 대부분입니다.
 제가 번역한 게임의 개발사도 크레딧(Credit)에 제 이름을 명시해주겠다는 제의까지 해주셨습니다.
 하지만 일부 개발사들은 고소까지 하는 사례도 있다고 하니 법적인 책임을 반드시 숙지해야 합니다.&lt;/p&gt;
@@ -98,7 +98,11 @@ Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들�
 ZIP 포맷의 파일 시그니처는 &lt;code&gt;PK&lt;/code&gt;이기 때문에 이를 찾아내어 파일을 추출하고,
 Love2D 개발툴을 사용해서 다시 패키징합니다.&lt;/p&gt;
 &lt;h3 id=&#34;고전-게임&#34;&gt;고전 게임&lt;/h3&gt;
-&lt;p&gt;고전 게임은 롬 카트리지에 저장되어 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;고전 게임은 롬 카트리지에 저장되어 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;
+구동 가능한 롬 파일을 직접 제작하거나 구해야 하는데, 아직 이 부분은 저도 모르겠습니다.
+YY-CHR와 같은 툴로 롬 파일을 열어서 스프라이트 폰트를 수정하고,
+HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
+패치 과정 자체는 스팀 게임과 동일하지만 Hex Editor를 들여다보는 일에 많은 인내가 필요합니다.&lt;/p&gt;
 &lt;h2 id=&#34;실시간-번역&#34;&gt;실시간 번역&lt;/h2&gt;
 &lt;p&gt;화면에 스크립트가 렌더링되고 텍스트를 추출해서 번역하는 방식입니다.
 그래서 딜레이가 꽤 있습니다.
@@ -152,9 +156,9 @@ IL2CPP는 AOT 방식의 일종으로 IL 코드를 C++ 코드로 변환 후 네�
 C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 사용하면 플랫폼 호환성이 높아집니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;롬 카트리지(&lt;a href=&#34;https://en.wikipedia.org/wiki/ROM_cartridge&#34;&gt;ROM cartridge&lt;/a&gt;)에 저장된 패키지 게임.
-예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
-파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;롬 카트리지(&lt;a href=&#34;https://en.wikipedia.org/wiki/ROM_cartridge&#34;&gt;ROM cartridge&lt;/a&gt;)에 저장된 패키지 게임입니다.
+예를 들어, SFC(Super Famicom), GBA(Gameboy Advance), SNK NEOGEO, PS1, PCE(PC Engine) 등의 콘솔 게임들이 있습니다.
+파일 시그니처를 모른채 직접 패턴을 파악해야 해서 난이도가 어렵다고 생각합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;

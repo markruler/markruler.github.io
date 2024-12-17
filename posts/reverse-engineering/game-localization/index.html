@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기</title>
+<title>한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기</title>
 
 
 
@@ -18,13 +18,13 @@
 
 <meta property="og:url" content="https://markruler.github.io/posts/reverse-engineering/game-localization/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기">
+  <meta property="og:title" content="한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기">
   <meta property="og:description" content="한국어 패치 제작자분들 감사합니다">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-12-16T21:26:00+09:00">
-    <meta property="article:modified_time" content="2024-12-17T01:22:00+09:00">
+    <meta property="article:modified_time" content="2024-12-17T12:15:00+09:00">
     <meta property="article:tag" content="Reverse-Engineering">
     <meta property="article:tag" content="Game-Localization">
     <meta property="og:image" content="https://markruler.github.io/images/reverse-engineering/game-localization/jupiter-hell.png">
@@ -36,7 +36,7 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://markruler.github.io/images/reverse-engineering/game-localization/jupiter-hell.png">
-  <meta name="twitter:title" content="한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기">
+  <meta name="twitter:title" content="한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기">
   <meta name="twitter:description" content="한국어 패치 제작자분들 감사합니다">
 
 
@@ -552,7 +552,7 @@
                 
             >
                 <div class="post-title">
-                    한국어를 지원하지 않는 스팀 게임의 비공식 한국어 패치 만들기
+                    한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기
                     
                     <div class="post-subtitle">
                         한국어 패치 제작자분들 감사합니다
@@ -590,14 +590,14 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <p>스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 모드나 패치 도구가 꽤 많습니다.
-그래서 콘솔이나 고전게임보다 비교적 난이도가 쉽습니다.
+                    <p>스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 게임 모드(Mod)나 패치 도구가 꽤 많습니다.
+그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
 한국어 패치 제작에 입문하기 딱 좋은 플랫폼이라고 생각합니다.</p>
 <h1 id="게임-저작권과-한국어-패치">게임 저작권과 한국어 패치</h1>
 <p>먼저 저작권부터 이야기해야 할 것 같습니다.
 엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
-배포가 목적이라면 반드시 게임 개발사에 허락부터 받아야 합니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p>한국어 패치 제작자들은 호의적으로 패치하는 경우가 대부분이고,
+당연히 배포가 목적이라면 게임 개발사에 허락을 받아야 합니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p>한국어 패치 제작자들은 호의로 패치하는 경우가 대부분이고,
 인디 게임 개발사에서는 번역할 여건이 되지 않기 때문에 이에 긍정적으로 반응하는 경우가 대부분입니다.
 제가 번역한 게임의 개발사도 크레딧(Credit)에 제 이름을 명시해주겠다는 제의까지 해주셨습니다.
 하지만 일부 개발사들은 고소까지 하는 사례도 있다고 하니 법적인 책임을 반드시 숙지해야 합니다.</p>
@@ -667,7 +667,11 @@ Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들�
 ZIP 포맷의 파일 시그니처는 <code>PK</code>이기 때문에 이를 찾아내어 파일을 추출하고,
 Love2D 개발툴을 사용해서 다시 패키징합니다.</p>
 <h3 id="고전-게임">고전 게임</h3>
-<p>고전 게임은 롬 카트리지에 저장되어 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup></p>
+<p>고전 게임은 롬 카트리지에 저장되어 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>
+구동 가능한 롬 파일을 직접 제작하거나 구해야 하는데, 아직 이 부분은 저도 모르겠습니다.
+YY-CHR와 같은 툴로 롬 파일을 열어서 스프라이트 폰트를 수정하고,
+HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
+패치 과정 자체는 스팀 게임과 동일하지만 Hex Editor를 들여다보는 일에 많은 인내가 필요합니다.</p>
 <h2 id="실시간-번역">실시간 번역</h2>
 <p>화면에 스크립트가 렌더링되고 텍스트를 추출해서 번역하는 방식입니다.
 그래서 딜레이가 꽤 있습니다.
@@ -721,9 +725,9 @@ IL2CPP는 AOT 방식의 일종으로 IL 코드를 C++ 코드로 변환 후 네�
 C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 사용하면 플랫폼 호환성이 높아집니다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
-<p>롬 카트리지(<a href="https://en.wikipedia.org/wiki/ROM_cartridge">ROM cartridge</a>)에 저장된 패키지 게임.
-예를 들어, NES, GBA, NEOGEO, PS1 등의 콘솔 게임들이 있습니다.
-파일 시그니처를 모른채 직접 추출하고 패치해야 해서 난이도가 어렵다고 생각합니다.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>롬 카트리지(<a href="https://en.wikipedia.org/wiki/ROM_cartridge">ROM cartridge</a>)에 저장된 패키지 게임입니다.
+예를 들어, SFC(Super Famicom), GBA(Gameboy Advance), SNK NEOGEO, PS1, PCE(PC Engine) 등의 콘솔 게임들이 있습니다.
+파일 시그니처를 모른채 직접 패턴을 파악해야 해서 난이도가 어렵다고 생각합니다.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
@@ -777,7 +781,7 @@ C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2freverse-engineering%2fgame-localization%2f&amp;text=%ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ec%8a%a4%ed%8c%80%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2freverse-engineering%2fgame-localization%2f&amp;text=%ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:all">
@@ -813,7 +817,7 @@ C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ec%8a%a4%ed%8c%80%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0.&amp;body=%ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ec%8a%a4%ed%8c%80%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0a%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%ec%a0%9c%ec%9e%91%ec%9e%90%eb%b6%84%eb%93%a4%20%ea%b0%90%ec%82%ac%ed%95%a9%eb%8b%88%eb%8b%a4%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2freverse-engineering%2fgame-localization%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0.&amp;body=%ed%95%9c%ea%b5%ad%ec%96%b4%eb%a5%bc%20%ec%a7%80%ec%9b%90%ed%95%98%ec%a7%80%20%ec%95%8a%eb%8a%94%20%ea%b2%8c%ec%9e%84%ec%9d%98%20%eb%b9%84%ea%b3%b5%ec%8b%9d%20%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%eb%a7%8c%eb%93%a4%ea%b8%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0a%ed%95%9c%ea%b5%ad%ec%96%b4%20%ed%8c%a8%ec%b9%98%20%ec%a0%9c%ec%9e%91%ec%9e%90%eb%b6%84%eb%93%a4%20%ea%b0%90%ec%82%ac%ed%95%a9%eb%8b%88%eb%8b%a4%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2freverse-engineering%2fgame-localization%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
