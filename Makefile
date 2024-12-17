@@ -6,9 +6,9 @@ ifeq ($(OS), Windows_NT)
     # Windows
     OSFLAG := WINDOWS
     PRINTER := Write-Host
-		CLEAN := .\scripts\windows.clean.ps1
-		BUILD := .\scripts\windows.build.ps1
-		DEPLOY := .\scripts\windows.deploy.ps1
+		CLEAN := powershell -ExecutionPolicy Bypass -File .\scripts\windows.clean.ps1
+		BUILD := powershell -ExecutionPolicy Bypass -File .\scripts\windows.build.ps1
+		DEPLOY := powershell -ExecutionPolicy Bypass -File .\scripts\windows.deploy.ps1
 else
     # uname으로 운영체제 구분
 		UNAME_S := $(shell uname -s)
