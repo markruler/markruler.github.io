@@ -14,6 +14,7 @@ ifeq ($(OS), Windows_NT)
     IGNORE_ERRORS := -ErrorAction SilentlyContinue; exit 0
 #		LINE_CONTINUATION := `
     PRINTER := echo
+		DEPLOY := ./scripts/deploy.sh
 else
     IGNORE_ERRORS :=
     PRINTER := printf
@@ -24,6 +25,7 @@ else
     ifeq ($(UNAME_S), Darwin)
         OSFLAG := MACOS
     endif
+		DEPLOY := ./scripts/deploy.sh
 endif
 
 # ANSI Escape Code - Color
@@ -74,13 +76,7 @@ build: clean
 .PHONY: build
 
 deploy: build
-	git add -A
-	@msg="rebuilding site $(shell date '+%Y-%m-%dT%H:%M:%S %Z%z') on Unix-like system"; \
-	echo "$$msg"; \
-	git commit -m "$$msg"
-	@$(PRINTER) "\033[38;5;46mDeploying updates to GitHub...\033[38;5;15m\n"
-	@git push origin $(BRANCH)
-	@$(PRINTER) "\033[38;5;198mCOMPLETE! \033[38;5;15m\n"
+	$(DEPLOY)
 .PHONY: deploy
 
 run:
