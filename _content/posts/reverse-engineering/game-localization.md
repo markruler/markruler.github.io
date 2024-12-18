@@ -18,6 +18,22 @@ categories:
 그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
 한국어 패치 제작에 입문하기 딱 좋은 플랫폼이라고 생각합니다.
 
+- [게임 저작권과 한국어 패치](#게임-저작권과-한국어-패치)
+- [대표적인 게임 엔진별 한국어 패치 제작 방법](#대표적인-게임-엔진별-한국어-패치-제작-방법)
+  - [언팩 도구 사용하기](#언팩-도구-사용하기)
+    - [유니티 (Unity)](#유니티-unity)
+    - [언리얼 엔진 (Unreal Engine)](#언리얼-엔진-unreal-engine)
+    - [게임메이커 (GameMaker Studio 2)](#게임메이커-gamemaker-studio-2)
+    - [렌파이 (Ren'Py - PyGame)](#렌파이-renpy---pygame)
+    - [고도 (Godot)](#고도-godot)
+  - [파일 카빙 (File Carving)](#파일-카빙-file-carving)
+    - [Love2D](#love2d)
+    - [고전 게임](#고전-게임)
+  - [실시간 번역](#실시간-번역)
+    - [XUnity Auto Translator](#xunity-auto-translator)
+    - [MORT (MonkeyHead's OCR Realtime Translator)](#mort-monkeyheads-ocr-realtime-translator)
+- [더 읽을거리](#더-읽을거리)
+
 # 게임 저작권과 한국어 패치
 
 먼저 저작권부터 이야기해야 할 것 같습니다.
