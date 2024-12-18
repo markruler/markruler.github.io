@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>모니터링과 타임아웃의 중요성</title>
+
+<title>
+  
+  임창수
+  
+  | 모니터링과 타임아웃의 중요성
+  
+  
+</title>
 
 
 
@@ -13,6 +21,7 @@
 <meta name="description" content="이거 모르는 개발자 많다카더라">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
 
 
 
@@ -1506,5 +1515,18 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
             </div>
     
     <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
     </body>
 </html>

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략</title>
+
+<title>
+  
+  임창수
+  
+  | 엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략
+  
+  
+</title>
 
 
 
@@ -13,6 +21,7 @@
 <meta name="description" content="검색 성능을 개선한 e커머스 서비스 사례">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
 
 
 
@@ -959,5 +968,18 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
             </div>
     
     <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
     </body>
 </html>

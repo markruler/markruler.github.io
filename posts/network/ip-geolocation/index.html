@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>IP로 지리적 위치(Geolocation) 찾기</title>
+
+<title>
+  
+  임창수
+  
+  | IP로 지리적 위치(Geolocation) 찾기
+  
+  
+</title>
 
 
 
@@ -13,6 +21,7 @@
 <meta name="description" content="CDN에서 위치 정보를 얻는 방법">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
 
 
 
@@ -1031,5 +1040,18 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
             </div>
     
     <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
     </body>
 </html>

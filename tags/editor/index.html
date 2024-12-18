@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>Editor</title>
+
+<title>
+  
+  임창수
+  
+  
+</title>
 
 
 
@@ -13,6 +19,7 @@
 <meta name="description" content="">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
 
 
 
@@ -376,5 +383,18 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
             </div>
     
     <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
     </body>
 </html>

@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko"><head>
-<title>유용한 구글 크롬(Google Chrome)의 기능</title>
+
+<title>
+  
+  임창수
+  
+  | 유용한 구글 크롬(Google Chrome)의 기능
+  
+  
+</title>
 
 
 
@@ -13,6 +21,7 @@
 <meta name="description" content="개발 편의성을 높일 수 있는 기능을 소개합니다.">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
 
 
 
@@ -1441,5 +1450,18 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
             </div>
     
     <script src="/js/journal.js"></script><script src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
     </body>
 </html>
