@@ -15,30 +15,44 @@
 
 ```sh
 sudo snap install hugo
+# sudo snap refresh hugo
+# sudo snap refresh
 ```
 
 - [macOS](https://gohugo.io/installation/macos/)
 
 ```sh
 brew install hugo
+# brew upgrade hugo
 ```
 
 - [Windows](https://gohugo.io/installation/windows/)
 
 ```ps1
 choco install hugo-extended
+# choco upgrade hugo-extended
+# choco upgrade all
 ```
 
 ## Install Dart Sass
 
-- [link](https://gohugo.io/hugo-pipes/transpile-sass-to-css/#installing-in-a-development-environment)
+[link](https://gohugo.io/hugo-pipes/transpile-sass-to-css/#installing-in-a-development-environment)
+
+- [Linux](https://github.com/jmooring/dart-sass-snap)
 
 ```sh
-# Linux
 sudo snap install dart-sass
-# macOS
+```
+
+- macOS
+
+```sh
 brew install sass/sass/sass
-# Windows
+```
+
+- [Windows](https://community.chocolatey.org/packages/sass)
+
+```sh
 choco install sass
 ```
 

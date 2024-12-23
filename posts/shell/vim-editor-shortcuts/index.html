@@ -33,7 +33,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2020-12-07T00:44:00+09:00">
-    <meta property="article:modified_time" content="2024-07-24T02:06:00+09:00">
+    <meta property="article:modified_time" content="2024-12-24T07:40:00+09:00">
     <meta property="article:tag" content="Editor">
     <meta property="article:tag" content="Vi">
     <meta property="article:tag" content="Vim">
@@ -197,8 +197,8 @@
 						
 						
 							<li>
-								<a href="#%ec%84%a4%ec%a0%95" class="nav-설정">
-									설정
+								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
+									설정 (.vimrc)
 								</a>
 							</li>
 						
@@ -514,34 +514,76 @@
                 <div class="post-body" v-pre>
                 
                     <blockquote>
-<p>업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
-VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
+<p>서버에서 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
+제가 사용하는 설정 파일과 자주 쓰는 명령어를 정리합니다.</p>
 </blockquote>
-<h1 id="설정">설정</h1>
-<p>설정 파일인 <code>~/.vimrc</code>에서 큰따옴표(<code>&quot;</code>, double quote)가 앞에 있다면 주석(comment)이 된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#f00">syntax</span> on <span style="color:#0f0">&#34;구문강조 사용</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">colorscheme</span> desert <span style="color:#0f0">&#34;color 폴더에 colorscheme 설치 필요</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> background=dark <span style="color:#0f0">&#34;하이라이팅 lihgt / dark</span>
+<h1 id="설정-vimrc">설정 (.vimrc)</h1>
+<p>제가 사용하는 설정 파일(<code>~/.vimrc</code>)입니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#0f0">&#34;이것은 주석</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">syntax</span> on                                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showcmd
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> statusline+=%F::%l,%c
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmatch
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ignorecase
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> smartcase
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> incsearch
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autowrite
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ruler
 </span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autoindent
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> shiftwidth=<span style="color:#f60">2</span> <span style="color:#0f0">&#34;autoindent width</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ts=<span style="color:#f60">2</span> <span style="color:#0f0">&#34;tabstop, width</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> softtabstop=<span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cindent <span style="color:#0f0">&#34;C Language indent</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> nu <span style="color:#0f0">&#34;number</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cul <span style="color:#0f0">&#34;Highlight current line</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> hls <span style="color:#0f0">&#34;hlsearch, 검색어 강조</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> incsearch <span style="color:#0f0">&#34;키워드 입력시 점진적 검색</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ic <span style="color:#0f0">&#34;ignorecase, 검색시 대소문자 무시</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> expandtab <span style="color:#0f0">&#34;탭 대신 스페이스</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> laststatus=<span style="color:#f60">2</span> <span style="color:#0f0">&#34;status line</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> nowrapscan <span style="color:#0f0">&#34;검색할 때 문서의 끝에서 처음으로 안돌아감</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> visualbell <span style="color:#0f0">&#34;키를 잘못눌렀을 때 화면 프레시</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ruler <span style="color:#0f0">&#34;화면 우측 하단에 현재 커서의 위치(줄,칸) 표시</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> fileencoding=utf<span style="color:#f60">-8</span> <span style="color:#0f0">&#34;파일저장인코딩</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tenc=utf<span style="color:#f60">-8</span> <span style="color:#0f0">&#34;터미널 인코딩</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> history=<span style="color:#f60">1000</span> <span style="color:#0f0">&#34;vi 편집기록 기억갯수 .viminfo에 기록</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showbreak=+++\
-</span></span></code></pre></div><p><img src="/images/shell/vim.png" alt="vim"></p>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cindent
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> shiftwidth=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tabstop=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> expandtab
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> laststatus=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> backspace=indent,eol,start
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmode
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> hls
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> colorcolumn=<span style="color:#f60">80</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ff=unix
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> fileencodings=utf8
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> viminfo=&#39;<span style="color:#f60">50</span>,&lt;<span style="color:#f60">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;set history=1000</span>
+</span></span><span style="display:flex;"><span>au FileType make setlocal noexpandtab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">highlight</span> TailingWhitespace ctermbg=red guibg=red
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cul
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> background=dark
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> nowrapscan
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> visualbell
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tenc=utf<span style="color:#f60">-8</span>
+</span></span></code></pre></div><ul>
+<li><code>syntax on</code> 구문강조 사용</li>
+<li><code>set showcmd</code> 명령어 입력시 상태표시줄에 보여줌</li>
+<li><code>set statusline+=%F::%l,%c</code> 상태표시줄에 파일명, 줄, 컬럼 표시</li>
+<li><code>set showmatch</code> 괄호 매칭 보여줌</li>
+<li><code>set ignorecase</code> 검색시 대소문자 무시</li>
+<li><code>set smartcase</code> 검색어에 대문자가 포함되어 있으면 대소문자 구분</li>
+<li><code>set incsearch</code> 검색어 입력시 점진적 검색</li>
+<li><code>set autowrite</code> 저장하지 않은 파일을 끝내기 전에 자동으로 저장</li>
+<li><code>set ruler</code> 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시</li>
+<li><code>set autoindent</code> 자동 들여쓰기</li>
+<li><code>set cindent</code> C언어 자동 들여쓰기</li>
+<li><code>set shiftwidth=2</code> 들여쓰기 2칸</li>
+<li><code>set tabstop=2</code> 탭을 2칸으로</li>
+<li><code>set expandtab</code> 탭을 스페이스로 대체</li>
+<li><code>set laststatus=2</code> 상태표시줄 항상 표시</li>
+<li><code>set backspace=indent,eol,start</code> 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제</li>
+<li><code>set showmode</code> 현재 모드 표시</li>
+<li><code>set hls</code> 검색어 하이라이팅</li>
+<li><code>set colorcolumn=80</code> 80칸에 세로줄 표시</li>
+<li><code>set ff=unix</code> 파일 포맷을 유닉스로</li>
+<li><code>set fileencodings=utf8</code> 파일 인코딩</li>
+<li><code>set viminfo='50,&lt;1000</code> 최근 50개의 명령어 기억</li>
+<li><code>set history=1000</code> vi 편집기록 기억갯수 <code>.viminfo</code>에 기록</li>
+<li><code>au FileType make setlocal noexpandtab</code> makefile에서 탭을 스페이스로 대체하지 않음</li>
+<li><code>highlight TailingWhitespace ctermbg=red guibg=red</code> 끝에 공백이 있는 경우 빨간색으로 표시</li>
+<li><code>set cul</code> 현재 커서가 있는 줄 강조</li>
+<li><code>set nowrapscan</code> 검색시 문서 끝에서 처음으로 이동하지 않음</li>
+<li><code>set visualbell</code> 경고음 대신 화면 깜빡임</li>
+<li><code>set tenc=utf-8</code> 터미널 인코딩을 UTF-8로</li>
+</ul>
+<p><img src="/images/shell/vim.png" alt="vim"></p>
 <h1 id="입력-모드-insert-mode">입력 모드 (Insert Mode)</h1>
 <ul>
 <li><code>i</code> 현재 커서에서 편집
@@ -585,7 +627,7 @@ VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 </li>
 <li><code>:tabnew [file]</code> 새로운 탭 열기 (file이 없으면 빈 탭)
 <ul>
-<li>실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편.</li>
+<li>실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편입니다.</li>
 <li><code>gt</code> 다음 탭으로 이동하기</li>
 <li><code>gT</code> 이전 탭으로 이동하기</li>
 </ul>
@@ -624,7 +666,7 @@ VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 <li><code>p</code> 붙여넣기</li>
 <li><code>&gt;</code> 들여쓰기</li>
 <li><code>&lt;</code> 내어쓰기</li>
-<li><code>Shift + j</code> 현재 줄과 다음 줄 합치기</li>
+<li><code>Shift + j</code> 현재 줄의 끝과 다음 줄의 앞부분을 합칩니다.</li>
 </ul>
 <h2 id="삭제">삭제</h2>
 <ul>
@@ -633,7 +675,7 @@ VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 <li><code>Shift + x</code> 현재 커서 앞에 한 글자 삭제 (backspace)</li>
 <li><code>:1,.d</code> 첫 번째 줄부터 현재 커서까지 삭제 (LLM)</li>
 <li><code>:5,10d</code> 5번 줄부터 10번 줄까지 삭제 (LLM)</li>
-<li><code>dd</code> 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)
+<li><code>dd</code> 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있습니다)
 <ul>
 <li>이동키와 조합해 삭제할 수도 있다.</li>
 <li><code>5dd</code> 현재 줄 포함 아래로 5줄 삭제</li>
@@ -651,14 +693,14 @@ VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 <li><code>shift + v</code> 비주얼 라인</li>
 <li><code>Ctrl + v</code> 비주얼 블록
 <ul>
-<li>비주얼 블록 모드에서 <code>Shift + i</code>를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환된다.</li>
-<li>입력을 마치고 <code>ESC</code>를 누르면 블록의 모든 줄에 입력한 내용이 삽입된다. (여러 줄을 주석 처리할 때 유용)</li>
+<li>비주얼 블록 모드에서 <code>Shift + i</code>를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환됩니다.</li>
+<li>입력을 마치고 <code>ESC</code>를 누르면 블록의 모든 줄에 입력한 내용이 삽입됩니다. (여러 줄을 주석 처리할 때 유용)</li>
 </ul>
 </li>
 </ul>
 <h2 id="화면-분할">화면 분할</h2>
 <ul>
-<li>탭 기능과 동일하게 터미널 자체 기능을 선호하는 편.</li>
+<li>탭 기능과 동일하게 터미널 자체 기능을 선호하는 편입니다.</li>
 <li><code>Control + w</code> + <code>s</code> horizontal split
 <ul>
 <li><code>new</code> horizontal split한 후 새로운 창 생성</li>
@@ -680,7 +722,7 @@ VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2024-07-24</p>
+		    <p style="color:#777;">최종 수정: 2024-12-24</p>
                     
                 </div>
             </div>
@@ -912,8 +954,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ec%84%a4%ec%a0%95" class="nav-설정">
-									설정
+								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
+									설정 (.vimrc)
 								</a>
 							</li>
 						

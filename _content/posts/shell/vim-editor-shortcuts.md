@@ -1,6 +1,6 @@
 ---
 date: 2020-12-07T00:44:00+09:00
-lastmod: 2024-07-24T02:06:00+09:00
+lastmod: 2024-12-24T07:40:00+09:00
 title: "VIM 에디터 명령어 정리"
 description: "VI/VIM"
 featured_image: "/images/shell/vim.png"
@@ -14,37 +14,78 @@ categories:
   - wiki
 ---
 
-> 업무 중에 구성 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
-> VIM 명령어 중에서도 가장 자주 쓰는 명령어를 정리한다.
+> 서버에서 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
+> 제가 사용하는 설정 파일과 자주 쓰는 명령어를 정리합니다.
 
-# 설정
+# 설정 (.vimrc)
 
-설정 파일인 `~/.vimrc`에서 큰따옴표(`"`, double quote)가 앞에 있다면 주석(comment)이 된다.
+제가 사용하는 설정 파일(`~/.vimrc`)입니다.
 
 ```vim
-syntax on "구문강조 사용
-colorscheme desert "color 폴더에 colorscheme 설치 필요
-set background=dark "하이라이팅 lihgt / dark
+"이것은 주석
+syntax on                                                                       
+set showcmd
+set statusline+=%F::%l,%c
+set showmatch
+set ignorecase
+set smartcase
+set incsearch
+set autowrite
+set ruler
 set autoindent
-set shiftwidth=2 "autoindent width
-set ts=2 "tabstop, width
-set softtabstop=2
-set cindent "C Language indent
-set nu "number
-set cul "Highlight current line
-set hls "hlsearch, 검색어 강조
-set incsearch "키워드 입력시 점진적 검색
-set ic "ignorecase, 검색시 대소문자 무시
-set expandtab "탭 대신 스페이스
-set laststatus=2 "status line
-set nowrapscan "검색할 때 문서의 끝에서 처음으로 안돌아감
-set visualbell "키를 잘못눌렀을 때 화면 프레시
-set ruler "화면 우측 하단에 현재 커서의 위치(줄,칸) 표시
-set fileencoding=utf-8 "파일저장인코딩
-set tenc=utf-8 "터미널 인코딩
-set history=1000 "vi 편집기록 기억갯수 .viminfo에 기록
-set showbreak=+++\
+set cindent
+set shiftwidth=2
+set tabstop=2
+set expandtab
+set laststatus=2
+set backspace=indent,eol,start
+set showmode
+set hls
+set colorcolumn=80
+set ff=unix
+set fileencodings=utf8
+set viminfo='50,<1000
+"set history=1000
+au FileType make setlocal noexpandtab
+
+highlight TailingWhitespace ctermbg=red guibg=red
+
+set cul
+set background=dark
+set nowrapscan
+set visualbell
+set tenc=utf-8
 ```
+
+- `syntax on` 구문강조 사용
+- `set showcmd` 명령어 입력시 상태표시줄에 보여줌
+- `set statusline+=%F::%l,%c` 상태표시줄에 파일명, 줄, 컬럼 표시
+- `set showmatch` 괄호 매칭 보여줌
+- `set ignorecase` 검색시 대소문자 무시
+- `set smartcase` 검색어에 대문자가 포함되어 있으면 대소문자 구분
+- `set incsearch` 검색어 입력시 점진적 검색
+- `set autowrite` 저장하지 않은 파일을 끝내기 전에 자동으로 저장
+- `set ruler` 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시
+- `set autoindent` 자동 들여쓰기
+- `set cindent` C언어 자동 들여쓰기
+- `set shiftwidth=2` 들여쓰기 2칸
+- `set tabstop=2` 탭을 2칸으로
+- `set expandtab` 탭을 스페이스로 대체
+- `set laststatus=2` 상태표시줄 항상 표시
+- `set backspace=indent,eol,start` 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제
+- `set showmode` 현재 모드 표시
+- `set hls` 검색어 하이라이팅
+- `set colorcolumn=80` 80칸에 세로줄 표시
+- `set ff=unix` 파일 포맷을 유닉스로
+- `set fileencodings=utf8` 파일 인코딩
+- `set viminfo='50,<1000` 최근 50개의 명령어 기억
+- `set history=1000` vi 편집기록 기억갯수 `.viminfo`에 기록
+- `au FileType make setlocal noexpandtab` makefile에서 탭을 스페이스로 대체하지 않음
+- `highlight TailingWhitespace ctermbg=red guibg=red` 끝에 공백이 있는 경우 빨간색으로 표시
+- `set cul` 현재 커서가 있는 줄 강조
+- `set nowrapscan` 검색시 문서 끝에서 처음으로 이동하지 않음
+- `set visualbell` 경고음 대신 화면 깜빡임
+- `set tenc=utf-8` 터미널 인코딩을 UTF-8로
 
 ![vim](/images/shell/vim.png)
 
@@ -73,7 +114,7 @@ set showbreak=+++\
   - `:!pwd` 현재 디렉토리 경로 출력
   - `:!date` 현재 시간 출력
 - `:tabnew [file]` 새로운 탭 열기 (file이 없으면 빈 탭)
-  - 실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편.
+  - 실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편입니다.
   - `gt` 다음 탭으로 이동하기
   - `gT` 이전 탭으로 이동하기
 
@@ -107,7 +148,7 @@ set showbreak=+++\
 - `p` 붙여넣기
 - `>` 들여쓰기
 - `<` 내어쓰기
-- `Shift + j` 현재 줄과 다음 줄 합치기
+- `Shift + j` 현재 줄의 끝과 다음 줄의 앞부분을 합칩니다.
 
 ## 삭제
 
@@ -116,7 +157,7 @@ set showbreak=+++\
 - `Shift + x` 현재 커서 앞에 한 글자 삭제 (backspace)
 - `:1,.d` 첫 번째 줄부터 현재 커서까지 삭제 (LLM)
 - `:5,10d` 5번 줄부터 10번 줄까지 삭제 (LLM)
-- `dd` 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있다)
+- `dd` 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있습니다)
   - 이동키와 조합해 삭제할 수도 있다.
   - `5dd` 현재 줄 포함 아래로 5줄 삭제
   - `dgg` 현재 커서에서 첫 줄까지 삭제
@@ -130,12 +171,12 @@ set showbreak=+++\
 - `v` 비주얼 모드
 - `shift + v` 비주얼 라인
 - `Ctrl + v` 비주얼 블록
-  - 비주얼 블록 모드에서 `Shift + i`를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환된다.
-  - 입력을 마치고 `ESC`를 누르면 블록의 모든 줄에 입력한 내용이 삽입된다. (여러 줄을 주석 처리할 때 유용)
+  - 비주얼 블록 모드에서 `Shift + i`를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환됩니다.
+  - 입력을 마치고 `ESC`를 누르면 블록의 모든 줄에 입력한 내용이 삽입됩니다. (여러 줄을 주석 처리할 때 유용)
 
 ## 화면 분할
 
-- 탭 기능과 동일하게 터미널 자체 기능을 선호하는 편.
+- 탭 기능과 동일하게 터미널 자체 기능을 선호하는 편입니다.
 - `Control + w` + `s` horizontal split
   - `new` horizontal split한 후 새로운 창 생성
 - `Control + w` + `v` vertical split
