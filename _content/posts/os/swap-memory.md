@@ -1,7 +1,7 @@
 ---
 draft: false
 date: 2024-09-05T21:13:00+09:00
-lastmod: 2024-09-05T21:13:00+09:00
+lastmod: 2024-12-26T21:13:00+09:00
 title: "일상에서의 스왑 메모리 (Swap Memory)"
 description: "스왑 메모리 설정과 모니터링"
 featured_image: "/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.webp"
@@ -41,6 +41,7 @@ NAME      TYPE SIZE USED PRIO
 - [부팅 시 자동 마운트 설정](#부팅-시-자동-마운트-설정)
 - [용량 늘리기](#용량-늘리기)
 - [비활성화](#비활성화)
+  - [swap file 교체](#swap-file-교체)
 - [Kubernetes에서 Swap 기능을 비활성화해야 하는 이유](#kubernetes에서-swap-기능을-비활성화해야-하는-이유)
 - [Prometheus node-exporter를 이용한 모니터링](#prometheus-node-exporter를-이용한-모니터링)
 - [더 읽을거리](#더-읽을거리)
@@ -147,7 +148,7 @@ Ubuntu 24.04 기준 기본 설정값에는 `/swap.img` 파일이 있다.
 # that works even if disks are added and removed. See fstab(5).
 #
 # <file system> <mount point>   <type>  <options>       <dump>  <pass>
-/swap.img       none    swap    sw      0       0
+/swap.img       none            swap    sw              0       0
 ```
 
 (위 설정이 없다는 전제 하에)
@@ -218,6 +219,31 @@ sudo swapoff /swapfile
 ```sh
 # /etc/fstab
 # /swapfile none swap sw 0 0
+```
+
+## swap file 교체
+
+만약 기존 swap file을 교체하고 싶다면 새로 생성한 파일로 swapon 후 기존 swap 파일을 swapoff 하면 옮겨간다.
+
+```sh
+sudo swapon /swap2file
+```
+
+```sh
+# sudo swapon --show
+NAME       TYPE SIZE USED PRIO
+/swapfile  file  16G   2G   -2
+/swap2file file  32G   0B   -3
+```
+
+```sh
+sudo swapoff /swapfile
+```
+
+```sh
+# sudo swapon --show
+NAME       TYPE SIZE USED PRIO
+/swap2file file  32G 1.5G   -2
 ```
 
 # Kubernetes에서 Swap 기능을 비활성화해야 하는 이유

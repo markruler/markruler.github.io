@@ -33,7 +33,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-09-05T21:13:00+09:00">
-    <meta property="article:modified_time" content="2024-09-05T21:13:00+09:00">
+    <meta property="article:modified_time" content="2024-12-26T21:13:00+09:00">
     <meta property="article:tag" content="Linux">
     <meta property="article:tag" content="Memory">
     <meta property="og:image" content="https://markruler.github.io/images/os/swap-memory/pexels-crazy-motions-80195021-12198537.webp">
@@ -365,6 +365,34 @@
 						
 						
 						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#swap-file-%ea%b5%90%ec%b2%b4" class="nav-swap-file-교체">
+									swap file 교체
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
 						
 							<li>
 								<a href="#kubernetes%ec%97%90%ec%84%9c-swap-%ea%b8%b0%eb%8a%a5%ec%9d%84-%eb%b9%84%ed%99%9c%ec%84%b1%ed%99%94%ed%95%b4%ec%95%bc-%ed%95%98%eb%8a%94-%ec%9d%b4%ec%9c%a0" class="nav-kubernetes에서-swap-기능을-비활성화해야-하는-이유">
@@ -539,7 +567,11 @@
 </li>
 <li><a href="#%EB%B6%80%ED%8C%85-%EC%8B%9C-%EC%9E%90%EB%8F%99-%EB%A7%88%EC%9A%B4%ED%8A%B8-%EC%84%A4%EC%A0%95">부팅 시 자동 마운트 설정</a></li>
 <li><a href="#%EC%9A%A9%EB%9F%89-%EB%8A%98%EB%A6%AC%EA%B8%B0">용량 늘리기</a></li>
-<li><a href="#%EB%B9%84%ED%99%9C%EC%84%B1%ED%99%94">비활성화</a></li>
+<li><a href="#%EB%B9%84%ED%99%9C%EC%84%B1%ED%99%94">비활성화</a>
+<ul>
+<li><a href="#swap-file-%EA%B5%90%EC%B2%B4">swap file 교체</a></li>
+</ul>
+</li>
 <li><a href="#kubernetes%EC%97%90%EC%84%9C-swap-%EA%B8%B0%EB%8A%A5%EC%9D%84-%EB%B9%84%ED%99%9C%EC%84%B1%ED%99%94%ED%95%B4%EC%95%BC-%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0">Kubernetes에서 Swap 기능을 비활성화해야 하는 이유</a></li>
 <li><a href="#prometheus-node-exporter%EB%A5%BC-%EC%9D%B4%EC%9A%A9%ED%95%9C-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81">Prometheus node-exporter를 이용한 모니터링</a></li>
 <li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC">더 읽을거리</a></li>
@@ -605,7 +637,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># that works even if disks are added and removed. See fstab(5).</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;</span>
-</span></span><span style="display:flex;"><span>/swap.img       none    swap    sw      <span style="color:#f60">0</span>       <span style="color:#f60">0</span>
+</span></span><span style="display:flex;"><span>/swap.img       none            swap    sw              <span style="color:#f60">0</span>       <span style="color:#f60">0</span>
 </span></span></code></pre></div><p>(위 설정이 없다는 전제 하에)
 새로 추가한 스왑 영역을 추가한다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo <span style="color:#87ceeb">&#39;/swapfile none swap sw 0 0&#39;</span> | sudo tee -a /etc/fstab
@@ -641,6 +673,17 @@
 </span></span></code></pre></div><p><code>/etc/fstab</code> 파일에서 Swap 파일 설정을 제거한다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/fstab</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># /swapfile none swap sw 0 0</span>
+</span></span></code></pre></div><h2 id="swap-file-교체">swap file 교체</h2>
+<p>만약 기존 swap file을 교체하고 싶다면 새로 생성한 파일로 swapon 후 기존 swap 파일을 swapoff 하면 옮겨간다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon /swap2file
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
+</span></span><span style="display:flex;"><span>NAME       TYPE SIZE USED PRIO
+</span></span><span style="display:flex;"><span>/swapfile  file  16G   2G   -2
+</span></span><span style="display:flex;"><span>/swap2file file  32G   0B   -3
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
+</span></span><span style="display:flex;"><span>NAME       TYPE SIZE USED PRIO
+</span></span><span style="display:flex;"><span>/swap2file file  32G 1.5G   -2
 </span></span></code></pre></div><h1 id="kubernetes에서-swap-기능을-비활성화해야-하는-이유">Kubernetes에서 Swap 기능을 비활성화해야 하는 이유</h1>
 <p>가장 큰 이유는 스왑 메모리가 있다면 Kubernetes는 메모리 부족 상황을 정확하게 파악할 수 없다는 것이다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>
 <strong>안정성을 위해</strong> 스왑 메모리를 비활성화하는 것이 좋다.
@@ -674,7 +717,7 @@ Prometheus와 Grafana를 실행해서 모니터링 할 수 있다.</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2024-09-05</p>
+		    <p style="color:#777;">최종 수정: 2024-12-26</p>
                     
                 </div>
             </div>
@@ -1074,6 +1117,34 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 					
 						
 						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#swap-file-%ea%b5%90%ec%b2%b4" class="nav-swap-file-교체">
+									swap file 교체
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
 						
 						
 						
