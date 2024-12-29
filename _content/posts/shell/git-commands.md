@@ -1,6 +1,6 @@
 ---
 date: 2021-12-01T23:28:00+09:00
-lastmod: 2022-02-17T01:39:05+09:00
+lastmod: 2024-12-29T11:55:00+09:00
 title: "깃(Git) CLI 환경에서 소스 코드 관리하기"
 description: "자주 쓰는 Git 명령어"
 featured_image: "/images/shell/git-logo-2color.png"
@@ -13,77 +13,6 @@ Categories:
   - wiki
 ---
 
-- [Git Internal](#git-internal)
-  - [차이가 아니라 스냅샷](#차이가-아니라-스냅샷)
-  - [데이터의 무결성](#데이터의-무결성)
-  - [Git 프로젝트의 세 가지 단계](#git-프로젝트의-세-가지-단계)
-- [Git directory](#git-directory)
-  - [HEAD](#head)
-  - [refs](#refs)
-  - [info](#info)
-  - [objects](#objects)
-    - [tree](#tree)
-    - [blob (binary large object)](#blob-binary-large-object)
-    - [commit](#commit)
-    - [tag](#tag)
-  - [index](#index)
-  - [Hash Function](#hash-function)
-  - [config](#config)
-- [SCM: Source Code Management](#scm-source-code-management)
-- [포셀린(Porcelain) 명령어](#포셀린porcelain-명령어)
-  - [init](#init)
-  - [clone](#clone)
-  - [submodule](#submodule)
-  - [subtree](#subtree)
-  - [branch](#branch)
-    - [xargs](#xargs)
-  - [tag](#tag-1)
-  - [switch](#switch)
-    - [upstream](#upstream)
-  - [status](#status)
-  - [add](#add)
-  - [fetch](#fetch)
-  - [commit](#commit-1)
-  - [merge](#merge)
-  - [pull](#pull)
-  - [rebase](#rebase)
-    - [squash와 fixup](#squash와-fixup)
-  - [cherry-pick](#cherry-pick)
-  - [stash](#stash)
-    - [How git stash works](#how-git-stash-works)
-  - [reset](#reset)
-  - [restore](#restore)
-  - [revert](#revert)
-  - [Git으로 버그 찾기](#git으로-버그-찾기)
-    - [blame](#blame)
-    - [bisect](#bisect)
-  - [show](#show)
-  - [log](#log)
-    - [Triple Dot(...)](#triple-dot)
-  - [reflog: Reference logs](#reflog-reference-logs)
-  - [diff](#diff)
-  - [push](#push)
-- [플러밍(Plumbing) 명령어](#플러밍plumbing-명령어)
-  - [rev-parse](#rev-parse)
-  - [hash-object](#hash-object)
-  - [ls-tree](#ls-tree)
-  - [ls-files](#ls-files)
-  - [cat-file](#cat-file)
-  - [write-tree](#write-tree)
-  - [commit-tree](#commit-tree)
-  - [read-tree](#read-tree)
-  - [update-index](#update-index)
-- [Advanced](#advanced)
-  - [Git Hooks](#git-hooks)
-  - [Garbage Collection](#garbage-collection)
-    - [Packfiles](#packfiles)
-    - [gc](#gc)
-  - [prune](#prune)
-- [Git Server](#git-server)
-  - [Fork](#fork)
-  - [Branch protection rules](#branch-protection-rules)
-- [참고](#참고)
-
 > Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
 > GUI 프로그램의 대부분은 Git 기능 중 일부만 구현하기 때문에 비교적 단순하다.
 > CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하지 않는다. -
@@ -95,13 +24,14 @@ Categories:
 
 - [Commits are snapshots, not diffs](https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/)
 
-CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리한다.
+CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리합니다.
 
 ![Storing data as changes to a base version of each file](/images/shell/git/storing-data-as-changes.png)
 
 *[Storing data as changes to a base version of each file](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F)*
 
-Git은 데이터를 스냅샷의 스트림처럼 취급한다. 파일이 달라지지 않았으면 이전 상태의 파일에 대한 링크만 저장한다.
+Git은 데이터를 스냅샷의 스트림처럼 취급합니다.
+파일이 달라지지 않았으면 이전 상태의 파일에 대한 링크만 저장합니다.
 
 ![Storing data as snapshots of the project over time](/images/shell/git/storing-data-as-snapshots.png)
 
@@ -109,12 +39,11 @@ Git은 데이터를 스냅샷의 스트림처럼 취급한다. 파일이 달라�
 
 ## 데이터의 무결성
 
-Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash function을 사용해서 체크섬을 계산하는 것이다.
-그리고 이 체크섬으로 데이터를 관리한다.
+Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash function을 사용해서 체크섬을 계산하는 것입니다.
+그리고 이 체크섬으로 데이터를 관리합니다.
 
-왜 데이터의 무결성을 검사해야 할까?
-[데이터를 신뢰하기 위해서다](https://www.youtube.com/watch?v=4XpnKHJAok8&t=56m25s).
-예를 들어 내가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 된다.
+이것은 [데이터를 신뢰하기 위해](https://www.youtube.com/watch?v=4XpnKHJAok8&t=56m25s) 무결성을 검사하는 과정입니다.
+예를 들어 제가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 되는 것이죠.
 
 ```sh
 echo "test" > test.txt
@@ -122,7 +51,7 @@ git hash-object test.txt
 # 9daeafb9864cf43055ae93beb0afd6c7d144bfa4
 ```
 
-파일명을 변경하더라도 체크섬은 바뀌지 않는다.
+파일명을 변경하더라도 체크섬은 바뀌지 않습니다.
 
 ```sh
 mv test.txt test2.md
@@ -130,7 +59,7 @@ git hash-object test2.md
 # 9daeafb9864cf43055ae93beb0afd6c7d144bfa4
 ```
 
-내용을 변경하면 체크섬은 바뀐다.
+내용을 변경하면 체크섬은 바뀝니다.
 
 ```sh
 echo " " >> test2.md
@@ -138,29 +67,29 @@ git hash-object test2.md
 # d698e83c7a0b75a29e815371e584973062b4cab9
 ```
 
-Git은 SHA-1 알고리즘을 사용하여 체크섬을 구한다.
-만든 체크섬은 40자 길이의 16진수 문자열이다.
-파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구한다.
+Git은 SHA-1 알고리즘을 사용하여 체크섬을 구합니다.
+체크섬은 40자 길이의 16진수 문자열입니다.
+파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구합니다.
 
 > *[Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
 > 정말 그렇게 되면 어떤 일이 벌어질까?](https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0)*
 
-이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용한다.
-그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 된다.
+이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용합니다.
+그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 됩니다.
 
-그러나 해시 값이 중복되는 일은 일어나기 어렵다.
-SHA-1 값의 크기는 20 Bytes(160 Bits)다.
-해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80이다.
+그러나 해시 값이 중복되는 일은 일어나기 어렵습니다.
+SHA-1 값의 크기는 20 Bytes(160 Bits)입니다.
+해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80입니다.
 
-([2018년부터 SHA-256으로 전환하고 있고](https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/), Git 2.29부터 지원하고 있다)
+- [2018년부터 SHA-256으로 전환하고 있고](https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/), Git 2.29부터 지원하고 있습니다.
 
-해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 된다.
+해시 값 앞부분이 중복되지 않으면 checksum은 앞 4자만 있어도 됩니다.
 
 ```sh
 git ls-tree ee85
 ```
 
-앞부분이 중복된다면 아래와 같은 에러가 발생한다.
+앞부분이 중복된다면 아래와 같은 에러가 발생합니다.
 
 ```sh
 ferror: short object ID ee85 is ambiguous
@@ -171,7 +100,7 @@ hint:   ee8574581 blob
 fatal: Not a valid object name ee85
 ```
 
-몇 글자를 더 입력해주면 정상적으로 동작한다.
+몇 글자를 더 입력해주면 정상적으로 조회됩니다.
 
 ```sh
 git ls-tree ee859
@@ -179,51 +108,44 @@ git ls-tree ee859
 
 ## Git 프로젝트의 세 가지 단계
 
-Git은 파일을 세 가지 상태로 관리한다.
+Git은 파일을 세 가지 상태로 관리합니다.
 
 ![The lifecycle of the status of your files](/images/shell/git/lifecycle-file-status.png)
 
 *[The lifecycle of the status of your files](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository)*
 
-- Modified - 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 상태다.
-- Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태다.
-  파일을 Stage하면 Git 저장소에 파일을 Blob으로 저장하고 Staging Area에 해당 파일의 체크섬을 저장한다.
-  - Tracked - 관리 대상에 있는 파일이다. 이미 스냅샷에 포함되어 있던 파일이다.
-  - Untracked - Unmodified, Modified, Staged 상태가 아닌 나머지 파일은 모두 Untracked 파일이다.
-    다시 말해서 Staging Area(index)에도 포함되지 않았고 스냅샷으로 저장되어 있지 않은 파일이다.
-- Committed - 데이터가 로컬 데이터베이스에 안전하게 저장된 상태다.
-  루트 디렉토리와 각 하위 디렉토리의 트리 객체(Object)를 체크섬과 함께 저장소에 저장한다.
-  그 후 커밋 객체를 만들고 메타데이터와 루트 디렉터리 트리 객체를 가리키는 포인터 정보를 커밋 객체에 넣어 저장한다.
-  그래서 필요하면 언제든지 스냅샷을 다시 만들 수 있다.
-- 아래는 커밋의 객체들을 나타낸다.
+- `Modified` 수정한 파일을 아직 로컬 데이터베이스에 커밋하지 않은 상태입니다.
+- `Staged` 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태입니다. 파일을 Stage하면 Git 저장소에 파일을 Blob으로 저장하고 Staging Area에 해당 파일의 체크섬을 저장합니다.
+  - `Tracked` 관리 대상에 있는 파일입니다. 이미 스냅샷에 포함되어 있던 파일입니다.
+  - `Untracked` Unmodified, Modified, Staged 상태가 아닌 나머지 파일은 모두 Untracked 파일입니다. 다시 말해서 Staging Area(index)에도 포함되지 않았고 스냅샷으로 저장되어 있지 않은 파일입니다.
+- `Committed` 데이터가 로컬 데이터베이스에 안전하게 저장된 상태입니다. 루트 디렉토리와 각 하위 디렉토리의 트리 객체(Object)를 체크섬과 함께 저장소에 저장합니다. 그 후 커밋 객체를 만들고 메타데이터와 루트 디렉터리 트리 객체를 가리키는 포인터 정보를 커밋 객체에 넣어 저장합니다. 그래서 필요하면 언제든지 스냅샷을 다시 만들 수 있습니다.
+- 아래는 커밋의 객체들을 나타냅니다.
 
 ![A commit and its tree](/images/shell/git/commit-and-its-tree.png)
 
 *[A commit and its tree](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell)*
 
-- 아래는 커밋과 이전 커밋들을 나타낸다.
+- 아래는 커밋과 이전 커밋들을 나타냅니다.
 
 ![Commits and their parents](/images/shell/git/commit-and-its-parent.png)
 
 *[Commits and their parents](https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell)*
 
-파일의 세 가지 상태는 Git 프로젝트의 세 가지 단계와 연결된다.
+파일의 세 가지 상태는 Git 프로젝트의 세 가지 단계와 연결됩니다.
 
 ![Working tree, staging area, and Git directory](/images/shell/git/git-three-step.png)
 
 *[Working tree, staging area, and Git directory](https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F#_the_three_states)*
 
-- Working Tree - 프로젝트의 특정 버전을 Checkout 한 것이다.
-  Git Directory 안에 압축된 DB에서 파일을 가져와 워킹 트리를 만든다.
-- Staging Area - 곧 커밋할 파일에 대한 정보를 담고 있으며 Git Directory 안(`.git/index`)에 저장된다.
-  Index라고도 불리지만 Staging Area가 거의 표준이다.
-  - `stage`라는 용어는 두루 쓰이기 때문에 한번 생각해 볼 만하다.
-    stage는 "과정이나 발전, 성장 등의 단계"라는 뜻을 가지고 있다.
-    그래서 "목표로 하는 것의 직전 단계"라고 생각하면 쉽다.
-    Git에서의 staging area는 저장소에 커밋되기 직전 단계이고,
-    배포 환경에서의 staging 서버는 production 서버에 배포하기 직전 단계에 있는 서버다.
+- Working Tree - 프로젝트의 특정 버전을 Checkout 한 것입니다. Git Directory 안에 압축된 DB에서 파일을 가져와 워킹 트리를 만듭니다.
+- Staging Area - 곧 커밋할 파일에 대한 정보를 담고 있으며 Git Directory 안(`.git/index`)에 저장됩니다. Index라고도 불립니다.
+  - `stage`라는 용어는 두루 쓰이기 때문에 한번 생각해 볼 만합니다.
+    stage는 "과정이나 발전, 성장 등의 단계"라는 뜻을 가지고 있습니다.
+    그래서 "목표로 하는 것의 이전 단계"라고 생각하면 쉽습니다.
+    Git에서의 staging area는 저장소에 커밋하기 전 단계이고,
+    배포 환경에서의 staging 서버는 production 서버에 배포하기 전 단계에 있는 서버입니다.
 
-Git으로 하는 일은 기본적으로 아래와 같다.
+Git으로 하는 일은 기본적으로 아래와 같습니다.
 
 1. Working Tree에서 파일을 수정한다.
 2. Staging Area에 파일을 Stage 해서 커밋할 스냅샷을 만든다.
@@ -233,8 +155,8 @@ Git으로 하는 일은 기본적으로 아래와 같다.
 
 `.git/`
 
-Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳이다.
-description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 된다.
+Git이 프로젝트의 메타데이터와 객체 데이터베이스를 저장하는 곳입니다.
+description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 때문에 이 파일은 신경쓰지 않아도 됩니다.
 
 ```sh
 tree -L 2 .git
@@ -299,21 +221,21 @@ cat refs/heads/main
 
 ## refs
 
-commit 객체의 포인터를 저장한다.
+commit 객체의 포인터를 저장합니다.
 
 ## info
 
-저장소에 관한 추가 정보들은 이 디렉터리 안에 저장된다.
-`.gitignore` 파일처럼 무시할 파일의 패턴을 적어둘 수 있다.
-다만 `.git/info/exclude`은 `.git` 디렉토리 안에 있기 때문에 동료와 공유할 수 없다.
+저장소에 관한 추가 정보들은 이 디렉터리 안에 저장됩니다.
+`.gitignore` 파일처럼 무시할 파일의 패턴을 적어둘 수 있습니다.
+다만 `.git/info/exclude`은 `.git` 디렉토리 안에 있기 때문에 동료와 공유할 수 없습니다.
 
 ## objects
 
-다른 VCS의 저장소처럼 Git의 저장소는 파일에 대한 유지, 복제, 수정 등의 이력을 관리하는데 필요한 모든 데이터를 포함하는 데이터베이스다.
-하지만 Git의 이런 작업들을 처리하는 방식은 다른 VCS들과 차별화되어 있다.
+다른 VCS의 저장소처럼 Git의 저장소는 파일에 대한 유지, 복제, 수정 등의 이력을 관리하는데 필요한 모든 데이터를 포함하는 데이터베이스입니다.
+하지만 Git의 이런 작업들을 처리하는 방식은 다른 VCS들과 차별화되어 있습니다.
 
-Git은 유입되는 모든 것을 Object로 간주한다.
-주요 Object 유형으로 blob, tree, commit, tag가 있다.
+Git은 유입되는 모든 것을 Object로 간주합니다.
+대표적으로 blob, tree, commit, tag가 있습니다.
 
 ![Simple version of the Git data model](/images/shell/git/simple-git-data-model.png)
 
@@ -321,16 +243,17 @@ Git은 유입되는 모든 것을 Object로 간주한다.
 
 ### tree
 
-Git은 유닉스 파일 시스템과 비슷한 방법으로 저장하지만 좀 더 단순하다.
-모든 것을 tree와 blob 객체로 저장한다.
-tree는 유닉스의 디렉토리에 대응되고 blob은 inode나 일반 파일에 대응된다.
-tree 객체 하나는 항목을 여러 개 가질 수 있다.
-그리고 그 항목에는 blob 객체나 하위 tree 객체를 가리키는 SHA-1 포인터, 파일 모드, 객체 타입, 파일 이름이 들어 있다. `write-tree` 명령으로 생성한다.
+Git은 유닉스 파일 시스템과 비슷한 방법으로 저장하지만 좀 더 단순합니다.
+모든 것을 tree와 blob 객체로 저장합니다.
+tree는 유닉스의 디렉토리에 대응되고 blob은 inode나 일반 파일에 대응됩니다.
+tree 객체 하나는 항목을 여러 개 가질 수 있습니다.
+그리고 그 항목에는 blob 객체나 하위 tree 객체를 가리키는 SHA-1 포인터, 파일 모드, 객체 타입, 파일 이름이 들어 있습니다.
+`write-tree` 명령으로 생성합니다.
 
 ### blob (binary large object)
 
-blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장한다.
-파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장한다.
+blob은 데이터 구조에 상관없이 모든 종류의 파일을 저장합니다.
+파일의 위치나 이름과 같은 파일의 메타 데이터가 아닌 파일 내용 자체를 저장합니다.
 
 ```sh
 git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
@@ -339,13 +262,13 @@ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
 
 여기서 blob의 파일 모드는 보통의 파일을 나타내는 `100644`,
 실행파일을 나타내는 `100755`,
-심볼릭 링크를 나타내는 `120000` 세 가지만 사용한다.
+심볼릭 링크를 나타내는 `120000` 세 가지만 사용합니다.
 
 ### commit
 
-스냅샷에 관한 모든 메타 데이터를 보유하는 객체다.
-메타 데이터는 스냅샷을 누가, 언제, 왜 저장했는지에 대한 정보를 포함한다.
-`commit-tree` 명령으로 생성한다.
+스냅샷에 관한 모든 메타 데이터를 보유하는 객체입니다.
+메타 데이터는 스냅샷을 누가, 언제, 왜 저장했는지에 대한 정보를 포함합니다.
+`commit-tree` 명령으로 생성합니다.
 
 ![All the reachable objects in your Git directory](/images/shell/git/reachable-objects.png)
 
@@ -353,25 +276,23 @@ git cat-file -p d8329fc1cc938780ffdd9f94e0d364e0ea74f579
 
 ### tag
 
-커밋 객체를 쉽게 참조할 수 있도록 도와주는 labeling 객체다.
+커밋 객체를 쉽게 참조할 수 있도록 도와주는 labeling 객체입니다.
 
 ## index
 
-Staging Area에 관한 정보가 저장되어 있다.
-즉, 저장소에 커밋할 파일을 보관하는 장소다.
+Staging Area에 관한 정보가 저장되어 있습니다.
+즉, 저장소에 커밋할 파일을 보관하는 장소입니다.
 
 ## Hash Function
 
-체크섬을 계산한다.
+체크섬을 계산합니다.
 
 ## config
 
-git 설정을 저장한다.
-설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용된다.
-Local (`.git/config`) > Global (`$HOME/.gitconfig`) > System (`/etc/gitconfig`) 순서다.
-config 파일은 INI file(`.ini`) 형식이다.
-
-- macOS에서는 Local 설정보다 Keychain이 우선하나? TODO
+git 설정을 저장합니다.
+설정 데이터는 우선순위가 있는데 범위가 좁은 Local이 가장 우선 적용됩니다.
+Local (`.git/config`) > Global (`$HOME/.gitconfig`) > System (`/etc/gitconfig`) 순서입니다.
+config 파일은 INI file(`.ini`) 형식입니다.
 
 ```ini
 # $HOME/.gitconfig
@@ -420,11 +341,13 @@ git config --list --global
 # SCM: Source Code Management
 
 - [Source code management](https://www.atlassian.com/git/tutorials/source-code-management) - Atlassian
-- What? 코드 변경 사항을 추적하고 관리하는 방법이다. 'Version Control System'으로도 불린다.
-- Why? 팀의 커뮤니케이션 오버헤드를 줄이고 릴리스 속도를 높일 수 있다.
-- How? Git Commands
-  - 포셀린(Porcelain) 명령어는 사용자에게 이해하기 쉬운 명령어다.
-  - 플러밍(Plumbing) 명령어는 저수준 명령어다.
+- What? 코드 변경 사항을 추적하고 관리하는 방법입니다. 'Version Control System'으로도 불립니다.
+- Why? 팀의 커뮤니케이션 오버헤드를 줄이고 릴리스 속도를 높일 수 있습니다.
+  - 개인적인 사례를 들면, 저는 첫 회사에서 [PVCS](https://en.wikipedia.org/wiki/PVCS)라는 SCM을 사용했는데 Local에서만 사용할 수 있었습니다.
+    그래서 PVCS에서 수정할 파일을 동료들에게 알리고 잠금(`Lock`) 상태로 만듭니다.
+    서버에 FTP로 파일을 업로드해서 교체합니다.
+    병합 과정없이 Overwrite합니다. 그래서 동료들에게 알려야 했습니다. 같은 파일을 수정하는 동료가 있다면 수동으로 병합 과정을 거쳐야 하기 때문입니다.
+- How? 각종 명령어와 분산 VCS(distributed version control system) 특징을 활용합니다.
 
 # 포셀린(Porcelain) 명령어
 
@@ -436,7 +359,7 @@ Git을 관리하는 **상위 수준의 인터페이스**입니다.
 
 ## init
 
-현재 디렉토리에 `.git` 디렉터리를 생성하고 Git 프로젝트로 초기화한다.
+현재 디렉토리에 `.git` 디렉터리를 생성하고 Git 프로젝트로 초기화합니다.
 
 ```sh
 git init
@@ -445,7 +368,8 @@ git init
 
 ## clone
 
-remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제한다. 그 과정은 다음과 같다.
+remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제합니다.
+그 과정은 다음과 같습니다.
 
 1. 대상 디렉토리가 존재하지 않는다면 생성하고, 대상 디렉토리를 GIt 디렉토리로 초기화한다.
 2. 대상 디렉토리 안에 소스 저장소의 브랜치와 동일한 추적 브랜치들을 설정한다. (git remote)
@@ -468,16 +392,16 @@ Resolving deltas: 100% (16109/16109), done.
 
 ## submodule
 
-submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있다.
-submodule을 추가하면 `.gitmodules` 파일이 생성된다.
+submodule을 사용하면 다른 리포지터리의 특정 스냅샷을 참조할 수 있습니다.
+submodule을 추가하면 `.gitmodules` 파일이 생성됩니다.
 
-submodule을 새로 추가하는 경우
+submodule을 새로 추가합니다.
 
 ```sh
 git submodule add https://github.com/markruler/repository
 ```
 
-의존하는 submodule 리포지터리를 clone한다.
+의존하는 submodule 리포지터리를 clone합니다.
 
 ```sh
 git submodule update --init --recursive
@@ -485,7 +409,7 @@ git submodule update --init --recursive
 
 ## subtree
 
-submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 `.gitmodule`과 같은 메타 데이터없이 데이터를 그대로 복제한다.
+submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 `.gitmodule`과 같은 메타 데이터없이 데이터를 그대로 복제합니다.
 
 - 왜 submodule 대신 subtree를 사용해야 할까?
   - [Git subtree: the alternative to Git submodule](https://www.atlassian.com/git/tutorials/git-subtree) - Atlassian
@@ -497,9 +421,11 @@ submodule은 하위 프로젝트의 체크섬만 참조하는 반면 subtree는 
 
 ## branch
 
-브랜치(branch)는 나뭇가지나 지점, 분기를 뜻한다. Git의 브랜치는 커밋 사이를 가볍게 이동할 수 있는 포인터 같은 것이다. 흔히 말하는 master, main 브랜치는 트렁크(trunk, 줄기) 브랜치라고 불리는데 소스 코드 통합의 중심이 되는 브랜치이기 때문이다.
+브랜치(branch)는 나뭇가지나 지점, 분기를 의미합니다.
+Git의 브랜치는 커밋 사이를 가볍게 이동할 수 있는 포인터 같은 것입니다.
+흔히 말하는 master, main 브랜치는 트렁크(trunk, 줄기) 브랜치라고 불리는데 소스 코드 통합의 중심이 되는 브랜치이기 때문입니다.
 
-branch 명령을 실행하면 다음의 단계를 수행한다.
+branch 명령을 실행하면 다음의 단계를 수행합니다.
 
 1. `.git/refs/heads/`에서 모든 브랜치명을 수집한다.
 2. `.git/HEAD`에 위치한 HEAD를 참조해 현재 작업 중인 브랜치를 찾는다.
@@ -516,7 +442,7 @@ git branch
 
 ### xargs
 
-eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용하다.
+eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용합니다.
 
 - [When to Use xargs](https://www.baeldung.com/linux/xargs) - Baeldung
 
@@ -529,7 +455,7 @@ echo {0..9} | xargs -n 2
 # 8 9
 ```
 
-branch 명령과 xargs 명령을 파이프(`|`)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있다.
+branch 명령과 xargs 명령을 파이프(`|`)로 연결해서 사용하지 않는 작업 브랜치를 한꺼번에 정리할 수 있습니다.
 
 ```sh
 # master, stable, main, 현재 브랜치 외 모든 브랜치 삭제
@@ -553,7 +479,8 @@ git branch | grep -Eo 'feature/.*' | xargs git branch -D
 
 ## tag
 
-커밋을 참조하기 쉽도록 꼬리표(tag)를 붙인다. Lightweight 태그와 Annotated 태그 두 종류가 있다.
+커밋을 참조하기 쉽도록 꼬리표(tag)를 붙입니다.
+Lightweight 태그와 Annotated 태그 두 종류가 있습니다.
 
 - Lightweight 태그는 단순히 특정 커밋에 대한 포인터일 뿐이다.
 - Annotated 태그는 Git 데이터베이스에 태그를 만든 사람의 이름, 이메일과 태그를 만든 날짜, 그리고 태그 메시지도 저장한다.
@@ -567,14 +494,14 @@ git branch | grep -Eo 'feature/.*' | xargs git branch -D
 git tag -a 1.0.0 -m "test tag"
 ```
 
-tag 목록 확인하기
+tag 목록을 확인합니다.
 
 ```sh
 git tag
 # 1.0.0
 ```
 
-tag 내용 확인
+tag 내용을 확인합니다.
 
 ```sh
 git show 1.0.0
@@ -596,7 +523,7 @@ git show-ref --tags
 # 02618f768d91cc1d21f5998c8d10ad62aacf278b refs/tags/1.0.0
 ```
 
-tag 명령어를 실행하면 다음과 같은 단계를 수행한다.
+tag 명령어를 실행하면 다음과 같은 단계를 수행합니다.
 
 1. 커밋이 참조하고 있는 체크섬을 가져온다.
 2. 존재하는 태그명들 중 주어진 태그명을 검증한다.
@@ -605,10 +532,10 @@ tag 명령어를 실행하면 다음과 같은 단계를 수행한다.
 
 ## switch
 
-브랜치를 변경한다.
+브랜치를 변경합니다.
 
-- [git@v2.23.0](https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61) 부터 `checkout` 명령어는 `git-switch`와 `git-restore`로 분리되었다.
-  이유는 checkout이 하는 기능이 많기 때문이다.
+- [git@v2.23.0](https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61) 부터 `checkout` 명령어는 `git-switch`와 `git-restore`로 분리되었습니다.
+  이유는 checkout이 하는 기능이 많기 때문입니다.
   - [Highlights from Git 2.23](https://github.blog/2019-08-16-highlights-from-git-2-23/) - GitHub Blog
   - [Git 2.23 Adds Switch and Restore Commands](https://www.infoq.com/news/2019/08/git-2-23-switch-restore/) - Sergio De Simone
 
@@ -625,7 +552,8 @@ git switch -c feature/local-test -t origin/feature/remote-test
 # Switched to a new branch 'feature/local-test'
 ```
 
-브랜치를 Local에서 먼저 생성하는 경우도 있다.
+브랜치를 Local에서 먼저 생성하는 경우도 있습니다.
+이 경우 upstream까지 지정합니다.
 
 ```sh
 # 1. 브랜치를 생성한다.
@@ -633,16 +561,9 @@ git switch -c test-rebase
 ```
 
 ```sh
-# 2. upstream을 지정한다.
-git branch --set-upstream-to=origin/test-rebase test-rebase
+# 2. push하면서 upstream을 지정한다.
+git push origin HEAD --set-upstream
 # Branch 'test-rebase' set up to track remote branch 'test-rebase' from 'origin'.
-```
-
-```sh
-# 3. rebase
-git rebase
-# First, rewinding head to replay your work on top of it...
-# Fast-forwarded add-github-action to refs/remotes/origin/test-rebase.
 ```
 
 ### upstream
@@ -651,33 +572,33 @@ git rebase
 
 [Triangular Workflow](https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/)
 
-upstream이라는 용어는 헷갈릴 수 있다.
+upstream이라는 용어는 헷갈릴 수 있습니다.
 협업 프로젝트에서 보통 위와 같은 원본 저장소를 `upstream`이라고 부르고
 그것을 [fork](#fork)한 저장소를 `origin`,
-upstream에서 fetch한 나의 로컬 환경을 `local`이라고 부른다.
-아래 명령어는 지정한 `upstream` 브랜치로 push하도록 한다.
-
-잠깐. fork한 `origin` 저장소가 아니라 `upstream`으로 push한다?
+upstream에서 fetch한 로컬 환경을 `local`이라고 부릅니다.
+아래 명령어는 지정한 `upstream` 브랜치로 push하도록 합니다.
 
 ```sh
-git push --set-upstream origin feature/test-upstream
+git push origin HEAD --set-upstream
 # push 후
 # Branch 'feature/test-upstream' set up to track remote branch 'feature/test-upstream' from 'origin'.
 ```
 
-사실 upstream이라는 용어는 Git에서만 쓰이는 건 아니다.
-흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어다.
-예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고, downstream은 그 반대다.
-즉, upload/download의 방향을 말하며 Git에서 upstream은 push하려는 방향을 말한다.
+잠깐! fork한 `origin` 저장소가 아니라 `upstream`으로 push?
 
-여기서 중요한 점은 Git에서 절대적인 upstream/downstream이 없다는 것이다.
-Git은 DVCS(Distributed Version Control System)다.
-다시 말해서 origin이 upstream일 수 있고, upstream은 또 다른 저장소의 downstream일 수 있다.
-Triangular Workflow는 하나의 효과적인 방식일 뿐이다.
+사실 upstream이라는 용어는 Git에서만 쓰이는 건 아닙니다.
+흔히 downstream과 대비해서 네트워크에서도 쓰이는 용어입니다.
+예를 들어 로컬에서 원격으로, 클라이언트에서 서버로 데이터를 전송하는 것을 upstream이라고 말하고, downstream은 그 반대입니다.
+즉, upload/download의 방향을 말하며 Git에서 upstream은 push하려는 방향을 말합니다.
+
+여기서 중요한 점은 Git에서 절대적인 upstream/downstream이 없다는 것입니다.
+Git은 DVCS(Distributed Version Control System)입니다.
+다시 말해서 origin이 upstream일 수 있고, upstream은 또 다른 저장소의 downstream일 수 있습니다.
+Triangular Workflow는 하나의 효과적인 방식일 뿐입니다.
 
 ## status
 
-index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시한다.
+index 파일과 HEAD 커밋, index 파일과 working tree를 비교해서 차이나는 부분을 표시합니다.
 
 ```sh
 git status -sb
@@ -695,8 +616,9 @@ D  c.c
 
 ## add
 
-Working Directory의 변경 사항들을 Staging Area에 포함시킨다.
-index를 갱신하고 다음 커밋에 대한 컨텐츠를 준비한다. 그 과정은 다음과 같다.
+Working Directory의 변경 사항들을 Staging Area에 포함시킵니다.
+index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
+그 과정은 다음과 같습니다.
 
 1. 컨텐츠에 대한 SHA-1 체크섬을 계산한다.
 2. 기존의 blob 객체에 새로운 컨텐츠나 링크를 만들지 여부를 결정한다.
@@ -721,9 +643,9 @@ git add src/
 
 ## fetch
 
-커밋, 파일 및 참조를 원격 저장소에서 로컬 저장소로 다운로드한다.
-다른 사람들이 작업한 것을 보고 싶을 때 사용할 수 있다.
-다음과 같은 단계를 수행한다.
+커밋, 파일 및 참조를 원격 저장소에서 로컬 저장소로 다운로드합니다.
+다른 사람들이 작업한 것을 보고 싶을 때 사용할 수 있습니다.
+다음과 같은 단계를 수행합니다.
 
 1. URL이나 원격 저장소 이름을 검증하고, 지정된 저장소에 대한 유효성을 확인한다.
 2. 정의된 것이 없다면 설정 파일을 읽어서 기본 설정된 원격 저장소를 찾는다.
@@ -743,9 +665,9 @@ git merge FETCH_HEAD
 
 ## commit
 
-관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영한다.
-즉, staging area(index)에 있는 변경 사항들을 local repository에 반영한다.
-그렇다고 working tree나 staging area의 내용들을 지우지 않는다.
+관리 대상(Tracked)에 있는 변경 사항들을 HEAD에 반영합니다.
+즉, staging area(index)에 있는 변경 사항들을 local repository에 반영합니다.
+그렇다고 working tree나 staging area의 내용들을 지우지 않습니다.
 
 ```sh
 git commit
@@ -760,8 +682,8 @@ git commit --amend --author="Changsu Im <imcxsu@gmail.com>"
 
 ## merge
 
-소스 코드를 병합한다.
-다음과 같은 단계를 수행한다.
+소스 코드를 병합합니다.
+다음과 같은 단계를 수행합니다.
 
 1. 지정된 파라미터를 기반으로 `.git/refs/heads` 디렉토리로부터 병합 후보들을 식별한다.
 2. 모든 heads의 공통된 조상을 찾아 메모리에 있는 모든 대상 객체들을 로드한다.
@@ -790,27 +712,27 @@ git merge --abort
 
 *[Merging main into the feature branch](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)*
 
-병합은 두 가지 방식이 있다.
+병합은 두 가지 방식이 있습니다.
 
 ```sh
 # fast-forward
 git merge --ff
 ```
 
-먼저 Fast Forward 방식이다.
+먼저 Fast Forward 방식입니다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상(ancestor)으로 두고 있다면
-별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동한다.
+별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동합니다.
 
 ```sh
 # no-fast-forward
 git merge --no-ff
 ```
 
-두 번째는 [3-way-merge](<https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge>) 방식을 사용한 No Fast Forward 방식이다.
-현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합한다.
+두 번째는 [3-way-merge](<https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge>) 방식을 사용한 No Fast Forward 방식입니다.
+현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합합니다.
 단순히 브랜치 포인터를 최신 커밋으로 옮기는 게 아니라 3-way-merge의 결과를
-별도의 **Merge 커밋**으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킨다.
-이 Merge 커밋은 부모 커밋을 2개 가진다.
+별도의 **Merge 커밋**으로 만들고 나서 해당 브랜치의 HEAD가 그 커밋들을 가리키도록 이동시킵니다.
+이 Merge 커밋은 부모 커밋을 2개 가집니다.
 
 ```sh
 *   commit aec54781c060c26eeb5a6475ea3fede4a47dc178
@@ -825,9 +747,9 @@ git merge --no-ff
 | * commit bf50160af864cab37ba8eca54c97c6e448886b62 (test-merge-branch)
 ```
 
-만약 병합하는 두 브랜치에서 같은 파일의 같은 부분을 동시에 수정하고 병합하면 GIt은 해당 부분을 병합하지 못한다.
-3-way-merge가 실패하고 충돌(Conflict)이 발생한다.
-`git mergetool`을 활용하면 간편하게 충돌을 해결할 수 있다.
+만약 병합하는 두 브랜치에서 같은 파일의 같은 부분을 동시에 수정하고 병합하면 GIt은 해당 부분을 병합하지 못합니다.
+3-way-merge가 실패하고 충돌(Conflict)이 발생합니다.
+`git mergetool`을 활용하면 간편하게 충돌을 해결할 수 있습니다.
 
 ```sh
 git mergetool
@@ -882,23 +804,23 @@ environment. If run in a terminal-only session, they will fail.
 
 ## pull
 
-해당 명령은 내부적으로 다음의 과정을 수행한다.
+해당 명령은 내부적으로 다음의 과정을 수행합니다.
 
-1. 주어진 파라미터를 가지고 `git fetch`를 수행한다.
-2. `git merge`를 호출해 현재 브랜치의 HEAD와 지정한 브랜치의 HEAD를 병합한다.
+1. 주어진 파라미터를 가지고 `git fetch`를 수행합니다.
+2. `git merge`를 호출해 현재 브랜치의 HEAD와 지정한 브랜치의 HEAD를 병합합니다.
 
-Git 서버의 Pull Request는 협업 과정에서 "제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~"라고 하는 것과 같다.
+Git 서버의 Pull Request는 협업 과정에서 "제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~"라고 하는 것과 같습니다.
 
 ## rebase
 
-> [rebase는 Git의 꽃이다.](https://www.facebook.com/photo?fbid=4291246567585200) - 이규원
+> [rebase는 Git의 꽃이다.](https://www.facebook.com/photo?fbid=4291246567585200)
 
-merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive 명령이다.
-반면 rebase는 내용은 같지만 새로운 commit 객체를 생성해서 HEAD에 배치한다.
-그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없다.
+merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive 명령입니다.
+반면 rebase는 내용은 같지만 새로운 commit 객체를 생성해서 HEAD에 배치합니다.
+그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없습니다.
 
-rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다르다.
-보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용한다.
+rebase를 하든지, merge를 하든지 최종 결과물은 같지만 커밋 히스토리가 다릅니다.
+보통 원격 브랜치에 커밋 히스토리를 깔끔하게 적용하고 싶을 때 사용합니다.
 
 ```sh
 # oldBase 브랜치에서 newBase 브랜치로 rebase한다.
@@ -952,7 +874,7 @@ git rebase --onto main featureA featureB
       o---o---o---o---o  featureA
 ```
 
-interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있다.
+interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있습니다.
 
 ```sh
 # 돌아가고 싶은 커밋의 직전 커밋까지
@@ -963,8 +885,8 @@ git rebase -i <commit>^
 git rebase -i --root
 ```
 
-아래와 같은 하위 명령어들이 있다.
-나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경된다.
+아래와 같은 하위 명령어들이 있습니다.
+나열된 커밋의 순서를 바꾸는 것만으로도 실제 커밋 순서가 변경됩니다.
 
 ```sh
 # p, pick <commit> = use commit
@@ -985,8 +907,8 @@ git rebase -i --root
 
 ### squash와 fixup
 
-squash는 **커밋 메시지를 확인하고 편집한 후** squash and merge한다.
-대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경된다.
+squash는 **커밋 메시지를 확인하고 편집한 후** squash and merge 합니다.
+대상 커밋 뿐만 아니라 이후의 커밋들도 다시 저장해야 하기 때문에 체크섬이 변경됩니다.
 
 ```sh
 git --no-pager log --oneline
@@ -995,13 +917,13 @@ git --no-pager log --oneline
 # 7f1a625 (main) 1
 ```
 
-지금 staged 파일들을 squash 커밋으로 만든다.
+지금 staged 파일들을 squash 커밋으로 만듭니다.
 
 ```sh
 git commit --squash ea37b52
 ```
 
-squash 커밋은 대상 커밋 메시지 앞에 "squash!"가 붙는다.
+squash 커밋은 대상 커밋 메시지 앞에 "squash!"가 붙습니다.
 
 ```sh
 git --no-pager log --oneline
@@ -1011,7 +933,7 @@ git --no-pager log --oneline
 # 7f1a625 (main) 1
 ```
 
-squash 커밋들은 커밋 메시지를 확인 후 squash and merge한다.
+squash 커밋들은 커밋 메시지를 확인 후 squash and merge 합니다.
 
 ```sh
 git rebase -i --autosquash main
@@ -1035,7 +957,7 @@ git --no-pager log --oneline
 ```
 
 **fixup**은 squash와 결과가 동일하지만,
-original 커밋 메시지만 남기고 **fixup 커밋의 메시지들은 버린다**.
+기존 커밋 메시지만 남기고 **fixup 커밋의 메시지들은 버립니다**.
 
 ```sh
 git --no-pager log --oneline
@@ -1044,13 +966,13 @@ git --no-pager log --oneline
 # 7f1a625 (main) 1
 ```
 
-지금 staged 파일들을 fixup 커밋으로 만든다.
+지금 staged 파일들을 fixup 커밋으로 만듭니다.
 
 ```sh
 git commit --fixup ea53497
 ```
 
-fixup 커밋은 대상 커밋 메시지 앞에 "fixup!"이 붙는다.
+fixup 커밋은 대상 커밋 메시지 앞에 "fixup!"이 붙습니다.
 
 ```sh
 git --no-pager log --oneline
@@ -1060,7 +982,7 @@ git --no-pager log --oneline
 # 7f1a625 (main) 1
 ```
 
-fixup 커밋들은 자동으로 squash and merge가 된다.
+fixup 커밋들은 자동으로 squash and merge 됩니다.
 
 ```sh
 git rebase -i --autosquash main
@@ -1069,7 +991,7 @@ git rebase -i --autosquash main
 # pick ffdc929 3
 ```
 
-fixup 커밋의 메시지들은 자동으로 버린다.
+fixup 커밋의 메시지들은 자동으로 버려집니다.
 
 ```sh
 Successfully rebased and updated refs/heads/fixup.
@@ -1160,7 +1082,7 @@ git stash list
 # stash@{0}: On master: haha
 ```
 
-기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있다.
+기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있습니다. (각각 `--include-untracked`, `--all`)
 
 ![git stash options](/images/shell/git/git-stash-options.png)
 
@@ -1186,33 +1108,36 @@ cat .git/refs/stash
 
 ## reset
 
-HEAD를 특정 상태로 되돌린다.
-다양한 mode 옵션이 있다.
+HEAD를 특정 상태로 되돌립니다.
+다양한 mode 옵션이 있습니다.
 
-- `--soft` - 스테이징된 스냅샷과 워킹 디렉토리는 건드리지 않고 커밋만 업데이트한다.
-- `--mixed` - default 옵션이다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 업데이트(Tracked → Untracked)되지만, 워킹 디렉터리는 영향을 받지 않는다.
+- `--mixed` **default 옵션**입니다. 스테이징된 스냅샷이 지정한 커밋과 일치하도록 되돌리지만(Tracked → Untracked), 워킹 디렉토리에 영향을 주지 않습니다. **되돌린 커밋 내용들은 Unstaged 상태로 남습니다**.
+- `--soft` 스테이징된 스냅샷과 워킹 디렉토리는 그대로 두고, 지정한 커밋까지 내용을 되돌립니다. **되돌린 커밋 내용들은 Staged 상태로 남습니다**.
 
   ```sh
-  git reset HEAD^
-  git reset --mixed HEAD^
+  git reset HEAD~1
+  git reset --mixed HEAD~1
   # Unstaged changes after reset:
   # M package-lock.json
   # M package.json
   ```
 
-- `--hard` - 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 업데이트한다.
+- `--hard` 스테이징된 스냅샷과 워킹 디렉토리가 지정된 커밋과 일치하도록 되돌립니다. **되돌린 커밋 내용들은 삭제됩니다**.
 
   ```sh
-  git reset --hard HEAD^
+  git reset --hard HEAD~1
   # HEAD is now at 955b01b7 chore: renew mac certificates (#12)
   ```
 
   ```sh
+  # 현재 작업 내용 전부 삭제
+  git reset --hard HEAD
+
   # 첫 커밋 제외하고 전부 Hard Reset
   git reset --hard $(git rev-list --max-parents=0 HEAD)
   ```
 
-- `--merge` — 워킹 트리에서 merge를 undo 할 수 있다. (Undo `merge`/`pull`)
+- `--merge` 워킹 트리에서 merge를 undo 할 수 있습니다. (Undo `merge`/`pull`)
 
   ```sh
   git pull
@@ -1228,9 +1153,10 @@ HEAD를 특정 상태로 되돌린다.
 
 ## restore
 
-워킹 트리를 복구한다. `--staged` 옵션을 지정하면 스테이징된 스냅샷도 되돌릴 수 있다.
+워킹 트리를 복구합니다.
+`--staged` 옵션을 지정하면 스테이징된 스냅샷도 되돌릴 수 있습니다.
 
-- [git@v2.23.0](https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61) 부터 `checkout` 명령어에서 분리되었다.
+- [git@v2.23.0](https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt#L61) 부터 `checkout` 명령어에서 분리되었습니다.
 
 ```sh
 # git checkout -- ${file_name}
@@ -1240,14 +1166,16 @@ git restore --staged * # git reset --mixed HEAD
 
 ## revert
 
-`reset`처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성한다.
+`reset`처럼 커밋을 되돌리지만 이력을 지우지 않고 변경 사항을 되돌리는 커밋을 생성합니다.
 
 ```sh
-git revert <commit>
+# git revert <commit>
+git revert 4ea42dbe
 ```
 
 ```sh
-Revert "4ea42dbe의 커밋 메시지"
+# revert 커밋 메시지
+Revert "이것은 4ea42dbe의 커밋 메시지입니다"
 
 This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 ```
@@ -1256,7 +1184,7 @@ This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 
 ### blame
 
-파일의 라인마다 마지막 수정 정보를 확인할 수 있다.
+파일의 라인마다 마지막 수정 정보를 확인할 수 있습니다.
 
 ```sh
 git blame README.md
@@ -1266,20 +1194,24 @@ git blame README.md
 ```
 
 ```sh
-git blame -L 69,82 README.md
+# 69번째 라인의 변경 이력을 확인
 git blame -L 69 README.md
+
+# 69번째 라인부터 82번째 라인까지의 변경 이력을 확인
+git blame -L 69,82 README.md
 ```
 
 ### bisect
 
 - [A beginner's guide to GIT BISECT](https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination) - Tony Rost
 
-이진 탐색을 이용해 버그가 발생한 커밋을 찾습니다.
+이분 탐색을 이용해 버그가 발생한 커밋을 찾습니다.
 운영 환경에서 버그가 발생했는데 어디서부터 잘못된 건지 찾기 힘들 때가 있습니다.
 이 때 bisect는 스냅샷 더미를 헤집고 다닐 수 있게 도와줍니다.
 
+우선 아래 스크립트로 테스트용 프로젝트를 생성합니다.
+
 ```sh
-# 테스트 프로젝트 생성
 mkdir git-bisect-tests
 cd git-bisect-tests
 git init
@@ -1306,16 +1238,15 @@ echo stream >> test.txt
 git add -A && git commit -m "Adding the word 'stream'"
 ```
 
-```sh
-cat test.txt
-```
+`test.txt` 파일에 삽입된 bug가 어디서 발생했는지 찾아볼 겁니다.
 
 ```sh
+# test.txt
 row
 row
 row
 your
-bug # 이 bug를 찾을 겁니다.
+bug # HERE
 gently
 down
 the
@@ -1385,8 +1316,9 @@ c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third
 ...
 ```
 
+`test.txt` 파일을 확인합니다.
+
 ```sh
-# 버그가 없다면 good 기록
 cat test.txt
 ```
 
@@ -1399,6 +1331,8 @@ boat
 gently
 ```
 
+버그가 없으니 `good`으로 기록합니다.
+
 ```sh
 git bisect good
 ```
@@ -1408,7 +1342,7 @@ Bisecting: 1 revision left to test after this (roughly 1 step)
 [9a120127fabd58d0f54786cf015528f77d9a9f17] Adding the word 'down'
 ```
 
-`good`으로 기록하면 `bad` 커밋 방향으로 이진탐색한다.
+`good`으로 기록하면 `bad` 커밋 방향으로 이분 탐색합니다.
 
 ```sh
 git log --oneline
@@ -1421,11 +1355,12 @@ f937601 Changing the word 'boat' to 'bug'
 850323e Adding the word 'boat'
 222f64a Adding the word 'your'
 c608f80 (refs/bisect/good-c608f8011e4bfa3d1f1e9f537cc148769f158669) Adding third row
-...
+# ...
 ```
 
+계속해서 `test.txt` 파일을 확인합니다.
+
 ```sh
-# 버그를 발견했다면 bad 기록
 cat test.txt
 ```
 
@@ -1439,13 +1374,15 @@ gently
 down
 ```
 
+버그를 발견했으니 `bad`로 기록합니다.
+
 ```sh
 git bisect bad
 # Bisecting: 0 revisions left to test after this (roughly 0 steps)
 # [f9376015d4721390c942c0cd0064467b51495094] Changing the word 'boat' to 'bug'
 ```
 
-`bad`로 기록하면 `good` 커밋 방향으로 이진탐색한다.
+`bad`로 기록하면 `good` 커밋 방향으로 이분 탐색합니다.
 
 ```sh
 git log --oneline
@@ -1458,7 +1395,7 @@ git log --oneline
 
 그 다음 커밋도 `bad`로 기록하고
 `good` 커밋(refs/bisect/good-759ea63) 사이에 더 이상 커밋이 남아있지 않다면
-해당 `bad` 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료한다.
+해당 `bad` 커밋이 버그가 발생한 커밋이라고 판단하고 탐색을 종료합니다.
 
 ```sh
 git bisect bad
@@ -1466,14 +1403,14 @@ git bisect bad
 # commit f9376015d4721390c942c0cd0064467b51495094
 # Author: Changsu Im <imcxsu@gmail.com>
 # Date:   Thu Feb 17 03:21:28 2022 +0900
-
+#
 #     Changing the word 'boat' to 'bug'
-
+#
 #  test.txt | 2 +-
 #  1 file changed, 1 insertion(+), 1 deletion(-)
 ```
 
-이진탐색하는 동안 `.git` 디렉토리에 bisect를 위한 파일들이 생성된다.
+이분 탐색하는 동안 `.git` 디렉토리에 bisect를 위한 파일들이 생성됩니다.
 
 ```sh
 cat .git/BISECT_ANCESTORS_OK
@@ -1512,7 +1449,8 @@ cat .git/BISECT_TERMS
 # good
 ```
 
-bisect를 끝낼 때는 `.git/BISECT_START`로 다시 checkout 한다.
+bisect를 끝낼 때는 reset이라는 하위 명령어를 실행합니다.
+그럼 `.git/BISECT_START`로 다시 checkout 합니다.
 
 ```sh
 git bisect reset
@@ -1522,7 +1460,7 @@ git bisect reset
 
 ## show
 
-Git Object를 확인한다. (blob, tree, tag, commit)
+Git Object를 확인합니다. (blob, tree, tag, commit)
 
 ```sh
 git show ${object}
@@ -1551,10 +1489,10 @@ git show master:README.md
 
 ## log
 
-커밋 이력을 조회한다.
+커밋 이력을 조회합니다.
 
-- [pretty formats](https://git-scm.com/docs/git-log#_pretty_formats)을 사용해서 출력 형식을 정할 수 있다.
-- `--abbrev-commit` — 짧고 중복되지 않는 해시 값을 보여준다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여준다.
+- [pretty formats](https://git-scm.com/docs/git-log#_pretty_formats)을 사용해서 출력 형식을 정할 수 있습니다.
+- `--abbrev-commit` 짧고 중복되지 않는 해시 값을 보여줍니다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여줍니다.
 
 ```sh
 git log --oneline --graph
@@ -1571,14 +1509,14 @@ git log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(
 ```
 
 ```sh
-# alias 지정
+# 보통 alias로 지정해서 사용한다.
 git config --global alias.lg "log --graph --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD %C(bold green)(%ar)%C(bold yellow)%d%C(reset)%n'L'          %C(white)%s %C(dim white)- %an' --all"
 git lg
 ```
 
 ### Triple Dot(...)
 
-Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여준다.
+Triple Dot은 양쪽에 있는 두 refs 사이에서 공통으로 가지는 것을 제외하고 서로 다른 커밋만 보여줍니다.
 
 ```sh
 git log master...feature --oneline --left-right
@@ -1589,7 +1527,7 @@ git log master...feature --oneline --left-right
 
 ## reflog: Reference logs
 
-Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 `reflog`라고 부른다.
+Git은 자동으로 브랜치와 HEAD가 지난 몇 달 동안에 가리켰었던 커밋을 모두 기록하는데 이 로그를 `reflog`라고 부릅니다.
 
 ```sh
 git reflog
@@ -1607,7 +1545,7 @@ git reflog show HEAD@{0}
 git reflog show HEAD
 ```
 
-특정 브랜치의 reflog만 확인할 수도 있다.
+특정 브랜치의 reflog만 확인할 수도 있습니다.
 
 ```sh
 # git reflog show main@{0}
@@ -1615,9 +1553,9 @@ git reflog show HEAD
 git reflog main
 ```
 
-Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장한다.
-그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있다.
-`@{n}` 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있다.
+Git은 브랜치가 가리키는 것이 달라질 때마다 그 정보를 임시 영역에 저장합니다.
+그래서 예전에 가리키던 것이 무엇인지 확인해 볼 수 있습니다.
+`@{n}` 규칙을 사용하면 아래와 같이 HEAD가 5번 전에 가리켰던 것을 알 수 있습니다.
 
 ```sh
 git show HEAD@{5}
@@ -1630,7 +1568,8 @@ Date:   Wed Dec 1 23:51:01 2021 +0900
 ...
 ```
 
-순서뿐 아니라 시간도 사용할 수 있다. 어제 날짜의 `master` 브랜치를 보고 싶으면 아래와 같이 한다.
+순서뿐 아니라 시간도 사용할 수 있습니다.
+어제 날짜의 `master` 브랜치를 보고 싶으면 아래와 같이 명령어를 실행합니다.
 
 ```sh
 git show main@{1.minute.ago}
@@ -1650,8 +1589,8 @@ Date:   Thu Dec 2 21:27:17 2021 +0900
 ...
 ```
 
-이 명령은 특정 시간에 `main` 브랜치가 가리키고 있던 것이 무엇인지 보여준다.
-reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 커밋은 조회할 수 없다.
+이 명령은 특정 시간에 `main` 브랜치가 가리키고 있던 것이 무엇인지 보여줍니다.
+reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 커밋은 조회할 수 없습니다.
 
 | tilde  | caret  | at-sign (reflog) |
 | ------ | ------ | ---------------- |
@@ -1661,7 +1600,7 @@ reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 �
 
 ## diff
 
-변경 사항을 비교한다.
+변경 사항을 비교합니다.
 
 ```sh
 git diff <before> <after>
@@ -1684,10 +1623,10 @@ git diff <commit>~ <commit>
 
 ## push
 
-local 저장소의 내용을 remote 저장소에 반영한다.
-히스토리가 일치하지 않으면 push할 수 없다.
-rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있다.
-다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 한다.
+local 저장소의 내용을 remote 저장소에 반영합니다.
+히스토리가 일치하지 않으면 push할 수 없습니다.
+rebase 등의 동작으로 히스토리가 변경되었다면 강제 푸시(force push)를 시도해 볼 수 있습니다.
+다만 동료와 같이 작업 중인 브랜치라면 강제 푸시는 주의해서 사용해야 합니다.
 
 ```sh
 # origin 저장소의 main 브랜치로 push
@@ -1707,7 +1646,7 @@ git push origin HEAD --set-upstream
 git push --set-upstream origin feature/test-upstream
 ```
 
-push 명령을 실행하면 다음 과정을 수행한다.
+push 명령을 실행하면 다음 과정을 수행합니다.
 
 1. 현재 브랜치를 확인한다.
 2. 설정 파일에 기본 원격 저장소가 존재하는지 탐색한다.
@@ -1716,7 +1655,7 @@ push 명령을 실행하면 다음 과정을 수행한다.
    1. 원격 저장소로부터 reference 목록을 가져온다(`git ls-remote`).
    2. 로컬 저장소와 원격 저장소의 커밋 이력(history)을 확인한다. 만약 다르다면 fetch 혹은 pull을 수행한다.
 
-remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있다.
+remote 저장소에 동명의 브랜치가 없다면 아래와 같은 문구를 볼 수 있는데 저장소 이름과 브랜치 이름을 명시적으로 입력하면 push할 수 있습니다.
 
 ```sh
 git push
@@ -1759,7 +1698,7 @@ git rev-parse feature
 
 ## hash-object
 
-데이터를 `.git` 디렉토리에 저장하고 체크섬을 계산한다.
+데이터를 `.git` 디렉토리에 저장하고 체크섬을 계산합니다.
 
 ```sh
 git hash-object -w READM.me
@@ -1768,7 +1707,7 @@ git hash-object -w READM.me
 
 ## ls-tree
 
-tree 객체의 내용들을 보여준다.
+tree 객체의 내용들을 보여줍니다.
 
 ```sh
 # commit hash: ee85974962b9645d757bc71dd773effb67d3594f
@@ -1783,7 +1722,7 @@ git ls-tree ee85
 
 ## ls-files
 
-index(스테이징된 파일)의 내용들을 체크섬과 함께 보여준다.
+index(스테이징된 파일)의 내용들을 체크섬과 함께 보여줍니다.
 
 ```sh
 git ls-files -s
@@ -1798,23 +1737,23 @@ git ls-files -s
 
 ## cat-file
 
-저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있다.
+저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있습니다.
 
-`<checksum>`을 가진 객체의 타입을 알려준다.
+`<checksum>`을 가진 객체의 타입을 알려줍니다.
 
 ```sh
 git cat-file -t <checksum>
 # blob
 ```
 
-`<checksum>`을 가진 객체의 사이즈를 알려준다.
+`<checksum>`을 가진 객체의 사이즈를 알려줍니다.
 
 ```sh
 git cat-file -s <checksum>
 # 13 # bytes
 ```
 
-객체의 타입을 알고 있다면 파일의 내용을 표시해준다.
+객체의 타입을 알고 있다면 파일의 내용을 표시해줍니다.
 
 ```sh
 git cat-file <type> <checksum>
@@ -1823,7 +1762,7 @@ git cat-file <type> <checksum>
 
 ## write-tree
 
-현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환한다.
+현재 index 내용으로 tree 객체를 생성하고 체크섬을 반환합니다.
 
 ```sh
 git write-tree
@@ -1837,7 +1776,7 @@ git ls-tree 17459
 
 ## commit-tree
 
-특정 tree 객체로 새로운 커밋을 만든다.
+특정 tree 객체로 새로운 커밋을 만듭니다.
 
 ```sh
 git commit-tree HEAD^{tree} -p main -m "test commit"
@@ -1861,7 +1800,7 @@ git merge --ff-only d5fc
 
 ## read-tree
 
-특정 tree 객체를 index에 포함시킨다.
+특정 tree 객체를 index에 포함시킵니다.
 
 ```sh
 git read-tree HEAD^
@@ -1880,17 +1819,14 @@ git status
 
 woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트합니다.
 
-- `update-ref`
-  - master 브랜치를 지정한 커밋 객체로 업데이트한다.
+- `update-ref` master 브랜치를 지정한 커밋 객체로 업데이트합니다.
 
   ```sh
   git update-ref refs/heads/master 992379
   ```
 
-- `symbolic-ref`
-  - 또 다른 reference를 가리키도록 reference(일반적으로 HEAD)를 업데이트한다.
-- `ls-remote`
-  - 원격 저장소의 references를 나열한다.
+- `symbolic-ref` 또 다른 reference를 가리키도록 reference(일반적으로 HEAD)를 업데이트합니다.
+- `ls-remote` 원격 저장소의 reference들을 나열합니다.
 
   ```sh
   git ls-remote
@@ -1904,14 +1840,14 @@ woirking tree에서 기존 BLOB 또는 파일을 가져와 index를 업데이트
 
 ## Git Hooks
 
-Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행되는 스크립트다.
-스크립트들은 기본적으로 `.git/hooks/*` 에 위치한다.
+Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행되는 스크립트입니다.
+스크립트들은 기본적으로 `.git/hooks/*`에 위치합니다.
 
 ![Maintaining a hook using a symlink to version-controlled script](/images/shell/git/hook-symlink-script.png)
 
 *[Maintaining a hook using a symlink to version-controlled script](https://www.atlassian.com/git/tutorials/git-hooks)*
 
-예를 들어, 아래와 같은 `pre-push` hook은 `git push` 명령어를 실행시켰을 때 `push` 가 실행되기 전 `gradle test` 명령어가 먼저 실행된다.
+예를 들어, 아래와 같은 `pre-push` hook은 `git push` 명령어를 실행시켰을 때 `push` 가 실행되기 전 `gradle test` 명령어가 먼저 실행됩니다.
 
 ```sh
 #!/usr/bin/env bash
@@ -1930,13 +1866,13 @@ gradle test
 
 ### Packfiles
 
-Git이 처음 객체를 저장하는 형식은 loose objects라고 부른다.
-여러 개의 loose objects를 Packfile(`./git/objects/pack/*`)이라 불리는 단일 바이너리 내에 압축(pack)한다.
-`git gc` 명령을 실행하면 `git repack`을 실행하고 `git pack-objects` 명령을 실행한다.
+Git이 처음 객체를 저장하는 형식은 loose objects라고 부릅니다.
+여러 개의 loose objects를 Packfile(`./git/objects/pack/*`)이라 불리는 단일 바이너리 내에 압축(pack)합니다.
+`git gc` 명령을 실행하면 `git repack`을 실행하고 `git pack-objects` 명령을 실행합니다.
 [pack-objects 명령](https://git-scm.com/docs/git-pack-objects)은 default로
-zlib을 사용해서 packfile(`.pack`)과 pack의 index 파일(`.idx`)을 생성한다.
-packfile은 객체들을 효율적으로 주고받고, 빠르게 읽기 위해 사용한다.
-packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한다.
+zlib을 사용해서 packfile(`.pack`)과 pack의 index 파일(`.idx`)을 생성합니다.
+packfile은 객체들을 효율적으로 주고받고, 빠르게 읽기 위해 사용합니다.
+packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원합니다.
 
 | 구현 측면 | 프로세스 호출 | 설명                                                                                                                                                  |
 | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -1945,7 +1881,7 @@ packfile은 다른 객체들과 다르게 clone, fetch, push, pull만 지원한�
 | Server    | Receive-pack  | git send-pack에 의해 호출되며, 저장소 안에 push된 것들을 받는다.                                                                                          |
 | Client    | Send-pack     | 다른 저장소에 대해 git 프로토콜을 이용해 객체들을 push한다. 이 명령은 일반적으로 최종 사용자에 의해 직접 호출되지 않고, 이 명령을 상위 수준으로 감싼 git push가 대신 실행된다. |
 
-Packfile을 열어 압축한 내용을 확인해볼 수 있다.
+Packfile을 열어 압축한 내용을 확인해볼 수 있습니다.
 
 ```sh
 git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bdab.idx
@@ -1955,13 +1891,13 @@ git verify-pack -v .git/objects/pack/pack-3c3fc80c28fbf38af5ca843ae8b714d22c06bd
 
 ### gc
 
-Garbage Collection을 실행한다.
-Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)다.
-예를 들어 orphan 브랜치, 어떤 커밋에도 추가되지 않은 dangling 객체, 어떤 커밋도 가리키지 않고 압축되지 않은 blob 객체 등이다.
-`git prune`, `git repack`, `git pack`, `git rerere` 등 다른 내부 하위 명령어를 같이 실행한다.
-`git gc` 명령으로도 실행할 수 있지만 push, pull, merge, rebase, commit 명령에서 자동으로 실행된다.
+Garbage Collection을 실행합니다.
+Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)입니다.
+예를 들어 orphan 브랜치, 어떤 커밋에도 추가되지 않은 dangling 객체, 어떤 커밋도 가리키지 않고 압축되지 않은 blob 객체 등입니다.
+`git prune`, `git repack`, `git pack`, `git rerere` 등 다른 내부 하위 명령어를 같이 실행합니다.
+`git gc` 명령으로도 실행할 수 있지만 push, pull, merge, rebase, commit 명령에서 자동으로 실행됩니다.
 
-Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있다.
+2개의 커밋을 만들어서 reset 후 gc를 실행해봅니다.
 
 ```sh
 # touch test and git add
@@ -1990,6 +1926,8 @@ git reset --hard HEAD^
 git gc
 ```
 
+Garbage Collection을 실행하기 전에는 reset한 객체들을 복구할 수 있습니다.
+
 ```sh
 git fsck --lost-found
 # Checking object directories: 100% (256/256), done.
@@ -2011,7 +1949,7 @@ git log --oneline
 # fd5e183 test
 ```
 
-orphan 브랜치를 직접 만들어보자
+orphan 브랜치를 만들어 gc를 실행해봅니다.
 
 ```sh
 touch test
@@ -2043,12 +1981,16 @@ git commit --allow-empty -m "empty commit"
 # [empty (root-commit) 02116ce] empty commit
 ```
 
+```sh
+git gc
+```
+
 ## prune
 
-연결할 수 없는 orphan 객체를 제거한다.
-일반적으로 직접 실행되지 않고 `gc`의 하위 명령으로 gc의 기준에 따라 사용된다.
+연결할 수 없는 orphan 객체를 제거합니다.
+일반적으로 직접 실행되지 않고 `gc`의 하위 명령으로 gc의 기준에 따라 사용됩니다.
 
-`fsck` 명령으로 dangling 객체를 확인할 수 있다.
+`fsck` 명령으로 dangling 객체를 확인할 수 있습니다.
 
 ```sh
 git fsck
@@ -2070,8 +2012,8 @@ git fsck
 # dangling blob 002f663c650d708e29d75524630bc5cf97403039
 ```
 
-`--dry-run` 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 한다.
-확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있다.
+`--dry-run` 옵션을 사용하면 실제로 객체를 지우지 않고 어떤 것이 지워지는지 보여주기만 합니다.
+확인해보면 위의 dangling blob 객체들이라는 것을 알 수 있습니다.
 
 ```sh
 git prune --dry-run --verbose
@@ -2091,7 +2033,7 @@ git prune --dry-run --verbose
 # f4d5466af82d891b81ad792b0e74e2341e46312f blob
 ```
 
-`GIT_TRACE=true` 환경 변수와 함께 `gc`를 실행하면 `prune` 명령이 실행된다는 것을 알 수 있다.
+`GIT_TRACE=true` 환경 변수와 함께 `gc`를 실행하면 `prune` 명령이 실행된다는 것을 알 수 있습니다.
 
 ```sh
 GIT_TRACE=true git gc
@@ -2122,23 +2064,28 @@ GIT_TRACE=true git gc
 
 ## Fork
 
-Fork는 서버에 저장소의 복사본을 만든다.
+Fork는 서버에 저장소의 복사본을 만듭니다.
 
 ![fork-repository](/images/shell/git/fork-repository.svg)
 
 *[Distributed version control and forking workflow](https://flatironinstitute.github.io/sciware-git-collaborative/03-distributed/)*
 
-- fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있다.
-  - fork 리포지토리에서 `push --force`를 하든 말든 상관없다.
-  - remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있다.
-  - 공유지의 비극을 피할 수 있다.
-- upstream 리포지토리의 메인테이너를 제한할 수 있다.
-- upstream 리포지토리의 안 쓰는 브랜치들을 따로 정리할 필요가 없다.
-- 진정한 의미의 DVCS
+- fork를 사용하면 upstream 리포지토리에 영향을 주지 않고 마음대로 변경할 수 있습니다.
+  - fork 리포지토리에서 `push --force`를 하든 말든 상관없습니다.
+  - remote-local 리포지토리를 좀 더 적극적으로 관리할 수 있습니다.
+  - 공유지의 비극을 피할 수 있습니다.
+- upstream 리포지토리의 메인테이너를 제한할 수 있습니다.
+- upstream 리포지토리의 안 쓰는 브랜치들을 따로 정리할 필요가 없습니다.
+- 진정한 의미의 DVCS를 사용하는 것입니다.
 
-## Branch protection rules
+## 브랜치 보호 규칙 정하기: Branch protection rules
 
-Pull Request를 통해서만 소스를 통합할 수 있도록 제약 사항을 설정했을 경우 혹은 원격 브랜치에 force push 할 수 있는 권한이 없을 경우 아래와 같은 메시지를 마주할 수 있다.
+GitHub 혹은 Bitbucket 등의 Git 저장소 서비스를 사용하면 브랜치 규칙을 정할 수 있습니다.
+예를 들어, PR(Pull Request)을 통해서만 소스를 병합할 수 있도록 제한하거나 동료가 승인한 PR만 병합할 수 있도록 설정할 수 있습니다.
+또한 force push를 제한할 수도 있습니다.
+2024년 기준 모든 서비스에서 이 기능에 유료 모델을 도입했고, 유용한 규칙들을 적용하려면 비용을 지불해야 합니다.
+(이게 참 안타깝습니다.)
+만약 규칙을 어겼을 경우 아래와 같은 메시지를 만날 수 있습니다.
 
 ```sh
 git --no-optional-locks -c color.branch=false -c color.diff=false -c color.status=false -c diff.mnemonicprefix=false -c core.quotepath=false -c credential.helper=sourcetree push -v --tags origin refs/heads/develop:refs/heads/develop
