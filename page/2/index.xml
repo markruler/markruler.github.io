@@ -22,7 +22,7 @@
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/snmp/</guid>
         <description>임창수 https://markruler.github.io/posts/network/snmp/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있다.&lt;/p&gt;
+&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;전제-조건&#34;&gt;전제 조건&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;IP 네트워크 환경이 있다.&lt;/li&gt;
@@ -43,15 +43,16 @@
 &lt;/li&gt;
 &lt;li&gt;SNMP 프로토콜 (TCP/IP)
 &lt;ul&gt;
-&lt;li&gt;UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용함.&lt;/li&gt;
+&lt;li&gt;UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;MIB (Management Information Base)
 &lt;ul&gt;
 &lt;li&gt;SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1156&#34;&gt;RFC 1156&lt;/a&gt;으로 규정된 MIB1, &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1213&#34;&gt;RFC 1213&lt;/a&gt;으로 규정된 MIB2&lt;/li&gt;
-&lt;li&gt;MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있다.&lt;/li&gt;
-&lt;li&gt;MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타낸다. 이 번호열을 OID(Object ID)라고 한다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1156&#34;&gt;RFC 1156&lt;/a&gt;으로 규정된 MIB1,
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1213&#34;&gt;RFC 1213&lt;/a&gt;으로 규정된 MIB2&lt;/li&gt;
+&lt;li&gt;MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있습니다.&lt;/li&gt;
+&lt;li&gt;MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타냅니다. 이 번호열을 OID(Object ID)라고 합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -77,43 +78,43 @@
 &lt;ul&gt;
 &lt;li&gt;폴링 (Polling)
 &lt;ul&gt;
-&lt;li&gt;매니저가 정기적으로 에이전트로부터 관리 정보를 추출&lt;/li&gt;
+&lt;li&gt;매니저가 정기적으로 에이전트로부터 관리 정보를 추출합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;트랩 (Trap)
 &lt;ul&gt;
-&lt;li&gt;에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보&lt;/li&gt;
+&lt;li&gt;에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;커뮤니티-이름&#34;&gt;커뮤니티 이름&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;매니저와 에이전트는 커뮤니티 이름으로 그룹화한다.&lt;/li&gt;
-&lt;li&gt;매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신한다.&lt;/li&gt;
+&lt;li&gt;매니저와 에이전트는 커뮤니티 이름으로 그룹화합니다.&lt;/li&gt;
+&lt;li&gt;매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;버전별-차이&#34;&gt;버전별 차이&lt;/h1&gt;
 &lt;h2 id=&#34;v1&#34;&gt;v1&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;커뮤니티 이름이 포함된 패킷을 평문으로 전달함.&lt;/li&gt;
-&lt;li&gt;기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용함.&lt;/li&gt;
+&lt;li&gt;커뮤니티 이름이 포함된 패킷을 평문으로 전달합니다.&lt;/li&gt;
+&lt;li&gt;기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;v2&#34;&gt;v2&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;커뮤니티 이름이 포함된 패킷을 암호화해서 전달함.&lt;/li&gt;
-&lt;li&gt;추가된 PDU 타입(예: &lt;a href=&#34;http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&#34;&gt;GetBulkRequest&lt;/a&gt;)을 통해 대량의 데이터를 한 번에 전송할 수 있음.&lt;/li&gt;
+&lt;li&gt;커뮤니티 이름이 포함된 패킷을 암호화해서 전달합니다.&lt;/li&gt;
+&lt;li&gt;추가된 PDU 타입(예: &lt;a href=&#34;http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&#34;&gt;GetBulkRequest&lt;/a&gt;)을 통해 대량의 데이터를 한 번에 전송할 수 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;v2c&#34;&gt;v2c&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달하도록 원복함.&lt;/li&gt;
+&lt;li&gt;커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달할 수 있도록 원복되었습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;v3&#34;&gt;v3&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;(username, password) 인증 기능이 추가됨.&lt;/li&gt;
-&lt;li&gt;이 외 다양한 보안 기능 추가됨.&lt;/li&gt;
+&lt;li&gt;(username, password) 인증 기능이 추가되었습니다.&lt;/li&gt;
+&lt;li&gt;이 외 다양한 보안 기능 추가되었습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;관련-명령어-도구&#34;&gt;관련 명령어 도구&lt;/h1&gt;
 &lt;h2 id=&#34;snmpget&#34;&gt;snmpget&lt;/h2&gt;
-&lt;p&gt;정확한 OID를 입력해야 해서 난 잘 사용하지 않음.&lt;/p&gt;
+&lt;p&gt;정확한 OID를 입력해야 합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# output&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iso.3.6.1.2.1.1.1.0 = STRING: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
@@ -408,18 +409,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl status ssh
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치한다.&lt;/li&gt;
-&lt;li&gt;내용: 클라이언트의 공개 키가 저장된다.
+&lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일입니다. (사용자 인증 방식)&lt;/li&gt;
+&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치합니다.&lt;/li&gt;
+&lt;li&gt;내용: 클라이언트의 공개 키가 저장됩니다.
 서버는 클라이언트의 접속 시도 시,
-이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.&lt;/li&gt;
+이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행합니다.&lt;/li&gt;
 &lt;li&gt;보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
-공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
-특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.&lt;/li&gt;
+공개 키 인증 방식이 비밀번호 인증보다 더 안전합니다.
+특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높습니다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;SSH 데몬(sshd) 설치 혹은 실행 시 &lt;code&gt;/etc/ssh&lt;/code&gt; 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
-만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
-&lt;code&gt;ssh-keygen&lt;/code&gt; 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.&lt;/p&gt;
+&lt;p&gt;SSH 데몬(sshd) 설치 혹은 실행 시 &lt;code&gt;/etc/ssh&lt;/code&gt; 디렉토리에 비대칭키 쌍이 생성 및 저장됩니다.
+만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성됩니다.
+&lt;code&gt;ssh-keygen&lt;/code&gt; 명령어를 사용해서 수동으로 생성 및 교체할 수도 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; ls /etc/ssh | grep &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;ssh_host&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ecdsa_key.pub
@@ -427,7 +428,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_ed25519_key.pub
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh_host_rsa_key.pub
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;수동으로 교체하는 명령어는 다음과 같다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;수동으로 교체하는 명령어는 다음과 같습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 새 키 생성&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key_new
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -440,7 +441,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# SSH 서버 재시작&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl restart sshd
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;주로-사용하는-server-설정&#34;&gt;주로 사용하는 Server 설정&lt;/h2&gt;
-&lt;p&gt;설정 완료 후 데몬 재시작(&lt;code&gt;systemctl restart sshd&lt;/code&gt;)해야 적용된다.&lt;/p&gt;
+&lt;p&gt;설정 완료 후 데몬 재시작(&lt;code&gt;systemctl restart sshd&lt;/code&gt;)해야 적용됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;## /etc/ssh/sshd_config&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This is the sshd server system-wide configuration file.  See&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sshd_config(5) for more information.&lt;/span&gt;
@@ -475,7 +476,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 비밀번호 인증 시도 간격&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;LoginGraceTime &lt;span style=&#34;color:#f60&#34;&gt;120&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# seconds == 2m&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/hosts.allow&lt;/code&gt; 파일에 허용할 IP를 설정할 수 있다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/hosts.allow&lt;/code&gt; 파일에 허용할 IP를 설정할 수 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 호스트 허용&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: ALL
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 하나의 IP를 허용할 경우&lt;/span&gt;
@@ -485,25 +486,25 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 도메인을 허용할 경우&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd: .example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-client&#34;&gt;SSH Client&lt;/h1&gt;
-&lt;p&gt;system-wide 설정 파일은 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;이다.&lt;/p&gt;
+&lt;p&gt;system-wide 설정 파일은 &lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;입니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-client
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-파일-우선-순위&#34;&gt;설정 파일 우선 순위&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;명령줄 옵션: 가장 우선한다.&lt;/li&gt;
+&lt;li&gt;명령줄 옵션: 가장 우선합니다.&lt;/li&gt;
 &lt;li&gt;환경 변수&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;$HOME/.ssh/config&lt;/code&gt;: 사용자별 설정 파일&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;/etc/ssh/ssh_config&lt;/code&gt;: 전역 설정 파일&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;known_hosts&#34;&gt;known_hosts&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치한다.&lt;/li&gt;
-&lt;li&gt;내용: 서버의 호스트 키 정보가 저장된다.
+&lt;li&gt;역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일입니다. (서버 인증 방식)&lt;/li&gt;
+&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치합니다.&lt;/li&gt;
+&lt;li&gt;내용: 서버의 호스트 키 정보가 저장됩니다.
 클라이언트가 처음 특정 서버에 접속할 때,
-서버의 호스트 키를 확인하고 &lt;code&gt;known_hosts&lt;/code&gt; 파일에 저장한다.
-이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.&lt;/li&gt;
-&lt;li&gt;보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
-이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.&lt;/li&gt;
+서버의 호스트 키를 확인하고 &lt;code&gt;known_hosts&lt;/code&gt; 파일에 저장합니다.
+이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인합니다.&lt;/li&gt;
+&lt;li&gt;보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
+이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘입니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;주로-사용하는-host-설정&#34;&gt;주로 사용하는 Host 설정&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# $HOME/.ssh/config&lt;/span&gt;
@@ -513,7 +514,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-key.pem
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentitiesOnly yes
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우 다음과 같이 &lt;code&gt;HostKeyAlgorithms&lt;/code&gt;을 설정합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host old-host
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 111.222.111.222
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
@@ -543,17 +544,15 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host bitbucket.org
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/bitbucket_ed25519
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
-새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 합니다.
+새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@work.github.com:xpdojo/kubernetes.git
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# .git/config&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;origin&amp;#34;&lt;/span&gt;]
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  url = git@work.github.com:xpdojo/kubernetes.git
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fetch = +refs/heads/*:refs/remotes/origin/*
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;local-forward&#34;&gt;Local Forward&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Bastion Host를 두고 Local Forwarding이 필요한 경우&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Bastion Host를 두고 Local Forwarding이 필요한 경우 다음과 같이 설정합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host tost
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
@@ -561,17 +560,17 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/my-rds-key.pem
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogLevel VERBOSE
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -f -N tost
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;커넥션을 끊어야 할 경우 PID을 직접 죽인다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;커넥션을 끊어야 할 경우 PID을 직접 죽입니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ps -ef | grep tost
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# markrul+   38624    4372  0 08:37 ?        00:00:00 ssh -f -N tost&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kill -TERM &lt;span style=&#34;color:#f60&#34;&gt;38624&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;위 설정과 동일한 명령어&lt;/strong&gt;는 다음과 같다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;위 설정과 동일한 명령어&lt;/strong&gt;는 다음과 같습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -vv -f -N &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -i &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;~/.ssh/my-rds-key.pem&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;password-입력-없이-ssh-key로-client에서-server로-접속하기&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/h1&gt;
-&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속합니다.
 (AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server: SSH Key 생성&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch ~/.ssh/authorized_keys
@@ -641,7 +640,7 @@
 &lt;li&gt;&lt;a href=&#34;#%EB%B6%84%EC%84%9D-dig-%EC%9C%BC%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8&#34;&gt;분석: dig 으로 테스트&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#nameserver-8888-%EB%A1%9C-%EC%A7%80%EC%A0%95&#34;&gt;nameserver 8.8.8.8 로 지정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#nameserver%EB%8A%94-resolvconf-%EC%84%A4%EC%A0%95%EC%9D%84-%EB%94%B0%EB%A6%84&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따름&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#nameserver%EB%8A%94-resolvconf-%EC%84%A4%EC%A0%95%EC%9D%84-%EB%94%B0%EB%A5%B8%EB%8B%A4&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따른다&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%B9%84%EA%B5%90&#34;&gt;비교&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -649,12 +648,12 @@
 &lt;/ul&gt;
 &lt;h1 id=&#34;배경&#34;&gt;배경&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.
+&lt;li&gt;약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생했습니다.
 &lt;ul&gt;
-&lt;li&gt;해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.&lt;/li&gt;
+&lt;li&gt;해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.&lt;/li&gt;
+&lt;li&gt;환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됩니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;분석-dig-으로-테스트&#34;&gt;분석: dig 으로 테스트&lt;/h1&gt;
 &lt;h2 id=&#34;nameserver-8888-로-지정&#34;&gt;nameserver 8.8.8.8 로 지정&lt;/h2&gt;
@@ -669,7 +668,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: Tue Jun &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 11:00:57 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;nameserver는-resolvconf-설정을-따름&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따름&lt;/h2&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;nameserver는-resolvconf-설정을-따른다&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따른다&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/resolv.conf&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# LG 메인 네임 서버&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nameserver 164.124.101.2
@@ -681,13 +680,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 164.124.101.2#53(164.124.101.2)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: 화  6월 &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 17:14:45 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었음.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; Query time: &lt;span style=&#34;color:#f60&#34;&gt;230&lt;/span&gt; msec
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 164.124.101.2#53(164.124.101.2)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: 화  6월 &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 17:25:41 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;비교&#34;&gt;비교&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;LG DNS&lt;/code&gt;는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생함.
+&lt;p&gt;&lt;code&gt;LG DNS&lt;/code&gt;는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생했습니다.
 (현재 서버가 위치한 IDC 회선이 LG라서 LG DNS 사용)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;watch -n &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;dig @164.124.101.2 api.example.com | grep \&amp;#34;Query time\&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 3 msec&lt;/span&gt;
@@ -705,7 +704,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 3 msec&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 10 msec&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;8.8.8.8&lt;/code&gt; 은 더 심함.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;8.8.8.8&lt;/code&gt; 은 레이턴시가 더 길었습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;watch -n &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;dig @8.8.8.8 api.example.com | grep \&amp;#34;Query time\&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 303 msec&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 121 msec&lt;/span&gt;
@@ -729,15 +728,15 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 334 msec&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;해결-호스트-파일-수정&#34;&gt;해결: 호스트 파일 수정&lt;/h1&gt;
-&lt;p&gt;server -&amp;gt; L4 Switch -&amp;gt; server는 프록시 없이 설정할 수 없다고 함.
-실제로 호스트 파일(&lt;code&gt;/etc/hosts&lt;/code&gt;)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃 발생함.&lt;/p&gt;
+&lt;p&gt;server -&amp;gt; L4 Switch -&amp;gt; server는 프록시 없이 설정할 수 없다고 합니다.
+실제로 호스트 파일(&lt;code&gt;/etc/hosts&lt;/code&gt;)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃이 발생했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &amp;lt;L4_IP_ADDRESS&amp;gt; api.example.com&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정함.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;127.0.0.1 api.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/image-20240611-080044.webp&#34; alt=&#34;Datadog Timeseries&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인함.&lt;/li&gt;
-&lt;li&gt;이후 서버 B(초록색)도 수정 후 응답 속도 줄어듦.&lt;/li&gt;
+&lt;li&gt;처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인했습니다.&lt;/li&gt;
+&lt;li&gt;이후 서버 B(초록색)도 수정 후 응답 속도가 줄었습니다.&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/network/server-to-server-dns/ - Im Changsu 2020 - 2024</description>
         </item>
@@ -755,45 +754,41 @@
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;팀내에서 문서 생성 도구로 &lt;a href=&#34;https://pdfmyurl.com/html-to-pdf-api&#34;&gt;PDFmyURL&lt;/a&gt;과
-&lt;a href=&#34;https://www.forcs.com/kr/oz-e-form/&#34;&gt;OZ e-Form&lt;/a&gt;을 사용하고 있다.
-보통 이런 외부 솔루션은 테스트 할 때 매우 불편하다.&lt;/p&gt;
-&lt;p&gt;PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있다.
+&lt;a href=&#34;https://www.forcs.com/kr/oz-e-form/&#34;&gt;OZ e-Form&lt;/a&gt;을 사용하고 있습니다.
+보통 이런 외부 솔루션은 테스트 할 때 매우 불편합니다.&lt;/p&gt;
+&lt;p&gt;PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있습니다.
 하나는 URL을 통해 페이지를 읽어서 PDF를 생성하는 인터페이스고,
-하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스다.
-URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할 수 있어야 한다.
-그래서 private 환경에서는 테스트 할 수가 없다.
-그래서 해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생긴다.
-더 큰 문제는 데이터를 Public 환경에 노출해야 하기 때문에
-데이터에 따라 개인 정보 유출 문제가 될 수 있다.&lt;/p&gt;
-&lt;p&gt;OZ e-Form의 클라이언트 프로그램(OZ e-Form Designer)은 Windows만 지원한다.
-그리고 OZ 에이전트와 script를 적극적으로 관리할 인력이 없다.
-해당 기술은 활용도가 떨어지기 때문에 관심이 적을 수 밖에 없기 때문이다.&lt;/p&gt;
-&lt;p&gt;그러다가 누군가의 실수로 PDFmyURL 서버에 동시에 수많은 요청을 보내게 되었다.
-그러자 PDFmyURL은 우리를 차단해버렸다.
-문의를 남겨도 해외 서비스라 그런지 대응이 느렸고,
-PDFmyURL을 이용하는 서비스가 반나절동안 중단되었다.
-언제 해결될지 기약이 없었다.
-결국 다른 계정으로 라이센스를 추가 발급받아 해결했다.&lt;/p&gt;
-&lt;p&gt;내부에서 관리 가능한 HTML to PDF 변환 도구가 간절하다고 느낀 시기였다.&lt;/p&gt;
+하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스입니다.
+URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할 수 있어야 합니다.
+그래서 private 환경에서는 테스트 할 수가 없습니다.
+해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생기는 겁니다.
+더 큰 문제는 데이터를 Public 환경에 노출해야 하기 때문에 데이터에 따라 개인 정보 유출 문제가 될 수 있습니다.&lt;/p&gt;
+&lt;p&gt;OZ e-Form의 클라이언트 프로그램(OZ e-Form Designer)은 Windows만 지원합니다.
+그리고 OZ 에이전트와 script를 적극적으로 관리할 인력이 없습니다.
+해당 기술은 활용도가 떨어지기 때문에 관심이 적을 수 밖에 없기 때문입니다.&lt;/p&gt;
+&lt;p&gt;그러다가 누군가의 실수로 PDFmyURL 서버에 동시에 수많은 요청을 보내게 되었습니다.
+그러자 PDFmyURL은 우리를 차단해버렸습니다.
+문의를 남겨도 해외 서비스라 그런지 대응이 느렸고, PDFmyURL을 이용하는 서비스가 반나절동안 중단되었습니다.
+언제 해결될지 기약이 없었습니다.
+결국 다른 계정으로 라이센스를 추가 발급받아 해결했습니다.&lt;/p&gt;
+&lt;p&gt;내부에서 관리 가능한 HTML to PDF 변환 도구가 간절하다고 느낀 시기였습니다.&lt;/p&gt;
 &lt;h1 id=&#34;1차-시도-wkhtmltopdf&#34;&gt;1차 시도: wkhtmltopdf&lt;/h1&gt;
-&lt;p&gt;이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤다.
-가장 먼저 답변해준 방법은 &lt;a href=&#34;https://wkhtmltopdf.org/&#34;&gt;wkhtmltopdf&lt;/a&gt; 였다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했다.&lt;/span&gt;
+&lt;p&gt;이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤습니다.
+가장 먼저 답변해준 방법은 &lt;a href=&#34;https://wkhtmltopdf.org/&#34;&gt;wkhtmltopdf&lt;/a&gt;였습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt-get -y install fonts-nanum wkhtmltopdf
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;빠르게 시작하기 위해 Python의 &lt;code&gt;pdfkit&lt;/code&gt;과
-오픈 소스 PDF 변환 툴인 &lt;code&gt;wkhtmltopdf&lt;/code&gt;를 사용해서 Flask 앱을 만들었다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;빠르게 시작하기 위해 Python의 &lt;code&gt;pdfkit&lt;/code&gt;과 오픈 소스 PDF 변환 툴인 &lt;code&gt;wkhtmltopdf&lt;/code&gt;를 사용해서 Flask 앱을 만들었습니다.
 하지만 기존 출력물(크롬에서 &lt;a href=&#34;https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#printing&#34;&gt;window.print()&lt;/a&gt;)과
-달리 PDF 출력물을 보면 CSS가 틀어지는 부분이 너무 많았다.&lt;/p&gt;
-&lt;p&gt;리뷰하는 과정에서 확인해보니 문서를 읽지 않은 내 잘못이었다.
-해당 홈페이지 첫 문장부터 &lt;code&gt;Qt WebKit rendering engine&lt;/code&gt; 이라고 설명한다.
-&lt;code&gt;wk&lt;/code&gt;는 WebKit의 약자였고, Qt WebKit을 기반으로 변환하다보니
-Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었다.&lt;/p&gt;
+달리 PDF 출력물을 보면 CSS가 틀어지는 부분이 너무 많았습니다.&lt;/p&gt;
+&lt;p&gt;리뷰하는 과정에서 확인해보니 문서를 읽지 않은 저의 잘못이었습니다.
+해당 홈페이지 첫 문장부터 &lt;code&gt;Qt WebKit rendering engine&lt;/code&gt; 이라고 설명합니다.
+&lt;code&gt;wk&lt;/code&gt;는 WebKit의 약자였고, Qt WebKit을 기반으로 변환하다보니 Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었습니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Comparison_of_browser_engines&#34;&gt;Comparison of browser engines&lt;/a&gt;&lt;/strong&gt; - Wikipedia&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Comparison_of_browser_engines&#34;&gt;Comparison of browser engines&lt;/a&gt;&lt;/strong&gt; | Wikipedia&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;2차-시도-pyppeteer&#34;&gt;2차 시도: pyppeteer&lt;/h1&gt;
 &lt;p&gt;기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 &lt;a href=&#34;https://github.com/puppeteer/puppeteer&#34;&gt;puppeteer&lt;/a&gt;
-대신 python 기반의 &lt;a href=&#34;https://github.com/pyppeteer/pyppeteer&#34;&gt;pyppeteer&lt;/a&gt;을 사용했다.&lt;/p&gt;
+대신 python 기반의 &lt;a href=&#34;https://github.com/pyppeteer/pyppeteer&#34;&gt;pyppeteer&lt;/a&gt;을 사용했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Ubuntu 22.04에서 google-chrome 명령어 설치&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;apt-get update &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;    &amp;amp;&amp;amp; apt-get install -y wget gnupg &lt;span style=&#34;color:#87ceeb&#34;&gt;\
@@ -804,20 +799,18 @@ Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었다
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;      --no-install-recommends &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;    &amp;amp;&amp;amp; rm -rf /var/lib/apt/lists/* &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;    &amp;amp;&amp;amp; groupadd -r pptruser &amp;amp;&amp;amp; useradd -rm -g pptruser -G audio,video pptruser
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;google-chrome&lt;/code&gt;을 headless 모드로 실행해서 프린트하면
-출력물이 브라우저 프린트(&lt;code&gt;window.print()&lt;/code&gt;)와 동일하게 나왔다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;google-chrome&lt;/code&gt;을 headless 모드로 실행해서 프린트하면 출력물이 브라우저 프린트(&lt;code&gt;window.print()&lt;/code&gt;)와 동일하게 나왔습니다.
 (팀원 모두 Edge 아니면 Chrome을 사용함)
-또한 private 환경에서도 출력할 수 있게 되었다.&lt;/p&gt;
+또한 private 환경에서도 출력할 수 있게 되었습니다.&lt;/p&gt;
 &lt;h2 id=&#34;windowprint로-출력&#34;&gt;window.print()로 출력&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/pdf/htmltopdf/window.print.webp&#34; alt=&#34;window.print() - google.com&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;pyppeteer로-출력&#34;&gt;Pyppeteer로 출력&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/pdf/htmltopdf/pyppeteer.print.webp&#34; alt=&#34;pyppeteer - google.com&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;3차-시도-microsoftplaywright&#34;&gt;3차 시도: microsoft/playwright&lt;/h1&gt;
-&lt;p&gt;URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했다.
-p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아서
-이미지 렌더링(img src, background url 등)이 되지 않았다.&lt;/p&gt;
+&lt;p&gt;URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했습니다.
+p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아 이미지 렌더링(img src, background url 등)이 되지 않았습니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;setContent()&lt;/code&gt; 시 &lt;code&gt;waitUntil&lt;/code&gt; 옵션을 p&lt;strong&gt;u&lt;/strong&gt;ppeteer만 지원하고 있다.
+&lt;li&gt;&lt;code&gt;setContent()&lt;/code&gt; 시 &lt;code&gt;waitUntil&lt;/code&gt; 옵션을 p&lt;strong&gt;u&lt;/strong&gt;ppeteer만 지원하고 있습니다.
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/puppeteer/puppeteer/issues/907#issuecomment-472334126&#34;&gt;page.setContent(html, {waitUntil: &amp;rsquo;networkidle&amp;rsquo;}); · Issue #907 · puppeteer/puppeteer&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/miyakogi/pyppeteer/issues/211&#34;&gt;setContent extra options · Issue #211 · miyakogi/pyppeteer&lt;/a&gt;&lt;/li&gt;
@@ -825,11 +818,11 @@ p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 L
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;반면 &lt;a href=&#34;https://github.com/microsoft/playwright-python&#34;&gt;Microsoft의 playwright&lt;/a&gt;는 해당 기능들을
-모두 지원하면서, Javascript는 물론 Python도 지원했다.
-결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했다.
+모두 지원하면서, Javascript는 물론 Python도 지원했습니다.
+결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했습니다.
 &lt;a href=&#34;https://playwright.dev/docs/puppeteer&#34;&gt;puppeteer와 인터페이스를 유사하게 만들었기&lt;/a&gt;
-때문에 변경하는 데에 많은 리소스가 들지 않았다.&lt;/p&gt;
-&lt;p&gt;다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드다.&lt;/p&gt;
+때문에 변경하는 데에 많은 리소스가 들지 않았습니다.&lt;/p&gt;
+&lt;p&gt;다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드입니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# python3 -m pip install playwright&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# python3 main.py&lt;/span&gt;
@@ -908,15 +901,15 @@ p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 L
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    asyncio.run(core_file())
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;구현-시-참고-사항&#34;&gt;구현 시 참고 사항&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;CSS attribute 중 &lt;code&gt;page-break-***&lt;/code&gt; 를 사용하면 페이지를 원하는 부분에서 분리할 수 있다.
+&lt;li&gt;CSS attribute 중 &lt;code&gt;page-break-***&lt;/code&gt; 를 사용하면 페이지를 원하는 부분에서 분리할 수 있습니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;page-break-after: always;&lt;/code&gt; 해당 Element 이후에 내용이 있더라도 페이지를 분리한다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;page-break-after: avoid;&lt;/code&gt; 해당 Element 이후에 페이지는 분리하지 않는다. 이후 내용이 페이지를 넘친다면 페이지 분리되긴 한다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;page-break-after: always;&lt;/code&gt; 해당 Element 이후에 내용이 있더라도 페이지를 분리합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;page-break-after: avoid;&lt;/code&gt; 해당 Element 이후에 페이지는 분리하지 않습니다. 이후 내용이 페이지를 넘친다면 페이지가 분리되긴 합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;PDF 생성 후 응답되기까지 2초 정도 소요된다.
+&lt;li&gt;PDF 생성 후 응답되기까지 2초 정도 소요됩니다.
 &lt;ul&gt;
-&lt;li&gt;PDFmyURL, OZ report와 비슷하다.&lt;/li&gt;
+&lt;li&gt;PDFmyURL, OZ report와 비슷합니다.&lt;/li&gt;
 &lt;li&gt;1주일 기준
 &lt;ul&gt;
 &lt;li&gt;P50: 2.01s&lt;/li&gt;
@@ -927,14 +920,14 @@ p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 L
 &lt;/li&gt;
 &lt;li&gt;Server to Server로 요청 시 Spring Boot에서 FeignClient로
 &lt;a href=&#34;https://wildeveloperetrain.tistory.com/304&#34;&gt;x-www-form-urlencoded&lt;/a&gt;
-데이터를 보내려면 &lt;code&gt;MultiValueMap&amp;lt;String, String&amp;gt;&lt;/code&gt;을 사용해야 한다.&lt;/li&gt;
+데이터를 보내려면 &lt;code&gt;MultiValueMap&amp;lt;String, String&amp;gt;&lt;/code&gt;을 사용해야 합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;h2 id=&#34;playwright&#34;&gt;&lt;strong&gt;Playwright&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://playwright.dev/python/&#34;&gt;공식 문서&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/microsoft/playwright-python&#34;&gt;GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://devocean.sk.com/blog/techBoardDetail.do?ID=165090&#34;&gt;웹 테스트 자동화&lt;/a&gt;가 목적인 라이브러리임.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://devocean.sk.com/blog/techBoardDetail.do?ID=165090&#34;&gt;웹 테스트 자동화&lt;/a&gt;가 목적인 라이브러리입니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;webkit&#34;&gt;&lt;strong&gt;WebKit&lt;/strong&gt;&lt;/h2&gt;
 &lt;ul&gt;
@@ -956,22 +949,22 @@ p&lt;strong&gt;y&lt;/strong&gt;ppeteer에선 HTML Content를 렌더링 할 때 L
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
         <description>임창수 https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;현재 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)다.
-이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용 가능하다.
+&lt;p&gt;저희 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)입니다.
+이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용할 수 있습니다.
 만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
-트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있다.
-&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었다.&lt;/strong&gt;
+트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있습니다.
+&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었습니다.&lt;/strong&gt;
 SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
 &lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35&#34;&gt;Oracle Diagnostics Pack&lt;/a&gt;을
-사용할 수 없다.&lt;/p&gt;
-&lt;h1 id=&#34;db-진단-도구가-필요하다&#34;&gt;DB 진단 도구가 필요하다&lt;/h1&gt;
-&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했다.
-검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰다.&lt;/p&gt;
-&lt;p&gt;하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌다.
-Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었다.
-이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었다.&lt;/p&gt;
+사용할 수 없습니다.&lt;/p&gt;
+&lt;h1 id=&#34;db-진단-도구가-필요합니다&#34;&gt;DB 진단 도구가 필요합니다&lt;/h1&gt;
+&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했습니다.
+검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰습니다.&lt;/p&gt;
+&lt;p&gt;하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌습니다.
+Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었습니다.
+이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었습니다.&lt;/p&gt;
 &lt;p&gt;Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html&#34;&gt;V$SESSION&lt;/a&gt;)에서
-세션 정보를 수집하기 위해 사용한 SQL은 다음과 같다.&lt;/p&gt;
+세션 정보를 수집하기 위해 사용한 SQL은 다음과 같습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; *
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;FROM&lt;/span&gt; (&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; sess.sid,
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.serial#,
@@ -1014,52 +1007,51 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;UPDATE &amp;#34;SYSTEM&amp;#34;.&amp;#34;SYS_EXPORT_SCHEMA_01&amp;#34; SET value_n = :1 WHERE process_order = :2&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;중점적으로 수집하고 싶었던 데이터는 &lt;strong&gt;Wait Event&lt;/strong&gt;와 &lt;strong&gt;SQL Full Text&lt;/strong&gt;였다.
-이를 Elasticsearch에 저장하려면 식별자가 필요했다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;중점적으로 수집하고 싶었던 데이터는 &lt;strong&gt;Wait Event&lt;/strong&gt;와 &lt;strong&gt;SQL Full Text&lt;/strong&gt;였습니다.
+이를 Elasticsearch에 저장하려면 식별자가 필요했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;id = &lt;span style=&#34;color:#87ceeb&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;prev_exec_id&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;prev_sql_id&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;unix_epoch_time(prev_exec_start)&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 고려했던 식별자는 &lt;code&gt;sql_exec_id&lt;/code&gt;와 &lt;code&gt;sql_id&lt;/code&gt;다.
-하지만 대기 상태라면 &lt;code&gt;sql_exec_id&lt;/code&gt;는 &lt;code&gt;NULL&lt;/code&gt;이기 때문에 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt;를 선택했다.
-어느 정도 데이터가 쌓이고 살펴보니 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt; 만으로도 충분히 식별되었다.
-하지만 만에 하나를 위해 &lt;code&gt;prev_exec_start&lt;/code&gt;도 추가했다.
-누적된 데이터를 Kibana로 시각화하면 다음과 같다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 고려했던 식별자는 &lt;code&gt;sql_exec_id&lt;/code&gt;와 &lt;code&gt;sql_id&lt;/code&gt;입니다.
+하지만 대기 상태라면 &lt;code&gt;sql_exec_id&lt;/code&gt;는 &lt;code&gt;NULL&lt;/code&gt;이기 때문에 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt;를 선택했습니다.
+어느 정도 데이터가 쌓이고 살펴보니 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt; 만으로도 충분히 식별되었습니다.
+하지만 만에 하나를 위해 &lt;code&gt;prev_exec_start&lt;/code&gt;도 추가했습니다.
+누적된 데이터를 Kibana로 시각화하면 다음과 같습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/oracle-dbms-session-kibana.png&#34; alt=&#34;Oracle DBMS Session to Kibana&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;사용-사례&#34;&gt;사용 사례&lt;/h1&gt;
-&lt;p&gt;DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표다.
-메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아니다.
-이런 지표가 필요하다면 Prometheus나 Datadog을 사용한다.
-우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었다.&lt;/p&gt;
+&lt;p&gt;DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표입니다.
+메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아닙니다.
+이런 지표가 필요하다면 Prometheus나 Datadog을 사용합니다.
+우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었습니다.&lt;/p&gt;
 &lt;h2 id=&#34;resmgrcpu-quantum&#34;&gt;resmgr:cpu quantum&lt;/h2&gt;
-&lt;p&gt;세션이 CPU 자원을 할당받기 위해 대기하는 이벤트&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;다.
-Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고
-CPU 사용량이 제한(throttling)되어 있을 때 발생한다.&lt;/p&gt;
-&lt;p&gt;먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했다.
-대시보드를 확인해보니 Wait Event &lt;code&gt;resmgr:cpu quantum&lt;/code&gt;이 다수 발생했다.&lt;/p&gt;
+&lt;p&gt;세션이 CPU 자원을 할당받기 위해 대기하는 이벤트&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;입니다.
+Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고 CPU 사용량이 제한(throttling)되어 있을 때 발생합니다.&lt;/p&gt;
+&lt;p&gt;먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했습니다.
+대시보드를 확인해보니 Wait Event &lt;code&gt;resmgr:cpu quantum&lt;/code&gt;이 다수 발생했습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-cpu-quantum.png&#34; alt=&#34;Wait Event - cpu quantum&#34;&gt;&lt;/p&gt;
 &lt;p&gt;해당 Wait Event가 발생한 SQL의 Execution Plan을 확인해보니,
-실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었다.
-SE2는 리소스가 제한된 만큼 &lt;strong&gt;리소스를 효율적으로 사용하는 것이 속도만큼 중요했다&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했다.
-주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했다.
-불필요한 쿼리도 제거했다.&lt;/p&gt;
+실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었습니다.
+SE2는 리소스가 제한된 만큼 &lt;strong&gt;리소스를 효율적으로 사용하는 것이 속도만큼 중요했습니다&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했습니다.
+주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했습니다.
+불필요한 쿼리도 제거했습니다.&lt;/p&gt;
 &lt;h2 id=&#34;enq-tx---row-lock-contention&#34;&gt;enq: TX - row lock contention&lt;/h2&gt;
-&lt;p&gt;여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;다.&lt;/p&gt;
+&lt;p&gt;여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;입니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-row-lock-contention.png&#34; alt=&#34;Wait Event - row lock contention&#34;&gt;&lt;/p&gt;
 &lt;p&gt;해당 Wait Event가 발생한 SQL을 확인해보니
-데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았다.&lt;/p&gt;
-&lt;p&gt;분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것이다&amp;hellip;&lt;/p&gt;
+데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았습니다.&lt;/p&gt;
+&lt;p&gt;분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것입니다&amp;hellip;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;주목할 것은, 오라클에서 발생하는 Lock 경합의 대부분을 차지하는 &lt;code&gt;enq: TM - contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;와
-&lt;code&gt;enq: TX - row lock contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;가 Concurrency가 아닌 Application으로 분류돼 있다는 사실이다.
+&lt;code&gt;enq: TX - row lock contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;가 Concurrency가 아닌 Application으로 분류돼 있다는 사실입니다.
 &amp;hellip;
-이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것이다.
-Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐이다.
-근본적인 해법은 애플리케이션 로직에서 찾아야 한다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것입니다.
+Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐입니다.
+근본적인 해법은 애플리케이션 로직에서 찾아야 합니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
-&lt;p&gt;리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것이다.
-애초에 RDB가 적합하지 않을 수 있다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;어떤 기술을 사용하든 진단 도구부터 찾아보자.
-기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있다.&lt;/p&gt;
+&lt;p&gt;리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것입니다.
+애초에 RDB가 적합하지 않을 수도 있습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;기술 도입을 고려할 때 진단 도구도 중요한 고려 사항이라는 것을 느끼게 되었습니다.
+기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;Oracle Database 19
@@ -1081,10 +1073,10 @@ Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은
 &lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07&#34;&gt;enq: TX - row lock contention&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;DML 테이블 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;DML 테이블 Lock 경합 시 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;DML 로우 Lock 경합 시 발생한다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;DML 로우 Lock 경합 시 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
 &lt;p&gt;오라클 성능 고도화 - 원리와 해법 1, 100쪽&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
@@ -1109,53 +1101,53 @@ Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은
 &lt;p&gt;커버 이미지 출처: &lt;a href=&#34;https://stablediffusionweb.com/&#34;&gt;Stable diffusion&lt;/a&gt; &amp;ldquo;swimming pool lane pattern&amp;rdquo;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h1 id=&#34;증상&#34;&gt;증상&lt;/h1&gt;
-&lt;p&gt;Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었다.
-요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생했다.
+&lt;p&gt;Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었습니다.
+요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생했습니다.
 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
-IDC에 위치한 서버(CentOS 7)에서는 &lt;code&gt;OutOfMemoryError&lt;/code&gt;가 발생하면서 동작하지 않았다.&lt;/p&gt;
+IDC에 위치한 서버(CentOS 7)에서는 &lt;code&gt;OutOfMemoryError&lt;/code&gt;가 발생하면서 동작하지 않았습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.lang.OutOfMemoryError: unable to create new native thread
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Caused by: java.net.SocketException: Too many open files
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;SocketException&lt;/code&gt;인데 &lt;code&gt;Too many open files&lt;/code&gt;? &lt;strong&gt;이게 OOM&lt;/strong&gt;?
-이해되지 않았다.&lt;/p&gt;
-&lt;p&gt;문제를 정의하기 위해 먼저 이해부터 해야 했다.&lt;/p&gt;
+이해되지 않았습니다.&lt;/p&gt;
+&lt;p&gt;문제를 정의하기 위해 먼저 이해부터 해야 했습니다.&lt;/p&gt;
 &lt;h1 id=&#34;분석&#34;&gt;분석&lt;/h1&gt;
 &lt;h2 id=&#34;too-many-open-files&#34;&gt;Too many open files&lt;/h2&gt;
 &lt;p&gt;근본적인 원인이 되는 &lt;code&gt;Too many open files&lt;/code&gt;는
-프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생한다.
-로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤다.&lt;/p&gt;
+프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생합니다.
+로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 우선 별도의 세션을 연다.&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;prlimit&lt;/code&gt;를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인한다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;prlimit&lt;/code&gt;를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prlimit -n
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;기본적으로 &lt;strong&gt;4096&lt;/strong&gt;이 설정되어 있었다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;기본적으로 &lt;strong&gt;4096&lt;/strong&gt;이 설정되어 있었습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RESOURCE DESCRIPTION              SOFT    HARD UNITS
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NOFILE   max number of open files &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1048576&lt;/span&gt; files
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;ulimit&lt;/code&gt;를 이용해 열 수 있는 파일 디스크립터 수를 제한한다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;ulimit&lt;/code&gt;를 이용해 열 수 있는 파일 디스크립터 수를 제한합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그리고 &lt;code&gt;cat&lt;/code&gt; 명령어를 실행하면 &lt;code&gt;Too many open files&lt;/code&gt;가 발생한다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그리고 &lt;code&gt;cat&lt;/code&gt; 명령어를 실행하면 &lt;code&gt;Too many open files&lt;/code&gt;가 발생합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# bash: start_pipeline: pgrp pipe: Too many open files&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 나갔다가 새로운 세션을 연다.
-limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
-하지만 에러가 발생한다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 나갔다가 새로운 세션을 생성합니다.
+limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
+하지만 에러가 발생했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# bash: start_pipeline: pgrp pipe: Too many open files&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# PRETTY_NAME=&amp;#34;Ubuntu 22.04.2 LTS&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;5로 설정하면 에러가 발생하지 않고 정상적으로 출력된다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;5로 설정하면 에러가 발생하지 않고 정상적으로 출력됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# PRETTY_NAME=&amp;#34;Ubuntu 22.04.2 LTS&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이유가 무엇일까?&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이유가 무엇일까요?&lt;/p&gt;
 &lt;h2 id=&#34;파일-디스크립터-file-descriptor&#34;&gt;파일 디스크립터 (File descriptor)&lt;/h2&gt;
-&lt;p&gt;리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환한다.
-반환된 파일 디스크립터는 &lt;code&gt;fdtable&lt;/code&gt;의 참조값을 나타내며, 파일을 읽고 쓰는데 사용된다.&lt;/p&gt;
+&lt;p&gt;리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환합니다.
+반환된 파일 디스크립터는 &lt;code&gt;fdtable&lt;/code&gt;의 참조값을 나타내며, 파일을 읽고 쓰는데 사용됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;stuct task_struct {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
@@ -1175,39 +1167,39 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력된다.
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; file __rcu * fd_array[NR_OPEN_DEFAULT];
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;정확히 fd를 어떻게 찾는지는 확인하지 않았다. 나중에 &lt;a href=&#34;https://m.blog.naver.com/arcyze/60048807080&#34;&gt;이 블로그&lt;/a&gt; 참고해서 공부하자.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;fdtable&lt;/code&gt;의 0번 fd는 표준 입력(&lt;code&gt;stdin&lt;/code&gt;), 1번 fd는 표준 출력(&lt;code&gt;stdout&lt;/code&gt;).
-2번 fd는 표준 에러(&lt;code&gt;stderr&lt;/code&gt;)다.
-3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킨다.
-그래서 &lt;code&gt;ulimit -n 4&lt;/code&gt;로 설정하면 정상적으로 &lt;code&gt;cat&lt;/code&gt;의 출력이 나오는 것이다.&lt;/p&gt;
-&lt;p&gt;다시 문제로 돌아가서 그럼 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;는 왜 발생했던 걸까?&lt;/p&gt;
-&lt;p&gt;Linux에서는 Socket도 파일로 취급한다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;정확히 fd를 어떻게 찾는지는 확인하지 않았습니다. 나중에 &lt;a href=&#34;https://m.blog.naver.com/arcyze/60048807080&#34;&gt;이 블로그&lt;/a&gt;를 참고해서 공부해봐야겠습니다.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fdtable&lt;/code&gt;의 0번 fd는 표준 입력(&lt;code&gt;stdin&lt;/code&gt;), 1번 fd는 표준 출력(&lt;code&gt;stdout&lt;/code&gt;),
+2번 fd는 표준 에러(&lt;code&gt;stderr&lt;/code&gt;)입니다.
+3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킵니다.
+그래서 &lt;code&gt;ulimit -n 4&lt;/code&gt;로 설정하면 정상적으로 &lt;code&gt;cat&lt;/code&gt;의 출력이 나오는 것입니다.&lt;/p&gt;
+&lt;p&gt;다시 문제로 돌아가서 그럼 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;는 왜 발생했던 걸까요?&lt;/p&gt;
+&lt;p&gt;Linux에서는 Socket도 파일로 취급합니다.
 그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
-시스템 제한을 초과하면 &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생하는 것이다.&lt;/p&gt;
-&lt;p&gt;문제가 발생했던 서버의 시스템 제한을 확인해봤다.&lt;/p&gt;
+시스템 제한을 초과하면 &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생하는 것입니다.&lt;/p&gt;
+&lt;p&gt;문제가 발생했던 서버의 시스템 제한을 확인해봤습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prlimit -n
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RESOURCE DESCRIPTION              SOFT    HARD UNITS
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NOFILE   max number of open files &lt;span style=&#34;color:#f60&#34;&gt;1024&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1048576&lt;/span&gt; files
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 제한을 늘리면 문제가 해결될 것 같았다.
-그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였다.
-갑자기 요청이 늘어난 원인이 무엇일까?&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 제한을 늘리면 문제가 해결될 것 같았습니다.
+그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였습니다.
+갑자기 요청이 늘어난 원인이 무엇일까요?&lt;/p&gt;
 &lt;p&gt;혼자가 아닌 함께 개발할 때,
 내가 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
-해당 소스 코드를 복사해서 사용하는 경우가 많았다.
-&lt;code&gt;OkHttpClient&lt;/code&gt;도 그대로 복사해서 사용했었다.&lt;/p&gt;
+해당 소스 코드를 복사해서 사용하는 경우가 많았습니다.
+&lt;code&gt;OkHttpClient&lt;/code&gt;도 그대로 복사해서 사용했었습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OkHttpClient client = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; OkHttpClient();
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;하지만 &lt;code&gt;OkHttpClient&lt;/code&gt;를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성된다.
-파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트해봤다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/jvm-monitoring/#visualvm&#34;&gt;VisualVM&lt;/a&gt;을 사용해서 스레드를 확인해봤다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;하지만 &lt;code&gt;OkHttpClient&lt;/code&gt;를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성됩니다.
+파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트 해봤습니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/jvm-monitoring/#visualvm&#34;&gt;VisualVM&lt;/a&gt;을 사용해서 스레드를 확인해봤습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/too-many-open-files/visualvm-bad-okhttp-connectionpool.png&#34; alt=&#34;visualvm-bad-okhttp-connectionpool&#34;&gt;&lt;/p&gt;
-&lt;p&gt;OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;이 발생했다.&lt;/p&gt;
+&lt;p&gt;OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;이 발생했습니다.&lt;/p&gt;
 &lt;h1 id=&#34;문제-정의&#34;&gt;문제 정의&lt;/h1&gt;
-&lt;p&gt;실제 문제는 불필요한 스레드가 과다 생성되어 발생한 것이다.
-&lt;strong&gt;이 에러가 특히 위험한 이유는 시스템 제한을 초과했기 때문에 동일한 머신에 있는 다른 프로세스에도 영향을 준다는 것이다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;실제 문제는 불필요한 스레드가 과다 생성되어 발생한 것입니다.
+&lt;strong&gt;이 에러가 특히 위험한 이유는 시스템 제한을 초과했기 때문에 동일한 머신에 있는 다른 프로세스에도 영향을 준다는 것입니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;OkHttp ConnectionPool&lt;/code&gt;을 재사용하기 위해 Spring Bean으로 등록했다.
-&lt;strong&gt;이는 &lt;a href=&#34;https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/index.html&#34;&gt;공식 문서&lt;/a&gt;에도 있는 내용이다.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;OkHttp ConnectionPool&lt;/code&gt;을 재사용하기 위해 Spring Bean으로 등록했습니다.
+&lt;strong&gt;이는 &lt;a href=&#34;https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/index.html&#34;&gt;공식 문서&lt;/a&gt;에도 있는 내용입니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;OkHttpClients Should Be Shared&lt;/strong&gt;
 &lt;br&gt;
@@ -1246,13 +1238,12 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;// ...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 4,000개의 요청을 보내도록 테스트했다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 4,000개의 요청을 보내도록 테스트 했습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/too-many-open-files/visualvm-okhttpclient-bean.png&#34; alt=&#34;visualvm okhttpclient bean&#34;&gt;&lt;/p&gt;
 &lt;p&gt;더 이상 불필요하게 스레드가 늘어나지 않았고,
-스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었다.
+스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었습니다.
 (평균 10초 → 3초)&lt;/p&gt;
-&lt;p&gt;시스템 제한 설정을 변경할 필요 없이
-&lt;code&gt;Too many open files&lt;/code&gt; 에러도 발생하지 않았다.&lt;/p&gt;
+&lt;p&gt;시스템 제한 설정을 변경할 필요 없이 &lt;code&gt;Too many open files&lt;/code&gt; 에러도 발생하지 않았습니다.&lt;/p&gt;
 - https://markruler.github.io/posts/java/too-many-open-files/ - Im Changsu 2020 - 2024</description>
         </item>
     
@@ -1264,12 +1255,12 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
         <pubDate>Wed, 21 Dec 2022 22:20:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</guid>
-        <description>임창수 https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공한다.
-엘라스틱서치가 빠른 이유는 문서의 단어(term)들을 역색인(inverted index)하기 때문이다.
-책에서 특정 단어를 찾는 걸 상상해 보자.
-&lt;strong&gt;관계형 데이터베이스(RDB, Relational Database)는&lt;/strong&gt; &lt;code&gt;LIKE&lt;/code&gt; 검색을 통해 검색 키워드가 포함된 &lt;strong&gt;모든 페이지를 찾아야 한다&lt;/strong&gt;.
-&lt;strong&gt;엘라스틱서치는&lt;/strong&gt; 책 뒷부분에 있는 색인(index)을 보고 &lt;strong&gt;필요한 페이지만 찾으면 된다&lt;/strong&gt;.
-이 글에서는 e커머스 서비스에서 검색 성능을 개선하기 위해 도입한 엘라스틱서치와 인덱싱 전략에 대해 소개한다.&lt;/p&gt;
+        <description>임창수 https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공합니다.
+엘라스틱서치가 빠른 이유는 문서의 단어(term)들을 역색인(inverted index)하기 때문입니다.
+책에서 특정 단어를 찾는 걸 상상해 보죠.
+&lt;strong&gt;관계형 데이터베이스(RDB, Relational Database)는&lt;/strong&gt; &lt;code&gt;LIKE&lt;/code&gt; 검색을 통해 검색 키워드가 포함된 &lt;strong&gt;모든 페이지를 찾아야 합니다&lt;/strong&gt;.
+&lt;strong&gt;엘라스틱서치는&lt;/strong&gt; 책 뒷부분에 있는 색인(index)을 보고 &lt;strong&gt;필요한 페이지만 찾으면 됩니다&lt;/strong&gt;.
+이 글에서는 e커머스 서비스에서 검색 성능을 개선하기 위해 도입한 엘라스틱서치와 인덱싱 전략에 대해 소개합니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-%EB%8F%84%EC%9E%85-%EB%B0%B0%EA%B2%BD&#34;&gt;엘라스틱서치 도입 배경&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#rdb-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%9D%B8%EB%8D%B1%EC%8B%B1%ED%95%98%EB%8A%94-%EC%A0%84%EB%9E%B5&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/a&gt;
@@ -1280,34 +1271,34 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B6%80%EB%B6%84&#34;&gt;더 개선할 수 있는 부분&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4-%EA%B3%A0%EB%AF%BC%EC%9D%84-%EB%82%98%EB%A7%8C-%ED%96%88%EB%8D%98-%EA%B2%8C-%EC%95%84%EB%8B%88%EC%97%88%EB%8B%A4&#34;&gt;이 고민을 나만 했던 게 아니었다&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4-%EA%B3%A0%EB%AF%BC%EC%9D%84-%EC%A0%80%EB%A7%8C-%ED%96%88%EB%8D%98-%EA%B2%8C-%EC%95%84%EB%8B%88%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;엘라스틱서치-도입-배경&#34;&gt;엘라스틱서치 도입 배경&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;매일 새벽에 장애가 발생하기 시작했다&lt;/strong&gt;.
-유저 트래픽이 주로 새벽에 몰리는데, 이때 DB 레이턴시가 높아져서 모든 서버에 장애가 발생했다.
-왜 DB 레이턴시가 높았을까?
-현재 서비스에서 트래픽이 가장 많이 발생하는 페이지가 메인, 상품 검색, 상품 상세 페이지다.
-이 중 검색 페이지에서 쿼리 대기 시간이 길어지고 있었다.
-원인은 크게 다음과 같다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;매일 새벽에 장애가 발생하기 시작했습니다&lt;/strong&gt;.
+유저 트래픽이 주로 새벽에 몰리는데, 이때 DB 레이턴시가 높아져서 모든 서버에 장애가 발생했습니다.
+왜 DB 레이턴시가 높았을까요?
+현재 서비스에서 트래픽이 가장 많이 발생하는 페이지가 메인, 상품 검색, 상품 상세 페이지입니다.
+이 중 검색 페이지에서 쿼리 대기 시간이 길어지고 있었습니다.
+원인은 크게 다음과 같습니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;LIKE %keyword%&lt;/code&gt; 검색&lt;/strong&gt; — 최악의 경우 DB는 모든 레코드를 찾아야 한다.
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;LIKE %keyword%&lt;/code&gt; 검색&lt;/strong&gt; — 최악의 경우 DB는 모든 레코드를 찾아야 합니다.
 &lt;ul&gt;
-&lt;li&gt;검색 페이지가 증가할수록 검색 속도는 더 느려졌다.&lt;/li&gt;
+&lt;li&gt;검색 페이지가 증가할수록 검색 속도는 더 느려졌습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;상품 수의 급증&lt;/strong&gt; — 상품 수가 약 50만 개에서 270만 개로 증가했다.
+&lt;li&gt;&lt;strong&gt;상품 수의 급증&lt;/strong&gt; — 상품 수가 약 50만 개에서 270만 개로 증가했습니다.
 &lt;ul&gt;
-&lt;li&gt;판매 중인 상품만 보면 약 6만 개에서 76만 개로 증가했다.&lt;/li&gt;
-&lt;li&gt;개선 전에는 판매된 상품도 검색 결과에 포함되어 있었다.&lt;/li&gt;
+&lt;li&gt;판매 중인 상품만 보면 약 6만 개에서 76만 개로 증가했습니다.&lt;/li&gt;
+&lt;li&gt;개선 전에는 판매된 상품도 검색 결과에 포함되어 있었습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;당장 개선이 필요했다&lt;/strong&gt;.
-RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지 않았다.
-더 중요한 건 RDB에 부하가 발생하고 있었기 때문에 RDB에서 작업할 수 없던 상황이었다.
+&lt;p&gt;&lt;strong&gt;당장 개선이 필요했습니다&lt;/strong&gt;.
+RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지 않았습니다.
+더 중요한 건 RDB에 부하가 발생하고 있었기 때문에 RDB에서 작업할 수 없던 상황이었습니다.
 당시 검색 키워드를 저장하고 집계만 하던 기능에 사용되던 Elastic Cloud가 있었고,
-MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었다.
-그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했다.&lt;/p&gt;
+MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었습니다.
+그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/search/elasticsearch-indexing-strategy/improve-response-time.png&#34; alt=&#34;Elasticsearch로 응답 속도 개선&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;엘라스틱서치를 검색 기능에 도입 후 서버 응답 속도 (Datadog APM)&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
@@ -1317,52 +1308,52 @@ MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지�
 &lt;h1 id=&#34;rdb-데이터를-인덱싱하는-전략&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/h1&gt;
 &lt;h2 id=&#34;1-가장-쉬운-방법-batch&#34;&gt;1. 가장 쉬운 방법 Batch&lt;/h2&gt;
 &lt;p&gt;처음엔 &lt;a href=&#34;https://www.elastic.co/kr/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash&#34;&gt;Elastic 공식 문서&lt;/a&gt;를 참조해서
-&lt;strong&gt;로그스태시(Logstash)&lt;/strong&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;로 시작했지만 원하는 로그와 커스텀 동작을 추가하기 힘들었다.
-그래서 성능 개선 후 바로 &lt;strong&gt;파이썬(Python)&lt;/strong&gt; 스크립트로 전환했다.
-대략적인 ETL 과정은 다음과 같다.&lt;/p&gt;
+&lt;strong&gt;로그스태시(Logstash)&lt;/strong&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;로 시작했지만 원하는 로그와 커스텀 동작을 추가하기 힘들었습니다.
+그래서 성능 개선 후 바로 &lt;strong&gt;파이썬(Python)&lt;/strong&gt; 스크립트로 전환했습니다.
+대략적인 ETL 과정은 다음과 같습니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Extract: Oracle DBMS에서 마지막으로 조회한 &lt;em&gt;최근 수정된 날짜(&lt;code&gt;updated_at&lt;/code&gt;)&lt;/em&gt; 기준 이후로 데이터 조회&lt;/li&gt;
 &lt;li&gt;Transform: 엘라스틱서치 인덱스의 스키마(Schema)에 맞게 데이터 수정&lt;/li&gt;
 &lt;li&gt;Load: 엘라스틱서치에 데이터 인덱싱&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;2-update-데이터&#34;&gt;2. UPDATE 데이터&lt;/h2&gt;
-&lt;p&gt;시간이 지날수록 RDB 데이터와 Elasticsearch 데이터에 차이가 발생하기 시작했다. (평균 약 300개/1d)
-이러한 이유로 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했다.&lt;/p&gt;
-&lt;p&gt;Python의 &lt;code&gt;deepdiff&lt;/code&gt; 모듈을 사용해서 RDB와 엘라스틱서치 데이터 전체를 비교해봤다.
-특정 패턴을 분석해보니 내가 파악하지 못한 레거시 시스템이나 스케줄러에서 &lt;code&gt;updated_at&lt;/code&gt;을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었다.
-추가로 트랜잭션 문제로 인해 데이터에 차이가 발생하는 경우도 있었다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-간략히 설명하면 &lt;strong&gt;데이터 UPDATE를 위한 트랜잭션 시작 후 COMMIT 전에 배치 작업이 SELECT를 실행하면 업데이트 이벤트가 누락될 수 있다.&lt;/strong&gt;
-&lt;code&gt;updated_at&lt;/code&gt; 기준이 아닌 전체 인덱싱도 고려해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했다.&lt;/p&gt;
+&lt;p&gt;시간이 지날수록 RDB 데이터와 Elasticsearch 데이터에 차이가 발생하기 시작했습니다. (평균 약 300개/1d)
+이러한 이유로 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했습니다.&lt;/p&gt;
+&lt;p&gt;Python의 &lt;code&gt;deepdiff&lt;/code&gt; 모듈을 사용해서 RDB와 엘라스틱서치 데이터 전체를 비교해봤습니다.
+특정 패턴을 분석해보니 내가 파악하지 못한 레거시 시스템이나 스케줄러에서 &lt;code&gt;updated_at&lt;/code&gt;을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었습니다.
+추가로 트랜잭션 문제로 인해 데이터에 차이가 발생하는 경우도 있었습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+간략히 설명하면 &lt;strong&gt;데이터 UPDATE를 위한 트랜잭션 시작 후 COMMIT 전에 배치 작업이 SELECT를 실행하면 업데이트 이벤트가 누락될 수 있습니다.&lt;/strong&gt;
+&lt;code&gt;updated_at&lt;/code&gt; 기준이 아닌 전체 인덱싱도 고려해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했습니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;실시간 배치 — &lt;code&gt;updated_at&lt;/code&gt;을 기준으로 5초 Fixed Delay&lt;/li&gt;
 &lt;li&gt;전체 배치 — 최근 데이터까지 인덱싱하면 다시 처음부터 반복 (약 3시간 소요)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;3-hard-delete-데이터&#34;&gt;3. HARD DELETE 데이터&lt;/h2&gt;
-&lt;p&gt;수정 후 데이터 차이가 많이 줄었다. (평균 약 2개/1d)
-하지만 남은 건 어디서 발생하는지 한참 찾아야 했다.
-운영상 상품을 HARD DELETE&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 해야 하는 상황이 있었고, 이 정보가 팀원 간에 공유되지 않았었다.
-지금까지 설명한 배치 방식은 Hard Delete에 대응하지 못한다.&lt;/p&gt;
-&lt;p&gt;다른 대안이 있을까 찾아봤더니 &lt;strong&gt;CDC(Change Data Capture)와 같은 스트림(Stream) 방식&lt;/strong&gt;을 사용할 수 있다.
-하지만 Oracle CDC&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;, Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았다.&lt;/p&gt;
-&lt;p&gt;그럼 또 다른 대안은? &lt;strong&gt;상품 인덱스에 alias를 지정하고, 1일 1번 새로운 인덱스를 생성해서 변경한다&lt;/strong&gt;.
+&lt;p&gt;수정 후 데이터 차이가 많이 줄었습니다. (평균 약 2개/1d)
+하지만 남은 건 어디서 발생하는지 한참 찾아야 했습니다.
+운영상 상품을 HARD DELETE&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 해야 하는 상황이 있었고, 이 정보가 팀원 간에 공유되지 않았습니다.
+지금까지 설명한 배치 방식은 Hard Delete에 대응하지 못합니다.&lt;/p&gt;
+&lt;p&gt;다른 대안이 있을까 찾아봤더니 &lt;strong&gt;CDC(Change Data Capture)와 같은 스트림(Stream) 방식&lt;/strong&gt;을 사용할 수 있습니다.
+하지만 Oracle CDC&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;, Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았습니다.&lt;/p&gt;
+&lt;p&gt;그럼 또 다른 대안이 있을까요? &lt;strong&gt;상품 인덱스에 alias를 지정하고, 1일 1번 새로운 인덱스를 생성해서 변경하기로 했습니다&lt;/strong&gt;.
 예를 들어 &lt;code&gt;product-20220102&lt;/code&gt; 인덱스를 생성하고,
-전체 문서 인덱싱을 완료할 경우 &lt;code&gt;product&lt;/code&gt; alias를 &lt;code&gt;product-20220101&lt;/code&gt;에서 &lt;code&gt;product-20220102&lt;/code&gt;로 변경한다.
-그럼 Hard Delete가 발생해도 최대 1일 동안만 차이가 발생한다.&lt;/p&gt;
+전체 문서 인덱싱을 완료할 경우 &lt;code&gt;product&lt;/code&gt; alias를 &lt;code&gt;product-20220101&lt;/code&gt;에서 &lt;code&gt;product-20220102&lt;/code&gt;로 변경합니다.
+그럼 Hard Delete가 발생해도 최대 1일 동안만 차이가 발생합니다.&lt;/p&gt;
 &lt;h1 id=&#34;더-개선할-수-있는-부분&#34;&gt;더 개선할 수 있는 부분&lt;/h1&gt;
-&lt;p&gt;검색 기능 구현에 Spring Data Elasticsearch 모듈을 사용했다.
-&lt;strong&gt;인덱스 스키마를 Python과 Java 언어로 된 2개의 프로젝트에서 관리하는 것&lt;/strong&gt;이다.
-엘라스틱서치 인덱스는 &lt;code&gt;@Entity&lt;/code&gt;로 정의했는데 이를 &lt;strong&gt;별도 모듈로 재사용&lt;/strong&gt;하면 Spring Batch를 사용할 수 있다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;현재 전체 데이터를 인덱싱하는데 평균 3시간이 걸린다.&lt;/strong&gt;
+&lt;p&gt;검색 기능 구현에 Spring Data Elasticsearch 모듈을 사용했습니다.
+&lt;strong&gt;인덱스 스키마를 Python과 Java 언어로 된 2개의 프로젝트에서 관리하는 것&lt;/strong&gt;입니다.
+엘라스틱서치 인덱스는 &lt;code&gt;@Entity&lt;/code&gt;로 정의했는데 이를 &lt;strong&gt;별도 모듈로 재사용&lt;/strong&gt;하면 Spring Batch를 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;현재 전체 데이터를 인덱싱하는데 평균 3시간이 걸립니다.&lt;/strong&gt;
 파이썬은 GIL(Global Interpreter Lock) 때문에 &lt;code&gt;multiprocessing&lt;/code&gt; 모듈을 사용해야 병렬 처리가 가능하지만,
-Spring Batch로 전환하면 &lt;strong&gt;배치 작업을 병럴 처리해서 처리 속도를 향상&lt;/strong&gt;시킬 수 있다.&lt;/p&gt;
-&lt;p&gt;하지만 Elastic Cloud를 사용한다면 &lt;strong&gt;비용(Credit)도 고려&lt;/strong&gt;해야 한다.
-데이터 인덱싱을 더 많이, 더 자주 해보니 데이터 노드의 CPU 사용량이 높아지는 것을 확인했다.&lt;/p&gt;
-&lt;p&gt;검색 기능의 서버 응답 속도는 평균 85.2ms/1w 이다&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
+Spring Batch로 전환하면 &lt;strong&gt;배치 작업을 병럴 처리해서 처리 속도를 향상&lt;/strong&gt;시킬 수 있습니다.&lt;/p&gt;
+&lt;p&gt;하지만 Elastic Cloud를 사용한다면 &lt;strong&gt;비용(Credit)도 고려&lt;/strong&gt;해야 합니다.
+데이터 인덱싱을 더 많이, 더 자주 해보니 데이터 노드의 CPU 사용량이 높아지는 것을 확인했습니다.&lt;/p&gt;
+&lt;p&gt;검색 기능의 서버 응답 속도는 평균 85.2ms/1w 입니다&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
 데이터에 차이가 발생하는 문제 때문에 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했는데,
-배치 처리 속도를 개선하면 RDB를 조회하는 부분을 제거할 수 있다.
-게다가 현재 서비스의 주요 이용자들은 &lt;strong&gt;아프리카, 중남미, 중앙아시아&lt;/strong&gt; 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 이다&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;.
-RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것이다.&lt;/p&gt;
-&lt;h1 id=&#34;이-고민을-나만-했던-게-아니었다&#34;&gt;이 고민을 나만 했던 게 아니었다&lt;/h1&gt;
+배치 처리 속도를 개선하면 RDB를 조회하는 부분을 제거할 수 있습니다.
+게다가 현재 서비스의 주요 이용자들은 &lt;strong&gt;아프리카, 중남미, 중앙아시아&lt;/strong&gt; 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 입니다&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;.
+RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것입니다.&lt;/p&gt;
+&lt;h1 id=&#34;이-고민을-저만-했던-게-아니었습니다&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html&#34;&gt;Tune for indexing speed&lt;/a&gt; | Elastic&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://youtu.be/fBfUr_8Pq8A&#34;&gt;엘라스틱서치를 이용한 상품 검색 엔진 개발 일지&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
@@ -1385,12 +1376,12 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 &lt;p&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ?t=862&#34;&gt;동일한 사례&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;strong&gt;Hard Delete&lt;/strong&gt;란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말한다. SQL에서는 &lt;code&gt;DELETE&lt;/code&gt;.
-이와 반대로 &lt;strong&gt;Soft Delete&lt;/strong&gt;는 삭제 플래그(ex: &lt;code&gt;is_deleted&lt;/code&gt;)만 수정하고 데이터를 삭제하지 않는다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Hard Delete&lt;/strong&gt;란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 &lt;code&gt;DELETE&lt;/code&gt;.
+이와 반대로 &lt;strong&gt;Soft Delete&lt;/strong&gt;는 삭제 플래그(ex: &lt;code&gt;is_deleted&lt;/code&gt;)만 수정하고 데이터를 삭제하지 않습니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었다.
-또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었다.
+&lt;p&gt;Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
+또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었습니다.
 &lt;a href=&#34;https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/&#34;&gt;Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&amp;hellip;&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
@@ -1414,7 +1405,7 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
         <guid>https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/</guid>
         <description>임창수 https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해
-&lt;a href=&#34;https://www.jenkins.io/doc/book/pipeline/syntax/#triggers&#34;&gt;triggers&lt;/a&gt; directive를 사용했다.&lt;/p&gt;
+&lt;a href=&#34;https://www.jenkins.io/doc/book/pipeline/syntax/#triggers&#34;&gt;triggers&lt;/a&gt; directive를 사용했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pipeline {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    agent any
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1441,12 +1432,12 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;해당 Job은 빌드 간 메타데이터(&lt;code&gt;.meta/&lt;/code&gt;)를 공유해야 했기 때문에
 &lt;a href=&#34;https://plugins.jenkins.io/ws-cleanup/&#34;&gt;cleanWs&lt;/a&gt; 플러그인에서도
-&lt;code&gt;.git&lt;/code&gt; 디렉토리와 함께 삭제되지 않도록 설정했다.&lt;/p&gt;
+&lt;code&gt;.git&lt;/code&gt; 디렉토리와 함께 삭제되지 않도록 설정했습니다.&lt;/p&gt;
 &lt;p&gt;하지만 무슨 이유인지 메타데이터가 간헐적으로 누락되었고,
-작업도 원하는대로 동작하지 않고 있었다.&lt;/p&gt;
+작업도 원하는대로 동작하지 않고 있었습니다.&lt;/p&gt;
 &lt;h1 id=&#34;workspacelist&#34;&gt;WorkspaceList&lt;/h1&gt;
 &lt;p&gt;Jenkins에서 Job을 실행할 경우 말그대로 작업 공간을 위한
-Workspace(&lt;code&gt;$JENKINS_HOME/workspace&lt;/code&gt;) 디렉토리가 생성된다.&lt;/p&gt;
+Workspace(&lt;code&gt;$JENKINS_HOME/workspace&lt;/code&gt;) 디렉토리가 생성됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// hudson.slaves.WorkspaceList&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;synchronized&lt;/span&gt; Lease &lt;span style=&#34;color:#ff0&#34;&gt;allocate&lt;/span&gt;(@NonNull FilePath base, Object context) &lt;span style=&#34;color:#f00&#34;&gt;throws&lt;/span&gt; InterruptedException {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#ee82ee&#34;&gt;int&lt;/span&gt; i = 1; ; i++) {
@@ -1457,9 +1448,9 @@ Workspace(&lt;code&gt;$JENKINS_HOME/workspace&lt;/code&gt;) 디렉토리가 생�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; acquire(candidate, &lt;span style=&#34;color:#f00&#34;&gt;false&lt;/span&gt;, context);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않는다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않습니다.
 Jenkins 런타임의 &lt;a href=&#34;https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java&#34;&gt;WorkspaceList 객체&lt;/a&gt;에
-전체 Workspace 목록을 저장한다.&lt;/p&gt;
+전체 Workspace 목록을 저장합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// hudson.slaves.WorkspaceList&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;/**
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; * Used by {@link Computer} to keep track of workspaces that are actively in use.
@@ -1483,14 +1474,14 @@ Jenkins 런타임의 &lt;a href=&#34;https://github.com/jenkinsci/jenkins/blob/j
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;문제&#34;&gt;문제&lt;/h2&gt;
 &lt;p&gt;만약 파이프라인에서 &lt;code&gt;Concurrent Build&lt;/code&gt; 옵션을 허용한 채
 여러 개의 빌드를 동시에 실행하면 간혹 &lt;code&gt;job_name&lt;/code&gt; workspace에서 실행되지 않고
-&lt;code&gt;job_name@2&lt;/code&gt; 에서만 실행되는 경우가 있다.
+&lt;code&gt;job_name@2&lt;/code&gt; 에서만 실행되는 경우가 있습니다.
 그런데 메타데이터 파일을 공유해서 사용해야 하는 경우
-&lt;code&gt;job_name&lt;/code&gt; workspace에서 실행되기를 보장해야 한다.&lt;/p&gt;
+&lt;code&gt;job_name&lt;/code&gt; workspace에서 실행되기를 보장해야 합니다.&lt;/p&gt;
 &lt;h2 id=&#34;해결&#34;&gt;해결&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Jenkins Master 프로세스를 재시작&lt;/strong&gt;해서 &lt;code&gt;WorkspaceList&lt;/code&gt;를 초기화하거나
-&lt;strong&gt;새로운 이름의 Job을 생성&lt;/strong&gt;하면 새로운 이름의 workspace에서 빌드할 수 있다.
+&lt;strong&gt;새로운 이름의 Job을 생성&lt;/strong&gt;하면 새로운 이름의 workspace에서 빌드할 수 있습니다.
 이후 &lt;a href=&#34;https://en.wikipedia.org/wiki/Thread_safety&#34;&gt;스레드 안전성&lt;/a&gt;을 보장하기 위해
-&lt;code&gt;Concurrent Build&lt;/code&gt; 옵션을 허용하지 않은 채 빌드한다.&lt;/p&gt;
+&lt;code&gt;Concurrent Build&lt;/code&gt; 옵션을 허용하지 않은 채 빌드합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pipeline {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    agent any
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1500,26 +1491,26 @@ Jenkins 런타임의 &lt;a href=&#34;https://github.com/jenkinsci/jenkins/blob/j
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;// https://www.jenkins.io/doc/book/pipeline/syntax/#options
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;    options {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정한다.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정합니다.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        timeout(time: &lt;span style=&#34;color:#f60&#34;&gt;50&lt;/span&gt;, unit: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;SECONDS&amp;#39;&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 빌드 스케줄이 2개 생성되면 &amp;#39;job_name&amp;#39;, &amp;#39;job_name@2&amp;#39; workspace가 생성되고
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// metadata를 각각 관리하게 된다. abortPrevious 값을 true로 설정하면
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// metadata를 각각 관리하게 됩니다. abortPrevious 값을 true로 설정하면
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 이미 빌드 중인 프로세스와 겹쳐서 &amp;#39;job_name@2&amp;#39; workspace가 생성되더라도
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &amp;#39;job_name&amp;#39; workspace에서 실행된다.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &amp;#39;job_name&amp;#39; workspace에서 실행됩니다.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;        disableConcurrentBuilds(abortPrevious: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    stages {...}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;timeout과-cron&#34;&gt;timeout과 cron&lt;/h1&gt;
-&lt;p&gt;Crontab(Unix의 Job Scheduler)처럼 Jenkins는 &lt;code&gt;cron&lt;/code&gt; 설정을 통해 잡 스케줄러를 만들 수 있다.
-Jenkins &lt;code&gt;cron&lt;/code&gt;의 최소 간격은 1분(&lt;code&gt;* * * * *&lt;/code&gt;)이다.&lt;/p&gt;
+&lt;p&gt;Crontab(Unix의 Job Scheduler)처럼 Jenkins는 &lt;code&gt;cron&lt;/code&gt; 설정을 통해 잡 스케줄러를 만들 수 있습니다.
+Jenkins &lt;code&gt;cron&lt;/code&gt;의 최소 간격은 1분(&lt;code&gt;* * * * *&lt;/code&gt;)입니다.&lt;/p&gt;
 &lt;h2 id=&#34;문제-1&#34;&gt;문제&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;timeout&lt;/code&gt; 설정도 &lt;code&gt;cron&lt;/code&gt; 설정과 같이 1분으로 두면 timeout abort 되기 전
-&lt;code&gt;job_name@2&lt;/code&gt; workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있다.&lt;/p&gt;
+&lt;code&gt;job_name@2&lt;/code&gt; workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;해결-1&#34;&gt;해결&lt;/h2&gt;
-&lt;p&gt;만약 &lt;code&gt;cron&lt;/code&gt; 간격을 1분으로 설정했다면 &lt;code&gt;timeout&lt;/code&gt;을 50초로 설정하는 등 차이를 둔다. (55초는 살짝 겹쳤다…)&lt;/p&gt;
+&lt;p&gt;만약 &lt;code&gt;cron&lt;/code&gt; 간격을 1분으로 설정했다면 &lt;code&gt;timeout&lt;/code&gt;을 50초로 설정하는 등 차이를 둡니다. (55초는 살짝 겹쳤습니다&amp;hellip;)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;timeout(time: &lt;span style=&#34;color:#f60&#34;&gt;50&lt;/span&gt;, unit: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;SECONDS&amp;#39;&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/ci/jenkins-workspace-concurrency/ - Im Changsu 2020 - 2024</description>
         </item>
@@ -1626,9 +1617,9 @@ Jasper 엔진을 사용해서 servlet을 관리한다.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;valve&#34;&gt;Valve&lt;/h3&gt;
-&lt;p&gt;밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터다.
+&lt;p&gt;밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터입니다.
 밸브는 톰캣에서만 쓸 수 있는 기술이고,
-서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술이다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술입니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;h1 id=&#34;spring-application에서-httprequest의-흐름&#34;&gt;Spring application에서 HttpRequest의 흐름&lt;/h1&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/http-servlet-request-flow.png&#34; alt=&#34;HTTP Servlet Request&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://github.com/xpdojo/java/tree/study/request-lifecycle-servlet/&#34;&gt;Demonstration&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
@@ -1741,23 +1732,22 @@ Jasper 엔진을 사용해서 servlet을 관리한다.&lt;/p&gt;
 &lt;/table&gt;
 &lt;h1 id=&#34;ajp-apache-jserv-protocol&#34;&gt;AJP: Apache JServ Protocol&lt;/h1&gt;
 &lt;p&gt;웹 서버(httpd)의 인바운드 요청을
-애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜이다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜입니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;h1 id=&#34;jmx-java-management-extensions&#34;&gt;&lt;strong&gt;JMX:&lt;/strong&gt; Java Management eXtensions&lt;/h1&gt;
-&lt;p&gt;애플리케이션을 관리하고 모니터링하기 위한 Java API다. &lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;애플리케이션을 관리하고 모니터링하기 위한 Java API입니다. &lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/jmx-architecture.png&#34; alt=&#34;JMX Architecture&#34;&gt;&lt;/p&gt;
-&lt;p&gt;Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체다.
-모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공한다.
+&lt;p&gt;Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체입니다.
+모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공합니다.
 Standard MBean, Dynamic MBean과 추가적으로 Model MBean, Open MBean, Monitor MBean으로 구분되며
-이를 통해 구현할 수 있다.&lt;/p&gt;
-&lt;p&gt;MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소다.
-애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있다.
+이를 통해 구현할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소입니다.
+애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있습니다.
 MBean Server는 MBean의 생명주기를 관리하고,
 MBean의 속성 및 연산에 대한 액세스를 제공하며,
-알림을 수신하는 등의 작업을 수행한다.&lt;/p&gt;
-&lt;p&gt;JMX 에이전트는 JMX 서비스의 일부로, 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출한다.
-에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며,
-MBean Server를 통해 애플리케이션의 관리 작업을 수행한다.
-JMX 에이전트는 Java 애플리케이션 내부에 포함되거나, 별도의 프로세스로 실행될 수 있다.&lt;/p&gt;
+알림을 수신하는 등의 작업을 수행합니다.&lt;/p&gt;
+&lt;p&gt;JMX 에이전트는 JMX 서비스의 일부로 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출합니다.
+에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며, MBean Server를 통해 애플리케이션의 관리 작업을 수행합니다.
+JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 프로세스로 실행될 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://tomcat.apache.org/tomcat-8.5-doc/architecture/overview.html&#34;&gt;Apache Tomcat 8 Architecture&lt;/a&gt;

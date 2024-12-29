@@ -16,23 +16,23 @@ categories:
 
 # 대형 언어 모델 (LLM, Large Language Model)
 
-**LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델**[^1]이다.
+**LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델**[^1]입니다.
 이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
-다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있다.
+다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있습니다.
 
 [^1]: [대규모 언어 모델(LLM)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/large-language-model/) - AWS
 
-일반적으로 **700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM**이라고 한다.
-**70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM**(Small Language Model)이라고 한다.
-이 사이에 **중간 규모의 모델은 sLLM**(smaller Large Language Model)이라고 한다.
+일반적으로 **700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM**이라고 합니다.
+**70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM**(Small Language Model)이라고 합니다.
+이 사이에 **중간 규모의 모델은 sLLM**(smaller Large Language Model)이라고 합니다.
 
-**Ollama**는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
-**Open WebUI**는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
-이 2가지 도구를 간단하게 사용해보자.
+**Ollama**는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구입니다.
+**Open WebUI**는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스입니다.
+이 2가지 도구를 간단하게 사용해보겠습니다.
 
 # Docker 없이 Ollma 실행해보기
 
-먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.
+먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보겠습니다.
 
 ```sh
 pip install langchain-community==0.2.11
@@ -98,7 +98,7 @@ if __name__ == "__main__":
         print("Assistant:", response)
 ```
 
-위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.
+위 스크립트를 실행하면 다음과 같이 대화를 할 수 있습니다.
 
 ```sh
 중고차 판매 어시스턴트 AMI와 대화를 시작합니다. 'exit'을 입력하면 종료됩니다.
@@ -117,27 +117,27 @@ Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델
 대화를 종료합니다.
 ```
 
-질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.
+질문에 답변 시 GPU를 사용하는 것도 확인할 수 있습니다.
 
 ![GPU 사용하는 프로그램](/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp)
 
 # Docker Compose 사용하기
 
 처음에는 Open WebUI 레포지토리에 있는 [docker-compose.yaml](https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml)
-파일로 실행해봤지만 답변 시 **CPU만 사용**하는 것을 확인할 수 있었다.
+파일로 실행해봤지만 답변 시 **CPU만 사용**하는 것을 확인할 수 있었습니다.
 
 ![CPU를 사용하는 Docker Ollama](/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp)
 
-확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용한다.
+확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용합니다.
 [Ollama 문서](https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image)를
-참조해서 GPU를 사용하도록 설정해보자.
+참조해서 GPU를 사용하도록 설정해보겠습니다.
 
 ```sh
 # Docker로 실행할 경우
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
 
-Docker Compose로 실행할 때도 [공식 문서](https://docs.docker.com/compose/gpu-support/)를 참조해서 옵션을 추가할 수 있었다.
+Docker Compose로 실행할 때도 [공식 문서](https://docs.docker.com/compose/gpu-support/)를 참조해서 옵션을 추가할 수 있었습니다.
 
 ```yaml
 # Docker Compose로 실행할 경우
@@ -185,11 +185,11 @@ volumes:
   open-webui: {}
 ```
 
-실행 후 `3000`번 포트 혹은 `OPEN_WEBUI_PORT`로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있다.
+실행 후 `3000`번 포트 혹은 `OPEN_WEBUI_PORT`로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있습니다.
 
 ![Open WebUI 화면](/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp)
 
-GPU를 사용하는 것도 확인할 수 있다.
+GPU를 사용하는 것도 확인할 수 있습니다.
 
 ![GPU 사용하는 Ollama Docker Container](/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp)
 
@@ -199,9 +199,9 @@ GPU를 사용하는 것도 확인할 수 있다.
 
 ![LLM optimization context](/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp)
 
-- **RAG(Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.
-- **파인 튜닝(Fine-tuning)**[^3]을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.
-- **가드레일(Guardrails)**[^4]을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)
+- **RAG(Retrieval-Augmented Generation)**[^2]을 통해 외부의 정보와 결합된 답변을 생성할 수 있습니다.
+- **파인 튜닝(Fine-tuning)**[^3]을 통해 특정 도메인에 특화된 답변을 생성할 수 있습니다.
+- **가드레일(Guardrails)**[^4]을 설정해 원치 않는 답변을 방지할 수 있습니다. (토픽/안전/보안 가드레일)
 
 [^2]: [검색 증강 생성(RAG)이란 무엇인가요?](https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/) - AWS
 [^3]: [RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드](https://www.skelterlabs.com/blog/rag-vs-finetuning) - 스켈터 랩스 Skelter Labs

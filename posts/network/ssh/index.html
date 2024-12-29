@@ -566,18 +566,18 @@
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>systemctl status ssh
 </span></span></code></pre></div><h2 id="authoized_keys">authoized_keys</h2>
 <ul>
-<li>역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)</li>
-<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/authorized_keys</code>에 위치한다.</li>
-<li>내용: 클라이언트의 공개 키가 저장된다.
+<li>역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일입니다. (사용자 인증 방식)</li>
+<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/authorized_keys</code>에 위치합니다.</li>
+<li>내용: 클라이언트의 공개 키가 저장됩니다.
 서버는 클라이언트의 접속 시도 시,
-이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.</li>
+이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행합니다.</li>
 <li>보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
-공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
-특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.</li>
+공개 키 인증 방식이 비밀번호 인증보다 더 안전합니다.
+특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높습니다.</li>
 </ul>
-<p>SSH 데몬(sshd) 설치 혹은 실행 시 <code>/etc/ssh</code> 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
-만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
-<code>ssh-keygen</code> 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.</p>
+<p>SSH 데몬(sshd) 설치 혹은 실행 시 <code>/etc/ssh</code> 디렉토리에 비대칭키 쌍이 생성 및 저장됩니다.
+만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성됩니다.
+<code>ssh-keygen</code> 명령어를 사용해서 수동으로 생성 및 교체할 수도 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>&gt; ls /etc/ssh | grep <span style="color:#87ceeb">&#34;ssh_host&#34;</span>
 </span></span><span style="display:flex;"><span>ssh_host_ecdsa_key
 </span></span><span style="display:flex;"><span>ssh_host_ecdsa_key.pub
@@ -585,7 +585,7 @@
 </span></span><span style="display:flex;"><span>ssh_host_ed25519_key.pub
 </span></span><span style="display:flex;"><span>ssh_host_rsa_key
 </span></span><span style="display:flex;"><span>ssh_host_rsa_key.pub
-</span></span></code></pre></div><p>수동으로 교체하는 명령어는 다음과 같다.</p>
+</span></span></code></pre></div><p>수동으로 교체하는 명령어는 다음과 같습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 새 키 생성</span>
 </span></span><span style="display:flex;"><span>sudo ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key_new
 </span></span><span style="display:flex;"><span>
@@ -598,7 +598,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># SSH 서버 재시작</span>
 </span></span><span style="display:flex;"><span>sudo systemctl restart sshd
 </span></span></code></pre></div><h2 id="주로-사용하는-server-설정">주로 사용하는 Server 설정</h2>
-<p>설정 완료 후 데몬 재시작(<code>systemctl restart sshd</code>)해야 적용된다.</p>
+<p>설정 완료 후 데몬 재시작(<code>systemctl restart sshd</code>)해야 적용됩니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0">## /etc/ssh/sshd_config</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># This is the sshd server system-wide configuration file.  See</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># sshd_config(5) for more information.</span>
@@ -633,7 +633,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 비밀번호 인증 시도 간격</span>
 </span></span><span style="display:flex;"><span>LoginGraceTime <span style="color:#f60">120</span> <span style="color:#0f0"># seconds == 2m</span>
-</span></span></code></pre></div><p><code>/etc/hosts.allow</code> 파일에 허용할 IP를 설정할 수 있다.</p>
+</span></span></code></pre></div><p><code>/etc/hosts.allow</code> 파일에 허용할 IP를 설정할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 모든 호스트 허용</span>
 </span></span><span style="display:flex;"><span>sshd: ALL
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 하나의 IP를 허용할 경우</span>
@@ -643,25 +643,25 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 특정 도메인을 허용할 경우</span>
 </span></span><span style="display:flex;"><span>sshd: .example.com
 </span></span></code></pre></div><h1 id="ssh-client">SSH Client</h1>
-<p>system-wide 설정 파일은 <code>/etc/ssh/ssh_config</code>이다.</p>
+<p>system-wide 설정 파일은 <code>/etc/ssh/ssh_config</code>입니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo apt install openssh-client
 </span></span></code></pre></div><h2 id="설정-파일-우선-순위">설정 파일 우선 순위</h2>
 <ol>
-<li>명령줄 옵션: 가장 우선한다.</li>
+<li>명령줄 옵션: 가장 우선합니다.</li>
 <li>환경 변수</li>
 <li><code>$HOME/.ssh/config</code>: 사용자별 설정 파일</li>
 <li><code>/etc/ssh/ssh_config</code>: 전역 설정 파일</li>
 </ol>
 <h2 id="known_hosts">known_hosts</h2>
 <ul>
-<li>역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)</li>
-<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/known_hosts</code>에 위치한다.</li>
-<li>내용: 서버의 호스트 키 정보가 저장된다.
+<li>역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일입니다. (서버 인증 방식)</li>
+<li>위치: 보통 사용자의 홈 디렉토리 아래의 <code>~/.ssh/known_hosts</code>에 위치합니다.</li>
+<li>내용: 서버의 호스트 키 정보가 저장됩니다.
 클라이언트가 처음 특정 서버에 접속할 때,
-서버의 호스트 키를 확인하고 <code>known_hosts</code> 파일에 저장한다.
-이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.</li>
-<li>보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
-이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.</li>
+서버의 호스트 키를 확인하고 <code>known_hosts</code> 파일에 저장합니다.
+이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인합니다.</li>
+<li>보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
+이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘입니다.</li>
 </ul>
 <h2 id="주로-사용하는-host-설정">주로 사용하는 Host 설정</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># $HOME/.ssh/config</span>
@@ -671,7 +671,7 @@
 </span></span><span style="display:flex;"><span>  IdentityFile ~/.ssh/my-key.pem
 </span></span><span style="display:flex;"><span>  IdentitiesOnly yes
 </span></span><span style="display:flex;"><span>  LogLevel VERBOSE
-</span></span></code></pre></div><p>remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우</p>
+</span></span></code></pre></div><p>remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우 다음과 같이 <code>HostKeyAlgorithms</code>을 설정합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Host old-host
 </span></span><span style="display:flex;"><span>  HostName 111.222.111.222
 </span></span><span style="display:flex;"><span>  User markruler
@@ -701,17 +701,15 @@
 </span></span><span style="display:flex;"><span>Host bitbucket.org
 </span></span><span style="display:flex;"><span>  IdentityFile ~/.ssh/bitbucket_ed25519
 </span></span><span style="display:flex;"><span>  User git
-</span></span></code></pre></div><p>위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
-새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.</p>
+</span></span></code></pre></div><p>위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 합니다.
+새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 됩니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git clone git@work.github.com:xpdojo/kubernetes.git
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span><span style="color:#0f0"># .git/config</span>
 </span></span><span style="display:flex;"><span>[remote <span style="color:#87ceeb">&#34;origin&#34;</span>]
 </span></span><span style="display:flex;"><span>  url = git@work.github.com:xpdojo/kubernetes.git
 </span></span><span style="display:flex;"><span>  fetch = +refs/heads/*:refs/remotes/origin/*
 </span></span></code></pre></div><h2 id="local-forward">Local Forward</h2>
-<ul>
-<li>Bastion Host를 두고 Local Forwarding이 필요한 경우</li>
-</ul>
+<p>Bastion Host를 두고 Local Forwarding이 필요한 경우 다음과 같이 설정합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Host tost
 </span></span><span style="display:flex;"><span>  User markruler
 </span></span><span style="display:flex;"><span>  HostName ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
@@ -719,17 +717,17 @@
 </span></span><span style="display:flex;"><span>  IdentityFile ~/.ssh/my-rds-key.pem
 </span></span><span style="display:flex;"><span>  LogLevel VERBOSE
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ssh -f -N tost
-</span></span></code></pre></div><p>커넥션을 끊어야 할 경우 PID을 직접 죽인다.</p>
+</span></span></code></pre></div><p>커넥션을 끊어야 할 경우 PID을 직접 죽입니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ps -ef | grep tost
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># markrul+   38624    4372  0 08:37 ?        00:00:00 ssh -f -N tost</span>
 </span></span><span style="display:flex;"><span>kill -TERM <span style="color:#f60">38624</span>
-</span></span></code></pre></div><p><strong>위 설정과 동일한 명령어</strong>는 다음과 같다.</p>
+</span></span></code></pre></div><p><strong>위 설정과 동일한 명령어</strong>는 다음과 같습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ssh -vv -f -N <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -i <span style="color:#87ceeb">&#34;~/.ssh/my-rds-key.pem&#34;</span> <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
 </span></span></code></pre></div><h1 id="password-입력-없이-ssh-key로-client에서-server로-접속하기">Password 입력 없이 SSH Key로 Client에서 Server로 접속하기</h1>
-<p>Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+<p>Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속합니다.
 (AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># server: SSH Key 생성</span>
 </span></span><span style="display:flex;"><span>touch ~/.ssh/authorized_keys

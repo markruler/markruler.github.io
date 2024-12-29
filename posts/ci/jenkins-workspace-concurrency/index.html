@@ -443,7 +443,7 @@
                 
                     <h1 id="개요">개요</h1>
 <p>Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해
-<a href="https://www.jenkins.io/doc/book/pipeline/syntax/#triggers">triggers</a> directive를 사용했다.</p>
+<a href="https://www.jenkins.io/doc/book/pipeline/syntax/#triggers">triggers</a> directive를 사용했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
 </span></span><span style="display:flex;"><span>    agent any
 </span></span><span style="display:flex;"><span>
@@ -470,12 +470,12 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>해당 Job은 빌드 간 메타데이터(<code>.meta/</code>)를 공유해야 했기 때문에
 <a href="https://plugins.jenkins.io/ws-cleanup/">cleanWs</a> 플러그인에서도
-<code>.git</code> 디렉토리와 함께 삭제되지 않도록 설정했다.</p>
+<code>.git</code> 디렉토리와 함께 삭제되지 않도록 설정했습니다.</p>
 <p>하지만 무슨 이유인지 메타데이터가 간헐적으로 누락되었고,
-작업도 원하는대로 동작하지 않고 있었다.</p>
+작업도 원하는대로 동작하지 않고 있었습니다.</p>
 <h1 id="workspacelist">WorkspaceList</h1>
 <p>Jenkins에서 Job을 실행할 경우 말그대로 작업 공간을 위한
-Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성된다.</p>
+Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성됩니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">public</span> <span style="color:#f00">synchronized</span> Lease <span style="color:#ff0">allocate</span>(@NonNull FilePath base, Object context) <span style="color:#f00">throws</span> InterruptedException {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">for</span> (<span style="color:#ee82ee">int</span> i = 1; ; i++) {
@@ -486,9 +486,9 @@ Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성된다.</p
 </span></span><span style="display:flex;"><span>        <span style="color:#f00">return</span> acquire(candidate, <span style="color:#f00">false</span>, context);
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않는다.
+</span></span></code></pre></div><p>Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않습니다.
 Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java">WorkspaceList 객체</a>에
-전체 Workspace 목록을 저장한다.</p>
+전체 Workspace 목록을 저장합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"> * Used by {@link Computer} to keep track of workspaces that are actively in use.
@@ -512,14 +512,14 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 </span></span></code></pre></div><h2 id="문제">문제</h2>
 <p>만약 파이프라인에서 <code>Concurrent Build</code> 옵션을 허용한 채
 여러 개의 빌드를 동시에 실행하면 간혹 <code>job_name</code> workspace에서 실행되지 않고
-<code>job_name@2</code> 에서만 실행되는 경우가 있다.
+<code>job_name@2</code> 에서만 실행되는 경우가 있습니다.
 그런데 메타데이터 파일을 공유해서 사용해야 하는 경우
-<code>job_name</code> workspace에서 실행되기를 보장해야 한다.</p>
+<code>job_name</code> workspace에서 실행되기를 보장해야 합니다.</p>
 <h2 id="해결">해결</h2>
 <p><strong>Jenkins Master 프로세스를 재시작</strong>해서 <code>WorkspaceList</code>를 초기화하거나
-<strong>새로운 이름의 Job을 생성</strong>하면 새로운 이름의 workspace에서 빌드할 수 있다.
+<strong>새로운 이름의 Job을 생성</strong>하면 새로운 이름의 workspace에서 빌드할 수 있습니다.
 이후 <a href="https://en.wikipedia.org/wiki/Thread_safety">스레드 안전성</a>을 보장하기 위해
-<code>Concurrent Build</code> 옵션을 허용하지 않은 채 빌드한다.</p>
+<code>Concurrent Build</code> 옵션을 허용하지 않은 채 빌드합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
 </span></span><span style="display:flex;"><span>    agent any
 </span></span><span style="display:flex;"><span>
@@ -529,26 +529,26 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>    <span style="color:#0f0">// https://www.jenkins.io/doc/book/pipeline/syntax/#options
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>    options {
-</span></span><span style="display:flex;"><span>        <span style="color:#0f0">// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정한다.
+</span></span><span style="display:flex;"><span>        <span style="color:#0f0">// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정합니다.
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 빌드 스케줄이 2개 생성되면 &#39;job_name&#39;, &#39;job_name@2&#39; workspace가 생성되고
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// metadata를 각각 관리하게 된다. abortPrevious 값을 true로 설정하면
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// metadata를 각각 관리하게 됩니다. abortPrevious 값을 true로 설정하면
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// 이미 빌드 중인 프로세스와 겹쳐서 &#39;job_name@2&#39; workspace가 생성되더라도
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &#39;job_name&#39; workspace에서 실행된다.
+</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &#39;job_name&#39; workspace에서 실행됩니다.
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        disableConcurrentBuilds(abortPrevious: <span style="color:#f00">true</span>)
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    stages {...}
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h1 id="timeout과-cron">timeout과 cron</h1>
-<p>Crontab(Unix의 Job Scheduler)처럼 Jenkins는 <code>cron</code> 설정을 통해 잡 스케줄러를 만들 수 있다.
-Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)이다.</p>
+<p>Crontab(Unix의 Job Scheduler)처럼 Jenkins는 <code>cron</code> 설정을 통해 잡 스케줄러를 만들 수 있습니다.
+Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)입니다.</p>
 <h2 id="문제-1">문제</h2>
 <p><code>timeout</code> 설정도 <code>cron</code> 설정과 같이 1분으로 두면 timeout abort 되기 전
-<code>job_name@2</code> workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있다.</p>
+<code>job_name@2</code> workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있습니다.</p>
 <h2 id="해결-1">해결</h2>
-<p>만약 <code>cron</code> 간격을 1분으로 설정했다면 <code>timeout</code>을 50초로 설정하는 등 차이를 둔다. (55초는 살짝 겹쳤다…)</p>
+<p>만약 <code>cron</code> 간격을 1분으로 설정했다면 <code>timeout</code>을 50초로 설정하는 등 차이를 둡니다. (55초는 살짝 겹쳤습니다&hellip;)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
 </span></span></code></pre></div>
                     

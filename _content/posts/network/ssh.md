@@ -52,18 +52,18 @@ systemctl status ssh
 
 ## authoized_keys
 
-- 역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일이다. (사용자 인증 방식)
-- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/authorized_keys`에 위치한다.
-- 내용: 클라이언트의 공개 키가 저장된다.
+- 역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일입니다. (사용자 인증 방식)
+- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/authorized_keys`에 위치합니다.
+- 내용: 클라이언트의 공개 키가 저장됩니다.
   서버는 클라이언트의 접속 시도 시,
-  이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행한다.
+  이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행합니다.
 - 보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
-  공개 키 인증 방식이 비밀번호 인증보다 더 안전하다.
-  특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높다.
+  공개 키 인증 방식이 비밀번호 인증보다 더 안전합니다.
+  특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높습니다.
 
-SSH 데몬(sshd) 설치 혹은 실행 시 `/etc/ssh` 디렉토리에 비대칭키 쌍이 생성 및 저장된다.
-만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성된다.
-`ssh-keygen` 명령어를 사용해서 수동으로 생성 및 교체할 수도 있다.
+SSH 데몬(sshd) 설치 혹은 실행 시 `/etc/ssh` 디렉토리에 비대칭키 쌍이 생성 및 저장됩니다.
+만약 설치 시 생성되지 않았다면, 맨 처음 실행할 때 생성됩니다.
+`ssh-keygen` 명령어를 사용해서 수동으로 생성 및 교체할 수도 있습니다.
 
 ```sh
 > ls /etc/ssh | grep "ssh_host"
@@ -75,7 +75,7 @@ ssh_host_rsa_key
 ssh_host_rsa_key.pub
 ```
 
-수동으로 교체하는 명령어는 다음과 같다.
+수동으로 교체하는 명령어는 다음과 같습니다.
 
 ```sh
 # 새 키 생성
@@ -93,7 +93,7 @@ sudo systemctl restart sshd
 
 ## 주로 사용하는 Server 설정
 
-설정 완료 후 데몬 재시작(`systemctl restart sshd`)해야 적용된다.
+설정 완료 후 데몬 재시작(`systemctl restart sshd`)해야 적용됩니다.
 
 ```sh
 ## /etc/ssh/sshd_config
@@ -132,7 +132,7 @@ MaxAuthTries 3 # default 6
 LoginGraceTime 120 # seconds == 2m
 ```
 
-`/etc/hosts.allow` 파일에 허용할 IP를 설정할 수 있다.
+`/etc/hosts.allow` 파일에 허용할 IP를 설정할 수 있습니다.
 
 ```sh
 # 모든 호스트 허용
@@ -147,7 +147,7 @@ sshd: .example.com
 
 # SSH Client
 
-system-wide 설정 파일은 `/etc/ssh/ssh_config`이다.
+system-wide 설정 파일은 `/etc/ssh/ssh_config`입니다.
 
 ```sh
 sudo apt install openssh-client
@@ -155,21 +155,21 @@ sudo apt install openssh-client
 
 ## 설정 파일 우선 순위
 
-1. 명령줄 옵션: 가장 우선한다.
+1. 명령줄 옵션: 가장 우선합니다.
 2. 환경 변수
 3. `$HOME/.ssh/config`: 사용자별 설정 파일
 4. `/etc/ssh/ssh_config`: 전역 설정 파일
 
 ## known_hosts
 
-- 역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일이다. (서버 인증 방식)
-- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/known_hosts`에 위치한다.
-- 내용: 서버의 호스트 키 정보가 저장된다.
+- 역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일입니다. (서버 인증 방식)
+- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/known_hosts`에 위치합니다.
+- 내용: 서버의 호스트 키 정보가 저장됩니다.
   클라이언트가 처음 특정 서버에 접속할 때,
-  서버의 호스트 키를 확인하고 `known_hosts` 파일에 저장한다.
-  이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인한다.
-- 보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단한다.
-  이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘이다.
+  서버의 호스트 키를 확인하고 `known_hosts` 파일에 저장합니다.
+  이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인합니다.
+- 보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
+  이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘입니다.
 
 ## 주로 사용하는 Host 설정
 
@@ -183,7 +183,7 @@ Host my-host
   LogLevel VERBOSE
 ```
 
-remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우
+remote host의 SSH 데몬이 최신 키를 지원하지 않는 오래된 버전인 경우 다음과 같이 `HostKeyAlgorithms`을 설정합니다.
 
 ```sh
 Host old-host
@@ -217,8 +217,8 @@ Host bitbucket.org
   User git
 ```
 
-위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 한다.
-새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 된다.
+위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 합니다.
+새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 됩니다.
 
 ```sh
 git clone git@work.github.com:xpdojo/kubernetes.git
@@ -233,7 +233,7 @@ git clone git@work.github.com:xpdojo/kubernetes.git
 
 ## Local Forward
 
-- Bastion Host를 두고 Local Forwarding이 필요한 경우
+Bastion Host를 두고 Local Forwarding이 필요한 경우 다음과 같이 설정합니다.
 
 ```sh
 Host tost
@@ -248,7 +248,7 @@ Host tost
 ssh -f -N tost
 ```
 
-커넥션을 끊어야 할 경우 PID을 직접 죽인다.
+커넥션을 끊어야 할 경우 PID을 직접 죽입니다.
 
 ```sh
 ps -ef | grep tost
@@ -256,7 +256,7 @@ ps -ef | grep tost
 kill -TERM 38624
 ```
 
-**위 설정과 동일한 명령어**는 다음과 같다.
+**위 설정과 동일한 명령어**는 다음과 같습니다.
 
 ```sh
 ssh -vv -f -N \
@@ -267,7 +267,7 @@ ssh -vv -f -N \
 
 # Password 입력 없이 SSH Key로 Client에서 Server로 접속하기
 
-Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속한다.
+Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속합니다.
 (AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)
 
 ```sh

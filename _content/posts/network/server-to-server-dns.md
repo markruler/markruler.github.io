@@ -17,15 +17,15 @@ Categories:
 - [배경](#배경)
 - [분석: dig 으로 테스트](#분석-dig-으로-테스트)
   - [nameserver 8.8.8.8 로 지정](#nameserver-8888-로-지정)
-  - [nameserver는 `resolv.conf` 설정을 따름](#nameserver는-resolvconf-설정을-따름)
+  - [nameserver는 `resolv.conf` 설정을 따른다](#nameserver는-resolvconf-설정을-따른다)
   - [비교](#비교)
 - [해결: 호스트 파일 수정](#해결-호스트-파일-수정)
 
 # 배경
 
-- 약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.
-  - 해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.
-- 환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.
+- 약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생했습니다.
+  - 해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있습니다.
+- 환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됩니다.
 
 # 분석: dig 으로 테스트
 
@@ -53,7 +53,7 @@ dig @8.8.8.8 api.example.com
 ;; MSG SIZE  rcvd: 154
 ```
 
-## nameserver는 `resolv.conf` 설정을 따름
+## nameserver는 `resolv.conf` 설정을 따른다
 
 ```sh
 # /etc/resolv.conf
@@ -76,7 +76,7 @@ dig api.example.com
 ;; MSG SIZE  rcvd: 154
 ```
 
-두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었음.
+두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었습니다.
 
 ```sh
 ;; Query time: 230 msec
@@ -87,7 +87,7 @@ dig api.example.com
 
 ## 비교
 
-`LG DNS`는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생함.
+`LG DNS`는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생했습니다.
 (현재 서버가 위치한 IDC 회선이 LG라서 LG DNS 사용)
 
 ```sh
@@ -109,7 +109,7 @@ watch -n 1 "dig @164.124.101.2 api.example.com | grep \"Query time\""
 # ...
 ```
 
-`8.8.8.8` 은 더 심함.
+`8.8.8.8` 은 레이턴시가 더 길었습니다.
 
 ```sh
 watch -n 1 "dig @8.8.8.8 api.example.com | grep \"Query time\""
@@ -138,14 +138,14 @@ watch -n 1 "dig @8.8.8.8 api.example.com | grep \"Query time\""
 
 # 해결: 호스트 파일 수정
 
-server -> L4 Switch -> server는 프록시 없이 설정할 수 없다고 함.
-실제로 호스트 파일(`/etc/hosts`)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃 발생함.
+server -> L4 Switch -> server는 프록시 없이 설정할 수 없다고 합니다.
+실제로 호스트 파일(`/etc/hosts`)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃이 발생했습니다.
 
 ```sh
 # <L4_IP_ADDRESS> api.example.com
 ```
 
-아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정함.
+아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정했습니다.
 
 ```sh
 127.0.0.1 api.example.com
@@ -153,5 +153,5 @@ server -> L4 Switch -> server는 프록시 없이 설정할 수 없다고 함.
 
 ![Datadog Timeseries](/images/network/image-20240611-080044.webp)
 
-- 처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인함.
-- 이후 서버 B(초록색)도 수정 후 응답 속도 줄어듦.
+- 처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인했습니다.
+- 이후 서버 B(초록색)도 수정 후 응답 속도가 줄었습니다.

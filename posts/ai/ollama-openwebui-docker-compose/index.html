@@ -390,17 +390,17 @@
                 <div class="post-body" v-pre>
                 
                     <h1 id="대형-언어-모델-llm-large-language-model">대형 언어 모델 (LLM, Large Language Model)</h1>
-<p><strong>LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>이다.
+<p><strong>LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>입니다.
 이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
-다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있다.</p>
-<p>일반적으로 <strong>700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM</strong>이라고 한다.
-<strong>70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM</strong>(Small Language Model)이라고 한다.
-이 사이에 <strong>중간 규모의 모델은 sLLM</strong>(smaller Large Language Model)이라고 한다.</p>
-<p><strong>Ollama</strong>는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구다.
-<strong>Open WebUI</strong>는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스다.
-이 2가지 도구를 간단하게 사용해보자.</p>
+다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있습니다.</p>
+<p>일반적으로 <strong>700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM</strong>이라고 합니다.
+<strong>70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM</strong>(Small Language Model)이라고 합니다.
+이 사이에 <strong>중간 규모의 모델은 sLLM</strong>(smaller Large Language Model)이라고 합니다.</p>
+<p><strong>Ollama</strong>는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구입니다.
+<strong>Open WebUI</strong>는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스입니다.
+이 2가지 도구를 간단하게 사용해보겠습니다.</p>
 <h1 id="docker-없이-ollma-실행해보기">Docker 없이 Ollma 실행해보기</h1>
-<p>먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보자.</p>
+<p>먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보겠습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>pip install langchain-community==0.2.11
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f00">from</span> langchain_community.chat_models <span style="color:#f00">import</span> ChatOllama
 </span></span><span style="display:flex;"><span><span style="color:#f00">from</span> langchain_core.prompts <span style="color:#f00">import</span> ChatPromptTemplate
@@ -459,7 +459,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>        response = process_input(user_input)
 </span></span><span style="display:flex;"><span>        print(<span style="color:#87ceeb">&#34;Assistant:&#34;</span>, response)
-</span></span></code></pre></div><p>위 스크립트를 실행하면 다음과 같이 대화를 할 수 있다.</p>
+</span></span></code></pre></div><p>위 스크립트를 실행하면 다음과 같이 대화를 할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>중고차 판매 어시스턴트 AMI와 대화를 시작합니다. <span style="color:#87ceeb">&#39;exit&#39;</span>을 입력하면 종료됩니다.
 </span></span><span style="display:flex;"><span>&gt; You: Hyundai 차 추천해줘.
 </span></span><span style="display:flex;"><span>Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
@@ -474,18 +474,18 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>&gt; You: exit
 </span></span><span style="display:flex;"><span>대화를 종료합니다.
-</span></span></code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있다.</p>
+</span></span></code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp" alt="GPU 사용하는 프로그램"></p>
 <h1 id="docker-compose-사용하기">Docker Compose 사용하기</h1>
 <p>처음에는 Open WebUI 레포지토리에 있는 <a href="https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml">docker-compose.yaml</a>
-파일로 실행해봤지만 답변 시 <strong>CPU만 사용</strong>하는 것을 확인할 수 있었다.</p>
+파일로 실행해봤지만 답변 시 <strong>CPU만 사용</strong>하는 것을 확인할 수 있었습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp" alt="CPU를 사용하는 Docker Ollama"></p>
-<p>확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용한다.
+<p>확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용합니다.
 <a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image">Ollama 문서</a>를
-참조해서 GPU를 사용하도록 설정해보자.</p>
+참조해서 GPU를 사용하도록 설정해보겠습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Docker로 실행할 경우</span>
 </span></span><span style="display:flex;"><span>docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-</span></span></code></pre></div><p>Docker Compose로 실행할 때도 <a href="https://docs.docker.com/compose/gpu-support/">공식 문서</a>를 참조해서 옵션을 추가할 수 있었다.</p>
+</span></span></code></pre></div><p>Docker Compose로 실행할 때도 <a href="https://docs.docker.com/compose/gpu-support/">공식 문서</a>를 참조해서 옵션을 추가할 수 있었습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#0f0"># Docker Compose로 실행할 경우</span>
 </span></span><span style="display:flex;"><span>services:
 </span></span><span style="display:flex;"><span>  ollama:
@@ -529,17 +529,17 @@
 </span></span><span style="display:flex;"><span>volumes:
 </span></span><span style="display:flex;"><span>  ollama: {}
 </span></span><span style="display:flex;"><span>  open-webui: {}
-</span></span></code></pre></div><p>실행 후 <code>3000</code>번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있다.</p>
+</span></span></code></pre></div><p>실행 후 <code>3000</code>번 포트 혹은 <code>OPEN_WEBUI_PORT</code>로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp" alt="Open WebUI 화면"></p>
-<p>GPU를 사용하는 것도 확인할 수 있다.</p>
+<p>GPU를 사용하는 것도 확인할 수 있습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp" alt="GPU 사용하는 Ollama Docker Container"></p>
 <h1 id="더-나은-결과물을-위해-추가로-고려해야-할-사항">더 나은 결과물을 위해 추가로 고려해야 할 사항</h1>
 <p><em><a href="https://platform.openai.com/docs/guides/optimizing-llm-accuracy">Optimizing LLMs for accuracy</a> - OpenAI Platform</em></p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp" alt="LLM optimization context"></p>
 <ul>
-<li><strong>RAG(Retrieval-Augmented Generation)</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을 통해 외부의 정보와 결합된 답변을 생성할 수 있다.</li>
-<li><strong>파인 튜닝(Fine-tuning)</strong><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>을 통해 특정 도메인에 특화된 답변을 생성할 수 있다.</li>
-<li><strong>가드레일(Guardrails)</strong><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>을 설정해 원치 않는 답변을 방지할 수 있다. (토픽/안전/보안 가드레일)</li>
+<li><strong>RAG(Retrieval-Augmented Generation)</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을 통해 외부의 정보와 결합된 답변을 생성할 수 있습니다.</li>
+<li><strong>파인 튜닝(Fine-tuning)</strong><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>을 통해 특정 도메인에 특화된 답변을 생성할 수 있습니다.</li>
+<li><strong>가드레일(Guardrails)</strong><sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>을 설정해 원치 않는 답변을 방지할 수 있습니다. (토픽/안전/보안 가드레일)</li>
 </ul>
 <h1 id="더-알아보기">더 알아보기</h1>
 <ul>

@@ -510,45 +510,41 @@
 </blockquote>
 <h1 id="개요">개요</h1>
 <p>팀내에서 문서 생성 도구로 <a href="https://pdfmyurl.com/html-to-pdf-api">PDFmyURL</a>과
-<a href="https://www.forcs.com/kr/oz-e-form/">OZ e-Form</a>을 사용하고 있다.
-보통 이런 외부 솔루션은 테스트 할 때 매우 불편하다.</p>
-<p>PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있다.
+<a href="https://www.forcs.com/kr/oz-e-form/">OZ e-Form</a>을 사용하고 있습니다.
+보통 이런 외부 솔루션은 테스트 할 때 매우 불편합니다.</p>
+<p>PDFmyURL은 PDF를 생성하는 2가지 인터페이스가 있습니다.
 하나는 URL을 통해 페이지를 읽어서 PDF를 생성하는 인터페이스고,
-하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스다.
-URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할 수 있어야 한다.
-그래서 private 환경에서는 테스트 할 수가 없다.
-그래서 해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생긴다.
-더 큰 문제는 데이터를 Public 환경에 노출해야 하기 때문에
-데이터에 따라 개인 정보 유출 문제가 될 수 있다.</p>
-<p>OZ e-Form의 클라이언트 프로그램(OZ e-Form Designer)은 Windows만 지원한다.
-그리고 OZ 에이전트와 script를 적극적으로 관리할 인력이 없다.
-해당 기술은 활용도가 떨어지기 때문에 관심이 적을 수 밖에 없기 때문이다.</p>
-<p>그러다가 누군가의 실수로 PDFmyURL 서버에 동시에 수많은 요청을 보내게 되었다.
-그러자 PDFmyURL은 우리를 차단해버렸다.
-문의를 남겨도 해외 서비스라 그런지 대응이 느렸고,
-PDFmyURL을 이용하는 서비스가 반나절동안 중단되었다.
-언제 해결될지 기약이 없었다.
-결국 다른 계정으로 라이센스를 추가 발급받아 해결했다.</p>
-<p>내부에서 관리 가능한 HTML to PDF 변환 도구가 간절하다고 느낀 시기였다.</p>
+하나는 raw HTML, CSS를 직접 전달해서 PDF를 생성하는 인터페이스입니다.
+URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할 수 있어야 합니다.
+그래서 private 환경에서는 테스트 할 수가 없습니다.
+해당 기능들은 운영 환경에서 QA 테스트를 해야 하는 불상사가 생기는 겁니다.
+더 큰 문제는 데이터를 Public 환경에 노출해야 하기 때문에 데이터에 따라 개인 정보 유출 문제가 될 수 있습니다.</p>
+<p>OZ e-Form의 클라이언트 프로그램(OZ e-Form Designer)은 Windows만 지원합니다.
+그리고 OZ 에이전트와 script를 적극적으로 관리할 인력이 없습니다.
+해당 기술은 활용도가 떨어지기 때문에 관심이 적을 수 밖에 없기 때문입니다.</p>
+<p>그러다가 누군가의 실수로 PDFmyURL 서버에 동시에 수많은 요청을 보내게 되었습니다.
+그러자 PDFmyURL은 우리를 차단해버렸습니다.
+문의를 남겨도 해외 서비스라 그런지 대응이 느렸고, PDFmyURL을 이용하는 서비스가 반나절동안 중단되었습니다.
+언제 해결될지 기약이 없었습니다.
+결국 다른 계정으로 라이센스를 추가 발급받아 해결했습니다.</p>
+<p>내부에서 관리 가능한 HTML to PDF 변환 도구가 간절하다고 느낀 시기였습니다.</p>
 <h1 id="1차-시도-wkhtmltopdf">1차 시도: wkhtmltopdf</h1>
-<p>이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤다.
-가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/">wkhtmltopdf</a> 였다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했다.</span>
+<p>이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤습니다.
+가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/">wkhtmltopdf</a>였습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.</span>
 </span></span><span style="display:flex;"><span>apt-get -y install fonts-nanum wkhtmltopdf
-</span></span></code></pre></div><p>빠르게 시작하기 위해 Python의 <code>pdfkit</code>과
-오픈 소스 PDF 변환 툴인 <code>wkhtmltopdf</code>를 사용해서 Flask 앱을 만들었다.
+</span></span></code></pre></div><p>빠르게 시작하기 위해 Python의 <code>pdfkit</code>과 오픈 소스 PDF 변환 툴인 <code>wkhtmltopdf</code>를 사용해서 Flask 앱을 만들었습니다.
 하지만 기존 출력물(크롬에서 <a href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#printing">window.print()</a>)과
-달리 PDF 출력물을 보면 CSS가 틀어지는 부분이 너무 많았다.</p>
-<p>리뷰하는 과정에서 확인해보니 문서를 읽지 않은 내 잘못이었다.
-해당 홈페이지 첫 문장부터 <code>Qt WebKit rendering engine</code> 이라고 설명한다.
-<code>wk</code>는 WebKit의 약자였고, Qt WebKit을 기반으로 변환하다보니
-Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었다.</p>
+달리 PDF 출력물을 보면 CSS가 틀어지는 부분이 너무 많았습니다.</p>
+<p>리뷰하는 과정에서 확인해보니 문서를 읽지 않은 저의 잘못이었습니다.
+해당 홈페이지 첫 문장부터 <code>Qt WebKit rendering engine</code> 이라고 설명합니다.
+<code>wk</code>는 WebKit의 약자였고, Qt WebKit을 기반으로 변환하다보니 Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었습니다.</p>
 <blockquote>
-<p><strong><a href="https://en.wikipedia.org/wiki/Comparison_of_browser_engines">Comparison of browser engines</a></strong> - Wikipedia</p>
+<p><strong><a href="https://en.wikipedia.org/wiki/Comparison_of_browser_engines">Comparison of browser engines</a></strong> | Wikipedia</p>
 </blockquote>
 <h1 id="2차-시도-pyppeteer">2차 시도: pyppeteer</h1>
 <p>기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 <a href="https://github.com/puppeteer/puppeteer">puppeteer</a>
-대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer">pyppeteer</a>을 사용했다.</p>
+대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer">pyppeteer</a>을 사용했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
 </span></span><span style="display:flex;"><span>apt-get update <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>    &amp;&amp; apt-get install -y wget gnupg <span style="color:#87ceeb">\
@@ -559,20 +555,18 @@ Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었다
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>      --no-install-recommends <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>    &amp;&amp; rm -rf /var/lib/apt/lists/* <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>    &amp;&amp; groupadd -r pptruser &amp;&amp; useradd -rm -g pptruser -G audio,video pptruser
-</span></span></code></pre></div><p><code>google-chrome</code>을 headless 모드로 실행해서 프린트하면
-출력물이 브라우저 프린트(<code>window.print()</code>)와 동일하게 나왔다.
+</span></span></code></pre></div><p><code>google-chrome</code>을 headless 모드로 실행해서 프린트하면 출력물이 브라우저 프린트(<code>window.print()</code>)와 동일하게 나왔습니다.
 (팀원 모두 Edge 아니면 Chrome을 사용함)
-또한 private 환경에서도 출력할 수 있게 되었다.</p>
+또한 private 환경에서도 출력할 수 있게 되었습니다.</p>
 <h2 id="windowprint로-출력">window.print()로 출력</h2>
 <p><img src="/images/pdf/htmltopdf/window.print.webp" alt="window.print() - google.com"></p>
 <h2 id="pyppeteer로-출력">Pyppeteer로 출력</h2>
 <p><img src="/images/pdf/htmltopdf/pyppeteer.print.webp" alt="pyppeteer - google.com"></p>
 <h1 id="3차-시도-microsoftplaywright">3차 시도: microsoft/playwright</h1>
-<p>URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했다.
-p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아서
-이미지 렌더링(img src, background url 등)이 되지 않았다.</p>
+<p>URL이 아닌 Raw HTML, Raw CSS를 전달해서 PDF를 출력하는 기능도 지원되어야 했습니다.
+p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 것을 기다리지 않아 이미지 렌더링(img src, background url 등)이 되지 않았습니다.</p>
 <ul>
-<li><code>setContent()</code> 시 <code>waitUntil</code> 옵션을 p<strong>u</strong>ppeteer만 지원하고 있다.
+<li><code>setContent()</code> 시 <code>waitUntil</code> 옵션을 p<strong>u</strong>ppeteer만 지원하고 있습니다.
 <ul>
 <li><a href="https://github.com/puppeteer/puppeteer/issues/907#issuecomment-472334126">page.setContent(html, {waitUntil: &rsquo;networkidle&rsquo;}); · Issue #907 · puppeteer/puppeteer</a></li>
 <li><a href="https://github.com/miyakogi/pyppeteer/issues/211">setContent extra options · Issue #211 · miyakogi/pyppeteer</a></li>
@@ -580,11 +574,11 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 </li>
 </ul>
 <p>반면 <a href="https://github.com/microsoft/playwright-python">Microsoft의 playwright</a>는 해당 기능들을
-모두 지원하면서, Javascript는 물론 Python도 지원했다.
-결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했다.
+모두 지원하면서, Javascript는 물론 Python도 지원했습니다.
+결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했습니다.
 <a href="https://playwright.dev/docs/puppeteer">puppeteer와 인터페이스를 유사하게 만들었기</a>
-때문에 변경하는 데에 많은 리소스가 들지 않았다.</p>
-<p>다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드다.</p>
+때문에 변경하는 데에 많은 리소스가 들지 않았습니다.</p>
+<p>다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드입니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#0f0"># python3 -m pip install playwright</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># python3 main.py</span>
@@ -663,15 +657,15 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 </span></span><span style="display:flex;"><span>    asyncio.run(core_file())
 </span></span></code></pre></div><h1 id="구현-시-참고-사항">구현 시 참고 사항</h1>
 <ul>
-<li>CSS attribute 중 <code>page-break-***</code> 를 사용하면 페이지를 원하는 부분에서 분리할 수 있다.
+<li>CSS attribute 중 <code>page-break-***</code> 를 사용하면 페이지를 원하는 부분에서 분리할 수 있습니다.
 <ul>
-<li><code>page-break-after: always;</code> 해당 Element 이후에 내용이 있더라도 페이지를 분리한다.</li>
-<li><code>page-break-after: avoid;</code> 해당 Element 이후에 페이지는 분리하지 않는다. 이후 내용이 페이지를 넘친다면 페이지 분리되긴 한다.</li>
+<li><code>page-break-after: always;</code> 해당 Element 이후에 내용이 있더라도 페이지를 분리합니다.</li>
+<li><code>page-break-after: avoid;</code> 해당 Element 이후에 페이지는 분리하지 않습니다. 이후 내용이 페이지를 넘친다면 페이지가 분리되긴 합니다.</li>
 </ul>
 </li>
-<li>PDF 생성 후 응답되기까지 2초 정도 소요된다.
+<li>PDF 생성 후 응답되기까지 2초 정도 소요됩니다.
 <ul>
-<li>PDFmyURL, OZ report와 비슷하다.</li>
+<li>PDFmyURL, OZ report와 비슷합니다.</li>
 <li>1주일 기준
 <ul>
 <li>P50: 2.01s</li>
@@ -682,14 +676,14 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 </li>
 <li>Server to Server로 요청 시 Spring Boot에서 FeignClient로
 <a href="https://wildeveloperetrain.tistory.com/304">x-www-form-urlencoded</a>
-데이터를 보내려면 <code>MultiValueMap&lt;String, String&gt;</code>을 사용해야 한다.</li>
+데이터를 보내려면 <code>MultiValueMap&lt;String, String&gt;</code>을 사용해야 합니다.</li>
 </ul>
 <h1 id="참조">참조</h1>
 <h2 id="playwright"><strong>Playwright</strong></h2>
 <ul>
 <li><a href="https://playwright.dev/python/">공식 문서</a></li>
 <li><a href="https://github.com/microsoft/playwright-python">GitHub</a></li>
-<li><a href="https://devocean.sk.com/blog/techBoardDetail.do?ID=165090">웹 테스트 자동화</a>가 목적인 라이브러리임.</li>
+<li><a href="https://devocean.sk.com/blog/techBoardDetail.do?ID=165090">웹 테스트 자동화</a>가 목적인 라이브러리입니다.</li>
 </ul>
 <h2 id="webkit"><strong>WebKit</strong></h2>
 <ul>

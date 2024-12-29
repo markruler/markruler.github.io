@@ -256,8 +256,8 @@
 						
 						
 							<li>
-								<a href="#nameserver%eb%8a%94-resolvconf-%ec%84%a4%ec%a0%95%ec%9d%84-%eb%94%b0%eb%a6%84" class="nav-nameserver는-resolvconf-설정을-따름">
-									nameserver는 resolv.conf 설정을 따름
+								<a href="#nameserver%eb%8a%94-resolvconf-%ec%84%a4%ec%a0%95%ec%9d%84-%eb%94%b0%eb%a5%b8%eb%8b%a4" class="nav-nameserver는-resolvconf-설정을-따른다">
+									nameserver는 resolv.conf 설정을 따른다
 								</a>
 							</li>
 						
@@ -418,7 +418,7 @@
 <li><a href="#%EB%B6%84%EC%84%9D-dig-%EC%9C%BC%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8">분석: dig 으로 테스트</a>
 <ul>
 <li><a href="#nameserver-8888-%EB%A1%9C-%EC%A7%80%EC%A0%95">nameserver 8.8.8.8 로 지정</a></li>
-<li><a href="#nameserver%EB%8A%94-resolvconf-%EC%84%A4%EC%A0%95%EC%9D%84-%EB%94%B0%EB%A6%84">nameserver는 <code>resolv.conf</code> 설정을 따름</a></li>
+<li><a href="#nameserver%EB%8A%94-resolvconf-%EC%84%A4%EC%A0%95%EC%9D%84-%EB%94%B0%EB%A5%B8%EB%8B%A4">nameserver는 <code>resolv.conf</code> 설정을 따른다</a></li>
 <li><a href="#%EB%B9%84%EA%B5%90">비교</a></li>
 </ul>
 </li>
@@ -426,12 +426,12 @@
 </ul>
 <h1 id="배경">배경</h1>
 <ul>
-<li>약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생함.
+<li>약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생했습니다.
 <ul>
-<li>해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있음.</li>
+<li>해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있습니다.</li>
 </ul>
 </li>
-<li>환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됨.</li>
+<li>환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됩니다.</li>
 </ul>
 <h1 id="분석-dig-으로-테스트">분석: dig 으로 테스트</h1>
 <h2 id="nameserver-8888-로-지정">nameserver 8.8.8.8 로 지정</h2>
@@ -446,7 +446,7 @@
 </span></span><span style="display:flex;"><span>;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
 </span></span><span style="display:flex;"><span>;; WHEN: Tue Jun <span style="color:#f60">11</span> 11:00:57 KST <span style="color:#f60">2024</span>
 </span></span><span style="display:flex;"><span>;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
-</span></span></code></pre></div><h2 id="nameserver는-resolvconf-설정을-따름">nameserver는 <code>resolv.conf</code> 설정을 따름</h2>
+</span></span></code></pre></div><h2 id="nameserver는-resolvconf-설정을-따른다">nameserver는 <code>resolv.conf</code> 설정을 따른다</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/resolv.conf</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># LG 메인 네임 서버</span>
 </span></span><span style="display:flex;"><span>nameserver 164.124.101.2
@@ -458,13 +458,13 @@
 </span></span><span style="display:flex;"><span>;; SERVER: 164.124.101.2#53(164.124.101.2)
 </span></span><span style="display:flex;"><span>;; WHEN: 화  6월 <span style="color:#f60">11</span> 17:14:45 KST <span style="color:#f60">2024</span>
 </span></span><span style="display:flex;"><span>;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
-</span></span></code></pre></div><p>두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었음.</p>
+</span></span></code></pre></div><p>두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>;; Query time: <span style="color:#f60">230</span> msec
 </span></span><span style="display:flex;"><span>;; SERVER: 164.124.101.2#53(164.124.101.2)
 </span></span><span style="display:flex;"><span>;; WHEN: 화  6월 <span style="color:#f60">11</span> 17:25:41 KST <span style="color:#f60">2024</span>
 </span></span><span style="display:flex;"><span>;; MSG SIZE  rcvd: <span style="color:#f60">154</span>
 </span></span></code></pre></div><h2 id="비교">비교</h2>
-<p><code>LG DNS</code>는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생함.
+<p><code>LG DNS</code>는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생했습니다.
 (현재 서버가 위치한 IDC 회선이 LG라서 LG DNS 사용)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>watch -n <span style="color:#f60">1</span> <span style="color:#87ceeb">&#34;dig @164.124.101.2 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 3 msec</span>
@@ -482,7 +482,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 3 msec</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 10 msec</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
-</span></span></code></pre></div><p><code>8.8.8.8</code> 은 더 심함.</p>
+</span></span></code></pre></div><p><code>8.8.8.8</code> 은 레이턴시가 더 길었습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>watch -n <span style="color:#f60">1</span> <span style="color:#87ceeb">&#34;dig @8.8.8.8 api.example.com | grep \&#34;Query time\&#34;&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 303 msec</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 121 msec</span>
@@ -506,15 +506,15 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ;; Query time: 334 msec</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
 </span></span></code></pre></div><h1 id="해결-호스트-파일-수정">해결: 호스트 파일 수정</h1>
-<p>server -&gt; L4 Switch -&gt; server는 프록시 없이 설정할 수 없다고 함.
-실제로 호스트 파일(<code>/etc/hosts</code>)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃 발생함.</p>
+<p>server -&gt; L4 Switch -&gt; server는 프록시 없이 설정할 수 없다고 합니다.
+실제로 호스트 파일(<code>/etc/hosts</code>)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃이 발생했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># &lt;L4_IP_ADDRESS&gt; api.example.com</span>
-</span></span></code></pre></div><p>아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정함.</p>
+</span></span></code></pre></div><p>아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>127.0.0.1 api.example.com
 </span></span></code></pre></div><p><img src="/images/network/image-20240611-080044.webp" alt="Datadog Timeseries"></p>
 <ul>
-<li>처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인함.</li>
-<li>이후 서버 B(초록색)도 수정 후 응답 속도 줄어듦.</li>
+<li>처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인했습니다.</li>
+<li>이후 서버 B(초록색)도 수정 후 응답 속도가 줄었습니다.</li>
 </ul>
 
                     
@@ -811,8 +811,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#nameserver%eb%8a%94-resolvconf-%ec%84%a4%ec%a0%95%ec%9d%84-%eb%94%b0%eb%a6%84" class="nav-nameserver는-resolvconf-설정을-따름">
-									nameserver는 resolv.conf 설정을 따름
+								<a href="#nameserver%eb%8a%94-resolvconf-%ec%84%a4%ec%a0%95%ec%9d%84-%eb%94%b0%eb%a5%b8%eb%8b%a4" class="nav-nameserver는-resolvconf-설정을-따른다">
+									nameserver는 resolv.conf 설정을 따른다
 								</a>
 							</li>
 						

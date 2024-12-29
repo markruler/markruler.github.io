@@ -136,9 +136,9 @@ public final class MyServletListener implements ServletContextListener {
 
 ### Valve
 
-밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터다.
+밸브(Valve)는 컨테이너에 들어오는 HTTP 요청을 가로채는 필터입니다.
 밸브는 톰캣에서만 쓸 수 있는 기술이고,
-서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술이다.[^3]
+서블릿 필터(Servlet Filter)는 톰캣 이외의 다른 서블릿 컨테이너에서도 사용할 수 있는 기술입니다.[^3]
 
 # Spring application에서 HttpRequest의 흐름
 
@@ -166,29 +166,28 @@ public final class MyServletListener implements ServletContextListener {
 # AJP: Apache JServ Protocol
 
 웹 서버(httpd)의 인바운드 요청을
-애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜이다.[^4]
+애플리케이션 서버(Tomcat)로 프록시할 수 있는 바이너리 프로토콜입니다.[^4]
 
 # **JMX:** Java Management eXtensions
 
-애플리케이션을 관리하고 모니터링하기 위한 Java API다. [^5]
+애플리케이션을 관리하고 모니터링하기 위한 Java API입니다. [^5]
 
 ![JMX Architecture](/images/java/jmx-architecture.png)
 
-Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체다.
-모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공한다.
+Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체입니다.
+모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공합니다.
 Standard MBean, Dynamic MBean과 추가적으로 Model MBean, Open MBean, Monitor MBean으로 구분되며
-이를 통해 구현할 수 있다.
+이를 통해 구현할 수 있습니다.
 
-MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소다.
-애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있다.
+MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소입니다.
+애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있습니다.
 MBean Server는 MBean의 생명주기를 관리하고,
 MBean의 속성 및 연산에 대한 액세스를 제공하며,
-알림을 수신하는 등의 작업을 수행한다.
+알림을 수신하는 등의 작업을 수행합니다.
 
-JMX 에이전트는 JMX 서비스의 일부로, 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출한다.
-에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며,
-MBean Server를 통해 애플리케이션의 관리 작업을 수행한다.
-JMX 에이전트는 Java 애플리케이션 내부에 포함되거나, 별도의 프로세스로 실행될 수 있다.
+JMX 에이전트는 JMX 서비스의 일부로 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출합니다.
+에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며, MBean Server를 통해 애플리케이션의 관리 작업을 수행합니다.
+JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 프로세스로 실행될 수 있습니다.
 
 # 참조
 
