@@ -9,9 +9,138 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2024 18:38:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>일상에서의 Wireshark</title>
+        <link>https://markruler.github.io/posts/network/wireshark/</link>
+        <pubDate>Mon, 30 Dec 2024 18:38:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/wireshark/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/wireshark/ -&lt;p&gt;GUI가 꽤 편하기 때문에 Windows나 macOS에서는
+&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/wireshark.html&#34;&gt;Wireshark&lt;/a&gt;를 사용하는 경우가 많습니다.
+하지만 여기서는 CLI 환경에서도 사용할 수 있는
+&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/tshark.html&#34;&gt;TShark&lt;/a&gt;를 소개합니다.&lt;/p&gt;
+&lt;h1 id=&#34;설치&#34;&gt;설치&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# CLI&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install tshark
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# GUI&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install wireshark
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;wireshark 그룹 추가 후 컴퓨터를 재부팅해야 합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo usermod -aG wireshark &lt;span style=&#34;color:#eedd82&#34;&gt;$USER&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reboot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -h
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# TShark (Wireshark) 3.6.2 (Git v3.6.2 packaged as 3.6.2-2)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Dump and analyze network traffic.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# See https://www.wireshark.org for more information.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Usage: tshark [options] ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;네트워크-인터페이스-조회&#34;&gt;네트워크 인터페이스 조회&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark --list-interfaces&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -D
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1. enp2s0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2. docker0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3. vetha1d3dea
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;4. any
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5. lo (Loopback)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;패킷-분석-시-사용할-수-있는-옵션&#34;&gt;패킷 분석 시 사용할 수 있는 옵션&lt;/h1&gt;
+&lt;h2 id=&#34;network-interface&#34;&gt;Network interface&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;, &lt;code&gt;--interface&lt;/code&gt; 인터페이스의 이름 혹은 인덱스를 지정
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-i eth0&lt;/code&gt; &lt;code&gt;eth0&lt;/code&gt; 인터페이스 캡처&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-i 2&lt;/code&gt; 2번째 인터페이스 캡처&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;processing&#34;&gt;Processing&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-f&lt;/code&gt; libpcap filter syntax를 사용하여 패킷 필터링
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-f &amp;quot;tcp port 80&amp;quot;&lt;/code&gt; TCP port 80 패킷 필터링&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-Y&lt;/code&gt;, &lt;code&gt;--display-filter&lt;/code&gt; Wireshark displa&lt;strong&gt;Y&lt;/strong&gt; filter syntax 사용하여 패킷 표시
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-Y &amp;quot;http.request&amp;quot;&lt;/code&gt; HTTP request 패킷 표시&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;stop-conditions&#34;&gt;Stop conditions&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; stop after n packets (def: infinite)
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c 10&lt;/code&gt; - stop after 10 packets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-a &amp;lt;autostop cond.&amp;gt; ...&lt;/code&gt;, &lt;code&gt;--autostop &amp;lt;autostop cond.&amp;gt; …&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;duration:NUM&lt;/code&gt; stop after NUM seconds&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;filesize:NUM&lt;/code&gt; stop this file after NUM KB&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;files:NUM&lt;/code&gt; stop after NUM files&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;packets:NUM&lt;/code&gt; stop after NUM packets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;write&#34;&gt;Write&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-w&lt;/code&gt;, &lt;code&gt;--write-file&lt;/code&gt; set the filename to write to (or &amp;lsquo;-&amp;rsquo; for stdout)
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-w file&lt;/code&gt; write to file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e &amp;lt;field&amp;gt;&lt;/code&gt; field to print if -Tfields selected (e.g. tcp.port, _ws.col.Info)
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-e tcp.port&lt;/code&gt; print the TCP port field&lt;/li&gt;
+&lt;li&gt;this option can be repeated to print multiple fields&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t a|ad|adoy|d|dd|e|r|u|ud|udoy&lt;/code&gt; output format of time stamps (def: r: rel. to first)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--color&lt;/code&gt; color output text similarly to the Wireshark GUI, requires a terminal with 24-bit color support Also supplies color attributes to pdml and psml formats (Note that attributes are nonstandard)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;read-file&#34;&gt;Read file&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-r&lt;/code&gt;, &lt;code&gt;--read-file&lt;/code&gt; set the filename to read from (or &amp;lsquo;-&amp;rsquo; for stdin)
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-r file&lt;/code&gt; read from file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;diagnostic-output&#34;&gt;Diagnostic output&lt;/h2&gt;
+&lt;h2 id=&#34;miscellaneous&#34;&gt;Miscellaneous&lt;/h2&gt;
+&lt;h1 id=&#34;패킷-분석&#34;&gt;패킷 분석&lt;/h1&gt;
+&lt;p&gt;기본적으로 특정 네트워크 인터페이스를 지정해서 실시간으로 패킷을 캡처하거나
+이미 캡처된 pcap 파일을 열어서 분석할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;모든-인터페이스-캡쳐&#34;&gt;모든 인터페이스 캡쳐&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;localhostlo-loopback-주소의-8080-포트-캡쳐&#34;&gt;localhost(lo, loopback) 주소의 8080 포트 캡쳐&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp.port == 8080&amp;#39;&lt;/span&gt; --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/wireshark/wireshark-tui.png&#34; alt=&#34;Wireshark TUI&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;http-body-출력&#34;&gt;HTTP body 출력&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;전체 body&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp.port == 8080&amp;#39;&lt;/span&gt; -T fields -e http.file_data --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;response body만 출력&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp.port == 8080 &amp;amp;&amp;amp; http.response&amp;#39;&lt;/span&gt; -T fields -e http.file_data --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;특정-도메인에서의-패킷-캡쳐&#34;&gt;특정 도메인에서의 패킷 캡쳐&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# youtube&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;host www.youtube.com&amp;#39;&lt;/span&gt; --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;host localhost&amp;#39;&lt;/span&gt; --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;파일로-출력&#34;&gt;파일로 출력&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -w capture.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark로 파일 읽기&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap --color
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# wireshark GUI로 파일 읽기&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wireshark capture.pcap
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/network/wireshark/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1936,45 +2065,6 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/news?hl=ko&#34;&gt;DevTools의 새로운 기능&lt;/a&gt; | What&amp;rsquo;s New in DevTools&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/web/google-chrome/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>APM만큼 중요한 네트워크 모니터링</title>
-        <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
-        <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</guid>
-        <description>임창수 https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/ -&lt;p&gt;APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)입니다.
-저희 팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있습니다.
-(인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)&lt;/p&gt;
-&lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/first.png&#34; alt=&#34;First&#34;&gt;&lt;/p&gt;
-&lt;p&gt;어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했습니다.
-또한 서비스 전체에 영향이 있었습니다.&lt;/p&gt;
-&lt;h1 id=&#34;분석-쉽게-간과했던-문제&#34;&gt;분석: 쉽게 간과했던 문제&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/&#34;&gt;Oracle Session 히스토리&lt;/a&gt;를 남겨서 확인했을 때
-DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었습니다.
-DB 문제는 아니었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/oracle-session.webp&#34; alt=&#34;Oracle Session 히스토리&#34;&gt;&lt;/p&gt;
-&lt;p&gt;발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했습니다.
-이 시점에는 이게 문제라고 생각하지 않았습니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;&amp;ldquo;Private IP로 요청하면 더 빠른 거 아냐?&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었습니다.
-혹시 몰라서 라우터 장비에 &lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP&lt;/a&gt; 모니터링을 추가했습니다.
-IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp&#34; alt=&#34;Network Router&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
-&lt;p&gt;정말 간단하게&amp;hellip; 케이블을 교체해서 해결되었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/solved.png&#34; alt=&#34;Solved&#34;&gt;&lt;/p&gt;
-&lt;p&gt;정각마다 발생하는 스파이크는 DB 백업 솔루션에서 정각마다 실행하는 프로그램이 있어서 발생한 것입니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/replace-udp-cable.webp&#34; alt=&#34;Replace UDP Cable&#34;&gt;&lt;/p&gt;
-&lt;p&gt;순간의 오판으로 시간을 허비했습니다.
-익숙한 것도 의심하고, 모니터링의 한계점을 파악할 필요가 있다고 느꼈습니다.&lt;/p&gt;
-- https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

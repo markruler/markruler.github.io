@@ -9,9 +9,232 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2024 18:38:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>CS Visualized: 유용한 깃(Git) 명령어</title>
+        <link>https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/</link>
+        <pubDate>Sat, 09 Jan 2021 08:35:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/</guid>
+        <description>임창수 https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/ -&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;리디아 할리(Lydia Hallie, &lt;a href=&#34;https://twitter.com/lydiahallie&#34;&gt;@lydiahallie&lt;/a&gt;)가 쓴 &lt;a href=&#34;https://dev.to/lydiahallie/cs-visualized-useful-git-commands-37p1&#34;&gt;CS Visualized: Useful Git Commands&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Git이 정말 강력한 도구이긴 하지만, 대다수의 사람들은 끔찍한 악몽 😐
+같다는 말도 공감할 거에요. 저는 항상 Git으로 작업할 때 어떤 일이 일어날지
+머릿속으로 그려보는 것이 꽤 유용하다는 것을 알았습니다. 특정 명령을 실행할
+때 브랜치는 어떻게 상호작용하고, 그것이 히스토리에 어떤 영향을 미칠까요?
+&lt;code&gt;master&lt;/code&gt;에서 &lt;code&gt;reset --hard&lt;/code&gt; 하고 &lt;code&gt;origin&lt;/code&gt; 리포지터리로 &lt;code&gt;force push&lt;/code&gt;한 후,
+&lt;code&gt;.git&lt;/code&gt; 폴더를 &lt;code&gt;rimraf&lt;/code&gt;하면 왜 저의 팀원은 소리를 지를까요?&lt;/p&gt;
+&lt;p&gt;* &lt;code&gt;rimraf&lt;/code&gt; == &lt;code&gt;rm -rf&lt;/code&gt;: 묻지도 따지지도 않고 전부 지워버린다.&lt;/p&gt;
+&lt;p&gt;저는 가장 많이 쓰이면서 유용한 명령어들을 시각화하는 것이 완벽한 유즈 케이스라고 생각했습니다! 🥳
+명령어들은 동작(behavior)을 바꾸기 위해 사용할 수 있는 전달 인자들(arguments)이 있지만,
+제가 다룰 예시에서는 (수많은) 설정 옵션 없이 명령어의 기본 동작에 대해서만 설명하겠습니다. 😄&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;병합-merge&#34;&gt;병합 (Merge)&lt;/h1&gt;
+&lt;p&gt;브랜치가 여러 개 있으면 새로운 변경 사항들을 분리해서 관리하기 편합니다.
+승인되지 않았거나 잘못된 변경 사항을 실수로 운영 환경에 푸시하지
+않도록 하는 데에도 편합니다. 변경 사항이 승인됐다면 운영 환경
+브랜치에 적용해야 하죠!&lt;/p&gt;
+&lt;p&gt;한 브랜치에서 다른 브랜치로 변경 사항을 옮기는 한 가지 방법은
+&lt;code&gt;git merge&lt;/code&gt;를 실행하는 것입니다! Git이 수행할 수 있는 병합에는
+&lt;strong&gt;fast-forward&lt;/strong&gt;, &lt;strong&gt;no-fast-forward&lt;/strong&gt;라는 두 가지 유형이 있습니다. 🐢&lt;/p&gt;
+&lt;p&gt;지금 당장은 무슨 말인지 이해되지 않으실테니 차이점을 살펴보도록 하겠습니다!&lt;/p&gt;
+&lt;h2 id=&#34;fast-forward---ff&#34;&gt;Fast-forward (&lt;code&gt;--ff&lt;/code&gt;)&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;fast-forward 병합&lt;/strong&gt;은 현재 브랜치에 병합하려는 브랜치에 비해 추가
+커밋이 없을 때 발생할 수 있습니다. Git은&amp;hellip; &lt;em&gt;게을러서&lt;/em&gt; 가장 쉬운
+옵션인 fast-forward부터 시도하려 할 것입니다! 이 방식은 새로운
+커밋을 생성하지 않고 병합하려는 브랜치의 커밋을 그대로 병합합니다. 🥳&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/merge-ff.gif&#34; alt=&#34;merge-ff&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Perfect! 우리는 이제 &lt;code&gt;dev&lt;/code&gt; 브랜치에서 만든 모든 변경 사항들을
+&lt;code&gt;master&lt;/code&gt; 브랜치에서도 접근할 수 있게 되었습니다. 그럼
+&lt;strong&gt;no-fast-forward&lt;/strong&gt;는 뭘까요?&lt;/p&gt;
+&lt;h2 id=&#34;no-fast-foward---no-ff&#34;&gt;No-fast-foward (&lt;code&gt;--no-ff&lt;/code&gt;)&lt;/h2&gt;
+&lt;p&gt;병합하려는 브랜치와 비교해 현재 브랜치에 추가 커밋이 없는 경우가 좋겠지만
+안타깝게도 그런 경우는 거의 없습니다! 병합할 브랜치에 없는 변경 사항을 현재 브랜치에 커밋한 경우
+Git은 &lt;em&gt;no-fast-forward&lt;/em&gt; 병합을 수행합니다.&lt;/p&gt;
+&lt;p&gt;Git은 no-fast-forward을 사용해 현재 브랜치에 새로운 &lt;em&gt;병합 커밋&lt;/em&gt;을 생성합니다.
+상위 커밋은 현재 브랜치와 병합하려는 브랜치 모두를 가리킵니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/merge-no-ff.gif&#34; alt=&#34;merge-no-ff&#34;&gt;&lt;/p&gt;
+&lt;p&gt;별 거 아니지만 완벽해요! 🎉
+이제 &lt;code&gt;master&lt;/code&gt; 브랜치는 &lt;code&gt;dev&lt;/code&gt; 브랜치에서 변경한 내용을 모두 포함합니다.&lt;/p&gt;
+&lt;h2 id=&#34;병합-충돌-merge-conflicts&#34;&gt;병합 충돌 (Merge conflicts)&lt;/h2&gt;
+&lt;p&gt;어떻게 브랜치를 병합하고 파일에 변경 사항을 추가할지 Git이 잘 결정할테지만,
+Git이 항상 혼자 결정할 수는 없습니다. 🙂 병합하려는 두 개의 브랜치가 똑같은
+파일, 똑같은 줄에 변경 사항이 있거나 한 브랜치가 다른 브랜치에서 변경한 파일을
+삭제하는 경우 등의 문제가 발생할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이런 경우 Git이 두 가지 중 어떤 내용을 유지하고 싶은지 물어볼 것입니다!
+두 브랜치 모두에서 &lt;code&gt;README.md&lt;/code&gt;의 첫번째 줄을 편집했다고 가정해 보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/readme.png&#34; alt=&#34;readme&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dev&lt;/code&gt;를 &lt;code&gt;master&lt;/code&gt;로 병합하려는 경우 병합 충돌이 발생합니다.
+그럼 제목을 &lt;code&gt;Hello!&lt;/code&gt; 또는 &lt;code&gt;Hey!&lt;/code&gt; 중 어떤 걸로 지정하실래요?&lt;/p&gt;
+&lt;p&gt;브랜치를 병합하려고 하면 Git은 충돌이 발생한 위치를 보여줄 겁니다.
+버리고 싶은 변경 사항을 수동으로 제거하고 저장한 후,
+변경된 파일을 다시 추가하면 커밋할 수 있게 됩니다. 🥳&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/merge-conflict.gif&#34; alt=&#34;merge-conflict&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Yay! 병합 충돌은 정말 번거롭지만 꼭 필요한 과정입니다.
+Git은 단순히 우리가 유지하고자 하는 변경 사항을 &lt;em&gt;가정&lt;/em&gt;해서는 안 됩니다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;리베이스-rebase&#34;&gt;리베이스 (Rebase)&lt;/h1&gt;
+&lt;p&gt;방금 &lt;code&gt;git merge&lt;/code&gt;를 수행하여 한 브랜치에서 다른 브랜치로 변경 사항을 적용하는 방법을
+보았습니다. 여기에 또 한 가지 방법이 있는데 바로 &lt;code&gt;git rebase&lt;/code&gt;입니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git rebase&lt;/code&gt;는 현재 브랜치에서 커밋을 복사하고 복사된 커밋을 지정한 브랜치 맨 위에 놓습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/rebase.gif&#34; alt=&#34;rebase&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Perfect! 이제 &lt;code&gt;master&lt;/code&gt; 브랜치의 모든 변경 사항을 &lt;code&gt;dev&lt;/code&gt; 브랜치에서도 사용할 수 있게 되었습니다! 🎊&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git merge&lt;/code&gt;와 비교할 때 큰 차이점은 Git이 유지할 파일과 유지하지 않을 파일을 물어보지
+않았는다는 거에요. 리베이스 하는 브랜치에는 항상 최근 변경 사항이 적용됩니다!
+이러한 방식으로 병합 충돌은 발생하지 않고 Git 히스토리를 선형으로 유지하죠.&lt;/p&gt;
+&lt;p&gt;이 예에서는 &lt;code&gt;master&lt;/code&gt; 브랜치에 대한 리베이스를 보여 줍니다.
+그러나 더 큰 프로젝트에서는 대개 이렇게 하고 싶지 않을 거에요.
+&lt;code&gt;git rebase&lt;/code&gt;는 복사된 커밋의 해시가 새로 생성될 때
+&lt;strong&gt;프로젝트 히스토리를 변형시킵니다&lt;/strong&gt;!&lt;/p&gt;
+&lt;p&gt;리베이스는 &lt;code&gt;feature&lt;/code&gt; 브랜치에서 작업할 때나 &lt;code&gt;master&lt;/code&gt; 브랜치가 업데이트될 때 유용합니다.
+브랜치에서 모든 업데이트를 받을 수 있으므로 이후 병합 충돌을 방지할 수 있거든요! 😄&lt;/p&gt;
+&lt;h2 id=&#34;대화형-리베이스--i-interactive-rebase&#34;&gt;대화형 리베이스 (&lt;code&gt;-i&lt;/code&gt; interactive rebase)&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;대화형 리베이스&lt;/em&gt;를 사용하면 커밋을 리베이스 하기 전에 변형시킬 수도 있어요! 😃
+대화형 리베이스는 현재 작업 중인 브랜치에서 일부 커밋을 수정하고 싶은 경우 유용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;리베이스 작업중인 커밋에 대해 수행할 수 있는 명령어는 6가지가 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;reword&lt;/code&gt;: 커밋 메시지 수정&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;edit&lt;/code&gt;: 커밋 수정&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;squash&lt;/code&gt;: 이전 커밋과 혼합&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fixup&lt;/code&gt;: 커밋 로그 메시지를 유지하지 않고 이전 커밋과 혼합&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;exec&lt;/code&gt;: 리베이스하려는 커밋마다 명령어 실행&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;drop&lt;/code&gt;: 커밋 삭제&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Awesome! 이 명령어들을 사용해 커밋을 완전히 제어할 수 있습니다.
+만약 커밋을 지우고 싶다면 그냥 &lt;code&gt;drop&lt;/code&gt;하세요.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/rebase-drop.gif&#34; alt=&#34;rebase-drop&#34;&gt;&lt;/p&gt;
+&lt;p&gt;만약 깨끗한 히스토리를 유지하고 싶다면 여러 커밋들을 &lt;code&gt;squash&lt;/code&gt;하시면 됩니다. 문제 없어요!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/rebase-squash.gif&#34; alt=&#34;rebase-squash&#34;&gt;&lt;/p&gt;
+&lt;p&gt;대화형 리베이스는 커밋을 제어하는 다양한 방법을 제공합니다.
+현재 작업 중인 브랜치라도 말이죠!&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;리셋-reset&#34;&gt;리셋 (Reset)&lt;/h1&gt;
+&lt;p&gt;나중에 원치 않는 변경 사항을 커밋할 수도 있습니다.
+&lt;code&gt;WIP&lt;/code&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 커밋이거나 버그가 발견된 커밋일 수도 있죠! 🐛
+그런 경우에 &lt;code&gt;git reset&lt;/code&gt; 명령어를 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git reset&lt;/code&gt;은 스테이징&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;된 파일을 제거하거나
+&lt;code&gt;HEAD&lt;/code&gt;가 가리키는 곳을 제어할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;소프트-리셋---soft&#34;&gt;소프트 리셋 (&lt;code&gt;--soft&lt;/code&gt;)&lt;/h2&gt;
+&lt;p&gt;&lt;em&gt;소프트 리셋&lt;/em&gt;은 &lt;code&gt;HEAD&lt;/code&gt;를 지정된 커밋으로 옮기거나 해당 커밋의 인덱스를 &lt;code&gt;HEAD&lt;/code&gt;와 비교합니다.
+나중에 커밋된 변경 사항들을 제거하지 않고서 말이죠!&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;style.css&lt;/code&gt; 파일을 추가한 &lt;code&gt;9e78i&lt;/code&gt; 커밋과
+&lt;code&gt;index.js&lt;/code&gt; 파일을 추가한 &lt;code&gt;035cc&lt;/code&gt; 커밋을 유지하고 싶지 않다고 가정해 보겠습니다.
+하지만 새로 추가된 &lt;code&gt;style.css&lt;/code&gt;와 &lt;code&gt;index.js&lt;/code&gt; 파일은 유지하고 싶어요!
+그럼 소프트 리셋을 위한 완벽한 유즈 케이스입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/reset-soft.gif&#34; alt=&#34;reset-soft&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git status&lt;/code&gt;를 입력하면 아직 이전 커밋에서 변경한 모든 내용에 접근할 수 있다는 것을 알 수 있습니다.
+이렇게 파일의 내용을 변경하고 또 다시 커밋할 수 있으니 좋은 방법입니다!&lt;/p&gt;
+&lt;h2 id=&#34;하드-리셋---hard&#34;&gt;하드 리셋 (&lt;code&gt;--hard&lt;/code&gt;)&lt;/h2&gt;
+&lt;p&gt;때로는 특정 커밋에 의해 반영된 변경 사항을 유지하고 싶지 않을 겁니다.
+그럼 소프트 리셋과 달리 더 이상 변경 사항에 접근할 필요가 없겠죠.
+Git은 지정된 커밋의 상태로 간단하게 리셋합니다.
+여기에는 워킹 디렉토리와 스테이징된 파일의 변경 사항도 포함됩니다! 💣&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/reset-hard.gif&#34; alt=&#34;reset-hard&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Git은 &lt;code&gt;9e78i&lt;/code&gt;와 &lt;code&gt;035cc&lt;/code&gt; 커밋에 반영된 변경 사항을 버리고
+&lt;code&gt;ec5be&lt;/code&gt;커밋으로 다시 상태를 리셋했습니다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;리버트-revert&#34;&gt;리버트 (Revert)&lt;/h1&gt;
+&lt;p&gt;변경 사항을 되돌리는 또 다른 방법은 &lt;code&gt;git revert&lt;/code&gt; 하는 것입니다.
+특정 커밋을 리버트하면 &lt;em&gt;새로운 커밋&lt;/em&gt;이 생성되고 여기에는 리버트된 변경 사항이 포함됩니다!&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;ec5be&lt;/code&gt; 커밋으로 &lt;code&gt;index.js&lt;/code&gt; 파일이 추가됐다고 가정해 보겠습니다.
+그리고 나중에서야 이 변경 사항이 더 이상 필요없다는 것을 느끼죠!
+이제 &lt;code&gt;ec5be&lt;/code&gt; 커밋을 되돌려보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/revert.gif&#34; alt=&#34;revert&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Perfect! &lt;code&gt;9e78i&lt;/code&gt; 커밋은 &lt;code&gt;ec5be&lt;/code&gt; 커밋에 반영된 변경 사항을 제거했습니다.
+&lt;code&gt;git revert&lt;/code&gt;를 실행하면 브랜치의 히스토리를 수정하지 않고 특정 커밋을 되돌릴 수 있습니다.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;체리-피킹-cherry-pick&#34;&gt;체리 피킹 (Cherry-pick)&lt;/h1&gt;
+&lt;p&gt;특정 브랜치에 우리에게 필요한 변경 사항을 가진 커밋이 있다면,
+&lt;code&gt;cherry-pick&lt;/code&gt; 명령어를 사용할 수 있습니다! 커밋을 &lt;code&gt;cherry-pick&lt;/code&gt;하면
+&lt;code&gt;cherry-pick&lt;/code&gt; 커밋에 담긴 변경 사항을 포함해 현재 브랜치에 새로운 커밋을 만듭니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;dev&lt;/code&gt; 브랜치의 &lt;code&gt;76d12&lt;/code&gt; 커밋이 &lt;code&gt;master&lt;/code&gt; 브랜치에서 원하는 변경 사항을
+&lt;code&gt;index.js&lt;/code&gt; 파일에 추가했다고 가정해 보세요. 그럼 &lt;em&gt;다른 커밋&lt;/em&gt;들은 필요없고
+단 한 가지 커밋만 있으면 됩니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/cherry-pick.gif&#34; alt=&#34;cherry-pick&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;페치-fetch&#34;&gt;페치 (Fetch)&lt;/h1&gt;
+&lt;p&gt;현재 브랜치에 없는 커밋이 원격 브랜치에 생길 수 있습니다!
+예를 들어 다른 브랜치가 병합된다거나 동료가 빠르게 변경 사항을 푸시하는 경우 등이 있죠.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git fetch&lt;/code&gt;를 실행해서 원격 브랜치의 변경 사항을 로컬로 가져올 수 있습니다!
+&lt;code&gt;fetch&lt;/code&gt;는 단순히 새로운 데이터를 다운로드 하는 것일 뿐이지, 로컬 브랜치에 영향을 끼치지는
+않습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/git-fetch.gif&#34; alt=&#34;git-fetch&#34;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;풀-pull&#34;&gt;풀 (Pull)&lt;/h1&gt;
+&lt;p&gt;브랜치의 원격 데이터를 가져오기 위해서는 &lt;code&gt;git fetch&lt;/code&gt;도 유용하지만 &lt;code&gt;git pull&lt;/code&gt;도 좋습니다.
+&lt;code&gt;git pull&lt;/code&gt;은 &lt;code&gt;git fetch&lt;/code&gt;와 &lt;code&gt;git merge&lt;/code&gt; 두 가지 명령을 합친 것입니다.
+&lt;code&gt;origin&lt;/code&gt; 저장소에서 변경 사항을 풀(pull)할 때 먼저 &lt;code&gt;git fetch&lt;/code&gt; 명령처럼
+모든 데이터를 가져온 후 최신 변경 사항을 자동으로 로컬 브랜치에 병합합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/git-pull.gif&#34; alt=&#34;git-pull&#34;&gt;&lt;/p&gt;
+&lt;p&gt;Awesome! 이제 원격 브랜치와 완전히 동기화되었고 최신 변경 사항이 모두 반영되었습니다! 🤩&lt;/p&gt;
+&lt;hr&gt;
+&lt;h1 id=&#34;레프-로그-reflog&#34;&gt;레프-로그 (Reflog)&lt;/h1&gt;
+&lt;p&gt;모든 사람은 실수를 합니다. 지극히 정상이에요!
+때로는 Git 저장소를 망쳐버려서 완전히 삭제하고 싶은 충동을 느낄 수도 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;git reflog&lt;/code&gt;는 실행된 작업 로그를 모두 표시하는 데 정말 유용한 명령입니다!
+여기에는 병합, 리셋, 리버트 등 기본적으로 브랜치에 대한 모든 변경 사항이 포함됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/git-reflog.gif&#34; alt=&#34;git-reflog&#34;&gt;&lt;/p&gt;
+&lt;p&gt;실수를 했다면 &lt;code&gt;reflog&lt;/code&gt;가 주는 정보를 바탕으로 &lt;code&gt;HEAD&lt;/code&gt;를 리셋해서 쉽게 되돌릴 수 있습니다!&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;origin&lt;/code&gt; 저장소의 브랜치를 병합하지 않고 싶다고 가정해보세요.
+&lt;code&gt;git reflog&lt;/code&gt; 명령어를 실행하면 병합 전의 저장소 상태가 &lt;code&gt;HEAD@{1}&lt;/code&gt;로 표시됩니다.
+&lt;code&gt;git reset&lt;/code&gt;을 수행하여 헤드가 &lt;code&gt;head@{1}&lt;/code&gt;으로 돌아가도록 합니다!&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/lydia/reset-reflog.gif&#34; alt=&#34;reset-reflog&#34;&gt;&lt;/p&gt;
+&lt;p&gt;리셋 명령으로 &lt;code&gt;reflog&lt;/code&gt;가 밀린 것을 볼 수 있습니다!&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Git에는 유용한 포셀린(porcelain) 명령어와 플러밍(plumbing) 명령어&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;가 너무
+많아서 모두 다룰 수 있었으면 좋겠어요! 😄 다른 명령어나 대안들이 많아서 미처
+다룰 시간이 없었다는 것을 이해해주세요. 좋아하는 명령어나 가장 유용한 명령어가
+무엇인지 알려주시면 제가 다른 글에서 다룰 수도 있습니다!&lt;/p&gt;
+&lt;p&gt;그리고 언제나 그랬듯이 저(Lydia Hallie)와 소통해요! 😊&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;✨&lt;/th&gt;
+          &lt;th&gt;👩🏽‍💻&lt;/th&gt;
+          &lt;th&gt;💻&lt;/th&gt;
+          &lt;th&gt;💡&lt;/th&gt;
+          &lt;th&gt;📷&lt;/th&gt;
+          &lt;th&gt;💌&lt;/th&gt;
+          &lt;th&gt;&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.twitter.com/lydiahallie&#34;&gt;Twitter&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.instagram.com/theavocoder&#34;&gt;Instagram&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.github.com/lydiahallie&#34;&gt;GitHub&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.linkedin.com/in/lydia-hallie&#34;&gt;LinkedIn&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.youtube.com/channel/UC4EWKIKdKiDtAscQ9BIXwUw&#34;&gt;YouTube&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;mailto:lydiahallie.dev@gmail.com&#34;&gt;Email&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;WIP (Work in Progress): 진행 중인 작업&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;현재 작업 중인 &amp;ldquo;working directory&amp;quot;를 &lt;code&gt;git add&lt;/code&gt; 하면 &amp;ldquo;staging area&amp;quot;로 옮겨진다. 그 후 &lt;code&gt;git commit&lt;/code&gt;을 하면 &amp;ldquo;local repository&amp;quot;로 옮겨진다. 여기서 &lt;code&gt;git push&lt;/code&gt;를 명령할 경우 마침내 &amp;ldquo;remote repository&amp;quot;로 간다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Plumbing-%EB%AA%85%EB%A0%B9%EA%B3%BC-Porcelain-%EB%AA%85%EB%A0%B9&#34;&gt;저수준의 명령어는 &amp;ldquo;Plumbing&amp;rdquo; 명령어라고 부르고 좀 더 사용자에게 친숙한 사용자용 명령어는 &amp;ldquo;Porcelain&amp;rdquo; 명령어라고 부른다.&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1952,141 +2175,6 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
 개념을 더 쉽게 따라가기 위해 레퍼런스로 사용할 수 있도록 NFV 마인드 맵을 만들었습니다.&lt;/p&gt;
 &lt;p&gt;코멘트를 남겨서 NFV 아키텍처용 &lt;code&gt;치트 시트&lt;/code&gt;에 대해 어떻게 생각하는지 알려주세요.&lt;/p&gt;
 - https://markruler.github.io/posts/nfv/cheat-sheet-understanding-nfv-architecture/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>쿠버네티스 API 접근 제어</title>
-        <link>https://markruler.github.io/posts/kubernetes/controlling-access-api/</link>
-        <pubDate>Thu, 17 Sep 2020 06:58:08 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/kubernetes/controlling-access-api/</guid>
-        <description>임창수 https://markruler.github.io/posts/kubernetes/controlling-access-api/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/&#34;&gt;쿠버네티스 공식 문서&lt;/a&gt;를 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!-- overview --&gt;
-&lt;p&gt;이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.&lt;/p&gt;
-&lt;!-- body --&gt;
-&lt;p&gt;사용자는&lt;code&gt;kubectl&lt;/code&gt;, 클라이언트 라이브러리
-또는 REST 요청을 통해
-&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/&#34;&gt;API에 접근한다&lt;/a&gt;.
-사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
-요청이 API에 도달하면,
-다음 다이어그램에 설명된 몇 가지 단계를 거친다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/access-control-overview.svg&#34; alt=&#34;Diagram of request handling steps for Kubernetes API request&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;전송-보안&#34;&gt;전송 보안&lt;/h2&gt;
-&lt;p&gt;일반적인 쿠버네티스 클러스터에서 API는 443번 포트에서 서비스한다.
-API 서버는 인증서를 제시한다.
-이 인증서는 종종 자체 서명되기 때문에 일반적으로 사용자 머신의 &lt;code&gt;$USER/.kube/config&lt;/code&gt;은
-API 서버의 인증서에 대한 루트 인증서를 포함하며,
-시스템 기본 루트 인증서 대신 사용된다.
-&lt;code&gt;kube-up.sh&lt;/code&gt;을 사용하여 클러스터를 직접 생성할 때
-이 인증서는 일반적으로 &lt;code&gt;$USER/.kube/config&lt;/code&gt;에 자동으로 기록된다.
-클러스터에 여러 명의 사용자가 있는 경우, 작성자는 인증서를 다른 사용자와 공유해야 한다.&lt;/p&gt;
-&lt;h2 id=&#34;인증&#34;&gt;인증&lt;/h2&gt;
-&lt;p&gt;TLS가 설정되면 HTTP 요청이 인증 단계로 넘어간다.
-이는 다이어그램에 &lt;strong&gt;1&lt;/strong&gt;단계로 표시되어 있다.
-클러스터 생성 스크립트 또는 클러스터 관리자는
-API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
-인증기는 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/authentication/&#34;&gt;여기&lt;/a&gt;에서 더 자세히 서술한다.&lt;/p&gt;
-&lt;p&gt;인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
-일반적으로 헤더 그리고/또는 클라이언트 인증서만 검사한다.&lt;/p&gt;
-&lt;p&gt;인증 모듈은 클라이언트 인증서, 암호 및 일반 토큰, 부트스트랩 토큰,
-JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.&lt;/p&gt;
-&lt;p&gt;여러 개의 인증 모듈을 지정할 수 있으며,
-이 경우 하나의 인증 모듈이 성공할 때까지 각 모듈을 순차적으로 시도한다.&lt;/p&gt;
-&lt;p&gt;GCE에서는 클라이언트 인증서, 암호, 일반 토큰 및 JWT 토큰이 모두 사용 가능하다.&lt;/p&gt;
-&lt;p&gt;요청을 인증할 수 없는 경우 HTTP 상태 코드 401과 함께 거부된다.
-이 외에는 사용자가 특정 &lt;code&gt;username&lt;/code&gt;으로 인증되며,
-이 username은 다음 단계에서 사용자의 결정에 사용할 수 있다.
-일부 인증기는 사용자 그룹 관리 기능을 제공하는 반면,
-이외의 인증기는 그렇지 않다.&lt;/p&gt;
-&lt;p&gt;쿠버네티스는 접근 제어 결정과 요청 기록 시 &lt;code&gt;usernames&lt;/code&gt;를 사용하지만,
-&lt;code&gt;user&lt;/code&gt; 오브젝트를 가지고 있지 않고 usernames 나 기타 사용자 정보를
-오브젝트 저장소에 저장하지도 않는다.&lt;/p&gt;
-&lt;h2 id=&#34;인가&#34;&gt;인가&lt;/h2&gt;
-&lt;p&gt;특정 사용자로부터 온 요청이 인증된 후에는 인가되어야 한다. 이는 다이어그램에 &lt;strong&gt;2&lt;/strong&gt;단계로 표시되어 있다.&lt;/p&gt;
-&lt;p&gt;요청은 요청자의 username, 요청된 작업 및 해당 작업이 영향을 주는 오브젝트를 포함해야 한다. 기존 정책이 요청된 작업을 완료할 수 있는 권한이 해당 사용자에게 있다고 선언하는 경우 요청이 인가된다.&lt;/p&gt;
-&lt;p&gt;예를 들어 Bob이 아래와 같은 정책을 가지고 있다면 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에서만 파드를 읽을 수 있다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;abac.authorization.kubernetes.io/v1beta1&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Policy&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;spec&amp;#34;: {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;user&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;bob&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &amp;#34;readonly&amp;#34;: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 다음과 같은 요청을 하면 &amp;lsquo;projectCaribou&amp;rsquo; 네임스페이스의 오브젝트를 읽을 수 있기 때문에 요청이 인가된다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;apiVersion&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;authorization.k8s.io/v1beta1&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;kind&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;SubjectAccessReview&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;spec&amp;#34;: {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;#34;resourceAttributes&amp;#34;: {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;namespace&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;projectCaribou&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;verb&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;get&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;group&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;unicorn.example.org&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;resource&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pods&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에 있는 오브젝트에 쓰기(&lt;code&gt;create&lt;/code&gt; 또는 &lt;code&gt;update&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 &lt;code&gt;projectFish&lt;/code&gt;처럼 다른 네임스페이스의 오브젝트 읽기(&lt;code&gt;get&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다.&lt;/p&gt;
-&lt;p&gt;쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.&lt;/p&gt;
-&lt;p&gt;쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).&lt;/p&gt;
-&lt;p&gt;인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz//authorization/&#34;&gt;인가 개요&lt;/a&gt;를 참조하십시오.&lt;/p&gt;
-&lt;h2 id=&#34;승인-제어&#34;&gt;승인 제어&lt;/h2&gt;
-&lt;p&gt;승인 제어 모듈은 요청을 수정하거나 거부할 수 있는 소프트웨어 모듈이다.
-인가 모듈에서 사용할 수 있는 속성 외에도
-승인 제어 모듈은 생성되거나 수정된 오브젝트 내용에 접근할 수 있다.&lt;/p&gt;
-&lt;p&gt;어드미션 컨트롤러는 오브젝트를 생성, 수정, 삭제 또는 (프록시에) 연결하는 요청에 따라 작동한다.
-어드미션 컨트롤러는 단순히 객체를 읽는 요청에 작동하지 않는다.
-여러 개의 어드미션 컨트롤러가 구성되면 순서대로 호출된다.&lt;/p&gt;
-&lt;p&gt;이는 다이어그램에 &lt;strong&gt;3&lt;/strong&gt;단계로 표시되어 있다.&lt;/p&gt;
-&lt;p&gt;인증 및 인가 모듈과 달리,
-승인 제어 모듈이 거부되면 요청은 즉시 거부된다.&lt;/p&gt;
-&lt;p&gt;승인 제어 모듈은 오브젝트를 거부하는 것 외에도
-필드의 복잡한 기본값을 설정할 수 있다.&lt;/p&gt;
-&lt;p&gt;사용 가능한 승인 제어 모듈은 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/&#34;&gt;여기&lt;/a&gt;에 서술되어 있다.&lt;/p&gt;
-&lt;p&gt;요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후
-오브젝트 저장소에 기록(&lt;strong&gt;4단계&lt;/strong&gt;)된다.&lt;/p&gt;
-&lt;h2 id=&#34;api-서버-포트와-ip&#34;&gt;API 서버 포트와 IP&lt;/h2&gt;
-&lt;p&gt;이전의 논의는 (일반적인 경우) API 서버의 보안 포트로 전송되는 요청에 적용된다.
-API 서버는 실제로 다음과 같이 2개의 포트에서 서비스할 수 있다.&lt;/p&gt;
-&lt;p&gt;기본적으로 쿠버네티스 API 서버는 2개의 포트에서 HTTP 서비스를 한다.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;로컬호스트 포트&lt;/code&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;테스트 및 부트스트랩을 하기 위한 것이며 마스터 노드의 다른 구성요소
-(스케줄러, 컨트롤러 매니저)가 API와 통신하기 위한 것이다.&lt;/li&gt;
-&lt;li&gt;TLS가 없다.&lt;/li&gt;
-&lt;li&gt;기본 포트는 8080이며, &lt;code&gt;--insecure-port&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
-&lt;li&gt;기본 IP는 로컬호스트(localhost)이며, &lt;code&gt;--insecure-bind-address&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
-&lt;li&gt;요청이 인증 및 인가 모듈을 &lt;strong&gt;우회한다&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;요청이 승인 제어 모듈(들)에 의해 처리된다.&lt;/li&gt;
-&lt;li&gt;호스트 접근 요구로부터 보호를 받는다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;보안 포트&lt;/code&gt;:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;가능하면 언제나 사용하십시오.&lt;/li&gt;
-&lt;li&gt;TLS를 사용하십시오. &lt;code&gt;--tls-cert-file&lt;/code&gt; 플래그로 인증서를 지정하고 &lt;code&gt;--tls-private-key-file&lt;/code&gt; 플래그로 키를 지정하십시오.&lt;/li&gt;
-&lt;li&gt;기본 포트는 6443이며, &lt;code&gt;--secure-port&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
-&lt;li&gt;기본 IP는 로컬호스트가 아닌 첫 번째 네트워크 인터페이스이며, &lt;code&gt;--bind-address&lt;/code&gt; 플래그를 사용하여 변경한다.&lt;/li&gt;
-&lt;li&gt;요청이 인증 및 인가 모듈에 의해 처리된다.&lt;/li&gt;
-&lt;li&gt;요청이 승인 제어 모듈(들)에 의해 처리된다.&lt;/li&gt;
-&lt;li&gt;인증 및 인가 모듈을 실행한다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;GCE(구글 컴퓨트 엔진) 및 다른 클라우드 제공자에서 &lt;code&gt;kube-up.sh&lt;/code&gt;로 클러스터를 생성하면
-API 서버는 포트 443에서 서비스한다.
-GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 방화벽 규칙이 구성된다.
-이외에 클러스터 설정 방법은 다양하다.&lt;/p&gt;
-- https://markruler.github.io/posts/kubernetes/controlling-access-api/ - Im Changsu 2020 - 2024</description>
         </item>
     
     

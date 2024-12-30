@@ -9,9 +9,48 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu 2020 - 2024</copyright>
-    <lastBuildDate>Mon, 16 Dec 2024 21:26:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 30 Dec 2024 18:38:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>APM만큼 중요한 네트워크 모니터링</title>
+        <link>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</link>
+        <pubDate>Thu, 25 Jul 2024 01:22:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/</guid>
+        <description>임창수 https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/ -&lt;p&gt;APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)입니다.
+저희 팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있습니다.
+(인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)&lt;/p&gt;
+&lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/first.png&#34; alt=&#34;First&#34;&gt;&lt;/p&gt;
+&lt;p&gt;어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했습니다.
+또한 서비스 전체에 영향이 있었습니다.&lt;/p&gt;
+&lt;h1 id=&#34;분석-쉽게-간과했던-문제&#34;&gt;분석: 쉽게 간과했던 문제&lt;/h1&gt;
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/&#34;&gt;Oracle Session 히스토리&lt;/a&gt;를 남겨서 확인했을 때
+DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었습니다.
+DB 문제는 아니었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/oracle-session.webp&#34; alt=&#34;Oracle Session 히스토리&#34;&gt;&lt;/p&gt;
+&lt;p&gt;발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했습니다.
+이 시점에는 이게 문제라고 생각하지 않았습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&amp;ldquo;Private IP로 요청하면 더 빠른 거 아냐?&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었습니다.
+혹시 몰라서 라우터 장비에 &lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP&lt;/a&gt; 모니터링을 추가했습니다.
+IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp&#34; alt=&#34;Network Router&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
+&lt;p&gt;정말 간단하게&amp;hellip; 케이블을 교체해서 해결되었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/solved.png&#34; alt=&#34;Solved&#34;&gt;&lt;/p&gt;
+&lt;p&gt;정각마다 발생하는 스파이크는 DB 백업 솔루션에서 정각마다 실행하는 프로그램이 있어서 발생한 것입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/replace-udp-cable.webp&#34; alt=&#34;Replace UDP Cable&#34;&gt;&lt;/p&gt;
+&lt;p&gt;순간의 오판으로 시간을 허비했습니다.
+익숙한 것도 의심하고, 모니터링의 한계점을 파악할 필요가 있다고 느꼈습니다.&lt;/p&gt;
+- https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/ - Im Changsu 2020 - 2024</description>
+        </item>
     
     
     
@@ -1797,356 +1836,6 @@ JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/java/tomcat/ - Im Changsu 2020 - 2024</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>X Desktop Group</title>
-        <link>https://markruler.github.io/posts/gui/x-based-desktop/</link>
-        <pubDate>Sun, 21 Aug 2022 23:04:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/gui/x-based-desktop/</guid>
-        <description>임창수 https://markruler.github.io/posts/gui/x-based-desktop/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#freedesktoporg&#34;&gt;freedesktop.org&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B4%80%EB%A0%A8-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4&#34;&gt;관련 소프트웨어&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#xdg-user-dirs-xdg-user-directories&#34;&gt;xdg-user-dirs (XDG user directories)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#xdg-open-open&#34;&gt;xdg-open (open)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#x-window-system&#34;&gt;X Window System&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%9C%EB%B2%84-%EB%B2%84%EC%A0%84%EC%97%90-x-window-system-%EC%84%A4%EC%B9%98&#34;&gt;서버 버전에 X Window System 설치&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#x-window-system-%EC%82%AD%EC%A0%9C&#34;&gt;X Window System 삭제&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#x11-forwarding&#34;&gt;X11 Forwarding&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#gnome-%EB%8D%B0%EC%8A%A4%ED%81%AC%ED%83%91&#34;&gt;GNOME 데스크탑&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#gui-toolkit&#34;&gt;GUI Toolkit&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#gtk-gimp-toolkit&#34;&gt;GTK: GIMP ToolKit&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#qt&#34;&gt;Qt&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#gui-%EB%8D%B0%EC%8A%A4%ED%81%AC%ED%83%91-%ED%99%98%EA%B2%BD%EA%B3%BC-%EA%B4%80%EB%A0%A8%EB%90%9C-%EC%B6%94%EA%B0%80-%EC%86%8C%ED%94%84%ED%8A%B8%EC%9B%A8%EC%96%B4&#34;&gt;GUI 데스크탑 환경과 관련된 추가 소프트웨어&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#vnc-virtual-network-computing&#34;&gt;VNC: Virtual Network Computing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#rdp-remote-desktop-protocol&#34;&gt;RDP: Remote Desktop Protocol&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;freedesktoporg&#34;&gt;freedesktop.org&lt;/h1&gt;
-&lt;p&gt;XDG는 &lt;code&gt;X Desktop Group&lt;/code&gt;의 약자로, &lt;a href=&#34;https://freedesktop.org&#34;&gt;freedesktop.org&lt;/a&gt;의 옛 이름입니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;freedesktop.org hosts the development of free and open source software, focused on interoperability and shared technology for open-source graphical and desktop systems.
-&lt;br&gt;
-&lt;br&gt;
-freedesktop.org는 오픈 소스 그래픽 및 데스크탑 시스템을 위한 상호 운용성과 공유 기술에 중점을 둔 무료 및 오픈 소스 소프트웨어의 개발을 주도합니다.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;관련-소프트웨어&#34;&gt;관련 소프트웨어&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.freedesktop.org/wiki/Software/&#34;&gt;Software&lt;/a&gt; - &lt;code&gt;freedesktop.org&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;xdg-user-dirs-xdg-user-directories&#34;&gt;xdg-user-dirs (XDG user directories)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.freedesktop.org/wiki/Software/xdg-user-dirs/&#34;&gt;xdg-user-dirs&lt;/a&gt;는 사용자 홈 디렉터리에서 &amp;ldquo;well known&amp;rdquo; 디렉토리를 관리하기 위한 도구입니다.
-&lt;ul&gt;
-&lt;li&gt;well known 디렉토리? Downloads, Documents, Music, Pictures, Videos 등 사용자 홈 디렉터리에 자주 사용되는 디렉토리를 말합니다.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://wiki.archlinux.org/title/XDG_user_directories&#34;&gt;XDG user directories&lt;/a&gt; - archilinux&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;printenv | grep XDG_
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# XDG_SESSION_ID=57404&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# XDG_RUNTIME_DIR=/run/user/1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# XDG_SESSION_TYPE=tty&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# XDG_SESSION_CLASS=user&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;man xdg-user-dirs-update
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# xdg-user-dirs-update - Update XDG user dir configuration&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;man xdg-user-dir
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# xdg-user-dir - Find an XDG user dir&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xdg-user-dir DESKTOP
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /home/markruler/Desktop&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;전역 설정 파일은 기본적으로 &lt;code&gt;/etc/xdg/user-dirs.conf&lt;/code&gt;에 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/xdg/user-dirs.conf&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# the XDG_CONFIG_HOME and/or XDG_CONFIG_DIRS to override this&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;enabled&lt;/span&gt;=True
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;filename_encoding&lt;/span&gt;=UTF-8
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/xdg/user-dirs.defaults&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Default settings for user directories&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# The values are relative pathnames from the home directory and&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# will be translated on a per-path-element basis into the users locale&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;DESKTOP&lt;/span&gt;=Desktop
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;DOWNLOAD&lt;/span&gt;=Downloads
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;TEMPLATES&lt;/span&gt;=Templates
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PUBLICSHARE&lt;/span&gt;=Public
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;DOCUMENTS&lt;/span&gt;=Documents
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;MUSIC&lt;/span&gt;=Music
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PICTURES&lt;/span&gt;=Pictures
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;VIDEOS&lt;/span&gt;=Videos
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Another alternative is:&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#MUSIC=Documents/Music&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#PICTURES=Documents/Pictures&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#VIDEOS=Documents/Videos&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;유저 설정 파일은 기본적으로 &lt;code&gt;~/.config/user-dirs.dirs&lt;/code&gt;에 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ~/.config/user-dirs.dirs&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This file is written by xdg-user-dirs-update&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# If you want to change or add directories, just edit the line you&amp;#39;re&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# interested in. All local changes will be retained on the next run.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Format is XDG_xxx_DIR=&amp;#34;$HOME/yyy&amp;#34;, where yyy is a shell-escaped&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# homedir-relative path, or XDG_xxx_DIR=&amp;#34;/yyy&amp;#34;, where /yyy is an&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# absolute path. No other format is supported.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_DESKTOP_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Desktop&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_DOWNLOAD_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Downloads&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_TEMPLATES_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Templates&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_PUBLICSHARE_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Public&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_DOCUMENTS_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Documents&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_MUSIC_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Music&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_PICTURES_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Pictures&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;XDG_VIDEOS_DIR&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/Videos&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ~/.config/user-dirs.locale&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;en_US
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;xdg-open-open&#34;&gt;xdg-open (open)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.freedesktop.org/wiki/Software/xdg-utils/&#34;&gt;xdg-open&lt;/a&gt;은 주어진 파일이나 URL을 사용자의 기본 애플리케이션으로 열어주는 도구입니다.&lt;/li&gt;
-&lt;li&gt;디렉토리를 인자로 전달하면 파일 관리자가 열립니다.&lt;/li&gt;
-&lt;li&gt;간혹 열리지 않는 경우가 있는데 GNOME 데스크탑 환경에서는 파일 관리자인 &lt;code&gt;nautilus&lt;/code&gt; 패키지를 설치해야 합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;open .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# xdg-open .&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;파일을 인자로 전달하면 지정된 MIME 타입에 따라 알맞은 프로그램이 실행됩니다.&lt;/li&gt;
-&lt;li&gt;MIME 타입은 &lt;code&gt;~/.config/mimeapps.list&lt;/code&gt;에 설정되어 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ~/.config/mimeapps.list&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[Default Applications]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/html=google-chrome.desktop
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x-scheme-handler/http=google-chrome.desktop
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;x-scheme-handler/https=google-chrome.desktop
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[Added Associations]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;image/png=gimp_gimp.desktop;pinta_pinta.desktop;shotwell-viewer.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/x-csrc=code.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;image/jpeg=shotwell-viewer.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;application/sql=code.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/markdown=code.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/html=google-chrome.desktop;code.desktop;microsoft-edge.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;text/plain=code.desktop;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;x-window-system&#34;&gt;X Window System&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.x.org/&#34;&gt;X.Org&lt;/a&gt;은 &lt;a href=&#34;https://en.wikipedia.org/wiki/X_Window_System&#34;&gt;X 윈도우 시스템&lt;/a&gt;(X Window System, X11)을 만들었습니다.&lt;/li&gt;
-&lt;li&gt;유닉스 계열 운영 체제에서 일반적으로 사용되는 &lt;a href=&#34;https://en.wikipedia.org/wiki/Bitmap&#34;&gt;비트맵&lt;/a&gt; 디스플레이용 &lt;a href=&#34;https://en.wikipedia.org/wiki/Windowing_system&#34;&gt;윈도우 시스템&lt;/a&gt;입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;서버-버전에-x-window-system-설치&#34;&gt;서버 버전에 X Window System 설치&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;서버 업데이트&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dnf update -y
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;X Window System 설치&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dnf groupinstall &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Server with GUI&amp;#34;&lt;/span&gt; -y
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;시작 레벨 설정&lt;/strong&gt;:
-설치 후, 시스템이 GUI 모드로 부팅되도록 기본 런레벨을 변경해야 합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl set-default graphical.target
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Removed &amp;#34;/etc/systemd/system/default.target&amp;#34;.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Created symlink /etc/systemd/system/default.target → /usr/lib/systemd/system/graphical.target.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;시스템 재부팅&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo reboot
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;재부팅 후, 서버가 GUI 모드로 부팅됩니다.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;x-window-system-삭제&#34;&gt;X Window System 삭제&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;GUI 모드를 비활성화하고 기본 런레벨을 변경&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl set-default multi-user.target
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Removed &amp;#34;/etc/systemd/system/default.target&amp;#34;.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Created symlink /etc/systemd/system/default.target → /usr/lib/systemd/system/multi-user.target.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;X Window System 패키지 제거&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dnf groupremove &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Server with GUI&amp;#34;&lt;/span&gt; -y
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;사용하지 않는 패키지 정리&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dnf autoremove -y
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;strong&gt;시스템 재부팅&lt;/strong&gt;:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo reboot
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;x11-forwarding&#34;&gt;X11 Forwarding&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;macOS에서 &lt;a href=&#34;https://www.xquartz.org/&#34;&gt;XQuartz&lt;/a&gt;를 사용하여 원격으로 X11에 접속할 수 있습니다.
-&lt;ul&gt;
-&lt;li&gt;서버에서 이를 허용하기 위해 SSH 데몬 설정에 X11 포워딩을 허용해야 합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;RHEL에서 다양한 X 유틸들을 제공하는 &lt;code&gt;xorg-x11-apps&lt;/code&gt; 패키지는 &lt;a href=&#34;https://access.redhat.com/solutions/3887371&#34;&gt;9부터 deprecated&lt;/a&gt; 되었습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sshd_config&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#X11Forwarding no&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#X11DisplayOffset 10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#X11UseLocalhost yes&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X11Forwarding yes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X11DisplayOffset &lt;span style=&#34;color:#f60&#34;&gt;10&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;X11UseLocalhost yes
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sshd -t | sshd -T
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl reload sshd
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;macOS에서 XQuartz 설치 후 X11로 연결합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# macOS&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;brew install --cask xquartz
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 재시작&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;reboot
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh -X user@host
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Activate the web console with: systemctl enable --now cockpit.socket&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;실행할 수 있는 GUI 프로그램을 실행하여 X Window System이 동작하는지 확인합니다.
-&lt;ul&gt;
-&lt;li&gt;아래는 Firefox를 실행한 결과입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;firefox
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# No matching fbConfigs or visuals found&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/gui/xdg/x-firefox.png&#34; alt=&#34;Firefox&#34;&gt;&lt;/p&gt;
-&lt;p&gt;혹은 xterm 으로 확인할 수도 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# dnf provides xterm&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dnf install xterm
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;xterm
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;gnome-데스크탑&#34;&gt;GNOME 데스크탑&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.freedesktop.org/wiki/GNOME/&#34;&gt;GNOME Desktop&lt;/a&gt;은 GNU 프로젝트에서 만든 유용한 데스크톱 환경입니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;GNOME은 다양한 방식으로 설정할 수 있습니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Gconf&lt;/strong&gt; - XML based database (backend system). The older one.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dconf&lt;/strong&gt; - BLOB based database (backend system). The newer one.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Gsettings&lt;/strong&gt; - CLI tool to edit settings. Looks like it works only with Dconf (although I saw somewhere that it might work with Gconf).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;아래 명령어들은 제가 데스크탑을 사용할 때 macOS처럼 독을 하단에 두기 위해 사용한 설정입니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gnome-shell --version
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# GNOME Shell 41.8.1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock dock-position BOTTOM
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock animation-time 0.2
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock transparency-mode FIXED &lt;span style=&#34;color:#0f0&#34;&gt;# 투명도 모드&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock background-opacity 0.6 &lt;span style=&#34;color:#0f0&#34;&gt;# 배경 투명도&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock running-indicator-style DASHES &lt;span style=&#34;color:#0f0&#34;&gt;# 실행 중인 앱 표시 형태&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock intellihide-mode FOCUS_APPLICATION_WINDOWS
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock dash-max-icon-size &lt;span style=&#34;color:#f60&#34;&gt;32&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;# 범위: 16-64&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock extend-height false &lt;span style=&#34;color:#0f0&#34;&gt;# 화면에 아이콘이 꽉 차지 않을 때 여백을 두지 않음&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock show-windows-preview true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock show-favorites true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock show-trash true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock show-mounts true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock multi-monitor true &lt;span style=&#34;color:#0f0&#34;&gt;# 모니터가 여러 개일 때 어느 모니터에서든 dock을 볼 수 있음&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock scroll-action cycle-windows &lt;span style=&#34;color:#0f0&#34;&gt;# 아이콘 위에서 마우스 스크롤하면 여러 윈도우를 이동할 수 있음&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys true &lt;span style=&#34;color:#0f0&#34;&gt;# `super`+`num`&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock hotkeys-show-dock true
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gsettings set org.gnome.shell.extensions.dash-to-dock force-straight-corner false
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;gui-toolkit&#34;&gt;GUI Toolkit&lt;/h1&gt;
-&lt;p&gt;리눅스에서 GUI 개발을 위한 가장 대표적인 툴킷 라이브러리는 2가지가 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.kernelpanic.kr/25&#34;&gt;출처&lt;/a&gt;&lt;/p&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;&lt;/th&gt;
-          &lt;th&gt;GTK&lt;/th&gt;
-          &lt;th&gt;QT&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;지원언어&lt;/td&gt;
-          &lt;td&gt;C, C++, Python 등&lt;/td&gt;
-          &lt;td&gt;C++, Python 등&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;플랫폼&lt;/td&gt;
-          &lt;td&gt;Linux, Windows, MacOS&lt;/td&gt;
-          &lt;td&gt;Linux, WIndows, MacOS&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;라이센스&lt;/td&gt;
-          &lt;td&gt;LGPL2.1&lt;/td&gt;
-          &lt;td&gt;LGPL, GPL, 상용 라이센스&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;대표 데스크탑 환경&lt;/td&gt;
-          &lt;td&gt;GNOME, Xfce&lt;/td&gt;
-          &lt;td&gt;KDE&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;gtk-gimp-toolkit&#34;&gt;GTK: GIMP ToolKit&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/GTK&#34;&gt;Wikipedia&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;GNOME Desktop: desktop environment&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.gimp.org/&#34;&gt;GIMP (GNU Image Manipulation Program)&lt;/a&gt;: raster graphics editor&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.libreoffice.org/&#34;&gt;LibreOffice&lt;/a&gt;: office suite&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.mozilla.org/firefox/&#34;&gt;Mozilla Firefox&lt;/a&gt;: web browser&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.thunderbird.net/&#34;&gt;Mozilla Thunderbird&lt;/a&gt;: email client&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;qt&#34;&gt;Qt&lt;/h2&gt;
-&lt;p&gt;Qt(&amp;ldquo;cute&amp;quot;로 발음)는 GUI 프로그램 개발에 널리 쓰이는 크로스 플랫폼 소프트웨어입니다.
-서버용 콘솔과 명령 줄 도구와 같은 CLI 프로그램 개발에도 사용됩니다.
-그래픽 사용자 인터페이스를 사용하는 경우에는 Qt를
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Widget_toolkit&#34;&gt;Widget toolkit&lt;/a&gt;으로 분류합니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/KDE&#34;&gt;KDE&lt;/a&gt;: K(ool) Desktop Environment
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://kdenlive.org/&#34;&gt;kdenlive&lt;/a&gt;: video editing software&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;gui-데스크탑-환경과-관련된-추가-소프트웨어&#34;&gt;GUI 데스크탑 환경과 관련된 추가 소프트웨어&lt;/h1&gt;
-&lt;h2 id=&#34;vnc-virtual-network-computing&#34;&gt;VNC: Virtual Network Computing&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;RFB 프로토콜(Remote Frame Buffer protocol)을 이용하여 원격으로 다른 컴퓨터를 제어하는 그래픽 데스크탑 공유 시스템입니다.&lt;/li&gt;
-&lt;li&gt;RealVNC, TightVNC, TigerVNC 등이 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;rdp-remote-desktop-protocol&#34;&gt;RDP: Remote Desktop Protocol&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;RDP는 Microsoft에서 만든 프로토콜로 Windows에서는 &lt;a href=&#34;https://learn.microsoft.com/windows-server/administration/windows-commands/mstsc&#34;&gt;MSTSC&lt;/a&gt;(Microsoft Terminal Services Client)를 사용하여 원격 데스크탑을 사용할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;XRDP, MS 원격 데스크탑, 팀뷰어 등이 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/neutrinolabs/xrdp&#34;&gt;XRDP&lt;/a&gt;는 리눅스 서버에 RDP로 연결할 수 있습니다.
-&lt;ul&gt;
-&lt;li&gt;XDG에서 만든 건 아닙니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://learn.microsoft.com/azure/virtual-machines/linux/use-remote-desktop&#34;&gt;Ubuntu에 원격 데스크탑을 사용하도록 xrdp 설치 및 구성&lt;/a&gt; - Microsoft&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Freedesktop.org&#34;&gt;freedesktop.org&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://askubuntu.com/questions/249887/gconf-dconf-gsettings-and-the-relationship-between-them&#34;&gt;Ask Ubuntu&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Qt_(software)&#34;&gt;Qt&lt;/a&gt; - Wikipedia&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/gui/x-based-desktop/ - Im Changsu 2020 - 2024</description>
         </item>
     
     
