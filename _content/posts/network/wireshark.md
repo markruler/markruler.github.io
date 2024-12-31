@@ -11,12 +11,17 @@ categories:
   - wiki
 ---
 
+Wireshark란 오픈 소스 네트워크 프로토콜 분석기입니다.
+GUI와 CLI 환경 모두에서 사용할 수 있으며, 네트워크 문제를 분석할 때 많이 사용됩니다.
+플랫폼 또한 Windows, macOS, Linux 등 다양한 운영체제에서 사용할 수 있습니다.
 GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 [Wireshark](https://www.wireshark.org/docs/man-pages/wireshark.html)를 사용하는 경우가 많습니다.
-하지만 여기서는 CLI 환경에서도 사용할 수 있는
+여기서는 CLI 환경에서도 사용할 수 있는
 [TShark](https://www.wireshark.org/docs/man-pages/tshark.html)를 소개합니다.
 
 # 설치
+
+Ubuntu 22.04에서 설치하는 방법을 소개합니다.
 
 ```sh
 # CLI
@@ -25,7 +30,7 @@ sudo apt install tshark
 sudo apt install wireshark
 ```
 
-wireshark 그룹 추가 후 컴퓨터를 재부팅해야 합니다.
+`wireshark` 그룹 추가 후 컴퓨터를 재부팅해야 합니다.
 
 ```sh
 sudo usermod -aG wireshark $USER
@@ -45,6 +50,8 @@ tshark -h
 
 # 네트워크 인터페이스 조회
 
+먼저 TShark로 사용할 수 있는 네트워크 인터페이스를 조회합니다.
+
 ```sh
 # tshark --list-interfaces
 tshark -D
@@ -59,7 +66,15 @@ tshark -D
 # ...
 ```
 
-# 패킷 분석 시 사용할 수 있는 옵션
+# 패킷 캡처 시 사용할 수 있는 옵션
+
+`tshark` 라는 명령어를 옵션없이 실행하면 기본적으로 모든 네트워크 인터페이스를 경유하는 패킷을 캡처합니다.
+네트워크 분석하기에는 너무 많은 패킷이 캡처되기 때문에
+네트워크 인터페이스, 프로토콜, 호스트, 포트 등을 지정해서 필터링합니다.
+
+```sh
+tshark
+```
 
 ## Network interface
 
@@ -106,47 +121,17 @@ tshark -D
 - `-r`, `--read-file` 파일에서 읽기
   - `-r file` file에서 읽기
 
-## Diagnostic output
-
-## Miscellaneous
-
 # 패킷 분석
+
+![Wireshark TUI](/images/network/wireshark/wireshark-tui.png)
 
 기본적으로 특정 네트워크 인터페이스를 지정해서 실시간으로 패킷을 캡처하거나
 이미 캡처된 pcap 파일을 열어서 분석할 수 있습니다.
 
-## 모든 인터페이스 캡쳐
+## 웹 앱 패킷 캡처
 
 ```sh
-tshark -i any
-```
-
-## localhost(lo, loopback)의 8080 포트 캡쳐
-
-```sh
-tshark -i lo -Y 'tcp.port == 8080' --color
-```
-
-![Wireshark TUI](/images/network/wireshark/wireshark-tui.png)
-
-## HTTP body 출력
-
-- 전체 body
-
-```sh
-tshark -i lo -Y 'tcp.port == 8080' -T fields -e http.file_data --color
-```
-
-- response body만 출력
-
-```sh
-tshark -i lo -Y 'tcp.port == 8080 && http.response' -T fields -e http.file_data --color
-```
-
-## 웹 앱 패킷 캡쳐
-
-```sh
-# youtube
+# Youtube
 tshark -i any -f 'host www.youtube.com' --color
 ```
 
@@ -155,28 +140,35 @@ tshark -i any -f 'host www.youtube.com' -T fields -e ip.src -e ip.dst -e tcp.por
 ```
 
 ```sh
-# 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡쳐 (앱에서 서버 도메인을 private ip로 설정)
+# 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡처 (앱에서 서버 도메인을 private ip로 설정)
 tshark -i any -Y 'http and (tcp.port == 15500 or tcp.port == 33000) and ip.dst == 192.168.0.15' -T json
 ```
 
 ```sh
-# Postman처럼 localhost로 요청하는 패킷 캡쳐
+# Postman처럼 localhost로 요청하는 패킷 캡처
 tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T json
 ```
 
 ```sh
 # localhost의 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력
 tshark -i lo -Y 'http and (tcp.dstport == 15500 or tcp.dstport == 33000)' -T fields -e http.file_data
+tshark -i lo -Y 'http.request and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
 # localhost의 15500 혹은 33000 포트에서 응답하는 패킷에서 http body 출력
 tshark -i lo -Y 'http and (tcp.srcport == 15500 or tcp.srcport == 33000)' -T fields -e http.file_data
+tshark -i lo -Y 'http.response and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
 # localhost의 15500 혹은 33000 포트를 경유하는 모든 패킷에서 http body 출력
 tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
 ```
 
 ## 파일 출력
 
+**파일로 출력할 때**는 pcap-filter(`-f`)를 사용할 수 있지만, Wireshark display-filter(`-Y`)를 사용할 수 없습니다.
+
+> tshark: Display filters aren't supported when capturing and saving the captured packets.
+
 ```sh
-tshark -i any -w capture.pcap
+# tcp 프로토콜의 port 15500을 경유하는 패킷 5초간 캡처해서 capture.pcap 파일로 저장
+tshark -i lo -f 'tcp port 15500' -w capture.pcap -a duration:5
 ```
 
 ## 파일 읽기
@@ -184,6 +176,11 @@ tshark -i any -w capture.pcap
 ```sh
 # tshark로 파일 읽기
 tshark -r capture.pcap --color
+```
+
+```sh
+# JSON 형식으로 읽기
+tshark -r capture.pcap -T json | less
 ```
 
 ```sh

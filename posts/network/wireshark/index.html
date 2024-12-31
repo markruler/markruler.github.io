@@ -230,8 +230,8 @@
 						
 						
 							<li>
-								<a href="#%ed%8c%a8%ed%82%b7-%eb%b6%84%ec%84%9d-%ec%8b%9c-%ec%82%ac%ec%9a%a9%ed%95%a0-%ec%88%98-%ec%9e%88%eb%8a%94-%ec%98%b5%ec%85%98" class="nav-패킷-분석-시-사용할-수-있는-옵션">
-									패킷 분석 시 사용할 수 있는 옵션
+								<a href="#%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b2%98-%ec%8b%9c-%ec%82%ac%ec%9a%a9%ed%95%a0-%ec%88%98-%ec%9e%88%eb%8a%94-%ec%98%b5%ec%85%98" class="nav-패킷-캡처-시-사용할-수-있는-옵션">
+									패킷 캡처 시 사용할 수 있는 옵션
 								</a>
 							</li>
 						
@@ -341,42 +341,6 @@
 						
 						
 						
-						
-						
-							<li>
-								<a href="#diagnostic-output" class="nav-diagnostic-output">
-									Diagnostic output
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#miscellaneous" class="nav-miscellaneous">
-									Miscellaneous
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
 							
 								</ul>
 							
@@ -408,62 +372,8 @@
 						
 						
 							<li>
-								<a href="#%eb%aa%a8%eb%93%a0-%ec%9d%b8%ed%84%b0%ed%8e%98%ec%9d%b4%ec%8a%a4-%ec%ba%a1%ec%b3%90" class="nav-모든-인터페이스-캡쳐">
-									모든 인터페이스 캡쳐
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#localhostlo-loopback%ec%9d%98-8080-%ed%8f%ac%ed%8a%b8-%ec%ba%a1%ec%b3%90" class="nav-localhostlo-loopback의-8080-포트-캡쳐">
-									localhost(lo, loopback)의 8080 포트 캡쳐
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#http-body-%ec%b6%9c%eb%a0%a5" class="nav-http-body-출력">
-									HTTP body 출력
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%ec%9b%b9-%ec%95%b1-%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b3%90" class="nav-웹-앱-패킷-캡쳐">
-									웹 앱 패킷 캡쳐
+								<a href="#%ec%9b%b9-%ec%95%b1-%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b2%98" class="nav-웹-앱-패킷-캡처">
+									웹 앱 패킷 캡처
 								</a>
 							</li>
 						
@@ -609,16 +519,20 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <p>GUI가 꽤 편하기 때문에 Windows나 macOS에서는
+                    <p>Wireshark란 오픈 소스 네트워크 프로토콜 분석기입니다.
+GUI와 CLI 환경 모두에서 사용할 수 있으며, 네트워크 문제를 분석할 때 많이 사용됩니다.
+플랫폼 또한 Windows, macOS, Linux 등 다양한 운영체제에서 사용할 수 있습니다.
+GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 <a href="https://www.wireshark.org/docs/man-pages/wireshark.html">Wireshark</a>를 사용하는 경우가 많습니다.
-하지만 여기서는 CLI 환경에서도 사용할 수 있는
+여기서는 CLI 환경에서도 사용할 수 있는
 <a href="https://www.wireshark.org/docs/man-pages/tshark.html">TShark</a>를 소개합니다.</p>
 <h1 id="설치">설치</h1>
+<p>Ubuntu 22.04에서 설치하는 방법을 소개합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># CLI</span>
 </span></span><span style="display:flex;"><span>sudo apt install tshark
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># GUI</span>
 </span></span><span style="display:flex;"><span>sudo apt install wireshark
-</span></span></code></pre></div><p>wireshark 그룹 추가 후 컴퓨터를 재부팅해야 합니다.</p>
+</span></span></code></pre></div><p><code>wireshark</code> 그룹 추가 후 컴퓨터를 재부팅해야 합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo usermod -aG wireshark <span style="color:#eedd82">$USER</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>reboot
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -h
@@ -627,6 +541,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># See https://www.wireshark.org for more information.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Usage: tshark [options] ...</span>
 </span></span></code></pre></div><h1 id="네트워크-인터페이스-조회">네트워크 인터페이스 조회</h1>
+<p>먼저 TShark로 사용할 수 있는 네트워크 인터페이스를 조회합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tshark --list-interfaces</span>
 </span></span><span style="display:flex;"><span>tshark -D
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>1. enp2s0
@@ -635,8 +550,12 @@
 </span></span><span style="display:flex;"><span>4. any
 </span></span><span style="display:flex;"><span>5. lo (Loopback)
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
-</span></span></code></pre></div><h1 id="패킷-분석-시-사용할-수-있는-옵션">패킷 분석 시 사용할 수 있는 옵션</h1>
-<h2 id="network-interface">Network interface</h2>
+</span></span></code></pre></div><h1 id="패킷-캡처-시-사용할-수-있는-옵션">패킷 캡처 시 사용할 수 있는 옵션</h1>
+<p><code>tshark</code> 라는 명령어를 옵션없이 실행하면 기본적으로 모든 네트워크 인터페이스를 경유하는 패킷을 캡처합니다.
+네트워크 분석하기에는 너무 많은 패킷이 캡처되기 때문에
+네트워크 인터페이스, 프로토콜, 호스트, 포트 등을 지정해서 필터링합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark
+</span></span></code></pre></div><h2 id="network-interface">Network interface</h2>
 <ul>
 <li><code>-i</code>, <code>--interface</code> 인터페이스의 이름 혹은 인덱스를 지정
 <ul>
@@ -711,44 +630,38 @@
 </ul>
 </li>
 </ul>
-<h2 id="diagnostic-output">Diagnostic output</h2>
-<h2 id="miscellaneous">Miscellaneous</h2>
 <h1 id="패킷-분석">패킷 분석</h1>
+<p><img src="/images/network/wireshark/wireshark-tui.png" alt="Wireshark TUI"></p>
 <p>기본적으로 특정 네트워크 인터페이스를 지정해서 실시간으로 패킷을 캡처하거나
 이미 캡처된 pcap 파일을 열어서 분석할 수 있습니다.</p>
-<h2 id="모든-인터페이스-캡쳐">모든 인터페이스 캡쳐</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i any
-</span></span></code></pre></div><h2 id="localhostlo-loopback의-8080-포트-캡쳐">localhost(lo, loopback)의 8080 포트 캡쳐</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;tcp.port == 8080&#39;</span> --color
-</span></span></code></pre></div><p><img src="/images/network/wireshark/wireshark-tui.png" alt="Wireshark TUI"></p>
-<h2 id="http-body-출력">HTTP body 출력</h2>
-<ul>
-<li>전체 body</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;tcp.port == 8080&#39;</span> -T fields -e http.file_data --color
-</span></span></code></pre></div><ul>
-<li>response body만 출력</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;tcp.port == 8080 &amp;&amp; http.response&#39;</span> -T fields -e http.file_data --color
-</span></span></code></pre></div><h2 id="웹-앱-패킷-캡쳐">웹 앱 패킷 캡쳐</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># youtube</span>
+<h2 id="웹-앱-패킷-캡처">웹 앱 패킷 캡처</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Youtube</span>
 </span></span><span style="display:flex;"><span>tshark -i any -f <span style="color:#87ceeb">&#39;host www.youtube.com&#39;</span> --color
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i any -f <span style="color:#87ceeb">&#39;host www.youtube.com&#39;</span> -T fields -e ip.src -e ip.dst -e tcp.port
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡쳐 (앱에서 서버 도메인을 private ip로 설정)</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡처 (앱에서 서버 도메인을 private ip로 설정)</span>
 </span></span><span style="display:flex;"><span>tshark -i any -Y <span style="color:#87ceeb">&#39;http and (tcp.port == 15500 or tcp.port == 33000) and ip.dst == 192.168.0.15&#39;</span> -T json
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Postman처럼 localhost로 요청하는 패킷 캡쳐</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Postman처럼 localhost로 요청하는 패킷 캡처</span>
 </span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http and (tcp.port == 15500 or tcp.port == 33000)&#39;</span> -T json
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># localhost의 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력</span>
 </span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http and (tcp.dstport == 15500 or tcp.dstport == 33000)&#39;</span> -T fields -e http.file_data
+</span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http.request and (tcp.port == 15500 or tcp.port == 33000)&#39;</span> -T fields -e http.file_data
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># localhost의 15500 혹은 33000 포트에서 응답하는 패킷에서 http body 출력</span>
 </span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http and (tcp.srcport == 15500 or tcp.srcport == 33000)&#39;</span> -T fields -e http.file_data
+</span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http.response and (tcp.port == 15500 or tcp.port == 33000)&#39;</span> -T fields -e http.file_data
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># localhost의 15500 혹은 33000 포트를 경유하는 모든 패킷에서 http body 출력</span>
 </span></span><span style="display:flex;"><span>tshark -i lo -Y <span style="color:#87ceeb">&#39;http and (tcp.port == 15500 or tcp.port == 33000)&#39;</span> -T fields -e http.file_data
 </span></span></code></pre></div><h2 id="파일-출력">파일 출력</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>tshark -i any -w capture.pcap
+<p><strong>파일로 출력할 때</strong>는 pcap-filter(<code>-f</code>)를 사용할 수 있지만, Wireshark display-filter(<code>-Y</code>)를 사용할 수 없습니다.</p>
+<blockquote>
+<p>tshark: Display filters aren&rsquo;t supported when capturing and saving the captured packets.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tcp 프로토콜의 port 15500을 경유하는 패킷 5초간 캡처해서 capture.pcap 파일로 저장</span>
+</span></span><span style="display:flex;"><span>tshark -i lo -f <span style="color:#87ceeb">&#39;tcp port 15500&#39;</span> -w capture.pcap -a duration:5
 </span></span></code></pre></div><h2 id="파일-읽기">파일 읽기</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tshark로 파일 읽기</span>
 </span></span><span style="display:flex;"><span>tshark -r capture.pcap --color
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># JSON 형식으로 읽기</span>
+</span></span><span style="display:flex;"><span>tshark -r capture.pcap -T json | less
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># wireshark GUI로 파일 읽기</span>
 </span></span><span style="display:flex;"><span>wireshark capture.pcap
 </span></span></code></pre></div>
@@ -1022,8 +935,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ed%8c%a8%ed%82%b7-%eb%b6%84%ec%84%9d-%ec%8b%9c-%ec%82%ac%ec%9a%a9%ed%95%a0-%ec%88%98-%ec%9e%88%eb%8a%94-%ec%98%b5%ec%85%98" class="nav-패킷-분석-시-사용할-수-있는-옵션">
-									패킷 분석 시 사용할 수 있는 옵션
+								<a href="#%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b2%98-%ec%8b%9c-%ec%82%ac%ec%9a%a9%ed%95%a0-%ec%88%98-%ec%9e%88%eb%8a%94-%ec%98%b5%ec%85%98" class="nav-패킷-캡처-시-사용할-수-있는-옵션">
+									패킷 캡처 시 사용할 수 있는 옵션
 								</a>
 							</li>
 						
@@ -1133,42 +1046,6 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 						
-						
-						
-							<li>
-								<a href="#diagnostic-output" class="nav-diagnostic-output">
-									Diagnostic output
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#miscellaneous" class="nav-miscellaneous">
-									Miscellaneous
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
 							
 								</ul>
 							
@@ -1200,62 +1077,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%eb%aa%a8%eb%93%a0-%ec%9d%b8%ed%84%b0%ed%8e%98%ec%9d%b4%ec%8a%a4-%ec%ba%a1%ec%b3%90" class="nav-모든-인터페이스-캡쳐">
-									모든 인터페이스 캡쳐
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#localhostlo-loopback%ec%9d%98-8080-%ed%8f%ac%ed%8a%b8-%ec%ba%a1%ec%b3%90" class="nav-localhostlo-loopback의-8080-포트-캡쳐">
-									localhost(lo, loopback)의 8080 포트 캡쳐
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#http-body-%ec%b6%9c%eb%a0%a5" class="nav-http-body-출력">
-									HTTP body 출력
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%ec%9b%b9-%ec%95%b1-%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b3%90" class="nav-웹-앱-패킷-캡쳐">
-									웹 앱 패킷 캡쳐
+								<a href="#%ec%9b%b9-%ec%95%b1-%ed%8c%a8%ed%82%b7-%ec%ba%a1%ec%b2%98" class="nav-웹-앱-패킷-캡처">
+									웹 앱 패킷 캡처
 								</a>
 							</li>
 						
