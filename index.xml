@@ -43,7 +43,8 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# See https://www.wireshark.org for more information.&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Usage: tshark [options] ...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;네트워크-인터페이스-조회&#34;&gt;네트워크 인터페이스 조회&lt;/h1&gt;
-&lt;p&gt;먼저 TShark로 사용할 수 있는 네트워크 인터페이스를 조회합니다.&lt;/p&gt;
+&lt;p&gt;먼저 TShark로 사용할 수 있는 네트워크 인터페이스를 조회합니다.
+&lt;code&gt;tcpdump&lt;/code&gt;와 유사하지만 특정 옵션이 더 추가되어 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark --list-interfaces&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -D
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1. enp2s0
@@ -51,31 +52,59 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3. vetha1d3dea
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;4. any
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5. lo (Loopback)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6. enx0c3796393822
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;7. bluetooth-monitor
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8. nflog
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;9. nfqueue
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;10. dbus-system
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;11. dbus-session
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;12. ciscodump (Cisco remote capture)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;13. dpauxmon (DisplayPort AUX channel monitor capture)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;14. randpkt (Random packet generator)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;15. sdjournal (systemd Journal Export)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;16. sshdump (SSH remote capture)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;17. udpdump (UDP Listener remote capture)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;tcpdump의 경우&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo tcpdump -D
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1.enp2s0 [Up, Running, Connected]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2.docker0 [Up, Running, Connected]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;3.vetha1d3dea [Up, Running, Connected]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;4.any (Pseudo-device that captures on all interfaces) [Up, Running]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;5.lo [Up, Running, Loopback]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6.enx0c3796393822 [Up, Disconnected]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;7.bluetooth-monitor (Bluetooth Linux Monitor) [Wireless]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;8.nflog (Linux netfilter log (NFLOG) interface) [none]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;9.nfqueue (Linux netfilter queue (NFQUEUE) interface) [none]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;10.dbus-system (D-Bus system bus) [none]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;11.dbus-session (D-Bus session bus) [none]
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;패킷-캡처-시-사용할-수-있는-옵션&#34;&gt;패킷 캡처 시 사용할 수 있는 옵션&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;tshark&lt;/code&gt; 라는 명령어를 옵션없이 실행하면 기본적으로 모든 네트워크 인터페이스를 경유하는 패킷을 캡처합니다.
+&lt;p&gt;&lt;code&gt;tshark&lt;/code&gt; 라는 명령어를 옵션없이 실행하면 기본적으로
+첫번째 non-loopback 인터페이스가 선택되고
+이 인터페이스를 경유하는 모든 패킷을 캡처합니다.
 네트워크 분석하기에는 너무 많은 패킷이 캡처되기 때문에
 네트워크 인터페이스, 프로토콜, 호스트, 포트 등을 지정해서 필터링합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;network-interface&#34;&gt;Network interface&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;, &lt;code&gt;--interface&lt;/code&gt; 인터페이스의 이름 혹은 인덱스를 지정
+&lt;li&gt;&lt;code&gt;-i&lt;/code&gt;, &lt;code&gt;--interface&lt;/code&gt; 네트워크 인터페이스의 이름 혹은 인덱스를 지정합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-i eth0&lt;/code&gt; &lt;code&gt;eth0&lt;/code&gt; 인터페이스 캡처&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-i 2&lt;/code&gt; 2번째 인터페이스 캡처&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-i eth0&lt;/code&gt; &lt;code&gt;eth0&lt;/code&gt; 인터페이스를 캡처합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-i 2&lt;/code&gt; 2번째 인터페이스를 캡처합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;processing&#34;&gt;Processing&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-f&lt;/code&gt; &lt;a href=&#34;https://www.tcpdump.org/manpages/pcap-filter.7.html&#34;&gt;pcap-filter syntax&lt;/a&gt;를 사용하여 패킷 필터링
+&lt;li&gt;&lt;code&gt;-f&lt;/code&gt; &lt;a href=&#34;https://www.tcpdump.org/manpages/pcap-filter.7.html&#34;&gt;pcap-filter syntax&lt;/a&gt;를 사용하여 패킷을 필터링합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-f &amp;quot;tcp port 80&amp;quot;&lt;/code&gt; TCP port 80 패킷 필터링&lt;/li&gt;
+&lt;li&gt;패킷을 캡처할 때 사용됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-f &amp;quot;tcp port 80&amp;quot;&lt;/code&gt; TCP port 80 패킷 필터링합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-Y&lt;/code&gt;, &lt;code&gt;--display-filter&lt;/code&gt; &lt;a href=&#34;https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html&#34;&gt;Wireshark displa&lt;strong&gt;Y&lt;/strong&gt; filter syntax&lt;/a&gt; 사용하여 패킷 표시
+&lt;li&gt;&lt;code&gt;-Y&lt;/code&gt;, &lt;code&gt;--display-filter&lt;/code&gt; &lt;a href=&#34;https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html&#34;&gt;Wireshark displa&lt;strong&gt;Y&lt;/strong&gt; filter syntax&lt;/a&gt; 사용하여 보고싶은 패킷만 표시합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-Y &amp;quot;http.request&amp;quot;&lt;/code&gt; HTTP request 패킷 표시&lt;/li&gt;
+&lt;li&gt;패킷을 읽을 때 사용됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-Y &amp;quot;http.request&amp;quot;&lt;/code&gt; HTTP request 패킷 표시합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -83,52 +112,56 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;-a &amp;lt;autostop cond.&amp;gt; ...&lt;/code&gt;, &lt;code&gt;--autostop &amp;lt;autostop cond.&amp;gt; …&lt;/code&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;duration:NUM&lt;/code&gt; NUM 초(seconds) 후 중지 (기본값 무한, 소수점 사용 가능)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;filesize:NUM&lt;/code&gt; NUM kB 이상 캡처 후 중지 (최대 2GiB)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;packets:NUM&lt;/code&gt; NUM 개 패킷 캡처 후 중지 (&lt;code&gt;-c&lt;/code&gt;와 같음)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;duration:NUM&lt;/code&gt; NUM 초(seconds) 후 중지합니다. (기본값 무한, 소수점 사용 가능)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;filesize:NUM&lt;/code&gt; NUM kB 이상 캡처 후 중지합니다. (최대 2GiB)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;packets:NUM&lt;/code&gt; NUM 개 패킷 캡처 후 중지합니다. (&lt;code&gt;-c&lt;/code&gt;와 동일)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; n개 패킷 캡처 후 중지
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; n개 패킷 캡처 후 중지합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-c 10&lt;/code&gt; 10개 패킷 캡처 후 중지&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-c 10&lt;/code&gt; 10개 패킷 캡처 후 중지합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;write&#34;&gt;Write&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-w&lt;/code&gt;, &lt;code&gt;--write-file&lt;/code&gt; 파일에 쓰기 위한 파일 이름 설정 (stdout의 경우 &amp;lsquo;-&amp;rsquo;)
+&lt;li&gt;&lt;code&gt;-w&lt;/code&gt;, &lt;code&gt;--write-file&lt;/code&gt; 지정한 이름의 파일로 출력합니다. (stdout의 경우 &amp;lsquo;-&amp;rsquo;)
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-w file&lt;/code&gt; file 이름으로 쓰기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-w capture.pcap&lt;/code&gt; &amp;ldquo;capture.pcap&amp;quot;이라는 파일로 저장합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T&lt;/code&gt; 출력 형식을 선택
+&lt;li&gt;&lt;code&gt;-T&lt;/code&gt; 출력 형식을 지정합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-T fields&lt;/code&gt; 필드를 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T pdml&lt;/code&gt; Packet Details Markup Language (PDML) 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T psml&lt;/code&gt; Packet Summary Markup Language (PSML) 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T json&lt;/code&gt; JSON 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T jsonraw&lt;/code&gt; JSON 출력 (no formatting)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-T ek&lt;/code&gt; Elasticsearch bulk format&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T fields&lt;/code&gt; 지정한 필드를 출력합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T pdml&lt;/code&gt; Packet Details Markup Language (PDML) 형식으로 출력합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T psml&lt;/code&gt; Packet Summary Markup Language (PSML) 형식으로 출력합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T json&lt;/code&gt; JSON 형식으로 출력합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T jsonraw&lt;/code&gt; 포맷팅 없이 JSON 형식으로 출력합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-T ek&lt;/code&gt; Elasticsearch에 bulk insert하기 위한 형식으로 출력합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-e &amp;lt;field&amp;gt;&lt;/code&gt; 위 출력 옵션 중 &lt;code&gt;ek&lt;/code&gt;, &lt;code&gt;fields&lt;/code&gt;, &lt;code&gt;json&lt;/code&gt;, &lt;code&gt;pdml&lt;/code&gt; 사용 시 출력할 필드 지정
+&lt;li&gt;&lt;code&gt;-e &amp;lt;field&amp;gt;&lt;/code&gt; 위 출력 옵션 중 &lt;code&gt;ek&lt;/code&gt;, &lt;code&gt;fields&lt;/code&gt;, &lt;code&gt;json&lt;/code&gt;, &lt;code&gt;pdml&lt;/code&gt; 사용 시 출력할 필드를 지정합니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-e tcp.port&lt;/code&gt; TCP port 출력&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e tcp.port&lt;/code&gt; TCP port를 출력합니다.&lt;/li&gt;
 &lt;li&gt;이 옵션은 여러 필드를 출력하기 위해 반복할 수 있습니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-e tcp.port -e tcp.flags&lt;/code&gt; TCP port와 flags 출력&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e tcp.port -e tcp.flags&lt;/code&gt; TCP port와 flags를 출력합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-t a|ad|adoy|d|dd|e|r|u|ud|udoy&lt;/code&gt; output format of time stamps (def: r: rel. to first)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;--color&lt;/code&gt; Wireshark GUI와 유사하게 텍스트를 색상으로 출력하며, 24비트 색상을 지원하는 터미널이 필요합니다. 또한 PDML 및 PSML 형식에 색상 속성을 제공합니다(이 속성은 비표준임).&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-t a|ad|adoy|d|dd|e|r|u|ud|udoy&lt;/code&gt; 타임스탬프 형식을 지정합니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;--color&lt;/code&gt; Wireshark GUI와 유사하게 텍스트를 색상으로 출력하며, 24비트 색상을 지원하는 터미널이 필요합니다. 또한 PDML 및 PSML 형식에 색상 속성을 제공합니다(이 속성은 비표준임).
+&lt;ul&gt;
+&lt;li&gt;색상 설정을 변경하려면 &lt;a href=&#34;https://gitlab.com/wireshark/wireshark/-/wikis/ColoringRules&#34;&gt;ColoringRules&lt;/a&gt;를 확인해보세요.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;read-file&#34;&gt;Read file&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-r&lt;/code&gt;, &lt;code&gt;--read-file&lt;/code&gt; 파일에서 읽기
+&lt;li&gt;&lt;code&gt;-r&lt;/code&gt;, &lt;code&gt;--read-file&lt;/code&gt; 파일에서 캡처된 패킷을 읽습니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-r file&lt;/code&gt; file에서 읽기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-r file&lt;/code&gt; &amp;ldquo;capture.pcap&amp;quot;이라는 파일에서 캡처된 패킷을 읽습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -144,26 +177,40 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.port == 15500 or tcp.port == 33000) and ip.dst == 192.168.0.15&amp;#39;&lt;/span&gt; -T json
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Postman처럼 localhost로 요청하는 패킷 캡처&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T json
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# localhost의 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.dstport == 15500 or tcp.dstport == 33000)&amp;#39;&lt;/span&gt; -T fields -e http.file_data
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http.request and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T fields -e http.file_data
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.dstport == 15500 or tcp.dstport == 33000)&amp;#39;&lt;/span&gt; -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http.request and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# loopback일 경우 ip.src, ip.dst 필드를 사용할 수 없다.&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# localhost의 15500 혹은 33000 포트에서 응답하는 패킷에서 http body 출력&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.srcport == 15500 or tcp.srcport == 33000)&amp;#39;&lt;/span&gt; -T fields -e http.file_data
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http.response and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T fields -e http.file_data
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# localhost의 15500 혹은 33000 포트를 경유하는 모든 패킷에서 http body 출력&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T fields -e http.file_data
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;파일-출력&#34;&gt;파일 출력&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;파일로 출력할 때&lt;/strong&gt;는 pcap-filter(&lt;code&gt;-f&lt;/code&gt;)를 사용할 수 있지만, Wireshark display-filter(&lt;code&gt;-Y&lt;/code&gt;)를 사용할 수 없습니다.&lt;/p&gt;
+&lt;p&gt;파일로 출력할 때는 &lt;code&gt;tcpdump&lt;/code&gt;와 유사하게 사용할 수 있습니다.
+실제로 서버에서 패킷을 캡처하는 경우 의존성이 적고 가벼운 &lt;code&gt;tcpdump&lt;/code&gt;를 더 많이 사용하는 편입니다.
+&lt;strong&gt;파일로 출력할 때는 Wireshark display-filter(&lt;code&gt;-Y&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;tshark: Display filters aren&amp;rsquo;t supported when capturing and saving the captured packets.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tcp 프로토콜의 port 15500을 경유하는 패킷 5초간 캡처해서 capture.pcap 파일로 저장&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i lo -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp port 15500&amp;#39;&lt;/span&gt; -w capture.pcap -a duration:5
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tcp 프로토콜의 port 33000을 경유하는 패킷 5초간 캡처해서 tcp_33000.pcap 파일로 저장&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp port 33000&amp;#39;&lt;/span&gt; -w tcp_33000.pcap -a duration:5
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo timeout &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt; tcpdump -i any -n tcp and port &lt;span style=&#34;color:#f60&#34;&gt;33000&lt;/span&gt; -w tcp_33000.pcap
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;파일-읽기&#34;&gt;파일 읽기&lt;/h2&gt;
+&lt;p&gt;Wireshark(GUI)로 읽는 게 편하긴 하지만,
+특정 필드만 출력하거나 JSON 형식으로 출력할 때는 CLI로 읽는 게 편합니다.
+&lt;strong&gt;파일을 읽을 때는 pcap-filter(&lt;code&gt;-f&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;tshark: Only read filters, not capture filters, can be specified when reading a capture file.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark로 파일 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap --color
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# JSON 형식으로 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap -T json | less
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 15500 혹은 33000 포트로 요청하는 패킷에서 ip, port, http body만 출력&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap -Y &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;http.request and (tcp.port == 15500 or tcp.port == 33000)&amp;#39;&lt;/span&gt; -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap -i &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;lo&amp;#39;&lt;/span&gt; -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# wireshark GUI로 파일 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wireshark capture.pcap
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/network/wireshark/ - Im Changsu 2020 - 2024</description>

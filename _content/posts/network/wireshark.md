@@ -1,10 +1,10 @@
 ---
 date: 2024-12-30T18:38:00+09:00
-lastmod: 2024-12-31T13:16:00+09:00
+lastmod: 2024-12-31T15:05:00+09:00
 title: "일상에서의 Wireshark"
 description: "네트워크 문제 분석 시 필요한 패킷 분석 도구"
-featured_image: "/images/network/wireshark/wireshark.jpg"
-images: ["/images/network/wireshark/wireshark.jpg"]
+featured_image: "/images/network/wireshark/xAI-grok-wireshark.jpg"
+images: ["/images/network/wireshark/xAI-grok-wireshark.jpg"]
 tags:
   - network
 categories:
@@ -51,6 +51,7 @@ tshark -h
 # 네트워크 인터페이스 조회
 
 먼저 TShark로 사용할 수 있는 네트워크 인터페이스를 조회합니다.
+`tcpdump`와 유사하지만 특정 옵션이 더 추가되어 있습니다.
 
 ```sh
 # tshark --list-interfaces
@@ -63,12 +64,45 @@ tshark -D
 3. vetha1d3dea
 4. any
 5. lo (Loopback)
-# ...
+6. enx0c3796393822
+7. bluetooth-monitor
+8. nflog
+9. nfqueue
+10. dbus-system
+11. dbus-session
+12. ciscodump (Cisco remote capture)
+13. dpauxmon (DisplayPort AUX channel monitor capture)
+14. randpkt (Random packet generator)
+15. sdjournal (systemd Journal Export)
+16. sshdump (SSH remote capture)
+17. udpdump (UDP Listener remote capture)
+```
+
+tcpdump의 경우
+
+```sh
+sudo tcpdump -D
+```
+
+```sh
+1.enp2s0 [Up, Running, Connected]
+2.docker0 [Up, Running, Connected]
+3.vetha1d3dea [Up, Running, Connected]
+4.any (Pseudo-device that captures on all interfaces) [Up, Running]
+5.lo [Up, Running, Loopback]
+6.enx0c3796393822 [Up, Disconnected]
+7.bluetooth-monitor (Bluetooth Linux Monitor) [Wireless]
+8.nflog (Linux netfilter log (NFLOG) interface) [none]
+9.nfqueue (Linux netfilter queue (NFQUEUE) interface) [none]
+10.dbus-system (D-Bus system bus) [none]
+11.dbus-session (D-Bus session bus) [none]
 ```
 
 # 패킷 캡처 시 사용할 수 있는 옵션
 
-`tshark` 라는 명령어를 옵션없이 실행하면 기본적으로 모든 네트워크 인터페이스를 경유하는 패킷을 캡처합니다.
+`tshark` 라는 명령어를 옵션없이 실행하면 기본적으로
+첫번째 non-loopback 인터페이스가 선택되고
+이 인터페이스를 경유하는 모든 패킷을 캡처합니다.
 네트워크 분석하기에는 너무 많은 패킷이 캡처되기 때문에
 네트워크 인터페이스, 프로토콜, 호스트, 포트 등을 지정해서 필터링합니다.
 
@@ -78,48 +112,51 @@ tshark
 
 ## Network interface
 
-- `-i`, `--interface` 인터페이스의 이름 혹은 인덱스를 지정
-  - `-i eth0` `eth0` 인터페이스 캡처
-  - `-i 2` 2번째 인터페이스 캡처
+- `-i`, `--interface` 네트워크 인터페이스의 이름 혹은 인덱스를 지정합니다.
+  - `-i eth0` `eth0` 인터페이스를 캡처합니다.
+  - `-i 2` 2번째 인터페이스를 캡처합니다.
 
 ## Processing
 
-- `-f` [pcap-filter syntax](https://www.tcpdump.org/manpages/pcap-filter.7.html)를 사용하여 패킷 필터링
-  - `-f "tcp port 80"` TCP port 80 패킷 필터링
-- `-Y`, `--display-filter` [Wireshark displa**Y** filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) 사용하여 패킷 표시
-  - `-Y "http.request"` HTTP request 패킷 표시
+- `-f` [pcap-filter syntax](https://www.tcpdump.org/manpages/pcap-filter.7.html)를 사용하여 패킷을 필터링합니다.
+  - 패킷을 캡처할 때 사용됩니다.
+  - `-f "tcp port 80"` TCP port 80 패킷 필터링합니다.
+- `-Y`, `--display-filter` [Wireshark displa**Y** filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) 사용하여 보고싶은 패킷만 표시합니다.
+  - 패킷을 읽을 때 사용됩니다.
+  - `-Y "http.request"` HTTP request 패킷 표시합니다.
 
 ## Stop writing
 
 - `-a <autostop cond.> ...`, `--autostop <autostop cond.> …`
-  - `duration:NUM` NUM 초(seconds) 후 중지 (기본값 무한, 소수점 사용 가능)
-  - `filesize:NUM` NUM kB 이상 캡처 후 중지 (최대 2GiB)
-  - `packets:NUM` NUM 개 패킷 캡처 후 중지 (`-c`와 같음)
-- `-c` n개 패킷 캡처 후 중지
-  - `-c 10` 10개 패킷 캡처 후 중지
+  - `duration:NUM` NUM 초(seconds) 후 중지합니다. (기본값 무한, 소수점 사용 가능)
+  - `filesize:NUM` NUM kB 이상 캡처 후 중지합니다. (최대 2GiB)
+  - `packets:NUM` NUM 개 패킷 캡처 후 중지합니다. (`-c`와 동일)
+- `-c` n개 패킷 캡처 후 중지합니다.
+  - `-c 10` 10개 패킷 캡처 후 중지합니다.
 
 ## Write
 
-- `-w`, `--write-file` 파일에 쓰기 위한 파일 이름 설정 (stdout의 경우 '-')
-  - `-w file` file 이름으로 쓰기
-- `-T` 출력 형식을 선택
-  - `-T fields` 필드를 출력
-  - `-T pdml` Packet Details Markup Language (PDML) 출력
-  - `-T psml` Packet Summary Markup Language (PSML) 출력
-  - `-T json` JSON 출력
-  - `-T jsonraw` JSON 출력 (no formatting)
-  - `-T ek` Elasticsearch bulk format
-- `-e <field>` 위 출력 옵션 중 `ek`, `fields`, `json`, `pdml` 사용 시 출력할 필드 지정
-  - `-e tcp.port` TCP port 출력
+- `-w`, `--write-file` 지정한 이름의 파일로 출력합니다. (stdout의 경우 '-')
+  - `-w capture.pcap` "capture.pcap"이라는 파일로 저장합니다.
+- `-T` 출력 형식을 지정합니다.
+  - `-T fields` 지정한 필드를 출력합니다.
+  - `-T pdml` Packet Details Markup Language (PDML) 형식으로 출력합니다.
+  - `-T psml` Packet Summary Markup Language (PSML) 형식으로 출력합니다.
+  - `-T json` JSON 형식으로 출력합니다.
+  - `-T jsonraw` 포맷팅 없이 JSON 형식으로 출력합니다.
+  - `-T ek` Elasticsearch에 bulk insert하기 위한 형식으로 출력합니다.
+- `-e <field>` 위 출력 옵션 중 `ek`, `fields`, `json`, `pdml` 사용 시 출력할 필드를 지정합니다.
+  - `-e tcp.port` TCP port를 출력합니다.
   - 이 옵션은 여러 필드를 출력하기 위해 반복할 수 있습니다.
-    - `-e tcp.port -e tcp.flags` TCP port와 flags 출력
-- `-t a|ad|adoy|d|dd|e|r|u|ud|udoy` output format of time stamps (def: r: rel. to first)
+    - `-e tcp.port -e tcp.flags` TCP port와 flags를 출력합니다.
+- `-t a|ad|adoy|d|dd|e|r|u|ud|udoy` 타임스탬프 형식을 지정합니다.
 - `--color` Wireshark GUI와 유사하게 텍스트를 색상으로 출력하며, 24비트 색상을 지원하는 터미널이 필요합니다. 또한 PDML 및 PSML 형식에 색상 속성을 제공합니다(이 속성은 비표준임).
+  - 색상 설정을 변경하려면 [ColoringRules](https://gitlab.com/wireshark/wireshark/-/wikis/ColoringRules)를 확인해보세요.
 
 ## Read file
 
-- `-r`, `--read-file` 파일에서 읽기
-  - `-r file` file에서 읽기
+- `-r`, `--read-file` 파일에서 캡처된 패킷을 읽습니다.
+  - `-r file` "capture.pcap"이라는 파일에서 캡처된 패킷을 읽습니다.
 
 # 패킷 분석
 
@@ -150,9 +187,11 @@ tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T json
 ```
 
 ```sh
-# localhost의 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력
-tshark -i lo -Y 'http and (tcp.dstport == 15500 or tcp.dstport == 33000)' -T fields -e http.file_data
-tshark -i lo -Y 'http.request and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
+# 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력
+tshark -i any -Y 'http and (tcp.dstport == 15500 or tcp.dstport == 33000)' -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+tshark -i any -Y 'http.request and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+
+# loopback일 경우 ip.src, ip.dst 필드를 사용할 수 없다.
 # localhost의 15500 혹은 33000 포트에서 응답하는 패킷에서 http body 출력
 tshark -i lo -Y 'http and (tcp.srcport == 15500 or tcp.srcport == 33000)' -T fields -e http.file_data
 tshark -i lo -Y 'http.response and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
@@ -162,16 +201,28 @@ tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e
 
 ## 파일 출력
 
-**파일로 출력할 때**는 pcap-filter(`-f`)를 사용할 수 있지만, Wireshark display-filter(`-Y`)를 사용할 수 없습니다.
+파일로 출력할 때는 `tcpdump`와 유사하게 사용할 수 있습니다.
+실제로 서버에서 패킷을 캡처하는 경우 의존성이 적고 가벼운 `tcpdump`를 더 많이 사용하는 편입니다.
+**파일로 출력할 때는 Wireshark display-filter(`-Y`)를 사용할 수 없습니다.**
 
 > tshark: Display filters aren't supported when capturing and saving the captured packets.
 
 ```sh
-# tcp 프로토콜의 port 15500을 경유하는 패킷 5초간 캡처해서 capture.pcap 파일로 저장
-tshark -i lo -f 'tcp port 15500' -w capture.pcap -a duration:5
+# tcp 프로토콜의 port 33000을 경유하는 패킷 5초간 캡처해서 tcp_33000.pcap 파일로 저장
+tshark -i any -f 'tcp port 33000' -w tcp_33000.pcap -a duration:5
+```
+
+```sh
+sudo timeout 5 tcpdump -i any -n tcp and port 33000 -w tcp_33000.pcap
 ```
 
 ## 파일 읽기
+
+Wireshark(GUI)로 읽는 게 편하긴 하지만,
+특정 필드만 출력하거나 JSON 형식으로 출력할 때는 CLI로 읽는 게 편합니다.
+**파일을 읽을 때는 pcap-filter(`-f`)를 사용할 수 없습니다.**
+
+> tshark: Only read filters, not capture filters, can be specified when reading a capture file.
 
 ```sh
 # tshark로 파일 읽기
@@ -181,6 +232,12 @@ tshark -r capture.pcap --color
 ```sh
 # JSON 형식으로 읽기
 tshark -r capture.pcap -T json | less
+```
+
+```sh
+# 15500 혹은 33000 포트로 요청하는 패킷에서 ip, port, http body만 출력
+tshark -r capture.pcap -Y 'http.request and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
+tshark -r capture.pcap -i 'lo' -T fields -e ip.src -e tcp.srcport -e ip.dst -e tcp.dstport -e http.file_data
 ```
 
 ```sh
