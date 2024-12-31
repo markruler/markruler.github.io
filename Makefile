@@ -45,7 +45,8 @@ deploy: build
 
 run:
 	@echo "Run the site..."
-	hugo server --contentDir _content --bind=0.0.0.0
+	# hugo server --contentDir=_content --bind=0.0.0.0 --baseURL=http://192.168.219.200
+	hugo server --contentDir=_content --bind=0.0.0.0
 .PHONY: run
 
 # git submodule
