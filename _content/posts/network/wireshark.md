@@ -1,8 +1,8 @@
 ---
 date: 2024-12-30T18:38:00+09:00
-lastmod: 2024-12-30T18:38:00+09:00
+lastmod: 2024-12-31T13:16:00+09:00
 title: "일상에서의 Wireshark"
-description: "네트워크 문제 해결에 도움이 될 패킷 분석하기"
+description: "네트워크 문제 분석 시 필요한 패킷 분석 도구"
 featured_image: "/images/network/wireshark/wireshark.jpg"
 images: ["/images/network/wireshark/wireshark.jpg"]
 tags:
@@ -69,35 +69,42 @@ tshark -D
 
 ## Processing
 
-- `-f` libpcap filter syntax를 사용하여 패킷 필터링
+- `-f` [pcap-filter syntax](https://www.tcpdump.org/manpages/pcap-filter.7.html)를 사용하여 패킷 필터링
   - `-f "tcp port 80"` TCP port 80 패킷 필터링
-- `-Y`, `--display-filter` Wireshark displa**Y** filter syntax 사용하여 패킷 표시
+- `-Y`, `--display-filter` [Wireshark displa**Y** filter syntax](https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html) 사용하여 패킷 표시
   - `-Y "http.request"` HTTP request 패킷 표시
 
-## Stop conditions
+## Stop writing
 
-- `-c` stop after n packets (def: infinite)
-  - `-c 10` - stop after 10 packets
 - `-a <autostop cond.> ...`, `--autostop <autostop cond.> …`
-  - `duration:NUM` stop after NUM seconds
-  - `filesize:NUM` stop this file after NUM KB
-  - `files:NUM` stop after NUM files
-  - `packets:NUM` stop after NUM packets
+  - `duration:NUM` NUM 초(seconds) 후 중지 (기본값 무한, 소수점 사용 가능)
+  - `filesize:NUM` NUM kB 이상 캡처 후 중지 (최대 2GiB)
+  - `packets:NUM` NUM 개 패킷 캡처 후 중지 (`-c`와 같음)
+- `-c` n개 패킷 캡처 후 중지
+  - `-c 10` 10개 패킷 캡처 후 중지
 
 ## Write
 
-- `-w`, `--write-file` set the filename to write to (or '-' for stdout)
-  - `-w file` write to file
-- `-e <field>` field to print if -Tfields selected (e.g. tcp.port, _ws.col.Info)
-  - `-e tcp.port` print the TCP port field
-  - this option can be repeated to print multiple fields
+- `-w`, `--write-file` 파일에 쓰기 위한 파일 이름 설정 (stdout의 경우 '-')
+  - `-w file` file 이름으로 쓰기
+- `-T` 출력 형식을 선택
+  - `-T fields` 필드를 출력
+  - `-T pdml` Packet Details Markup Language (PDML) 출력
+  - `-T psml` Packet Summary Markup Language (PSML) 출력
+  - `-T json` JSON 출력
+  - `-T jsonraw` JSON 출력 (no formatting)
+  - `-T ek` Elasticsearch bulk format
+- `-e <field>` 위 출력 옵션 중 `ek`, `fields`, `json`, `pdml` 사용 시 출력할 필드 지정
+  - `-e tcp.port` TCP port 출력
+  - 이 옵션은 여러 필드를 출력하기 위해 반복할 수 있습니다.
+    - `-e tcp.port -e tcp.flags` TCP port와 flags 출력
 - `-t a|ad|adoy|d|dd|e|r|u|ud|udoy` output format of time stamps (def: r: rel. to first)
-- `--color` color output text similarly to the Wireshark GUI, requires a terminal with 24-bit color support Also supplies color attributes to pdml and psml formats (Note that attributes are nonstandard)
+- `--color` Wireshark GUI와 유사하게 텍스트를 색상으로 출력하며, 24비트 색상을 지원하는 터미널이 필요합니다. 또한 PDML 및 PSML 형식에 색상 속성을 제공합니다(이 속성은 비표준임).
 
 ## Read file
 
-- `-r`, `--read-file` set the filename to read from (or '-' for stdin)
-  - `-r file` read from file
+- `-r`, `--read-file` 파일에서 읽기
+  - `-r file` file에서 읽기
 
 ## Diagnostic output
 
@@ -114,7 +121,7 @@ tshark -D
 tshark -i any
 ```
 
-## localhost(lo, loopback) 주소의 8080 포트 캡쳐
+## localhost(lo, loopback)의 8080 포트 캡쳐
 
 ```sh
 tshark -i lo -Y 'tcp.port == 8080' --color
@@ -136,7 +143,7 @@ tshark -i lo -Y 'tcp.port == 8080' -T fields -e http.file_data --color
 tshark -i lo -Y 'tcp.port == 8080 && http.response' -T fields -e http.file_data --color
 ```
 
-## 특정 도메인에서의 패킷 캡쳐
+## 웹 앱 패킷 캡쳐
 
 ```sh
 # youtube
@@ -144,14 +151,35 @@ tshark -i any -f 'host www.youtube.com' --color
 ```
 
 ```sh
-tshark -i any -f 'host localhost' --color
+tshark -i any -f 'host www.youtube.com' -T fields -e ip.src -e ip.dst -e tcp.port
 ```
 
-## 파일로 출력
+```sh
+# 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡쳐 (앱에서 서버 도메인을 private ip로 설정)
+tshark -i any -Y 'http and (tcp.port == 15500 or tcp.port == 33000) and ip.dst == 192.168.0.15' -T json
+```
+
+```sh
+# Postman처럼 localhost로 요청하는 패킷 캡쳐
+tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T json
+```
+
+```sh
+# localhost의 15500 혹은 33000 포트로 요청하는 패킷에서 http body 출력
+tshark -i lo -Y 'http and (tcp.dstport == 15500 or tcp.dstport == 33000)' -T fields -e http.file_data
+# localhost의 15500 혹은 33000 포트에서 응답하는 패킷에서 http body 출력
+tshark -i lo -Y 'http and (tcp.srcport == 15500 or tcp.srcport == 33000)' -T fields -e http.file_data
+# localhost의 15500 혹은 33000 포트를 경유하는 모든 패킷에서 http body 출력
+tshark -i lo -Y 'http and (tcp.port == 15500 or tcp.port == 33000)' -T fields -e http.file_data
+```
+
+## 파일 출력
 
 ```sh
 tshark -i any -w capture.pcap
 ```
+
+## 파일 읽기
 
 ```sh
 # tshark로 파일 읽기
