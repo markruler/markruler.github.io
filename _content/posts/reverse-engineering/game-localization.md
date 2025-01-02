@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2024-12-16T21:26:00+09:00
-lastmod: 2024-12-17T12:15:00+09:00
+lastmod: 2025-01-02T18:43:00+09:00
 title: "한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기"
 description: "한국어 패치 제작자분들 감사합니다"
 featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
@@ -16,7 +16,7 @@ categories:
 
 스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 게임 모드(Mod)나 패치 도구가 꽤 많습니다.
 그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
-한국어 패치 제작에 입문하기 딱 좋은 플랫폼이라고 생각합니다.
+한국어 패치 제작에 입문하기 좋은 플랫폼이라고 생각합니다.
 
 - [게임 저작권과 한국어 패치](#게임-저작권과-한국어-패치)
 - [대표적인 게임 엔진별 한국어 패치 제작 방법](#대표적인-게임-엔진별-한국어-패치-제작-방법)
@@ -115,7 +115,7 @@ Example patchcrc catalog.json
 
 언팩-리팩 과정은 언더테일 모드 툴인 [UnderminersTeam/UndertaleModTool](https://github.com/UnderminersTeam/UndertaleModTool/releases)을 사용합니다.
 
-자세한 폰트 교체 방법은 [Sonwyegret](https://snowyegret.tistory.com/65)님의 글을 참고하세요.
+자세한 폰트 교체 방법은 [Snowyegret](https://snowyegret.tistory.com/65)님의 글을 참고하세요.
 폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.
 
 ### 렌파이 (Ren'Py - PyGame)
@@ -135,8 +135,18 @@ python -m unrpa -mp patch patch.rpa
 
 [GDRETools/gdsdecomp](https://github.com/GDRETools/gdsdecomp)
 
-`translation.csv` 파일 추출을 지원하지 않아서 시도하지 못했었는데,
-[v0.8.0](https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0) 버전부터 가능해졌다고 합니다.
+~~`translation.csv` 파일 추출을 지원하지 않아서 시도하지 못했었는데, [v0.8.0](https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0) 버전부터 가능해졌다고 합니다.~~
+
+먼저 GDRE로 언팩할 때 암호화가 되어 있어서 에러가 발생했다면 encryption key를 찾아야 합니다.
+[Godot 3.5.2](https://github.com/godotengine/godot/tree/3.5.2-stable) 기준
+Ghidra를 사용해서 `script_encryption_key`를 찾습니다.
+변수명과 함수명 등은 컴파일 과정에서 모두 사라지기 때문에
+근처에 하드코딩된 문자열을 찾아서 키를 유추해야 합니다.
+
+준비가 되었다면 `.pck` 파일을 언팩합니다.
+프로젝트 내에 있는 `.translation` 파일들을 확인해서 번역 후 다시 패키징합니다.
+이때 `.translation` 파일은 바이너리 파일이기 때문에 바이트 크기를 정확하게 맞춰야 합니다.
+이를 텍스트 형식으로 편집할 수 있는 툴은 아직 없는 것 같습니다.
 
 ## 파일 카빙 (File Carving)
 

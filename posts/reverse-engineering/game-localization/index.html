@@ -33,7 +33,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2024-12-16T21:26:00+09:00">
-    <meta property="article:modified_time" content="2024-12-17T12:15:00+09:00">
+    <meta property="article:modified_time" content="2025-01-02T18:43:00+09:00">
     <meta property="article:tag" content="Reverse-Engineering">
     <meta property="article:tag" content="Game-Localization">
     <meta property="og:image" content="https://markruler.github.io/images/reverse-engineering/game-localization/jupiter-hell.png">
@@ -601,7 +601,7 @@
                 
                     <p>스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 게임 모드(Mod)나 패치 도구가 꽤 많습니다.
 그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
-한국어 패치 제작에 입문하기 딱 좋은 플랫폼이라고 생각합니다.</p>
+한국어 패치 제작에 입문하기 좋은 플랫폼이라고 생각합니다.</p>
 <ul>
 <li><a href="#%EA%B2%8C%EC%9E%84-%EC%A0%80%EC%9E%91%EA%B6%8C%EA%B3%BC-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%8C%A8%EC%B9%98">게임 저작권과 한국어 패치</a></li>
 <li><a href="#%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EA%B2%8C%EC%9E%84-%EC%97%94%EC%A7%84%EB%B3%84-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%8C%A8%EC%B9%98-%EC%A0%9C%EC%9E%91-%EB%B0%A9%EB%B2%95">대표적인 게임 엔진별 한국어 패치 제작 방법</a>
@@ -678,7 +678,7 @@ Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들�
 패치 파일을 원본 pak 파일 위치에 <code>_p</code>라는 접미사를 붙이면 적용됩니다.</p>
 <h3 id="게임메이커-gamemaker-studio-2">게임메이커 (GameMaker Studio 2)</h3>
 <p>언팩-리팩 과정은 언더테일 모드 툴인 <a href="https://github.com/UnderminersTeam/UndertaleModTool/releases">UnderminersTeam/UndertaleModTool</a>을 사용합니다.</p>
-<p>자세한 폰트 교체 방법은 <a href="https://snowyegret.tistory.com/65">Sonwyegret</a>님의 글을 참고하세요.
+<p>자세한 폰트 교체 방법은 <a href="https://snowyegret.tistory.com/65">Snowyegret</a>님의 글을 참고하세요.
 폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.</p>
 <h3 id="렌파이-renpy---pygame">렌파이 (Ren&rsquo;Py - PyGame)</h3>
 <p><a href="https://github.com/Lattyware/unrpa">unrpa</a> 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.</p>
@@ -690,8 +690,16 @@ Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들�
 </span></span><span style="display:flex;"><span>python -m unrpa -mp patch patch.rpa
 </span></span></code></pre></div><h3 id="고도-godot">고도 (Godot)</h3>
 <p><a href="https://github.com/GDRETools/gdsdecomp">GDRETools/gdsdecomp</a></p>
-<p><code>translation.csv</code> 파일 추출을 지원하지 않아서 시도하지 못했었는데,
-<a href="https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0">v0.8.0</a> 버전부터 가능해졌다고 합니다.</p>
+<p><del><code>translation.csv</code> 파일 추출을 지원하지 않아서 시도하지 못했었는데, <a href="https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0">v0.8.0</a> 버전부터 가능해졌다고 합니다.</del></p>
+<p>먼저 GDRE로 언팩할 때 암호화가 되어 있어서 에러가 발생했다면 encryption key를 찾아야 합니다.
+<a href="https://github.com/godotengine/godot/tree/3.5.2-stable">Godot 3.5.2</a> 기준
+Ghidra를 사용해서 <code>script_encryption_key</code>를 찾습니다.
+변수명과 함수명 등은 컴파일 과정에서 모두 사라지기 때문에
+근처에 하드코딩된 문자열을 찾아서 키를 유추해야 합니다.</p>
+<p>준비가 되었다면 <code>.pck</code> 파일을 언팩합니다.
+프로젝트 내에 있는 <code>.translation</code> 파일들을 확인해서 번역 후 다시 패키징합니다.
+이때 <code>.translation</code> 파일은 바이너리 파일이기 때문에 바이트 크기를 정확하게 맞춰야 합니다.
+이를 텍스트 형식으로 편집할 수 있는 툴은 아직 없는 것 같습니다.</p>
 <h2 id="파일-카빙-file-carving">파일 카빙 (File Carving)</h2>
 <p>만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
 이때 <a href="../file-signature/#1-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98-%EA%B8%B0%EB%B0%98-%EC%B9%B4%EB%B9%99">파일 카빙</a>이 필요합니다.
@@ -772,7 +780,7 @@ C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2024-12-17</p>
+		    <p style="color:#777;">최종 수정: 2025-01-02</p>
                     
                 </div>
             </div>
