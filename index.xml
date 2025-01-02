@@ -306,13 +306,17 @@ Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들�
 &lt;p&gt;자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/65&#34;&gt;Snowyegret&lt;/a&gt;님의 글을 참고하세요.
 폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.&lt;/p&gt;
 &lt;h3 id=&#34;렌파이-renpy---pygame&#34;&gt;렌파이 (Ren&amp;rsquo;Py - PyGame)&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/Lattyware/unrpa&#34;&gt;unrpa&lt;/a&gt; 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# unrpa 설치&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m pip install unrpa
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RPA 파일 추출&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m unrpa yourfile.rpa
+&lt;p&gt;&lt;a href=&#34;https://github.com/shizmob/rpatool&#34;&gt;rpatool&lt;/a&gt;로 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@github.com:shizmob/rpatool.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# origin.rpa에 포함된 파일 목록 조회&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -l origin.rpa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RPA 파일을 추출해서 patch라는 폴더에 저장&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -o output -x origin.rpa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 수정 후 패치 파일 리팩&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -m unrpa -mp patch patch.rpa
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -c patch.rpa output
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;고도-godot&#34;&gt;고도 (Godot)&lt;/h3&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/GDRETools/gdsdecomp&#34;&gt;GDRETools/gdsdecomp&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;del&gt;&lt;code&gt;translation.csv&lt;/code&gt; 파일 추출을 지원하지 않아서 시도하지 못했었는데, &lt;a href=&#34;https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0&#34;&gt;v0.8.0&lt;/a&gt; 버전부터 가능해졌다고 합니다.&lt;/del&gt;&lt;/p&gt;

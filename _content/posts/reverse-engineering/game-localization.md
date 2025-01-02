@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2024-12-16T21:26:00+09:00
-lastmod: 2025-01-02T18:43:00+09:00
+lastmod: 2025-01-02T19:43:00+09:00
 title: "한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기"
 description: "한국어 패치 제작자분들 감사합니다"
 featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
@@ -120,15 +120,19 @@ Example patchcrc catalog.json
 
 ### 렌파이 (Ren'Py - PyGame)
 
-[unrpa](https://github.com/Lattyware/unrpa) 모듈을 사용해서 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.
+[rpatool](https://github.com/shizmob/rpatool)로 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.
 
 ```sh
-# unrpa 설치
-python -m pip install unrpa
-# RPA 파일 추출
-python -m unrpa yourfile.rpa
+git clone git@github.com:shizmob/rpatool.git
+
+# origin.rpa에 포함된 파일 목록 조회
+python3 rpatool -l origin.rpa
+
+# RPA 파일을 추출해서 patch라는 폴더에 저장
+python3 rpatool -o output -x origin.rpa
+
 # 수정 후 패치 파일 리팩
-python -m unrpa -mp patch patch.rpa
+python3 rpatool -c patch.rpa output
 ```
 
 ### 고도 (Godot)
