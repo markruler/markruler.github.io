@@ -240,7 +240,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;li&gt;&lt;a href=&#34;#%EA%B3%A0%EB%8F%84-godot&#34;&gt;고도 (Godot)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%8C%8C%EC%9D%BC-%EC%B9%B4%EB%B9%99-file-carving&#34;&gt;파일 카빙 (File Carving)&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A6%AC%EB%B2%84%EC%8A%A4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-reverse-engineering&#34;&gt;리버스 엔지니어링 (Reverse Engineering)&lt;/a&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#love2d&#34;&gt;Love2D&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B3%A0%EC%A0%84-%EA%B2%8C%EC%9E%84&#34;&gt;고전 게임&lt;/a&gt;&lt;/li&gt;
@@ -331,11 +331,9 @@ GDRE에서 &lt;code&gt;PCK&lt;/code&gt; &amp;gt; &lt;code&gt;Create PCK archive 
 만약 &lt;code&gt;.translation&lt;/code&gt; 파일처럼 바이너리 형태라면 헥사 에디터와 같은 도구를 사용해서
 바이트 크기를 정확하게 맞춰서 수정해야 합니다.
 &lt;code&gt;translation&lt;/code&gt; 파일을 텍스트 형식으로 편집할 수 있는 툴은 아직 없는 것 같습니다.&lt;/p&gt;
-&lt;h2 id=&#34;파일-카빙-file-carving&#34;&gt;파일 카빙 (File Carving)&lt;/h2&gt;
+&lt;h2 id=&#34;리버스-엔지니어링-reverse-engineering&#34;&gt;리버스 엔지니어링 (Reverse Engineering)&lt;/h2&gt;
 &lt;p&gt;만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이때 &lt;a href=&#34;../file-signature/#1-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98-%EA%B8%B0%EB%B0%98-%EC%B9%B4%EB%B9%99&#34;&gt;파일 카빙&lt;/a&gt;이 필요합니다.
-우선 파일 시그니처를 찾거나 유추해서 파일을 추출합니다.
-이후 파일을 다시 패키징(repack)하여 게임에 적용합니다.&lt;/p&gt;
+이때 기드라(Ghidra)와 같은 툴을 이용해서 &lt;a href=&#34;../file-signature/#%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98&#34;&gt;파일 시그니처&lt;/a&gt;나 암호키를 찾아야 할 수도 있습니다.&lt;/p&gt;
 &lt;h3 id=&#34;love2d&#34;&gt;Love2D&lt;/h3&gt;
 &lt;p&gt;Love2D 게임은 &lt;code&gt;.love&lt;/code&gt; 파일로 패키징되어 있습니다.
 &lt;code&gt;.love&lt;/code&gt; 파일은 ZIP 파일 기반의 포맷입니다.

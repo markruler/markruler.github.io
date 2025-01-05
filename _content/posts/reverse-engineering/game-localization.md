@@ -26,7 +26,7 @@ categories:
     - [게임메이커 (GameMaker Studio 2)](#게임메이커-gamemaker-studio-2)
     - [렌파이 (Ren'Py - PyGame)](#렌파이-renpy---pygame)
     - [고도 (Godot)](#고도-godot)
-  - [파일 카빙 (File Carving)](#파일-카빙-file-carving)
+  - [리버스 엔지니어링 (Reverse Engineering)](#리버스-엔지니어링-reverse-engineering)
     - [Love2D](#love2d)
     - [고전 게임](#고전-게임)
   - [실시간 번역](#실시간-번역)
@@ -154,12 +154,10 @@ GDRE에서 `PCK` > `Create PCK archive from folder...`로 패키징하면 됩니
 바이트 크기를 정확하게 맞춰서 수정해야 합니다.
 `translation` 파일을 텍스트 형식으로 편집할 수 있는 툴은 아직 없는 것 같습니다.
 
-## 파일 카빙 (File Carving)
+## 리버스 엔지니어링 (Reverse Engineering)
 
 만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이때 [파일 카빙](../file-signature/#1-시그니처-기반-카빙)이 필요합니다.
-우선 파일 시그니처를 찾거나 유추해서 파일을 추출합니다.
-이후 파일을 다시 패키징(repack)하여 게임에 적용합니다.
+이때 기드라(Ghidra)와 같은 툴을 이용해서 [파일 시그니처](../file-signature/#파일-시그니처)나 암호키를 찾아야 할 수도 있습니다.
 
 ### Love2D
 
