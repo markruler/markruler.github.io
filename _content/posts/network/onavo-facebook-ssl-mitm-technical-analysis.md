@@ -22,7 +22,7 @@ categories:
 ---
 
 이 글은 페이스북(Facebook) 집단 소송에서 밝혀진 정보를 바탕으로 한 기술 조사입니다.
-페이스북은 경쟁사의 정보를 얻기 위해 Onavo Protect 앱을 실행 중인 사용자 기기에서 암호화된 트래픽을 도청했었다는 이유로 재판이 진행 중입니다.
+페이스북은 경쟁사의 정보를 얻기 위해 Onavo Protect 앱이 실행 중인 사용자 기기에서 암호화된 트래픽을 도청했었다는 이유로 재판이 진행 중입니다.
 
 ![How did Facebook intercept their competitor's encrypted mobile app traffic?](/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp)
 

@@ -9,6 +9,7 @@ ifeq ($(OS), Windows_NT)
 		CLEAN := powershell -ExecutionPolicy Bypass -File .\scripts\windows.clean.ps1
 		BUILD := powershell -ExecutionPolicy Bypass -File .\scripts\windows.build.ps1
 		DEPLOY := powershell -ExecutionPolicy Bypass -File .\scripts\windows.deploy.ps1
+		RUN := powershell -ExecutionPolicy Bypass -File .\scripts\windows.run.ps1
 else
     # uname으로 운영체제 구분
 		UNAME_S := $(shell uname -s)
@@ -22,6 +23,7 @@ else
 		CLEAN := ./scripts/clean.sh
 		BUILD := ./scripts/build.sh
 		DEPLOY := ./scripts/deploy.sh
+		RUN := ./scripts/run.sh
 endif
 
 # ANSI Escape Code - Color
@@ -44,8 +46,7 @@ deploy: build
 .PHONY: deploy
 
 run:
-	@echo "Run the site..."
-	hugo server --contentDir=_content --bind=0.0.0.0 --baseURL=http://127.0.0.1
+	$(RUN)
 .PHONY: run
 
 # git submodule
