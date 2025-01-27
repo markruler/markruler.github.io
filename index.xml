@@ -9,9 +9,80 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Mon, 13 Jan 2025 19:13:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jan 2025 23:15:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>비파괴 스캐너로 스캔한 책 PDF outline 만들기</title>
+        <link>https://markruler.github.io/posts/pdf/pdf-editor/</link>
+        <pubDate>Mon, 27 Jan 2025 23:15:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/pdf/pdf-editor/</guid>
+        <description>임창수 https://markruler.github.io/posts/pdf/pdf-editor/ -&lt;p&gt;절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
+그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
+하지만 펼칠 때마다 목차(Outline)이 없으면 발췌독하기 불편한데요.
+오픈 소스 OCR 도구인 Google Tesseract를 이용해 PDF outline을 만들어보겠습니다.&lt;/p&gt;
+&lt;h1 id=&#34;사적이용을-위한-저작권법&#34;&gt;사적이용을 위한 저작권법&lt;/h1&gt;
+&lt;p&gt;먼저 저작권에 대해 확인해야 할 부분이 있습니다.
+과연 책을 스캔해서 PDF로 만드는 것이 합법일까요?
+인터넷에 검색해보면 도서관에서 빌린 책을 스캔하는 건 불법이라고 하는 경우가 많은 것 같습니다.
+&lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C30%EC%A1%B0&#34;&gt;저작권법 제30조&lt;/a&gt;를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;제30조(사적이용을 위한 복제) 공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있다.
+다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;이 조항에 대해서도 인터넷 커뮤니티에서는 &amp;ldquo;개인이 구매한 서적만 가능한 것이다&amp;quot;라고 해석하는 경우가 많은 것 같습니다.
+유명한 테크 유튜브 채널인 &lt;a href=&#34;https://youtu.be/NUfQGNMfwis?t=491&#34;&gt;테크몽&lt;/a&gt;에서도 &lt;strong&gt;한국저작권위원회&lt;/strong&gt;에 직접 문의한 결과 문제가 없다고 합니다.
+&lt;strong&gt;한국저작권보호원&lt;/strong&gt;의 &lt;a href=&#34;https://www.youtube.com/watch?v=9fSDhWAP7A0&#34;&gt;영상 댓글&lt;/a&gt;에서도 이 경우에는 문제없다고 하죠.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있습니다(저작권법 제30조).
+이를 &amp;lsquo;사적이용을 위한 복제&amp;rsquo; 통칭 사적 복제라고 하며, 구입한 CD를 핸드폰에 넣어 듣기 위하여 mp3파일로 변환하는 행위, 다운로드받은 영화를 TV에서 보기 위하여 usb에 옮기는 행위, 구입한 책에 필기를 하기 위하여 복사하는 행위 등이 해당할 수 있습니다.
+관련하여, 도서관에서 빌린 책을 직접 스캔 또는 사진으로 찍어 귀하 소유의 핸드폰으로 읽는 것은 사적복제로서 저작권 침해가 되지 않습니다.
+그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;즉, &lt;strong&gt;자신이 소유한 또는 도서관에서 빌린 서적&lt;/strong&gt;을 &lt;strong&gt;개인적으로 이용&lt;/strong&gt;하기 위해 &lt;strong&gt;자신이 소유한 복제기기&lt;/strong&gt;로 직접 스캔한 경우 적법한 행위입니다.
+이쯤이면 저작권법 제30조를 유추해석하거나 확장해석 될 여지는 없을 것 같습니다.&lt;/p&gt;
+&lt;h1 id=&#34;pdf-읽기&#34;&gt;PDF 읽기&lt;/h1&gt;
+&lt;p&gt;PDF는 Adobe 사에서 개발한 파일 형식으로, 다양한 운영체제에서 동일한 형식으로 문서를 표현할 수 있습니다.
+여기서는 Python 모듈인 PyMuPDF를 사용해서 PDF를 읽어보겠습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pdf_file: pymupdf.Document = pymupdf.open(self.filename)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ocr-optical-character-recognition&#34;&gt;OCR (Optical Character Recognition)&lt;/h1&gt;
+&lt;p&gt;OCR은 광학 문자 인식(Optical Character Recognition)의 약자로, 이미지나 문서를 스캔해서 텍스트로 변환하는 기술입니다.
+스캐너로 스캔한 책은 이미지로 저장이 되는데요.
+이 이미지를 텍스트로 변환해서 PDF outline을 만들어보겠습니다.&lt;/p&gt;
+&lt;p&gt;먼저 오픈 소스 도구인 &lt;a href=&#34;https://tesseract-ocr.github.io/tessdoc/Installation.html&#34;&gt;Tesseract OCR&lt;/a&gt;를 설치해야 합니다.
+이후 Tesseract OCR 설치 경로의 &lt;code&gt;tessdata&lt;/code&gt; 폴더에 훈련 모델(&lt;a href=&#34;https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata&#34;&gt;kor.tessdata&lt;/a&gt;)을 다운로드합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;page = pdf_file[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;images = page.get_images()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; img in images:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    base_image = pdf_file.extract_image(img[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    image = Image.open(io.BytesIO(base_image[&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;image&amp;#34;&lt;/span&gt;]))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt = pytesseract.image_to_string(image, lang=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;eng+kor&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;pyqt6&#34;&gt;PyQt6&lt;/h1&gt;
+&lt;p&gt;PyQt6는 Qt 프레임워크의 Python 바인딩으로, Qt는 크로스 플랫폼 GUI 프레임워크입니다.
+위 짤막 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;app = QApplication(sys.argv)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;window = App()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;window.show()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sys.exit(app.exec())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;QThread&lt;/code&gt;를 사용해서 OCR 작업을 별도의 스레드에서 처리해야 Blocking 되는 것을 피할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# https://wikidocs.net/71014&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; Worker(QThread):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; __init__(self, parent=&lt;span style=&#34;color:#f00&#34;&gt;None&lt;/span&gt;):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    super().__init__(parent)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    self.filename = &lt;span style=&#34;color:#f00&#34;&gt;None&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;run&lt;/span&gt;(self):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/pdf/pdf-editor/pdf-editor.png&#34; alt=&#34;PDF Editor&#34;&gt;&lt;/p&gt;
+&lt;p&gt;전체 소스 코드는 &lt;a href=&#34;https://github.com/markruler/pdf-editor&#34;&gt;markruler/pdf-editor&lt;/a&gt;를 참조해주세요.&lt;/p&gt;
+- https://markruler.github.io/posts/pdf/pdf-editor/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1726,223 +1797,6 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/web/traceparent-datadog/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Docker Compose로 간단하게 Ollama 시작하기</title>
-        <link>https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/</link>
-        <pubDate>Wed, 31 Jul 2024 23:48:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/</guid>
-        <description>임창수 https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/ -&lt;h1 id=&#34;대형-언어-모델-llm-large-language-model&#34;&gt;대형 언어 모델 (LLM, Large Language Model)&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;LLM은 방대한 양의 데이터로 사전 학습된 초대형 딥 러닝 모델&lt;/strong&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;입니다.
-이를 활용해 텍스트를 생성하거나 분류, 요약, 번역 등
-다양한 자연어 처리 작업(NLP, Natural Language Processing)을 수행할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;일반적으로 &lt;strong&gt;700억 개(70 Billion) 이상의 파라미터를 갖는 모델을 LLM&lt;/strong&gt;이라고 합니다.
-&lt;strong&gt;70억 개(7 Billion) 수준의 파라미터를 갖는 모델은 SLM&lt;/strong&gt;(Small Language Model)이라고 합니다.
-이 사이에 &lt;strong&gt;중간 규모의 모델은 sLLM&lt;/strong&gt;(smaller Large Language Model)이라고 합니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Ollama&lt;/strong&gt;는 오픈소스 LLM을 쉽게 실행할 수 있게 도와주는 도구입니다.
-&lt;strong&gt;Open WebUI&lt;/strong&gt;는 ChatGPT 화면처럼 LLM과 대화 시 웹 UI를 제공하는 오픈소스입니다.
-이 2가지 도구를 간단하게 사용해보겠습니다.&lt;/p&gt;
-&lt;h1 id=&#34;docker-없이-ollma-실행해보기&#34;&gt;Docker 없이 Ollma 실행해보기&lt;/h1&gt;
-&lt;p&gt;먼저 Docker 컨테이너 없이 Python 스크립트로 Ollama를 실행해보겠습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install langchain-community==0.2.11
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;from&lt;/span&gt; langchain_community.chat_models &lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; ChatOllama
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;from&lt;/span&gt; langchain_core.prompts &lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; ChatPromptTemplate
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Initialize the prompt with system message&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;initial_prompt = [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    (
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;system&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;너는 중고차 판매를 도와주는 어시스턴트야.&amp;#34;&lt;/span&gt; +
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;이름은 AMI야.&amp;#34;&lt;/span&gt; +
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;존댓말을 해야 해.&amp;#34;&lt;/span&gt; +
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;human이 우리 서비스의 자동차를 구매하도록 유도하고 관련 질문 아니면 대답해줄 수 없다고 해.&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Function to create a prompt with message history&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;create_prompt_with_history&lt;/span&gt;(history, new_message):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; ChatPromptTemplate.from_messages(history + [(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;human&amp;#34;&lt;/span&gt;, new_message)])
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Initialize the model&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;llm = ChatOllama(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    model=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;llama3.1:8b&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    temperature=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Conversation history&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;conversation_history = initial_prompt.copy()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Function to process new user input&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;process_input&lt;/span&gt;(input_text):
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;global&lt;/span&gt; conversation_history
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    prompt = create_prompt_with_history(conversation_history, input_text)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    chain = prompt | llm
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    response = chain.invoke({&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;input&amp;#34;&lt;/span&gt;: input_text})
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;# Add the new messages to the conversation history&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    conversation_history.append((&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;human&amp;#34;&lt;/span&gt;, input_text))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    conversation_history.append((&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;assistant&amp;#34;&lt;/span&gt;, response.content))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; response.content
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Main loop to handle console input&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; __name__ == &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &amp;#39;exit&amp;#39;을 입력하면 종료됩니다.&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;True&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        user_input = input(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;You: &amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; user_input.lower() == &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;exit&amp;#39;&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            print(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;대화를 종료합니다.&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f00&#34;&gt;break&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        response = process_input(user_input)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Assistant:&amp;#34;&lt;/span&gt;, response)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 스크립트를 실행하면 다음과 같이 대화를 할 수 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;중고차 판매 어시스턴트 AMI와 대화를 시작합니다. &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;exit&amp;#39;&lt;/span&gt;을 입력하면 종료됩니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; You: Hyundai 차 추천해줘.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Assistant: 죄송합니다. 저는 중고차 판매를 도와주는 어시스턴트로, 저는 직접 자동차를 추천할 수 없습니다. 그러나, 저는 Hyundai의 다양한 모델에 대한 정보를 제공할 수 있습니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Hyundai에는 여러 모델이 있지만, 가장 인기 있는 몇 가지 모델은 다음과 같습니다:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;*   Hyundai Elantra: 이 모델은 중형 세단으로, 내구성과 경제성을 강조합니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;*   Hyundai Sonata: 이 모델은 중형 세단으로, 스타일과 기능을 제공합니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;*   Hyundai Tucson: 이 모델은 소형 SUV로, 공간과 성능을 제공합니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;이러한 정보는 구매자에게 도움이 될 수 있습니다. 그러나, 구매자는 직접 자동차를 방문하고 테스트해 보아야 합니다.
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; You: exit
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;대화를 종료합니다.
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;질문에 답변 시 GPU를 사용하는 것도 확인할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp&#34; alt=&#34;GPU 사용하는 프로그램&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;docker-compose-사용하기&#34;&gt;Docker Compose 사용하기&lt;/h1&gt;
-&lt;p&gt;처음에는 Open WebUI 레포지토리에 있는 &lt;a href=&#34;https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml&#34;&gt;docker-compose.yaml&lt;/a&gt;
-파일로 실행해봤지만 답변 시 &lt;strong&gt;CPU만 사용&lt;/strong&gt;하는 것을 확인할 수 있었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp&#34; alt=&#34;CPU를 사용하는 Docker Ollama&#34;&gt;&lt;/p&gt;
-&lt;p&gt;확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용합니다.
-&lt;a href=&#34;https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image&#34;&gt;Ollama 문서&lt;/a&gt;를
-참조해서 GPU를 사용하도록 설정해보겠습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Docker로 실행할 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Docker Compose로 실행할 때도 &lt;a href=&#34;https://docs.docker.com/compose/gpu-support/&#34;&gt;공식 문서&lt;/a&gt;를 참조해서 옵션을 추가할 수 있었습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Docker Compose로 실행할 경우&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;services:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ollama:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    volumes:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - ollama:/root/.ollama
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    container_name: ollama
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    pull_policy: always
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    tty: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    restart: unless-stopped
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    image: ollama/ollama:${OLLAMA_DOCKER_TAG-latest}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;# 추가한 옵션 [deploy](https://docs.docker.com/compose/gpu-support/)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    deploy:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      resources:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        reservations:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;          devices:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            - driver: nvidia
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              count: &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              capabilities: [gpu]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  open-webui:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    build:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      context: .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      args:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        OLLAMA_BASE_URL: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/ollama&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      dockerfile: Dockerfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    image: ghcr.io/open-webui/open-webui:${WEBUI_DOCKER_TAG-main}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    container_name: open-webui
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    volumes:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - open-webui:/app/backend/data
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    depends_on:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - ollama
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ports:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - ${OPEN_WEBUI_PORT-3000}:8080
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    environment:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;OLLAMA_BASE_URL=http://ollama:11434&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;WEBUI_SECRET_KEY=&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    extra_hosts:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      - host.docker.internal:host-gateway
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    restart: unless-stopped
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;volumes:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ollama: {}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  open-webui: {}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;실행 후 &lt;code&gt;3000&lt;/code&gt;번 포트 혹은 &lt;code&gt;OPEN_WEBUI_PORT&lt;/code&gt;로 지정한 포트로 접속하면 Open WebUI 화면을 확인할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-open-webui.webp&#34; alt=&#34;Open WebUI 화면&#34;&gt;&lt;/p&gt;
-&lt;p&gt;GPU를 사용하는 것도 확인할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp&#34; alt=&#34;GPU 사용하는 Ollama Docker Container&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;더-나은-결과물을-위해-추가로-고려해야-할-사항&#34;&gt;더 나은 결과물을 위해 추가로 고려해야 할 사항&lt;/h1&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://platform.openai.com/docs/guides/optimizing-llm-accuracy&#34;&gt;Optimizing LLMs for accuracy&lt;/a&gt; - OpenAI Platform&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp&#34; alt=&#34;LLM optimization context&#34;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;RAG(Retrieval-Augmented Generation)&lt;/strong&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;을 통해 외부의 정보와 결합된 답변을 생성할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;파인 튜닝(Fine-tuning)&lt;/strong&gt;&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;을 통해 특정 도메인에 특화된 답변을 생성할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;가드레일(Guardrails)&lt;/strong&gt;&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;을 설정해 원치 않는 답변을 방지할 수 있습니다. (토픽/안전/보안 가드레일)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;더-알아보기&#34;&gt;더 알아보기&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;입문 (전체적인 그림 그리기)
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598&#34;&gt;(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영&lt;/a&gt; - 입문&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703&#34;&gt;(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준&lt;/a&gt; - 입문 + 측정&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/cto0f7prJXs&#34;&gt;(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/cto0f7prJXs&#34;&gt;(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;RAG
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/kr/what-is/retrieval-augmented-generation/&#34;&gt;검색 증강 생성(RAG)이란?&lt;/a&gt; - Elastic&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/T-D1OfcDW1M&#34;&gt;What is Retrieval-Augmented Generation (RAG)?&lt;/a&gt; - IBM Techonology&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation&#34;&gt;Retrieval augmented generation using Elasticsearch and OpenAI&lt;/a&gt; - OpenAI Cookbook&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine&#34;&gt;Elasticsearch Relevance Engine(ESRE)&lt;/a&gt; - Elastic&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;파인 튜닝
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://platform.openai.com/docs/guides/fine-tuning&#34;&gt;Fine-tuning&lt;/a&gt; - OpenAI Platform&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;가드레일
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/4zRc-k2KNKQ&#34;&gt;LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.ml6.eu/blogpost/the-landscape-of-llm-guardrails-intervention-levels-and-techniques&#34;&gt;The landscape of LLM guardrails: intervention levels and techniques&lt;/a&gt; - ML6&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cookbook.openai.com/examples/how_to_use_guardrails&#34;&gt;How to implement LLM guardrails&lt;/a&gt; - OpenAI Cookbook&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/SwqusllMCnE&#34;&gt;NVIDIA NeMo Guardrails: Full Walkthrough for Chatbots / AI&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/NVIDIA/NeMo-Guardrails&#34;&gt;NVIDIA/NeMo-Guardrails&lt;/a&gt; - GitHub repository&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.guardrailsai.com/docs/examples/response_is_on_topic&#34;&gt;On Topic Validation&lt;/a&gt; - Guardrails AI&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://aws.amazon.com/ko/what-is/large-language-model/&#34;&gt;대규모 언어 모델(LLM)이란 무엇인가요?&lt;/a&gt; - AWS&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/&#34;&gt;검색 증강 생성(RAG)이란 무엇인가요?&lt;/a&gt; - AWS&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.skelterlabs.com/blog/rag-vs-finetuning&#34;&gt;RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드&lt;/a&gt; - 스켈터 랩스 Skelter Labs&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.nvidia.com/ko-kr/blog/nvidia-enables-trustworthy-safe-and-secure-large-language-model-conversational-systems/&#34;&gt;신뢰할 수 있고 안전하며 보안이 뛰어난 대규모 언어 모델 대화 시스템을 구현하는 NVIDIA&lt;/a&gt; - NVIDIA&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/ai/ollama-openwebui-docker-compose/ - Im Changsu | Since 2020</description>
         </item>
     
     
