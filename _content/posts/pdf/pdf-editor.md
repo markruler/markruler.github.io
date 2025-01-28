@@ -2,7 +2,7 @@
 date: 2025-01-27T23:15:00+09:00
 lastmod: 2025-01-27T23:15:00+09:00
 title: "비파괴 스캐너로 스캔한 책 PDF outline 만들기"
-description: "이젠 "
+description: "PyMuPDF, Tesseract OCR, PyQt6"
 featured_image: "/images/pdf/pdf-editor/pdf-editor.png"
 images: ["/images/pdf/pdf-editor/pdf-editor.png"]
 socialshare: true
@@ -16,7 +16,7 @@ Categories:
 절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
 그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
 하지만 펼칠 때마다 목차(Outline)이 없으면 발췌독하기 불편한데요.
-오픈 소스 OCR 도구인 Google Tesseract를 이용해 PDF outline을 만들어보겠습니다.
+오픈 소스 OCR 도구인 Tesseract를 이용해 PDF outline을 만들어보겠습니다.
 
 # 사적이용을 위한 저작권법
 
@@ -70,7 +70,7 @@ for img in images:
 # PyQt6
 
 PyQt6는 Qt 프레임워크의 Python 바인딩으로, Qt는 크로스 플랫폼 GUI 프레임워크입니다.
-위 짤막 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.
+위 조각 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.
 
 ```python
 app = QApplication(sys.argv)

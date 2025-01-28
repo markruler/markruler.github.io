@@ -18,7 +18,7 @@
 <meta name="google-site-verification" content="G-FFMDWZ27TN">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="이젠 ">
+<meta name="description" content="PyMuPDF, Tesseract OCR, PyQt6">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="/manifest.json">
@@ -28,7 +28,7 @@
 <meta property="og:url" content="https://markruler.github.io/posts/pdf/pdf-editor/">
   <meta property="og:site_name" content="임창수">
   <meta property="og:title" content="비파괴 스캐너로 스캔한 책 PDF outline 만들기">
-  <meta property="og:description" content="이젠">
+  <meta property="og:description" content="PyMuPDF, Tesseract OCR, PyQt6">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
@@ -46,7 +46,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://markruler.github.io/images/pdf/pdf-editor/pdf-editor.png">
   <meta name="twitter:title" content="비파괴 스캐너로 스캔한 책 PDF outline 만들기">
-  <meta name="twitter:description" content="이젠">
+  <meta name="twitter:description" content="PyMuPDF, Tesseract OCR, PyQt6">
 
 
 
@@ -328,7 +328,7 @@
                     비파괴 스캐너로 스캔한 책 PDF outline 만들기
                     
                     <div class="post-subtitle">
-                        이젠 
+                        PyMuPDF, Tesseract OCR, PyQt6
                     </div>
                     
                     <div class="post-meta">
@@ -366,7 +366,7 @@
                     <p>절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
 그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
 하지만 펼칠 때마다 목차(Outline)이 없으면 발췌독하기 불편한데요.
-오픈 소스 OCR 도구인 Google Tesseract를 이용해 PDF outline을 만들어보겠습니다.</p>
+오픈 소스 OCR 도구인 Tesseract를 이용해 PDF outline을 만들어보겠습니다.</p>
 <h1 id="사적이용을-위한-저작권법">사적이용을 위한 저작권법</h1>
 <p>먼저 저작권에 대해 확인해야 할 부분이 있습니다.
 과연 책을 스캔해서 PDF로 만드는 것이 합법일까요?
@@ -405,7 +405,7 @@
 </span></span><span style="display:flex;"><span>    txt = pytesseract.image_to_string(image, lang=<span style="color:#87ceeb">&#34;eng+kor&#34;</span>)
 </span></span></code></pre></div><h1 id="pyqt6">PyQt6</h1>
 <p>PyQt6는 Qt 프레임워크의 Python 바인딩으로, Qt는 크로스 플랫폼 GUI 프레임워크입니다.
-위 짤막 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.</p>
+위 조각 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>app = QApplication(sys.argv)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>window = App()
@@ -509,7 +509,7 @@
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %eb%b9%84%ed%8c%8c%ea%b4%b4%20%ec%8a%a4%ec%ba%90%eb%84%88%eb%a1%9c%20%ec%8a%a4%ec%ba%94%ed%95%9c%20%ec%b1%85%20PDF%20outline%20%eb%a7%8c%eb%93%a4%ea%b8%b0.&amp;body=%eb%b9%84%ed%8c%8c%ea%b4%b4%20%ec%8a%a4%ec%ba%90%eb%84%88%eb%a1%9c%20%ec%8a%a4%ec%ba%94%ed%95%9c%20%ec%b1%85%20PDF%20outline%20%eb%a7%8c%eb%93%a4%ea%b8%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0a%ec%9d%b4%ec%a0%a0%20%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fpdf%2fpdf-editor%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %eb%b9%84%ed%8c%8c%ea%b4%b4%20%ec%8a%a4%ec%ba%90%eb%84%88%eb%a1%9c%20%ec%8a%a4%ec%ba%94%ed%95%9c%20%ec%b1%85%20PDF%20outline%20%eb%a7%8c%eb%93%a4%ea%b8%b0.&amp;body=%eb%b9%84%ed%8c%8c%ea%b4%b4%20%ec%8a%a4%ec%ba%90%eb%84%88%eb%a1%9c%20%ec%8a%a4%ec%ba%94%ed%95%9c%20%ec%b1%85%20PDF%20outline%20%eb%a7%8c%eb%93%a4%ea%b8%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aPyMuPDF%2c%20Tesseract%20OCR%2c%20PyQt6%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fpdf%2fpdf-editor%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
