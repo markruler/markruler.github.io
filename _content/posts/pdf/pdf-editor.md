@@ -10,7 +10,7 @@ tags:
   - pdf
   - book
 Categories:
-  - blog
+  - wiki
 ---
 
 절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
