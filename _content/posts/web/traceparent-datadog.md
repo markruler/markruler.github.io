@@ -3,7 +3,6 @@ date: 2024-08-22T18:00:00+09:00
 lastmod: 2024-09-05T21:47:00+09:00
 title: "Traceparent 헤더로 클라이언트부터 서버까지 추적하기"
 description: "W3C Trace Context"
-featured_image: "/images/web/traceparent-datadog/w3c.webp"
 images: ["/images/web/traceparent-datadog/w3c.webp"]
 tags:
   - network

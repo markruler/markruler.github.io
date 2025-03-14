@@ -5,7 +5,6 @@ date: 2025-01-13T19:13:00+09:00
 lastmod: 2025-01-13T19:13:00+09:00
 title: "네트워크 대역폭으로 발생한 복합적인 시스템 장애"
 description: "NFS와 네트워크 대역폭"
-featured_image: "/images/network/nfs-network-bandwidth/static-file-server.png"
 images: ["/images/network/nfs-network-bandwidth/static-file-server.png"]
 tags:
   - NFS

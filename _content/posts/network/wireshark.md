@@ -3,7 +3,6 @@ date: 2024-12-30T18:38:00+09:00
 lastmod: 2024-12-31T15:05:00+09:00
 title: "일상에서의 Wireshark"
 description: "네트워크 문제 분석 시 필요한 패킷 분석 도구"
-featured_image: "/images/network/wireshark/xAI-grok-wireshark.jpg"
 images: ["/images/network/wireshark/xAI-grok-wireshark.jpg"]
 tags:
   - network

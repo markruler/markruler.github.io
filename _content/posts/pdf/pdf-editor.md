@@ -3,8 +3,7 @@ date: 2025-01-27T23:15:00+09:00
 lastmod: 2025-01-27T23:15:00+09:00
 title: "비파괴 스캐너로 스캔한 책 PDF outline 만들기"
 description: "PyMuPDF, Tesseract OCR, PyQt6"
-featured_image: "/images/pdf/pdf-editor/pdf-editor.png"
-images: ["/images/pdf/pdf-editor/pdf-editor.png"]
+images: ["/images/pdf/pdf-editor/pdf-editor.jpg"]
 socialshare: true
 tags:
   - pdf
@@ -94,6 +93,6 @@ class Worker(QThread):
     # ...
 ```
 
-![PDF Editor](/images/pdf/pdf-editor/pdf-editor.png)
+![PDF Editor](/images/pdf/pdf-editor/pdf-editor.jpg)
 
 전체 소스 코드는 [markruler/pdf-editor](https://github.com/markruler/pdf-editor)를 참조해주세요.

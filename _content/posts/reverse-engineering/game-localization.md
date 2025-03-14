@@ -5,7 +5,6 @@ date: 2024-12-16T21:26:00+09:00
 lastmod: 2025-01-02T19:43:00+09:00
 title: "한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기"
 description: "한국어 패치 제작자분들 감사합니다"
-featured_image: "/images/reverse-engineering/game-localization/jupiter-hell.png"
 images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
 tags:
   - reverse-engineering

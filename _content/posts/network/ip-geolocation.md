@@ -3,7 +3,6 @@ date: 2024-08-29T22:38:00+09:00
 lastmod: 2024-08-29T22:38:00+09:00
 title: "IP로 지리적 위치(Geolocation) 찾기"
 description: "CDN에서 위치 정보를 얻는 방법"
-featured_image: "/images/network/ip-geolocation/ip-geolocation.webp"
 images: ["/images/network/ip-geolocation/ip-geolocation.webp"]
 tags:
   - network

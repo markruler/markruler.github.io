@@ -4,7 +4,6 @@ date: 2024-09-12T00:17:00+09:00
 lastmod: 2024-09-12T00:17:00+09:00
 title: "Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?"
 description: "Onavo Protect, SSL Bump 그리고 Certificate Pinning"
-featured_image: "/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"
 images: ["/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp"]
 tags:
   - network
