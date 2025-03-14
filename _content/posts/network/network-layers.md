@@ -1,11 +1,10 @@
 ---
 draft: true
 socialshare: true
-date: 2025-01-27T01:03:00+09:00
-lastmod: 2025-01-27T01:03:00+09:00
+date: 2025-03-14T01:03:00+09:00
+lastmod: 2025-03-14T01:03:00+09:00
 title: "네트워크 레이어"
 description: "OSI 모델을 중심으로"
-featured_image: "/images/network/network-layers/osi-7-layer-bytebytego.png"
 images: ["/images/network/network-layers/osi-7-layer-bytebytego.png"]
 tags:
   - network
