@@ -690,8 +690,7 @@
 <p><img src="/images/ci/new-system-2022.webp" alt="개발중인 서비스의 새로운 시스템"></p>
 <blockquote>
 <p>총 14단계에서 1단계까지 줄였다.
-먼저 코드 리뷰를 마치고 소스 코드가 통합 브랜치(trunk)에 병합되면 자동으로 빌드된다.</p>
-</blockquote>
+먼저 코드 리뷰를 마치고 소스 코드가 통합 브랜치(trunk)에 병합되면 자동으로 빌드된다.</p></blockquote>
 <ol>
 <li>운영 환경에 반영하기 위해 배포 버튼을 누른다.
 <ul>
@@ -721,8 +720,7 @@
 <p><a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/active-health-checks/">Active Health Check</a>란
 주기적으로 서버에 연결을 시도하거나 HTTP 요청을 보내서 서버 상태를 확인한다.
 반면 <a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/passive-health-checks/">Passive Health Check</a>는
-오류가 있는지 활성 트래픽(active traffic)만 검사한다.</p>
-</blockquote>
+오류가 있는지 활성 트래픽(active traffic)만 검사한다.</p></blockquote>
 <p><code>s1</code> 과 <code>s2</code> 서버에는 CentOS 7이 설치되어있다.
 해당 OS에서는 httpd를 <strong>2.4.6 버전</strong>까지만 업데이트 할 수 있다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>&gt; yum info httpd
@@ -820,14 +818,14 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 만약 <code>docker0</code> 와 동일한 <code>172.17.0.1/16</code> 으로 생성하려고 시도하면 아래와 같은 에러가 발생한다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>failed to create network httpd_default: Error response from daemon: Pool overlaps with other one on this address space
 </span></span></code></pre></div><p>Docker에서 추가 인터페이스를 생성할 때 <code>172.17-31.x.x/16</code>, <code>192.168.x.x/20</code> 범위에서 추가하게 된다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/moby/moby/blob/df650a1aeb190a319287c4d26bd3593b5343fb72/libnetwork/ipamutils/utils.go
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">var</span> (
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// PredefinedLocalScopeDefaultNetworks contains a list of 31 IPv4 private networks with host size 16 and 12
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#0f0">// (172.17-31.x.x/16, 192.168.x.x/20) which do not overlap with the networks in `PredefinedGlobalScopeDefaultNetworks`
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  PredefinedLocalScopeDefaultNetworks []*net.IPNet
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// PredefinedGlobalScopeDefaultNetworks contains a list of 64K IPv4 private networks with host size 8
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#0f0">// (10.x.x.x/24) which do not overlap with the networks in `PredefinedLocalScopeDefaultNetworks`
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  PredefinedGlobalScopeDefaultNetworks []*net.IPNet
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/moby/moby/blob/df650a1aeb190a319287c4d26bd3593b5343fb72/libnetwork/ipamutils/utils.go</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">var</span> (
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// PredefinedLocalScopeDefaultNetworks contains a list of 31 IPv4 private networks with host size 16 and 12</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// (172.17-31.x.x/16, 192.168.x.x/20) which do not overlap with the networks in `PredefinedGlobalScopeDefaultNetworks`</span>
+</span></span><span style="display:flex;"><span>  PredefinedLocalScopeDefaultNetworks []*net.IPNet
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// PredefinedGlobalScopeDefaultNetworks contains a list of 64K IPv4 private networks with host size 8</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// (10.x.x.x/24) which do not overlap with the networks in `PredefinedLocalScopeDefaultNetworks`</span>
+</span></span><span style="display:flex;"><span>  PredefinedGlobalScopeDefaultNetworks []*net.IPNet
 </span></span><span style="display:flex;"><span>  mutex                                sync.Mutex
 </span></span><span style="display:flex;"><span>  localScopeDefaultNetworks = []*NetworkToSplit{{<span style="color:#87ceeb">&#34;172.17.0.0/16&#34;</span>, <span style="color:#f60">16</span>},
 </span></span><span style="display:flex;"><span>                                                {<span style="color:#87ceeb">&#34;172.18.0.0/16&#34;</span>, <span style="color:#f60">16</span>},
@@ -872,8 +870,7 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 </span></span></code></pre></div><p>설정이 끝났다면 iptables를 다시 실행한다.</p>
 <h2 id="httpd를-다시-실행해야-할-때">httpd를 다시 실행해야 할 때</h2>
 <blockquote>
-<p>httpd 컨테이너를 재실행(restart)하지 않고도 설정 파일을 다시 적용(reload)하는 방법을 아직 찾지 못했다.</p>
-</blockquote>
+<p>httpd 컨테이너를 재실행(restart)하지 않고도 설정 파일을 다시 적용(reload)하는 방법을 아직 찾지 못했다.</p></blockquote>
 <p>테스트 환경의 Alteon Switch에서 Layer 4 헬스체크가 잘 되는지 확인해 본다.
 그러고는 <code>s2</code> 서버의 <code>httpd</code> 를 죽여본다.
 <code>FAILED</code> 상태가 되고 트래픽을 보내지 않는다!</p>
@@ -946,8 +943,7 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 </span></span></code></pre></div><p>2번 서버로 갔던 패킷이 갑자기 유실되면 CDN에서 받는 응답 데이터가 없어서 발생하는 것으로 추측하고 있다. 🤯
 <a href="https://techdocs.akamai.com/edge-diagnostics/docs/error-codes">Akamai Reference</a>에 따르면 <code>#15.x.x.x</code>는 <code>ERR_ZERO_SIZE_OBJECT</code> 에러다.</p>
 <blockquote>
-<p><code>ERR_ZERO_SIZE_OBJECT</code> — A response from the origin server has zero length.</p>
-</blockquote>
+<p><code>ERR_ZERO_SIZE_OBJECT</code> — A response from the origin server has zero length.</p></blockquote>
 <p>Akamai에 문의 결과 해당 페이지는 커스텀 할 수 없다고 한다.
 버려지는 요청들을 어떻게 처리할지 고민이 필요하다.</p>
 <h2 id="haproxy-전환">HAProxy 전환</h2>

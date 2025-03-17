@@ -23,8 +23,8 @@
         <guid>https://markruler.github.io/posts/pdf/pdf-editor/</guid>
         <description>임창수 https://markruler.github.io/posts/pdf/pdf-editor/ -&lt;p&gt;절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
 그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
-하지만 펼칠 때마다 목차(Outline)이 없으면 발췌독하기 불편한데요.
-오픈 소스 OCR 도구인 Tesseract를 이용해 PDF outline을 만들어보겠습니다.&lt;/p&gt;
+하지만 펼칠 때마다 목차&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;가 없으면 발췌독하기 불편한데요.
+오픈 소스 OCR 도구인 Tesseract를 이용해 PDF 목차를 만들어보겠습니다.&lt;/p&gt;
 &lt;h1 id=&#34;사적이용을-위한-저작권법&#34;&gt;사적이용을 위한 저작권법&lt;/h1&gt;
 &lt;p&gt;먼저 저작권에 대해 확인해야 할 부분이 있습니다.
 과연 책을 스캔해서 PDF로 만드는 것이 합법일까요?
@@ -32,8 +32,7 @@
 &lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C30%EC%A1%B0&#34;&gt;저작권법 제30조&lt;/a&gt;를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;제30조(사적이용을 위한 복제) 공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있다.
-다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;이 조항에 대해서도 인터넷 커뮤니티에서는 &amp;ldquo;개인이 구매한 서적만 가능한 것이다&amp;quot;라고 해석하는 경우가 많은 것 같습니다.
 유명한 테크 유튜브 채널인 &lt;a href=&#34;https://youtu.be/NUfQGNMfwis?t=491&#34;&gt;테크몽&lt;/a&gt;에서도 &lt;strong&gt;한국저작권위원회&lt;/strong&gt;에 직접 문의한 결과 문제가 없다고 합니다.
 &lt;strong&gt;한국저작권보호원&lt;/strong&gt;의 &lt;a href=&#34;https://www.youtube.com/watch?v=9fSDhWAP7A0&#34;&gt;영상 댓글&lt;/a&gt;에서도 이 경우에는 문제없다고 하죠.&lt;/p&gt;
@@ -41,10 +40,9 @@
 &lt;p&gt;공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있습니다(저작권법 제30조).
 이를 &amp;lsquo;사적이용을 위한 복제&amp;rsquo; 통칭 사적 복제라고 하며, 구입한 CD를 핸드폰에 넣어 듣기 위하여 mp3파일로 변환하는 행위, 다운로드받은 영화를 TV에서 보기 위하여 usb에 옮기는 행위, 구입한 책에 필기를 하기 위하여 복사하는 행위 등이 해당할 수 있습니다.
 관련하여, 도서관에서 빌린 책을 직접 스캔 또는 사진으로 찍어 귀하 소유의 핸드폰으로 읽는 것은 사적복제로서 저작권 침해가 되지 않습니다.
-그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;즉, &lt;strong&gt;자신이 소유한 또는 도서관에서 빌린 서적&lt;/strong&gt;을 &lt;strong&gt;개인적으로 이용&lt;/strong&gt;하기 위해 &lt;strong&gt;자신이 소유한 복제기기&lt;/strong&gt;로 직접 스캔한 경우 적법한 행위입니다.
-이쯤이면 저작권법 제30조를 유추해석하거나 확장해석 될 여지는 없을 것 같습니다.&lt;/p&gt;
+이쯤이면 저작권법 제30조가 다르게 해석&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;될 여지는 없을 것 같습니다.&lt;/p&gt;
 &lt;h1 id=&#34;pdf-읽기&#34;&gt;PDF 읽기&lt;/h1&gt;
 &lt;p&gt;PDF는 Adobe 사에서 개발한 파일 형식으로, 다양한 운영체제에서 동일한 형식으로 문서를 표현할 수 있습니다.
 여기서는 Python 모듈인 PyMuPDF를 사용해서 PDF를 읽어보겠습니다.&lt;/p&gt;
@@ -54,13 +52,13 @@
 스캐너로 스캔한 책은 이미지로 저장이 되는데요.
 이 이미지를 텍스트로 변환해서 PDF outline을 만들어보겠습니다.&lt;/p&gt;
 &lt;p&gt;먼저 오픈 소스 도구인 &lt;a href=&#34;https://tesseract-ocr.github.io/tessdoc/Installation.html&#34;&gt;Tesseract OCR&lt;/a&gt;를 설치해야 합니다.
-이후 Tesseract OCR 설치 경로의 &lt;code&gt;tessdata&lt;/code&gt; 폴더에 훈련 모델(&lt;a href=&#34;https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata&#34;&gt;kor.tessdata&lt;/a&gt;)을 다운로드합니다.&lt;/p&gt;
+이후 Tesseract OCR 설치 경로의 &lt;code&gt;tessdata&lt;/code&gt; 디렉토리에 훈련 모델(&lt;a href=&#34;https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata&#34;&gt;kor.tessdata&lt;/a&gt;)을 다운로드합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;page = pdf_file[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;]
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;images = page.get_images()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; img in images:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    base_image = pdf_file.extract_image(img[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;])
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    image = Image.open(io.BytesIO(base_image[&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;image&amp;#34;&lt;/span&gt;]))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt = pytesseract.image_to_string(image, lang=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;eng+kor&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    txt = pytesseract.image_to_string(image, lang=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;eng+kor&amp;#34;&lt;/span&gt;)  &lt;span style=&#34;color:#0f0&#34;&gt;# 영어와 한국어를 인식&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;pyqt6&#34;&gt;PyQt6&lt;/h1&gt;
 &lt;p&gt;PyQt6는 Qt 프레임워크의 Python 바인딩으로, Qt는 크로스 플랫폼 GUI 프레임워크입니다.
 위 조각 코드들을 조합해서 PyQt6로 PDF outline을 만드는 GUI 프로그램을 만들 수 있습니다.&lt;/p&gt;
@@ -79,8 +77,24 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;run&lt;/span&gt;(self):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/pdf/pdf-editor/pdf-editor.jpg&#34; alt=&#34;PDF Editor&#34;&gt;&lt;/p&gt;
-&lt;p&gt;전체 소스 코드는 &lt;a href=&#34;https://github.com/markruler/pdf-editor&#34;&gt;markruler/pdf-editor&lt;/a&gt;를 참조해주세요.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다음 화면은 &lt;a href=&#34;https://github.com/markruler/pdf-editor&#34;&gt;개인적으로 사용하기 위해 만든 프로그램&lt;/a&gt;입니다.
+목차 부분을 OCR로 추출해서 편집할 수 있습니다.
+편집된 목차를 두고 Write outline 버튼을 누르면 목차가 포함된 새 파일이 저장됩니다.
+페이지는 직접 PDF에서 입력해야 하지만 귀찮은 일을 많이 줄일 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/pdf/pdf-editor/pdf-editor.jpg&#34; alt=&#34;PDF Editor&#34;&gt;&lt;/p&gt;
+&lt;p&gt;기본적으로 제공된 훈련 데이터의 정확도가 높은 편은 아니지만,
+일일이 타이핑하는 것보다는 훨씬 편리하고 빠릅니다.&lt;/p&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;Adobe Acrobat에선 Bookmark, GNOME Evince에서는 Outline.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;유추해석 (법률에 명시되지 않은 사항에 대해, 유사한 사항에 관한 법률을 적용하는 해석 방법), 확장해석 (법문의 뜻을 보통의 의미보다 넓게 해석하는 방법) 등.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
 - https://markruler.github.io/posts/pdf/pdf-editor/ - Im Changsu | Since 2020</description>
         </item>
     
@@ -297,8 +311,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 실제로 서버에서 패킷을 캡처하는 경우 의존성이 적고 가벼운 &lt;code&gt;tcpdump&lt;/code&gt;를 더 많이 사용하는 편입니다.
 &lt;strong&gt;파일로 출력할 때는 Wireshark display-filter(&lt;code&gt;-Y&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;tshark: Display filters aren&amp;rsquo;t supported when capturing and saving the captured packets.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;tshark: Display filters aren&amp;rsquo;t supported when capturing and saving the captured packets.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tcp 프로토콜의 port 33000을 경유하는 패킷 5초간 캡처해서 tcp_33000.pcap 파일로 저장&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp port 33000&amp;#39;&lt;/span&gt; -w tcp_33000.pcap -a duration:5
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo timeout &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt; tcpdump -i any -n tcp and port &lt;span style=&#34;color:#f60&#34;&gt;33000&lt;/span&gt; -w tcp_33000.pcap
@@ -307,8 +320,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 특정 필드만 출력하거나 JSON 형식으로 출력할 때는 CLI로 읽는 게 편합니다.
 &lt;strong&gt;파일을 읽을 때는 pcap-filter(&lt;code&gt;-f&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;tshark: Only read filters, not capture filters, can be specified when reading a capture file.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;tshark: Only read filters, not capture filters, can be specified when reading a capture file.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark로 파일 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap --color
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# JSON 형식으로 읽기&lt;/span&gt;
@@ -378,8 +390,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 그래서 멀티 게임을 운영하는 개발사에서는 유독 민감하게 반응하는 것 같습니다.&lt;/p&gt;
 &lt;h1 id=&#34;대표적인-게임-엔진별-한국어-패치-제작-방법&#34;&gt;대표적인 게임 엔진별 한국어 패치 제작 방법&lt;/h1&gt;
 &lt;blockquote&gt;
-&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;기본적으로 제가 패치하는 방법은 다음과 같습니다.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;게임 엔진별 언팩 도구를 사용하여 게임 파일을 추출합니다(unpack).&lt;/li&gt;
@@ -943,22 +954,19 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;p&gt;[2024-07-28] - 이는 &lt;a href=&#34;https://techcrunch.com/2019/01/29/facebook-project-atlas/&#34;&gt;2019년에 TechCrunch가 공개한&lt;/a&gt; 내용과 다릅니다.
 당시 페이스북은 10대 청소년들에게 사용 습관 데이터를 수집하기 위해 돈을 지불했고,
 그 결과 Onavo 앱은 앱 스토어에서 삭제되고 &lt;a href=&#34;https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data&#34;&gt;벌금이 부과되었습니다&lt;/a&gt;.
-이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &amp;ldquo;가로채기&amp;rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &amp;ldquo;가로채기&amp;rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;*한 HN 사용자는 다음과 같이 &lt;a href=&#34;https://news.ycombinator.com/item?id=41091505&amp;amp;ref=doubleagent.net&#34;&gt;명확히 합니다&lt;/a&gt;.&lt;br&gt;
 &lt;br&gt;
 &amp;ldquo;이것은 도청법 위반 소송이 아닙니다. 독점 금지 소송으로, 청구 내용은 모두 셔먼법&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 위반에 관한 것입니다.
-원고 측 변호사들이 자료 조사 과정에서 페이스북이 도청법을 위반했을 가능성이 있다는 증거를 &lt;em&gt;우연히&lt;/em&gt; 발견했습니다.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
+원고 측 변호사들이 자료 조사 과정에서 페이스북이 도청법을 위반했을 가능성이 있다는 증거를 &lt;em&gt;우연히&lt;/em&gt; 발견했습니다.&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://doubleagent.net/content/images/2024/07/image-1.png&#34; alt=&#34;Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;*Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;이 글은 제한적이고 부분적인 정보로 인해 일부 사실이 부정확하거나 불완전할 수 있습니다.
 따라서 수정이 필요하거나 새로운 사실이 발견될 경우 이 글은 업데이트될 수 있습니다.
 새로운 콘텐츠를 받아보고 싶으시면 &lt;a href=&#34;https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/&#34;&gt;저자의 블로그&lt;/a&gt;를 구독하시거나
-&lt;a href=&#34;https://twitter.com/haxrob&#34;&gt;저자의 X&lt;/a&gt;를 팔로우하세요.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;a href=&#34;https://twitter.com/haxrob&#34;&gt;저자의 X&lt;/a&gt;를 팔로우하세요.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%8F%99%EA%B8%B0&#34;&gt;동기&lt;/a&gt;&lt;/li&gt;
@@ -1005,8 +1013,7 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;p&gt;&lt;em&gt;Page 3 - Case 3:20-cv-08570-JD Document 736&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;구글(Google)이 자사의 운영 체제에서 접근성 기능 사용에 대해 다음과 같이 말하고 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다.&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&amp;ldquo;장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다.&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;장애가 있는 사람들을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업이 있다는 것을 짐작할 수 있습니다.
 Android 접근성 기능의 남용은 주로
 &lt;a href=&#34;https://blog.pradeo.com/accessibility-services-mobile-analysis-malware&#34;&gt;뱅킹 멀웨어&lt;/a&gt;와 같은 악성 애플리케이션에 의해 발생하는 것으로 알려져 있습니다.&lt;/p&gt;
@@ -1040,8 +1047,7 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 또한 그해 애플(Apple)은 &lt;a href=&#34;https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app&#34;&gt;페이스북의 개발자 프로그램 인증서를 철회하는&lt;/a&gt;
 강력한 조치를 취해 분명한 메시지를 전달했습니다.&lt;br&gt;
 &lt;br&gt;
-서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;분석&#34;&gt;분석&lt;/h1&gt;
 &lt;p&gt;최종 사용자 디바이스의 웹사이트와 애플리케이션은 디바이스 내 신뢰 저장소에 저장된 public 인증서를 통해 HTTPS/TLS를 사용하는 원격 웹사이트나 서버를 신뢰합니다.
 이러한 &amp;ldquo;인증 기관(CA)&amp;rdquo; 인증서는 애플리케이션이 신뢰할 수 있는 상대방과 통신하고 있음을 확인해 주는 &amp;ldquo;신뢰 앵커(trust anchor)&amp;rdquo; 역할을 합니다.
@@ -1055,8 +1061,7 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 &lt;br&gt;
 &amp;ldquo;&lt;em&gt;HTTPS는 사용자에게 개인정보보호 및 보안을 제공하기 위해 설계되었습니다.
 사용자 동의나 인지 없이 HTTPS 터널을 복호화하는 것은 윤리 규범을 위반할 수 있으며,
-관할 지역에서 불법일 수 있습니다.&lt;/em&gt;&amp;rdquo;&lt;/p&gt;
-&lt;/blockquote&gt;
+관할 지역에서 불법일 수 있습니다.&lt;/em&gt;&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;아이폰의 iOS와 달리 구글은 대부분의 모바일 애플리케이션에서 신뢰할 수 있는 CA 인증서를 설치하기가 매우 어렵도록 수많은 변경 사항을 적용했습니다.
 2020년 9월에 출시된 안드로이드 11에서는 앱이 사용자에게 인증서를 설치하라는 메시지를 표시하는 메커니즘을 완전히 차단했습니다.
 그리고 어떤 애플리케이션도 기본적으로 사용자 저장소에 있는 인증서를 신뢰하지 않습니다.&lt;/p&gt;
@@ -1065,8 +1070,7 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 &lt;br&gt;
 나중에 살펴보겠지만, 당시 스냅챗 앱은 분석 도메인에 대한 인증서 고정을 구현하지 않았습니다.
 이는 다른 앱 도메인의 경우에도 마찬가지일 것입니다.
-따라서 페이스북은 경쟁사의 이러한 기술적 제한/실수를 이용한 것으로 보입니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+따라서 페이스북은 경쟁사의 이러한 기술적 제한/실수를 이용한 것으로 보입니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;현재는 2016년부터 2019년까지 페이스북이 했던 일을 하는 것은 기술적으로 불가능합니다.
 하지만 그들은 어떻게 해냈을까요?
 다행히도 우리는 안드로이드와 Play 스토어 생태계를 통해 오래된 안드로이드 앱 패키지를 종종 찾을 수 있습니다.&lt;/p&gt;
@@ -1082,8 +1086,7 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;li&gt;과거 및 삭제된 앱 사용 내역에 액세스 (Access past and deleted app usage)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&amp;ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;그들이 설명하지 않은 것은 이 기능이 앱을 설치한 사용자를 위한 것이 아니라 실제로는 Onavo/Facebook을 위한 것이라는 점입니다.
 이러한 정보는 매우 가치가 있으며, 이는 페이스북이 인수에 지불한 1억 2천만 달러라는 금액만 보더라도 알 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/GJpCkIEbkAAsckm?format=jpg&amp;amp;name=small&#34; alt=&#34;Onavo App Permissions&#34;&gt;&lt;/p&gt;
@@ -1111,8 +1114,7 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 이제 Facebook의 CA 인증서를 앱 내에서 직접 설치하는 것은 불가능해졌습니다.&lt;/p&gt;
 &lt;p&gt;Android 7에서 주목할 만한 또 다른 변경 사항은 &lt;a href=&#34;https://developer.android.com/privacy-and-security/security-config&#34;&gt;Android 문서&lt;/a&gt;에 따르면 다음과 같습니다(강조는 필자).&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;기본적으로 모든 앱의 보안 연결(TLS 및 HTTPS와 같은 프로토콜 사용)은 사전 설치된 시스템 CA를 신뢰하며, &lt;strong&gt;Android 6.0(API 레벨 23) 이하를 대상으로 하는 앱은 기본적으로 사용자가 추가한 CA 저장소도 신뢰합니다&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;기본적으로 모든 앱의 보안 연결(TLS 및 HTTPS와 같은 프로토콜 사용)은 사전 설치된 시스템 CA를 신뢰하며, &lt;strong&gt;Android 6.0(API 레벨 23) 이하를 대상으로 하는 앱은 기본적으로 사용자가 추가한 CA 저장소도 신뢰합니다&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;즉, Android Marshmallow(Android 6)와 그 이전 버전에서는 다른 앱들이 사용자 저장소에 있는 인증서를 신뢰했지만,
 2016년 8월 22일에 출시된 Android 7부터는 앱의 매니페스트 파일에 보안 구성(security configuration)이 있는 경우를 제외하고는 다른 앱에서 더 이상 이를 신뢰하지 않게 되었습니다.&lt;/p&gt;
 &lt;p&gt;Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는 한 어떤 방법으로도 시스템 저장소에 인증서를 설치할 수 없게 되었다는 점입니다.&lt;/p&gt;
@@ -1123,8 +1125,7 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;SSL bump에 사용되는 키는 어디에서 생성되며, 어떻게 남용으로부터 보호되나요?
 (예: 기기에서 생성되어, 해당 기기에만 사용되고, 기기를 벗어나지 않는지, 혹은 앱과 함께 다운로드되어 설치되는 공유 키가 있는지)&lt;/em&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;strong&gt;인증서는 서버에서 생성되어 기기로 전송됩니다.&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;strong&gt;인증서는 서버에서 생성되어 기기로 전송됩니다.&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://doubleagent.net/content/images/2024/04/image-15.png&#34; alt=&#34;Page 3 - Case 3:20-cv-08570-JD Document 736&#34;&gt;&lt;/p&gt;
 &lt;p&gt;따라서 2019년 이전의 훨씬 더 오래된 버전으로 돌아가야 하며, 특히 2017년 9월 버전이 필요합니다.
 이 버전에서는 &amp;ldquo;&lt;code&gt;old_ca.cer&lt;/code&gt;&amp;ldquo;와 &amp;ldquo;&lt;code&gt;new_ca.cer&lt;/code&gt;&amp;ldquo;라는 이름의 인증서가 &lt;code&gt;assets&lt;/code&gt;에 포함되어 있습니다.
@@ -1165,8 +1166,7 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/GKBnQNdb0AA2M8t?format=png&amp;amp;name=medium&#34; alt=&#34;old Snapchat did not use certificate pinning&#34;&gt;&lt;/p&gt;
 &lt;p&gt;앞서 논의한 것처럼, 페이스북은 안드로이드의 보안 강화 및 인증서 고정의 광범위한 도입을 인지하고 있었으며, 이에 대한 언급이 포함되어 있습니다. (이전 &lt;code&gt;Page 3 - Case 3:20-cv-08570-JD Document 736&lt;/code&gt; 참조)&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.&lt;/em&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;또-무엇이-있을까요&#34;&gt;또 무엇이 있을까요?&lt;/h1&gt;
 &lt;p&gt;제 눈에 띈 것은 &lt;a href=&#34;https://en.wikipedia.org/wiki/International_mobile_subscriber_identity&#34;&gt;모바일 가입자 IMSI&lt;/a&gt;를 얻으려는 요청이었습니다.
 이는 매우 민감한 데이터입니다.&lt;/p&gt;
@@ -1241,8 +1241,7 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 합니다.
 그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋습니다.
 물리적으로 할당되지 않은 블록을 포함할 수 있는 &lt;strong&gt;Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에&lt;/strong&gt;
-스왑이 예상대로 동작하지 않을 수 있습니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+스왑이 예상대로 동작하지 않을 수 있습니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;권한-설정&#34;&gt;권한 설정&lt;/h2&gt;
 &lt;p&gt;Swap 파일을 root만 읽고 쓰도록 권한을 설정합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; /swapfile
@@ -1507,8 +1506,7 @@ and the geographic information from the Internet registries to determine the loc
 In addition, we use the latency information contained within the trace and the latency information gathered from pinging routers,
 along with the limitations imposed by speed-of-light bounds,
 in order to weed out bad data and increase the probability of the location we choose being correct.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;제로-트러스트&#34;&gt;제로 트러스트!&lt;/h2&gt;
 &lt;p&gt;하지만 하루만에 문제가 발생했습니다.
 간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었습니다.&lt;/p&gt;

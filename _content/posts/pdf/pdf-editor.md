@@ -14,8 +14,10 @@ Categories:
 
 절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
 그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
-하지만 펼칠 때마다 목차(Outline)이 없으면 발췌독하기 불편한데요.
-오픈 소스 OCR 도구인 Tesseract를 이용해 PDF outline을 만들어보겠습니다.
+하지만 펼칠 때마다 목차[^1]가 없으면 발췌독하기 불편한데요.
+오픈 소스 OCR 도구인 Tesseract를 이용해 PDF 목차를 만들어보겠습니다.
+
+[^1]: Adobe Acrobat에선 Bookmark, GNOME Evince에서는 Outline.
 
 # 사적이용을 위한 저작권법
 
@@ -37,7 +39,9 @@ Categories:
 > 그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.
 
 즉, **자신이 소유한 또는 도서관에서 빌린 서적**을 **개인적으로 이용**하기 위해 **자신이 소유한 복제기기**로 직접 스캔한 경우 적법한 행위입니다.
-이쯤이면 저작권법 제30조를 유추해석하거나 확장해석 될 여지는 없을 것 같습니다.
+이쯤이면 저작권법 제30조가 다르게 해석[^2]될 여지는 없을 것 같습니다.
+
+[^2]: 유추해석 (법률에 명시되지 않은 사항에 대해, 유사한 사항에 관한 법률을 적용하는 해석 방법), 확장해석 (법문의 뜻을 보통의 의미보다 넓게 해석하는 방법) 등.
 
 # PDF 읽기
 
@@ -55,7 +59,7 @@ OCR은 광학 문자 인식(Optical Character Recognition)의 약자로, 이미�
 이 이미지를 텍스트로 변환해서 PDF outline을 만들어보겠습니다.
 
 먼저 오픈 소스 도구인 [Tesseract OCR](https://tesseract-ocr.github.io/tessdoc/Installation.html)를 설치해야 합니다.
-이후 Tesseract OCR 설치 경로의 `tessdata` 폴더에 훈련 모델([kor.tessdata](https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata))을 다운로드합니다.
+이후 Tesseract OCR 설치 경로의 `tessdata` 디렉토리에 훈련 모델([kor.tessdata](https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata))을 다운로드합니다.
 
 ```python
 page = pdf_file[0]
@@ -63,7 +67,7 @@ images = page.get_images()
 for img in images:
     base_image = pdf_file.extract_image(img[0])
     image = Image.open(io.BytesIO(base_image["image"]))
-    txt = pytesseract.image_to_string(image, lang="eng+kor")
+    txt = pytesseract.image_to_string(image, lang="eng+kor")  # 영어와 한국어를 인식
 ```
 
 # PyQt6
@@ -93,6 +97,12 @@ class Worker(QThread):
     # ...
 ```
 
+다음 화면은 [개인적으로 사용하기 위해 만든 프로그램](https://github.com/markruler/pdf-editor)입니다.
+목차 부분을 OCR로 추출해서 편집할 수 있습니다.
+편집된 목차를 두고 Write outline 버튼을 누르면 목차가 포함된 새 파일이 저장됩니다.
+페이지는 직접 PDF에서 입력해야 하지만 귀찮은 일을 많이 줄일 수 있습니다.
+
 ![PDF Editor](/images/pdf/pdf-editor/pdf-editor.jpg)
 
-전체 소스 코드는 [markruler/pdf-editor](https://github.com/markruler/pdf-editor)를 참조해주세요.
+기본적으로 제공된 훈련 데이터의 정확도가 높은 편은 아니지만,
+일일이 타이핑하는 것보다는 훨씬 편리하고 빠릅니다.

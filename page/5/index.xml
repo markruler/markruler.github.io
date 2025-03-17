@@ -25,8 +25,7 @@
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to NFV Management &amp;amp; Orchestration (MANO)&lt;/a&gt;을 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#nfv%EC%97%90%EC%84%9C-mano%EB%9E%80&#34;&gt;NFV에서 MANO란?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#1-virtualized-infrastructure-manager-vim&#34;&gt;1. Virtualized Infrastructure Manager (VIM)&lt;/a&gt;&lt;/li&gt;
@@ -104,8 +103,7 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 &lt;code&gt;mult
 &lt;p&gt;VIM이 NFVI을 위한 것이라면 VNFM은 VNF을 위한 것입니다.&lt;/p&gt;
 &lt;p&gt;즉, VNFM은 VNF를 관리합니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;VNF는 라우터 VNF, 스위치 VNF 등과 같은 가상화된 네트워크 요소입니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;VNF는 라우터 VNF, 스위치 VNF 등과 같은 가상화된 네트워크 요소입니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;구체적으로 VNFM은 다음을 수행합니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;VNFM은 VNF의 라이프사이클을 관리. 즉, VNF 인스턴스를 생성, 유지, 종료(VIM이 생성하고 관리하는 VM에 설치됨)&lt;/li&gt;
@@ -120,13 +118,11 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 &lt;code&gt;mult
 &lt;blockquote&gt;
 &lt;p&gt;과제 1&lt;/p&gt;
 &lt;p&gt;동일한 또는 서로 다른 PoP(Point of Presence)에 여러 VIM이 있는 경우, 누가 다른 VIM의 자원을 관리/조정할까요?
-섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 &lt;code&gt;과제 2&lt;/code&gt;를 만듭니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+섹션 2에서 언급한 바와 같이, 각각의 VNF를 관리하는 VNFM이 여러 개 있을 수 있습니다. 이것은 &lt;code&gt;과제 2&lt;/code&gt;를 만듭니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;과제 2&lt;/p&gt;
 &lt;p&gt;서로 다른 VNFM 도메인의 VNF를 포함하는 종단 간(end-to-end) 서비스 생성을
-누가 관리/조정할까요?&lt;/p&gt;
-&lt;/blockquote&gt;
+누가 관리/조정할까요?&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;이러한 과제는 NFVO의 다음 두 가지 기능이 해결해 줍니다.&lt;/p&gt;
 &lt;h2 id=&#34;resource-orchestration&#34;&gt;Resource Orchestration&lt;/h2&gt;
 &lt;p&gt;NFVO는 서로 다른 PoP 간에 또는 하나의 PoP 내에서 NFVI 자원을 조정, 승인, 해제, 결합합니다.
@@ -156,8 +152,7 @@ VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상�
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf&#34;&gt;VNF Descriptor (VNFD) Overview | ETSI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html&#34;&gt;VNF Descriptor Template Guide | Openstack&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;network-services-ns-catalog&#34;&gt;Network Services (NS) Catalog&lt;/h2&gt;
 &lt;p&gt;사용 가능한 네트워크 서비스의 목록입니다.
 가상 링크를 통한 연결에 대한 설명과 VNF 측면에서 네트워크 서비스를 위한 배포 템플릿은 향후 사용을 위해 NS 카탈로그에 저장됩니다.&lt;/p&gt;
@@ -175,8 +170,7 @@ VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행합니�
 장애 관리(fault management) 측면에서 VNF를 실행하는 데 문제가 있으면 VNFM이 보고하지만,
 기능과 관련된 장애인 경우(예: 모바일 코어에서 일부 신호 전달 문제) EM이 보고합니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;델타(delta): 수학에서 &lt;code&gt;&#39;차이&#39;&lt;/code&gt;, &lt;code&gt;&#39;변화&#39;&lt;/code&gt;를 나타냄.&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;델타(delta): 수학에서 &lt;code&gt;&#39;차이&#39;&lt;/code&gt;, &lt;code&gt;&#39;변화&#39;&lt;/code&gt;를 나타냄.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;VNFM은 운영자가 모든 종류의 FCAPS(가상 + 기능)에 대해 단일 GUI를 사용하고자 하는 경우에 대비하여 EM에 인터페이스를 노출시킵니다.&lt;/p&gt;
 &lt;h1 id=&#34;6-ossbss&#34;&gt;6. OSS/BSS&lt;/h1&gt;
 &lt;p&gt;OSS/BSS는 서비스 사업자가 사업을 운영하기 위해 사용하는 시스템/애플리케이션 모음을 포함합니다.&lt;/p&gt;
@@ -184,8 +178,7 @@ VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행합니�
 &lt;ul&gt;
 &lt;li&gt;OSS: Operations Support Systems&lt;/li&gt;
 &lt;li&gt;BSS: Business Support Systems&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;p&gt;NFV는 OSS/BSS와 같이 동작해야 합니다.&lt;/p&gt;
 &lt;p&gt;원칙적으로는 VNF와 NFVI를 직접 관리하기 위해 기존 OSS/BSS의 기능을 확장할 수 있지만,
 그것은 벤더의 독점적 구현일 수 있습니다.
@@ -210,8 +203,7 @@ Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
 기존 EMS/OSS와 어떻게 비교하시나요?&lt;br&gt;
 &lt;br&gt;
 벤더라면 NFV MANO에서 구현 중인 부분과 힘든 점은 무엇인가요?
-어떠한 견해라도 알려주세요.&lt;/p&gt;
-&lt;/blockquote&gt;
+어떠한 견해라도 알려주세요.&lt;/p&gt;&lt;/blockquote&gt;
 - https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/ - Im Changsu | Since 2020</description>
         </item>
     
@@ -227,8 +219,7 @@ Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;Faisal Khan의 A Cheat Sheet for Understanding &amp;ldquo;NFV Architecture&amp;rdquo;&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;p&gt;시간이 없으신가요?&lt;/p&gt;
 &lt;p&gt;쉽게 이해할 수 있는 NFV 용어/아키텍처에 대한 빠른 업데이트가 필요하신가요?&lt;/p&gt;
 &lt;p&gt;그렇다면 NFV 아키텍처를 시작하는 데 필요한 모든 정보를 얻을 수 있는 아래 7가지 주요 블록을 보세요.
@@ -295,8 +286,7 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;원문 링크&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/blockquote&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
 &lt;p&gt;사용 사례 및 SDN과의 관계를 포함한 NFV에 대한 자세한 내용을 보려면
 헤더 섹션의 링크에서 NFV 마인드맵을 다운로드하세요.
 개념을 더 쉽게 따라가기 위해 레퍼런스로 사용할 수 있도록 NFV 마인드 맵을 만들었습니다.&lt;/p&gt;
@@ -449,8 +439,7 @@ GCE에서는 외부 HTTPS가 API에 접근할 수 있도록 프로젝트에서 �
         <guid>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/</guid>
         <description>임창수 https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/ -&lt;blockquote&gt;
 &lt;p&gt;Faisal Khan의 &lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;Beginners Guide to MEC Architecture (Multi-access Edge Computing)&lt;/a&gt;을 번역한 글입니다.
-저자의 허락을 받아 번역했습니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+저자의 허락을 받아 번역했습니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;MEC&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 아키텍처 가이드에 오신 것을 환영합니다!&lt;/p&gt;
 &lt;p&gt;MEC는 5G의 저지연(low-latency) 서비스를 활용하려는 이동통신사들의 새로운 투자 물결을 가져올 것입니다.
 이는 소비자와 더 가까운 곳, 즉 무선 기지국(radio site)과 가까운 곳에서 서비스를 운영하겠다는 것을 의미합니다.&lt;/p&gt;
@@ -503,8 +492,7 @@ as well as real-time access to radio network information that can be leveraged b
 멀티 액세스 에지 컴퓨팅(MEC)은 애플리케이션 개발자와 콘텐츠 제공자에게
 네트워크 에지(edge)에서 클라우드 컴퓨팅 기능과 IT 서비스 환경을 제공합니다.
 이 환경은 초저지연과 고대역폭으로 특정지어지며,
-애플리케이션에서 활용할 수 있는 무선 네트워크 정보에 대한 접근을 제공합니다.&lt;/p&gt;
-&lt;/blockquote&gt;
+애플리케이션에서 활용할 수 있는 무선 네트워크 정보에 대한 접근을 제공합니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;2-etsi에-따른-mec-아키텍처&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/h1&gt;
 &lt;p&gt;그럼 아래에 표시된 것처럼 완전한 MEC ETSI 아키텍처를 살펴보겠습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/mec/mec-architecture-according-to-etsi.jpg&#34; alt=&#34;mec-architecture-according-to-etsi&#34;&gt;&lt;/p&gt;

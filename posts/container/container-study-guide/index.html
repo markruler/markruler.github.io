@@ -381,7 +381,7 @@
 						
 						
 							<li>
-								<a href="#control-group-%eb%93%9c%eb%9d%bc%ec%9d%b4%eb%b2%84httpskubernetesiokodocssetupproduction-environmentcontainer-runtimescgroup-eb939ceb9dbcec9db4ebb284" class="nav-control-group-드라이버httpskubernetesiokodocssetupproduction-environmentcontainer-runtimescgroup-eb939ceb9dbcec9db4ebb284">
+								<a href="#control-group-%eb%93%9c%eb%9d%bc%ec%9d%b4%eb%b2%84" class="nav-control-group-드라이버">
 									Control Group 드라이버
 								</a>
 							</li>
@@ -493,7 +493,7 @@
 						
 						
 							<li>
-								<a href="#%eb%a6%ac%eb%88%85%ec%8a%a4-%ec%ba%90%ed%8d%bc%eb%b9%8c%eb%a6%ac%ed%8b%b0httpsman7orglinuxman-pagesman7capabilities7html" class="nav-리눅스-캐퍼빌리티httpsman7orglinuxman-pagesman7capabilities7html">
+								<a href="#%eb%a6%ac%eb%88%85%ec%8a%a4-%ec%ba%90%ed%8d%bc%eb%b9%8c%eb%a6%ac%ed%8b%b0" class="nav-리눅스-캐퍼빌리티">
 									리눅스 캐퍼빌리티
 								</a>
 							</li>
@@ -714,8 +714,7 @@
 <h1 id="리눅스-컨테이너">리눅스 컨테이너</h1>
 <blockquote>
 <p>&ldquo;A Linux container is a set of 1 or more processes that are isolated from the rest of the system.&rdquo;
-<a href="https://www.redhat.com/en/topics/containers/whats-a-linux-container">Red Hat</a></p>
-</blockquote>
+<a href="https://www.redhat.com/en/topics/containers/whats-a-linux-container">Red Hat</a></p></blockquote>
 <p>리눅스 컨테이너(Linux Container)는 시스템의 다른 부분과 격리된 하나 이상의 프로세스 집합입니다.
 즉, 어떤 응용 프로그램이나 프로세스를 일컫는 것이 아니라 그저 리눅스 자원이 격리된 것입니다(‼️).</p>
 <p><img src="/images/container/user-space-vs-kernel-space-simple-container.png" alt="user-space-vs-kernel-space-simple-container"></p>
@@ -742,8 +741,7 @@
 도커를 못 쓰게 된 건지 혼란이 있었습니다. 도커가 워낙 만능이다보니
 &ldquo;컨테이너 엔진==컨테이너 런타임==CRI==도커&quot;라는 오해에서 비롯되었습니다.
 자세한 내용은 <a href="https://subicura.com/k8s/2020/12/19/deprecate-docker">서비큐라님 글</a>,
-<a href="https://www.slideshare.net/JoHoon1/the-myths-of-deprecating-docker-in-kubernetes">조훈님과 심근우님 글</a>을 참고해주세요.</p>
-</blockquote>
+<a href="https://www.slideshare.net/JoHoon1/the-myths-of-deprecating-docker-in-kubernetes">조훈님과 심근우님 글</a>을 참고해주세요.</p></blockquote>
 <p><img src="/images/container/simple-orchestration-node.png" alt="simple-orchestration-node"></p>
 <p><em>출처: <a href="https://www.katacoda.com/fatherlinux/courses/subsystems/container-internals-lab-2-0-part-1">Linux Container Internals - Scott McCarty</a></em></p>
 <h2 id="컨테이너-오케스트레이션">컨테이너 오케스트레이션</h2>
@@ -759,8 +757,7 @@
 <h2 id="네임스페이스-what-you-can-see">네임스페이스: What you can see</h2>
 <p>리눅스 네임스페이스(Namespace)는 프로세스 실행 시 시스템 자원을 격리시켜주는 기능입니다.</p>
 <blockquote>
-<p><a href="https://man7.org/linux/man-pages/man7/namespaces.7.html"><code>namespaces</code>(7)</a></p>
-</blockquote>
+<p><a href="https://man7.org/linux/man-pages/man7/namespaces.7.html"><code>namespaces</code>(7)</a></p></blockquote>
 <ul>
 <li>네임스페이스 유형</li>
 </ul>
@@ -872,15 +869,14 @@
 </ul>
 <h2 id="컨트롤-그룹-what-you-can-use">컨트롤 그룹: What you can use</h2>
 <blockquote>
-<p>보통 <code>씨-그룹</code>이나 <code>컨트롤-그룹</code>이라고 발음합니다.</p>
-</blockquote>
+<p>보통 <code>씨-그룹</code>이나 <code>컨트롤-그룹</code>이라고 발음합니다.</p></blockquote>
 <p>컨트롤 그룹(cgroup, control group)은 프로세스에서 사용 가능한 CPU, 메모리, 네트워크 대역폭, 디스크 I/O 등을
 그룹 단위로 제어하는 리눅스 커널의 기능입니다.
 원래는 <a href="https://lwn.net/Articles/236038/">프로세스 컨테이너</a>라는
 이름으로 제안되었지만, 나중에 컨트롤 그룹이 되었습니다.
 컨트롤 그룹은 컨테이너에서만 사용되는 기능은 아니고
 리눅스 시스템에서 프로세스 관리를 위해 일반적으로 사용되고 있습니다.</p>
-<h3 id="control-group-드라이버httpskubernetesiokodocssetupproduction-environmentcontainer-runtimescgroup-eb939ceb9dbcec9db4ebb284"><a href="https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/#cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84">Control Group 드라이버</a></h3>
+<h3 id="control-group-드라이버"><a href="https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/#cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84">Control Group 드라이버</a></h3>
 <ul>
 <li>cgroupfs</li>
 <li>systemd</li>
@@ -1017,7 +1013,7 @@
 <p>출처: <a href="https://docs.docker.com/storage/storagedriver/aufs-driver/">Use the AUFS storage driver - docker docs</a></p>
 <p><img src="/images/container/overlay-constructs.jpg" alt="overlay-constructs"></p>
 <p><em>출처: <a href="https://docs.docker.com/storage/storagedriver/overlayfs-driver/#how-the-overlay-driver-works">Use the OverlayFS storage driver - docker docs</a></em></p>
-<h2 id="리눅스-캐퍼빌리티httpsman7orglinuxman-pagesman7capabilities7html"><a href="https://man7.org/linux/man-pages/man7/capabilities.7.html">리눅스 캐퍼빌리티</a></h2>
+<h2 id="리눅스-캐퍼빌리티"><a href="https://man7.org/linux/man-pages/man7/capabilities.7.html">리눅스 캐퍼빌리티</a></h2>
 <p><a href="https://en.wikipedia.org/wiki/Capability-based_security#POSIX_capabilities">POSIX capabilities</a>
 개념으로 루트 프로세스 권한을 세부적으로 제어하기 위한 속성입니다. &lsquo;자격&rsquo;, &lsquo;능력&rsquo; 등으로 번역됩니다.</p>
 <p>캐퍼빌리티가 없을 때 프로세스는 두 가지로만 나뉘었습니다.</p>
@@ -1029,8 +1025,7 @@
 컨테이너 런타임에서 루트 권한 일부분만 필요할 경우 리눅스 캐퍼빌리티를 사용합니다.</p>
 <h1 id="샌드박싱-솔루션">샌드박싱 솔루션</h1>
 <blockquote>
-<p>샌드박싱이란? 자원 접근이 제한되도록 응용 프로그램을 격리하는 것 - &lt;컨테이너 보안&gt; 참조</p>
-</blockquote>
+<p>샌드박싱이란? 자원 접근이 제한되도록 응용 프로그램을 격리하는 것 - &lt;컨테이너 보안&gt; 참조</p></blockquote>
 <ul>
 <li>seccomp</li>
 <li>AppArmor</li>
@@ -1466,7 +1461,7 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#control-group-%eb%93%9c%eb%9d%bc%ec%9d%b4%eb%b2%84httpskubernetesiokodocssetupproduction-environmentcontainer-runtimescgroup-eb939ceb9dbcec9db4ebb284" class="nav-control-group-드라이버httpskubernetesiokodocssetupproduction-environmentcontainer-runtimescgroup-eb939ceb9dbcec9db4ebb284">
+								<a href="#control-group-%eb%93%9c%eb%9d%bc%ec%9d%b4%eb%b2%84" class="nav-control-group-드라이버">
 									Control Group 드라이버
 								</a>
 							</li>
@@ -1578,7 +1573,7 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%eb%a6%ac%eb%88%85%ec%8a%a4-%ec%ba%90%ed%8d%bc%eb%b9%8c%eb%a6%ac%ed%8b%b0httpsman7orglinuxman-pagesman7capabilities7html" class="nav-리눅스-캐퍼빌리티httpsman7orglinuxman-pagesman7capabilities7html">
+								<a href="#%eb%a6%ac%eb%88%85%ec%8a%a4-%ec%ba%90%ed%8d%bc%eb%b9%8c%eb%a6%ac%ed%8b%b0" class="nav-리눅스-캐퍼빌리티">
 									리눅스 캐퍼빌리티
 								</a>
 							</li>

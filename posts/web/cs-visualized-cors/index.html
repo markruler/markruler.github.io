@@ -380,8 +380,7 @@
 <ul>
 <li>리디아 할리(Lydia Hallie, <a href="https://twitter.com/lydiahallie">@lydiahallie</a>)가 쓴 <a href="https://dev.to/lydiahallie/cs-visualized-cors-5b8h">CS Visualized: CORS</a>를 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p>어쩌다 콘솔에서 &ldquo;fetch 접근이 CORS 정책에 의해 차단되었습니다&quot;라는
 커다란 빨간색 오류를 보면 모든 개발자가 짜증을 느낍니다! 😬
 임시방편이 몇 가지 있긴 하지만 오늘은 그 어떤 것도 사용하지 않겠습니다!
@@ -392,8 +391,7 @@
 HTTP 요청과 응답에 대해 더 자세히 알고 싶으시다면 제가 얼마 전에
 작성한 <a href="https://www.lydiahallie.dev/blog/http11">짧은 글</a>이
 있습니다. 🙂 제가 사용한 예시에서 HTTP/2 대신 HTTP/1.1을
-사용하지만 CORS에 영향을 미치지는 않습니다.</p>
-</blockquote>
+사용하지만 CORS에 영향을 미치지는 않습니다.</p></blockquote>
 <hr>
 <p>우리는 종종 프런트엔드에서 다른 곳에 있는 데이터를 보여주고 싶습니다!
 해당 데이터를 가져오기 위해 브라우저는 먼저 서버에 요청을 해야 하죠!
@@ -430,8 +428,7 @@ HTTP 요청과 응답에 대해 더 자세히 알고 싶으시다면 제가 얼�
 접근할 수 있게끔 만들었습니다!</p>
 <blockquote>
 <p>역주: 위 공격은 CSRF (Cross-Site Request Forgery) 공격에 해당되며
-XSS (Cross-Site Scripting)도 같은 출처 정책과 관련된 공격입니다.</p>
-</blockquote>
+XSS (Cross-Site Scripting)도 같은 출처 정책과 관련된 공격입니다.</p></blockquote>
 <p><img src="/images/web/lydia/wo-same-origin-policy.gif" alt="wo-same-origin-policy"></p>
 <p>맞습니다&hellip; 이건 엄청난 보안 위험이에요! 우리는 그 누구도 접근하지 못하길 바랍니다. 😧</p>
 <p>운 좋게도 여기서 같은 출처 정책이 우리를 도와줍니다!
@@ -498,8 +495,7 @@ HTTP 응답의 특정 CORS 헤더 값에 따라 CORS 메커니즘을 사용할 �
 <blockquote>
 <p>또한 CORS를 사용하면 허용되는 Origin 값으로 와일드카드 <code>*</code>를
 추가할 수 있습니다. 이것은 모든 출처가 요청된 자원에
-접근할 수 있다는 것이니 주의하세요!</p>
-</blockquote>
+접근할 수 있다는 것이니 주의하세요!</p></blockquote>
 <hr>
 <p><code>Access-Control-Allow-Origin</code>은 우리가 제공할 수 있는 수많은 CORS 헤더
 중 하나입니다. 서버 개발자는 특정 요청을 허용하거나 차단하기 위해
@@ -511,8 +507,7 @@ CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.</p>
 <code>PATCH</code> 또는 <code>DELETE</code>와 같은 다른 메서드들은 차단됩니다. ❌</p>
 <blockquote>
 <p>다른 CORS 헤더는 무엇이 있으며 어떤 용도로 사용되는지 궁금하다면
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers">이 목록을 확인해보세요</a>.</p>
-</blockquote>
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers">이 목록을 확인해보세요</a>.</p></blockquote>
 <p>CORS는 실제로 <code>PUT</code>, <code>PATCH</code>, <code>DELETE</code> 요청에 대해서는
 다르게 처리합니다! 🙃 이렇게 &ldquo;<em>단순하지 않은</em>&rdquo; 요청은
 <strong>예비 요청</strong> 이라는 것을 만듭니다!</p>
@@ -525,8 +520,7 @@ CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.</p>
 예비 요청은 <code>PUT</code>, <code>PATCH</code> 또는 <code>DELETE</code> 메서드와 같은 다른 모든 요청입니다.</p>
 <blockquote>
 <p>단순 요청이 되기 위해 어떤 요구 사항을 충족해야 하는지 궁금하다면 MDN에
-<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests">유용한 목록</a>이 있습니다!</p>
-</blockquote>
+<a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests">유용한 목록</a>이 있습니다!</p></blockquote>
 <p>알겠어요, 근데 &ldquo;예비 요청&quot;은 뭐고 왜 이런 일이 일어나는 건가요?</p>
 <hr>
 <p>실제 요청을 전송하기 전에 클라이언트는 예비 요청을 생성합니다!
@@ -550,8 +544,7 @@ CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.</p>
 <p>💡 서버 통신 횟수를 줄이기 위해 CORS 요청에 <code>Access-Control-Max-Age</code>
 헤더를 추가하여 예비 요청에 대한 응답을 캐시할 수 있습니다!
 그럼 브라우저는 새로운 예비 요청을 보내는 대신 캐시된 응답을
-사용할 수 있습니다!</p>
-</blockquote>
+사용할 수 있습니다!</p></blockquote>
 <hr>
 <h1 id="-자격-증명credentials">🍪 자격 증명(Credentials)</h1>
 <p>쿠키, 인가 헤더, TLS 인증서는 기본적으로 같은 출처 요청에서만 설정됩니다!

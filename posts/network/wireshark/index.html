@@ -678,8 +678,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 실제로 서버에서 패킷을 캡처하는 경우 의존성이 적고 가벼운 <code>tcpdump</code>를 더 많이 사용하는 편입니다.
 <strong>파일로 출력할 때는 Wireshark display-filter(<code>-Y</code>)를 사용할 수 없습니다.</strong></p>
 <blockquote>
-<p>tshark: Display filters aren&rsquo;t supported when capturing and saving the captured packets.</p>
-</blockquote>
+<p>tshark: Display filters aren&rsquo;t supported when capturing and saving the captured packets.</p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tcp 프로토콜의 port 33000을 경유하는 패킷 5초간 캡처해서 tcp_33000.pcap 파일로 저장</span>
 </span></span><span style="display:flex;"><span>tshark -i any -f <span style="color:#87ceeb">&#39;tcp port 33000&#39;</span> -w tcp_33000.pcap -a duration:5
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo timeout <span style="color:#f60">5</span> tcpdump -i any -n tcp and port <span style="color:#f60">33000</span> -w tcp_33000.pcap
@@ -688,8 +687,7 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 특정 필드만 출력하거나 JSON 형식으로 출력할 때는 CLI로 읽는 게 편합니다.
 <strong>파일을 읽을 때는 pcap-filter(<code>-f</code>)를 사용할 수 없습니다.</strong></p>
 <blockquote>
-<p>tshark: Only read filters, not capture filters, can be specified when reading a capture file.</p>
-</blockquote>
+<p>tshark: Only read filters, not capture filters, can be specified when reading a capture file.</p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># tshark로 파일 읽기</span>
 </span></span><span style="display:flex;"><span>tshark -r capture.pcap --color
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># JSON 형식으로 읽기</span>

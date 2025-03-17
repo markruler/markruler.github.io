@@ -783,8 +783,7 @@
 최근 회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 트래픽이 발생하는데도 2년동안 방치되고 있었다.
 이런 레거시는 유지 보수할 일이 없다면 개발팀에서도 확인하기 어렵다.
 사용자가 리포팅해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋다.
-심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.</p>
-</blockquote>
+심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 안걸렸지만 약 15초 걸리던 API를 100ms까지 줄였다.</p></blockquote>
 <p>먼저 알아두면 좋은 명령어가 있다.
 <code>jps</code>는 JVM Process Status를 출력하는 명령어로
 현재 머신에서 실행중인 JVM의 PID나 실행 옵션을 확인할 때 유용하다.</p>
@@ -793,8 +792,7 @@
 </span></span></code></pre></div><h1 id="thread-dump">Thread Dump</h1>
 <blockquote>
 <p>A thread dump is a snapshot of the state of all threads that are part of the process.
-(<a href="https://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/geninfo/diagnos/using_threaddumps.html">Oracle Docs</a>)</p>
-</blockquote>
+(<a href="https://docs.oracle.com/cd/E13150_01/jrockit_jvm/jrockit/geninfo/diagnos/using_threaddumps.html">Oracle Docs</a>)</p></blockquote>
 <p>쓰레드 덤프(Thread Dump)란 모든 쓰레드 상태의 스냅샷이다.</p>
 <p><img src="/images/java/jvm-monitoring/java-thread-state-machine.png" alt="java-thread-state-machine"></p>
 <p><em><a href="https://www.uml-diagrams.org/java-thread-uml-state-machine-diagram-example.html">Java Thread States and Life Cycle</a></em></p>
@@ -853,16 +851,14 @@ VisualVM을 사용하는 데에 큰 불편함이 없었다.</p>
 <h1 id="heap-dump">Heap Dump</h1>
 <blockquote>
 <p>A heap dump is a snapshot of all the objects in the Java Virtual Machine (JVM) heap at a certain point in time.
-(<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/heapdump.html">Oracle Docs</a>)</p>
-</blockquote>
+(<a href="https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/heapdump.html">Oracle Docs</a>)</p></blockquote>
 <p>힙 덤프(Heap Dump)란 JVM 힙의 모든 Object를 담은 스냅샷이다.</p>
 <h2 id="outofmemoryerror">OutOfMemoryError</h2>
 <p>JVM 실행 시 아래 옵션을 추가하면 <code>OutOfMemoryError</code> 발생으로 JVM이 종료될 때 힙 덤프를 생성한다.</p>
 <ul>
 <li><code>-XX:HeapDumpPath</code>를 생략하면 Java Process를 실행시킨 곳에 <code>java_pid&lt;pid&gt;.hprof</code> 형태로 파일이 생성된다.
 <blockquote>
-<p>By default the heap dump is created in a file called java_pid.hprof in the working directory of the VM. - <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/clopts001.html">Oracle Docs</a></p>
-</blockquote>
+<p>By default the heap dump is created in a file called java_pid.hprof in the working directory of the VM. - <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/clopts001.html">Oracle Docs</a></p></blockquote>
 </li>
 <li><code>-XX:+PrintClassHistogramAfterFullGC</code>, <code>-XX:+PrintClassHistogramBeforeFullGC</code> 등의 옵션으로
 Full GC 전후의 메모리 상태를 간략히 덤프할 수 있다.</li>
@@ -947,8 +943,7 @@ VisualVM은 실시간으로 확인하는 용도로 사용한다.</p>
 </span></span><span style="display:flex;"><span>  -jar
 </span></span></code></pre></div><p>이후 VisualVM에서 다음과 같이 설정한다.</p>
 <blockquote>
-<p>File &gt; Add JMX Connection</p>
-</blockquote>
+<p>File &gt; Add JMX Connection</p></blockquote>
 <p><img src="/images/java/jvm-monitoring/visualvm-file-add-jmx-connection.png" alt="File &gt; Add JMX Connection"></p>
 <p>JVM 옵션으로 추가한 RMI(Remote Method Invocation) HOST와 PORT를 입력한다.</p>
 <p><img src="/images/java/jvm-monitoring/visualvm-setting-jmx-connection.png" alt="Setting JMX Connection"></p>

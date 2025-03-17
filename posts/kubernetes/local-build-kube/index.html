@@ -369,7 +369,7 @@
 						
 						
 							<li>
-								<a href="#pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo" class="nav-pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo">
+								<a href="#pkgkubectlcmd" class="nav-pkgkubectlcmd">
 									pkg/kubectl/cmd
 								</a>
 							</li>
@@ -497,8 +497,7 @@
                 <div class="post-body" v-pre>
                 
                     <blockquote>
-<p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p>
-</blockquote>
+<p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p></blockquote>
 <h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md">kubernetes/build/README.md</a></li>
@@ -523,8 +522,7 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>build/root/Makefile
 </span></span></code></pre></div><h3 id="실제로-빌드되는-makefile">실제로 빌드되는 Makefile</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile">build/root/Makefile</a></p>
-</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile">build/root/Makefile</a></p></blockquote>
 <ul>
 <li>all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.</li>
 </ul>
@@ -558,8 +556,7 @@
 </span></span><span style="display:flex;"><span>endif
 </span></span></code></pre></div><h3 id="all-generated_files">all: generated_files</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh">hack/make-rules/build.sh</a></p>
-</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh">hack/make-rules/build.sh</a></p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
 </span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># This script sets up a go workspace locally and builds all go components.</span>
@@ -577,8 +574,7 @@
 </span></span><span style="display:flex;"><span>kube::golang::place_bins
 </span></span></code></pre></div><h3 id="kubegolang">kube::golang::</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh">hack/lib/golang.sh</a></p>
-</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh">hack/lib/golang.sh</a></p></blockquote>
 <ul>
 <li>참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.</li>
 </ul>
@@ -609,8 +605,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="로그-레벨">로그 레벨</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh">hack/lib/logging.sh</a></p>
-</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh">hack/lib/logging.sh</a></p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#0f0"># This controls the verbosity of the build. Higher numbers mean more output.
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#eedd82">KUBE_VERBOSE</span> ?= <span style="color:#f60">4</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
@@ -631,8 +626,7 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="cmdkubectl">cmd/kubectl</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go">kubectl.go</a></p>
-</blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go">kubectl.go</a></p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">package</span> main
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> (
@@ -647,8 +641,8 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#87ceeb">&#34;k8s.io/kubectl/pkg/util/logs&#34;</span>
 </span></span><span style="display:flex;"><span>	<span style="color:#87ceeb">&#34;k8s.io/kubernetes/pkg/kubectl/cmd&#34;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// Import to initialize client auth plugins.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>	_ <span style="color:#87ceeb">&#34;k8s.io/client-go/plugin/pkg/client/auth&#34;</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// Import to initialize client auth plugins.</span>
+</span></span><span style="display:flex;"><span>	_ <span style="color:#87ceeb">&#34;k8s.io/client-go/plugin/pkg/client/auth&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">main</span>() {
@@ -656,24 +650,23 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	command := cmd.<span style="color:#ff0">NewDefaultKubectlCommand</span>()
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// TODO: once we switch everything over to Cobra commands, we can go back to calling
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>	<span style="color:#0f0">// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>	<span style="color:#0f0">// normalize func and add the go flag set by hand.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>	pflag.CommandLine.<span style="color:#ff0">SetNormalizeFunc</span>(cliflag.WordSepNormalizeFunc)
+</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// TODO: once we switch everything over to Cobra commands, we can go back to calling</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// normalize func and add the go flag set by hand.</span>
+</span></span><span style="display:flex;"><span>	pflag.CommandLine.<span style="color:#ff0">SetNormalizeFunc</span>(cliflag.WordSepNormalizeFunc)
 </span></span><span style="display:flex;"><span>	pflag.CommandLine.<span style="color:#ff0">AddGoFlagSet</span>(goflag.CommandLine)
-</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// cliflag.InitFlags()
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>	logs.<span style="color:#ff0">InitLogs</span>()
+</span></span><span style="display:flex;"><span>	<span style="color:#0f0">// cliflag.InitFlags()</span>
+</span></span><span style="display:flex;"><span>	logs.<span style="color:#ff0">InitLogs</span>()
 </span></span><span style="display:flex;"><span>	<span style="color:#f00">defer</span> logs.<span style="color:#ff0">FlushLogs</span>()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	<span style="color:#f00">if</span> err := command.<span style="color:#ff0">Execute</span>(); err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>		os.<span style="color:#ff0">Exit</span>(<span style="color:#f60">1</span>)
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go">pkg/kubectl/cmd</a></h3>
+</span></span></code></pre></div><h3 id="pkgkubectlcmd"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go">pkg/kubectl/cmd</a></h3>
 <h2 id="디버깅">디버깅</h2>
 <blockquote>
-<p>환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.</p>
-</blockquote>
+<p>환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.</p></blockquote>
 <ul>
 <li><a href="https://code.visualstudio.com/docs/editor/debugging">launch.json</a></li>
 </ul>
@@ -1102,7 +1095,7 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo" class="nav-pkgkubectlcmdhttpsgithubcomkuberneteskubernetesblobrelease-119pkgkubectlcmdcmdgo">
+								<a href="#pkgkubectlcmd" class="nav-pkgkubectlcmd">
 									pkg/kubectl/cmd
 								</a>
 							</li>

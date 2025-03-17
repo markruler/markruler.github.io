@@ -638,8 +638,7 @@
 <ul>
 <li><a href="https://blog.jse.li/posts/torrent/">Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)</a>를 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
-</ul>
-</blockquote>
+</ul></blockquote>
 <p><strong>거두절미(tl;dr):</strong> The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요?
 이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트 프로토콜을 구현할 것입니다.
 바로 <a href="https://github.com/veggiedefender/torrent-client/">소스 코드</a>를 보거나 <a href="#%EB%AA%A8%EB%91%90-%ED%95%A9%EC%B9%98%EA%B8%B0">마지막 부분</a>으로 넘어갈 수 있습니다.</p>
@@ -724,8 +723,8 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  Info     bencodeInfo <span style="color:#87ceeb">`bencode:&#34;info&#34;`</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Open 토렌트 파일을 파싱합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> <span style="color:#ff0">Open</span>(r io.Reader) (*bencodeTorrent, <span style="color:#ee82ee">error</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Open 토렌트 파일을 파싱합니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">Open</span>(r io.Reader) (*bencodeTorrent, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  bto := bencodeTorrent{}
 </span></span><span style="display:flex;"><span>  err := bencode.<span style="color:#ff0">Unmarshal</span>(r, &amp;bto)
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
@@ -753,8 +752,8 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (bto bencodeTorrent) <span style="color:#ff0">toTorrentFile</span>() (TorrentFile, <span style="color:#ee82ee">error</span>) {
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// …
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>}
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// …</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a></p>
 <h2 id="트래커로부터-피어-찾기">트래커로부터 피어 찾기</h2>
 <p>이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 <strong>알리고</strong> 다른 피어들의 목록을 검색해 보겠습니다.
@@ -800,16 +799,16 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <strong>빅-엔디안</strong> 또는 <strong>네트워크 바이트 순서</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>는 바이트 그룹을 왼쪽부터 담아 정수로 해석하는 것을 말합니다.
 예를 들어 <code>0x1A</code>, <code>0xE1</code> 바이트는 <code>0x1AE1</code> 또는 십진수로 6881을 만듭니다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
 <p><img src="/images/go/bit-torrent/address.png" alt="address"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Peer 피어의 연결 정보를 인코딩합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">type</span> Peer <span style="color:#f00">struct</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Peer 피어의 연결 정보를 인코딩합니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Peer <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  IP   net.IP
 </span></span><span style="display:flex;"><span>  Port <span style="color:#ee82ee">uint16</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> <span style="color:#ff0">Unmarshal</span>(peersBin []<span style="color:#ee82ee">byte</span>) ([]Peer, <span style="color:#ee82ee">error</span>) {
-</span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> peerSize = <span style="color:#f60">6</span> <span style="color:#0f0">// 4 for IP, 2 for port
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  numPeers := len(peersBin) / peerSize
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Unmarshal 버퍼에서 피어의 IP 주소와 포트 번호를 파싱합니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">Unmarshal</span>(peersBin []<span style="color:#ee82ee">byte</span>) ([]Peer, <span style="color:#ee82ee">error</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> peerSize = <span style="color:#f60">6</span> <span style="color:#0f0">// 4 for IP, 2 for port</span>
+</span></span><span style="display:flex;"><span>  numPeers := len(peersBin) / peerSize
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> len(peersBin)%peerSize != <span style="color:#f60">0</span> {
 </span></span><span style="display:flex;"><span>    err := fmt.<span style="color:#ff0">Errorf</span>(<span style="color:#87ceeb">&#34;Received malformed peers&#34;</span>)
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">return</span> <span style="color:#f00">nil</span>, err
@@ -866,30 +865,30 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 그렇지 않다면 뭔가 잘못되었기 때문에 연결을 끊을 수 있습니다.
 <em>&ldquo;안녕?&rdquo; &ldquo;这是谁？ 你想要什么？&rdquo; &ldquo;알았어요, 와&hellip;잘못 걸었어요..&rdquo;</em></p>
 <p>코드에서 핸드셰이크를 나타내는 구조체를 만들고, 이것을 직렬화하고 읽는 몇 가지 메소드를 작성하겠습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">type</span> Handshake <span style="color:#f00">struct</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Handshake <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  Pstr     <span style="color:#ee82ee">string</span>
 </span></span><span style="display:flex;"><span>  InfoHash [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>  PeerID   [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Serialize 핸드셰이크를 버퍼에 직렬화합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> (h *Handshake) <span style="color:#ff0">Serialize</span>() []<span style="color:#ee82ee">byte</span> {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Serialize 핸드셰이크를 버퍼에 직렬화합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (h *Handshake) <span style="color:#ff0">Serialize</span>() []<span style="color:#ee82ee">byte</span> {
 </span></span><span style="display:flex;"><span>  buf := make([]<span style="color:#ee82ee">byte</span>, len(h.Pstr)+<span style="color:#f60">49</span>)
 </span></span><span style="display:flex;"><span>  buf[<span style="color:#f60">0</span>] = byte(len(h.Pstr))
 </span></span><span style="display:flex;"><span>  curr := <span style="color:#f60">1</span>
 </span></span><span style="display:flex;"><span>  curr += copy(buf[curr:], h.Pstr)
-</span></span><span style="display:flex;"><span>  curr += copy(buf[curr:], make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">8</span>)) <span style="color:#0f0">// 8 reserved bytes
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  curr += copy(buf[curr:], h.InfoHash[:])
+</span></span><span style="display:flex;"><span>  curr += copy(buf[curr:], make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">8</span>)) <span style="color:#0f0">// 8 reserved bytes</span>
+</span></span><span style="display:flex;"><span>  curr += copy(buf[curr:], h.InfoHash[:])
 </span></span><span style="display:flex;"><span>  curr += copy(buf[curr:], h.PeerID[:])
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> buf
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 핸드셰이크를 파싱합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> <span style="color:#ff0">Read</span>(r io.Reader) (*Handshake, <span style="color:#ee82ee">error</span>) {
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 역직렬화 수행
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#0f0">// ...
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 핸드셰이크를 파싱합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">Read</span>(r io.Reader) (*Handshake, <span style="color:#ee82ee">error</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 역직렬화 수행</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// ...</span>
+</span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go">github.com/veggiedefender/torrent-client/handshake/handshake.go</a></p>
 <h2 id="메시지-주고-받기">메시지 주고 받기</h2>
 <p>첫 핸드셰이크를 마치면 <code>메시지</code>를 주고받을 수 있습니다.
@@ -923,21 +922,21 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  MsgCancel        messageID = <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Message 메시지의 ID 및 페이로드를 저장합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">type</span> Message <span style="color:#f00">struct</span> {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Message 메시지의 ID 및 페이로드를 저장합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Message <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  ID      messageID
 </span></span><span style="display:flex;"><span>  Payload []<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0">// &lt;길이 접두사&gt;&lt;메시지 ID&gt;&lt;페이로드&gt;
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0">// `nil`은 keep-live 메시지로 해석합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> (m *Message) <span style="color:#ff0">Serialize</span>() []<span style="color:#ee82ee">byte</span> {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// Serialize 메시지를 다음과 같은 형식으로 버퍼에 직렬화합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// &lt;길이 접두사&gt;&lt;메시지 ID&gt;&lt;페이로드&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// `nil`은 keep-live 메시지로 해석합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (m *Message) <span style="color:#ff0">Serialize</span>() []<span style="color:#ee82ee">byte</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> m == <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">return</span> make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">4</span>)
 </span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>  length := uint32(len(m.Payload) + <span style="color:#f60">1</span>) <span style="color:#0f0">// +1 for id
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  buf := make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">4</span>+length)
+</span></span><span style="display:flex;"><span>  length := uint32(len(m.Payload) + <span style="color:#f60">1</span>) <span style="color:#0f0">// +1 for id</span>
+</span></span><span style="display:flex;"><span>  buf := make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">4</span>+length)
 </span></span><span style="display:flex;"><span>  binary.BigEndian.<span style="color:#ff0">PutUint32</span>(buf[<span style="color:#f60">0</span>:<span style="color:#f60">4</span>], length)
 </span></span><span style="display:flex;"><span>  buf[<span style="color:#f60">4</span>] = byte(m.ID)
 </span></span><span style="display:flex;"><span>  copy(buf[<span style="color:#f60">5</span>:], m.Payload)
@@ -947,8 +946,8 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <p>스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
 우리는 4바이트를 읽고 메시지의 <strong>길이</strong>를 얻기 위해 <code>uint32</code>로 해석합니다.
 그런 다음 <strong>ID</strong>(처음 1바이트) 및 <strong>payload</strong>(나머지 바이트)를 얻습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> <span style="color:#ff0">Read</span>(r io.Reader) (*Message, <span style="color:#ee82ee">error</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">Read</span>(r io.Reader) (*Message, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  lengthBuf := make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">4</span>)
 </span></span><span style="display:flex;"><span>  _, err := io.<span style="color:#ff0">ReadFull</span>(r, lengthBuf)
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
@@ -956,8 +955,8 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  length := binary.BigEndian.<span style="color:#ff0">Uint32</span>(lengthBuf)
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// keep-alive 메시지
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">if</span> length == <span style="color:#f60">0</span> {
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// keep-alive 메시지</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> length == <span style="color:#f60">0</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">return</span> <span style="color:#f00">nil</span>, <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>
@@ -987,18 +986,18 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 단점은 값에 접근하는 것이 좀 더 까다로워진다는 것입니다.
 컴퓨터가 처리할 수 있는 가장 작은 메모리 단위는 바이트입니다.
 따라서 비트에 접근하려면 몇 가지 비트 조작(bitwise manipulation)을 수행해야 합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">type</span> Bitfield []<span style="color:#ee82ee">byte</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Bitfield []<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> (bf Bitfield) <span style="color:#ff0">HasPiece</span>(index <span style="color:#ee82ee">int</span>) <span style="color:#ee82ee">bool</span> {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (bf Bitfield) <span style="color:#ff0">HasPiece</span>(index <span style="color:#ee82ee">int</span>) <span style="color:#ee82ee">bool</span> {
 </span></span><span style="display:flex;"><span>  byteIndex := index / <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>  offset := index % <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> bf[byteIndex]&gt;&gt;(<span style="color:#f60">7</span>-offset)&amp;<span style="color:#f60">1</span> != <span style="color:#f60">0</span>
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// SetPiece 비트 필드에 비트를 설정합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">func</span> (bf Bitfield) <span style="color:#ff0">SetPiece</span>(index <span style="color:#ee82ee">int</span>) {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// SetPiece 비트 필드에 비트를 설정합니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (bf Bitfield) <span style="color:#ff0">SetPiece</span>(index <span style="color:#ee82ee">int</span>) {
 </span></span><span style="display:flex;"><span>  byteIndex := index / <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>  offset := index % <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>  bf[byteIndex] |= <span style="color:#f60">1</span> &lt;&lt; (<span style="color:#f60">7</span> - offset)
@@ -1019,21 +1018,21 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 다른 하나는 다운로드한 조각들을 모으기 위한 채널입니다.
 다운로드된 조각들이 결과 채널을 통해 들어올 때,
 우리는 그것들을 버퍼에 복사해서 완전한 파일로 조립할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>workQueue := make(<span style="color:#f00">chan</span> *pieceWork, len(t.PieceHashes))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다</span>
+</span></span><span style="display:flex;"><span>workQueue := make(<span style="color:#f00">chan</span> *pieceWork, len(t.PieceHashes))
 </span></span><span style="display:flex;"><span>results := make(<span style="color:#f00">chan</span> *pieceResult)
 </span></span><span style="display:flex;"><span><span style="color:#f00">for</span> index, hash := <span style="color:#f00">range</span> t.PieceHashes {
 </span></span><span style="display:flex;"><span>  length := t.<span style="color:#ff0">calculatePieceSize</span>(index)
 </span></span><span style="display:flex;"><span>  workQueue &lt;- &amp;pieceWork{index, hash, length}
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// 작업을 시작합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">for</span> _, peer := <span style="color:#f00">range</span> t.Peers {
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// 작업을 시작합니다</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">for</span> _, peer := <span style="color:#f00">range</span> t.Peers {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">go</span> t.<span style="color:#ff0">startDownloadWorker</span>(peer, workQueue, results)
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>buf := make([]<span style="color:#ee82ee">byte</span>, t.Length)
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// 결과가 가득 찰 때까지 버퍼로 결과를 수집합니다</span>
+</span></span><span style="display:flex;"><span>buf := make([]<span style="color:#ee82ee">byte</span>, t.Length)
 </span></span><span style="display:flex;"><span>donePieces := <span style="color:#f60">0</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">for</span> donePieces &lt; len(t.PieceHashes) {
 </span></span><span style="display:flex;"><span>  res := &lt;-results
@@ -1061,23 +1060,23 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">for</span> pw := <span style="color:#f00">range</span> workQueue {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">if</span> !c.Bitfield.<span style="color:#ff0">HasPiece</span>(pw.index) {
-</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>      <span style="color:#f00">continue</span>
+</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">continue</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#0f0">// 조각 다운로드
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>    buf, err := <span style="color:#ff0">attemptDownloadPiece</span>(c, pw)
+</span></span><span style="display:flex;"><span>    <span style="color:#0f0">// 조각 다운로드</span>
+</span></span><span style="display:flex;"><span>    buf, err := <span style="color:#ff0">attemptDownloadPiece</span>(c, pw)
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>      log.<span style="color:#ff0">Println</span>(<span style="color:#87ceeb">&#34;Exiting&#34;</span>, err)
-</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>      <span style="color:#f00">return</span>
+</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">return</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    err = <span style="color:#ff0">checkIntegrity</span>(pw, buf)
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>      log.<span style="color:#ff0">Printf</span>(<span style="color:#87ceeb">&#34;Piece #%d failed integrity check\n&#34;</span>, pw.index)
-</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>      <span style="color:#f00">continue</span>
+</span></span><span style="display:flex;"><span>      workQueue &lt;- pw <span style="color:#0f0">// 큐에 조각을 다시 넣습니다</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f00">continue</span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    c.<span style="color:#ff0">SendHave</span>(pw.index)
@@ -1100,8 +1099,8 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (state *pieceProgress) <span style="color:#ff0">readMessage</span>() <span style="color:#ee82ee">error</span> {
-</span></span><span style="display:flex;"><span>  msg, err := state.client.<span style="color:#ff0">Read</span>() <span style="color:#0f0">// this call blocks
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">switch</span> msg.ID {
+</span></span><span style="display:flex;"><span>  msg, err := state.client.<span style="color:#ff0">Read</span>() <span style="color:#0f0">// this call blocks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">switch</span> msg.ID {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">case</span> message.MsgUnchoke:
 </span></span><span style="display:flex;"><span>    state.client.Choked = <span style="color:#f00">false</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">case</span> message.MsgChoke:
@@ -1137,11 +1136,11 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 <p>최신 클라이언트는 <a href="https://luminarys.com/posts/writing-a-bittorrent-client.html">적응형(adaptive)</a> 큐 크기를
 사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
 이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// MaxBlockSize 요청할 수 있는 최대 바이트 수
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> MaxBlockSize = <span style="color:#f60">16384</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// MaxBlockSize 요청할 수 있는 최대 바이트 수</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">const</span> MaxBlockSize = <span style="color:#f60">16384</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> MaxBacklog = <span style="color:#f60">5</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">const</span> MaxBacklog = <span style="color:#f60">5</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">attemptDownloadPiece</span>(c *client.Client, pw *pieceWork) ([]<span style="color:#ee82ee">byte</span>, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  state := pieceProgress{
@@ -1150,18 +1149,18 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>    buf:    make([]<span style="color:#ee82ee">byte</span>, pw.length),
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#0f0">// 262KB 조각을 다운로드하려면 30초가 충분합니다
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  c.Conn.<span style="color:#ff0">SetDeadline</span>(time.<span style="color:#ff0">Now</span>().<span style="color:#ff0">Add</span>(<span style="color:#f60">30</span> * time.Second))
-</span></span><span style="display:flex;"><span>  <span style="color:#f00">defer</span> c.Conn.<span style="color:#ff0">SetDeadline</span>(time.Time{}) <span style="color:#0f0">// 데드라인 비활성화
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 데드라인을 설정하면 응답하지 않는 피어를 떼어내는 데 도움이 됩니다</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 262KB 조각을 다운로드하려면 30초가 충분합니다</span>
+</span></span><span style="display:flex;"><span>  c.Conn.<span style="color:#ff0">SetDeadline</span>(time.<span style="color:#ff0">Now</span>().<span style="color:#ff0">Add</span>(<span style="color:#f60">30</span> * time.Second))
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">defer</span> c.Conn.<span style="color:#ff0">SetDeadline</span>(time.Time{}) <span style="color:#0f0">// 데드라인 비활성화</span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">for</span> state.downloaded &lt; pw.length {
-</span></span><span style="display:flex;"><span>    <span style="color:#0f0">// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>    <span style="color:#f00">if</span> !state.client.Choked {
+</span></span><span style="display:flex;"><span>    <span style="color:#0f0">// unchocked일 경우 완료되지 않은 요청이 충분히 쌓일 때까지 요청을 보냅니다.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f00">if</span> !state.client.Choked {
 </span></span><span style="display:flex;"><span>      <span style="color:#f00">for</span> state.backlog &lt; MaxBacklog &amp;&amp; state.requested &lt; pw.length {
 </span></span><span style="display:flex;"><span>        blockSize := MaxBlockSize
-</span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 마지막 블록은 일반 블록보다 짧을 수 있습니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#f00">if</span> pw.length-state.requested &lt; blockSize {
+</span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 마지막 블록은 일반 블록보다 짧을 수 있습니다.</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f00">if</span> pw.length-state.requested &lt; blockSize {
 </span></span><span style="display:flex;"><span>          blockSize = pw.length - state.requested
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>
@@ -1216,8 +1215,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 관심 있으시다면 <a href="https://github.com/veggiedefender/torrent-client">전체 소스 코드</a>를 확인하세요.</p>
 <hr>
 <blockquote>
-<p>역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.</p>
-</blockquote>
+<p>역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.</p></blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#0f0"># Go는 설치되어 있다고 가정합니다.</span>
 </span></span><span style="display:flex;"><span>git clone https://github.com/veggiedefender/torrent-client.git
 </span></span><span style="display:flex;"><span>cd torrent-client
