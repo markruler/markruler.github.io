@@ -45,7 +45,7 @@ deploy: build
 	$(DEPLOY)
 .PHONY: deploy
 
-run:
+run: clean
 	$(RUN)
 .PHONY: run
 
