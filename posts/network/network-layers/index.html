@@ -5,7 +5,7 @@
   
   임창수
   
-  | APM만큼 중요한 네트워크 모니터링
+  | 네트워크 레이어
   
   
 </title>
@@ -18,26 +18,24 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례">
+<meta name="description" content="OSI 모델을 중심으로">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="/manifest.json">
 
 
 
-<meta property="og:url" content="https://markruler.github.io/posts/web/apm-network-device-troubleshooting-mistakes/">
+<meta property="og:url" content="https://markruler.github.io/posts/network/network-layers/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="APM만큼 중요한 네트워크 모니터링">
-  <meta property="og:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례">
+  <meta property="og:title" content="네트워크 레이어">
+  <meta property="og:description" content="OSI 모델을 중심으로">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2024-07-25T01:22:00+09:00">
-    <meta property="article:modified_time" content="2024-07-25T01:22:00+09:00">
+    <meta property="article:published_time" content="2025-03-20T23:03:00+09:00">
+    <meta property="article:modified_time" content="2025-03-20T23:03:00+09:00">
     <meta property="article:tag" content="Network">
-    <meta property="article:tag" content="Monitoring">
-    <meta property="article:tag" content="APM">
-    <meta property="og:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp">
+    <meta property="og:image" content="https://markruler.github.io/images/network/network-layers/osi-7-layer-bytebytego.png">
 
 
 
@@ -45,9 +43,9 @@
 
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://markruler.github.io/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp">
-  <meta name="twitter:title" content="APM만큼 중요한 네트워크 모니터링">
-  <meta name="twitter:description" content="네트워크 장비 문제로 인한 레이턴시 증가 사례">
+  <meta name="twitter:image" content="https://markruler.github.io/images/network/network-layers/osi-7-layer-bytebytego.png">
+  <meta name="twitter:title" content="네트워크 레이어">
+  <meta name="twitter:description" content="OSI 모델을 중심으로">
 
 
 
@@ -181,8 +179,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
-									문제
+								<a href="#%ec%9a%a9%ec%96%b4" class="nav-용어">
+									용어
 								</a>
 							</li>
 						
@@ -199,8 +197,8 @@
 						
 						
 							<li>
-								<a href="#%eb%b6%84%ec%84%9d-%ec%89%bd%ea%b2%8c-%ea%b0%84%ea%b3%bc%ed%96%88%eb%8d%98-%eb%ac%b8%ec%a0%9c" class="nav-분석-쉽게-간과했던-문제">
-									분석: 쉽게 간과했던 문제
+								<a href="#layer-1---physical-layer" class="nav-layer-1---physical-layer">
+									Layer 1 - Physical Layer
 								</a>
 							</li>
 						
@@ -217,8 +215,116 @@
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
-									해결
+								<a href="#layer-2---data-link-layer" class="nav-layer-2---data-link-layer">
+									Layer 2 - Data Link Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-3---network-layer" class="nav-layer-3---network-layer">
+									Layer 3 - Network Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-4---transport-layer" class="nav-layer-4---transport-layer">
+									Layer 4 - Transport Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-5---session-layer" class="nav-layer-5---session-layer">
+									Layer 5 - Session Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-6---presentation-layer" class="nav-layer-6---presentation-layer">
+									Layer 6 - Presentation Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-7---application-layer" class="nav-layer-7---application-layer">
+									Layer 7 - Application Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						
@@ -282,33 +388,27 @@
                 
             >
                 <div class="post-title">
-                    APM만큼 중요한 네트워크 모니터링
+                    네트워크 레이어
                     
                     <div class="post-subtitle">
-                        네트워크 장비 문제로 인한 레이턴시 증가 사례
+                        OSI 모델을 중심으로
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2024-07-25 01:22
+                            2025-03-20 23:03
                         </time>
                         
 
                         
-                            <a href="/categories/blog">[blog]</a>
+                            <a href="/categories/wiki">[wiki]</a>
                             &nbsp;
                         
 
                         
                             
                                 <a href="/tags/network">network</a>
-                                &nbsp;
-                            
-                                <a href="/tags/monitoring">monitoring</a>
-                                &nbsp;
-                            
-                                <a href="/tags/apm">APM</a>
                                 &nbsp;
                             
                         
@@ -321,37 +421,79 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <p>APM은 애플리케이션 성능 모니터링(Application Performance Monitoring)입니다.
-저희 팀이 사용하는 모니터링 서비스 데이터독(Datadog)은 APM에서 많은 것을 확인할 수 있습니다.
-(인프라, 로그, 호스트의 프로세스, JVM 런타임 메트릭, 각 리소스별 레이턴시 등등)</p>
-<h1 id="문제">문제</h1>
-<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/first.png" alt="First"></p>
-<p>어느날 체감이 될 정도로 서비스의 레이턴시가 높아지고, 정각마다 스파이크 발생했습니다.
-또한 서비스 전체에 영향이 있었습니다.</p>
-<h1 id="분석-쉽게-간과했던-문제">분석: 쉽게 간과했던 문제</h1>
-<p><a href="https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/">Oracle Session 히스토리</a>를 남겨서 확인했을 때
-DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었습니다.
-DB 문제는 아니었습니다.</p>
-<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/oracle-session.webp" alt="Oracle Session 히스토리"></p>
-<p>발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했습니다.
-이 시점에는 이게 문제라고 생각하지 않았습니다.</p>
-<blockquote>
-<p><strong>&ldquo;Private IP로 요청하면 더 빠른 거 아냐?&rdquo;</strong></p></blockquote>
-<p>모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었습니다.
-혹시 몰라서 라우터 장비에 <a href="/posts/network/snmp/">SNMP</a> 모니터링을 추가했습니다.
-IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었습니다.</p>
-<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/network-router.webp" alt="Network Router"></p>
-<h1 id="해결">해결</h1>
-<p>정말 간단하게&hellip; 케이블을 교체해서 해결되었습니다.</p>
-<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/solved.png" alt="Solved"></p>
-<p>정각마다 발생하는 스파이크는 DB 백업 솔루션에서 정각마다 실행하는 프로그램이 있어서 발생한 것입니다.</p>
-<p><img src="/images/web/apm-network-device-troubleshooting-mistakes/replace-udp-cable.webp" alt="Replace UDP Cable"></p>
-<p>순간의 오판으로 시간을 허비했습니다.
-익숙한 것도 의심하고, 모니터링의 한계점을 파악할 필요가 있다고 느꼈습니다.</p>
+                    <p><strong>OSI 모델</strong>은 다양한 통신 시스템이 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
+각 계층(Layer)은 특정한 역할을 담당합니다.
+이 글에서는 각 계층의 주요 기능과 특징을 살펴보겠습니다.</p>
+<h1 id="용어">용어</h1>
+<p>먼저 공통 용어를 정리하며 시작하겠습니다.</p>
+<p>1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
+이 글에서도 글을 줄여 쓰기 위해서 물리 계층은 L1이라고 표기하겠습니다.</p>
+<p>계층에서 처리하는 한 덩어리의 데이터 단위를 <strong>PDU</strong>(Protocol Data Unit)라고 부릅니다.
+PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
+웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.</p>
+<p>이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
+L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
+특히 L3의 <strong>IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체</strong>를 일컫는 경우도 많습니다.</p>
+<p>송신 측에서 데이터를 보낼 때는 <strong>상위 계층의 데이터에 하위 계층의 헤더(header)를 붙여서 캡슐화(encapsulation)하며</strong> 내려가고,
+수신 측에서는 그 과정을 역순으로 <strong>디캡슐화(decapsulation)하여</strong> 상위 계층으로 전달합니다</p>
+<!-- ![](/images/network/network-layers/osi-7-layer-bytebytego.png) -->
+<!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* -->
+<!-- ![](/images/network/network-layers/linux-network-protocol-stack.png) -->
+<!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* -->
+<h1 id="layer-1---physical-layer">Layer 1 - Physical Layer</h1>
+<p>물리 계층(L1)은 실제 물리 매체를 통해 <strong>디지털 신호를 전기 신호나 광신호 등으로 변환</strong>하여 송수신합니다.
+L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
+주요 장비로는 허브, 리피터, 케이블, 커넥터, 모뎀 등이 있으며, 비트 단위의 데이터 전송과 신호 변조 및 복조를 수행합니다.
+물리 계층은 단순히 데이터를 전달하는 역할만 하며, 에러 검출이나 제어 기능은 포함되지 않습니다.</p>
+<h1 id="layer-2---data-link-layer">Layer 2 - Data Link Layer</h1>
+<p>데이터 링크 계층(L2)은 <strong>직접 연결된 인접 노드(장치) 간 데이터 전송을 담당</strong>합니다.
+L2는 MAC 주소를 이용해 통신하며, 프레임 단위로 데이터를 전송합니다.
+또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+주요 장비로는 스위치와 브리지가 있으며, Ethernet, PPP, HDLC와 같은 프로토콜이 사용됩니다.</p>
+<h1 id="layer-3---network-layer">Layer 3 - Network Layer</h1>
+<p>네트워크 계층(L3)은 <strong>다른 네트워크들을 연결</strong>하고
+<strong>패킷(Packet) 단위의 데이터가 출발지에서 최종 목적지까지 전달되도록 경로를 선택</strong>하는 계층입니다.
+L3는 IP 주소를 이용해 데이터를 라우팅하고, 패킷 단위로 데이터를 전송합니다.
+또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.
+주요 장비로는 라우터가 있으며, IP, ICMP, OSPF, BGP와 같은 프로토콜이 사용됩니다.</p>
+<h1 id="layer-4---transport-layer">Layer 4 - Transport Layer</h1>
+<p>전송 계층(L4)은 <strong>종단 간(end-to-end) 신뢰성 있는 데이터 전송</strong>을 담당합니다.
+L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며, 세그먼트 단위로 데이터를 전송합니다.
+연결 지향 서비스(TCP)와 비연결 지향 서비스(UDP)를 제공하며, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+주요 프로토콜로는 TCP, UDP, SCTP가 있습니다.</p>
+<h1 id="layer-5---session-layer">Layer 5 - Session Layer</h1>
+<p>세션 계층(L5)은 <strong>두 응용 프로그램 간의 대화(Session)를 관리하고 동기화</strong>하는 역할을 합니다.
+L5는 통신 세션을 구축하고 유지하며, 데이터 전송 중단 시 재개 지점을 관리합니다.
+또한, 전이중(Full-duplex) 및 반이중(Half-duplex) 통신 방식을 관리하고, 토큰 관리를 통해 상호배제를 보장합니다.
+보안 기능으로는 인증(Authentication), 허가(Authorization), 세션 복구(Session Recovery)가 포함됩니다.
+주요 표준으로는 NFS(Network File System), RPC(Remote Procedure Call)​가 있습니다.</p>
+<h1 id="layer-6---presentation-layer">Layer 6 - Presentation Layer</h1>
+<p>표현 계층(L6)은 데이터의 구문과 표현을 담당하는 계층으로,
+<strong>한 시스템의 애플리케이션 계층에서 보내는 데이터를 다른 시스템에서도 이해할 수 있는 형태로 변환</strong>해 줍니다.
+문자 인코딩, 데이터 포맷 변환, 압축 및 암호화와 같은 작업들이 이 계층에서 이루어집니다.
+L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행하며, 데이터의 인코딩과 디코딩을 담당합니다.
+주요 표준으로는 파일 포맷 (JPEG, PNG, MP3), 문자 인코딩 (ASCII, Unicode), 암호화 프로토콜 (SSL, TLS) 등이 있습니다.</p>
+<h1 id="layer-7---application-layer">Layer 7 - Application Layer</h1>
+<p>응용 계층(L7)은 사용자와 가장 가까운 계층으로, <strong>응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공</strong>합니다.
+이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.
+주요 프로토콜로는 HTTP, FTP, SMTP, DNS, SSH 등이 있습니다.</p>
+<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<ul>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414">그림으로 공부하는 TCP/IP 구조</a> | 미야타 히로시</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183">IT 엔지니어를 위한 네트워크 입문</a> | 고재성, 이상훈</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/">OSI 모델이란</a> | Cloudflare&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2024-07-25</p>
+		    <p style="color:#777;">최종 수정: 2025-03-20</p>
                     
                 </div>
             </div>
@@ -360,14 +502,14 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/web/google-chrome/">
-			다음글<br>유용한 구글 크롬(Google Chrome)의 기능
-                </a>
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
                 
                 
                 
-                <a class="older-posts" href="/posts/network/snmp/">
-			이전글<br>네트워크 장비 모니터링을 위한 SNMP
+                <a class="older-posts" href="/posts/pdf/pdf-editor/">
+			이전글<br>비파괴 스캐너로 스캔한 책 PDF outline 만들기
                 </a>
                 
             </nav>
@@ -398,7 +540,7 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fapm-network-device-troubleshooting-mistakes%2f&amp;text=APM%eb%a7%8c%ed%81%bc%20%ec%a4%91%ec%9a%94%ed%95%9c%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnetwork-layers%2f&amp;text=%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%a0%88%ec%9d%b4%ec%96%b4" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:all">
@@ -415,7 +557,7 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
     
     
     <li>
-      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fapm-network-device-troubleshooting-mistakes%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnetwork-layers%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
   <circle cx="24" cy="24" fill="#4E71A8" r="24" />
   <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
@@ -434,7 +576,7 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - APM%eb%a7%8c%ed%81%bc%20%ec%a4%91%ec%9a%94%ed%95%9c%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81.&amp;body=APM%eb%a7%8c%ed%81%bc%20%ec%a4%91%ec%9a%94%ed%95%9c%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0a%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%ec%9e%a5%eb%b9%84%20%eb%ac%b8%ec%a0%9c%eb%a1%9c%20%ec%9d%b8%ed%95%9c%20%eb%a0%88%ec%9d%b4%ed%84%b4%ec%8b%9c%20%ec%a6%9d%ea%b0%80%20%ec%82%ac%eb%a1%80%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fapm-network-device-troubleshooting-mistakes%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%a0%88%ec%9d%b4%ec%96%b4.&amp;body=%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%a0%88%ec%9d%b4%ec%96%b4%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aOSI%20%eb%aa%a8%eb%8d%b8%ec%9d%84%20%ec%a4%91%ec%8b%ac%ec%9c%bc%eb%a1%9c%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnetwork-layers%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -583,8 +725,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
-									문제
+								<a href="#%ec%9a%a9%ec%96%b4" class="nav-용어">
+									용어
 								</a>
 							</li>
 						
@@ -601,8 +743,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%eb%b6%84%ec%84%9d-%ec%89%bd%ea%b2%8c-%ea%b0%84%ea%b3%bc%ed%96%88%eb%8d%98-%eb%ac%b8%ec%a0%9c" class="nav-분석-쉽게-간과했던-문제">
-									분석: 쉽게 간과했던 문제
+								<a href="#layer-1---physical-layer" class="nav-layer-1---physical-layer">
+									Layer 1 - Physical Layer
 								</a>
 							</li>
 						
@@ -619,8 +761,116 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ed%95%b4%ea%b2%b0" class="nav-해결">
-									해결
+								<a href="#layer-2---data-link-layer" class="nav-layer-2---data-link-layer">
+									Layer 2 - Data Link Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-3---network-layer" class="nav-layer-3---network-layer">
+									Layer 3 - Network Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-4---transport-layer" class="nav-layer-4---transport-layer">
+									Layer 4 - Transport Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-5---session-layer" class="nav-layer-5---session-layer">
+									Layer 5 - Session Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-6---presentation-layer" class="nav-layer-6---presentation-layer">
+									Layer 6 - Presentation Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#layer-7---application-layer" class="nav-layer-7---application-layer">
+									Layer 7 - Application Layer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						

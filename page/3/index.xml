@@ -9,9 +9,157 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Fri, 14 Mar 2025 01:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략</title>
+        <link>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</link>
+        <pubDate>Wed, 21 Dec 2022 22:20:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</guid>
+        <description>임창수 https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공합니다.
+엘라스틱서치가 빠른 이유는 문서의 단어(term)들을 역색인(inverted index)하기 때문입니다.
+책에서 특정 단어를 찾는 걸 상상해 보죠.
+&lt;strong&gt;관계형 데이터베이스(RDB, Relational Database)는&lt;/strong&gt; &lt;code&gt;LIKE&lt;/code&gt; 검색을 통해 검색 키워드가 포함된 &lt;strong&gt;모든 페이지를 찾아야 합니다&lt;/strong&gt;.
+&lt;strong&gt;엘라스틱서치는&lt;/strong&gt; 책 뒷부분에 있는 색인(index)을 보고 &lt;strong&gt;필요한 페이지만 찾으면 됩니다&lt;/strong&gt;.
+이 글에서는 e커머스 서비스에서 검색 성능을 개선하기 위해 도입한 엘라스틱서치와 인덱싱 전략에 대해 소개합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-%EB%8F%84%EC%9E%85-%EB%B0%B0%EA%B2%BD&#34;&gt;엘라스틱서치 도입 배경&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#rdb-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%9D%B8%EB%8D%B1%EC%8B%B1%ED%95%98%EB%8A%94-%EC%A0%84%EB%9E%B5&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#1-%EA%B0%80%EC%9E%A5-%EC%89%AC%EC%9A%B4-%EB%B0%A9%EB%B2%95-batch&#34;&gt;1. 가장 쉬운 방법 Batch&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-update-%EB%8D%B0%EC%9D%B4%ED%84%B0&#34;&gt;2. UPDATE 데이터&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3-hard-delete-%EB%8D%B0%EC%9D%B4%ED%84%B0&#34;&gt;3. HARD DELETE 데이터&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B6%80%EB%B6%84&#34;&gt;더 개선할 수 있는 부분&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4-%EA%B3%A0%EB%AF%BC%EC%9D%84-%EC%A0%80%EB%A7%8C-%ED%96%88%EB%8D%98-%EA%B2%8C-%EC%95%84%EB%8B%88%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;엘라스틱서치-도입-배경&#34;&gt;엘라스틱서치 도입 배경&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;매일 새벽에 장애가 발생하기 시작했습니다&lt;/strong&gt;.
+유저 트래픽이 주로 새벽에 몰리는데, 이때 DB 레이턴시가 높아져서 모든 서버에 장애가 발생했습니다.
+왜 DB 레이턴시가 높았을까요?
+현재 서비스에서 트래픽이 가장 많이 발생하는 페이지가 메인, 상품 검색, 상품 상세 페이지입니다.
+이 중 검색 페이지에서 쿼리 대기 시간이 길어지고 있었습니다.
+원인은 크게 다음과 같습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;LIKE %keyword%&lt;/code&gt; 검색&lt;/strong&gt; — 최악의 경우 DB는 모든 레코드를 찾아야 합니다.
+&lt;ul&gt;
+&lt;li&gt;검색 페이지가 증가할수록 검색 속도는 더 느려졌습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;상품 수의 급증&lt;/strong&gt; — 상품 수가 약 50만 개에서 270만 개로 증가했습니다.
+&lt;ul&gt;
+&lt;li&gt;판매 중인 상품만 보면 약 6만 개에서 76만 개로 증가했습니다.&lt;/li&gt;
+&lt;li&gt;개선 전에는 판매된 상품도 검색 결과에 포함되어 있었습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;당장 개선이 필요했습니다&lt;/strong&gt;.
+RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지 않았습니다.
+더 중요한 건 RDB에 부하가 발생하고 있었기 때문에 RDB에서 작업할 수 없던 상황이었습니다.
+당시 검색 키워드를 저장하고 집계만 하던 기능에 사용되던 Elastic Cloud가 있었고,
+MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었습니다.
+그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/search/elasticsearch-indexing-strategy/improve-response-time.png&#34; alt=&#34;Elasticsearch로 응답 속도 개선&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;엘라스틱서치를 검색 기능에 도입 후 서버 응답 속도 (Datadog APM)&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;개선 전 평균 응답 시간: &lt;strong&gt;약 6,000~7,000ms&lt;/strong&gt; (7일 집계)&lt;/li&gt;
+&lt;li&gt;개선 후 평균 응답 시간: &lt;strong&gt;약 80~100ms&lt;/strong&gt; (7일 집계)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;rdb-데이터를-인덱싱하는-전략&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/h1&gt;
+&lt;h2 id=&#34;1-가장-쉬운-방법-batch&#34;&gt;1. 가장 쉬운 방법 Batch&lt;/h2&gt;
+&lt;p&gt;처음엔 &lt;a href=&#34;https://www.elastic.co/kr/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash&#34;&gt;Elastic 공식 문서&lt;/a&gt;를 참조해서
+&lt;strong&gt;로그스태시(Logstash)&lt;/strong&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;로 시작했지만 원하는 로그와 커스텀 동작을 추가하기 힘들었습니다.
+그래서 성능 개선 후 바로 &lt;strong&gt;파이썬(Python)&lt;/strong&gt; 스크립트로 전환했습니다.
+대략적인 ETL 과정은 다음과 같습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Extract: Oracle DBMS에서 마지막으로 조회한 &lt;em&gt;최근 수정된 날짜(&lt;code&gt;updated_at&lt;/code&gt;)&lt;/em&gt; 기준 이후로 데이터 조회&lt;/li&gt;
+&lt;li&gt;Transform: 엘라스틱서치 인덱스의 스키마(Schema)에 맞게 데이터 수정&lt;/li&gt;
+&lt;li&gt;Load: 엘라스틱서치에 데이터 인덱싱&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;2-update-데이터&#34;&gt;2. UPDATE 데이터&lt;/h2&gt;
+&lt;p&gt;시간이 지날수록 RDB 데이터와 Elasticsearch 데이터에 차이가 발생하기 시작했습니다. (평균 약 300개/1d)
+이러한 이유로 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했습니다.&lt;/p&gt;
+&lt;p&gt;Python의 &lt;code&gt;deepdiff&lt;/code&gt; 모듈을 사용해서 RDB와 엘라스틱서치 데이터 전체를 비교해봤습니다.
+특정 패턴을 분석해보니 내가 파악하지 못한 레거시 시스템이나 스케줄러에서 &lt;code&gt;updated_at&lt;/code&gt;을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었습니다.
+추가로 트랜잭션 문제로 인해 데이터에 차이가 발생하는 경우도 있었습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+간략히 설명하면 &lt;strong&gt;데이터 UPDATE를 위한 트랜잭션 시작 후 COMMIT 전에 배치 작업이 SELECT를 실행하면 업데이트 이벤트가 누락될 수 있습니다.&lt;/strong&gt;
+&lt;code&gt;updated_at&lt;/code&gt; 기준이 아닌 전체 인덱싱도 고려해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;실시간 배치 — &lt;code&gt;updated_at&lt;/code&gt;을 기준으로 5초 Fixed Delay&lt;/li&gt;
+&lt;li&gt;전체 배치 — 최근 데이터까지 인덱싱하면 다시 처음부터 반복 (약 3시간 소요)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;3-hard-delete-데이터&#34;&gt;3. HARD DELETE 데이터&lt;/h2&gt;
+&lt;p&gt;수정 후 데이터 차이가 많이 줄었습니다. (평균 약 2개/1d)
+하지만 남은 건 어디서 발생하는지 한참 찾아야 했습니다.
+운영상 상품을 HARD DELETE&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 해야 하는 상황이 있었고, 이 정보가 팀원 간에 공유되지 않았습니다.
+지금까지 설명한 배치 방식은 Hard Delete에 대응하지 못합니다.&lt;/p&gt;
+&lt;p&gt;다른 대안이 있을까 찾아봤더니 &lt;strong&gt;CDC(Change Data Capture)와 같은 스트림(Stream) 방식&lt;/strong&gt;을 사용할 수 있습니다.
+하지만 Oracle CDC&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;, Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았습니다.&lt;/p&gt;
+&lt;p&gt;그럼 또 다른 대안이 있을까요? &lt;strong&gt;상품 인덱스에 alias를 지정하고, 1일 1번 새로운 인덱스를 생성해서 변경하기로 했습니다&lt;/strong&gt;.
+예를 들어 &lt;code&gt;product-20220102&lt;/code&gt; 인덱스를 생성하고,
+전체 문서 인덱싱을 완료할 경우 &lt;code&gt;product&lt;/code&gt; alias를 &lt;code&gt;product-20220101&lt;/code&gt;에서 &lt;code&gt;product-20220102&lt;/code&gt;로 변경합니다.
+그럼 Hard Delete가 발생해도 최대 1일 동안만 차이가 발생합니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-개선할-수-있는-부분&#34;&gt;더 개선할 수 있는 부분&lt;/h1&gt;
+&lt;p&gt;검색 기능 구현에 Spring Data Elasticsearch 모듈을 사용했습니다.
+&lt;strong&gt;인덱스 스키마를 Python과 Java 언어로 된 2개의 프로젝트에서 관리하는 것&lt;/strong&gt;입니다.
+엘라스틱서치 인덱스는 &lt;code&gt;@Entity&lt;/code&gt;로 정의했는데 이를 &lt;strong&gt;별도 모듈로 재사용&lt;/strong&gt;하면 Spring Batch를 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;현재 전체 데이터를 인덱싱하는데 평균 3시간이 걸립니다.&lt;/strong&gt;
+파이썬은 GIL(Global Interpreter Lock) 때문에 &lt;code&gt;multiprocessing&lt;/code&gt; 모듈을 사용해야 병렬 처리가 가능하지만,
+Spring Batch로 전환하면 &lt;strong&gt;배치 작업을 병럴 처리해서 처리 속도를 향상&lt;/strong&gt;시킬 수 있습니다.&lt;/p&gt;
+&lt;p&gt;하지만 Elastic Cloud를 사용한다면 &lt;strong&gt;비용(Credit)도 고려&lt;/strong&gt;해야 합니다.
+데이터 인덱싱을 더 많이, 더 자주 해보니 데이터 노드의 CPU 사용량이 높아지는 것을 확인했습니다.&lt;/p&gt;
+&lt;p&gt;검색 기능의 서버 응답 속도는 평균 85.2ms/1w 입니다&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
+데이터에 차이가 발생하는 문제 때문에 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했는데,
+배치 처리 속도를 개선하면 RDB를 조회하는 부분을 제거할 수 있습니다.
+게다가 현재 서비스의 주요 이용자들은 &lt;strong&gt;아프리카, 중남미, 중앙아시아&lt;/strong&gt; 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 입니다&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;.
+RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것입니다.&lt;/p&gt;
+&lt;h1 id=&#34;이-고민을-저만-했던-게-아니었습니다&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html&#34;&gt;Tune for indexing speed&lt;/a&gt; | Elastic&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/fBfUr_8Pq8A&#34;&gt;엘라스틱서치를 이용한 상품 검색 엔진 개발 일지&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ&#34;&gt;샵바이 주문 검색 성능 개선기&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/topics/integration/what-is-change-data-capture&#34;&gt;What is change data capture (CDC)?&lt;/a&gt; | Red Hat
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://tech.kakaopay.com/post/kakaopaysec-mongodb-cdc/&#34;&gt;Oracle에서 MongoDB로의 CDC Pipeline 구축&lt;/a&gt; | 카카오페이&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://hyperconnect.github.io/2021/01/11/cdc-platform.html&#34;&gt;CDC &amp;amp; CDC Sink Platform 개발 1편 - CDC Platform 개발&lt;/a&gt; | 하이퍼커넥트&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;Logstash 사용 시 고려했던 성능 관련 &lt;a href=&#34;https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html&#34;&gt;문서1&lt;/a&gt;,
+&lt;a href=&#34;https://www.elastic.co/guide/en/logstash/7.17/resiliency.html&#34;&gt;문서2&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ?t=862&#34;&gt;동일한 사례&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;strong&gt;Hard Delete&lt;/strong&gt;란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 &lt;code&gt;DELETE&lt;/code&gt;.
+이와 반대로 &lt;strong&gt;Soft Delete&lt;/strong&gt;는 삭제 플래그(ex: &lt;code&gt;is_deleted&lt;/code&gt;)만 수정하고 데이터를 삭제하지 않습니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
+또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었습니다.
+&lt;a href=&#34;https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/&#34;&gt;Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&amp;hellip;&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;
+&lt;p&gt;Datadog RUM 측정 기준&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -3699,433 +3847,6 @@ tar 아카이브에 디렉터리 및 파일 엔트리를 추가합니다.
 &lt;a href=&#34;https://markruler.github.io/posts/container/container-study-guide/&#34;&gt;도움되었던 자료들&lt;/a&gt;을
 모으며 번역하고 있습니다. 필요하신 분들에게 도움이 되었으면 좋겠습니다.&lt;/p&gt;
 - https://markruler.github.io/posts/review/container-security/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>컨테이너 톺아보기</title>
-        <link>https://markruler.github.io/posts/container/container-study-guide/</link>
-        <pubDate>Wed, 17 Feb 2021 23:47:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/container/container-study-guide/</guid>
-        <description>임창수 https://markruler.github.io/posts/container/container-study-guide/ -&lt;h1 id=&#34;거두절미&#34;&gt;거두절미&lt;/h1&gt;
-&lt;p&gt;생각보다 컨테이너는 간단한 게 아닙니다.
-컨테이너를 쉽게 생성하고 삭제할 수 있었던 이유는
-도커와 같은 컨테이너 관리 도구가 복잡한 것들을 꽁꽁 감췄기 때문입니다.
-컨테이너를 공부하면 할수록 알아야 할 게 더 늘어나고 있지만
-이쯤에서 유익했던 자료들을 모아 보려 합니다.&lt;/p&gt;
-&lt;h1 id=&#34;참고-자료&#34;&gt;참고 자료&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;👍 필수
-&lt;ul&gt;
-&lt;li&gt;책 - &lt;a href=&#34;https://www.hanbit.co.kr/store/books/look.php?p_code=B8383749156&#34;&gt;컨테이너 보안&lt;/a&gt;, Liz Rice&lt;/li&gt;
-&lt;li&gt;katacoda - &lt;a href=&#34;https://www.katacoda.com/lizrice/courses/containers-and-go&#34;&gt;An Introduction to Containers for Go programmers&lt;/a&gt;, Liz Rice&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;컨테이너
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/&#34;&gt;A Practical Introduction to Container Terminology&lt;/a&gt;, Scott McCarty&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.infoq.com/articles/build-a-container-golang/&#34;&gt;Build Your Own Container Using Less than 100 Lines of Go&lt;/a&gt;, Julian Friedman&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://iximiuz.com/en/posts/implementing-container-runtime-shim/&#34;&gt;Implementing Container Runtime Shim: runc&lt;/a&gt;, Ivan Velichko&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;컨테이너 런타임
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/keyword/linux-container&#34;&gt;리눅스 컨테이너란?&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.samsungsds.com/kr/insights/docker.html&#34;&gt;흔들리는 도커(Docker)의 위상: OCI와 CRI 중심으로 재편되는 컨테이너 생태계&lt;/a&gt;, 김준석&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users/&#34;&gt;Podman and Buildah for Docker users&lt;/a&gt;, Red Hat&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://joejulian.name/post/kubernetes-container-engine-comparison/&#34;&gt;Selecting a container runtime for use with Kubernetes&lt;/a&gt;, Joe Julian&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;컨테이너 오케스트레이션
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/ko/topics/containers/what-is-container-orchestration&#34;&gt;컨테이너 오케스트레이션이란?&lt;/a&gt;, Red Hat&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;네임스페이스
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/keyword/linux-namespace&#34;&gt;리눅스 네임스페이스란?&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://jake.dothome.co.kr/namespace/&#34;&gt;네임스페이스&lt;/a&gt;, 문영일&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://windsock.io/using-linux-namespaces-to-isolate-processes/&#34;&gt;Using Linux Namespaces to Isolate Processes&lt;/a&gt;, Scott McCarty&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/en/blog/whats-next-containers-user-namespaces&#34;&gt;What’s Next for Containers? User Namespaces&lt;/a&gt;, Scott McCarty&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://netflixtechblog.com/evolving-container-security-with-linux-user-namespaces-afbe3308c082&#34;&gt;Evolving Container Security With Linux User Namespaces&lt;/a&gt;, Netflix&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://kinvolk.io/blog/2020/12/improving-kubernetes-and-container-security-with-user-namespaces/&#34;&gt;Improving Kubernetes and container security with user namespaces&lt;/a&gt;, Alban Crequy&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;컨트롤 그룹
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/&#34;&gt;Cgroup Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/&#34;&gt;Red Hat Resource Management Guide&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tech.kakao.com/2020/06/29/cgroup-driver/&#34;&gt;Cgroup Driver 선택하기&lt;/a&gt;, ssup&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://b.luavis.kr/server/missing-800mb&#34;&gt;사라진 800MB를 찾아서&lt;/a&gt;, Luavis&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;루트 파일세스템
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt&#34;&gt;Linux Kernel Documentation - ramfs, rootfs and initramfs&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/change-root-directory-by-using-chroot&#34;&gt;chroot를 사용한 프로세스의 루트 디렉터리 격리&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;유니온 마운트
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ahmet.im/blog/building-container-images-in-go/&#34;&gt;Building container images in Go&lt;/a&gt;, Ahmet Alp Balkan (번역중)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/how-docker-image-work&#34;&gt;도커 이미지 빌드 원리와 OverlayFS&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2016/01/13/a-practical-introduction-to-docker-container-terminology/&#34;&gt;A Practical Introduction to Docker Container Terminology&lt;/a&gt;, Scott McCarty / Joe Brockmeier&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.naver.com/alice_k106/221530340759&#34;&gt;투명 셀로판지 이론을 통한 Overlay FS 사용 방법과 유니온 마운트 이해하기&lt;/a&gt;, 최용호&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ssup2.github.io/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/&#34;&gt;Union Mount, AUFS, Docker Image Layer&lt;/a&gt;, ssup2&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver&#34;&gt;Use the AUFS storage driver&lt;/a&gt;, Docker&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://lwn.net/Articles/312641/&#34;&gt;Unifying filesystems with union mounts&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;캐퍼빌리티
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/capabilities.7.html&#34;&gt;capabilities(7)&lt;/a&gt;, Linux manual page&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://archive.is/20130112225523/http://www.eros-os.org/essays/capintro.html&#34;&gt;What is a Capability, Anyway?&lt;/a&gt;, Jonathan Shapiro&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.epnc.co.kr/news/articleView.html?idxno=43405&#34;&gt;권한을 최소화시키는 리눅스 커널 자격&lt;/a&gt;, 이혜원&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.container-solutions.com/linux-capabilities-why-they-exist-and-how-they-work&#34;&gt;Linux Capabilities: Why They Exist and How They Work&lt;/a&gt;, Adrian Mouat&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.container-solutions.com/linux-capabilities-in-practice&#34;&gt;Linux Capabilities In Practice&lt;/a&gt;, Adrian Mouat&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;컨테이너 네트워크
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/container-network-1-uts-namespace&#34;&gt;UTS 네임스페이스를 사용한 호스트네임 격리 - 컨테이너 네트워크 기초 1편&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/container-network-2-ip-command-and-network-namespace&#34;&gt;ip로 직접 만들어보는 네트워크 네임스페이스와 브리지 네트워크 - 컨테이너 네트워크 기초 2편&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;리눅스-컨테이너&#34;&gt;리눅스 컨테이너&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;A Linux container is a set of 1 or more processes that are isolated from the rest of the system.&amp;rdquo;
-&lt;a href=&#34;https://www.redhat.com/en/topics/containers/whats-a-linux-container&#34;&gt;Red Hat&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;리눅스 컨테이너(Linux Container)는 시스템의 다른 부분과 격리된 하나 이상의 프로세스 집합입니다.
-즉, 어떤 응용 프로그램이나 프로세스를 일컫는 것이 아니라 그저 리눅스 자원이 격리된 것입니다(‼️).&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/user-space-vs-kernel-space-simple-container.png&#34; alt=&#34;user-space-vs-kernel-space-simple-container&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.redhat.com/en/blog/architecting-containers-part-1-why-understanding-user-space-vs-kernel-space-matters&#34;&gt;레드햇 블로그 &amp;ldquo;Architecting Containers Part 1: Why Understanding User Space vs. Kernel Space Matters&amp;rdquo; - Scott McCarty (fatherlinux)&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/user-space-vs-kernel-space-virtualization-vs-containerization11.png&#34; alt=&#34;user-space-vs-kernel-space-virtualization-vs-containerization&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.redhat.com/en/blog/architecting-containers-part-2-why-user-space-matters&#34;&gt;레드햇 블로그 &amp;ldquo;Architecting Containers Part 2: Why the User Space Matters&amp;rdquo; - Scott McCarty (fatherlinux)&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;컨테이너-엔진&#34;&gt;컨테이너 엔진&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/#h.6yt1ex5wfo3l&#34;&gt;컨테이너 엔진(Container Engine)&lt;/a&gt;은
-컨테이너를 관리하기 위한 API나 CLI 도구를 제공하는 소프트웨어입니다.
-&lt;code&gt;도커 엔진(docker-ce)&lt;/code&gt;부터 레드햇의 &lt;code&gt;파드맨(Podman)&lt;/code&gt;, 로켓 컴퍼니의 &lt;code&gt;rkt&lt;/code&gt; 등이
-컨테이너 엔진에 해당합니다. 컨테이너 엔진은 사용자 입력을 받고, 컨테이너
-이미지를 꺼내고(pull), 컨테이너 실행 방법을 명시한 메타데이터를 만든 다음,
-컨테이너 런타임에 이 정보들을 전달합니다.&lt;/p&gt;
-&lt;h2 id=&#34;컨테이너-런타임&#34;&gt;컨테이너 런타임&lt;/h2&gt;
-&lt;p&gt;컨테이너 런타임(Container Runtime)은 루트 파일시스템과 메타 데이터(spec file)를
-받아 컨테이너를 실행하는 도구입니다. 가장 일반적으로 쓰이는 런타임은 OCI를 준수하는
-&lt;a href=&#34;https://github.com/opencontainers/runc&#34;&gt;&lt;code&gt;runC&lt;/code&gt;&lt;/a&gt;입니다.
-흔히 쓰이는 &lt;a href=&#34;https://github.com/containerd/containerd/blob/master/pkg/process/init.go#L64&#34;&gt;&lt;code&gt;컨테이너-디 (containerd)&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/cri-o/cri-o/blob/master/pkg/config/config.go#L38-L40&#34;&gt;&lt;code&gt;크라이-오 (cri-o)&lt;/code&gt;&lt;/a&gt;도 실제로는 &lt;code&gt;runC&lt;/code&gt;에 의존합니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/docker-containerd-runc.png&#34; alt=&#34;docker-containerd-runc&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.docker.com/blog/oci-release-of-v1-0-runtime-and-image-format-specifications/&#34;&gt;Docker Leads OCI Release of v1.0 Runtime and Image Format Specifications&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;최근 쿠버네티스 블로그에 업로드된 Dockershim 제거에 대한 글&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;로
-도커를 못 쓰게 된 건지 혼란이 있었습니다. 도커가 워낙 만능이다보니
-&amp;ldquo;컨테이너 엔진==컨테이너 런타임==CRI==도커&amp;quot;라는 오해에서 비롯되었습니다.
-자세한 내용은 &lt;a href=&#34;https://subicura.com/k8s/2020/12/19/deprecate-docker&#34;&gt;서비큐라님 글&lt;/a&gt;,
-&lt;a href=&#34;https://www.slideshare.net/JoHoon1/the-myths-of-deprecating-docker-in-kubernetes&#34;&gt;조훈님과 심근우님 글&lt;/a&gt;을 참고해주세요.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/simple-orchestration-node.png&#34; alt=&#34;simple-orchestration-node&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.katacoda.com/fatherlinux/courses/subsystems/container-internals-lab-2-0-part-1&#34;&gt;Linux Container Internals - Scott McCarty&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;컨테이너-오케스트레이션&#34;&gt;컨테이너 오케스트레이션&lt;/h2&gt;
-&lt;p&gt;컨테이너 오케스트레이션(Container Orchestration)은 컨테이너 배포, 관리, 확장, 네트워킹 등을 자동화합니다.
-대표적으로 CNCF에서 관리하고 있는 &lt;a href=&#34;https://kubernetes.io/&#34;&gt;쿠버네티스&lt;/a&gt;가 있습니다.&lt;/p&gt;
-&lt;h1 id=&#34;컨테이너를-만드는-리눅스-커널-기능&#34;&gt;컨테이너를 만드는 리눅스 커널 기능&lt;/h1&gt;
-&lt;p&gt;처음에는 리눅스 커널까지 깊게 알아야 하나 싶었는데
-&lt;a href=&#34;https://b.luavis.kr/server/missing-800mb&#34;&gt;사라진 메모리를 찾아가는 Luavis님 글&lt;/a&gt;을
-읽어보니 반드시 알아야겠더라구요.
-대표적으로 쓰이는 리눅스 커널 기능은 네임스페이스와 컨트롤 그룹 등이 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/docker-with-linux-kernel.png&#34; alt=&#34;docker-with-linux-kernel&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.educative.io/edpresso/what-are-kernel-namespaces&#34;&gt;educative&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;네임스페이스-what-you-can-see&#34;&gt;네임스페이스: What you can see&lt;/h2&gt;
-&lt;p&gt;리눅스 네임스페이스(Namespace)는 프로세스 실행 시 시스템 자원을 격리시켜주는 기능입니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/namespaces.7.html&#34;&gt;&lt;code&gt;namespaces&lt;/code&gt;(7)&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;네임스페이스 유형&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;네임스페이스&lt;/th&gt;
-          &lt;th&gt;플래그&lt;/th&gt;
-          &lt;th&gt;경로&lt;/th&gt;
-          &lt;th&gt;매뉴얼&lt;/th&gt;
-          &lt;th&gt;격리 대상&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Cgroup&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWCGROUP&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/cgroup&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html&#34;&gt;cgroup_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Cgroup root directory&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;IPC&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWIPC&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/ipc&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html&#34;&gt;ipc_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;System V IPC, POSIX message queues&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Network&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWNET&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/net&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/network_namespaces.7.html&#34;&gt;network_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Network devices, stacks, ports, etc.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Mount&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWNS&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/mnt&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/mount_namespaces.7.html&#34;&gt;mount_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Mount points&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;PID&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWPID&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/pid_namespaces.7.html&#34;&gt;pid_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Process IDs&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;Time&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWTIME&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/time_namespaces.7.html&#34;&gt;time_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Boot and monotonic clocks&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;User&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWUSER&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/user&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/user_namespaces.7.html&#34;&gt;user_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;User and group IDs&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;UTS (UNIX Time Sharing)&lt;/td&gt;
-          &lt;td&gt;CLONE_NEWUTS&lt;/td&gt;
-          &lt;td&gt;/proc/[pid]/ns/uts&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/uts_namespaces.7.html&#34;&gt;uts_namespaces(7)&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;Hostname and NIS domain name&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;ul&gt;
-&lt;li&gt;네임스페이스 관련 API&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;시스템 호출&lt;/th&gt;
-          &lt;th&gt;설명&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/clone.2.html&#34;&gt;clone&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;새로운 자식 프로세스를 생성합니다. 위의 표에서 &lt;code&gt;CLONE_NEW*&lt;/code&gt; 플래그를 인수로 지정합니다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/setns.2.html&#34;&gt;setns&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;시스템 호출한 프로세스가 &lt;code&gt;/proc/[pid]/ns&lt;/code&gt;를 참조해 기존 네임스페이스에 할당됩니다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/unshare.2.html&#34;&gt;unshare&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;시스템 호출한 프로세스가 새로운 네임스페이스에 할당됩니다. 마찬가지로 &lt;code&gt;CLONE_NEW*&lt;/code&gt; 플래그를 인수로 지정합니다.&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/ioctl.2.html&#34;&gt;ioctl&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;네임스페이스 관련 정보를 찾기 위한 다양한 기능을 제공합니다. 기본적으로 디바이스 제어 API입니다.&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;code&gt;clone&lt;/code&gt;과 &lt;code&gt;unshare&lt;/code&gt;는 &lt;code&gt;CAP_SYS_ADMIN&lt;/code&gt; &lt;a href=&#34;#%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%BA%90%ED%8D%BC%EB%B9%8C%EB%A6%AC%ED%8B%B0linux-capabilities&#34;&gt;캐퍼빌리티&lt;/a&gt;가 필요합니다.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/namespaces/compatibility-list.rst&#34;&gt;네임스페이스 호환성 문제&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;컨트롤-그룹-what-you-can-use&#34;&gt;컨트롤 그룹: What you can use&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;보통 &lt;code&gt;씨-그룹&lt;/code&gt;이나 &lt;code&gt;컨트롤-그룹&lt;/code&gt;이라고 발음합니다.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;컨트롤 그룹(cgroup, control group)은 프로세스에서 사용 가능한 CPU, 메모리, 네트워크 대역폭, 디스크 I/O 등을
-그룹 단위로 제어하는 리눅스 커널의 기능입니다.
-원래는 &lt;a href=&#34;https://lwn.net/Articles/236038/&#34;&gt;프로세스 컨테이너&lt;/a&gt;라는
-이름으로 제안되었지만, 나중에 컨트롤 그룹이 되었습니다.
-컨트롤 그룹은 컨테이너에서만 사용되는 기능은 아니고
-리눅스 시스템에서 프로세스 관리를 위해 일반적으로 사용되고 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;control-group-드라이버&#34;&gt;&lt;a href=&#34;https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/#cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84&#34;&gt;Control Group 드라이버&lt;/a&gt;&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;cgroupfs&lt;/li&gt;
-&lt;li&gt;systemd&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker info -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;{{json .}}&amp;#39;&lt;/span&gt; | jq &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;. | .CgroupDriver&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &amp;#34;cgroupfs&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cgroupfs-컨트롤-그룹-파일-시스템&#34;&gt;cgroupfs (컨트롤 그룹 파일 시스템)&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;memory&lt;/code&gt; 중에서도 &lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/memory.html#benefits-and-purpose-of-the-memory-controller&#34;&gt;일부분만 갈무리&lt;/a&gt;해봤습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;tasks&lt;/th&gt;
-          &lt;th&gt;attach a task(thread) and show list of threads&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;cgroup.procs&lt;/td&gt;
-          &lt;td&gt;show list of processes&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;cgroup.event_control&lt;/td&gt;
-          &lt;td&gt;an interface for event_fd()&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.stat&lt;/td&gt;
-          &lt;td&gt;show various statistics&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.limit_in_bytes&lt;/td&gt;
-          &lt;td&gt;set/show limit of memory usage&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.usage_in_bytes&lt;/td&gt;
-          &lt;td&gt;show current usage for memory (See 5.5 for details)&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.max_usage_in_bytes&lt;/td&gt;
-          &lt;td&gt;show max memory usage recorded&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.numa_stat&lt;/td&gt;
-          &lt;td&gt;show the number of memory usage per numa node&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;memory.kmem.tcp.max_usage_in_bytes&lt;/td&gt;
-          &lt;td&gt;show max tcp buf memory usage recorded&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&amp;hellip;&lt;/td&gt;
-          &lt;td&gt;&amp;hellip;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;control-group-v1-컨트롤러&#34;&gt;Control Group v1 컨트롤러&lt;/h3&gt;
-&lt;table&gt;
-  &lt;thead&gt;
-      &lt;tr&gt;
-          &lt;th&gt;컨트롤러&lt;/th&gt;
-          &lt;th&gt;커널 설정 옵션&lt;/th&gt;
-          &lt;th&gt;설명&lt;/th&gt;
-      &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst&#34;&gt;blkio&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_BLK_CGROUP&lt;/td&gt;
-          &lt;td&gt;블록 IO 제어&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst&#34;&gt;cpuacct&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_CPUACCT&lt;/td&gt;
-          &lt;td&gt;프로세스 그룹 CPU 사용량 계산&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst&#34;&gt;cpuset&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CPUSETS&lt;/td&gt;
-          &lt;td&gt;특정 CPU나 NUMA 노드 할당&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst&#34;&gt;devices&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_DEVICE&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/mknod.2.html&#34;&gt;mknod&lt;/a&gt;를 통해 디바이스를 관리할 수 있는지 결정&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst&#34;&gt;freezer&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_FREEZER&lt;/td&gt;
-          &lt;td&gt;프로세스 일시 정지-재개&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst&#34;&gt;memory&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_MEMCG&lt;/td&gt;
-          &lt;td&gt;사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst&#34;&gt;net_cls&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_NET_CLASSID&lt;/td&gt;
-          &lt;td&gt;트래픽 제어에 쓰이는 classid 관리&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst&#34;&gt;net_prio&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_NET_PRIO&lt;/td&gt;
-          &lt;td&gt;네트워크 인터페이스 우선순위(priorities) 관리&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst&#34;&gt;pids&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;CONFIG_CGROUP_PIDS&lt;/td&gt;
-          &lt;td&gt;생성할 수 있는 프로세스 수 관리&lt;/td&gt;
-      &lt;/tr&gt;
-      &lt;tr&gt;
-          &lt;td&gt;&amp;hellip;&lt;/td&gt;
-          &lt;td&gt;&amp;hellip;&lt;/td&gt;
-          &lt;td&gt;&amp;hellip;&lt;/td&gt;
-      &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;control-group-v2&#34;&gt;Control Group v2&lt;/h3&gt;
-&lt;p&gt;cgroups v2가 Linux 커널 4.5부터 공식적으로 포함되었습니다. 자세한 내용은
-&lt;a href=&#34;https://medium.com/nttlabs/cgroup-v2-596d035be4d7&#34;&gt;Akihiro Suda의 글&lt;/a&gt;과
-&lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html&#34;&gt;커널 문서&lt;/a&gt;를
-참고해주세요.&lt;/p&gt;
-&lt;h2 id=&#34;루트-파일시스템&#34;&gt;루트 파일시스템&lt;/h2&gt;
-&lt;p&gt;루트 파일시스템(Root File System)이란 &lt;code&gt;ramfs&lt;/code&gt;나 &lt;code&gt;tmpfs&lt;/code&gt;의 특수 인스턴스로
-루트 디렉토리(&lt;code&gt;/&lt;/code&gt;)에 마운트되는 파일 시스템을 말합니다.
-&lt;code&gt;rootfs&lt;/code&gt;은 커널이 동작하기 위한 필수 파일들이 있기 때문에 마운트를 해제할 수 없습니다.
-&lt;code&gt;chroot&lt;/code&gt;나 &lt;code&gt;pivot_root&lt;/code&gt; 명령어로 &lt;code&gt;rootfs&lt;/code&gt; 경로를 변경(chroot jail)하여 파일 시스템을 격리할 수 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;유니온-마운트&#34;&gt;유니온 마운트&lt;/h2&gt;
-&lt;p&gt;유니온 마운트(Union Mount)란 여러 파일 시스템을 단일 포인트로 마운트하는 것을 말합니다.
-컨테이너에 필수적인 기능은 아니지만 이미지 레이어 구현에 사용되면서 필수적인
-기능으로 자리잡았습니다. 예를 들면 도커가 사용하는 &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver/&#34;&gt;AUFS&lt;/a&gt;, &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/overlayfs-driver/&#34;&gt;OverlayFS&lt;/a&gt; 등이 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/aufs-layers.jpg&#34; alt=&#34;aufs&#34;&gt;&lt;/p&gt;
-&lt;p&gt;출처: &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver/&#34;&gt;Use the AUFS storage driver - docker docs&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/overlay-constructs.jpg&#34; alt=&#34;overlay-constructs&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/overlayfs-driver/#how-the-overlay-driver-works&#34;&gt;Use the OverlayFS storage driver - docker docs&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;리눅스-캐퍼빌리티&#34;&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/capabilities.7.html&#34;&gt;리눅스 캐퍼빌리티&lt;/a&gt;&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Capability-based_security#POSIX_capabilities&#34;&gt;POSIX capabilities&lt;/a&gt;
-개념으로 루트 프로세스 권한을 세부적으로 제어하기 위한 속성입니다. &amp;lsquo;자격&amp;rsquo;, &amp;lsquo;능력&amp;rsquo; 등으로 번역됩니다.&lt;/p&gt;
-&lt;p&gt;캐퍼빌리티가 없을 때 프로세스는 두 가지로만 나뉘었습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;(User ID가 0인, superuser라 불리는) 루트 사용자가 소유한 특권(privileged) 프로세스&lt;/li&gt;
-&lt;li&gt;(User ID가 0이 아닌) 일반 사용자가 소유한 비특권(unprivileged) 프로세스.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;이 중 루트 권한을 세분화해서 프로세스마다 다르게 적용할 수 있도록 만든 기능이 바로 리눅스 캐퍼빌리티입니다.
-컨테이너 런타임에서 루트 권한 일부분만 필요할 경우 리눅스 캐퍼빌리티를 사용합니다.&lt;/p&gt;
-&lt;h1 id=&#34;샌드박싱-솔루션&#34;&gt;샌드박싱 솔루션&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;샌드박싱이란? 자원 접근이 제한되도록 응용 프로그램을 격리하는 것 - &amp;lt;컨테이너 보안&amp;gt; 참조&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;seccomp&lt;/li&gt;
-&lt;li&gt;AppArmor&lt;/li&gt;
-&lt;li&gt;SELinux&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/&#34;&gt;Don&amp;rsquo;t Panic: Kubernetes and Docker&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://kubernetes.io/blog/2020/12/02/dockershim-faq/&#34;&gt;Dockershim Deprecation FAQ&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/container/container-study-guide/ - Im Changsu | Since 2020</description>
         </item>
     
     

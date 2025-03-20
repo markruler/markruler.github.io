@@ -9,9 +9,89 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Fri, 14 Mar 2025 01:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>네트워크 레이어</title>
+        <link>https://markruler.github.io/posts/network/network-layers/</link>
+        <pubDate>Thu, 20 Mar 2025 23:03:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/network-layers/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/network-layers/ -&lt;p&gt;&lt;strong&gt;OSI 모델&lt;/strong&gt;은 다양한 통신 시스템이 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+각 계층(Layer)은 특정한 역할을 담당합니다.
+이 글에서는 각 계층의 주요 기능과 특징을 살펴보겠습니다.&lt;/p&gt;
+&lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
+&lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
+&lt;p&gt;1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
+이 글에서도 글을 줄여 쓰기 위해서 물리 계층은 L1이라고 표기하겠습니다.&lt;/p&gt;
+&lt;p&gt;계층에서 처리하는 한 덩어리의 데이터 단위를 &lt;strong&gt;PDU&lt;/strong&gt;(Protocol Data Unit)라고 부릅니다.
+PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
+웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.&lt;/p&gt;
+&lt;p&gt;이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
+L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
+특히 L3의 &lt;strong&gt;IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체&lt;/strong&gt;를 일컫는 경우도 많습니다.&lt;/p&gt;
+&lt;p&gt;송신 측에서 데이터를 보낼 때는 &lt;strong&gt;상위 계층의 데이터에 하위 계층의 헤더(header)를 붙여서 캡슐화(encapsulation)하며&lt;/strong&gt; 내려가고,
+수신 측에서는 그 과정을 역순으로 &lt;strong&gt;디캡슐화(decapsulation)하여&lt;/strong&gt; 상위 계층으로 전달합니다&lt;/p&gt;
+&lt;!-- ![](/images/network/network-layers/osi-7-layer-bytebytego.png) --&gt;
+&lt;!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* --&gt;
+&lt;!-- ![](/images/network/network-layers/linux-network-protocol-stack.png) --&gt;
+&lt;!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* --&gt;
+&lt;h1 id=&#34;layer-1---physical-layer&#34;&gt;Layer 1 - Physical Layer&lt;/h1&gt;
+&lt;p&gt;물리 계층(L1)은 실제 물리 매체를 통해 &lt;strong&gt;디지털 신호를 전기 신호나 광신호 등으로 변환&lt;/strong&gt;하여 송수신합니다.
+L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
+주요 장비로는 허브, 리피터, 케이블, 커넥터, 모뎀 등이 있으며, 비트 단위의 데이터 전송과 신호 변조 및 복조를 수행합니다.
+물리 계층은 단순히 데이터를 전달하는 역할만 하며, 에러 검출이나 제어 기능은 포함되지 않습니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-2---data-link-layer&#34;&gt;Layer 2 - Data Link Layer&lt;/h1&gt;
+&lt;p&gt;데이터 링크 계층(L2)은 &lt;strong&gt;직접 연결된 인접 노드(장치) 간 데이터 전송을 담당&lt;/strong&gt;합니다.
+L2는 MAC 주소를 이용해 통신하며, 프레임 단위로 데이터를 전송합니다.
+또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+주요 장비로는 스위치와 브리지가 있으며, Ethernet, PPP, HDLC와 같은 프로토콜이 사용됩니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-3---network-layer&#34;&gt;Layer 3 - Network Layer&lt;/h1&gt;
+&lt;p&gt;네트워크 계층(L3)은 &lt;strong&gt;다른 네트워크들을 연결&lt;/strong&gt;하고
+&lt;strong&gt;패킷(Packet) 단위의 데이터가 출발지에서 최종 목적지까지 전달되도록 경로를 선택&lt;/strong&gt;하는 계층입니다.
+L3는 IP 주소를 이용해 데이터를 라우팅하고, 패킷 단위로 데이터를 전송합니다.
+또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.
+주요 장비로는 라우터가 있으며, IP, ICMP, OSPF, BGP와 같은 프로토콜이 사용됩니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-4---transport-layer&#34;&gt;Layer 4 - Transport Layer&lt;/h1&gt;
+&lt;p&gt;전송 계층(L4)은 &lt;strong&gt;종단 간(end-to-end) 신뢰성 있는 데이터 전송&lt;/strong&gt;을 담당합니다.
+L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며, 세그먼트 단위로 데이터를 전송합니다.
+연결 지향 서비스(TCP)와 비연결 지향 서비스(UDP)를 제공하며, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+주요 프로토콜로는 TCP, UDP, SCTP가 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-5---session-layer&#34;&gt;Layer 5 - Session Layer&lt;/h1&gt;
+&lt;p&gt;세션 계층(L5)은 &lt;strong&gt;두 응용 프로그램 간의 대화(Session)를 관리하고 동기화&lt;/strong&gt;하는 역할을 합니다.
+L5는 통신 세션을 구축하고 유지하며, 데이터 전송 중단 시 재개 지점을 관리합니다.
+또한, 전이중(Full-duplex) 및 반이중(Half-duplex) 통신 방식을 관리하고, 토큰 관리를 통해 상호배제를 보장합니다.
+보안 기능으로는 인증(Authentication), 허가(Authorization), 세션 복구(Session Recovery)가 포함됩니다.
+주요 표준으로는 NFS(Network File System), RPC(Remote Procedure Call)​가 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-6---presentation-layer&#34;&gt;Layer 6 - Presentation Layer&lt;/h1&gt;
+&lt;p&gt;표현 계층(L6)은 데이터의 구문과 표현을 담당하는 계층으로,
+&lt;strong&gt;한 시스템의 애플리케이션 계층에서 보내는 데이터를 다른 시스템에서도 이해할 수 있는 형태로 변환&lt;/strong&gt;해 줍니다.
+문자 인코딩, 데이터 포맷 변환, 압축 및 암호화와 같은 작업들이 이 계층에서 이루어집니다.
+L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행하며, 데이터의 인코딩과 디코딩을 담당합니다.
+주요 표준으로는 파일 포맷 (JPEG, PNG, MP3), 문자 인코딩 (ASCII, Unicode), 암호화 프로토콜 (SSL, TLS) 등이 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/h1&gt;
+&lt;p&gt;응용 계층(L7)은 사용자와 가장 가까운 계층으로, &lt;strong&gt;응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공&lt;/strong&gt;합니다.
+이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.
+주요 프로토콜로는 HTTP, FTP, SMTP, DNS, SSH 등이 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt; | 미야타 히로시&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183&#34;&gt;IT 엔지니어를 위한 네트워크 입문&lt;/a&gt; | 고재성, 이상훈&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/&#34;&gt;OSI 모델이란&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/network/network-layers/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1562,239 +1642,6 @@ in order to weed out bad data and increase the probability of the location we ch
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/network/ip-geolocation/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
-        <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>
-        <pubDate>Thu, 22 Aug 2024 18:00:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/web/traceparent-datadog/</guid>
-        <description>임창수 https://markruler.github.io/posts/web/traceparent-datadog/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었습니다.
-해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았습니다.
-에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달했습니다.
-서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었습니다.
-클라이언트 이벤트는 연결되어 있지 않았기 때문입니다.&lt;/p&gt;
-&lt;p&gt;또 다른 문제가 있었습니다.
-서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만
-클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었습니다.
-그리고 모든 요청이 아닌 전체 요청의 5% 정도에서만 발생하고 있었습니다.
-하지만 국가, Edge IP, User Agent, 요청 URL 등을 확인해봐도 특정 패턴을 보이는 것이 없어서 원인을 알 수 없었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/akamai-read-error.jpeg&#34; alt=&#34;Akamai ERR_READ_ERROR&#34;&gt;&lt;/p&gt;
-&lt;p&gt;원인을 찾기 위해 클라이언트에서 요청하는 부분부터 추적하고 싶었습니다.
-우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
-&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum&#34;&gt;RUM(Real User Monitoring)을 APM과 연결하면&lt;/a&gt;
-클라이언트부터 서버 Span까지 한눈에 확인할 수 있습니다.
-하지만 응답 속도가 Akamai에선 4초 이상이라고 측정되고 Datadog RUM에선 수백ms로 측정되었습니다.
-그래서 Datadog 측에 확인을 요청했습니다.
-Akamai Datastream 2에서는 요청하고 응답받을 때까지의 duration을 측정하지만,
-Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다는 답변을 받았습니다(2024년 8월 22일 기준).
-게다가 일주일 간 RUM 스크립트를 추가해보니 예상 견적이 만만치 않았습니다.
-다른 방법을 찾아야 했습니다.&lt;/p&gt;
-&lt;h1 id=&#34;trace-context&#34;&gt;Trace Context&lt;/h1&gt;
-&lt;p&gt;W3C 권고안(REC, Recommendation)인 Trace Context&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;는 분산 추적 통합을 위해 작성되었습니다.
-플랫폼마다 Trace 방법이 달라서 추적 흐름이 끊기는 것을 방지하기 위해 통합이 필요하단 이유&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;였습니다.
-Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했습니다.
-Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/datadog-trace-context.webp&#34; alt=&#34;datadog-trace-context.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context | Datadog&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;h2 id=&#34;traceparent-헤더-형식&#34;&gt;Traceparent 헤더 형식&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;해당 권고안에 명시된 헤더가 2개(traceparent, tracestate&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;) 있지만 여기서는 추적을 위한 &lt;code&gt;traceparent&lt;/code&gt; 헤더만 살펴보겠습니다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;{version}-{trace-id}-{parent-id}-{trace-flags}&lt;/code&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;version&lt;/code&gt;: 8 bits(1 byte). 현재는 00 고정입니다. 2글자의 16진수. ff is forbidden.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;trace-id&lt;/code&gt;: &lt;strong&gt;128 bits(16 bytes) trace ID, 32글자의 16진수. All zeroes forbidden.&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;parent-id&lt;/code&gt;: 64 bits(8 bytes) span ID, 16글자의 16진수. All zeroes forbidden.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;trace-flags&lt;/code&gt;: 8 bits(1 byte) &lt;a href=&#34;https://en.wikipedia.org/wiki/Bit_field&#34;&gt;비트 필드&lt;/a&gt;.
-데이터독에서는 2가지를 지정할 수 있습니다: Sampled (&lt;code&gt;01&lt;/code&gt;), not sampled (&lt;code&gt;00&lt;/code&gt;).&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;예시: &lt;code&gt;00-8adb122e8b139de4a8744a379b4db39a-45897f550adef5c9-01&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;테스트-환경&#34;&gt;테스트 환경&lt;/h1&gt;
-&lt;h2 id=&#34;전체-네트워크-흐름&#34;&gt;전체 네트워크 흐름&lt;/h2&gt;
-&lt;p&gt;Client(Mobile App / Browser) → CDN (Akamai) → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]&lt;/p&gt;
-&lt;h1 id=&#34;trace_id로-trace와-log-연결하기&#34;&gt;trace_id로 Trace와 Log 연결하기&lt;/h1&gt;
-&lt;p&gt;이 방법은 APM Trace와 Log Collection에 로그가 있어야 합니다.&lt;/p&gt;
-&lt;h2 id=&#34;1-browser에서-요청-시-traceparent-헤더-추가하기&#34;&gt;1. Browser에서 요청 시 Traceparent 헤더 추가하기&lt;/h2&gt;
-&lt;p&gt;요청 시 아래 스크립트로 생성한 값을 &lt;code&gt;Traceparent&lt;/code&gt; 헤더와 함께 보냅니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; Traceparent {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  constructor(version, traceId, parentId, flags) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#version
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.version = version;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-id
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.traceId = traceId;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#parent-id
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.parentId = parentId;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 2HEXDIGLC   ; 8 bit flags.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.flags = flags;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  toString() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.version&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.traceId&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.parentId&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.flags&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 랜덤 바이트 생성
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; randomBytes(size) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; bytes = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Uint8Array(size);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  window.crypto.getRandomValues(bytes);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; bytes;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 16진수 문자열로 변환
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; bufferHex(buffer) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Array.from(buffer)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .map((b) =&amp;gt; b.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;))
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .join(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 10진수 숫자를 16진수 문자열로 변환
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; toHex(number) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; number.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 버전, traceId, id, flags 생성
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; make() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; version = toHex(&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// 현재 버전은 항상 `00`이므로 0으로 설정
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;));
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; parentId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt;));
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceFlags = toHex(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// Datadog: Sampled (01) / not sampled (00)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Traceparent(version, traceId, parentId, traceFlags);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;default&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  make,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;2-akamai-cdn에서-traceparent의-값을-로그로-추가하기&#34;&gt;2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기&lt;/h2&gt;
-&lt;p&gt;Akamai Datastream 2에 &lt;strong&gt;커스텀 필드&lt;/strong&gt;를 추가해서 traceparent 헤더의 값을 데이터독에 로그로 전달하도록 설정합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Properties (Property Manage) &amp;gt; Property 선택 후 규칙을 추가합니다.&lt;/li&gt;
-&lt;li&gt;Datadog Log에서 Grok Parser를 활용해 Akamai Datastream - &lt;code&gt;customField&lt;/code&gt;로 남겨진 &lt;code&gt;traceparent&lt;/code&gt; 헤더에서 trace_id를 추출합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
-traceparent_nullif (traceparent:%{traceparent_rule}|traceparent:\^|traceparent:-|traceparent:|-)
-
-traceparent_rule %{_version}-%{_trace_id}-%{_parent_id}-%{_flags}
-
-# Extract from: customField
-
-_version %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.version}
-_trace_id %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.trace_id}
-_parent_id %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.parent_id}
-_flags %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.flags}
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기&#34;&gt;3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기&lt;/h2&gt;
-&lt;p&gt;LogFormat에  &lt;code&gt;%{header_name}i&lt;/code&gt; 으로 남기면 &lt;a href=&#34;https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats&#34;&gt;헤더의 값을 로그로 남길 수&lt;/a&gt; 있습니다.
-httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;lt;!-- httpd.conf --&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;IfModule log_config_module&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogFormat &amp;#34;%h %l %u %t \&amp;#34;%r\&amp;#34; %&amp;gt;s %b %D \&amp;#34;%{Referer}i\&amp;#34; \&amp;#34;%{User-Agent}i\&amp;#34; \&amp;#34;%{traceparent}i\&amp;#34; %{BALANCER_WORKER_ROUTE}e&amp;#34; combined
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  CustomLog /var/log/httpd/access.log combined
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/IfModule&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
-_traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{word:traceparent.parent_id})?(-%{data:traceparent.flags})?
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;4-java-application-spring-boot&#34;&gt;4. Java Application (Spring Boot)&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;dd.trace.propagation.style&lt;/code&gt; 속성의 기본값은 &lt;code&gt;datadog,tracecontext&lt;/code&gt;으로 Datadog의 Trace ID가 우선합니다.
-이를 &lt;code&gt;tracecontext,datadog&lt;/code&gt;으로 변경하면 W3C Trace ID를 우선합니다.
-물론 여기서는 클라이언트에서 전달한 Trace ID를 사용합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nohup ~/.jdk/temurin-17.0.6/bin/java &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.service.name=my-service &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.trace.propagation.style=tracecontext,datadog &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;ARTIFACT_PATH&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/app.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  --spring.profiles.active=prod &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;&amp;gt; /dev/null &amp;amp;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/DataDog/dd-trace-java/releases&#34;&gt;dd-java-agent 다운로드&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
-Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원합니다.&lt;/li&gt;
-&lt;li&gt;Datadog도 옵션 &lt;code&gt;dd.trace.128.bit.traceid.generation.enabled&lt;/code&gt;을 추가해서 128비트 Trace ID를 출력할 수 있다고 합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;5-결과&#34;&gt;5. 결과&lt;/h2&gt;
-&lt;p&gt;Trace에 Log를 연결한 모습은 다음과 같습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/connect-trace-log.webp&#34; alt=&#34;Connect Trace and Log&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;마치며&#34;&gt;마치며&lt;/h1&gt;
-&lt;p&gt;서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &amp;gt; CDN &amp;gt; 웹 서버 로그로 확인할 수 있고,
-방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었습니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;
-OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했습니다.&lt;/p&gt;
-&lt;p&gt;지연 문제도 찾아서 해결되었습니다.
-Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
-원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있다는 것이었습니다.
-아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습입니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/solve-network-delay.webp&#34; alt=&#34;Solve Network Delay&#34;&gt;&lt;/p&gt;
-&lt;p&gt;이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었습니다.&lt;/p&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/&#34;&gt;Trace Context | W3C&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/w3c/trace-context/tree/main/spec&#34;&gt;Github(w3c/trace-context) | W3C&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/trace/docs/trace-context&#34;&gt;Trace context | Google Cloud&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext&#34;&gt;Elastic APM adopts W3C TraceContext | Elastic&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Datadog
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext&#34;&gt;Connect RUM and Traces&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers&#34;&gt;Parsing&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers&#34;&gt;Grok Parser&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/standard-attributes/&#34;&gt;Default Standard Attributes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java&#34;&gt;Trace Context Propagation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/library_config/java/&#34;&gt;Configuring the Java Tracing Library&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/&#34;&gt;Remap Custom Severity Values to the Official Log Status&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs&#34;&gt;Correlated Logs Are Not Showing Up In The Trace ID Panel&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;W3C의 권고안에는 &lt;a href=&#34;https://www.w3.org/2004/02/Process-20040205/tr.html#maturity-levels&#34;&gt;레벨&lt;/a&gt;이 있는데
-Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/&#34;&gt;2020년 2월&lt;/a&gt; 최고 레벨인 Recommendation(REC)으로 전환된 권고안입니다.
-올해(2024년)에는 &lt;a href=&#34;https://www.w3.org/TR/trace-context-2/&#34;&gt;Level 2&lt;/a&gt;와 &lt;a href=&#34;https://w3c.github.io/trace-context/&#34;&gt;Level 3&lt;/a&gt;까지 나왔습니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#problem-statement&#34;&gt;Problem Statement&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#tracestate-header&#34;&gt;tracestate&lt;/a&gt;는 &lt;code&gt;key=value&lt;/code&gt; 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항입니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, &lt;a href=&#34;https://github.com/DataDog/browser-sdk/issues/1538&#34;&gt;beforeSend API를 사용해야 한다고 합니다&lt;/a&gt;. 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 것 같습니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/web/traceparent-datadog/ - Im Changsu | Since 2020</description>
         </item>
     
     

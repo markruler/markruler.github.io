@@ -9,9 +9,242 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Fri, 14 Mar 2025 01:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Traceparent 헤더로 클라이언트부터 서버까지 추적하기</title>
+        <link>https://markruler.github.io/posts/web/traceparent-datadog/</link>
+        <pubDate>Thu, 22 Aug 2024 18:00:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/traceparent-datadog/</guid>
+        <description>임창수 https://markruler.github.io/posts/web/traceparent-datadog/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;모니터링 도구를 확인해보니 며칠동안 특정 기능에 에러가 발생하고 있었습니다.
+해당 에러는 알람 임계점(threshold)보다 낮아서 알람이 발생하지 않았고, 이용자는 버그 리포팅을 하지 않았습니다.
+에러 로그를 확인해보니 서버에서는 유효성 검사를 하지 않았고, 클라이언트 앱에서는 유효하지 않은 파라미터를 전달했습니다.
+서버에서 유효성 검사를 추가할 수 있겠지만, 클라이언트 앱에서의 잘못된 요청(bug)은 원인을 알 수 없었습니다.
+클라이언트 이벤트는 연결되어 있지 않았기 때문입니다.&lt;/p&gt;
+&lt;p&gt;또 다른 문제가 있었습니다.
+서버에서는 정상적인 상태 코드와 함께 100ms 정도의 속도로 응답했지만
+클라이언트에서는 4초 이상의 지연이 발생하거나 아래와 같은 Akamai 에러 페이지가 응답되었습니다.
+그리고 모든 요청이 아닌 전체 요청의 5% 정도에서만 발생하고 있었습니다.
+하지만 국가, Edge IP, User Agent, 요청 URL 등을 확인해봐도 특정 패턴을 보이는 것이 없어서 원인을 알 수 없었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/akamai-read-error.jpeg&#34; alt=&#34;Akamai ERR_READ_ERROR&#34;&gt;&lt;/p&gt;
+&lt;p&gt;원인을 찾기 위해 클라이언트에서 요청하는 부분부터 추적하고 싶었습니다.
+우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
+&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum&#34;&gt;RUM(Real User Monitoring)을 APM과 연결하면&lt;/a&gt;
+클라이언트부터 서버 Span까지 한눈에 확인할 수 있습니다.
+하지만 응답 속도가 Akamai에선 4초 이상이라고 측정되고 Datadog RUM에선 수백ms로 측정되었습니다.
+그래서 Datadog 측에 확인을 요청했습니다.
+Akamai Datastream 2에서는 요청하고 응답받을 때까지의 duration을 측정하지만,
+Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다는 답변을 받았습니다(2024년 8월 22일 기준).
+게다가 일주일 간 RUM 스크립트를 추가해보니 예상 견적이 만만치 않았습니다.
+다른 방법을 찾아야 했습니다.&lt;/p&gt;
+&lt;h1 id=&#34;trace-context&#34;&gt;Trace Context&lt;/h1&gt;
+&lt;p&gt;W3C 권고안(REC, Recommendation)인 Trace Context&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;는 분산 추적 통합을 위해 작성되었습니다.
+플랫폼마다 Trace 방법이 달라서 추적 흐름이 끊기는 것을 방지하기 위해 통합이 필요하단 이유&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;였습니다.
+Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했습니다.
+Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/datadog-trace-context.webp&#34; alt=&#34;datadog-trace-context.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context | Datadog&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;traceparent-헤더-형식&#34;&gt;Traceparent 헤더 형식&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;해당 권고안에 명시된 헤더가 2개(traceparent, tracestate&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;) 있지만 여기서는 추적을 위한 &lt;code&gt;traceparent&lt;/code&gt; 헤더만 살펴보겠습니다.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;{version}-{trace-id}-{parent-id}-{trace-flags}&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;version&lt;/code&gt;: 8 bits(1 byte). 현재는 00 고정입니다. 2글자의 16진수. ff is forbidden.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;trace-id&lt;/code&gt;: &lt;strong&gt;128 bits(16 bytes) trace ID, 32글자의 16진수. All zeroes forbidden.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;parent-id&lt;/code&gt;: 64 bits(8 bytes) span ID, 16글자의 16진수. All zeroes forbidden.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;trace-flags&lt;/code&gt;: 8 bits(1 byte) &lt;a href=&#34;https://en.wikipedia.org/wiki/Bit_field&#34;&gt;비트 필드&lt;/a&gt;.
+데이터독에서는 2가지를 지정할 수 있습니다: Sampled (&lt;code&gt;01&lt;/code&gt;), not sampled (&lt;code&gt;00&lt;/code&gt;).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;예시: &lt;code&gt;00-8adb122e8b139de4a8744a379b4db39a-45897f550adef5c9-01&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;테스트-환경&#34;&gt;테스트 환경&lt;/h1&gt;
+&lt;h2 id=&#34;전체-네트워크-흐름&#34;&gt;전체 네트워크 흐름&lt;/h2&gt;
+&lt;p&gt;Client(Mobile App / Browser) → CDN (Akamai) → [IDC: 방화벽(FortiGate-100E) → L2 Switch → [WAF → L4 Switch → Apache HTTP Server → Application Server]]&lt;/p&gt;
+&lt;h1 id=&#34;trace_id로-trace와-log-연결하기&#34;&gt;trace_id로 Trace와 Log 연결하기&lt;/h1&gt;
+&lt;p&gt;이 방법은 APM Trace와 Log Collection에 로그가 있어야 합니다.&lt;/p&gt;
+&lt;h2 id=&#34;1-browser에서-요청-시-traceparent-헤더-추가하기&#34;&gt;1. Browser에서 요청 시 Traceparent 헤더 추가하기&lt;/h2&gt;
+&lt;p&gt;요청 시 아래 스크립트로 생성한 값을 &lt;code&gt;Traceparent&lt;/code&gt; 헤더와 함께 보냅니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; * https://www.w3.org/TR/trace-context-2/#traceparent-header-field-values
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; Traceparent {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  constructor(version, traceId, parentId, flags) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 2HEXDIGLC   ; this document assumes version 00. Version ff is forbidden
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#version
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.version = version;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 32HEXDIGLC  ; 16 bytes array identifier. All zeroes forbidden
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.traceId = traceId;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 16HEXDIGLC  ; 8 bytes array identifier. All zeroes forbidden
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#parent-id
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.parentId = parentId;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 2HEXDIGLC   ; 8 bit flags.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @see https://www.w3.org/TR/trace-context-2/#trace-flags
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.flags = flags;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  toString() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.version&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.traceId&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.parentId&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.flags&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;`&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 랜덤 바이트 생성
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; randomBytes(size) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; bytes = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Uint8Array(size);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  window.crypto.getRandomValues(bytes);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; bytes;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 16진수 문자열로 변환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; bufferHex(buffer) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Array.from(buffer)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .map((b) =&amp;gt; b.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .join(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 10진수 숫자를 16진수 문자열로 변환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; toHex(number) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; number.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 버전, traceId, id, flags 생성
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; make() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; version = toHex(&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// 현재 버전은 항상 `00`이므로 0으로 설정
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; parentId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceFlags = toHex(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// Datadog: Sampled (01) / not sampled (00)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Traceparent(version, traceId, parentId, traceFlags);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;default&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  make,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;2-akamai-cdn에서-traceparent의-값을-로그로-추가하기&#34;&gt;2. Akamai CDN에서 Traceparent의 값을 로그로 추가하기&lt;/h2&gt;
+&lt;p&gt;Akamai Datastream 2에 &lt;strong&gt;커스텀 필드&lt;/strong&gt;를 추가해서 traceparent 헤더의 값을 데이터독에 로그로 전달하도록 설정합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Properties (Property Manage) &amp;gt; Property 선택 후 규칙을 추가합니다.&lt;/li&gt;
+&lt;li&gt;Datadog Log에서 Grok Parser를 활용해 Akamai Datastream - &lt;code&gt;customField&lt;/code&gt;로 남겨진 &lt;code&gt;traceparent&lt;/code&gt; 헤더에서 trace_id를 추출합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
+traceparent_nullif (traceparent:%{traceparent_rule}|traceparent:\^|traceparent:-|traceparent:|-)
+
+traceparent_rule %{_version}-%{_trace_id}-%{_parent_id}-%{_flags}
+
+# Extract from: customField
+
+_version %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.version}
+_trace_id %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.trace_id}
+_parent_id %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.parent_id}
+_flags %{regex(&amp;#34;[a-zA-Z0-9]*&amp;#34;):traceparent.flags}
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기&#34;&gt;3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기&lt;/h2&gt;
+&lt;p&gt;LogFormat에  &lt;code&gt;%{header_name}i&lt;/code&gt; 으로 남기면 &lt;a href=&#34;https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats&#34;&gt;헤더의 값을 로그로 남길 수&lt;/a&gt; 있습니다.
+httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;lt;!-- httpd.conf --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;IfModule log_config_module&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  LogFormat &amp;#34;%h %l %u %t \&amp;#34;%r\&amp;#34; %&amp;gt;s %b %D \&amp;#34;%{Referer}i\&amp;#34; \&amp;#34;%{User-Agent}i\&amp;#34; \&amp;#34;%{traceparent}i\&amp;#34; %{BALANCER_WORKER_ROUTE}e&amp;#34; combined
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  CustomLog /var/log/httpd/access.log combined
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/IfModule&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-grok&#34; data-lang=&#34;grok&#34;&gt;# Grok Parser
+_traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{word:traceparent.parent_id})?(-%{data:traceparent.flags})?
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;4-java-application-spring-boot&#34;&gt;4. Java Application (Spring Boot)&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dd.trace.propagation.style&lt;/code&gt; 속성의 기본값은 &lt;code&gt;datadog,tracecontext&lt;/code&gt;으로 Datadog의 Trace ID가 우선합니다.
+이를 &lt;code&gt;tracecontext,datadog&lt;/code&gt;으로 변경하면 W3C Trace ID를 우선합니다.
+물론 여기서는 클라이언트에서 전달한 Trace ID를 사용합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nohup ~/.jdk/temurin-17.0.6/bin/java &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.service.name=my-service &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.trace.propagation.style=tracecontext,datadog &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;ARTIFACT_PATH&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/app.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  --spring.profiles.active=prod &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;&amp;gt; /dev/null &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/DataDog/dd-trace-java/releases&#34;&gt;dd-java-agent 다운로드&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
+Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원합니다.&lt;/li&gt;
+&lt;li&gt;Datadog도 옵션 &lt;code&gt;dd.trace.128.bit.traceid.generation.enabled&lt;/code&gt;을 추가해서 128비트 Trace ID를 출력할 수 있다고 합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;5-결과&#34;&gt;5. 결과&lt;/h2&gt;
+&lt;p&gt;Trace에 Log를 연결한 모습은 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/connect-trace-log.webp&#34; alt=&#34;Connect Trace and Log&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;마치며&#34;&gt;마치며&lt;/h1&gt;
+&lt;p&gt;서버에서 발생한 에러는 Trace에서 먼저 확인 후 클라이언트 &amp;gt; CDN &amp;gt; 웹 서버 로그로 확인할 수 있고,
+방화벽 이슈로 발생한 에러는 위와 같이 Log Collection에서 확인할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;Browser 스팬을 연결할 다른 방법이 없는지 데이터독 기술 지원을 요청했지만, RUM을 사용해보라는 답변뿐이었습니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;
+OpenTelemetry(OTel) 도입도 고민했지만, 현재 팀 규모에서 시스템을 더 늘릴 수는 없어서 포기했습니다.&lt;/p&gt;
+&lt;p&gt;지연 문제도 찾아서 해결되었습니다.
+Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 요청들에 대해 기술 지원을 요청했고,
+원인은 CDN이 아니라 IDC에 있던 방화벽에서 특정 Akamai Edge IP를 차단하고 있다는 것이었습니다.
+아래 이미지는 Akamai Edge IP를 차단 해제했을 때 해소된 모습입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/traceparent-datadog/solve-network-delay.webp&#34; alt=&#34;Solve Network Delay&#34;&gt;&lt;/p&gt;
+&lt;p&gt;이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었습니다.&lt;/p&gt;
+&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/&#34;&gt;Trace Context | W3C&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/w3c/trace-context/tree/main/spec&#34;&gt;Github(w3c/trace-context) | W3C&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://cloud.google.com/trace/docs/trace-context&#34;&gt;Trace context | Google Cloud&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext&#34;&gt;Elastic APM adopts W3C TraceContext | Elastic&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Datadog
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext&#34;&gt;Connect RUM and Traces&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers&#34;&gt;Parsing&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers&#34;&gt;Grok Parser&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/standard-attributes/&#34;&gt;Default Standard Attributes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java&#34;&gt;Trace Context Propagation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/trace_collection/library_config/java/&#34;&gt;Configuring the Java Tracing Library&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/&#34;&gt;Monitor OTel instrumented apps with support for W3C Trace Context&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/&#34;&gt;Remap Custom Severity Values to the Official Log Status&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs&#34;&gt;Correlated Logs Are Not Showing Up In The Trace ID Panel&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;W3C의 권고안에는 &lt;a href=&#34;https://www.w3.org/2004/02/Process-20040205/tr.html#maturity-levels&#34;&gt;레벨&lt;/a&gt;이 있는데
+Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/&#34;&gt;2020년 2월&lt;/a&gt; 최고 레벨인 Recommendation(REC)으로 전환된 권고안입니다.
+올해(2024년)에는 &lt;a href=&#34;https://www.w3.org/TR/trace-context-2/&#34;&gt;Level 2&lt;/a&gt;와 &lt;a href=&#34;https://w3c.github.io/trace-context/&#34;&gt;Level 3&lt;/a&gt;까지 나왔습니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#problem-statement&#34;&gt;Problem Statement&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.w3.org/TR/trace-context/#tracestate-header&#34;&gt;tracestate&lt;/a&gt;는 &lt;code&gt;key=value&lt;/code&gt; 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항입니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, &lt;a href=&#34;https://github.com/DataDog/browser-sdk/issues/1538&#34;&gt;beforeSend API를 사용해야 한다고 합니다&lt;/a&gt;. 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 것 같습니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/web/traceparent-datadog/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1737,154 +1970,6 @@ Conversely, creating a client for each request wastes resources on idle pools.&l
 (평균 10초 → 3초)&lt;/p&gt;
 &lt;p&gt;시스템 제한 설정을 변경할 필요 없이 &lt;code&gt;Too many open files&lt;/code&gt; 에러도 발생하지 않았습니다.&lt;/p&gt;
 - https://markruler.github.io/posts/java/too-many-open-files/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략</title>
-        <link>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</link>
-        <pubDate>Wed, 21 Dec 2022 22:20:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/</guid>
-        <description>임창수 https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ -&lt;p&gt;엘라스틱서치(Elasticsearch)는 문서 기반 검색 엔진으로 빠른 키워드 검색 속도를 제공합니다.
-엘라스틱서치가 빠른 이유는 문서의 단어(term)들을 역색인(inverted index)하기 때문입니다.
-책에서 특정 단어를 찾는 걸 상상해 보죠.
-&lt;strong&gt;관계형 데이터베이스(RDB, Relational Database)는&lt;/strong&gt; &lt;code&gt;LIKE&lt;/code&gt; 검색을 통해 검색 키워드가 포함된 &lt;strong&gt;모든 페이지를 찾아야 합니다&lt;/strong&gt;.
-&lt;strong&gt;엘라스틱서치는&lt;/strong&gt; 책 뒷부분에 있는 색인(index)을 보고 &lt;strong&gt;필요한 페이지만 찾으면 됩니다&lt;/strong&gt;.
-이 글에서는 e커머스 서비스에서 검색 성능을 개선하기 위해 도입한 엘라스틱서치와 인덱싱 전략에 대해 소개합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-%EB%8F%84%EC%9E%85-%EB%B0%B0%EA%B2%BD&#34;&gt;엘라스틱서치 도입 배경&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#rdb-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%9D%B8%EB%8D%B1%EC%8B%B1%ED%95%98%EB%8A%94-%EC%A0%84%EB%9E%B5&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#1-%EA%B0%80%EC%9E%A5-%EC%89%AC%EC%9A%B4-%EB%B0%A9%EB%B2%95-batch&#34;&gt;1. 가장 쉬운 방법 Batch&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-update-%EB%8D%B0%EC%9D%B4%ED%84%B0&#34;&gt;2. UPDATE 데이터&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#3-hard-delete-%EB%8D%B0%EC%9D%B4%ED%84%B0&#34;&gt;3. HARD DELETE 데이터&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B6%80%EB%B6%84&#34;&gt;더 개선할 수 있는 부분&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4-%EA%B3%A0%EB%AF%BC%EC%9D%84-%EC%A0%80%EB%A7%8C-%ED%96%88%EB%8D%98-%EA%B2%8C-%EC%95%84%EB%8B%88%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;엘라스틱서치-도입-배경&#34;&gt;엘라스틱서치 도입 배경&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;매일 새벽에 장애가 발생하기 시작했습니다&lt;/strong&gt;.
-유저 트래픽이 주로 새벽에 몰리는데, 이때 DB 레이턴시가 높아져서 모든 서버에 장애가 발생했습니다.
-왜 DB 레이턴시가 높았을까요?
-현재 서비스에서 트래픽이 가장 많이 발생하는 페이지가 메인, 상품 검색, 상품 상세 페이지입니다.
-이 중 검색 페이지에서 쿼리 대기 시간이 길어지고 있었습니다.
-원인은 크게 다음과 같습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;LIKE %keyword%&lt;/code&gt; 검색&lt;/strong&gt; — 최악의 경우 DB는 모든 레코드를 찾아야 합니다.
-&lt;ul&gt;
-&lt;li&gt;검색 페이지가 증가할수록 검색 속도는 더 느려졌습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;상품 수의 급증&lt;/strong&gt; — 상품 수가 약 50만 개에서 270만 개로 증가했습니다.
-&lt;ul&gt;
-&lt;li&gt;판매 중인 상품만 보면 약 6만 개에서 76만 개로 증가했습니다.&lt;/li&gt;
-&lt;li&gt;개선 전에는 판매된 상품도 검색 결과에 포함되어 있었습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;당장 개선이 필요했습니다&lt;/strong&gt;.
-RDB에도 역인덱싱 타입이 있었지만, 참조할 만한 문서가 많지 않았습니다.
-더 중요한 건 RDB에 부하가 발생하고 있었기 때문에 RDB에서 작업할 수 없던 상황이었습니다.
-당시 검색 키워드를 저장하고 집계만 하던 기능에 사용되던 Elastic Cloud가 있었고,
-MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지원을 받을 수 있었습니다.
-그래서 빠른 도입과 개선을 위해 관리형 서비스(Managed Service)를 쓰는 게 더 낫다고 판단했습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/search/elasticsearch-indexing-strategy/improve-response-time.png&#34; alt=&#34;Elasticsearch로 응답 속도 개선&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;엘라스틱서치를 검색 기능에 도입 후 서버 응답 속도 (Datadog APM)&lt;/em&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;개선 전 평균 응답 시간: &lt;strong&gt;약 6,000~7,000ms&lt;/strong&gt; (7일 집계)&lt;/li&gt;
-&lt;li&gt;개선 후 평균 응답 시간: &lt;strong&gt;약 80~100ms&lt;/strong&gt; (7일 집계)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;rdb-데이터를-인덱싱하는-전략&#34;&gt;RDB 데이터를 인덱싱하는 전략&lt;/h1&gt;
-&lt;h2 id=&#34;1-가장-쉬운-방법-batch&#34;&gt;1. 가장 쉬운 방법 Batch&lt;/h2&gt;
-&lt;p&gt;처음엔 &lt;a href=&#34;https://www.elastic.co/kr/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash&#34;&gt;Elastic 공식 문서&lt;/a&gt;를 참조해서
-&lt;strong&gt;로그스태시(Logstash)&lt;/strong&gt;&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;로 시작했지만 원하는 로그와 커스텀 동작을 추가하기 힘들었습니다.
-그래서 성능 개선 후 바로 &lt;strong&gt;파이썬(Python)&lt;/strong&gt; 스크립트로 전환했습니다.
-대략적인 ETL 과정은 다음과 같습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Extract: Oracle DBMS에서 마지막으로 조회한 &lt;em&gt;최근 수정된 날짜(&lt;code&gt;updated_at&lt;/code&gt;)&lt;/em&gt; 기준 이후로 데이터 조회&lt;/li&gt;
-&lt;li&gt;Transform: 엘라스틱서치 인덱스의 스키마(Schema)에 맞게 데이터 수정&lt;/li&gt;
-&lt;li&gt;Load: 엘라스틱서치에 데이터 인덱싱&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;2-update-데이터&#34;&gt;2. UPDATE 데이터&lt;/h2&gt;
-&lt;p&gt;시간이 지날수록 RDB 데이터와 Elasticsearch 데이터에 차이가 발생하기 시작했습니다. (평균 약 300개/1d)
-이러한 이유로 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했습니다.&lt;/p&gt;
-&lt;p&gt;Python의 &lt;code&gt;deepdiff&lt;/code&gt; 모듈을 사용해서 RDB와 엘라스틱서치 데이터 전체를 비교해봤습니다.
-특정 패턴을 분석해보니 내가 파악하지 못한 레거시 시스템이나 스케줄러에서 &lt;code&gt;updated_at&lt;/code&gt;을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었습니다.
-추가로 트랜잭션 문제로 인해 데이터에 차이가 발생하는 경우도 있었습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-간략히 설명하면 &lt;strong&gt;데이터 UPDATE를 위한 트랜잭션 시작 후 COMMIT 전에 배치 작업이 SELECT를 실행하면 업데이트 이벤트가 누락될 수 있습니다.&lt;/strong&gt;
-&lt;code&gt;updated_at&lt;/code&gt; 기준이 아닌 전체 인덱싱도 고려해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;실시간 배치 — &lt;code&gt;updated_at&lt;/code&gt;을 기준으로 5초 Fixed Delay&lt;/li&gt;
-&lt;li&gt;전체 배치 — 최근 데이터까지 인덱싱하면 다시 처음부터 반복 (약 3시간 소요)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;3-hard-delete-데이터&#34;&gt;3. HARD DELETE 데이터&lt;/h2&gt;
-&lt;p&gt;수정 후 데이터 차이가 많이 줄었습니다. (평균 약 2개/1d)
-하지만 남은 건 어디서 발생하는지 한참 찾아야 했습니다.
-운영상 상품을 HARD DELETE&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; 해야 하는 상황이 있었고, 이 정보가 팀원 간에 공유되지 않았습니다.
-지금까지 설명한 배치 방식은 Hard Delete에 대응하지 못합니다.&lt;/p&gt;
-&lt;p&gt;다른 대안이 있을까 찾아봤더니 &lt;strong&gt;CDC(Change Data Capture)와 같은 스트림(Stream) 방식&lt;/strong&gt;을 사용할 수 있습니다.
-하지만 Oracle CDC&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;, Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았습니다.&lt;/p&gt;
-&lt;p&gt;그럼 또 다른 대안이 있을까요? &lt;strong&gt;상품 인덱스에 alias를 지정하고, 1일 1번 새로운 인덱스를 생성해서 변경하기로 했습니다&lt;/strong&gt;.
-예를 들어 &lt;code&gt;product-20220102&lt;/code&gt; 인덱스를 생성하고,
-전체 문서 인덱싱을 완료할 경우 &lt;code&gt;product&lt;/code&gt; alias를 &lt;code&gt;product-20220101&lt;/code&gt;에서 &lt;code&gt;product-20220102&lt;/code&gt;로 변경합니다.
-그럼 Hard Delete가 발생해도 최대 1일 동안만 차이가 발생합니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-개선할-수-있는-부분&#34;&gt;더 개선할 수 있는 부분&lt;/h1&gt;
-&lt;p&gt;검색 기능 구현에 Spring Data Elasticsearch 모듈을 사용했습니다.
-&lt;strong&gt;인덱스 스키마를 Python과 Java 언어로 된 2개의 프로젝트에서 관리하는 것&lt;/strong&gt;입니다.
-엘라스틱서치 인덱스는 &lt;code&gt;@Entity&lt;/code&gt;로 정의했는데 이를 &lt;strong&gt;별도 모듈로 재사용&lt;/strong&gt;하면 Spring Batch를 사용할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;현재 전체 데이터를 인덱싱하는데 평균 3시간이 걸립니다.&lt;/strong&gt;
-파이썬은 GIL(Global Interpreter Lock) 때문에 &lt;code&gt;multiprocessing&lt;/code&gt; 모듈을 사용해야 병렬 처리가 가능하지만,
-Spring Batch로 전환하면 &lt;strong&gt;배치 작업을 병럴 처리해서 처리 속도를 향상&lt;/strong&gt;시킬 수 있습니다.&lt;/p&gt;
-&lt;p&gt;하지만 Elastic Cloud를 사용한다면 &lt;strong&gt;비용(Credit)도 고려&lt;/strong&gt;해야 합니다.
-데이터 인덱싱을 더 많이, 더 자주 해보니 데이터 노드의 CPU 사용량이 높아지는 것을 확인했습니다.&lt;/p&gt;
-&lt;p&gt;검색 기능의 서버 응답 속도는 평균 85.2ms/1w 입니다&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
-데이터에 차이가 발생하는 문제 때문에 &lt;strong&gt;엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식&lt;/strong&gt;을 사용했는데,
-배치 처리 속도를 개선하면 RDB를 조회하는 부분을 제거할 수 있습니다.
-게다가 현재 서비스의 주요 이용자들은 &lt;strong&gt;아프리카, 중남미, 중앙아시아&lt;/strong&gt; 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 입니다&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;.
-RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것입니다.&lt;/p&gt;
-&lt;h1 id=&#34;이-고민을-저만-했던-게-아니었습니다&#34;&gt;이 고민을 저만 했던 게 아니었습니다&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html&#34;&gt;Tune for indexing speed&lt;/a&gt; | Elastic&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/fBfUr_8Pq8A&#34;&gt;엘라스틱서치를 이용한 상품 검색 엔진 개발 일지&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ&#34;&gt;샵바이 주문 검색 성능 개선기&lt;/a&gt; | NHN FORWARD 22&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/topics/integration/what-is-change-data-capture&#34;&gt;What is change data capture (CDC)?&lt;/a&gt; | Red Hat
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://tech.kakaopay.com/post/kakaopaysec-mongodb-cdc/&#34;&gt;Oracle에서 MongoDB로의 CDC Pipeline 구축&lt;/a&gt; | 카카오페이&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://hyperconnect.github.io/2021/01/11/cdc-platform.html&#34;&gt;CDC &amp;amp; CDC Sink Platform 개발 1편 - CDC Platform 개발&lt;/a&gt; | 하이퍼커넥트&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;Logstash 사용 시 고려했던 성능 관련 &lt;a href=&#34;https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html&#34;&gt;문서1&lt;/a&gt;,
-&lt;a href=&#34;https://www.elastic.co/guide/en/logstash/7.17/resiliency.html&#34;&gt;문서2&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtu.be/1hpfNvcEbYQ?t=862&#34;&gt;동일한 사례&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;strong&gt;Hard Delete&lt;/strong&gt;란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 &lt;code&gt;DELETE&lt;/code&gt;.
-이와 반대로 &lt;strong&gt;Soft Delete&lt;/strong&gt;는 삭제 플래그(ex: &lt;code&gt;is_deleted&lt;/code&gt;)만 수정하고 데이터를 삭제하지 않습니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
-또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었습니다.
-&lt;a href=&#34;https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/&#34;&gt;Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&amp;hellip;&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;Datadog RUM 측정 기준&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/search/elasticsearch-indexing-strategy/ - Im Changsu | Since 2020</description>
         </item>
     
     

@@ -9,9 +9,436 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Fri, 14 Mar 2025 01:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>컨테이너 톺아보기</title>
+        <link>https://markruler.github.io/posts/container/container-study-guide/</link>
+        <pubDate>Wed, 17 Feb 2021 23:47:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/container/container-study-guide/</guid>
+        <description>임창수 https://markruler.github.io/posts/container/container-study-guide/ -&lt;h1 id=&#34;거두절미&#34;&gt;거두절미&lt;/h1&gt;
+&lt;p&gt;생각보다 컨테이너는 간단한 게 아닙니다.
+컨테이너를 쉽게 생성하고 삭제할 수 있었던 이유는
+도커와 같은 컨테이너 관리 도구가 복잡한 것들을 꽁꽁 감췄기 때문입니다.
+컨테이너를 공부하면 할수록 알아야 할 게 더 늘어나고 있지만
+이쯤에서 유익했던 자료들을 모아 보려 합니다.&lt;/p&gt;
+&lt;h1 id=&#34;참고-자료&#34;&gt;참고 자료&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;👍 필수
+&lt;ul&gt;
+&lt;li&gt;책 - &lt;a href=&#34;https://www.hanbit.co.kr/store/books/look.php?p_code=B8383749156&#34;&gt;컨테이너 보안&lt;/a&gt;, Liz Rice&lt;/li&gt;
+&lt;li&gt;katacoda - &lt;a href=&#34;https://www.katacoda.com/lizrice/courses/containers-and-go&#34;&gt;An Introduction to Containers for Go programmers&lt;/a&gt;, Liz Rice&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;컨테이너
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/&#34;&gt;A Practical Introduction to Container Terminology&lt;/a&gt;, Scott McCarty&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.infoq.com/articles/build-a-container-golang/&#34;&gt;Build Your Own Container Using Less than 100 Lines of Go&lt;/a&gt;, Julian Friedman&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://iximiuz.com/en/posts/implementing-container-runtime-shim/&#34;&gt;Implementing Container Runtime Shim: runc&lt;/a&gt;, Ivan Velichko&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;컨테이너 런타임
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/keyword/linux-container&#34;&gt;리눅스 컨테이너란?&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.samsungsds.com/kr/insights/docker.html&#34;&gt;흔들리는 도커(Docker)의 위상: OCI와 CRI 중심으로 재편되는 컨테이너 생태계&lt;/a&gt;, 김준석&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2019/02/21/podman-and-buildah-for-docker-users/&#34;&gt;Podman and Buildah for Docker users&lt;/a&gt;, Red Hat&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://joejulian.name/post/kubernetes-container-engine-comparison/&#34;&gt;Selecting a container runtime for use with Kubernetes&lt;/a&gt;, Joe Julian&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;컨테이너 오케스트레이션
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/ko/topics/containers/what-is-container-orchestration&#34;&gt;컨테이너 오케스트레이션이란?&lt;/a&gt;, Red Hat&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;네임스페이스
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/keyword/linux-namespace&#34;&gt;리눅스 네임스페이스란?&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://jake.dothome.co.kr/namespace/&#34;&gt;네임스페이스&lt;/a&gt;, 문영일&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://windsock.io/using-linux-namespaces-to-isolate-processes/&#34;&gt;Using Linux Namespaces to Isolate Processes&lt;/a&gt;, Scott McCarty&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.redhat.com/en/blog/whats-next-containers-user-namespaces&#34;&gt;What’s Next for Containers? User Namespaces&lt;/a&gt;, Scott McCarty&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://netflixtechblog.com/evolving-container-security-with-linux-user-namespaces-afbe3308c082&#34;&gt;Evolving Container Security With Linux User Namespaces&lt;/a&gt;, Netflix&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kinvolk.io/blog/2020/12/improving-kubernetes-and-container-security-with-user-namespaces/&#34;&gt;Improving Kubernetes and container security with user namespaces&lt;/a&gt;, Alban Crequy&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;컨트롤 그룹
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/&#34;&gt;Cgroup Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/resource_management_guide/&#34;&gt;Red Hat Resource Management Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://tech.kakao.com/2020/06/29/cgroup-driver/&#34;&gt;Cgroup Driver 선택하기&lt;/a&gt;, ssup&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://b.luavis.kr/server/missing-800mb&#34;&gt;사라진 800MB를 찾아서&lt;/a&gt;, Luavis&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;루트 파일세스템
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/Documentation/filesystems/ramfs-rootfs-initramfs.txt&#34;&gt;Linux Kernel Documentation - ramfs, rootfs and initramfs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/change-root-directory-by-using-chroot&#34;&gt;chroot를 사용한 프로세스의 루트 디렉터리 격리&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;유니온 마운트
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://ahmet.im/blog/building-container-images-in-go/&#34;&gt;Building container images in Go&lt;/a&gt;, Ahmet Alp Balkan (번역중)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/how-docker-image-work&#34;&gt;도커 이미지 빌드 원리와 OverlayFS&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2016/01/13/a-practical-introduction-to-docker-container-terminology/&#34;&gt;A Practical Introduction to Docker Container Terminology&lt;/a&gt;, Scott McCarty / Joe Brockmeier&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.naver.com/alice_k106/221530340759&#34;&gt;투명 셀로판지 이론을 통한 Overlay FS 사용 방법과 유니온 마운트 이해하기&lt;/a&gt;, 최용호&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://ssup2.github.io/theory_analysis/Union_Mount_AUFS_Docker_Image_Layer/&#34;&gt;Union Mount, AUFS, Docker Image Layer&lt;/a&gt;, ssup2&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver&#34;&gt;Use the AUFS storage driver&lt;/a&gt;, Docker&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://lwn.net/Articles/312641/&#34;&gt;Unifying filesystems with union mounts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;캐퍼빌리티
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/capabilities.7.html&#34;&gt;capabilities(7)&lt;/a&gt;, Linux manual page&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://archive.is/20130112225523/http://www.eros-os.org/essays/capintro.html&#34;&gt;What is a Capability, Anyway?&lt;/a&gt;, Jonathan Shapiro&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.epnc.co.kr/news/articleView.html?idxno=43405&#34;&gt;권한을 최소화시키는 리눅스 커널 자격&lt;/a&gt;, 이혜원&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.container-solutions.com/linux-capabilities-why-they-exist-and-how-they-work&#34;&gt;Linux Capabilities: Why They Exist and How They Work&lt;/a&gt;, Adrian Mouat&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.container-solutions.com/linux-capabilities-in-practice&#34;&gt;Linux Capabilities In Practice&lt;/a&gt;, Adrian Mouat&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;컨테이너 네트워크
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/container-network-1-uts-namespace&#34;&gt;UTS 네임스페이스를 사용한 호스트네임 격리 - 컨테이너 네트워크 기초 1편&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/post/container-network-2-ip-command-and-network-namespace&#34;&gt;ip로 직접 만들어보는 네트워크 네임스페이스와 브리지 네트워크 - 컨테이너 네트워크 기초 2편&lt;/a&gt;, Daegwon Nacyot Kim&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;리눅스-컨테이너&#34;&gt;리눅스 컨테이너&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;A Linux container is a set of 1 or more processes that are isolated from the rest of the system.&amp;rdquo;
+&lt;a href=&#34;https://www.redhat.com/en/topics/containers/whats-a-linux-container&#34;&gt;Red Hat&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;리눅스 컨테이너(Linux Container)는 시스템의 다른 부분과 격리된 하나 이상의 프로세스 집합입니다.
+즉, 어떤 응용 프로그램이나 프로세스를 일컫는 것이 아니라 그저 리눅스 자원이 격리된 것입니다(‼️).&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/user-space-vs-kernel-space-simple-container.png&#34; alt=&#34;user-space-vs-kernel-space-simple-container&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.redhat.com/en/blog/architecting-containers-part-1-why-understanding-user-space-vs-kernel-space-matters&#34;&gt;레드햇 블로그 &amp;ldquo;Architecting Containers Part 1: Why Understanding User Space vs. Kernel Space Matters&amp;rdquo; - Scott McCarty (fatherlinux)&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/user-space-vs-kernel-space-virtualization-vs-containerization11.png&#34; alt=&#34;user-space-vs-kernel-space-virtualization-vs-containerization&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.redhat.com/en/blog/architecting-containers-part-2-why-user-space-matters&#34;&gt;레드햇 블로그 &amp;ldquo;Architecting Containers Part 2: Why the User Space Matters&amp;rdquo; - Scott McCarty (fatherlinux)&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;컨테이너-엔진&#34;&gt;컨테이너 엔진&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.redhat.com/blog/2018/02/22/container-terminology-practical-introduction/#h.6yt1ex5wfo3l&#34;&gt;컨테이너 엔진(Container Engine)&lt;/a&gt;은
+컨테이너를 관리하기 위한 API나 CLI 도구를 제공하는 소프트웨어입니다.
+&lt;code&gt;도커 엔진(docker-ce)&lt;/code&gt;부터 레드햇의 &lt;code&gt;파드맨(Podman)&lt;/code&gt;, 로켓 컴퍼니의 &lt;code&gt;rkt&lt;/code&gt; 등이
+컨테이너 엔진에 해당합니다. 컨테이너 엔진은 사용자 입력을 받고, 컨테이너
+이미지를 꺼내고(pull), 컨테이너 실행 방법을 명시한 메타데이터를 만든 다음,
+컨테이너 런타임에 이 정보들을 전달합니다.&lt;/p&gt;
+&lt;h2 id=&#34;컨테이너-런타임&#34;&gt;컨테이너 런타임&lt;/h2&gt;
+&lt;p&gt;컨테이너 런타임(Container Runtime)은 루트 파일시스템과 메타 데이터(spec file)를
+받아 컨테이너를 실행하는 도구입니다. 가장 일반적으로 쓰이는 런타임은 OCI를 준수하는
+&lt;a href=&#34;https://github.com/opencontainers/runc&#34;&gt;&lt;code&gt;runC&lt;/code&gt;&lt;/a&gt;입니다.
+흔히 쓰이는 &lt;a href=&#34;https://github.com/containerd/containerd/blob/master/pkg/process/init.go#L64&#34;&gt;&lt;code&gt;컨테이너-디 (containerd)&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://github.com/cri-o/cri-o/blob/master/pkg/config/config.go#L38-L40&#34;&gt;&lt;code&gt;크라이-오 (cri-o)&lt;/code&gt;&lt;/a&gt;도 실제로는 &lt;code&gt;runC&lt;/code&gt;에 의존합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/docker-containerd-runc.png&#34; alt=&#34;docker-containerd-runc&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.docker.com/blog/oci-release-of-v1-0-runtime-and-image-format-specifications/&#34;&gt;Docker Leads OCI Release of v1.0 Runtime and Image Format Specifications&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;최근 쿠버네티스 블로그에 업로드된 Dockershim 제거에 대한 글&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;로
+도커를 못 쓰게 된 건지 혼란이 있었습니다. 도커가 워낙 만능이다보니
+&amp;ldquo;컨테이너 엔진==컨테이너 런타임==CRI==도커&amp;quot;라는 오해에서 비롯되었습니다.
+자세한 내용은 &lt;a href=&#34;https://subicura.com/k8s/2020/12/19/deprecate-docker&#34;&gt;서비큐라님 글&lt;/a&gt;,
+&lt;a href=&#34;https://www.slideshare.net/JoHoon1/the-myths-of-deprecating-docker-in-kubernetes&#34;&gt;조훈님과 심근우님 글&lt;/a&gt;을 참고해주세요.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/simple-orchestration-node.png&#34; alt=&#34;simple-orchestration-node&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.katacoda.com/fatherlinux/courses/subsystems/container-internals-lab-2-0-part-1&#34;&gt;Linux Container Internals - Scott McCarty&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;컨테이너-오케스트레이션&#34;&gt;컨테이너 오케스트레이션&lt;/h2&gt;
+&lt;p&gt;컨테이너 오케스트레이션(Container Orchestration)은 컨테이너 배포, 관리, 확장, 네트워킹 등을 자동화합니다.
+대표적으로 CNCF에서 관리하고 있는 &lt;a href=&#34;https://kubernetes.io/&#34;&gt;쿠버네티스&lt;/a&gt;가 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;컨테이너를-만드는-리눅스-커널-기능&#34;&gt;컨테이너를 만드는 리눅스 커널 기능&lt;/h1&gt;
+&lt;p&gt;처음에는 리눅스 커널까지 깊게 알아야 하나 싶었는데
+&lt;a href=&#34;https://b.luavis.kr/server/missing-800mb&#34;&gt;사라진 메모리를 찾아가는 Luavis님 글&lt;/a&gt;을
+읽어보니 반드시 알아야겠더라구요.
+대표적으로 쓰이는 리눅스 커널 기능은 네임스페이스와 컨트롤 그룹 등이 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/docker-with-linux-kernel.png&#34; alt=&#34;docker-with-linux-kernel&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://www.educative.io/edpresso/what-are-kernel-namespaces&#34;&gt;educative&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;네임스페이스-what-you-can-see&#34;&gt;네임스페이스: What you can see&lt;/h2&gt;
+&lt;p&gt;리눅스 네임스페이스(Namespace)는 프로세스 실행 시 시스템 자원을 격리시켜주는 기능입니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/namespaces.7.html&#34;&gt;&lt;code&gt;namespaces&lt;/code&gt;(7)&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;네임스페이스 유형&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;네임스페이스&lt;/th&gt;
+          &lt;th&gt;플래그&lt;/th&gt;
+          &lt;th&gt;경로&lt;/th&gt;
+          &lt;th&gt;매뉴얼&lt;/th&gt;
+          &lt;th&gt;격리 대상&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Cgroup&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWCGROUP&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/cgroup&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html&#34;&gt;cgroup_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Cgroup root directory&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;IPC&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWIPC&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/ipc&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html&#34;&gt;ipc_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;System V IPC, POSIX message queues&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Network&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWNET&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/net&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/network_namespaces.7.html&#34;&gt;network_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Network devices, stacks, ports, etc.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Mount&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWNS&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/mnt&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/mount_namespaces.7.html&#34;&gt;mount_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Mount points&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;PID&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWPID&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/pid_namespaces.7.html&#34;&gt;pid_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Process IDs&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;Time&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWTIME&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/time_namespaces.7.html&#34;&gt;time_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Boot and monotonic clocks&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;User&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWUSER&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/user&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/user_namespaces.7.html&#34;&gt;user_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;User and group IDs&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;UTS (UNIX Time Sharing)&lt;/td&gt;
+          &lt;td&gt;CLONE_NEWUTS&lt;/td&gt;
+          &lt;td&gt;/proc/[pid]/ns/uts&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/uts_namespaces.7.html&#34;&gt;uts_namespaces(7)&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;Hostname and NIS domain name&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;네임스페이스 관련 API&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;시스템 호출&lt;/th&gt;
+          &lt;th&gt;설명&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/clone.2.html&#34;&gt;clone&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;새로운 자식 프로세스를 생성합니다. 위의 표에서 &lt;code&gt;CLONE_NEW*&lt;/code&gt; 플래그를 인수로 지정합니다.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/setns.2.html&#34;&gt;setns&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;시스템 호출한 프로세스가 &lt;code&gt;/proc/[pid]/ns&lt;/code&gt;를 참조해 기존 네임스페이스에 할당됩니다.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/unshare.2.html&#34;&gt;unshare&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;시스템 호출한 프로세스가 새로운 네임스페이스에 할당됩니다. 마찬가지로 &lt;code&gt;CLONE_NEW*&lt;/code&gt; 플래그를 인수로 지정합니다.&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/ioctl.2.html&#34;&gt;ioctl&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;네임스페이스 관련 정보를 찾기 위한 다양한 기능을 제공합니다. 기본적으로 디바이스 제어 API입니다.&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;clone&lt;/code&gt;과 &lt;code&gt;unshare&lt;/code&gt;는 &lt;code&gt;CAP_SYS_ADMIN&lt;/code&gt; &lt;a href=&#34;#%EB%A6%AC%EB%88%85%EC%8A%A4-%EC%BA%90%ED%8D%BC%EB%B9%8C%EB%A6%AC%ED%8B%B0linux-capabilities&#34;&gt;캐퍼빌리티&lt;/a&gt;가 필요합니다.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/namespaces/compatibility-list.rst&#34;&gt;네임스페이스 호환성 문제&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;컨트롤-그룹-what-you-can-use&#34;&gt;컨트롤 그룹: What you can use&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;보통 &lt;code&gt;씨-그룹&lt;/code&gt;이나 &lt;code&gt;컨트롤-그룹&lt;/code&gt;이라고 발음합니다.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;컨트롤 그룹(cgroup, control group)은 프로세스에서 사용 가능한 CPU, 메모리, 네트워크 대역폭, 디스크 I/O 등을
+그룹 단위로 제어하는 리눅스 커널의 기능입니다.
+원래는 &lt;a href=&#34;https://lwn.net/Articles/236038/&#34;&gt;프로세스 컨테이너&lt;/a&gt;라는
+이름으로 제안되었지만, 나중에 컨트롤 그룹이 되었습니다.
+컨트롤 그룹은 컨테이너에서만 사용되는 기능은 아니고
+리눅스 시스템에서 프로세스 관리를 위해 일반적으로 사용되고 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;control-group-드라이버&#34;&gt;&lt;a href=&#34;https://kubernetes.io/ko/docs/setup/production-environment/container-runtimes/#cgroup-%EB%93%9C%EB%9D%BC%EC%9D%B4%EB%B2%84&#34;&gt;Control Group 드라이버&lt;/a&gt;&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;cgroupfs&lt;/li&gt;
+&lt;li&gt;systemd&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker info -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;{{json .}}&amp;#39;&lt;/span&gt; | jq &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;. | .CgroupDriver&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &amp;#34;cgroupfs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cgroupfs-컨트롤-그룹-파일-시스템&#34;&gt;cgroupfs (컨트롤 그룹 파일 시스템)&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;memory&lt;/code&gt; 중에서도 &lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v1/memory.html#benefits-and-purpose-of-the-memory-controller&#34;&gt;일부분만 갈무리&lt;/a&gt;해봤습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;tasks&lt;/th&gt;
+          &lt;th&gt;attach a task(thread) and show list of threads&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;cgroup.procs&lt;/td&gt;
+          &lt;td&gt;show list of processes&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;cgroup.event_control&lt;/td&gt;
+          &lt;td&gt;an interface for event_fd()&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.stat&lt;/td&gt;
+          &lt;td&gt;show various statistics&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.limit_in_bytes&lt;/td&gt;
+          &lt;td&gt;set/show limit of memory usage&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.usage_in_bytes&lt;/td&gt;
+          &lt;td&gt;show current usage for memory (See 5.5 for details)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.max_usage_in_bytes&lt;/td&gt;
+          &lt;td&gt;show max memory usage recorded&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.numa_stat&lt;/td&gt;
+          &lt;td&gt;show the number of memory usage per numa node&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;memory.kmem.tcp.max_usage_in_bytes&lt;/td&gt;
+          &lt;td&gt;show max tcp buf memory usage recorded&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;control-group-v1-컨트롤러&#34;&gt;Control Group v1 컨트롤러&lt;/h3&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;컨트롤러&lt;/th&gt;
+          &lt;th&gt;커널 설정 옵션&lt;/th&gt;
+          &lt;th&gt;설명&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst&#34;&gt;blkio&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_BLK_CGROUP&lt;/td&gt;
+          &lt;td&gt;블록 IO 제어&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst&#34;&gt;cpuacct&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_CPUACCT&lt;/td&gt;
+          &lt;td&gt;프로세스 그룹 CPU 사용량 계산&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst&#34;&gt;cpuset&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CPUSETS&lt;/td&gt;
+          &lt;td&gt;특정 CPU나 NUMA 노드 할당&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst&#34;&gt;devices&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_DEVICE&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man2/mknod.2.html&#34;&gt;mknod&lt;/a&gt;를 통해 디바이스를 관리할 수 있는지 결정&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst&#34;&gt;freezer&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_FREEZER&lt;/td&gt;
+          &lt;td&gt;프로세스 일시 정지-재개&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst&#34;&gt;memory&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_MEMCG&lt;/td&gt;
+          &lt;td&gt;사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst&#34;&gt;net_cls&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_NET_CLASSID&lt;/td&gt;
+          &lt;td&gt;트래픽 제어에 쓰이는 classid 관리&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst&#34;&gt;net_prio&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_NET_PRIO&lt;/td&gt;
+          &lt;td&gt;네트워크 인터페이스 우선순위(priorities) 관리&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;a href=&#34;https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst&#34;&gt;pids&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;CONFIG_CGROUP_PIDS&lt;/td&gt;
+          &lt;td&gt;생성할 수 있는 프로세스 수 관리&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td&gt;&amp;hellip;&lt;/td&gt;
+          &lt;td&gt;&amp;hellip;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;control-group-v2&#34;&gt;Control Group v2&lt;/h3&gt;
+&lt;p&gt;cgroups v2가 Linux 커널 4.5부터 공식적으로 포함되었습니다. 자세한 내용은
+&lt;a href=&#34;https://medium.com/nttlabs/cgroup-v2-596d035be4d7&#34;&gt;Akihiro Suda의 글&lt;/a&gt;과
+&lt;a href=&#34;https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html&#34;&gt;커널 문서&lt;/a&gt;를
+참고해주세요.&lt;/p&gt;
+&lt;h2 id=&#34;루트-파일시스템&#34;&gt;루트 파일시스템&lt;/h2&gt;
+&lt;p&gt;루트 파일시스템(Root File System)이란 &lt;code&gt;ramfs&lt;/code&gt;나 &lt;code&gt;tmpfs&lt;/code&gt;의 특수 인스턴스로
+루트 디렉토리(&lt;code&gt;/&lt;/code&gt;)에 마운트되는 파일 시스템을 말합니다.
+&lt;code&gt;rootfs&lt;/code&gt;은 커널이 동작하기 위한 필수 파일들이 있기 때문에 마운트를 해제할 수 없습니다.
+&lt;code&gt;chroot&lt;/code&gt;나 &lt;code&gt;pivot_root&lt;/code&gt; 명령어로 &lt;code&gt;rootfs&lt;/code&gt; 경로를 변경(chroot jail)하여 파일 시스템을 격리할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;유니온-마운트&#34;&gt;유니온 마운트&lt;/h2&gt;
+&lt;p&gt;유니온 마운트(Union Mount)란 여러 파일 시스템을 단일 포인트로 마운트하는 것을 말합니다.
+컨테이너에 필수적인 기능은 아니지만 이미지 레이어 구현에 사용되면서 필수적인
+기능으로 자리잡았습니다. 예를 들면 도커가 사용하는 &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver/&#34;&gt;AUFS&lt;/a&gt;, &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/overlayfs-driver/&#34;&gt;OverlayFS&lt;/a&gt; 등이 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/aufs-layers.jpg&#34; alt=&#34;aufs&#34;&gt;&lt;/p&gt;
+&lt;p&gt;출처: &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/aufs-driver/&#34;&gt;Use the AUFS storage driver - docker docs&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/container/overlay-constructs.jpg&#34; alt=&#34;overlay-constructs&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;출처: &lt;a href=&#34;https://docs.docker.com/storage/storagedriver/overlayfs-driver/#how-the-overlay-driver-works&#34;&gt;Use the OverlayFS storage driver - docker docs&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;리눅스-캐퍼빌리티&#34;&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man7/capabilities.7.html&#34;&gt;리눅스 캐퍼빌리티&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Capability-based_security#POSIX_capabilities&#34;&gt;POSIX capabilities&lt;/a&gt;
+개념으로 루트 프로세스 권한을 세부적으로 제어하기 위한 속성입니다. &amp;lsquo;자격&amp;rsquo;, &amp;lsquo;능력&amp;rsquo; 등으로 번역됩니다.&lt;/p&gt;
+&lt;p&gt;캐퍼빌리티가 없을 때 프로세스는 두 가지로만 나뉘었습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;(User ID가 0인, superuser라 불리는) 루트 사용자가 소유한 특권(privileged) 프로세스&lt;/li&gt;
+&lt;li&gt;(User ID가 0이 아닌) 일반 사용자가 소유한 비특권(unprivileged) 프로세스.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이 중 루트 권한을 세분화해서 프로세스마다 다르게 적용할 수 있도록 만든 기능이 바로 리눅스 캐퍼빌리티입니다.
+컨테이너 런타임에서 루트 권한 일부분만 필요할 경우 리눅스 캐퍼빌리티를 사용합니다.&lt;/p&gt;
+&lt;h1 id=&#34;샌드박싱-솔루션&#34;&gt;샌드박싱 솔루션&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;샌드박싱이란? 자원 접근이 제한되도록 응용 프로그램을 격리하는 것 - &amp;lt;컨테이너 보안&amp;gt; 참조&lt;/p&gt;&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;seccomp&lt;/li&gt;
+&lt;li&gt;AppArmor&lt;/li&gt;
+&lt;li&gt;SELinux&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://kubernetes.io/blog/2020/12/02/dont-panic-kubernetes-and-docker/&#34;&gt;Don&amp;rsquo;t Panic: Kubernetes and Docker&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://kubernetes.io/blog/2020/12/02/dockershim-faq/&#34;&gt;Dockershim Deprecation FAQ&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/container/container-study-guide/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -2320,81 +2747,6 @@ You go backward to the starting point.&lt;/li&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>NFV의 컴퓨팅 도메인에 대한 오해!</title>
-        <link>https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</link>
-        <pubDate>Thu, 01 Oct 2020 22:23:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</guid>
-        <description>임창수 https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ -&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/&#34;&gt;Faisal Khan의 The Misunderstood Facts about Compute Domain in NFV!&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
-&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;NFV에 대해 생각해 보세요! 그리고 x86 프로세서를 생각해 보세요&amp;hellip; 둘은 뗄 수 없는 사이입니다. 그렇죠?&lt;/p&gt;
-&lt;p&gt;프로세서(컴퓨팅 파트)가 아무리 단순하게 들리더라도 NFV의 컴퓨팅 도메인(compute domain)이 노드의 컴퓨팅 프로세서(compute processor)가 같지 않다는 사실을 모르는 사람이 많을 것입니다. 사실&amp;hellip; 훨씬 더 많습니다.&lt;/p&gt;
-&lt;p&gt;NFV의 &amp;ldquo;Compute Domain&amp;quot;과 &amp;ldquo;Compute Node&amp;quot;는 ETSI 정의에 따르면 동일한 것을 의미하지 않습니다. 이를 잘 알고 있으면 NFV 기본 아키텍처를 이해하는 데 많은 혼란을 피할 수 있으며, 벤더 및 고객과 이 주제에 대해 소통하는 과정에서 오해를 피할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;물론 NFV의 뼈대를 제대로 세우고 싶을 겁니다. 그렇죠?&lt;/p&gt;
-&lt;p&gt;뿐만 아니라 끝까지 읽으신다면 COTs, NIC, 하드웨어 가속기와 같이 매일 듣는 서버의 필수 용어가 명확해질 것입니다.&lt;/p&gt;
-&lt;h1 id=&#34;우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요&#34;&gt;우선 ETSI의 용어로 &amp;ldquo;Compute Domain&amp;quot;과 &amp;ldquo;Compute Node&amp;quot;는 무엇일까요?&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/computer-domain-in-nfv.png&#34; alt=&#34;computer-domain-in-nfv&#34;&gt;&lt;/p&gt;
-&lt;p&gt;(NFV 아키텍처에 대한 자세한 내용을 보려면 &lt;a href=&#34;../beginners-guide-to-nfv-mano/&#34;&gt;NFV 아키텍처&lt;/a&gt; 또는 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture&#34;&gt;NFV MANO 치트 시트&lt;/a&gt;에 대한 글을 읽는 것이 좋습니다.)&lt;/p&gt;
-&lt;p&gt;위의 NFV Infrastructure (NFVI) 블록에 명확히 나와 있듯이 컴퓨팅 도메인에는 컴퓨팅 하드웨어와 스토리지 하드웨어가 포함됩니다. 컴퓨팅 도메인은 상위 집합이며, 그 중 컴퓨팅 하드에어와 노드는 한 부분에 불과합니다.&lt;/p&gt;
-&lt;p&gt;놀랍죠? 스토리지를 컴퓨팅 도메인의 일부로 생각하는 사람이 얼마나 되겠습니까?&lt;/p&gt;
-&lt;p&gt;이제 컴퓨팅 도메인에 무엇이 포함되는지 자세히 살펴보겠습니다.&lt;/p&gt;
-&lt;h1 id=&#34;컴퓨팅-도메인의-세-가지-부분&#34;&gt;컴퓨팅 도메인의 세 가지 부분&lt;/h1&gt;
-&lt;h2 id=&#34;1-컴퓨팅-노드-compute-node&#34;&gt;1. 컴퓨팅 노드 (Compute Node)&lt;/h2&gt;
-&lt;p&gt;상용 제품(COTS, Commercial Off-the-Shelf) 아키텍처에서 컴퓨팅 노드에는 멀티 코어 프로세서와 칩셋이 포함되어 있으며, 여기에는 다음과 같은 물리적 리소스가 포함될 수 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;CPU 및 칩셋 (예: x86, ARM etc.)&lt;/li&gt;
-&lt;li&gt;메모리 하위 집합.&lt;/li&gt;
-&lt;li&gt;임의의 하드웨어 가속기 (예: co-processor)&lt;/li&gt;
-&lt;li&gt;NICs (임의의 가속기를 포함한 네트워크 인터페이스 카드)&lt;/li&gt;
-&lt;li&gt;블레이드 내부 스토리지 (비휘발성 메모리, 로컬 디스크 스토리지)&lt;/li&gt;
-&lt;li&gt;BIOS/부트 로더 (실행 환경의 일부)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;COTS 서버 블레이드는 컴퓨팅 노드의 한 가지 예입니다.&lt;/p&gt;
-&lt;h2 id=&#34;2-네트워크-인터페이스-카드-nic-및-io-가속기&#34;&gt;2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기&lt;/h2&gt;
-&lt;p&gt;이전 섹션에서 컴퓨팅 노드의 일부로 NIC를 언급했습니다. 이건 사실입니다.
-위의 경우 NIC 기능이 서버에 있기 때문입니다.
-그러나 최근 세분화된 모델(예: &lt;a href=&#34;http://www.opencompute.org/about/&#34;&gt;Open Compute Project, OCP&lt;/a&gt;) 트렌드가 있습니다.
-이 폼-팩터(form-factor)에서 CPU 블레이드/섀시는 NIC/가속기 섀시 및 스토리지 섀시와 분리됩니다.
-이 블레이드/섀시들 간의 상호 연결은 광섬유를 통해 이루어질 수 있습니다.
-이러한 이유로 NIC가 중요하기 때문에 별도로 설명합니다.&lt;/p&gt;
-&lt;p&gt;NIC의 주요 기능은 CPU에 네트워크 I/O 기능을 제공하는 것입니다.&lt;/p&gt;
-&lt;p&gt;NFV의 비전은 standard generic x86 서버에서 네트워크 기능을 실행하는 것입니다. 그러나 실제로 머신의 I/O 처리량을 향상시키기 위해 가속 기술을 요구하는 많은 I/O 집약적 애플리케이션(예: 가상 라우터)이 있습니다.&lt;/p&gt;
-&lt;p&gt;일부 하드웨어 가속 기술에는 다음이 포함됩니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;디지털 신호 처리(DSP, Digital Signal Processing), 패킷 헤더 처리, 패킷 버퍼링 및 스케줄링과 같은 하드웨어 가속.&lt;/li&gt;
-&lt;li&gt;캐시 관리 기능.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;이외에 새로운 소프트웨어 가속 기능을 구현하는 명령어 집합 아키텍처(ISA, Instruction Set Architecture)(예: x86, ARMv8 등)가 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;3-스토리지-빌딩-블록&#34;&gt;3. 스토리지 빌딩 블록&lt;/h2&gt;
-&lt;p&gt;스토리지 인프라는 주요 드라이브 유형들을 포함합니다. 반드시 이해하고 넘어가야 하는 하드 디스크 드라이브(HDD), 솔리드 스테이트 디스크(SDD), 캐시 스토리지 등이 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;31-hard-disk-drives-hdd&#34;&gt;3.1 Hard Disk Drives (HDD)&lt;/h3&gt;
-&lt;p&gt;하드 디스크는 마그네틱 스토리지를 사용하여 마그네틱 재질로 코팅된 하나 이상의
-견고한 고속 회전 디스크(플래터)를 사용하여 디지털 정보를 저장하고 검색하는 데이터 저장 장치입니다.
-플래터는 표면에 데이터를 읽고 쓰는 자기 헤드(magnetic heads)와 쌍을 이룹니다.
-데이터는 랜덤 액세스 방식으로 접근하므로 어느 순서로도 데이터를 검색할 수 있다는 장점이 있습니다.
-HDD는 비휘발성 스토리지입니다. 즉, 전원이 꺼진 상태에서도 저장된 데이터를 유지할 수 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;32-solid-state-disks-ssd&#34;&gt;3.2 Solid State Disks (SSD)&lt;/h3&gt;
-&lt;p&gt;SSD는 HDD와 달리 움직이는 부품이 없습니다.
-따라서 HDD에 비해 SSD는 일반적으로 물리적 충격에 더 강하고,
-조용히 실행되며, 액세스 시간과 대기 시간이 짧습니다.
-따라서 SSD는 상당한 랜덤 액세스가 필요한 애플리케이션에서 사용하기 적합한 기술입니다.
-하지만 HDD에 비해 상대적으로 비쌉니다.&lt;/p&gt;
-&lt;h3 id=&#34;33-hybrid-disk-drive&#34;&gt;3.3 Hybrid Disk Drive&lt;/h3&gt;
-&lt;p&gt;점점 인기를 얻고 있는 하이브리드 하드 드라이브는 기존의 회전 플래터와
-소량의 고속 플래시 메모리를 단일 드라이브에 배치하여 SSD 속도의 HDD 기능을 제공합니다.
-그래서 SSD를 고속 캐시(또는 tier로 사용 가능)로 사용하고
-HDD를 영구 스토리지에 사용한다는 것이 장점입니다.&lt;/p&gt;
-&lt;p&gt;&amp;ldquo;Compute Node&amp;rdquo;, &amp;ldquo;NIC&amp;rdquo; 및 &amp;ldquo;Storage&amp;rdquo; 세 부분을 이해하면 컴퓨팅 도메인의 그림이 완성되고
-완전한 NFV 아키텍처 서버를 만들기 때문에 정말 중요합니다.&lt;/p&gt;
-- https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ - Im Changsu | Since 2020</description>
         </item>
     
     
