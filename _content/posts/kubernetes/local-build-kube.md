@@ -1,8 +1,10 @@
 ---
 date: 2020-10-11T14:48:00+09:00
+lastmod: 2020-10-11T14:48:00+09:00
 title: "쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기"
-description: "Github/kubernetes"
-featured_image: "/images/kubernetes/vscode-debugging-golang.png"
+description: "kubernetes/kubernetes"
+# featured_image: "/images/kubernetes/vscode-debugging-golang.png"
+images: ["/images/kubernetes/vscode-debugging-golang.png"]
 tags:
   - kubernetes
 categories:

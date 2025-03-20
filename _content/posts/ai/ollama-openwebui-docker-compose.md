@@ -3,7 +3,7 @@ date: 2024-07-31T23:48:00+09:00
 lastmod: 2024-08-03T21:24:00+09:00
 title: "Docker Compose로 간단하게 Ollama 시작하기"
 description: "근데 이제 Open WebUI를 곁들인"
-featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
+# featured_image: "/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"
 images: ["/images/ai/ollama-openwebui-docker-compose/llama-impressionism.webp"]
 tags:
   - LLM

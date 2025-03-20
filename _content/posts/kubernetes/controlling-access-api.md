@@ -1,8 +1,10 @@
 ---
 date: 2020-09-17T06:58:08+09:00
+lastmod: 2020-09-17T06:58:08+09:00
 title: "쿠버네티스 API 접근 제어"
 description: "kubernetes.io"
-featured_image: "/images/kubernetes/access-control-overview.svg"
+# featured_image: "/images/kubernetes/access-control-overview.svg"
+images: ["/images/kubernetes/access-control-overview.svg"]
 tags:
   - kubernetes
   - nfv

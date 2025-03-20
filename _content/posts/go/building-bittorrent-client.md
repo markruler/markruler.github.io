@@ -1,8 +1,9 @@
 ---
 date: 2020-12-28T14:46:00+09:00
+lastmod: 2020-12-28T14:46:00+09:00
 title: "Go로 밑바닥부터 만드는 BitTorrent 클라이언트"
 description: "Jesse Li"
-featured_image: "/images/go/bit-torrent/2001-bit-torrent.png"
+# featured_image: "/images/go/bit-torrent/2001-bit-torrent.png"
 images: ["/images/go/bit-torrent/2001-bit-torrent.png"]
 socialshare: true
 tags:

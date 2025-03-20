@@ -3,7 +3,7 @@ date: 2022-08-17T03:44:00+09:00
 lastmod: 2022-08-17T03:44:00+09:00
 title: "Load Balancer를 활용해서 배포 프로세스를 개선해보자"
 description: "업무 자동화"
-featured_image: "/images/ci/old-system-2022.webp"
+# featured_image: "/images/ci/old-system-2022.webp"
 images: ["/images/ci/old-system-2022.webp"]
 socialshare: true
 tags:

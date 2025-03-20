@@ -1,8 +1,9 @@
 ---
 date: 2021-01-02T08:50:00+09:00
+lastmod: 2021-01-02T08:50:00+09:00
 title: "CS Visualized: CORS"
 description: "Lydia Hallie"
-featured_image: "/images/web/lydia/cover-cors.jpg"
+# featured_image: "/images/web/lydia/cover-cors.jpg"
 images: ["/images/web/lydia/cover-cors.jpg"]
 socialshare: true
 tags:

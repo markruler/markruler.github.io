@@ -3,7 +3,7 @@ date: 2020-09-13T20:58:08+09:00
 lastmod: 2024-09-09T18:35:00+09:00
 title: "MEC 아키텍처 초심자 가이드"
 description: "Faisal Khan"
-featured_image: "/images/mec/mec-architecture-according-to-etsi.jpg"
+# featured_image: "/images/mec/mec-architecture-according-to-etsi.jpg"
 images: ["/images/mec/mec-architecture-according-to-etsi.jpg"]
 tags:
   - mec

@@ -3,7 +3,7 @@ date: 2024-06-13T17:40:00+09:00
 lastmod: 2024-06-13T17:40:00+09:00
 title: "서버 to 서버 요청 시 발생한 DNS 레이턴시"
 description: "LG야 힘내"
-featured_image: "/images/network/server-to-server-dns/pexels-mo-eid-1268975-9934462.webp"
+# featured_image: "/images/network/server-to-server-dns/pexels-mo-eid-1268975-9934462.webp"
 images: ["/images/network/server-to-server-dns/pexels-mo-eid-1268975-9934462.webp"]
 socialshare: true
 tags:

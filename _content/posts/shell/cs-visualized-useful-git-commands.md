@@ -1,8 +1,9 @@
 ---
 date: 2021-01-09T08:35:00+09:00
+lastmod: 2021-01-09T08:35:00+09:00
 title: "CS Visualized: 유용한 깃(Git) 명령어"
 description: "Lydia Hallie"
-featured_image: "/images/shell/lydia/git-commands-visualized.png"
+# featured_image: "/images/shell/lydia/git-commands-visualized.png"
 images: ["/images/shell/lydia/git-commands-visualized.png"]
 socialshare: true
 tags:

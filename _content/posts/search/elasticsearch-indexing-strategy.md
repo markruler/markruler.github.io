@@ -4,7 +4,7 @@ date: 2022-12-21T22:20:00+09:00
 lastmod: 2024-09-08T10:55:00+09:00
 title: "엘라스틱서치(Elasticsearch)와 데이터 인덱싱 전략"
 description: "검색 성능을 개선한 e커머스 서비스 사례"
-featured_image: "/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"
+# featured_image: "/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"
 images: ["/images/search/elasticsearch-indexing-strategy/web-solution-capabilities-data-ingestion.png"]
 tags:
   - elasticsearch

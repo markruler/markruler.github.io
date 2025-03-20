@@ -3,7 +3,7 @@ date: 2021-12-01T23:28:00+09:00
 lastmod: 2024-12-29T11:55:00+09:00
 title: "깃(Git) CLI 환경에서 소스 코드 관리하기"
 description: "자주 쓰는 Git 명령어"
-featured_image: "/images/shell/git-logo-2color.png"
+# featured_image: "/images/shell/git-logo-2color.png"
 images: ["/images/shell/git-logo-2color.png"]
 socialshare: true
 tags:

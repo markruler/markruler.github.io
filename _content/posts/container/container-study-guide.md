@@ -1,8 +1,9 @@
 ---
 date: 2021-02-17T23:47:00+09:00
+lastmod: 2021-02-17T23:47:00+09:00
 title: "컨테이너 톺아보기"
 description: "컨테이너 관련 자료 모음"
-featured_image: "/images/common/kevin-horvat-hidd3n-programmer.jpg"
+# featured_image: "/images/common/kevin-horvat-hidd3n-programmer.jpg"
 images: ["/images/common/kevin-horvat-hidd3n-programmer.jpg"]
 socialshare: true
 tags:

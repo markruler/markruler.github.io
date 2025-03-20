@@ -1,8 +1,9 @@
 ---
 date: 2022-05-23T00:09:00+09:00
+lastmod: 2022-05-23T00:09:00+09:00
 title: "JVM 모니터링"
 description: "이게 왜 죽지..?"
-featured_image: "/images/java/jvm-monitoring/visualgc-with-visualvm.png"
+# featured_image: "/images/java/jvm-monitoring/visualgc-with-visualvm.png"
 images: ["/images/java/jvm-monitoring/visualgc-with-visualvm.png"]
 socialshare: true
 tags:

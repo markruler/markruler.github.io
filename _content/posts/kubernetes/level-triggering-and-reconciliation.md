@@ -1,8 +1,9 @@
 ---
 date: 2021-01-13T23:05:00+09:00
+lastmod: 2021-01-13T23:05:00+09:00
 title: "쿠버네티스 레벨 트리거링 및 조정"
 description: "James Bowes"
-featured_image: "/images/kubernetes/k8s-triggering.png"
+# featured_image: "/images/kubernetes/k8s-triggering.png"
 images: ["/images/kubernetes/k8s-triggering.png"]
 socialshare: true
 tags:

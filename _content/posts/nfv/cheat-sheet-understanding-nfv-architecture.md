@@ -3,7 +3,8 @@ date: 2020-09-22T21:58:08+09:00
 lastmod: 2020-09-22T21:58:08+09:00
 title: "\"NFV 아키텍처\" 이해를 위한 치트 시트"
 description: "Faisal Khan"
-featured_image: "/images/nfv/nfv-architecture.png"
+# featured_image: "/images/nfv/nfv-architecture.png"
+images: ["/images/nfv/nfv-architecture.png"]
 tags:
   - nfv
   - virtualization

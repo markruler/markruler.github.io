@@ -3,7 +3,8 @@ date: 2020-11-16T22:40:00+09:00
 lastmod: 2020-11-16T22:40:00+09:00
 title: "NFV 도커 컨테이너 초심자 가이드"
 description: "Faisal Khan"
-featured_image: "/images/nfv/vm-replaced-with-container.png"
+# featured_image: "/images/nfv/vm-replaced-with-container.png"
+images: ["/images/nfv/vm-replaced-with-container.png"]
 tags:
   - nfv
   - virtualization

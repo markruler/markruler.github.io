@@ -1,8 +1,9 @@
 ---
 date: 2021-02-14T15:22:00+09:00
+lastmod: 2021-02-14T15:22:00+09:00
 title: "최소한의 안전한 Bash 스크립트 템플릿"
 description: "Maciej Radzikowski"
-featured_image: "/images/shell/minimal-safe-bash-script-template.png"
+# featured_image: "/images/shell/minimal-safe-bash-script-template.png"
 images: ["/images/shell/minimal-safe-bash-script-template.png"]
 socialshare: true
 tags:

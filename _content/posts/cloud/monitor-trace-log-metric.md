@@ -1,8 +1,10 @@
 ---
 date: 2020-10-02T16:24:00+09:00
+lastmod: 2020-10-02T16:24:00+09:00
 title: "Observability 용어 정리"
 description: "observability"
-featured_image: "/images/cloud/jaeger-embed-trace-view.png"
+# featured_image: "/images/cloud/jaeger-embed-trace-view.png"
+images: ["/images/cloud/jaeger-embed-trace-view.png"]
 tags:
   - cloud
 categories:

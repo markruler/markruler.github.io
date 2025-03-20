@@ -3,7 +3,7 @@ date: 2023-12-12T22:02:00+09:00
 lastmod: 2024-12-10T20:38:00+09:00
 title: "Playwright를 사용해서 HTML 페이지를 PDF로 만들기"
 description: "HTML to PDF"
-featured_image: "/images/pdf/htmltopdf/htmltopdf.webp"
+# featured_image: "/images/pdf/htmltopdf/htmltopdf.webp"
 images: ["/images/pdf/htmltopdf/htmltopdf.webp"]
 socialshare: true
 tags:
