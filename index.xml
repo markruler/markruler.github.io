@@ -169,6 +169,12 @@ L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행�
 &lt;h1 id=&#34;layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/h1&gt;
 &lt;p&gt;L7(응용 계층)은 사용자와 가장 가까운 계층으로, &lt;strong&gt;응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공&lt;/strong&gt;합니다.
 이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.&lt;/p&gt;
+&lt;h2 id=&#34;l7-로드-밸런서-load-balancer&#34;&gt;L7 로드 밸런서 (Load Balancer)&lt;/h2&gt;
+&lt;p&gt;로드 밸런서는 여러 서버에 들어오는 트래픽(Load)을 분산(Balancing)하는 장치입니다.
+L7 로드 밸런서는 L7 스위치 또는 애플리케이션 스위치라고 불리기도 합니다.
+헬스 체크(HC, Health Check)를 통해 서버의 상태를 확인하고,
+사용자가 지정한 로드 밸런싱 방식을 이용해 가용성 확보를 목표로 합니다.
+로드 밸런서는 L4에도 사용됩니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;h2 id=&#34;l7-프로토콜&#34;&gt;L7 프로토콜&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;HTTP (HyperText Transfer Protocol)&lt;/li&gt;
@@ -195,6 +201,11 @@ L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행�
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
+NLB(Network Load Balancer)는 L4,
+ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
