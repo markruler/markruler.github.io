@@ -4,7 +4,7 @@ socialshare: true
 date: 2025-03-20T23:03:00+09:00
 lastmod: 2025-03-21T23:08:00+09:00
 title: "네트워크 레이어"
-description: "OSI 모델을 중심으로"
+description: "TCP/IP 모델을 중심으로"
 images: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
 tags:
   - network
@@ -81,7 +81,7 @@ NIC를 통해 LAN 케이블이나 전파로 보냅니다.
 패킷을 전파로 변조/복조하는 기기입니다.
 쉽게 말하면 무선과 유선 사이의 다리 역할을 합니다.
 
-## L1 표준
+## L1 표준 프로토콜
 
 - 유선 프로토콜
 - 무선 프로토콜
@@ -99,7 +99,7 @@ L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이�
 이 전송 처리를 브리징(bridging)이라고 합니다.
 최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.
 
-## L2 표준
+## L2 표준 프로토콜
 
 - 유선 프로토콜
 - 무선 프로토콜
@@ -126,7 +126,7 @@ L3는 **IP 주소**를 이용해 데이터를 라우팅하고, **패킷** 단위
 
 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.
 
-## L3 프로토콜
+## L3 표준 프로토콜
 
 - IP (Internet Protocol)
   - NAT (Network Address Translation)
@@ -148,44 +148,10 @@ L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며,
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
 별도의 하드웨어로도 사용하지만, Netfilter 프레임워크를 이용한 iptables 같은 소프트웨어 방화벽도 널리 사용됩니다.
 
-## L4 프로토콜
+## L4 표준 프로토콜
 
 - TCP (Transmission Control Protocol)
 - UDP (User Datagram Protocol)
-
-# Layer 5 - Session Layer
-
-L5(세션 계층)는 **두 응용 프로그램 간의 대화(Session)를 관리하고 동기화**하는 역할을 합니다.
-L5는 통신 세션을 구축하고 유지하며, 데이터 전송 중단 시 재개 지점을 관리합니다.
-또한, 전이중(Full-duplex) 및 반이중(Half-duplex) 통신 방식을 관리하고, 토큰 관리를 통해 상호배제를 보장합니다.
-보안 기능으로는 인증(Authentication), 허가(Authorization), 세션 복구(Session Recovery)가 포함됩니다.
-
-## L5 프로토콜
-
-- RPC (Remote Procedure Call)
-
-# Layer 6 - Presentation Layer
-
-L6(표현 계층)는 데이터의 구문과 표현을 담당하는 계층으로,
-**한 시스템의 애플리케이션 계층에서 보내는 데이터를 다른 시스템에서도 이해할 수 있는 형태로 변환**해 줍니다.
-문자 인코딩, 데이터 포맷 변환, 압축 및 암호화와 같은 작업들이 이 계층에서 이루어집니다.
-L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행하며, 데이터의 인코딩과 디코딩을 담당합니다.
-
-## L6 프로토콜
-
-- 파일 포맷
-  - JPEG (Joint Photographic Experts Group)
-  - PNG (Portable Network Graphics)
-  - MP3 (MPEG-1 Audio Layer III)
-- 문자 인코딩
-  - ASCII (American Standard Code for Information Interchange)
-  - Unicode
-- 압축
-  - ZIP
-  - GZIP
-- 암호화
-  - SSL (Secure Sockets Layer)
-  - TLS (Transport Layer Security)
 
 # Layer 7 - Application Layer
 
@@ -204,7 +170,7 @@ L7 로드 밸런서는 L7 스위치 또는 애플리케이션 스위치라고 �
 NLB(Network Load Balancer)는 L4,
 ALB(Application Load Balancer)는 L7을 지원합니다.
 
-## L7 프로토콜
+## L7 표준 프로토콜
 
 - HTTP (HyperText Transfer Protocol)
 - FTP (File Transfer Protocol)
