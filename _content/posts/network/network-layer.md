@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2025-03-20T23:03:00+09:00
-lastmod: 2025-03-20T23:03:00+09:00
+lastmod: 2025-03-21T23:08:00+09:00
 title: "네트워크 레이어"
 description: "OSI 모델을 중심으로"
 images: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
@@ -46,54 +46,161 @@ L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet
 
 # Layer 1 - Physical Layer
 
-물리 계층(L1)은 실제 물리 매체를 통해 **디지털 신호를 전기 신호나 광신호 등으로 변환**하여 송수신합니다.
+L1(물리 계층)은 실제 물리 매체를 통해 **디지털 신호를 전기 신호나 광신호 등으로 변환**하여 송수신합니다.
 L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
-주요 장비로는 허브, 리피터, 케이블, 커넥터, 모뎀 등이 있으며, 비트 단위의 데이터 전송과 신호 변조 및 복조를 수행합니다.
-물리 계층은 단순히 데이터를 전달하는 역할만 하며, 에러 검출이나 제어 기능은 포함되지 않습니다.
+케이블이나 커넥터 형태, 핀 배열 등 물리적인 사양에 관해 모두 정의되어 있는 계층입니다.
+
+## NIC (Network Interface Card)
+
+NIC는 컴퓨터를 네트워크에 연결하기 위해 필요한 하드웨어입니다.
+네트워크 인터페이스, 네트워크 어댑터라고도 부릅니다.
+모바일 기기를 포함한 모든 네트워크 단말기는 애플리케이션과 운영체제가 처리한 패킷을
+NIC를 통해 LAN 케이블이나 전파로 보냅니다.
+
+## 리피터 (Repeater)
+
+일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
+전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.[^2]
+리피터는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.
+
+[^2]: [실제 테스트하는 영상](https://youtu.be/WMOr3WSsu6Q)
+
+## 미디어 컨버터 (Media Converter)
+
+전기 신호와 광 신호를 서로 교환하는 기기입니다.
+광 섬유 케이블(Optic fiber cable, 광 케이블)을 연결하지 못하는 기기만 있는 상황에서
+네트워크를 연장하고자 할 때 사용합니다.
+전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
+해저 광 케이블[^3]의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
+다만 광 케이블과 장비는 비싼 편입니다.
+
+[^3]: [전세계 해저 케이블 지도](https://www.submarinecablemap.com/)
+
+## 액세스 포인트 (Access Point)
+
+패킷을 전파로 변조/복조하는 기기입니다.
+쉽게 말하면 무선과 유선 사이의 다리 역할을 합니다.
+
+## L1 표준
+
+- 유선 프로토콜
+- 무선 프로토콜
 
 # Layer 2 - Data Link Layer
 
-데이터 링크 계층(L2)은 **직접 연결된 인접 노드(장치) 간 데이터 전송을 담당**합니다.
-L2는 MAC 주소를 이용해 통신하며, 프레임 단위로 데이터를 전송합니다.
+L2(데이터 링크 계층)는 **직접 연결된 인접 노드(장치) 간 데이터 전송을 담당**합니다.
+L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이터를 전송합니다.
 또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
-주요 장비로는 스위치와 브리지가 있으며, Ethernet, PPP, HDLC와 같은 프로토콜이 사용됩니다.
+
+## 브리지 (Bridge)
+
+포트와 포트 사이의 '다리 bridge' 역할을 합니다.
+단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
+이 전송 처리를 브리징(bridging)이라고 합니다.
+최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.
+
+## L2 표준
+
+- 유선 프로토콜
+- 무선 프로토콜
+- ARP (Address Resolution Protocol)
+- PPP (Point-to-Point Protocol)
+- L2TP (Layer 2 Tunneling Protocol)
+- HDLC (High-Level Data Link Control)
 
 # Layer 3 - Network Layer
 
-네트워크 계층(L3)은 **다른 네트워크들을 연결**하고
+L3(네트워크 계층)는 **다른 네트워크들을 연결**하고
 **패킷(Packet) 단위의 데이터가 출발지에서 최종 목적지까지 전달되도록 경로를 선택**하는 계층입니다.
-L3는 IP 주소를 이용해 데이터를 라우팅하고, 패킷 단위로 데이터를 전송합니다.
+L3는 **IP 주소**를 이용해 데이터를 라우팅하고, **패킷** 단위로 데이터를 전송합니다.
 또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.
-주요 장비로는 라우터가 있으며, IP, ICMP, OSPF, BGP와 같은 프로토콜이 사용됩니다.
+
+## 라우터 (Router)
+
+단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
+자신이 속한 네트워크를 넘은 범위에 있는 단말로 전달하거나 중계하는 역할을 담당합니다.
+이 과정을 패키지 릴레이(Package Relay)라고 하며, 라우팅이라고 합니다.
+라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.
+
+## L3 스위치 (Layer 3 Switch)
+
+라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.
+
+## L3 프로토콜
+
+- IP (Internet Protocol)
+  - NAT (Network Address Translation)
+- ICMP (Internet Control Message Protocol)
+- OSPF (Open Shortest Path First)
+- BGP (Border Gateway Protocol)
 
 # Layer 4 - Transport Layer
 
-전송 계층(L4)은 **종단 간(end-to-end) 신뢰성 있는 데이터 전송**을 담당합니다.
-L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며, 세그먼트 단위로 데이터를 전송합니다.
-연결 지향 서비스(TCP)와 비연결 지향 서비스(UDP)를 제공하며, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
-주요 프로토콜로는 TCP, UDP, SCTP가 있습니다.
+L4(전송 계층)는 **종단 간(end-to-end) 신뢰성 있는 데이터 전송**을 담당합니다.
+L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며, **세그먼트** 단위로 데이터를 전송합니다.
+연결 지향 서비스(TCP)와 비연결 지향 서비스(UDP)를 제공하며,
+흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+
+## 방화벽 (Firewall)
+
+단말 사이에서 교환되는 패킷을 검사하여 허용할지 막을지 결정하는 기기입니다.
+패킷의 IP 주소나 포트 번호를 보고, 통신을 허가하거나 차단합니다.
+이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
+별도의 하드웨어로도 사용하지만, Netfilter 프레임워크를 이용한 iptables 같은 소프트웨어 방화벽도 널리 사용됩니다.
+
+## L4 프로토콜
+
+- TCP (Transmission Control Protocol)
+- UDP (User Datagram Protocol)
 
 # Layer 5 - Session Layer
 
-세션 계층(L5)은 **두 응용 프로그램 간의 대화(Session)를 관리하고 동기화**하는 역할을 합니다.
+L5(세션 계층)는 **두 응용 프로그램 간의 대화(Session)를 관리하고 동기화**하는 역할을 합니다.
 L5는 통신 세션을 구축하고 유지하며, 데이터 전송 중단 시 재개 지점을 관리합니다.
 또한, 전이중(Full-duplex) 및 반이중(Half-duplex) 통신 방식을 관리하고, 토큰 관리를 통해 상호배제를 보장합니다.
 보안 기능으로는 인증(Authentication), 허가(Authorization), 세션 복구(Session Recovery)가 포함됩니다.
-주요 표준으로는 NFS(Network File System), RPC(Remote Procedure Call)​가 있습니다.
+
+## L5 프로토콜
+
+- RPC (Remote Procedure Call)
 
 # Layer 6 - Presentation Layer
 
-표현 계층(L6)은 데이터의 구문과 표현을 담당하는 계층으로,
+L6(표현 계층)는 데이터의 구문과 표현을 담당하는 계층으로,
 **한 시스템의 애플리케이션 계층에서 보내는 데이터를 다른 시스템에서도 이해할 수 있는 형태로 변환**해 줍니다.
 문자 인코딩, 데이터 포맷 변환, 압축 및 암호화와 같은 작업들이 이 계층에서 이루어집니다.
 L6는 문자 코드 변환, 데이터 압축, 암호화 및 복호화를 수행하며, 데이터의 인코딩과 디코딩을 담당합니다.
-주요 표준으로는 파일 포맷 (JPEG, PNG, MP3), 문자 인코딩 (ASCII, Unicode), 암호화 프로토콜 (SSL, TLS) 등이 있습니다.
+
+## L6 프로토콜
+
+- 파일 포맷
+  - JPEG (Joint Photographic Experts Group)
+  - PNG (Portable Network Graphics)
+  - MP3 (MPEG-1 Audio Layer III)
+- 문자 인코딩
+  - ASCII (American Standard Code for Information Interchange)
+  - Unicode
+- 압축
+  - ZIP
+  - GZIP
+- 암호화
+  - SSL (Secure Sockets Layer)
+  - TLS (Transport Layer Security)
 
 # Layer 7 - Application Layer
 
-응용 계층(L7)은 사용자와 가장 가까운 계층으로, **응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공**합니다.
+L7(응용 계층)은 사용자와 가장 가까운 계층으로, **응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공**합니다.
 이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.
-주요 프로토콜로는 HTTP, FTP, SMTP, DNS, SSH 등이 있습니다.
+
+## L7 프로토콜
+
+- HTTP (HyperText Transfer Protocol)
+- FTP (File Transfer Protocol)
+- SMTP (Simple Mail Transfer Protocol)
+- DNS (Domain Name System)
+- SSH (Secure Shell)
+- SNMP (Simple Network Management Protocol)
+- SIP (Session Initiation Protocol)
 
 # 더 읽을 거리
 

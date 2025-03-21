@@ -176,6 +176,12 @@ tshark -i any -f 'host www.youtube.com' -T fields -e ip.src -e ip.dst -e tcp.por
 ```
 
 ```sh
+# 172.17.0.2을 제외한 443 port 패킷 캡처
+sudo tshark -i any -Y '((tcp.port == 443 or udp.port == 443) and not ip.addr == 172.17.0.2)'
+sudo tshark -i any -Y 'tcp.port == 443 or udp.port == 443'
+```wweded
+
+```sh
 # 테스트 모바일 앱에서 로컬 서버로 들어오는 패킷 캡처 (앱에서 서버 도메인을 private ip로 설정)
 tshark -i any -Y 'http and (tcp.port == 15500 or tcp.port == 33000) and ip.dst == 192.168.0.15' -T json
 ```
