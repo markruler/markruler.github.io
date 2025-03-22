@@ -12,10 +12,12 @@ categories:
   - wiki
 ---
 
-**TCP/IP 모델**은 미국 국방부 연구기관 DARPA에서 인터넷 초기 설계에 사용한 모델로 4계층으로 구성되어 있습니다.
+**TCP/IP 모델**은 1970년대 미국 국방부 연구기관 DARPA에서
+인터넷 초기 설계(ARPANet)에 사용한 모델로 4계층으로 구성되어 있습니다.
 실제 인터넷을 구현하기 위해 실용적 목적으로 개발되었습니다.
 
-반면 **OSI 모델**은 다양한 컴퓨터 시스템이 서로 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.[^1]
+반면 **OSI 모델**은 다양한 컴퓨터 시스템이 서로 통신할 수 있도록
+1984년 국제표준화기구(ISO)에서 만든 개념 모델입니다.[^1]
 이상적인 모델이기 때문에 실제 네트워크에서는 OSI 모델보다 TCP/IP 모델이 사용됩니다.
 이유는 모르겠지만 용어는 OSI 모델의 용어가 통용됩니다.
 
@@ -28,7 +30,7 @@ categories:
 
 먼저 공통 용어를 정리하며 시작하겠습니다.
 
-1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
+**1 계층**은 영어로 Layer 1, **줄여서 L1**이라고 부릅니다.
 이 글에서도 글을 줄여 쓰기 위해서 물리 계층은 L1이라고 표기하겠습니다.
 
 계층에서 처리하는 한 덩어리의 데이터 단위를 **PDU**(**Protocol Data Unit**)라고 부릅니다.
@@ -38,7 +40,7 @@ PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로�
 이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
 L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
 특히 L3의 **IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체**를 일컫기도 합니다.
-뭉뚱그려서 '패킷'[^2]이라고 부르죠.
+뭉뚱그려서 '**패킷**'[^2]이라고 부르죠.
 
 [^2]: Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등
 
@@ -84,16 +86,13 @@ NIC를 통해 LAN 케이블이나 전파로 보냅니다.
 **액세스 포인트**(**Access Point**)는 패킷을 전파로 변조/복조하는 기기입니다.
 쉽게 말하면 무선과 유선 사이의 다리 역할을 합니다.
 
-## L1 주요 프로토콜
-
-- IEEE802.3: 유선 LAN 프로토콜
-- IEEE802.11: 무선 LAN 프로토콜
-
 # Layer 2 - Data Link Layer
 
 L2(데이터 링크 계층)는 **직접 연결된 인접 노드(장치) 간 데이터 전송을 담당**합니다.
 L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이터를 전송합니다.
 또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
+
+<!-- MAC(Medium access control) 주소는 네트워크 인터페이스  -->
 
 ## L2 주요 기기
 
@@ -104,12 +103,48 @@ L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이�
 
 ## L2 주요 프로토콜
 
-- IEEE802.3: 유선 LAN 프로토콜
-- IEEE802.11: 무선 LAN 프로토콜
-- ARP (Address Resolution Protocol)
-- PPP (Point-to-Point Protocol)
-- L2TP (Layer 2 Tunneling Protocol)
-- HDLC (High-Level Data Link Control)
+[IEEE 802](https://en.wikipedia.org/wiki/IEEE_802)는 LAN(Local Area Network)과
+MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화 기구입니다.
+하위 워킹 그룹(working group)에 따라 다양한 프로토콜이 정의되어 있습니다.
+
+**유선 LAN 프로토콜**(**IEEE 802.3**)은 이더넷(Ethernet)에 대한 표준입니다.
+
+**무선 LAN 프로토콜**(**IEEE 802.11**)은 영어로 Wireless LAN(WLAN)이라고 하며, 와이파이(Wi-fi)가 대표적입니다.
+
+**IEEE 802.15**는 10m 정도 이내의 **초근거리 통신인 WPAN**(**Wireless Personal Area Network**)에 대한 표준입니다.
+하위 워킹 그룹으로 정말 다양한 프로토콜이 있습니다.
+
+- 블루투스 (IEEE 802.15.1)
+  - 저전력 근거리 통신.
+  - BR/EDR
+  - BLE(Bluetooth Low Energy)는 비콘(Beacon)에서 사용됩니다. 비콘은 주기적으로 신호를 송신하는 소형 무선 장치입니다.
+- Zigbee (IEEE 802.15.4)
+  - 저전력, 저속 무선 네트워크용. 주로 센서 네트워크, 홈 자동화에 사용됨.
+- RFID (Radio-Frequency Identification)
+  - 무선 주파수로 **태그**와 **리더**기 간 통신.
+  - NFC(Near Field Communication)는 기본적으로 RFID를 기반으로 만들어졌습니다. **13.56 MHz** 주파수를 사용하는 10cm 이내 초근거리 통신 기술입니다.
+
+IEEE 802 그룹 외에도 다양한 프로토콜도 있습니다.
+
+**ARP**(**Address Resolution Protocol**)는 MAC 주소와 L3에 해당되는 IP 주소를 매핑하는 프로토콜입니다.
+L2와 L3 사이에 있다고 볼 수 있습니다.
+
+**PPP**(**Point-to-Point Protocol**)는 **직렬 통신**을 위한 프로토콜입니다.
+전화선을 통해 인터넷에 접속하는 '다이얼업 접속'에서 사용된 프로토콜입니다.
+과거 인터넷 접속 시에 사용되던 모뎀은 PPP 프로토콜을 사용했습니다.
+이더넷 네트워크에서도 사용할 수 있도록 확장한 PPPoE(PPP over Ethernet)도 있습니다.
+
+<!-- https://youtu.be/LnGHcfcC-nE -->
+
+PPTP(Point-to-Point Tunneling Protocol)는 인터넷상에 가상 전용선(터널)을 만드는 **VPN** 프로토콜입니다.
+[RFC2637](https://datatracker.ietf.org/doc/html/rfc2637)에 정의되어 있습니다.
+보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
+macOS도 [Sierra(10.12)](https://support.apple.com/HT206844)부터 대응을 중단했습니다.
+
+L2TP(Layer 2 Tunneling Protocol)도 PPTP와 마찬가지로 인터넷상에 가상 전용선을 만드는 프로토콜입니다.
+[RFC2661](https://datatracker.ietf.org/doc/html/rfc2661)에 정의되어 있습니다.
+보안 기능을 가진 IPsec을 함께 사용해
+[L2TP over IPsec(RFC3193)](https://datatracker.ietf.org/doc/html/rfc3193)으로 사용하는 경우가 대부분입니다.
 
 # Layer 3 - Network Layer
 
