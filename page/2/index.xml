@@ -9,9 +9,205 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 00:10:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>IP로 지리적 위치(Geolocation) 찾기</title>
+        <link>https://markruler.github.io/posts/network/ip-geolocation/</link>
+        <pubDate>Thu, 29 Aug 2024 22:38:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/ip-geolocation/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/ip-geolocation/ -&lt;h1 id=&#34;현상&#34;&gt;현상&lt;/h1&gt;
+&lt;p&gt;약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했습니다.&lt;/p&gt;
+&lt;h1 id=&#34;원인&#34;&gt;원인&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-latency.png&#34; alt=&#34;ipapi Latency&#34;&gt;&lt;/p&gt;
+&lt;p&gt;해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;를 조회하는 기능이 가장 먼저 수행됩니다.
+국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스입니다.
+대략적인 코드는 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Cacheable(value = CacheName.IPAPI_COUNTRY_CODE, key = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#ipAddress&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Geolocation &lt;span style=&#34;color:#ff0&#34;&gt;findIsoCountryCode&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; String ipAddress) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (isPrivate(ipAddress)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.korea();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; ipapi = ipapiFeignClient.findGeolocationByIpAddress(ipAddress, IPAPI_ACCESS_KEY);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (ipapi != &lt;span style=&#34;color:#f00&#34;&gt;null&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.from(ipapi);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; ipInfoDB = ipInfoDBFeignClient.findGeolocationByIpAddress(ipAddress, IPINFODB_ACCESS_KEY);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (ipInfoDB != &lt;span style=&#34;color:#f00&#34;&gt;null&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.from(ipInfoDB);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.korea();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것입니다.&lt;/p&gt;
+&lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
+&lt;p&gt;이를 해결하기 위해 캐싱도 해봤지만 처음 접속한 IP의 경우 조회가 발생할 수 밖에 없었고,
+결정적으로 이렇게 처음 접속한 IP가 매우 많았다(약 130만 건/월)는 것입니다.&lt;/p&gt;
+&lt;p&gt;이 문제는 생각보다 간단하게 해결할 수 있었습니다.
+CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있는데,
+이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Akamai&lt;/strong&gt;는 EdgeScape 기능을 활성화하면 &lt;code&gt;X-Akamai-Edgescape&lt;/code&gt; 헤더로 확인할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;CloudFlare&lt;/strong&gt;는 관련 기능을 활성화 했을 경우 &lt;code&gt;CF-IPCountry&lt;/code&gt; 헤더로 확인할 수 있다고 합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Amazon CloudFront&lt;/strong&gt;는 &lt;code&gt;CloudFront-Viewer-Country&lt;/code&gt; 헤더로 확인할 수 있다고 합니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;구현-방법-spring-framework&#34;&gt;구현 방법 (Spring Framework)&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Target(ElementType.PARAMETER)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Retention(RetentionPolicy.RUNTIME)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; @interface GeoLocation {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Aspect
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Component
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@RequiredArgsConstructor
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; GeoLocationAspect {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; HttpServletRequest request;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; GeoLocationService service;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * &amp;lt;code&amp;gt;@annotation(GeoLocation)&amp;lt;/code&amp;gt;와 같은 방식은
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * &amp;lt;code&amp;gt;@GeoLocation&amp;lt;/code&amp;gt; 애노테이션이 붙은 메서드에만 적용됩니다.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Pointcut(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.GetMapping) || &amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            + &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.PostMapping) || &amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            + &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.RequestMapping)&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#ee82ee&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;mappingAnnotations&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Around(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;mappingAnnotations()&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Object &lt;span style=&#34;color:#ff0&#34;&gt;injectGeoLocation&lt;/span&gt;(ProceedingJoinPoint joinPoint) &lt;span style=&#34;color:#f00&#34;&gt;throws&lt;/span&gt; Throwable {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Method method = signature.getMethod();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Object[] args = joinPoint.getArgs();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Parameter[] parameters = method.getParameters();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#ee82ee&#34;&gt;int&lt;/span&gt; i = 0; i &amp;lt; parameters.length; i++) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (parameters[i].isAnnotationPresent(GeoLocation.class)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                Location geoLocation = getGeoLocationFromRequest();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#0f0&#34;&gt;// @GeoLocation 파라미터에 위치 정보를 주입합니다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                args[i] = geoLocation;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 메서드 호출을 진행합니다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; joinPoint.proceed(args);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * CDN, ipapi, IPInfoDB 순으로 접속 국가 코드 조회
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     *
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @return Geolocation
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; Location &lt;span style=&#34;color:#ff0&#34;&gt;getGeoLocationFromRequest&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; service.findLocation(request);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@GetMapping
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Response&amp;lt;Items&amp;gt; &lt;span style=&#34;color:#ff0&#34;&gt;control&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @GeoLocation &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; Location location,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @AuthenticationPrincipal &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; PrincipalDetailDto user,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @RequestBody @Valid &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; RequestDto requestDto
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    log.debug(location);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; success(service.process(requestDto));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;덤으로-얻은-정확성&#34;&gt;덤으로 얻은 정확성?&lt;/h1&gt;
+&lt;p&gt;추가로 해결되었던 점은 정확성이었습니다.&lt;/p&gt;
+&lt;p&gt;현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔습니다.
+확인해보니 ipapi에서 정확하지 않은 Geolocation 정보가 응답되고 있었습니다.
+이는 ipapi만의 문제가 아니었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/iplocation-inaccuracy.png&#34; alt=&#34;iplocation inaccuracy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;네덜란드이거나 아제르바이잔이거나 | &lt;a href=&#34;https://iplocation.io/&#34;&gt;iplocation.io&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-inaccuracy.png&#34; alt=&#34;ipapi inaccuracy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;파나마 공화국이었던 | &lt;a href=&#34;https://ipapi.com/&#34;&gt;ipapi&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었습니다.
+하지만 4개월이 지난 현재(8월 29일)에도 업데이트되지 않았습니다.&lt;/p&gt;
+&lt;p&gt;그렇다면 CDN Provider는 믿을 수 있을까요?
+저희 서비스에서 사용하는 Akamai 문서를 보면 신뢰도가 높아보였습니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&amp;ldquo;How Does Akamai Know the Location of an IP Address?&amp;rdquo; | &amp;lt;Akamai EdgeScape Methodology&amp;gt; 발췌&lt;/p&gt;
+&lt;p&gt;(Akamai Control &amp;gt; Download Center &amp;gt; Core Features &amp;gt; EdgeScape)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Public Registry Data&lt;/strong&gt;
+We obtain geographic information for the IP blocks registered with the various public Internet registries and ISPs. This information forms the base layer of the database.
+As this is public information registered for blocks of addresses, we trust this data the least when analyzing the different sources of data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hostname Pattern Matching&lt;/strong&gt;
+Many machines on the Internet (routers, servers, POPs, and even end-user machines) have a hostname (reverse DNS entry) associated with them.
+In many cases, these hostnames contain geographic information hinting at the location of that machine.
+By analyzing hostnames from different networks and ISPs, we have built up, and continue to add to,
+a database of patterns that allows us to extract the geographic information embedded in these names.
+It also allows us to extrapolate the location of other machines on the Internet,
+by giving us data points that can be used when tracing to other IPs.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Known Locations&lt;/strong&gt;
+Akamai has an extensive network of servers distributed across the globe, which act as data points when determining the location of machines nearby.
+We also have relationships with networks and customers all over the world.
+In order to serve their traffic efficiently, we sometimes get useful information from them regarding the location of their servers,
+which we can also use as data points in creating our geographic database.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Active Measurement&lt;/strong&gt;
+Due to Akamai&amp;rsquo;s extensive customer base, we have the unique ability to know at any given time a large fraction of &amp;ldquo;active&amp;rdquo; end-user IPs on the net.
+We then perform traceroutes and pings from various points on our globally distributed network to these active IPs.
+We also perform a reduced number of traces and pings to IPs in the non end-user space, such as routers and infrastructure servers.&lt;br&gt;
+&lt;br&gt;
+When analyzing the traces, we use the location of machines determined using the Hostname pattern matching described above
+and the geographic information from the Internet registries to determine the location of the IP traced to.
+In addition, we use the latency information contained within the trace and the latency information gathered from pinging routers,
+along with the limitations imposed by speed-of-light bounds,
+in order to weed out bad data and increase the probability of the location we choose being correct.&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;h2 id=&#34;제로-트러스트&#34;&gt;제로 트러스트!&lt;/h2&gt;
+&lt;p&gt;하지만 하루만에 문제가 발생했습니다.
+간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었습니다.&lt;/p&gt;
+&lt;p&gt;확인해보니 Akamai에서 전달하는 &lt;code&gt;True-Client-IP&lt;/code&gt; 헤더는 실제 한국 사용자 IP였고,
+&lt;code&gt;X-Akamai-EdgeScape&lt;/code&gt; 헤더에는 미국(country_code=US),
+&lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;는 Akamai 엣지 서버의 IP가 전달되고 있었습니다.
+이 경우 &lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 달랐습니다.
+그래서 &lt;strong&gt;&lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐싱하도록 설정했습니다.&lt;/strong&gt;
+(CDN -&amp;gt; ipapi -&amp;gt; IPInfoDB 순)&lt;/p&gt;
+&lt;p&gt;추가로 Apache에서 &lt;code&gt;RemoteIPHeader X-Forwarded-For&lt;/code&gt; 설정이 있으면
+프록시 서버들의 IP는 모두 빠지고 Client IP만 남습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;
+그래서 해당 설정을 제거했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 합니다.&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;VirtualHost *:443&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ServerName www.example.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyRequests Off
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyVia Off
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyPreserveHost On
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    # RemoteIPHeader X-Forwarded-For
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyAddHeaders On
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/VirtualHost&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;True-Client-IP 헤더
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://techdocs.akamai.com/property-mgr/docs/origin-server#true-client-ip-header&#34;&gt;Akamai | &lt;code&gt;True-Client-IP&lt;/code&gt; 설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/true-client-ip-header/&#34;&gt;Cloudflare | &lt;code&gt;True-Client-IP&lt;/code&gt; 설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-true-client-ip-header.html&#34;&gt;AWS CloudFront | &lt;code&gt;True-Client-IP&lt;/code&gt; 헤더 추가하기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;조회하는 정보는 &lt;a href=&#34;https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2&#34;&gt;국가 코드 2자리(ISO 3166-1 alpha-2)&lt;/a&gt;입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://techdocs.akamai.com/property-mgr/docs/content-tgting&#34;&gt;Content Targeting (EdgeScape)&lt;/a&gt; | Akamai&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/ip-geolocation/&#34;&gt;IP geolocation&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/adding-cloudfront-headers.html&#34;&gt;Add CloudFront request headers&lt;/a&gt; | Amazon CloudFront&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For&#34;&gt;X-Forwarded-For&lt;/a&gt; | mdn web docs&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader&#34;&gt;Apache Module mod_remoteip&lt;/a&gt; | Apache&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/network/ip-geolocation/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1849,162 +2045,6 @@ Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Too many open files</title>
-        <link>https://markruler.github.io/posts/java/too-many-open-files/</link>
-        <pubDate>Mon, 20 Mar 2023 21:58:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/java/too-many-open-files/</guid>
-        <description>임창수 https://markruler.github.io/posts/java/too-many-open-files/ -&lt;blockquote&gt;
-&lt;p&gt;커버 이미지 출처: &lt;a href=&#34;https://stablediffusionweb.com/&#34;&gt;Stable diffusion&lt;/a&gt; &amp;ldquo;swimming pool lane pattern&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;증상&#34;&gt;증상&lt;/h1&gt;
-&lt;p&gt;Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었습니다.
-요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생했습니다.
-작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
-IDC에 위치한 서버(CentOS 7)에서는 &lt;code&gt;OutOfMemoryError&lt;/code&gt;가 발생하면서 동작하지 않았습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.lang.OutOfMemoryError: unable to create new native thread
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Caused by: java.net.SocketException: Too many open files
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;SocketException&lt;/code&gt;인데 &lt;code&gt;Too many open files&lt;/code&gt;? &lt;strong&gt;이게 OOM&lt;/strong&gt;?
-이해되지 않았습니다.&lt;/p&gt;
-&lt;p&gt;문제를 정의하기 위해 먼저 이해부터 해야 했습니다.&lt;/p&gt;
-&lt;h1 id=&#34;분석&#34;&gt;분석&lt;/h1&gt;
-&lt;h2 id=&#34;too-many-open-files&#34;&gt;Too many open files&lt;/h2&gt;
-&lt;p&gt;근본적인 원인이 되는 &lt;code&gt;Too many open files&lt;/code&gt;는
-프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생합니다.
-로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 우선 별도의 세션을 연다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bash
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;prlimit&lt;/code&gt;를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prlimit -n
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;기본적으로 &lt;strong&gt;4096&lt;/strong&gt;이 설정되어 있었습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RESOURCE DESCRIPTION              SOFT    HARD UNITS
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NOFILE   max number of open files &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1048576&lt;/span&gt; files
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;ulimit&lt;/code&gt;를 이용해 열 수 있는 파일 디스크립터 수를 제한합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그리고 &lt;code&gt;cat&lt;/code&gt; 명령어를 실행하면 &lt;code&gt;Too many open files&lt;/code&gt;가 발생합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# bash: start_pipeline: pgrp pipe: Too many open files&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 나갔다가 새로운 세션을 생성합니다.
-limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
-하지만 에러가 발생했습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# bash: start_pipeline: pgrp pipe: Too many open files&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# PRETTY_NAME=&amp;#34;Ubuntu 22.04.2 LTS&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;5로 설정하면 에러가 발생하지 않고 정상적으로 출력됩니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ulimit -n &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat /etc/os-release
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# PRETTY_NAME=&amp;#34;Ubuntu 22.04.2 LTS&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이유가 무엇일까요?&lt;/p&gt;
-&lt;h2 id=&#34;파일-디스크립터-file-descriptor&#34;&gt;파일 디스크립터 (File descriptor)&lt;/h2&gt;
-&lt;p&gt;리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환합니다.
-반환된 파일 디스크립터는 &lt;code&gt;fdtable&lt;/code&gt;의 참조값을 나타내며, 파일을 읽고 쓰는데 사용됩니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;stuct task_struct {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;/* Filesystem information: */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; fs_struct    *fs;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;/* Open file information: */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; files_struct *files;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;/*
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; * Open file table structure
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt; */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; files_struct {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; fdtable __rcu *fdt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;struct&lt;/span&gt; file __rcu * fd_array[NR_OPEN_DEFAULT];
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;em&gt;정확히 fd를 어떻게 찾는지는 확인하지 않았습니다. 나중에 &lt;a href=&#34;https://m.blog.naver.com/arcyze/60048807080&#34;&gt;이 블로그&lt;/a&gt;를 참고해서 공부해봐야겠습니다.&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;fdtable&lt;/code&gt;의 0번 fd는 표준 입력(&lt;code&gt;stdin&lt;/code&gt;), 1번 fd는 표준 출력(&lt;code&gt;stdout&lt;/code&gt;),
-2번 fd는 표준 에러(&lt;code&gt;stderr&lt;/code&gt;)입니다.
-3번 fd부터 어떤 작업을 수행하는 프로세스가 필요한 파일을 가리킵니다.
-그래서 &lt;code&gt;ulimit -n 4&lt;/code&gt;로 설정하면 정상적으로 &lt;code&gt;cat&lt;/code&gt;의 출력이 나오는 것입니다.&lt;/p&gt;
-&lt;p&gt;다시 문제로 돌아가서 그럼 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;는 왜 발생했던 걸까요?&lt;/p&gt;
-&lt;p&gt;Linux에서는 Socket도 파일로 취급합니다.
-그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
-시스템 제한을 초과하면 &lt;code&gt;Too many open files&lt;/code&gt; 에러가 발생하는 것입니다.&lt;/p&gt;
-&lt;p&gt;문제가 발생했던 서버의 시스템 제한을 확인해봤습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prlimit -n
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RESOURCE DESCRIPTION              SOFT    HARD UNITS
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NOFILE   max number of open files &lt;span style=&#34;color:#f60&#34;&gt;1024&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1048576&lt;/span&gt; files
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 제한을 늘리면 문제가 해결될 것 같았습니다.
-그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였습니다.
-갑자기 요청이 늘어난 원인이 무엇일까요?&lt;/p&gt;
-&lt;p&gt;혼자가 아닌 함께 개발할 때,
-내가 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
-해당 소스 코드를 복사해서 사용하는 경우가 많았습니다.
-&lt;code&gt;OkHttpClient&lt;/code&gt;도 그대로 복사해서 사용했었습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OkHttpClient client = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; OkHttpClient();
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;하지만 &lt;code&gt;OkHttpClient&lt;/code&gt;를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성됩니다.
-파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트 해봤습니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/jvm-monitoring/#visualvm&#34;&gt;VisualVM&lt;/a&gt;을 사용해서 스레드를 확인해봤습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/too-many-open-files/visualvm-bad-okhttp-connectionpool.png&#34; alt=&#34;visualvm-bad-okhttp-connectionpool&#34;&gt;&lt;/p&gt;
-&lt;p&gt;OkHttp ConnectionPool의 스레드가 4,000개가 채 못 되어 &lt;code&gt;java.net.SocketException: Too many open files&lt;/code&gt;이 발생했습니다.&lt;/p&gt;
-&lt;h1 id=&#34;문제-정의&#34;&gt;문제 정의&lt;/h1&gt;
-&lt;p&gt;실제 문제는 불필요한 스레드가 과다 생성되어 발생한 것입니다.
-&lt;strong&gt;이 에러가 특히 위험한 이유는 시스템 제한을 초과했기 때문에 동일한 머신에 있는 다른 프로세스에도 영향을 준다는 것입니다.&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
-&lt;p&gt;&lt;code&gt;OkHttp ConnectionPool&lt;/code&gt;을 재사용하기 위해 Spring Bean으로 등록했습니다.
-&lt;strong&gt;이는 &lt;a href=&#34;https://square.github.io/okhttp/5.x/okhttp/okhttp3/-ok-http-client/index.html&#34;&gt;공식 문서&lt;/a&gt;에도 있는 내용입니다.&lt;/strong&gt;&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;OkHttpClients Should Be Shared&lt;/strong&gt;
-&lt;br&gt;
-OkHttp performs best when you create a single OkHttpClient instance
-and reuse it for all of your HTTP calls.
-This is because each client holds its own connection pool and thread pools.
-Reusing connections and threads reduces latency and saves memory.
-Conversely, creating a client for each request wastes resources on idle pools.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; okhttp3.OkHttpClient;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; org.springframework.context.annotation.Bean;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; org.springframework.context.annotation.Configuration;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Configuration
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; OkHttpConfig {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Bean
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; OkHttpClient &lt;span style=&#34;color:#ff0&#34;&gt;okHttpClient&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; OkHttpClient();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; okhttp3.OkHttpClient;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; org.springframework.beans.factory.annotation.Autowired;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; org.springframework.stereotype.Component;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Component
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; MyHttpClient {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; OkHttpClient httpClient;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Autowired
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;MyHttpClient&lt;/span&gt;(OkHttpClient httpClient) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.httpClient = httpClient;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;// ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다시 4,000개의 요청을 보내도록 테스트 했습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/too-many-open-files/visualvm-okhttpclient-bean.png&#34; alt=&#34;visualvm okhttpclient bean&#34;&gt;&lt;/p&gt;
-&lt;p&gt;더 이상 불필요하게 스레드가 늘어나지 않았고,
-스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었습니다.
-(평균 10초 → 3초)&lt;/p&gt;
-&lt;p&gt;시스템 제한 설정을 변경할 필요 없이 &lt;code&gt;Too many open files&lt;/code&gt; 에러도 발생하지 않았습니다.&lt;/p&gt;
-- https://markruler.github.io/posts/java/too-many-open-files/ - Im Changsu | Since 2020</description>
         </item>
     
     

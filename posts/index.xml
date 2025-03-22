@@ -9,8 +9,15 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Fri, 21 Mar 2025 23:08:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 00:10:00 +0900</lastBuildDate>
     <atom:link href="https://markruler.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기</title>
+      <link>https://markruler.github.io/posts/network/http-response-compression/</link>
+      <pubDate>Sun, 23 Mar 2025 00:10:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
+      <guid>https://markruler.github.io/posts/network/http-response-compression/</guid>
+      <description>&lt;p&gt;클라이언트 로딩 시간을 줄이기 위해 API 하나에 많은 걸 담기 시작했습니다.&#xA;브라우저에서는 HTTP/1.1 연결 시 최대 6개의 커넥션만 허용해주기 때문입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&#xA;그래서 서버 응답 데이터의 사이즈가 점점 커지기 시작했고,&#xA;덩달아 CDN과 IDC 네트워크 트래픽(outbound) 비용이 늘기 시작했습니다.&#xA;그 중에는 변하지 않는 데이터도 포함되어 있고, 변하는 데이터도 포함되어 있습니다.&#xA;변하지 않는 데이터는 중간 레이어에서 캐시를 통해 해결할 수도 있지만,&#xA;이 글에서는 서버에서 응답 데이터를 압축해서 보내는 방법을 소개합니다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;spring-boot-애플리케이션-설정&#34;&gt;Spring Boot 애플리케이션 설정&lt;/h1&gt;&#xA;&lt;p&gt;서버에서 클라이언트에 응답 시 응답 데이터를 압축해서 보낼 수 있습니다.&#xA;Spring Boot 애플리케이션이라면 간단하게 &lt;code&gt;application.yaml&lt;/code&gt; 파일에 아래 설정만 추가하면 됩니다.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>네트워크 레이어</title>
       <link>https://markruler.github.io/posts/network/network-layer/</link>
@@ -26,11 +33,11 @@
       <description>&lt;p&gt;절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.&#xA;그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&#xA;하지만 펼칠 때마다 목차&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;가 없으면 발췌독하기 불편한데요.&#xA;오픈 소스 OCR 도구인 Tesseract를 이용해 PDF 목차를 만들어보겠습니다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;사적이용을-위한-저작권법&#34;&gt;사적이용을 위한 저작권법&lt;/h1&gt;&#xA;&lt;p&gt;먼저 저작권에 대해 확인해야 할 부분이 있습니다.&#xA;과연 책을 스캔해서 PDF로 만드는 것이 합법일까요?&#xA;인터넷에 검색해보면 도서관에서 빌린 책을 스캔하는 건 불법이라고 하는 경우가 많은 것 같습니다.&#xA;&lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C30%EC%A1%B0&#34;&gt;저작권법 제30조&lt;/a&gt;를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;</description>
     </item>
     <item>
-      <title>네트워크 대역폭으로 발생한 복합적인 시스템 장애</title>
+      <title>네트워크 대역폭과 NFS 지연</title>
       <link>https://markruler.github.io/posts/network/nfs-network-bandwidth/</link>
       <pubDate>Mon, 13 Jan 2025 19:13:00 +0900</pubDate><author>imcxsu@gmail.com (Im Changsu)</author>
       <guid>https://markruler.github.io/posts/network/nfs-network-bandwidth/</guid>
-      <description>&lt;h1 id=&#34;배경&#34;&gt;배경&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;IDC마다 다르겠지만 일반적으로 Inbound/Outbound 네트워크 트래픽 양에 따라 비용을 부과합니다. 제가 속한 팀은 트래픽 비용을 줄이기 위해 기존에 사설망(private network) 없이 내부 서버 간 통신하던 시스템에 사설망을 추가했습니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/nfs-network-bandwidth/static-file-server.png&#34; alt=&#34;static-file-server.png&#34;&gt;&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;DB 백업을 위해 Veeam을 사용하다가 expdp와 RMAN을 사용하기 시작했고, NFS 마운트 된 스토리지에 백업본을 저장했습니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;&#xA;&lt;p&gt;NFS 마운트 된 정적 파일들(이미지, 스크립트 파일)을 조회하는 서버에서만 부하가 발생하기 시작했습니다.&lt;/p&gt;&#xA;&lt;p&gt;확인해보니 DB 서버 회선에서 허용되는 네트워크 대역폭(1Gbps)의 100%를 사용하는 경우가 계속 발생했고, 덩달아 NFS 접근도 느려진 것입니다.&#xA;백업 기능을 변경한 후 발생했습니다.&lt;/p&gt;</description>
+      <description>&lt;p&gt;IDC마다 다르겠지만 일반적으로 Outbound 네트워크 트래픽 양에 따라 비용을 부과합니다.&#xA;제가 속한 팀은 트래픽 비용을 줄이기 위해 기존에 사설망(private network) 없이&#xA;내부 서버 간 통신하던 시스템에 사설망을 추가했습니다.&lt;/p&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/nfs-network-bandwidth/static-file-server.png&#34; alt=&#34;static-file-server.png&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;DB 백업을 위해 Veeam을 사용하다가 expdp와 RMAN을 사용하기 시작했고,&#xA;NFS 마운트 된 스토리지에 백업본을 저장했습니다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;&#xA;&lt;p&gt;NFS 마운트 된 정적 파일들(이미지, 스크립트 파일)을 조회하는 서버에서만 부하가 발생하기 시작했습니다.&lt;/p&gt;&#xA;&lt;p&gt;확인해보니 DB 서버 회선에서 허용되는 네트워크 대역폭(1Gbps)의 100%를 사용하는 경우가 계속 발생했고,&#xA;덩달아 NFS 접근도 느려진 것입니다.&#xA;백업 기능을 변경한 후 발생했습니다.&lt;/p&gt;</description>
     </item>
     <item>
       <title>일상에서의 Wireshark</title>

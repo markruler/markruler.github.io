@@ -829,7 +829,24 @@ L3는 <strong>IP 주소</strong>를 이용해 데이터를 라우팅하고, <str
 <p><strong>IP</strong>(<strong>Internet Protocol</strong>)는
 <a href="https://datatracker.ietf.org/doc/html/rfc791">RFC791</a>에 정의된 프로토콜로, <strong>패킷</strong>을 전송하는 역할을 합니다.
 패킷을 전송하기 위해 송신지 IP 주소와 수적지 IP 주소가 IP 헤더에 포함됩니다.</p>
-<p><strong>NAT</strong>(<strong>Network Address Translation</strong>)는
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span> 0               1               2               3
+</span></span><span style="display:flex;"><span> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|Version|  IHL  |Type of Service|          Total Length         |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|         Identification        |Flags|      Fragment Offset    |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|  Time to Live |    Protocol   |         Header Checksum       |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                       Source Address                          |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                    Destination Address                        |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                    Options                    |    Padding    |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|         IP Payload (TCP Segment / UDP Datagram) ...
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+</span></span></code></pre></div><p><strong>NAT</strong>(<strong>Network Address Translation</strong>)는
 사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
 NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
 NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
@@ -861,6 +878,40 @@ CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &lsquo;1&rsquo;의 �
 <a href="https://datatracker.ietf.org/doc/html/rfc1122">RFC1122</a>에 정의되어 있습니다.
 Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
 <a href="https://datatracker.ietf.org/doc/html/rfc1918">RFC1918</a>에 정의되어 있습니다.</p>
+<table>
+  <thead>
+      <tr>
+          <th>Class</th>
+          <th>Start Address</th>
+          <th>End Address</th>
+          <th>Subnet Mask</th>
+          <th>Maximum Hosts</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>A</td>
+          <td>10.0.0.0</td>
+          <td>10.255.255.255</td>
+          <td>255.0.0.0   (/8)</td>
+          <td>16,777,214 (=2^24 - 2)</td>
+      </tr>
+      <tr>
+          <td>B</td>
+          <td>172.16.0.0</td>
+          <td>172.132.255.255</td>
+          <td>255.240.0.0 (/12)</td>
+          <td>1,048,574  (=2^20 - 2)</td>
+      </tr>
+      <tr>
+          <td>C</td>
+          <td>192.168.0.0</td>
+          <td>192.168.255.255</td>
+          <td>255.0.0.0   (/16)</td>
+          <td>65,534     (=2^16 - 2)</td>
+      </tr>
+  </tbody>
+</table>
 <h3 id="ip-라우팅">IP 라우팅</h3>
 <p>라우터는 라우팅 테이블(Routing Table)을 통해
 수신지 네트워크 정보와 IP 패킷을 전송할 근접 기기의 IP 주소를 나타내는 네트워크 홉 정보를 관리함으로써
@@ -903,14 +954,42 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 <h2 id="l4-주요-프로토콜">L4 주요 프로토콜</h2>
 <p><strong>UDP</strong>(<strong>User Datagram Protocol</strong>)는 실시간성을 요하는 애플리케이션에 사용되는
 <strong>비연결</strong>(Connectionless) 지향 프로토콜입니다.(<a href="https://datatracker.ietf.org/doc/html/rfc768">RFC768</a>)</p>
-<p><strong>TCP</strong>(<strong>Transmission Control Protocol</strong>)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span> 0                   1                   2                   3
+</span></span><span style="display:flex;"><span> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|          Source Port          |       Destination Port        |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|            Length             |            Checksum           |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|              UDP Payload (Application data) ...                              
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+</span></span></code></pre></div><p><strong>TCP</strong>(<strong>Transmission Control Protocol</strong>)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
 (<a href="https://datatracker.ietf.org/doc/html/rfc793">RFC793</a>)
 <strong>3 Way Handshake</strong>를 시작으로 연결 수립 후 통신합니다.
 TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
 <strong>흐름 제어</strong>(<strong>Flow Control</strong>)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
 <strong>혼잡 제어</strong>(<strong>Congestion Control</strong>)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
 <strong>재전송 제어</strong>(<strong>Retransmission Control</strong>)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.</p>
-<h3 id="포트-번호">포트 번호</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span> 0                   1                   2                   3
+</span></span><span style="display:flex;"><span> 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|          Source Port          |       Destination Port        |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                        Sequence Number                        |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                    Acknowledgment Number                      |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|  Data |           |U|A|P|R|S|F|                               |
+</span></span><span style="display:flex;"><span>| Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+</span></span><span style="display:flex;"><span>|       |           |G|K|H|T|N|N|                               |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|           Checksum            |         Urgent Pointer        |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|                    Options                    |    Padding    |
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+</span></span><span style="display:flex;"><span>|              TCP Payload (Application data) ...                              
+</span></span><span style="display:flex;"><span>+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+</span></span></code></pre></div><h3 id="포트-번호">포트 번호</h3>
 <p><strong>포트 번호</strong>(<strong>Port Number</strong>)는 <strong>프로세스 간 통신을 위한 번호</strong>입니다.</p>
 <table>
   <thead>
@@ -1023,9 +1102,9 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&#160;<a href="#fnref:5"
             <nav class="post-pagination">
 
                 
-                <div class="newer-posts">
-			다음글<br>다음글이 없습니다.
-                </div>
+                <a class="newer-posts" href="/posts/network/http-response-compression/">
+			다음글<br>HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기
+                </a>
                 
                 
                 

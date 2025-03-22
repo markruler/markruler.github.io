@@ -5,7 +5,7 @@
   
   임창수
   
-  | 네트워크 대역폭과 NFS 지연
+  | HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기
   
   
 </title>
@@ -18,24 +18,25 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="사실 아직도 정확히 이해하지 못한 문제">
+<meta name="description" content="gzip compression">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="/manifest.json">
 
 
 
-<meta property="og:url" content="https://markruler.github.io/posts/network/nfs-network-bandwidth/">
+<meta property="og:url" content="https://markruler.github.io/posts/network/http-response-compression/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="네트워크 대역폭과 NFS 지연">
-  <meta property="og:description" content="사실 아직도 정확히 이해하지 못한 문제">
+  <meta property="og:title" content="HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기">
+  <meta property="og:description" content="gzip compression">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2025-01-13T19:13:00+09:00">
-    <meta property="article:modified_time" content="2025-01-13T19:13:00+09:00">
-    <meta property="article:tag" content="NFS">
-    <meta property="og:image" content="https://markruler.github.io/images/network/nfs-network-bandwidth/static-file-server.png">
+    <meta property="article:published_time" content="2025-03-23T00:10:00+09:00">
+    <meta property="article:modified_time" content="2025-03-23T00:10:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Http">
+    <meta property="og:image" content="https://markruler.github.io/images/network/network-layer/osi-7-layer-bytebytego.png">
 
 
 
@@ -43,9 +44,9 @@
 
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://markruler.github.io/images/network/nfs-network-bandwidth/static-file-server.png">
-  <meta name="twitter:title" content="네트워크 대역폭과 NFS 지연">
-  <meta name="twitter:description" content="사실 아직도 정확히 이해하지 못한 문제">
+  <meta name="twitter:image" content="https://markruler.github.io/images/network/network-layer/osi-7-layer-bytebytego.png">
+  <meta name="twitter:title" content="HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기">
+  <meta name="twitter:description" content="gzip compression">
 
 
 
@@ -179,8 +180,8 @@
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
-									문제
+								<a href="#spring-boot-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98-%ec%84%a4%ec%a0%95" class="nav-spring-boot-애플리케이션-설정">
+									Spring Boot 애플리케이션 설정
 								</a>
 							</li>
 						
@@ -197,8 +198,26 @@
 						
 						
 							<li>
-								<a href="#%ea%b2%b0%eb%a1%a0" class="nav-결론">
-									결론
+								<a href="#%ea%b2%b0%ea%b3%bc" class="nav-결과">
+									결과
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						
@@ -262,27 +281,30 @@
                 
             >
                 <div class="post-title">
-                    네트워크 대역폭과 NFS 지연
+                    HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기
                     
                     <div class="post-subtitle">
-                        사실 아직도 정확히 이해하지 못한 문제
+                        gzip compression
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2025-01-13 19:13
+                            2025-03-23 00:10
                         </time>
                         
 
                         
-                            <a href="/categories/blog">[blog]</a>
+                            <a href="/categories/wiki">[wiki]</a>
                             &nbsp;
                         
 
                         
                             
-                                <a href="/tags/nfs">NFS</a>
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/http">http</a>
                                 &nbsp;
                             
                         
@@ -295,34 +317,56 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <p>IDC마다 다르겠지만 일반적으로 Outbound 네트워크 트래픽 양에 따라 비용을 부과합니다.
-제가 속한 팀은 트래픽 비용을 줄이기 위해 기존에 사설망(private network) 없이
-내부 서버 간 통신하던 시스템에 사설망을 추가했습니다.</p>
-<p><img src="/images/network/nfs-network-bandwidth/static-file-server.png" alt="static-file-server.png"></p>
-<p>DB 백업을 위해 Veeam을 사용하다가 expdp와 RMAN을 사용하기 시작했고,
-NFS 마운트 된 스토리지에 백업본을 저장했습니다.</p>
-<h1 id="문제">문제</h1>
-<p>NFS 마운트 된 정적 파일들(이미지, 스크립트 파일)을 조회하는 서버에서만 부하가 발생하기 시작했습니다.</p>
-<p>확인해보니 DB 서버 회선에서 허용되는 네트워크 대역폭(1Gbps)의 100%를 사용하는 경우가 계속 발생했고,
-덩달아 NFS 접근도 느려진 것입니다.
-백업 기능을 변경한 후 발생했습니다.</p>
-<p><img src="/images/network/nfs-network-bandwidth/inbound-db-server.png" alt="static-file-server.png"></p>
-<p><em>Inbound (DB server)</em></p>
-<p><img src="/images/network/nfs-network-bandwidth/outbound-storage-server.png" alt="static-file-server.png"></p>
-<p><em>Outbound (Storage server)</em></p>
-<p>레거시 서버에서 파일 업로드 기능 중 NFS 마운트 된 스토리지 서버에 저장하는 기능이 있었는데,
-해당 기능에 DB 트랜잭션도 함께 묶이면서 DB에도 영향이 있었습니다.
-가장 큰 문제는 레거시 프로젝트에 DB 트랜잭션 타임아웃 설정이 없어서 지속적으로 대기하는 상황이 발생했습니다.</p>
-<h1 id="결론">결론</h1>
-<p>전체 시스템에 장애를 발생시킨 직접적인 원인은 트랜잭션 타임아웃이었지만,
-근본적인 원인은 NFS 마운트 된 디렉토리에 과도한 입출력이 발생한 것이었습니다.
-DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 해결은 되었습니다.</p>
-<p>하지만 장애가 발생한 후 확인하는 것이 아닌 발생하기 전 예방하는 것이 좋다고 생각합니다.
-기능 설계 시 처리 가능한 트래픽 양을 계산하고, 부하 테스트를 통해 내구성을 테스트해야 합니다.</p>
+                    <p>클라이언트 로딩 시간을 줄이기 위해 API 하나에 많은 걸 담기 시작했습니다.
+브라우저에서는 HTTP/1.1 연결 시 최대 6개의 커넥션만 허용해주기 때문입니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
+그래서 서버 응답 데이터의 사이즈가 점점 커지기 시작했고,
+덩달아 CDN과 IDC 네트워크 트래픽(outbound) 비용이 늘기 시작했습니다.
+그 중에는 변하지 않는 데이터도 포함되어 있고, 변하는 데이터도 포함되어 있습니다.
+변하지 않는 데이터는 중간 레이어에서 캐시를 통해 해결할 수도 있지만,
+이 글에서는 서버에서 응답 데이터를 압축해서 보내는 방법을 소개합니다.</p>
+<h1 id="spring-boot-애플리케이션-설정">Spring Boot 애플리케이션 설정</h1>
+<p>서버에서 클라이언트에 응답 시 응답 데이터를 압축해서 보낼 수 있습니다.
+Spring Boot 애플리케이션이라면 간단하게 <code>application.yaml</code> 파일에 아래 설정만 추가하면 됩니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>server:
+</span></span><span style="display:flex;"><span>  compression:
+</span></span><span style="display:flex;"><span>    enabled: <span style="color:#f00">true</span>
+</span></span><span style="display:flex;"><span>    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+</span></span><span style="display:flex;"><span>    min-response-size: <span style="color:#f60">1024</span>
+</span></span></code></pre></div><p>Servlet Filter에서 Response의 OutputStream을 <code>GZIPOutputStream</code>으로 교체하면
+좀 더 세밀하게 설정할 수 있습니다.
+예를 들면, 특정 경로만 압축한다거나 압축 정도를 조절할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<h1 id="결과">결과</h1>
+<p>Akamai CDN을 통해서 확인해보니
+<a href="https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule#caching">offload</a>
+(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는) 트래픽 양이 확연히 늘었고,
+Origin 응답 트래픽 양이 줄어들었습니다.</p>
+<p><img src="/images/network/http-response-compression/akamai-load-compression.png" alt="Akamai CDN load compression"></p>
+<p>네트워크 대역폭과 처리량에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
+하지만 사이즈 자체가 작아지면서 네트워크 비용을 줄일 수 있습니다.</p>
+<p><img src="/images/network/http-response-compression/before-after-http-response-compression.png" alt="before and after http response compression"></p>
+<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<ul>
+<li><a href="https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression">Compression in HTTP</a> | MDN</li>
+<li><a href="https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding">Content-Encoding</a> | MDN</li>
+<li><a href="https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Transfer-Encoding">Transfer-Encoding</a> | MDN</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546">Chrome Docs</a> 참조.
+최신 브라우저나 프록시 서버는 대부분 HTTP/2 혹은 HTTP/3를 지원하지만,
+여러 개의 요청으로 나눈다해도 그만큼의 네트워크 트래픽이 발생합니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://jongmin4943.tistory.com/entry/Spring-%ED%8A%B9%EC%A0%95-API%EC%9D%98-Response-%EC%95%95%EC%B6%95%ED%95%98%EA%B8%B0">Spring 특정 API의 Response 압축하기</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2025-01-13</p>
+		    <p style="color:#777;">최종 수정: 2025-03-23</p>
                     
                 </div>
             </div>
@@ -331,14 +375,14 @@ DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 �
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/pdf/pdf-editor/">
-			다음글<br>비파괴 스캐너로 스캔한 책 PDF outline 만들기
-                </a>
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
                 
                 
                 
-                <a class="older-posts" href="/posts/network/wireshark/">
-			이전글<br>일상에서의 Wireshark
+                <a class="older-posts" href="/posts/network/network-layer/">
+			이전글<br>네트워크 레이어
                 </a>
                 
             </nav>
@@ -369,7 +413,7 @@ DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 �
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnfs-network-bandwidth%2f&amp;text=%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%8c%80%ec%97%ad%ed%8f%ad%ea%b3%bc%20NFS%20%ec%a7%80%ec%97%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fhttp-response-compression%2f&amp;text=HTTP%20%ec%9d%91%eb%8b%b5%20%ed%8c%a8%ed%82%b7%ec%9d%84%20%ec%95%95%ec%b6%95%ed%95%b4%ec%84%9c%20Outbound%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%b9%84%ec%9a%a9%20%ec%a0%88%ec%95%bd%ed%95%98%ea%b8%b0" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:all">
@@ -386,7 +430,7 @@ DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 �
     
     
     <li>
-      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnfs-network-bandwidth%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fhttp-response-compression%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
   <circle cx="24" cy="24" fill="#4E71A8" r="24" />
   <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
@@ -405,7 +449,7 @@ DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 �
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%8c%80%ec%97%ad%ed%8f%ad%ea%b3%bc%20NFS%20%ec%a7%80%ec%97%b0.&amp;body=%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%8c%80%ec%97%ad%ed%8f%ad%ea%b3%bc%20NFS%20%ec%a7%80%ec%97%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0a%ec%82%ac%ec%8b%a4%20%ec%95%84%ec%a7%81%eb%8f%84%20%ec%a0%95%ed%99%95%ed%9e%88%20%ec%9d%b4%ed%95%b4%ed%95%98%ec%a7%80%20%eb%aa%bb%ed%95%9c%20%eb%ac%b8%ec%a0%9c%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fnfs-network-bandwidth%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - HTTP%20%ec%9d%91%eb%8b%b5%20%ed%8c%a8%ed%82%b7%ec%9d%84%20%ec%95%95%ec%b6%95%ed%95%b4%ec%84%9c%20Outbound%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%b9%84%ec%9a%a9%20%ec%a0%88%ec%95%bd%ed%95%98%ea%b8%b0.&amp;body=HTTP%20%ec%9d%91%eb%8b%b5%20%ed%8c%a8%ed%82%b7%ec%9d%84%20%ec%95%95%ec%b6%95%ed%95%b4%ec%84%9c%20Outbound%20%eb%84%a4%ed%8a%b8%ec%9b%8c%ed%81%ac%20%eb%b9%84%ec%9a%a9%20%ec%a0%88%ec%95%bd%ed%95%98%ea%b8%b0%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0agzip%20compression%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fnetwork%2fhttp-response-compression%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -554,8 +598,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%eb%ac%b8%ec%a0%9c" class="nav-문제">
-									문제
+								<a href="#spring-boot-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98-%ec%84%a4%ec%a0%95" class="nav-spring-boot-애플리케이션-설정">
+									Spring Boot 애플리케이션 설정
 								</a>
 							</li>
 						
@@ -572,8 +616,26 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ea%b2%b0%eb%a1%a0" class="nav-결론">
-									결론
+								<a href="#%ea%b2%b0%ea%b3%bc" class="nav-결과">
+									결과
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						

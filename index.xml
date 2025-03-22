@@ -9,9 +9,66 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Thu, 20 Mar 2025 23:03:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 00:10:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기</title>
+        <link>https://markruler.github.io/posts/network/http-response-compression/</link>
+        <pubDate>Sun, 23 Mar 2025 00:10:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/network/http-response-compression/</guid>
+        <description>임창수 https://markruler.github.io/posts/network/http-response-compression/ -&lt;p&gt;클라이언트 로딩 시간을 줄이기 위해 API 하나에 많은 걸 담기 시작했습니다.
+브라우저에서는 HTTP/1.1 연결 시 최대 6개의 커넥션만 허용해주기 때문입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+그래서 서버 응답 데이터의 사이즈가 점점 커지기 시작했고,
+덩달아 CDN과 IDC 네트워크 트래픽(outbound) 비용이 늘기 시작했습니다.
+그 중에는 변하지 않는 데이터도 포함되어 있고, 변하는 데이터도 포함되어 있습니다.
+변하지 않는 데이터는 중간 레이어에서 캐시를 통해 해결할 수도 있지만,
+이 글에서는 서버에서 응답 데이터를 압축해서 보내는 방법을 소개합니다.&lt;/p&gt;
+&lt;h1 id=&#34;spring-boot-애플리케이션-설정&#34;&gt;Spring Boot 애플리케이션 설정&lt;/h1&gt;
+&lt;p&gt;서버에서 클라이언트에 응답 시 응답 데이터를 압축해서 보낼 수 있습니다.
+Spring Boot 애플리케이션이라면 간단하게 &lt;code&gt;application.yaml&lt;/code&gt; 파일에 아래 설정만 추가하면 됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;server:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  compression:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    enabled: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    min-response-size: &lt;span style=&#34;color:#f60&#34;&gt;1024&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Servlet Filter에서 Response의 OutputStream을 &lt;code&gt;GZIPOutputStream&lt;/code&gt;으로 교체하면
+좀 더 세밀하게 설정할 수 있습니다.
+예를 들면, 특정 경로만 압축한다거나 압축 정도를 조절할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h1 id=&#34;결과&#34;&gt;결과&lt;/h1&gt;
+&lt;p&gt;Akamai CDN을 통해서 확인해보니
+&lt;a href=&#34;https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule#caching&#34;&gt;offload&lt;/a&gt;
+(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는) 트래픽 양이 확연히 늘었고,
+Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/akamai-load-compression.png&#34; alt=&#34;Akamai CDN load compression&#34;&gt;&lt;/p&gt;
+&lt;p&gt;네트워크 대역폭과 처리량에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
+하지만 사이즈 자체가 작아지면서 네트워크 비용을 줄일 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/before-after-http-response-compression.png&#34; alt=&#34;before and after http response compression&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression&#34;&gt;Compression in HTTP&lt;/a&gt; | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding&#34;&gt;Content-Encoding&lt;/a&gt; | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Transfer-Encoding&#34;&gt;Transfer-Encoding&lt;/a&gt; | MDN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546&#34;&gt;Chrome Docs&lt;/a&gt; 참조.
+최신 브라우저나 프록시 서버는 대부분 HTTP/2 혹은 HTTP/3를 지원하지만,
+여러 개의 요청으로 나눈다해도 그만큼의 네트워크 트래픽이 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://jongmin4943.tistory.com/entry/Spring-%ED%8A%B9%EC%A0%95-API%EC%9D%98-Response-%EC%95%95%EC%B6%95%ED%95%98%EA%B8%B0&#34;&gt;Spring 특정 API의 Response 압축하기&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/network/http-response-compression/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -201,7 +258,24 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 &lt;p&gt;&lt;strong&gt;IP&lt;/strong&gt;(&lt;strong&gt;Internet Protocol&lt;/strong&gt;)는
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791&#34;&gt;RFC791&lt;/a&gt;에 정의된 프로토콜로, &lt;strong&gt;패킷&lt;/strong&gt;을 전송하는 역할을 합니다.
 패킷을 전송하기 위해 송신지 IP 주소와 수적지 IP 주소가 IP 헤더에 포함됩니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;NAT&lt;/strong&gt;(&lt;strong&gt;Network Address Translation&lt;/strong&gt;)는
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0               1               2               3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|Version|  IHL  |Type of Service|          Total Length         |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|         Identification        |Flags|      Fragment Offset    |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|  Time to Live |    Protocol   |         Header Checksum       |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                       Source Address                          |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Destination Address                        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Options                    |    Padding    |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|         IP Payload (TCP Segment / UDP Datagram) ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;NAT&lt;/strong&gt;(&lt;strong&gt;Network Address Translation&lt;/strong&gt;)는
 사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
 NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
 NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
@@ -233,6 +307,40 @@ CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &amp;lsquo;1&amp;rsq
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1122&#34;&gt;RFC1122&lt;/a&gt;에 정의되어 있습니다.
 Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1918&#34;&gt;RFC1918&lt;/a&gt;에 정의되어 있습니다.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Class&lt;/th&gt;
+          &lt;th&gt;Start Address&lt;/th&gt;
+          &lt;th&gt;End Address&lt;/th&gt;
+          &lt;th&gt;Subnet Mask&lt;/th&gt;
+          &lt;th&gt;Maximum Hosts&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;A&lt;/td&gt;
+          &lt;td&gt;10.0.0.0&lt;/td&gt;
+          &lt;td&gt;10.255.255.255&lt;/td&gt;
+          &lt;td&gt;255.0.0.0   (/8)&lt;/td&gt;
+          &lt;td&gt;16,777,214 (=2^24 - 2)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;B&lt;/td&gt;
+          &lt;td&gt;172.16.0.0&lt;/td&gt;
+          &lt;td&gt;172.132.255.255&lt;/td&gt;
+          &lt;td&gt;255.240.0.0 (/12)&lt;/td&gt;
+          &lt;td&gt;1,048,574  (=2^20 - 2)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;C&lt;/td&gt;
+          &lt;td&gt;192.168.0.0&lt;/td&gt;
+          &lt;td&gt;192.168.255.255&lt;/td&gt;
+          &lt;td&gt;255.0.0.0   (/16)&lt;/td&gt;
+          &lt;td&gt;65,534     (=2^16 - 2)&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h3 id=&#34;ip-라우팅&#34;&gt;IP 라우팅&lt;/h3&gt;
 &lt;p&gt;라우터는 라우팅 테이블(Routing Table)을 통해
 수신지 네트워크 정보와 IP 패킷을 전송할 근접 기기의 IP 주소를 나타내는 네트워크 홉 정보를 관리함으로써
@@ -275,14 +383,42 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 &lt;h2 id=&#34;l4-주요-프로토콜&#34;&gt;L4 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
 &lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|            Length             |            Checksum           |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              UDP Payload (Application data) ...                              
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
 (&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)
 &lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 시작으로 연결 수립 후 통신합니다.
 TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
 &lt;strong&gt;흐름 제어&lt;/strong&gt;(&lt;strong&gt;Flow Control&lt;/strong&gt;)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
 &lt;strong&gt;혼잡 제어&lt;/strong&gt;(&lt;strong&gt;Congestion Control&lt;/strong&gt;)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
 &lt;strong&gt;재전송 제어&lt;/strong&gt;(&lt;strong&gt;Retransmission Control&lt;/strong&gt;)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.&lt;/p&gt;
-&lt;h3 id=&#34;포트-번호&#34;&gt;포트 번호&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                        Sequence Number                        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Acknowledgment Number                      |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|  Data |           |U|A|P|R|S|F|                               |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       |           |G|K|H|T|N|N|                               |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|           Checksum            |         Urgent Pointer        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Options                    |    Padding    |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              TCP Payload (Application data) ...                              
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;포트-번호&#34;&gt;포트 번호&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;포트 번호&lt;/strong&gt;(&lt;strong&gt;Port Number&lt;/strong&gt;)는 &lt;strong&gt;프로세스 간 통신을 위한 번호&lt;/strong&gt;입니다.&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
@@ -477,31 +613,32 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
     
     
         <item>
-        <title>네트워크 대역폭으로 발생한 복합적인 시스템 장애</title>
+        <title>네트워크 대역폭과 NFS 지연</title>
         <link>https://markruler.github.io/posts/network/nfs-network-bandwidth/</link>
         <pubDate>Mon, 13 Jan 2025 19:13:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/nfs-network-bandwidth/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/nfs-network-bandwidth/ -&lt;h1 id=&#34;배경&#34;&gt;배경&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;IDC마다 다르겠지만 일반적으로 Inbound/Outbound 네트워크 트래픽 양에 따라 비용을 부과합니다. 제가 속한 팀은 트래픽 비용을 줄이기 위해 기존에 사설망(private network) 없이 내부 서버 간 통신하던 시스템에 사설망을 추가했습니다.&lt;/li&gt;
-&lt;/ul&gt;
+        <description>임창수 https://markruler.github.io/posts/network/nfs-network-bandwidth/ -&lt;p&gt;IDC마다 다르겠지만 일반적으로 Outbound 네트워크 트래픽 양에 따라 비용을 부과합니다.
+제가 속한 팀은 트래픽 비용을 줄이기 위해 기존에 사설망(private network) 없이
+내부 서버 간 통신하던 시스템에 사설망을 추가했습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/nfs-network-bandwidth/static-file-server.png&#34; alt=&#34;static-file-server.png&#34;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;DB 백업을 위해 Veeam을 사용하다가 expdp와 RMAN을 사용하기 시작했고, NFS 마운트 된 스토리지에 백업본을 저장했습니다.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;DB 백업을 위해 Veeam을 사용하다가 expdp와 RMAN을 사용하기 시작했고,
+NFS 마운트 된 스토리지에 백업본을 저장했습니다.&lt;/p&gt;
 &lt;h1 id=&#34;문제&#34;&gt;문제&lt;/h1&gt;
 &lt;p&gt;NFS 마운트 된 정적 파일들(이미지, 스크립트 파일)을 조회하는 서버에서만 부하가 발생하기 시작했습니다.&lt;/p&gt;
-&lt;p&gt;확인해보니 DB 서버 회선에서 허용되는 네트워크 대역폭(1Gbps)의 100%를 사용하는 경우가 계속 발생했고, 덩달아 NFS 접근도 느려진 것입니다.
+&lt;p&gt;확인해보니 DB 서버 회선에서 허용되는 네트워크 대역폭(1Gbps)의 100%를 사용하는 경우가 계속 발생했고,
+덩달아 NFS 접근도 느려진 것입니다.
 백업 기능을 변경한 후 발생했습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/nfs-network-bandwidth/inbound-db-server.png&#34; alt=&#34;static-file-server.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Inbound (DB server)&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/nfs-network-bandwidth/outbound-storage-server.png&#34; alt=&#34;static-file-server.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Outbound (Storage server)&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;레거시 서버에서 파일 업로드 기능 중 NFS 마운트 된 스토리지 서버에 저장하는 기능이 있었는데, 해당 기능에 DB 트랜잭션도 함께 묶이면서 DB에도 영향이 있었습니다.
+&lt;p&gt;레거시 서버에서 파일 업로드 기능 중 NFS 마운트 된 스토리지 서버에 저장하는 기능이 있었는데,
+해당 기능에 DB 트랜잭션도 함께 묶이면서 DB에도 영향이 있었습니다.
 가장 큰 문제는 레거시 프로젝트에 DB 트랜잭션 타임아웃 설정이 없어서 지속적으로 대기하는 상황이 발생했습니다.&lt;/p&gt;
 &lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
-&lt;p&gt;전체 시스템에 장애를 발생시킨 직접적인 원인은 트랜잭션 타임아웃이었지만, 근본적인 원인은 NFS 마운트 된 디렉토리에 과도한 입출력이 발생한 것이었습니다.
+&lt;p&gt;전체 시스템에 장애를 발생시킨 직접적인 원인은 트랜잭션 타임아웃이었지만,
+근본적인 원인은 NFS 마운트 된 디렉토리에 과도한 입출력이 발생한 것이었습니다.
 DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 해결은 되었습니다.&lt;/p&gt;
 &lt;p&gt;하지만 장애가 발생한 후 확인하는 것이 아닌 발생하기 전 예방하는 것이 좋다고 생각합니다.
 기능 설계 시 처리 가능한 트래픽 양을 계산하고, 부하 테스트를 통해 내구성을 테스트해야 합니다.&lt;/p&gt;
@@ -1748,202 +1885,6 @@ Prometheus와 Grafana를 실행해서 모니터링 할 수 있습니다.&lt;/p&g
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/os/swap-memory/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>IP로 지리적 위치(Geolocation) 찾기</title>
-        <link>https://markruler.github.io/posts/network/ip-geolocation/</link>
-        <pubDate>Thu, 29 Aug 2024 22:38:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/network/ip-geolocation/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/ip-geolocation/ -&lt;h1 id=&#34;현상&#34;&gt;현상&lt;/h1&gt;
-&lt;p&gt;약 10ms 응답속도가 예상되는 API에 500~700ms의 응답속도가 발생했습니다.&lt;/p&gt;
-&lt;h1 id=&#34;원인&#34;&gt;원인&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-latency.png&#34; alt=&#34;ipapi Latency&#34;&gt;&lt;/p&gt;
-&lt;p&gt;해당 API에서는 국가별로 다른 정책을 적용하기 위해 IP로 국가 정보&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;를 조회하는 기능이 가장 먼저 수행됩니다.
-국가 정보의 출처는 ipapi라는 유료 API 서비스와 IPInfoDB라는 무료 서비스입니다.
-대략적인 코드는 다음과 같습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Cacheable(value = CacheName.IPAPI_COUNTRY_CODE, key = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#ipAddress&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Geolocation &lt;span style=&#34;color:#ff0&#34;&gt;findIsoCountryCode&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; String ipAddress) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (isPrivate(ipAddress)) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.korea();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; ipapi = ipapiFeignClient.findGeolocationByIpAddress(ipAddress, IPAPI_ACCESS_KEY);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (ipapi != &lt;span style=&#34;color:#f00&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.from(ipapi);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; ipInfoDB = ipInfoDBFeignClient.findGeolocationByIpAddress(ipAddress, IPINFODB_ACCESS_KEY);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (ipInfoDB != &lt;span style=&#34;color:#f00&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.from(ipInfoDB);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Geolocation.korea();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;문제는 API가 아무리 빨라도 해당 IP Geolocation 서비스에서 응답받는 데에 평균 약 500ms 정도 소요되었다는 것입니다.&lt;/p&gt;
-&lt;h1 id=&#34;해결&#34;&gt;해결&lt;/h1&gt;
-&lt;p&gt;이를 해결하기 위해 캐싱도 해봤지만 처음 접속한 IP의 경우 조회가 발생할 수 밖에 없었고,
-결정적으로 이렇게 처음 접속한 IP가 매우 많았다(약 130만 건/월)는 것입니다.&lt;/p&gt;
-&lt;p&gt;이 문제는 생각보다 간단하게 해결할 수 있었습니다.
-CDN을 사용할 경우 CDN에서 제공하는 헤더에서 위치 정보를 얻을 수 있는데,
-이 헤더를 활용하면 별도 서비스를 조회할 필요가 없기 때문에 응답 속도를 줄일 수 있었습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Akamai&lt;/strong&gt;는 EdgeScape 기능을 활성화하면 &lt;code&gt;X-Akamai-Edgescape&lt;/code&gt; 헤더로 확인할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;CloudFlare&lt;/strong&gt;는 관련 기능을 활성화 했을 경우 &lt;code&gt;CF-IPCountry&lt;/code&gt; 헤더로 확인할 수 있다고 합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Amazon CloudFront&lt;/strong&gt;는 &lt;code&gt;CloudFront-Viewer-Country&lt;/code&gt; 헤더로 확인할 수 있다고 합니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;구현-방법-spring-framework&#34;&gt;구현 방법 (Spring Framework)&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Target(ElementType.PARAMETER)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Retention(RetentionPolicy.RUNTIME)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; @interface GeoLocation {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Aspect
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Component
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@RequiredArgsConstructor
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; GeoLocationAspect {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; HttpServletRequest request;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; GeoLocationService service;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * &amp;lt;code&amp;gt;@annotation(GeoLocation)&amp;lt;/code&amp;gt;와 같은 방식은
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * &amp;lt;code&amp;gt;@GeoLocation&amp;lt;/code&amp;gt; 애노테이션이 붙은 메서드에만 적용됩니다.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Pointcut(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.GetMapping) || &amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            + &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.PostMapping) || &amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            + &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;@annotation(org.springframework.web.bind.annotation.RequestMapping)&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#ee82ee&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;mappingAnnotations&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Around(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;mappingAnnotations()&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Object &lt;span style=&#34;color:#ff0&#34;&gt;injectGeoLocation&lt;/span&gt;(ProceedingJoinPoint joinPoint) &lt;span style=&#34;color:#f00&#34;&gt;throws&lt;/span&gt; Throwable {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Method method = signature.getMethod();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Object[] args = joinPoint.getArgs();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Parameter[] parameters = method.getParameters();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#ee82ee&#34;&gt;int&lt;/span&gt; i = 0; i &amp;lt; parameters.length; i++) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; (parameters[i].isAnnotationPresent(GeoLocation.class)) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                Location geoLocation = getGeoLocationFromRequest();
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#0f0&#34;&gt;// @GeoLocation 파라미터에 위치 정보를 주입합니다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                args[i] = geoLocation;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#0f0&#34;&gt;// 메서드 호출을 진행합니다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; joinPoint.proceed(args);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;/**
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * CDN, ipapi, IPInfoDB 순으로 접속 국가 코드 조회
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     *
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     * @return Geolocation
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;private&lt;/span&gt; Location &lt;span style=&#34;color:#ff0&#34;&gt;getGeoLocationFromRequest&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; service.findLocation(request);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@GetMapping
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Response&amp;lt;Items&amp;gt; &lt;span style=&#34;color:#ff0&#34;&gt;control&lt;/span&gt;(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @GeoLocation &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; Location location,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @AuthenticationPrincipal &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; PrincipalDetailDto user,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        @RequestBody @Valid &lt;span style=&#34;color:#f00&#34;&gt;final&lt;/span&gt; RequestDto requestDto
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    log.debug(location);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; success(service.process(requestDto));
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;덤으로-얻은-정확성&#34;&gt;덤으로 얻은 정확성?&lt;/h1&gt;
-&lt;p&gt;추가로 해결되었던 점은 정확성이었습니다.&lt;/p&gt;
-&lt;p&gt;현재 서비스에서 아제르바이잔 이용자에게만 적용되는 정책이 있었는데 실제 이용자에게서 본인에게만 적용되지 않는다고 클레임이 들어왔습니다.
-확인해보니 ipapi에서 정확하지 않은 Geolocation 정보가 응답되고 있었습니다.
-이는 ipapi만의 문제가 아니었습니다.&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/iplocation-inaccuracy.png&#34; alt=&#34;iplocation inaccuracy&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;네덜란드이거나 아제르바이잔이거나 | &lt;a href=&#34;https://iplocation.io/&#34;&gt;iplocation.io&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/ip-geolocation/ipapi-inaccuracy.png&#34; alt=&#34;ipapi inaccuracy&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;파나마 공화국이었던 | &lt;a href=&#34;https://ipapi.com/&#34;&gt;ipapi&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;우리는 2024년 4월 12일 ipapi에 문의했지만 데이터 공급자(Data Provider)에 의해 업데이트 될 것이라는 답변만 받았었습니다.
-하지만 4개월이 지난 현재(8월 29일)에도 업데이트되지 않았습니다.&lt;/p&gt;
-&lt;p&gt;그렇다면 CDN Provider는 믿을 수 있을까요?
-저희 서비스에서 사용하는 Akamai 문서를 보면 신뢰도가 높아보였습니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;How Does Akamai Know the Location of an IP Address?&amp;rdquo; | &amp;lt;Akamai EdgeScape Methodology&amp;gt; 발췌&lt;/p&gt;
-&lt;p&gt;(Akamai Control &amp;gt; Download Center &amp;gt; Core Features &amp;gt; EdgeScape)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Public Registry Data&lt;/strong&gt;
-We obtain geographic information for the IP blocks registered with the various public Internet registries and ISPs. This information forms the base layer of the database.
-As this is public information registered for blocks of addresses, we trust this data the least when analyzing the different sources of data.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hostname Pattern Matching&lt;/strong&gt;
-Many machines on the Internet (routers, servers, POPs, and even end-user machines) have a hostname (reverse DNS entry) associated with them.
-In many cases, these hostnames contain geographic information hinting at the location of that machine.
-By analyzing hostnames from different networks and ISPs, we have built up, and continue to add to,
-a database of patterns that allows us to extract the geographic information embedded in these names.
-It also allows us to extrapolate the location of other machines on the Internet,
-by giving us data points that can be used when tracing to other IPs.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Known Locations&lt;/strong&gt;
-Akamai has an extensive network of servers distributed across the globe, which act as data points when determining the location of machines nearby.
-We also have relationships with networks and customers all over the world.
-In order to serve their traffic efficiently, we sometimes get useful information from them regarding the location of their servers,
-which we can also use as data points in creating our geographic database.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Active Measurement&lt;/strong&gt;
-Due to Akamai&amp;rsquo;s extensive customer base, we have the unique ability to know at any given time a large fraction of &amp;ldquo;active&amp;rdquo; end-user IPs on the net.
-We then perform traceroutes and pings from various points on our globally distributed network to these active IPs.
-We also perform a reduced number of traces and pings to IPs in the non end-user space, such as routers and infrastructure servers.&lt;br&gt;
-&lt;br&gt;
-When analyzing the traces, we use the location of machines determined using the Hostname pattern matching described above
-and the geographic information from the Internet registries to determine the location of the IP traced to.
-In addition, we use the latency information contained within the trace and the latency information gathered from pinging routers,
-along with the limitations imposed by speed-of-light bounds,
-in order to weed out bad data and increase the probability of the location we choose being correct.&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;제로-트러스트&#34;&gt;제로 트러스트!&lt;/h2&gt;
-&lt;p&gt;하지만 하루만에 문제가 발생했습니다.
-간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었습니다.&lt;/p&gt;
-&lt;p&gt;확인해보니 Akamai에서 전달하는 &lt;code&gt;True-Client-IP&lt;/code&gt; 헤더는 실제 한국 사용자 IP였고,
-&lt;code&gt;X-Akamai-EdgeScape&lt;/code&gt; 헤더에는 미국(country_code=US),
-&lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;는 Akamai 엣지 서버의 IP가 전달되고 있었습니다.
-이 경우 &lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 달랐습니다.
-그래서 &lt;strong&gt;&lt;code&gt;True-Client-IP&lt;/code&gt;와 &lt;code&gt;X-Forwarded-For&lt;/code&gt; 헤더가 가리키는 IP가 서로 다를 경우에는 다른 서비스에서 Geolocation을 조회하고 캐싱하도록 설정했습니다.&lt;/strong&gt;
-(CDN -&amp;gt; ipapi -&amp;gt; IPInfoDB 순)&lt;/p&gt;
-&lt;p&gt;추가로 Apache에서 &lt;code&gt;RemoteIPHeader X-Forwarded-For&lt;/code&gt; 설정이 있으면
-프록시 서버들의 IP는 모두 빠지고 Client IP만 남습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;
-그래서 해당 설정을 제거했습니다.&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;다만 이 설정을 변경하면 IP를 활용하는 비즈니스 로직에 영향을 줄 수 있으니 영향도를 고려해야 합니다.&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;VirtualHost *:443&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ServerName www.example.com
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyRequests Off
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyVia Off
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyPreserveHost On
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    # RemoteIPHeader X-Forwarded-For
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ProxyAddHeaders On
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/VirtualHost&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;True-Client-IP 헤더
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://techdocs.akamai.com/property-mgr/docs/origin-server#true-client-ip-header&#34;&gt;Akamai | &lt;code&gt;True-Client-IP&lt;/code&gt; 설정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/true-client-ip-header/&#34;&gt;Cloudflare | &lt;code&gt;True-Client-IP&lt;/code&gt; 설정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/example-function-add-true-client-ip-header.html&#34;&gt;AWS CloudFront | &lt;code&gt;True-Client-IP&lt;/code&gt; 헤더 추가하기&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;조회하는 정보는 &lt;a href=&#34;https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2&#34;&gt;국가 코드 2자리(ISO 3166-1 alpha-2)&lt;/a&gt;입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://techdocs.akamai.com/property-mgr/docs/content-tgting&#34;&gt;Content Targeting (EdgeScape)&lt;/a&gt; | Akamai&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developers.cloudflare.com/network/ip-geolocation/&#34;&gt;IP geolocation&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/adding-cloudfront-headers.html&#34;&gt;Add CloudFront request headers&lt;/a&gt; | Amazon CloudFront&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Forwarded-For&#34;&gt;X-Forwarded-For&lt;/a&gt; | mdn web docs&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://httpd.apache.org/docs/current/mod/mod_remoteip.html#remoteipheader&#34;&gt;Apache Module mod_remoteip&lt;/a&gt; | Apache&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/network/ip-geolocation/ - Im Changsu | Since 2020</description>
         </item>
     
     
