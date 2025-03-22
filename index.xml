@@ -23,7 +23,9 @@
         <guid>https://markruler.github.io/posts/network/network-layer/</guid>
         <description>임창수 https://markruler.github.io/posts/network/network-layer/ -&lt;p&gt;&lt;strong&gt;OSI 모델&lt;/strong&gt;은 다양한 통신 시스템이 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
 각 계층(Layer)은 특정한 역할을 담당합니다.
-이 글에서는 각 계층의 주요 기능과 특징을 살펴보겠습니다.&lt;/p&gt;
+이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해 &lt;strong&gt;TCP/IP 모델&lt;/strong&gt;을 설명하지만 용어는 OSI 모델을 사용합니다.
+TCP/IP 모델은 OSI 모델을 기반으로 하며, 4계층으로 구성되어 있습니다.
+OSI 모델의 5~7 계층은 TCP/IP 모델의 응용 계층에 합쳐져 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
 &lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
 &lt;p&gt;1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
@@ -70,15 +72,14 @@ NIC를 통해 LAN 케이블이나 전파로 보냅니다.&lt;/p&gt;
 L2는 &lt;strong&gt;MAC 주소&lt;/strong&gt;를 이용해 통신하며, &lt;strong&gt;프레임&lt;/strong&gt; 단위로 데이터를 전송합니다.
 또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.&lt;/p&gt;
 &lt;h2 id=&#34;l2-주요-기기&#34;&gt;L2 주요 기기&lt;/h2&gt;
-&lt;p&gt;브리지 (Bridge)&lt;/p&gt;
-&lt;p&gt;포트와 포트 사이의 &amp;lsquo;다리 bridge&amp;rsquo; 역할을 합니다.
+&lt;p&gt;&lt;strong&gt;브리지&lt;/strong&gt;(&lt;strong&gt;Bridge&lt;/strong&gt;)는 포트와 포트 사이의 &amp;lsquo;다리 bridge&amp;rsquo; 역할을 합니다.
 단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
 이 전송 처리를 브리징(bridging)이라고 합니다.
 최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.&lt;/p&gt;
 &lt;h2 id=&#34;l2-주요-프로토콜&#34;&gt;L2 주요 프로토콜&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;유선 프로토콜&lt;/li&gt;
-&lt;li&gt;무선 프로토콜&lt;/li&gt;
+&lt;li&gt;IEEE802.3: 유선 LAN 프로토콜&lt;/li&gt;
+&lt;li&gt;IEEE802.11: 무선 LAN 프로토콜&lt;/li&gt;
 &lt;li&gt;ARP (Address Resolution Protocol)&lt;/li&gt;
 &lt;li&gt;PPP (Point-to-Point Protocol)&lt;/li&gt;
 &lt;li&gt;L2TP (Layer 2 Tunneling Protocol)&lt;/li&gt;
@@ -90,13 +91,11 @@ L2는 &lt;strong&gt;MAC 주소&lt;/strong&gt;를 이용해 통신하며, &lt;str
 L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅하고, &lt;strong&gt;패킷&lt;/strong&gt; 단위로 데이터를 전송합니다.
 또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-기기&#34;&gt;L3 주요 기기&lt;/h2&gt;
-&lt;p&gt;라우터 (Router)&lt;/p&gt;
-&lt;p&gt;단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
+&lt;p&gt;&lt;strong&gt;라우터&lt;/strong&gt;(&lt;strong&gt;Router&lt;/strong&gt;)는 단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
 자신이 속한 네트워크를 넘은 범위에 있는 단말로 전달하거나 중계하는 역할을 담당합니다.
 이 과정을 패키지 릴레이(Package Relay)라고 하며, 라우팅이라고 합니다.
 라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.&lt;/p&gt;
-&lt;p&gt;L3 스위치 (Layer 3 Switch)&lt;/p&gt;
-&lt;p&gt;라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;L3 스위치&lt;/strong&gt;(&lt;strong&gt;Layer 3 Switch&lt;/strong&gt;)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-프로토콜&#34;&gt;L3 주요 프로토콜&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;IP (Internet Protocol)
@@ -177,8 +176,8 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/pdf/pdf-editor/</guid>
         <description>임창수 https://markruler.github.io/posts/pdf/pdf-editor/ -&lt;p&gt;절판된 책이나 집에서 보관하던 두꺼운 책을 스캔해서 소장하고 싶은 경우가 있습니다.
-그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.
-하지만 펼칠 때마다 목차&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;가 없으면 발췌독하기 불편한데요.
+그래서 저는 비파괴 스캐너를 구입해서 거의 10년 동안 책을 스캔해서 보관하고 있습니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+하지만 펼칠 때마다 목차&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;가 없으면 발췌독하기 불편한데요.
 오픈 소스 OCR 도구인 Tesseract를 이용해 PDF 목차를 만들어보겠습니다.&lt;/p&gt;
 &lt;h1 id=&#34;사적이용을-위한-저작권법&#34;&gt;사적이용을 위한 저작권법&lt;/h1&gt;
 &lt;p&gt;먼저 저작권에 대해 확인해야 할 부분이 있습니다.
@@ -197,7 +196,7 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 관련하여, 도서관에서 빌린 책을 직접 스캔 또는 사진으로 찍어 귀하 소유의 핸드폰으로 읽는 것은 사적복제로서 저작권 침해가 되지 않습니다.
 그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;p&gt;즉, &lt;strong&gt;자신이 소유한 또는 도서관에서 빌린 서적&lt;/strong&gt;을 &lt;strong&gt;개인적으로 이용&lt;/strong&gt;하기 위해 &lt;strong&gt;자신이 소유한 복제기기&lt;/strong&gt;로 직접 스캔한 경우 적법한 행위입니다.
-이쯤이면 저작권법 제30조가 다르게 해석&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;될 여지는 없을 것 같습니다.&lt;/p&gt;
+이쯤이면 저작권법 제30조가 다르게 해석&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;될 여지는 없을 것 같습니다.&lt;/p&gt;
 &lt;h1 id=&#34;pdf-읽기&#34;&gt;PDF 읽기&lt;/h1&gt;
 &lt;p&gt;PDF는 Adobe 사에서 개발한 파일 형식으로, 다양한 운영체제에서 동일한 형식으로 문서를 표현할 수 있습니다.
 여기서는 Python 모듈인 PyMuPDF를 사용해서 PDF를 읽어보겠습니다.&lt;/p&gt;
@@ -243,10 +242,13 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;Adobe Acrobat에선 Bookmark, GNOME Evince에서는 Outline.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Treventus ScanRobot과 같은 자동 비파괴 스캐너도 있지만, 개인이 사용하기에는 부피가 크고 비싸서 도서관이나 출판사, 대학교에서 사용됩니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;유추해석 (법률에 명시되지 않은 사항에 대해, 유사한 사항에 관한 법률을 적용하는 해석 방법), 확장해석 (법문의 뜻을 보통의 의미보다 넓게 해석하는 방법) 등.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;GNOME Evince에서는 Outline, Adobe Acrobat에선 Bookmark, macOS Preview에서는 Table of Contents로 표시됩니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;유추해석 (법률에 명시되지 않은 사항에 대해, 유사한 사항에 관한 법률을 적용하는 해석 방법), 확장해석 (법문의 뜻을 보통의 의미보다 넓게 해석하는 방법) 등.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;

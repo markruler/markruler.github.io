@@ -599,7 +599,9 @@
                 
                     <p><strong>OSI 모델</strong>은 다양한 통신 시스템이 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
 각 계층(Layer)은 특정한 역할을 담당합니다.
-이 글에서는 각 계층의 주요 기능과 특징을 살펴보겠습니다.</p>
+이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해 <strong>TCP/IP 모델</strong>을 설명하지만 용어는 OSI 모델을 사용합니다.
+TCP/IP 모델은 OSI 모델을 기반으로 하며, 4계층으로 구성되어 있습니다.
+OSI 모델의 5~7 계층은 TCP/IP 모델의 응용 계층에 합쳐져 있습니다.</p>
 <h1 id="용어">용어</h1>
 <p>먼저 공통 용어를 정리하며 시작하겠습니다.</p>
 <p>1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
@@ -646,15 +648,14 @@ NIC를 통해 LAN 케이블이나 전파로 보냅니다.</p>
 L2는 <strong>MAC 주소</strong>를 이용해 통신하며, <strong>프레임</strong> 단위로 데이터를 전송합니다.
 또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.</p>
 <h2 id="l2-주요-기기">L2 주요 기기</h2>
-<p>브리지 (Bridge)</p>
-<p>포트와 포트 사이의 &lsquo;다리 bridge&rsquo; 역할을 합니다.
+<p><strong>브리지</strong>(<strong>Bridge</strong>)는 포트와 포트 사이의 &lsquo;다리 bridge&rsquo; 역할을 합니다.
 단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
 이 전송 처리를 브리징(bridging)이라고 합니다.
 최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.</p>
 <h2 id="l2-주요-프로토콜">L2 주요 프로토콜</h2>
 <ul>
-<li>유선 프로토콜</li>
-<li>무선 프로토콜</li>
+<li>IEEE802.3: 유선 LAN 프로토콜</li>
+<li>IEEE802.11: 무선 LAN 프로토콜</li>
 <li>ARP (Address Resolution Protocol)</li>
 <li>PPP (Point-to-Point Protocol)</li>
 <li>L2TP (Layer 2 Tunneling Protocol)</li>
@@ -666,13 +667,11 @@ L2는 <strong>MAC 주소</strong>를 이용해 통신하며, <strong>프레임</
 L3는 <strong>IP 주소</strong>를 이용해 데이터를 라우팅하고, <strong>패킷</strong> 단위로 데이터를 전송합니다.
 또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.</p>
 <h2 id="l3-주요-기기">L3 주요 기기</h2>
-<p>라우터 (Router)</p>
-<p>단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
+<p><strong>라우터</strong>(<strong>Router</strong>)는 단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
 자신이 속한 네트워크를 넘은 범위에 있는 단말로 전달하거나 중계하는 역할을 담당합니다.
 이 과정을 패키지 릴레이(Package Relay)라고 하며, 라우팅이라고 합니다.
 라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.</p>
-<p>L3 스위치 (Layer 3 Switch)</p>
-<p>라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.</p>
+<p><strong>L3 스위치</strong>(<strong>Layer 3 Switch</strong>)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.</p>
 <h2 id="l3-주요-프로토콜">L3 주요 프로토콜</h2>
 <ul>
 <li>IP (Internet Protocol)
