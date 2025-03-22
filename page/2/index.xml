@@ -752,8 +752,43 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
         <pubDate>Tue, 23 Jul 2024 19:08:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/snmp/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/snmp/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
-&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만, SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다.&lt;/p&gt;
+        <description>임창수 https://markruler.github.io/posts/network/snmp/ -&lt;p&gt;주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만,
+SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A0%84%EC%A0%9C-%EC%A1%B0%EA%B1%B4&#34;&gt;전제 조건&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C&#34;&gt;구성 요소&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A7%A4%EB%8B%88%EC%A0%80-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%EC%97%AD%ED%95%A0&#34;&gt;매니저-에이전트 역할&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A7%A4%EB%8B%88%EC%A0%80-%EC%97%90%EC%9D%B4%EC%A0%84%ED%8A%B8-%ED%86%B5%EC%8B%A0-%EB%B0%A9%EC%8B%9D&#34;&gt;매니저-에이전트 통신 방식&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0-%EC%9D%B4%EB%A6%84&#34;&gt;커뮤니티 이름&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%B2%84%EC%A0%84%EB%B3%84-%EC%B0%A8%EC%9D%B4&#34;&gt;버전별 차이&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#v1&#34;&gt;v1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#v2&#34;&gt;v2&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#v2c&#34;&gt;v2c&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#v3&#34;&gt;v3&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B4%80%EB%A0%A8-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%8F%84%EA%B5%AC&#34;&gt;관련 명령어 도구&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#snmpget&#34;&gt;snmpget&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#snmpwalk&#34;&gt;snmpwalk&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mib-2-oid-object-id&#34;&gt;MIB-2 OID (Object ID)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ex-136121-%EB%B6%84%ED%95%B4&#34;&gt;ex: 1.3.6.1.2.1 분해&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1361211-system&#34;&gt;1.3.6.1.2.1.1 system&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1361212-interfaces&#34;&gt;1.3.6.1.2.1.2 interfaces&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1361213-at---address-translation&#34;&gt;1.3.6.1.2.1.3 at - Address Translation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1361214-ip---internet-protocol&#34;&gt;1.3.6.1.2.1.4 ip - Internet Protocol&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#13612131-ifmib&#34;&gt;1.3.6.1.2.1.31 ifMIB&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&#34;전제-조건&#34;&gt;전제 조건&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;IP 네트워크 환경이 있다.&lt;/li&gt;
@@ -1105,7 +1140,9 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
         <pubDate>Wed, 17 Jul 2024 22:40:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/ssh/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/ssh/ -&lt;ul&gt;
+        <description>임창수 https://markruler.github.io/posts/network/ssh/ -&lt;p&gt;원격지의 셸에 접속하기 위해 사용되는 네트워크 프로토콜로
+이 글에서는 업무에서 자주 사용하는 SSH 설정을 정리합니다.&lt;/p&gt;
+&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#ssh-key-%EC%83%9D%EC%84%B1&#34;&gt;SSH key 생성&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#ssh-server&#34;&gt;SSH Server&lt;/a&gt;
 &lt;ul&gt;
@@ -1125,8 +1162,6 @@ IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP �
 &lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;업무에서 자주 사용하는 SSH 설정을 정리합니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h1 id=&#34;ssh-key-생성&#34;&gt;SSH key 생성&lt;/h1&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RSA&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t rsa -b &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;

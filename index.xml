@@ -29,7 +29,49 @@
 이상적인 모델이기 때문에 실제 네트워크에서는 OSI 모델보다 TCP/IP 모델이 사용됩니다.
 이유는 모르겠지만 용어는 OSI 모델의 용어가 통용됩니다.&lt;/p&gt;
 &lt;p&gt;이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
-일반적으로 사용되는 &lt;strong&gt;TCP/IP 모델을 설명하지만, 용어는 OSI 모델을 사용&lt;/strong&gt;합니다.&lt;/p&gt;
+일반적으로 사용되는 &lt;strong&gt;OSI 모델을 따르지만 5~7계층은 TCP/IP 모델처럼 합쳐진 5계층 모델&lt;/strong&gt;을 설명합니다.&lt;/p&gt;
+&lt;!-- 첫 책 p12 --&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9A%A9%EC%96%B4&#34;&gt;용어&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#layer-1---physical-layer&#34;&gt;Layer 1 - Physical Layer&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#l1-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L1 주요 기기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#layer-2---data-link-layer&#34;&gt;Layer 2 - Data Link Layer&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#l2-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L2 주요 기기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l2-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L2 주요 프로토콜&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#layer-3---network-layer&#34;&gt;Layer 3 - Network Layer&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#l3-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L3 주요 기기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l3-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L3 주요 프로토콜&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#ip-%EC%A3%BC%EC%86%8C-%EC%B2%B4%EA%B3%84&#34;&gt;IP 주소 체계&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ip-%EB%9D%BC%EC%9A%B0%ED%8C%85&#34;&gt;IP 라우팅&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#layer-4---transport-layer&#34;&gt;Layer 4 - Transport Layer&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#l4-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L4 주요 기기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l4-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L4 주요 프로토콜&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%8F%AC%ED%8A%B8-%EB%B2%88%ED%98%B8&#34;&gt;포트 번호&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#l7-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L7 주요 프로토콜&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
 &lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;1 계층&lt;/strong&gt;은 영어로 Layer 1, &lt;strong&gt;줄여서 L1&lt;/strong&gt;이라고 부릅니다.
@@ -42,7 +84,14 @@ L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet
 특히 L3의 &lt;strong&gt;IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체&lt;/strong&gt;를 일컫기도 합니다.
 뭉뚱그려서 &amp;lsquo;&lt;strong&gt;패킷&lt;/strong&gt;&amp;rsquo;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;이라고 부르죠.&lt;/p&gt;
 &lt;p&gt;송신 측에서 데이터를 보낼 때는 &lt;strong&gt;상위 계층의 데이터에 하위 계층의 헤더(header)를 붙여서 캡슐화(encapsulation)하며&lt;/strong&gt; 내려가고,
-수신 측에서는 그 과정을 역순으로 &lt;strong&gt;디캡슐화(decapsulation)하여&lt;/strong&gt; 상위 계층으로 전달합니다&lt;/p&gt;
+수신 측에서는 그 과정을 역순으로 &lt;strong&gt;디캡슐화(decapsulation)하여&lt;/strong&gt; 상위 계층으로 전달합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;호스트&lt;/strong&gt;(&lt;strong&gt;Host&lt;/strong&gt;)는 네트워크에 연결된 장치를 의미합니다.&lt;/p&gt;
+&lt;p&gt;네트워크 기기는 눈에 보이는 실제 기기인 &lt;strong&gt;물리 어플라이언스&lt;/strong&gt;(Physical Appliance)와
+가상화 소프트웨어 위에서 동작하는 논리적 네트워크 기기인 &lt;strong&gt;가상 어플라이언스&lt;/strong&gt;(Virtual Appliance)dd로 나뉩니다.&lt;/p&gt;
+&lt;p&gt;인터넷의 통신 방식은 크게 반이중화 통신과 전이중화 통신으로 나뉩니다.
+&lt;strong&gt;반이중화 통신&lt;/strong&gt;(&lt;strong&gt;half duplex&lt;/strong&gt;)은 전송로가 1개이기 때문에 송신과 수신을 번갈아가며 하는 방식입니다.
+&lt;strong&gt;전이중화 통신&lt;/strong&gt;(&lt;strong&gt;full duplex&lt;/strong&gt;)은 송신용 전송로와 수신용 전송로를 별도로 준비하고,
+송신과 수신을 동시에 할 수 있는 방식입니다.&lt;/p&gt;
 &lt;!-- ![](/images/network/network-layers/osi-7-layer-bytebytego.png) --&gt;
 &lt;!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* --&gt;
 &lt;!-- ![](/images/network/network-layers/linux-network-protocol-stack.png) --&gt;
@@ -56,16 +105,37 @@ L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매
 네트워크 인터페이스, 네트워크 어댑터라고도 부릅니다.
 모바일 기기를 포함한 모든 네트워크 단말기는 애플리케이션과 운영체제가 처리한 패킷을
 NIC를 통해 LAN 케이블이나 전파로 보냅니다.&lt;/p&gt;
+&lt;p&gt;유선 LAN인 &lt;strong&gt;이더넷 케이블&lt;/strong&gt;은 IEEE 802.3로 표준화하고 있습니다.
+대표적으로 트위스트 페어 케이블, 광섬유 케이블, 동축 케이블이 있습니다.
+&lt;strong&gt;트위스트 페어 케이블&lt;/strong&gt;은 구리로 만든 LAN 케이블로 흔히 UTP(Unshielded Twisted Pair)가 사용됩니다.
+UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
+공장 등 전자석 노이즈가 많은 환경에서는 비싸지만 안정적인 STP(Shielded Twisted Pair)를 사용합니다.
+&lt;strong&gt;동축 케이블&lt;/strong&gt;(Coaxial cable)은 고주파(높은 주파수) 전송에 적합하기 때문에 주로 TV나 오디오 신호 케이블로 사용됩니다.
+트위스트 페어 케이블과 마찬가지로 구리로 만들어졌습니다.
+&lt;strong&gt;광섬유 케이블&lt;/strong&gt;(Optic fiber cable)은 광 신호를 전달하는 케이블로 유리로 만들어집니다.
+줄여서 광 케이블이라고도 부릅니다.
+다중 모드 광섬유 케이블은 단파장(Short Wavelength) 레이저를 사용하며, 단거리 전송에 적합합니다.
+단일 모드 광섬유 케이블은 장파장(Long Wavelength) 레이저를 사용하며, 장거리 전송에 적합합니다.&lt;/p&gt;
 &lt;p&gt;일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
 전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
 &lt;strong&gt;리피터&lt;/strong&gt;(&lt;strong&gt;Repeater&lt;/strong&gt;)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;미디어 컨버터&lt;/strong&gt;(&lt;strong&gt;Media Converter&lt;/strong&gt;)는 전기 신호와 광 신호를 서로 교환하는 기기입니다.
-광 섬유 케이블(Optic fiber cable, 광 케이블)을 연결하지 못하는 기기만 있는 상황에서
+광 케이블을 연결하지 못하는 기기만 있는 상황에서
 네트워크를 연장하고자 할 때 사용합니다.
 전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
 해저 광 케이블&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
 다만 광 케이블과 장비는 비싼 편입니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;액세스 포인트&lt;/strong&gt;(&lt;strong&gt;Access Point&lt;/strong&gt;)는 패킷을 전파로 변조/복조하는 기기입니다.
+&lt;p&gt;&lt;strong&gt;무선 LAN&lt;/strong&gt;은 &lt;strong&gt;전파를 이용해 통신&lt;/strong&gt;합니다.
+무선 LAN은 주파수 대역에 따라 2.4GHz, 5GHz 대역으로 나뉩니다.
+2.4GHz 대역은 장애물에 강하기 때문에 옥내외에서 사용할 수 있습니다.
+하지만 일상생활에서 사용되는 전자레인지, 블루투스 등에서 전파 간섭을 일으키는 경우가 많습니다.
+전파 간섭이 발생하면 갑자기 연결이 끊어지거나 패킷이 소실되어 버립니다.
+5GHz 대역은 사용할 수 있는 채널이 많고 동시에 사용할 수 있기 때문에
+깨끗한 전파 환경을 구축할 수 있습니다.
+하지만 장애물에 약하며, 옥외에서는 특정 주파수 대역(W56)만 사용할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;액세스 포인트&lt;/strong&gt;(&lt;strong&gt;Access Point&lt;/strong&gt;)는 &lt;strong&gt;패킷을 전파로 변조 및 복조&lt;/strong&gt;하는 기기입니다.
+디지털 데이터를 아날로그 전파로 변환하는 것을 변조(modulation)라고 합니다.
+그 반대를 복조(demodulation)라고 하죠.
 쉽게 말하면 무선과 유선 사이의 다리 역할을 합니다.&lt;/p&gt;
 &lt;h1 id=&#34;layer-2---data-link-layer&#34;&gt;Layer 2 - Data Link Layer&lt;/h1&gt;
 &lt;p&gt;L2(데이터 링크 계층)는 &lt;strong&gt;직접 연결된 인접 노드(장치) 간 데이터 전송을 담당&lt;/strong&gt;합니다.
@@ -85,29 +155,22 @@ MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화
 &lt;p&gt;&lt;strong&gt;무선 LAN 프로토콜&lt;/strong&gt;(&lt;strong&gt;IEEE 802.11&lt;/strong&gt;)은 영어로 Wireless LAN(WLAN)이라고 하며, 와이파이(Wi-fi)가 대표적입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;IEEE 802.15&lt;/strong&gt;는 10m 정도 이내의 &lt;strong&gt;초근거리 통신인 WPAN&lt;/strong&gt;(&lt;strong&gt;Wireless Personal Area Network&lt;/strong&gt;)에 대한 표준입니다.
 하위 워킹 그룹으로 정말 다양한 프로토콜이 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;블루투스 (IEEE 802.15.1)
-&lt;ul&gt;
-&lt;li&gt;저전력 근거리 통신.&lt;/li&gt;
-&lt;li&gt;BR/EDR&lt;/li&gt;
-&lt;li&gt;BLE(Bluetooth Low Energy)는 비콘(Beacon)에서 사용됩니다. 비콘은 주기적으로 신호를 송신하는 소형 무선 장치입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Zigbee (IEEE 802.15.4)
-&lt;ul&gt;
-&lt;li&gt;저전력, 저속 무선 네트워크용. 주로 센서 네트워크, 홈 자동화에 사용됨.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;RFID (Radio-Frequency Identification)
-&lt;ul&gt;
-&lt;li&gt;무선 주파수로 &lt;strong&gt;태그&lt;/strong&gt;와 &lt;strong&gt;리더&lt;/strong&gt;기 간 통신.&lt;/li&gt;
-&lt;li&gt;NFC(Near Field Communication)는 기본적으로 RFID를 기반으로 만들어졌습니다. &lt;strong&gt;13.56 MHz&lt;/strong&gt; 주파수를 사용하는 10cm 이내 초근거리 통신 기술입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;그 중 대표적인 것이 &lt;strong&gt;IEEE 802.15.1&lt;/strong&gt;인 &lt;strong&gt;블루투스&lt;/strong&gt;(&lt;strong&gt;Bluetooth&lt;/strong&gt;)입니다.
+블루투스는 저전력 근거리 통신 프로토콜입니다.
+무선 LAN에 비해 전속 속도나 통신 거리가 부족하지만
+소비 전력이 적고 다양한 장치를 간단히 페어링할 수 있게 때문에 널리 보급되었습니다.
+초기 버전이었던 Classic Bluetooth(BR/EDR)을 넘어
+현재는 BLE(Bluetooth Low Energy) 스택이 널리 사용되고 있습니다.
+BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 비콘(Beacon)에서도 사용됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;지그비 Zigbee&lt;/strong&gt;는 &lt;strong&gt;IEEE 802.15.4&lt;/strong&gt;에서 표준화된 저전력 단거리 무선 프로토콜입니다.
+무선 LAN에 비해 전송 속도나 전송 거리가 열악합니다.
+하지만 데이터 송수신 시 소비 전력이 적고 슬립 시 대기 전력이 블루투스보다도 적기 때문에
+스마트홈 가전이나 제조 공장의 센서 등
+필요할 때만 통신하는 일이 많은 &lt;strong&gt;IoT&lt;/strong&gt;(&lt;strong&gt;Internet of Things&lt;/strong&gt;)에서 사용됩니다.&lt;/p&gt;
 &lt;p&gt;IEEE 802 그룹 외에도 다양한 프로토콜도 있습니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ARP&lt;/strong&gt;(&lt;strong&gt;Address Resolution Protocol&lt;/strong&gt;)는 MAC 주소와 L3에 해당되는 IP 주소를 매핑하는 프로토콜입니다.
-L2와 L3 사이에 있다고 볼 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;RFID&lt;/strong&gt;(&lt;strong&gt;Radio-Frequency Identification&lt;/strong&gt;)는 무선 주파수로 &lt;strong&gt;태그&lt;/strong&gt;와 &lt;strong&gt;리더&lt;/strong&gt;기 간 통신 기술입니다.
+&lt;strong&gt;NFC&lt;/strong&gt;(&lt;strong&gt;Near Field Communication&lt;/strong&gt;)는 기본적으로 RFID를 기반으로 만들어졌습니다.
+&lt;strong&gt;13.56 MHz&lt;/strong&gt; 주파수를 사용하는 10cm 이내 초근거리 통신 기술입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;PPP&lt;/strong&gt;(&lt;strong&gt;Point-to-Point Protocol&lt;/strong&gt;)는 &lt;strong&gt;직렬 통신&lt;/strong&gt;을 위한 프로토콜입니다.
 전화선을 통해 인터넷에 접속하는 &amp;lsquo;다이얼업 접속&amp;rsquo;에서 사용된 프로토콜입니다.
 과거 인터넷 접속 시에 사용되던 모뎀은 PPP 프로토콜을 사용했습니다.
@@ -121,6 +184,8 @@ macOS도 &lt;a href=&#34;https://support.apple.com/HT206844&#34;&gt;Sierra(10.12
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2661&#34;&gt;RFC2661&lt;/a&gt;에 정의되어 있습니다.
 보안 기능을 가진 IPsec을 함께 사용해
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc3193&#34;&gt;L2TP over IPsec(RFC3193)&lt;/a&gt;으로 사용하는 경우가 대부분입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ARP&lt;/strong&gt;(&lt;strong&gt;Address Resolution Protocol&lt;/strong&gt;)는 MAC 주소와 L3에 해당되는 IP 주소를 매핑하는 프로토콜입니다.
+L2와 L3 사이에 있다고 볼 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;layer-3---network-layer&#34;&gt;Layer 3 - Network Layer&lt;/h1&gt;
 &lt;p&gt;L3(네트워크 계층)는 &lt;strong&gt;다른 네트워크들을 연결&lt;/strong&gt;하고
 &lt;strong&gt;패킷(Packet) 단위의 데이터가 출발지에서 최종 목적지까지 전달되도록 경로를 선택&lt;/strong&gt;하는 계층입니다.
@@ -133,16 +198,65 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;L3 스위치&lt;/strong&gt;(&lt;strong&gt;Layer 3 Switch&lt;/strong&gt;)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-프로토콜&#34;&gt;L3 주요 프로토콜&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;IP (Internet Protocol)
-&lt;ul&gt;
-&lt;li&gt;NAT (Network Address Translation)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ICMP (Internet Control Message Protocol)&lt;/li&gt;
-&lt;li&gt;OSPF (Open Shortest Path First)&lt;/li&gt;
-&lt;li&gt;BGP (Border Gateway Protocol)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;IP&lt;/strong&gt;(&lt;strong&gt;Internet Protocol&lt;/strong&gt;)는
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791&#34;&gt;RFC791&lt;/a&gt;에 정의된 프로토콜로, &lt;strong&gt;패킷&lt;/strong&gt;을 전송하는 역할을 합니다.
+패킷을 전송하기 위해 송신지 IP 주소와 수적지 IP 주소가 IP 헤더에 포함됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;NAT&lt;/strong&gt;(&lt;strong&gt;Network Address Translation&lt;/strong&gt;)는
+사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
+NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
+NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
+이 중 &lt;strong&gt;포트 포워딩&lt;/strong&gt;(&lt;strong&gt;Port Forwarding&lt;/strong&gt;)은 특정 &lt;code&gt;IP주소:포트&lt;/code&gt;로 들어온 패킷을 특정 단말로 전달하는 기술입니다.
+내부(LAN)에 있는 서버를 외부(인터넷)에 공개할 때 사용합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ICMP&lt;/strong&gt;(&lt;strong&gt;Internet Control Message Protocol&lt;/strong&gt;)는
+IP 패킷을 전송하면서 발생하는 오류를 알리는 프로토콜입니다.
+대표적으로 &lt;code&gt;ping&lt;/code&gt;이 Echo Request와 Echo Reply 패킷을 사용해서
+L3 네트워크에 접속된 단말이 살아있는지 확인하는 데 사용됩니다.&lt;/p&gt;
+&lt;p&gt;IP 패킷 헤더에는 &lt;strong&gt;TTL&lt;/strong&gt;(&lt;strong&gt;Time To Live&lt;/strong&gt;)이라는 패킷의 수명을 나타내는 1바이트(8비트) 필드가 있습니다.
+IP 패킷의 수명은 &amp;lsquo;경유하는 라우터의 수&amp;rsquo;를 의미합니다.
+경유하는 라우터의 수는 &amp;lsquo;홉(Hop) 수&amp;rsquo;라고 부릅니다.
+실제로 TTL 값은 L3 이상에서 동작하는 모든 기기에서 1씩 감소합니다.
+값이 0이 되면 패킷이 파기되고, &lt;code&gt;Time-to-live excceded&lt;/code&gt;라는 ICMPv4 패킷을 반환하고, 송신지 단말에 전달합니다.
+이는 라우팅 루프 방지와 통신 경로 확인(traceroute)을 위해 사용됩니다.&lt;/p&gt;
+&lt;h3 id=&#34;ip-주소-체계&#34;&gt;IP 주소 체계&lt;/h3&gt;
+&lt;p&gt;IP 주소는 L3 네트워크에 접속된 단말을 식별하는 주소입니다.
+IPv4는 32비트 주소체계를 사용하고, IPv6는 128비트 주소체계를 사용합니다.
+&lt;strong&gt;듀얼 스택&lt;/strong&gt;(&lt;strong&gt;Dual Stack&lt;/strong&gt;)은 IPv4와 IPv6를 동시에 사용하는 방식입니다.&lt;/p&gt;
+&lt;p&gt;IPv4를 10진수로 표현할 때 8비트(1바이트)씩 점(.)으로 구분하는데,
+구분된 그룹은 8비트씩 묶여서 옥텟(octet)이라고 부릅니다.
+보통 IPv4 주소는 &lt;strong&gt;서브넷 마스크&lt;/strong&gt;(&lt;strong&gt;subnet mask&lt;/strong&gt;)와 함께 사용됩니다.
+서브넷 마스크는 IP 주소를 네트워크 부분과 호스트 부분으로 나누는 역할을 합니다.
+서브넷 마스크는 32비트 중 네트워크 부분을 1로, 호스트 부분을 0으로 표현합니다.
+서브넷 마스크를 IP 주소와 AND 연산하면 네트워크 주소를 얻을 수 있습니다.
+CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &amp;lsquo;1&amp;rsquo;의 비트 수를 합산해서 표기합니다.&lt;/p&gt;
+&lt;p&gt;IPv4 주소에는 예외적인 주소들이 있습니다.
+루프백(Loopback) 주소인 &lt;code&gt;127.0.0.1/8&lt;/code&gt;은 호스트 자기 자신을 가리키는 주소입니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1122&#34;&gt;RFC1122&lt;/a&gt;에 정의되어 있습니다.
+Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1918&#34;&gt;RFC1918&lt;/a&gt;에 정의되어 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;ip-라우팅&#34;&gt;IP 라우팅&lt;/h3&gt;
+&lt;p&gt;라우터는 라우팅 테이블(Routing Table)을 통해
+수신지 네트워크 정보와 IP 패킷을 전송할 근접 기기의 IP 주소를 나타내는 네트워크 홉 정보를 관리함으로써
+IP 패킷의 전송 대상자를 바꿉니다.
+IP 패킷의 전송 대상자를 바꾸는 기능을 &lt;strong&gt;라우팅&lt;/strong&gt;(&lt;strong&gt;Routing&lt;/strong&gt;)이라고 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;라우팅 프로토콜&lt;/strong&gt;은 그 제어 범위에 따라 IGP(Interior Gateway Protocol)와
+EGP(Exterior Gateway Protocol)로 나뉩니다.
+하나의 정책에 따라 관리되는 네트워크 집합을 &lt;strong&gt;AS&lt;/strong&gt;(&lt;strong&gt;Autonomous System&lt;/strong&gt;)라고 하는데,
+AS 내부에서 라우팅하는 프로토콜을 IGP로, AS 간 라우팅하는 프로토콜을 EGP로 분류합니다.
+여기서 AS는 ISP(Internet Service Provider), 기업, 연구 기관, 특정 거점 등이 될 수 있습니다.&lt;/p&gt;
+&lt;p&gt;대표적인 IGP로 &lt;strong&gt;OSPF&lt;/strong&gt;(&lt;strong&gt;Open Shortest Path First&lt;/strong&gt;)가 있습니다.
+다익스트라 알고리즘을 기반으로 하는 링크 상태 라우팅 프로토콜(Link-state routing protocol)입니다.
+링크 상태를 활용해 최적 경로를 계산합니다.&lt;/p&gt;
+&lt;p&gt;또 다른 IGP로 &lt;strong&gt;RIP&lt;/strong&gt;(&lt;strong&gt;Routing Information Protocol&lt;/strong&gt;)가 있습니다.
+디스턴스 벡터 라우팅 프로토콜(Distance-vector routing protocol)로, 벨만-포드 알고리즘을 기반으로 합니다.
+거리(distnace)와 방향(vector)를 활용해서 경로를 계산합니다.
+여기에서의 거리는 수신지에 이를 때까지 경유하는 라우터의 수(홉 수)를 의미합니다.&lt;/p&gt;
+&lt;p&gt;대표적인 EGP로 &lt;strong&gt;BGP&lt;/strong&gt;(&lt;strong&gt;Border Gateway Protocol&lt;/strong&gt;)가 있습니다.
+BGP는 AS 간 라우팅을 담당하는 프로토콜로, 경로 벡터 라우팅 프로토콜(Path-vector routing protocol)입니다.
+경로(path)와 방향(vector)를 활용해서 경로를 계산합니다.
+여기에서 경로는 수신지까지 경유하는 AS, 방향은 BGP peer를 나타냅니다.
+BGP는 EGP이지만 AS 안에서도 사용할 수 있습니다.
+AS 내부에서 사용하는 BGP를 &lt;strong&gt;iBGP&lt;/strong&gt;(&lt;strong&gt;Internal BGP&lt;/strong&gt;),
+AS 간에 사용하는 BGP를 &lt;strong&gt;eBGP&lt;/strong&gt;(&lt;strong&gt;External BGP&lt;/strong&gt;)라고 부릅니다.&lt;/p&gt;
 &lt;h1 id=&#34;layer-4---transport-layer&#34;&gt;Layer 4 - Transport Layer&lt;/h1&gt;
 &lt;p&gt;L4(전송 계층)는 &lt;strong&gt;종단 간(end-to-end) 신뢰성 있는 데이터 전송&lt;/strong&gt;을 담당합니다.
 L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며, &lt;strong&gt;세그먼트&lt;/strong&gt; 단위로 데이터를 전송합니다.
@@ -159,27 +273,93 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
 별도의 하드웨어로도 사용하지만, Netfilter 프레임워크를 이용한 iptables 같은 소프트웨어 방화벽도 널리 사용됩니다.&lt;/p&gt;
 &lt;h2 id=&#34;l4-주요-프로토콜&#34;&gt;L4 주요 프로토콜&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;TCP (Transmission Control Protocol)&lt;/li&gt;
-&lt;li&gt;UDP (User Datagram Protocol)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
+&lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)
+&lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 시작으로 연결 수립 후 통신합니다.
+TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
+&lt;strong&gt;흐름 제어&lt;/strong&gt;(&lt;strong&gt;Flow Control&lt;/strong&gt;)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
+&lt;strong&gt;혼잡 제어&lt;/strong&gt;(&lt;strong&gt;Congestion Control&lt;/strong&gt;)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
+&lt;strong&gt;재전송 제어&lt;/strong&gt;(&lt;strong&gt;Retransmission Control&lt;/strong&gt;)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.&lt;/p&gt;
+&lt;h3 id=&#34;포트-번호&#34;&gt;포트 번호&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;포트 번호&lt;/strong&gt;(&lt;strong&gt;Port Number&lt;/strong&gt;)는 &lt;strong&gt;프로세스 간 통신을 위한 번호&lt;/strong&gt;입니다.&lt;/p&gt;
+&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Range&lt;/th&gt;
+          &lt;th&gt;Name&lt;/th&gt;
+          &lt;th&gt;For&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;0 ~ 1023&lt;/td&gt;
+          &lt;td&gt;Well-Known ports (System ports)&lt;/td&gt;
+          &lt;td&gt;System processes (with superuser privileges)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;1024 ~ 49151&lt;/td&gt;
+          &lt;td&gt;Registered ports&lt;/td&gt;
+          &lt;td&gt;User processes (without superuser privileges)&lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;tr&gt;
+          &lt;td&gt;49152 ~ 65535&lt;/td&gt;
+          &lt;td&gt;Dynamic, private ports&lt;/td&gt;
+          &lt;td&gt;for temporary purposes, and for automatic allocation of ephemeral ports.&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h1 id=&#34;layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/h1&gt;
 &lt;p&gt;L7(응용 계층)은 사용자와 가장 가까운 계층으로, &lt;strong&gt;응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공&lt;/strong&gt;합니다.
 이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.&lt;/p&gt;
 &lt;h2 id=&#34;l7-주요-프로토콜&#34;&gt;L7 주요 프로토콜&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;HTTP (HyperText Transfer Protocol)&lt;/li&gt;
-&lt;li&gt;FTP (File Transfer Protocol)&lt;/li&gt;
-&lt;li&gt;SMTP (Simple Mail Transfer Protocol)&lt;/li&gt;
-&lt;li&gt;DNS (Domain Name System)&lt;/li&gt;
-&lt;li&gt;SSH (Secure Shell)&lt;/li&gt;
-&lt;li&gt;SNMP (Simple Network Management Protocol)&lt;/li&gt;
-&lt;li&gt;SIP (Session Initiation Protocol)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;HTTP&lt;/strong&gt;(&lt;strong&gt;HyperText Transfer Protocol&lt;/strong&gt;)는
+웹 서버와 웹 클라이언트 간의 통신을 위한 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DNS&lt;/strong&gt;(&lt;strong&gt;Domain Name System&lt;/strong&gt;)는
+도메인 이름으로 IP 주소를 찾는 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FTP&lt;/strong&gt;(&lt;strong&gt;File Transfer Protocol&lt;/strong&gt;)는
+파일 전송을 위한 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SMTP&lt;/strong&gt;(&lt;strong&gt;Simple Mail Transfer Protocol&lt;/strong&gt;)는
+이메일을 전송하는 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SSH&lt;/strong&gt;(&lt;strong&gt;Secure Shell&lt;/strong&gt;)는 원격 로그인을 위한 프로토콜입니다.
+(&lt;a href=&#34;https://markruler.github.io/posts/network/ssh/&#34;&gt;more&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SNMP&lt;/strong&gt;(&lt;strong&gt;Simple Network Management Protocol&lt;/strong&gt;)는
+네트워크 장비의 상태를 모니터링하고 관리하기 위한 프로토콜입니다.
+(&lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;more&lt;/a&gt;)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;DHCP&lt;/strong&gt;(&lt;strong&gt;Dynamic Host Configuration Protocol&lt;/strong&gt;)는
+단말에 대해 자동으로 IP 주소를 설정하는 방법입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;LDAP&lt;/strong&gt;(&lt;strong&gt;Lightweight Directory Access Protocol&lt;/strong&gt;)는
+디렉터리 서비스를 위한 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MQTT&lt;/strong&gt;(&lt;strong&gt;Message Queuing Telemetry Transport&lt;/strong&gt;)는
+경량 발행-구독 메시징 프로토콜로 IoT 기기 간 메시지 전달에 적합합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SIP&lt;/strong&gt;(&lt;strong&gt;Session Initiation Protocol&lt;/strong&gt;)는
+음성, 비디오, 메시징 애플리케이션을 포함하는 통신 세션을 시작, 유지, 종료하는 데 사용되는 신호 프로토콜입니다.
+흔히 VoIP 통화를 위해 사용됩니다.&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt; | 미야타 히로시&lt;/li&gt;
+&lt;li&gt;네트워크 일반
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318&#34;&gt;컴퓨터 네트워킹 하향식 접근&lt;/a&gt; | James F. Kurose, Keith W. Ross&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183&#34;&gt;IT 엔지니어를 위한 네트워크 입문&lt;/a&gt; | 고재성, 이상훈&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;TCP/IP
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt; | 미야타 히로시&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DNS
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600445&#34;&gt;DNS 실전 교과서&lt;/a&gt; | 와타나베 유이, 사토 신타, 후지와라 가즈노리&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;HTTP
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788966261208&#34;&gt;HTTP 완벽 가이드&lt;/a&gt; | 데이빗 고울리, 브라이언 토티, 마조리 세이어, 세일루 레디, 안슈 아가왈&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161754475&#34;&gt;HTTP/2 in Action&lt;/a&gt; | 배리 폴라드&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;

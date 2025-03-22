@@ -13,6 +13,9 @@ categories:
   - wiki
 ---
 
+원격지의 셸에 접속하기 위해 사용되는 네트워크 프로토콜로
+이 글에서는 업무에서 자주 사용하는 SSH 설정을 정리합니다.
+
 - [SSH key 생성](#ssh-key-생성)
 - [SSH Server](#ssh-server)
   - [authoized\_keys](#authoized_keys)
@@ -25,8 +28,6 @@ categories:
   - [Local Forward](#local-forward)
 - [Password 입력 없이 SSH Key로 Client에서 Server로 접속하기](#password-입력-없이-ssh-key로-client에서-server로-접속하기)
 - [참조](#참조)
-
-> 업무에서 자주 사용하는 SSH 설정을 정리합니다.
 
 # SSH key 생성
 
