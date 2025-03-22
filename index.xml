@@ -21,21 +21,24 @@
         <pubDate>Thu, 20 Mar 2025 23:03:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/network/network-layer/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/network-layer/ -&lt;p&gt;&lt;strong&gt;OSI 모델&lt;/strong&gt;은 다양한 통신 시스템이 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
-각 계층(Layer)은 특정한 역할을 담당합니다.
-이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해 &lt;strong&gt;TCP/IP 모델&lt;/strong&gt;을 설명하지만 용어는 OSI 모델을 사용합니다.
-TCP/IP 모델은 OSI 모델을 기반으로 하며, 4계층으로 구성되어 있습니다.
-OSI 모델의 5~7 계층은 TCP/IP 모델의 응용 계층에 합쳐져 있습니다.&lt;/p&gt;
+        <description>임창수 https://markruler.github.io/posts/network/network-layer/ -&lt;p&gt;&lt;strong&gt;TCP/IP 모델&lt;/strong&gt;은 미국 국방부 연구기관 DARPA에서 인터넷 초기 설계에 사용한 모델로 4계층으로 구성되어 있습니다.
+실제 인터넷을 구현하기 위해 실용적 목적으로 개발되었습니다.&lt;/p&gt;
+&lt;p&gt;반면 &lt;strong&gt;OSI 모델&lt;/strong&gt;은 다양한 컴퓨터 시스템이 서로 통신할 수 있도록 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+이상적인 모델이기 때문에 실제 네트워크에서는 OSI 모델보다 TCP/IP 모델이 사용됩니다.
+이유는 모르겠지만 용어는 OSI 모델의 용어가 통용됩니다.&lt;/p&gt;
+&lt;p&gt;이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
+일반적으로 사용되는 &lt;strong&gt;TCP/IP 모델을 설명하지만, 용어는 OSI 모델을 사용&lt;/strong&gt;합니다.&lt;/p&gt;
 &lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
 &lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
 &lt;p&gt;1 계층은 영어로 Layer 1, 줄여서 L1이라고 부릅니다.
 이 글에서도 글을 줄여 쓰기 위해서 물리 계층은 L1이라고 표기하겠습니다.&lt;/p&gt;
-&lt;p&gt;계층에서 처리하는 한 덩어리의 데이터 단위를 &lt;strong&gt;PDU&lt;/strong&gt;(Protocol Data Unit)라고 부릅니다.
+&lt;p&gt;계층에서 처리하는 한 덩어리의 데이터 단위를 &lt;strong&gt;PDU&lt;/strong&gt;(&lt;strong&gt;Protocol Data Unit&lt;/strong&gt;)라고 부릅니다.
 PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
 웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.&lt;/p&gt;
 &lt;p&gt;이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
 L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
-특히 L3의 &lt;strong&gt;IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체&lt;/strong&gt;를 일컫는 경우도 많습니다.&lt;/p&gt;
+특히 L3의 &lt;strong&gt;IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체&lt;/strong&gt;를 일컫기도 합니다.
+뭉뚱그려서 &amp;lsquo;패킷&amp;rsquo;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;이라고 부르죠.&lt;/p&gt;
 &lt;p&gt;송신 측에서 데이터를 보낼 때는 &lt;strong&gt;상위 계층의 데이터에 하위 계층의 헤더(header)를 붙여서 캡슐화(encapsulation)하며&lt;/strong&gt; 내려가고,
 수신 측에서는 그 과정을 역순으로 &lt;strong&gt;디캡슐화(decapsulation)하여&lt;/strong&gt; 상위 계층으로 전달합니다&lt;/p&gt;
 &lt;!-- ![](/images/network/network-layers/osi-7-layer-bytebytego.png) --&gt;
@@ -43,7 +46,7 @@ L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet
 &lt;!-- ![](/images/network/network-layers/linux-network-protocol-stack.png) --&gt;
 &lt;!-- *[ByteByteGo](https://blog.bytebytego.com/p/network-protocols-run-the-internet)* --&gt;
 &lt;h1 id=&#34;layer-1---physical-layer&#34;&gt;Layer 1 - Physical Layer&lt;/h1&gt;
-&lt;p&gt;L1(물리 계층)은 실제 물리 매체를 통해 &lt;strong&gt;디지털 신호를 전기 신호나 광신호 등으로 변환&lt;/strong&gt;하여 송수신합니다.
+&lt;p&gt;L1(물리 계층)은 실제 물리 매체를 통해 &lt;strong&gt;디지털 신호를 전기 신호나 광신호 등으로 상호 변환&lt;/strong&gt;하여 송수신합니다.
 L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
 케이블이나 커넥터 형태, 핀 배열 등 물리적인 사양에 관해 모두 정의되어 있는 계층입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l1-주요-기기&#34;&gt;L1 주요 기기&lt;/h2&gt;
@@ -52,13 +55,13 @@ L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매
 모바일 기기를 포함한 모든 네트워크 단말기는 애플리케이션과 운영체제가 처리한 패킷을
 NIC를 통해 LAN 케이블이나 전파로 보냅니다.&lt;/p&gt;
 &lt;p&gt;일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
-전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
 &lt;strong&gt;리피터&lt;/strong&gt;(&lt;strong&gt;Repeater&lt;/strong&gt;)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;미디어 컨버터&lt;/strong&gt;(&lt;strong&gt;Media Converter&lt;/strong&gt;)는 전기 신호와 광 신호를 서로 교환하는 기기입니다.
 광 섬유 케이블(Optic fiber cable, 광 케이블)을 연결하지 못하는 기기만 있는 상황에서
 네트워크를 연장하고자 할 때 사용합니다.
 전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
-해저 광 케이블&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
+해저 광 케이블&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
 다만 광 케이블과 장비는 비싼 편입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;액세스 포인트&lt;/strong&gt;(&lt;strong&gt;Access Point&lt;/strong&gt;)는 패킷을 전파로 변조/복조하는 기기입니다.
 쉽게 말하면 무선과 유선 사이의 다리 역할을 합니다.&lt;/p&gt;
@@ -117,7 +120,7 @@ L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며,
 L4 로드 밸런서는 L4 스위치 또는 애플리케이션 스위치라고 불리기도 합니다.
 IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상태를 확인하고,
 사용자가 지정한 로드 밸런싱 방식을 이용해 가용성 확보를 목표로 합니다.
-로드 밸런서는 L7에도 사용됩니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+로드 밸런서는 L7에도 사용됩니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;방화벽&lt;/strong&gt;(&lt;strong&gt;Firewall&lt;/strong&gt;)은 단말 사이에서 교환되는 패킷을 검사하여 허용할지 막을지 결정하는 기기입니다.
 패킷의 IP 주소나 포트 번호를 보고, 통신을 허가하거나 차단합니다.
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
@@ -152,15 +155,18 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 &lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/&#34;&gt;OSI 모델이란&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q&#34;&gt;실제 테스트하는 영상&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q&#34;&gt;실제 테스트하는 영상&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
 &lt;p&gt;AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
 NLB(Network Load Balancer)는 L4,
-ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
