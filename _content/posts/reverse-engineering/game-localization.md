@@ -7,8 +7,8 @@ title: "한국어를 지원하지 않는 게임의 비공식 한국어 패치 �
 description: "한국어 패치 제작자분들 감사합니다"
 images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
 tags:
+  - game
   - reverse-engineering
-  - game-localization
 categories:
   - wiki
 ---
