@@ -83,9 +83,9 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 인터넷 초기 설계(ARPANet)에 사용한 모델로 4계층으로 구성되어 있습니다.
 실제 인터넷을 구현하기 위해 실용적 목적으로 개발되었습니다.&lt;/p&gt;
 &lt;p&gt;반면 &lt;strong&gt;OSI 모델&lt;/strong&gt;은 다양한 컴퓨터 시스템이 서로 통신할 수 있도록
-1984년 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
-이상적인 모델이기 때문에 실제 네트워크에서는 OSI 모델보다 TCP/IP 모델이 사용됩니다.
-이유는 모르겠지만 용어는 OSI 모델의 용어가 통용됩니다.&lt;/p&gt;
+1984년 국제표준화기구(ISO)에서 만든 개념 모델입니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;실제 네트워크에서는 TCP/IP 모델이 사용됩니다.
+하지만 개념을 이해하고 설명하기에는 OSI 모델이 더 적합하기 때문에 OSI 모델이 통용됩니다.&lt;/p&gt;
 &lt;p&gt;이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
 일반적으로 사용되는 &lt;strong&gt;OSI 모델을 따르지만 5~7계층은 TCP/IP 모델처럼 합쳐진 5계층 모델&lt;/strong&gt;을 설명합니다.&lt;/p&gt;
 &lt;!-- 첫 책 p12 --&gt;
@@ -162,7 +162,8 @@ L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매
 &lt;p&gt;&lt;strong&gt;NIC&lt;/strong&gt;(&lt;strong&gt;Network Interface Card&lt;/strong&gt;)는 컴퓨터를 네트워크에 연결하기 위해 필요한 하드웨어입니다.
 네트워크 인터페이스, 네트워크 어댑터라고도 부릅니다.
 모바일 기기를 포함한 모든 네트워크 단말기는 애플리케이션과 운영체제가 처리한 패킷을
-NIC를 통해 LAN 케이블이나 전파로 보냅니다.&lt;/p&gt;
+NIC를 통해 LAN 케이블이나 전파로 보냅니다.
+&lt;strong&gt;MAC&lt;/strong&gt;(&lt;strong&gt;Medium access control&lt;/strong&gt;) 주소는 네트워크 인터페이스 카드(NIC)에 할당된 고유한 주소입니다.&lt;/p&gt;
 &lt;p&gt;유선 LAN인 &lt;strong&gt;이더넷 케이블&lt;/strong&gt;은 IEEE 802.3로 표준화하고 있습니다.
 대표적으로 트위스트 페어 케이블, 광섬유 케이블, 동축 케이블이 있습니다.
 &lt;strong&gt;트위스트 페어 케이블&lt;/strong&gt;은 구리로 만든 LAN 케이블로 흔히 UTP(Unshielded Twisted Pair)가 사용됩니다.
@@ -173,16 +174,18 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 &lt;strong&gt;광섬유 케이블&lt;/strong&gt;(Optic fiber cable)은 광 신호를 전달하는 케이블로 유리로 만들어집니다.
 줄여서 광 케이블이라고도 부릅니다.
 다중 모드 광섬유 케이블은 단파장(Short Wavelength) 레이저를 사용하며, 단거리 전송에 적합합니다.
-단일 모드 광섬유 케이블은 장파장(Long Wavelength) 레이저를 사용하며, 장거리 전송에 적합합니다.&lt;/p&gt;
-&lt;p&gt;일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
-전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
-&lt;strong&gt;리피터&lt;/strong&gt;(&lt;strong&gt;Repeater&lt;/strong&gt;)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;미디어 컨버터&lt;/strong&gt;(&lt;strong&gt;Media Converter&lt;/strong&gt;)는 전기 신호와 광 신호를 서로 교환하는 기기입니다.
-광 케이블을 연결하지 못하는 기기만 있는 상황에서
-네트워크를 연장하고자 할 때 사용합니다.
+단일 모드 광섬유 케이블은 장파장(Long Wavelength) 레이저를 사용하며, 장거리 전송에 적합합니다.
 전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
-해저 광 케이블&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
-다만 광 케이블과 장비는 비싼 편입니다.&lt;/p&gt;
+해저 광 케이블&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;의 경우 추가 리피터없이 300km까지 전송이 가능하다고 합니다.
+다만 광 케이블은 구리선에 비해 비싼 편입니다.&lt;/p&gt;
+&lt;p&gt;일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
+전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨지고 데이터 수신에 문제가 발생합니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;
+&lt;strong&gt;리피터&lt;/strong&gt;(&lt;strong&gt;Repeater&lt;/strong&gt;)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;미디어 컨버터&lt;/strong&gt;(&lt;strong&gt;Media Converter&lt;/strong&gt;)는 전기 신호와 광 신호를 서로 변환하는 기기입니다.
+광 케이블을 연결하지 못하는 기기만 있는 상황에서
+장거리 전송을 위해 광 케이블을 사용하고자 할 때,
+또는 전자파 간섭이 심한 환경에서 안정적인 통신을 위해
+기존의 전기 신호 기반 네트워크와 광 신호 기반 네트워크를 연결하는 데 사용됩니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;무선 LAN&lt;/strong&gt;은 &lt;strong&gt;전파를 이용해 통신&lt;/strong&gt;합니다.
 무선 LAN은 주파수 대역에 따라 2.4GHz, 5GHz 대역으로 나뉩니다.
 2.4GHz 대역은 장애물에 강하기 때문에 옥내외에서 사용할 수 있습니다.
@@ -198,13 +201,13 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 &lt;h1 id=&#34;layer-2---data-link-layer&#34;&gt;Layer 2 - Data Link Layer&lt;/h1&gt;
 &lt;p&gt;L2(데이터 링크 계층)는 &lt;strong&gt;직접 연결된 인접 노드(장치) 간 데이터 전송을 담당&lt;/strong&gt;합니다.
 L2는 &lt;strong&gt;MAC 주소&lt;/strong&gt;를 이용해 통신하며, &lt;strong&gt;프레임&lt;/strong&gt; 단위로 데이터를 전송합니다.
-또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.&lt;/p&gt;
-&lt;!-- MAC(Medium access control) 주소는 네트워크 인터페이스  --&gt;
+다른 계층과 달리 페이로드 뒤에 &lt;strong&gt;트레일러&lt;/strong&gt;(&lt;strong&gt;trailer&lt;/strong&gt;)가 포함될 수 있습니다.
+예를 들어, 이더넷의 &lt;strong&gt;CRC&lt;/strong&gt;(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.&lt;/p&gt;
 &lt;h2 id=&#34;l2-주요-기기&#34;&gt;L2 주요 기기&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;브리지&lt;/strong&gt;(&lt;strong&gt;Bridge&lt;/strong&gt;)는 포트와 포트 사이의 &amp;lsquo;다리 bridge&amp;rsquo; 역할을 합니다.
 단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
 이 전송 처리를 브리징(bridging)이라고 합니다.
-최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.&lt;/p&gt;
+최근에는 L2 스위치가 브리지의 기능을 포함하고 있어서 단일 기기를 이용하지는 않습니다.&lt;/p&gt;
 &lt;h2 id=&#34;l2-주요-프로토콜&#34;&gt;L2 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/IEEE_802&#34;&gt;IEEE 802&lt;/a&gt;는 LAN(Local Area Network)과
 MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화 기구입니다.
@@ -236,7 +239,7 @@ BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 비콘(Bea
 &lt;!-- https://youtu.be/LnGHcfcC-nE --&gt;
 &lt;p&gt;PPTP(Point-to-Point Tunneling Protocol)는 인터넷상에 가상 전용선(터널)을 만드는 &lt;strong&gt;VPN&lt;/strong&gt; 프로토콜입니다.
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2637&#34;&gt;RFC2637&lt;/a&gt;에 정의되어 있습니다.
-보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
+인증 메커니즘이 취약하고 암호화 방식이 약하여 보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
 macOS도 &lt;a href=&#34;https://support.apple.com/HT206844&#34;&gt;Sierra(10.12)&lt;/a&gt;부터 대응을 중단했습니다.&lt;/p&gt;
 &lt;p&gt;L2TP(Layer 2 Tunneling Protocol)도 PPTP와 마찬가지로 인터넷상에 가상 전용선을 만드는 프로토콜입니다.
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2661&#34;&gt;RFC2661&lt;/a&gt;에 정의되어 있습니다.
@@ -251,9 +254,11 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 또한, 혼잡 제어와 QoS(서비스 품질) 보장을 통해 네트워크의 효율성을 높입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-기기&#34;&gt;L3 주요 기기&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;라우터&lt;/strong&gt;(&lt;strong&gt;Router&lt;/strong&gt;)는 단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
-자신이 속한 네트워크를 넘은 범위에 있는 단말로 전달하거나 중계하는 역할을 담당합니다.
-이 과정을 패키지 릴레이(Package Relay)라고 하며, 라우팅이라고 합니다.
-라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.&lt;/p&gt;
+라우팅 테이블을 참조하여 최적의 경로를 선택합니다.
+그리고 그 경로로 패킷을 전달합니다.
+이 과정을 패키지 릴레이(Package Relay)라고 하며, 흔히 라우팅(routing)이라고 합니다.
+자신이 속한 네트워크 내에서도 발생할 수 있으며,
+다른 네트워크로 패킷을 전달하는 경우도 포함됩니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;L3 스위치&lt;/strong&gt;(&lt;strong&gt;Layer 3 Switch&lt;/strong&gt;)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-프로토콜&#34;&gt;L3 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;IP&lt;/strong&gt;(&lt;strong&gt;Internet Protocol&lt;/strong&gt;)는
@@ -276,20 +281,13 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|         IP Payload (TCP Segment / UDP Datagram) ...
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;NAT&lt;/strong&gt;(&lt;strong&gt;Network Address Translation&lt;/strong&gt;)는
-사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
-NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
-NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
-이 중 &lt;strong&gt;포트 포워딩&lt;/strong&gt;(&lt;strong&gt;Port Forwarding&lt;/strong&gt;)은 특정 &lt;code&gt;IP주소:포트&lt;/code&gt;로 들어온 패킷을 특정 단말로 전달하는 기술입니다.
-내부(LAN)에 있는 서버를 외부(인터넷)에 공개할 때 사용합니다.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;ICMP&lt;/strong&gt;(&lt;strong&gt;Internet Control Message Protocol&lt;/strong&gt;)는
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;ICMP&lt;/strong&gt;(&lt;strong&gt;Internet Control Message Protocol&lt;/strong&gt;)는
 IP 패킷을 전송하면서 발생하는 오류를 알리는 프로토콜입니다.
 대표적으로 &lt;code&gt;ping&lt;/code&gt;이 Echo Request와 Echo Reply 패킷을 사용해서
 L3 네트워크에 접속된 단말이 살아있는지 확인하는 데 사용됩니다.&lt;/p&gt;
 &lt;p&gt;IP 패킷 헤더에는 &lt;strong&gt;TTL&lt;/strong&gt;(&lt;strong&gt;Time To Live&lt;/strong&gt;)이라는 패킷의 수명을 나타내는 1바이트(8비트) 필드가 있습니다.
-IP 패킷의 수명은 &amp;lsquo;경유하는 라우터의 수&amp;rsquo;를 의미합니다.
-경유하는 라우터의 수는 &amp;lsquo;홉(Hop) 수&amp;rsquo;라고 부릅니다.
-실제로 TTL 값은 L3 이상에서 동작하는 모든 기기에서 1씩 감소합니다.
+IP 패킷의 수명은 &amp;lsquo;경유하는 라우터(Hop)의 수&amp;rsquo;를 의미합니다.
+하지만 실제로 TTL 값은 L3 이상에서 동작하는 모든 기기에서 1씩 감소합니다.
 값이 0이 되면 패킷이 파기되고, &lt;code&gt;Time-to-live excceded&lt;/code&gt;라는 ICMPv4 패킷을 반환하고, 송신지 단말에 전달합니다.
 이는 라우팅 루프 방지와 통신 경로 확인(traceroute)을 위해 사용됩니다.&lt;/p&gt;
 &lt;h3 id=&#34;ip-주소-체계&#34;&gt;IP 주소 체계&lt;/h3&gt;
@@ -302,11 +300,12 @@ IPv4는 32비트 주소체계를 사용하고, IPv6는 128비트 주소체계를
 서브넷 마스크는 IP 주소를 네트워크 부분과 호스트 부분으로 나누는 역할을 합니다.
 서브넷 마스크는 32비트 중 네트워크 부분을 1로, 호스트 부분을 0으로 표현합니다.
 서브넷 마스크를 IP 주소와 AND 연산하면 네트워크 주소를 얻을 수 있습니다.
-CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &amp;lsquo;1&amp;rsquo;의 비트 수를 합산해서 표기합니다.&lt;/p&gt;
+CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &amp;lsquo;1&amp;rsquo;의 비트 수를 표기합니다.&lt;/p&gt;
 &lt;p&gt;IPv4 주소에는 예외적인 주소들이 있습니다.
 루프백(Loopback) 주소인 &lt;code&gt;127.0.0.1/8&lt;/code&gt;은 호스트 자기 자신을 가리키는 주소입니다.
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1122&#34;&gt;RFC1122&lt;/a&gt;에 정의되어 있습니다.
 Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
+내부 네트워크에서만 사용할 수 있으며, 인터넷에 접속하기 위해서는 NAT와 같은 기술을 사용해야 합니다.
 &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1918&#34;&gt;RFC1918&lt;/a&gt;에 정의되어 있습니다.&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
@@ -342,6 +341,12 @@ Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 �
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;NAT&lt;/strong&gt;(&lt;strong&gt;Network Address Translation&lt;/strong&gt;)는
+사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
+NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
+NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
+이 중 &lt;strong&gt;포트 포워딩&lt;/strong&gt;(&lt;strong&gt;Port Forwarding&lt;/strong&gt;)은 특정 &lt;code&gt;IP주소:포트&lt;/code&gt;로 들어온 패킷을 특정 단말로 전달하는 기술입니다.
+내부(LAN)에 있는 서버를 외부(인터넷)에 공개할 때 사용합니다.&lt;/p&gt;
 &lt;h3 id=&#34;ip-라우팅&#34;&gt;IP 라우팅&lt;/h3&gt;
 &lt;p&gt;라우터는 라우팅 테이블(Routing Table)을 통해
 수신지 네트워크 정보와 IP 패킷을 전송할 근접 기기의 IP 주소를 나타내는 네트워크 홉 정보를 관리함으로써
@@ -384,8 +389,27 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 &lt;h2 id=&#34;l4-주요-프로토콜&#34;&gt;L4 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는
 데이터 전송의 신뢰성을 요구하는 통신에서 사용합니다.
-(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)
-먼저 &lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 통해 연결을 열어서 통신합니다.&lt;/p&gt;
+(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                        Sequence Number                        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Acknowledgment Number                      |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|  Data |           |U|A|P|R|S|F|                               |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Offset| Reserved  |R|C|S|S|Y|I|            Window             |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       |           |G|K|H|T|N|N|                               |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|           Checksum            |         Urgent Pointer        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Options                    |    Padding    |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              TCP Payload (Application data) ...                              
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 &lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 통해 연결을 열어서 통신합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    TCP A                                                TCP B
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;1.  CLOSED                                               LISTEN
@@ -416,34 +440,19 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;6.  (2 MSL)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    CLOSED
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여기서 &lt;strong&gt;연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로&lt;/strong&gt;를 말합니다.
-이 때 연결을 위한 인터페이스로 &lt;strong&gt;소켓&lt;/strong&gt;(&lt;strong&gt;Socket&lt;/strong&gt;)이라는 파일을 사용합니다.&lt;/p&gt;
-&lt;p&gt;소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+이 때 연결을 위해 &lt;strong&gt;소켓&lt;/strong&gt;(&lt;strong&gt;Socket&lt;/strong&gt;)이라는 네트워크 통신을 위한 추상화된 인터페이스를 사용합니다.
+소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
 L3를 거치지 않는 &lt;strong&gt;UDS&lt;/strong&gt;(&lt;strong&gt;Unix Domain Socket&lt;/strong&gt;)를 사용하기도 합니다.
 대표적으로 Docker, MySQL, Python Gunicorn 등의 &lt;code&gt;.sock&lt;/code&gt; 파일이 UDS입니다.&lt;/p&gt;
-&lt;p&gt;TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
+&lt;p&gt;네트워크에서는 L3까지 Unreliable 통신입니다.
+Unreliable 통신에선 네트워크가 &lt;strong&gt;혼잡&lt;/strong&gt;(&lt;strong&gt;Congestion&lt;/strong&gt;)한 상태가 될 수 있습니다.
+패킷 손실(packet loss), 패킷 순서 뒤바뀜(out of order), 패킷 중복 전송(duplicate), 과부하(network overload) 등의 오류가 발생할 수 있죠.&lt;/p&gt;
+&lt;p&gt;TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어를 제공합니다.
 &lt;strong&gt;흐름 제어&lt;/strong&gt;(&lt;strong&gt;Flow Control&lt;/strong&gt;)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
+대표적으로 슬라이딩 윈도우(Sliding Window) 기법이 있습니다.
 &lt;strong&gt;혼잡 제어&lt;/strong&gt;(&lt;strong&gt;Congestion Control&lt;/strong&gt;)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
-&lt;strong&gt;재전송 제어&lt;/strong&gt;(&lt;strong&gt;Retransmission Control&lt;/strong&gt;)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                        Sequence Number                        |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Acknowledgment Number                      |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|  Data |           |U|A|P|R|S|F|                               |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;| Offset| Reserved  |R|C|S|S|Y|I|            Window             |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|       |           |G|K|H|T|N|N|                               |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|           Checksum            |         Urgent Pointer        |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Options                    |    Padding    |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              TCP Payload (Application data) ...                              
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
+대표적으로 AIMD(Additive Increase/Multiplicative Decrease), 느린 시작(Slow Start), 빠른 재전송(Fast Retransmit), 빠른 회복(Fast Recovery) 등이 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
 &lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -549,10 +558,10 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 &lt;p&gt;Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q&#34;&gt;실제 테스트하는 영상&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q&#34;&gt;실제 테스트하는 영상&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
 &lt;p&gt;AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
@@ -560,7 +569,7 @@ NLB(Network Load Balancer)는 L4,
 ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느리게 만드는 원인입니다.&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느려지게 만드는 주요 원인입니다.&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;

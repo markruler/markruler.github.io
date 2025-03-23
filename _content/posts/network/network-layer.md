@@ -19,8 +19,9 @@ categories:
 
 반면 **OSI 모델**은 다양한 컴퓨터 시스템이 서로 통신할 수 있도록
 1984년 국제표준화기구(ISO)에서 만든 개념 모델입니다.[^1]
-이상적인 모델이기 때문에 실제 네트워크에서는 OSI 모델보다 TCP/IP 모델이 사용됩니다.
-이유는 모르겠지만 용어는 OSI 모델의 용어가 통용됩니다.
+
+실제 네트워크에서는 TCP/IP 모델이 사용됩니다.
+하지만 개념을 이해하고 설명하기에는 OSI 모델이 더 적합하기 때문에 OSI 모델이 통용됩니다.
 
 이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
 일반적으로 사용되는 **OSI 모델을 따르지만 5~7계층은 TCP/IP 모델처럼 합쳐진 5계층 모델**을 설명합니다.
@@ -99,6 +100,7 @@ L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매
 네트워크 인터페이스, 네트워크 어댑터라고도 부릅니다.
 모바일 기기를 포함한 모든 네트워크 단말기는 애플리케이션과 운영체제가 처리한 패킷을
 NIC를 통해 LAN 케이블이나 전파로 보냅니다.
+**MAC**(**Medium access control**) 주소는 네트워크 인터페이스 카드(NIC)에 할당된 고유한 주소입니다.
 
 유선 LAN인 **이더넷 케이블**은 IEEE 802.3로 표준화하고 있습니다.
 대표적으로 트위스트 페어 케이블, 광섬유 케이블, 동축 케이블이 있습니다.
@@ -111,21 +113,23 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 줄여서 광 케이블이라고도 부릅니다.
 다중 모드 광섬유 케이블은 단파장(Short Wavelength) 레이저를 사용하며, 단거리 전송에 적합합니다.
 단일 모드 광섬유 케이블은 장파장(Long Wavelength) 레이저를 사용하며, 장거리 전송에 적합합니다.
+전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
+해저 광 케이블[^3]의 경우 추가 리피터없이 300km까지 전송이 가능하다고 합니다.
+다만 광 케이블은 구리선에 비해 비싼 편입니다.
+
+[^3]: [전세계 해저 케이블 지도](https://www.submarinecablemap.com/)
 
 일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
-전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨집니다.[^3]
+전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨지고 데이터 수신에 문제가 발생합니다.[^4]
 **리피터**(**Repeater**)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.
 
-[^3]: [실제 테스트하는 영상](https://youtu.be/WMOr3WSsu6Q)
+[^4]: [실제 테스트하는 영상](https://youtu.be/WMOr3WSsu6Q)
 
-**미디어 컨버터**(**Media Converter**)는 전기 신호와 광 신호를 서로 교환하는 기기입니다.
+**미디어 컨버터**(**Media Converter**)는 전기 신호와 광 신호를 서로 변환하는 기기입니다.
 광 케이블을 연결하지 못하는 기기만 있는 상황에서
-네트워크를 연장하고자 할 때 사용합니다.
-전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
-해저 광 케이블[^4]의 경우 추가 리피터없이 300km까지 전송이 가능하다고 한다.
-다만 광 케이블과 장비는 비싼 편입니다.
-
-[^4]: [전세계 해저 케이블 지도](https://www.submarinecablemap.com/)
+장거리 전송을 위해 광 케이블을 사용하고자 할 때,
+또는 전자파 간섭이 심한 환경에서 안정적인 통신을 위해
+기존의 전기 신호 기반 네트워크와 광 신호 기반 네트워크를 연결하는 데 사용됩니다.
 
 **무선 LAN**은 **전파를 이용해 통신**합니다.
 무선 LAN은 주파수 대역에 따라 2.4GHz, 5GHz 대역으로 나뉩니다.
@@ -145,16 +149,15 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 
 L2(데이터 링크 계층)는 **직접 연결된 인접 노드(장치) 간 데이터 전송을 담당**합니다.
 L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이터를 전송합니다.
-또한, 흐름 제어와 오류 제어를 통해 데이터 전송의 안정성을 보장합니다.
-
-<!-- MAC(Medium access control) 주소는 네트워크 인터페이스  -->
+다른 계층과 달리 페이로드 뒤에 **트레일러**(**trailer**)가 포함될 수 있습니다.
+예를 들어, 이더넷의 **CRC**(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.
 
 ## L2 주요 기기
 
 **브리지**(**Bridge**)는 포트와 포트 사이의 '다리 bridge' 역할을 합니다.
 단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
 이 전송 처리를 브리징(bridging)이라고 합니다.
-최근에는 L2 스위치가 대부분의 브리지 역할을 포함하기 때문에 단일 기기를 이용하지는 않습니다.
+최근에는 L2 스위치가 브리지의 기능을 포함하고 있어서 단일 기기를 이용하지는 않습니다.
 
 ## L2 주요 프로토콜
 
@@ -198,7 +201,7 @@ IEEE 802 그룹 외에도 다양한 프로토콜도 있습니다.
 
 PPTP(Point-to-Point Tunneling Protocol)는 인터넷상에 가상 전용선(터널)을 만드는 **VPN** 프로토콜입니다.
 [RFC2637](https://datatracker.ietf.org/doc/html/rfc2637)에 정의되어 있습니다.
-보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
+인증 메커니즘이 취약하고 암호화 방식이 약하여 보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
 macOS도 [Sierra(10.12)](https://support.apple.com/HT206844)부터 대응을 중단했습니다.
 
 L2TP(Layer 2 Tunneling Protocol)도 PPTP와 마찬가지로 인터넷상에 가상 전용선을 만드는 프로토콜입니다.
@@ -219,9 +222,11 @@ L3는 **IP 주소**를 이용해 데이터를 라우팅하고, **패킷** 단위
 ## L3 주요 기기
 
 **라우터**(**Router**)는 단말로부터 받은 IP 패킷의 목적지 IP 주소를 보고,
-자신이 속한 네트워크를 넘은 범위에 있는 단말로 전달하거나 중계하는 역할을 담당합니다.
-이 과정을 패키지 릴레이(Package Relay)라고 하며, 라우팅이라고 합니다.
-라우터는 라우팅 테이블을 기반으로 패킷을 전달할 대상자를 관리합니다.
+라우팅 테이블을 참조하여 최적의 경로를 선택합니다.
+그리고 그 경로로 패킷을 전달합니다.
+이 과정을 패키지 릴레이(Package Relay)라고 하며, 흔히 라우팅(routing)이라고 합니다.
+자신이 속한 네트워크 내에서도 발생할 수 있으며,
+다른 네트워크로 패킷을 전달하는 경우도 포함됩니다.
 
 **L3 스위치**(**Layer 3 Switch**)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.
 
@@ -251,22 +256,14 @@ L3는 **IP 주소**를 이용해 데이터를 라우팅하고, **패킷** 단위
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 ```
 
-**NAT**(**Network Address Translation**)는
-사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
-NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
-NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
-이 중 **포트 포워딩**(**Port Forwarding**)은 특정 `IP주소:포트`로 들어온 패킷을 특정 단말로 전달하는 기술입니다.
-내부(LAN)에 있는 서버를 외부(인터넷)에 공개할 때 사용합니다.
-
 **ICMP**(**Internet Control Message Protocol**)는
 IP 패킷을 전송하면서 발생하는 오류를 알리는 프로토콜입니다.
 대표적으로 `ping`이 Echo Request와 Echo Reply 패킷을 사용해서
 L3 네트워크에 접속된 단말이 살아있는지 확인하는 데 사용됩니다.
 
 IP 패킷 헤더에는 **TTL**(**Time To Live**)이라는 패킷의 수명을 나타내는 1바이트(8비트) 필드가 있습니다.
-IP 패킷의 수명은 '경유하는 라우터의 수'를 의미합니다.
-경유하는 라우터의 수는 '홉(Hop) 수'라고 부릅니다.
-실제로 TTL 값은 L3 이상에서 동작하는 모든 기기에서 1씩 감소합니다.
+IP 패킷의 수명은 '경유하는 라우터(Hop)의 수'를 의미합니다.
+하지만 실제로 TTL 값은 L3 이상에서 동작하는 모든 기기에서 1씩 감소합니다.
 값이 0이 되면 패킷이 파기되고, `Time-to-live excceded`라는 ICMPv4 패킷을 반환하고, 송신지 단말에 전달합니다.
 이는 라우팅 루프 방지와 통신 경로 확인(traceroute)을 위해 사용됩니다.
 
@@ -282,12 +279,13 @@ IPv4를 10진수로 표현할 때 8비트(1바이트)씩 점(.)으로 구분하�
 서브넷 마스크는 IP 주소를 네트워크 부분과 호스트 부분으로 나누는 역할을 합니다.
 서브넷 마스크는 32비트 중 네트워크 부분을 1로, 호스트 부분을 0으로 표현합니다.
 서브넷 마스크를 IP 주소와 AND 연산하면 네트워크 주소를 얻을 수 있습니다.
-CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 '1'의 비트 수를 합산해서 표기합니다.
+CIDR 표기로는 IPv4 주소 뒤에 서브넷 마스크의 '1'의 비트 수를 표기합니다.
 
 IPv4 주소에는 예외적인 주소들이 있습니다.
 루프백(Loopback) 주소인 `127.0.0.1/8`은 호스트 자기 자신을 가리키는 주소입니다.
 [RFC1122](https://datatracker.ietf.org/doc/html/rfc1122)에 정의되어 있습니다.
 Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
+내부 네트워크에서만 사용할 수 있으며, 인터넷에 접속하기 위해서는 NAT와 같은 기술을 사용해야 합니다.
 [RFC1918](https://datatracker.ietf.org/doc/html/rfc1918)에 정의되어 있습니다.
 
 | Class | Start Address | End Address     | Subnet Mask       | Maximum Hosts          |
@@ -295,6 +293,13 @@ Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 �
 | A     | 10.0.0.0      | 10.255.255.255  | 255.0.0.0   (/8)  | 16,777,214 (=2^24 - 2) |
 | B     | 172.16.0.0    | 172.132.255.255 | 255.240.0.0 (/12) | 1,048,574  (=2^20 - 2) |
 | C     | 192.168.0.0   | 192.168.255.255 | 255.0.0.0   (/16) | 65,534     (=2^16 - 2) |
+
+**NAT**(**Network Address Translation**)는
+사설(Private) IP 주소를 공인(Public) IP 주소로 상호 변환하는 기술입니다.
+NAT를 사용하면 같은 사설 IP 주소를 사용하는 여러 단말이 하나의 공인 IP 주소로 인터넷에 접속할 수 있습니다.
+NAT 기기를 넘어 단말끼리 직접 통신하도록 하기 위한 NAT 트래버설(NAT Traversal)이라는 기술이 있습니다.
+이 중 **포트 포워딩**(**Port Forwarding**)은 특정 `IP주소:포트`로 들어온 패킷을 특정 단말로 전달하는 기술입니다.
+내부(LAN)에 있는 서버를 외부(인터넷)에 공개할 때 사용합니다.
 
 ### IP 라우팅
 
@@ -355,57 +360,6 @@ ALB(Application Load Balancer)는 L7을 지원합니다.
 **TCP**(**Transmission Control Protocol**)는
 데이터 전송의 신뢰성을 요구하는 통신에서 사용합니다.
 ([RFC793](https://datatracker.ietf.org/doc/html/rfc793))
-먼저 **3 Way Handshake**를 통해 연결을 열어서 통신합니다.
-
-```plaintext
-    TCP A                                                TCP B
-
-1.  CLOSED                                               LISTEN
-
-2.  SYN-SENT    --> <SEQ=100><CTL=SYN>                --> SYN-RECEIVED
-
-3.  ESTABLISHED <-- <SEQ=300><ACK=101><CTL=SYN,ACK>   <-- SYN-RECEIVED
-
-4.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK>       --> ESTABLISHED
-
---- 통신 시작
-
-5.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK><DATA> --> ESTABLISHED
-```
-
-통신이 끝나면 **4 Way Handshake**를 통해 연결을 닫습니다.[^6]
-
-[^6]: 이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느리게 만드는 원인입니다.
-
-```plaintext
-    TCP A                                                TCP B
-1.  ESTABLISHED                                          ESTABLISHED
-
-2.  (Close)
-    FIN-WAIT-1  --> <SEQ=100><ACK=300><CTL=FIN,ACK>  --> CLOSE-WAIT
-
-3.  FIN-WAIT-2  <-- <SEQ=300><ACK=101><CTL=ACK>      <-- CLOSE-WAIT
-
-4.                                                       (Close)
-    TIME-WAIT   <-- <SEQ=300><ACK=101><CTL=FIN,ACK>  <-- LAST-ACK
-
-5.  TIME-WAIT   --> <SEQ=101><ACK=301><CTL=ACK>      --> CLOSED
-
-6.  (2 MSL)
-    CLOSED
-```
-
-여기서 **연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로**를 말합니다.
-이 때 연결을 위한 인터페이스로 **소켓**(**Socket**)이라는 파일을 사용합니다.
-
-소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
-L3를 거치지 않는 **UDS**(**Unix Domain Socket**)를 사용하기도 합니다.
-대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 파일이 UDS입니다.
-
-TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
-**흐름 제어**(**Flow Control**)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
-**혼잡 제어**(**Congestion Control**)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
-**재전송 제어**(**Retransmission Control**)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.
 
 ```plaintext
  0                   1                   2                   3
@@ -428,6 +382,63 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 |              TCP Payload (Application data) ...                              
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 ```
+
+
+먼저 **3 Way Handshake**를 통해 연결을 열어서 통신합니다.
+
+```plaintext
+    TCP A                                                TCP B
+
+1.  CLOSED                                               LISTEN
+
+2.  SYN-SENT    --> <SEQ=100><CTL=SYN>                --> SYN-RECEIVED
+
+3.  ESTABLISHED <-- <SEQ=300><ACK=101><CTL=SYN,ACK>   <-- SYN-RECEIVED
+
+4.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK>       --> ESTABLISHED
+
+--- 통신 시작
+
+5.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK><DATA> --> ESTABLISHED
+```
+
+통신이 끝나면 **4 Way Handshake**를 통해 연결을 닫습니다.[^6]
+
+[^6]: 이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느려지게 만드는 주요 원인입니다.
+
+```plaintext
+    TCP A                                                TCP B
+1.  ESTABLISHED                                          ESTABLISHED
+
+2.  (Close)
+    FIN-WAIT-1  --> <SEQ=100><ACK=300><CTL=FIN,ACK>  --> CLOSE-WAIT
+
+3.  FIN-WAIT-2  <-- <SEQ=300><ACK=101><CTL=ACK>      <-- CLOSE-WAIT
+
+4.                                                       (Close)
+    TIME-WAIT   <-- <SEQ=300><ACK=101><CTL=FIN,ACK>  <-- LAST-ACK
+
+5.  TIME-WAIT   --> <SEQ=101><ACK=301><CTL=ACK>      --> CLOSED
+
+6.  (2 MSL)
+    CLOSED
+```
+
+여기서 **연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로**를 말합니다.
+이 때 연결을 위해 **소켓**(**Socket**)이라는 네트워크 통신을 위한 추상화된 인터페이스를 사용합니다.
+소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+L3를 거치지 않는 **UDS**(**Unix Domain Socket**)를 사용하기도 합니다.
+대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 파일이 UDS입니다.
+
+네트워크에서는 L3까지 Unreliable 통신입니다.
+Unreliable 통신에선 네트워크가 **혼잡**(**Congestion**)한 상태가 될 수 있습니다.
+패킷 손실(packet loss), 패킷 순서 뒤바뀜(out of order), 패킷 중복 전송(duplicate), 과부하(network overload) 등의 오류가 발생할 수 있죠.
+
+TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어를 제공합니다.
+**흐름 제어**(**Flow Control**)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
+대표적으로 슬라이딩 윈도우(Sliding Window) 기법이 있습니다.
+**혼잡 제어**(**Congestion Control**)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
+대표적으로 AIMD(Additive Increase/Multiplicative Decrease), 느린 시작(Slow Start), 빠른 재전송(Fast Retransmit), 빠른 회복(Fast Recovery) 등이 있습니다.
 
 **UDP**(**User Datagram Protocol**)는 실시간성을 요하는 애플리케이션에 사용되는
 **비연결**(Connectionless) 지향 프로토콜입니다.([RFC768](https://datatracker.ietf.org/doc/html/rfc768))
