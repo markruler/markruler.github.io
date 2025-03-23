@@ -48,13 +48,14 @@ Servlet Filter에서 Response의 OutputStream을 `GZIPOutputStream`으로 교체
 # 결과
 
 Akamai CDN을 통해서 확인해보니
+(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는)
 [offload](https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule#caching)
-(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는) 트래픽 양이 확연히 늘었고,
+트래픽 양이 확연히 늘었고,
 Origin 응답 트래픽 양이 줄어들었습니다.
 
 ![Akamai CDN load compression](/images/network/http-response-compression/akamai-load-compression.png)
 
-네트워크 대역폭과 처리량에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
+네트워크 대역폭(Bandwidth)과 처리량(Throughput)에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
 하지만 사이즈 자체가 작아지면서 네트워크 비용을 줄일 수 있습니다.
 
 ![before and after http response compression](/images/network/http-response-compression/before-after-http-response-compression.png)

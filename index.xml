@@ -41,11 +41,12 @@ Spring Boot 애플리케이션이라면 간단하게 &lt;code&gt;application.yam
 예를 들면, 특정 경로만 압축한다거나 압축 정도를 조절할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;h1 id=&#34;결과&#34;&gt;결과&lt;/h1&gt;
 &lt;p&gt;Akamai CDN을 통해서 확인해보니
+(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는)
 &lt;a href=&#34;https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule#caching&#34;&gt;offload&lt;/a&gt;
-(Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는) 트래픽 양이 확연히 늘었고,
+트래픽 양이 확연히 늘었고,
 Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/akamai-load-compression.png&#34; alt=&#34;Akamai CDN load compression&#34;&gt;&lt;/p&gt;
-&lt;p&gt;네트워크 대역폭과 처리량에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
+&lt;p&gt;네트워크 대역폭(Bandwidth)과 처리량(Throughput)에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
 하지만 사이즈 자체가 작아지면서 네트워크 비용을 줄일 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/before-after-http-response-compression.png&#34; alt=&#34;before and after http response compression&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
