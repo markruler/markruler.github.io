@@ -952,14 +952,42 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
 별도의 하드웨어로도 사용하지만, Netfilter 프레임워크를 이용한 iptables 같은 소프트웨어 방화벽도 널리 사용됩니다.</p>
 <h2 id="l4-주요-프로토콜">L4 주요 프로토콜</h2>
-<p><strong>TCP</strong>(<strong>Transmission Control Protocol</strong>)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+<p><strong>TCP</strong>(<strong>Transmission Control Protocol</strong>)는
+데이터 전송의 신뢰성을 요구하는 통신에서 사용합니다.
 (<a href="https://datatracker.ietf.org/doc/html/rfc793">RFC793</a>)
-<strong>3 Way Handshake</strong>를 통해 연결을 열어서 <strong>통신</strong>하고,
-<strong>4 Way Handshake</strong>를 통해 연결을 닫습니다.
-여기서 <strong>연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로</strong>를 말합니다.</p>
-<p>이 때 연결을 위한 인터페이스로 <strong>소켓</strong>(<strong>Socket</strong>)이라는 파일을 사용합니다.
-소켓은 프로세스 간 통신을 위한 인터페이스입니다.
-기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+먼저 <strong>3 Way Handshake</strong>를 통해 연결을 열어서 통신합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>    TCP A                                                TCP B
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1.  CLOSED                                               LISTEN
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2.  SYN-SENT    --&gt; &lt;SEQ=100&gt;&lt;CTL=SYN&gt;                --&gt; SYN-RECEIVED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>3.  ESTABLISHED &lt;-- &lt;SEQ=300&gt;&lt;ACK=101&gt;&lt;CTL=SYN,ACK&gt;   &lt;-- SYN-RECEIVED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>4.  ESTABLISHED --&gt; &lt;SEQ=101&gt;&lt;ACK=301&gt;&lt;CTL=ACK&gt;       --&gt; ESTABLISHED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>--- 통신 시작
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>5.  ESTABLISHED --&gt; &lt;SEQ=101&gt;&lt;ACK=301&gt;&lt;CTL=ACK&gt;&lt;DATA&gt; --&gt; ESTABLISHED
+</span></span></code></pre></div><p>통신이 끝나면 <strong>4 Way Handshake</strong>를 통해 연결을 닫습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>    TCP A                                                TCP B
+</span></span><span style="display:flex;"><span>1.  ESTABLISHED                                          ESTABLISHED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2.  (Close)
+</span></span><span style="display:flex;"><span>    FIN-WAIT-1  --&gt; &lt;SEQ=100&gt;&lt;ACK=300&gt;&lt;CTL=FIN,ACK&gt;  --&gt; CLOSE-WAIT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>3.  FIN-WAIT-2  &lt;-- &lt;SEQ=300&gt;&lt;ACK=101&gt;&lt;CTL=ACK&gt;      &lt;-- CLOSE-WAIT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>4.                                                       (Close)
+</span></span><span style="display:flex;"><span>    TIME-WAIT   &lt;-- &lt;SEQ=300&gt;&lt;ACK=101&gt;&lt;CTL=FIN,ACK&gt;  &lt;-- LAST-ACK
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>5.  TIME-WAIT   --&gt; &lt;SEQ=101&gt;&lt;ACK=301&gt;&lt;CTL=ACK&gt;      --&gt; CLOSED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>6.  (2 MSL)
+</span></span><span style="display:flex;"><span>    CLOSED
+</span></span></code></pre></div><p>여기서 <strong>연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로</strong>를 말합니다.
+이 때 연결을 위한 인터페이스로 <strong>소켓</strong>(<strong>Socket</strong>)이라는 파일을 사용합니다.</p>
+<p>소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
 L3를 거치지 않는 <strong>UDS</strong>(<strong>Unix Domain Socket</strong>)를 사용하기도 합니다.
 대표적으로 Docker, MySQL, Python Gunicorn 등의 <code>.sock</code> 파일이 UDS입니다.</p>
 <p>TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
@@ -1063,6 +1091,7 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 <li>TCP/IP
 <ul>
 <li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414">그림으로 공부하는 TCP/IP 구조</a> | 미야타 히로시</li>
+<li><a href="https://youtu.be/K9L9YZhEjC0">(Youtube) TCP 송/수신 원리</a> | 널널한 개발자</li>
 <li><a href="https://youtu.be/X73Jl2nsqiE">(Youtube) TCP Connection 이론편</a> | 쉬운코드</li>
 <li><a href="https://youtu.be/WwseO8l8rZc">(Youtube) TCP Connection 실제편</a> | 쉬운코드</li>
 <li><a href="https://youtu.be/lLb2lMQpKbY">(Youtube) byte-stream protocol vs message-oriented protocol</a> | 쉬운코드</li>
@@ -1099,6 +1128,9 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 <p>AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
 NLB(Network Load Balancer)는 L4,
 ALB(Application Load Balancer)는 L7을 지원합니다.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p>이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느리게 만드는 원인입니다.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>

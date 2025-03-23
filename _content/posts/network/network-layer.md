@@ -352,15 +352,53 @@ ALB(Application Load Balancer)는 L7을 지원합니다.
 
 ## L4 주요 프로토콜
 
-**TCP**(**Transmission Control Protocol**)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+**TCP**(**Transmission Control Protocol**)는
+데이터 전송의 신뢰성을 요구하는 통신에서 사용합니다.
 ([RFC793](https://datatracker.ietf.org/doc/html/rfc793))
-**3 Way Handshake**를 통해 연결을 열어서 **통신**하고,
-**4 Way Handshake**를 통해 연결을 닫습니다.
-여기서 **연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로**를 말합니다.
+먼저 **3 Way Handshake**를 통해 연결을 열어서 통신합니다.
 
+```plaintext
+    TCP A                                                TCP B
+
+1.  CLOSED                                               LISTEN
+
+2.  SYN-SENT    --> <SEQ=100><CTL=SYN>                --> SYN-RECEIVED
+
+3.  ESTABLISHED <-- <SEQ=300><ACK=101><CTL=SYN,ACK>   <-- SYN-RECEIVED
+
+4.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK>       --> ESTABLISHED
+
+--- 통신 시작
+
+5.  ESTABLISHED --> <SEQ=101><ACK=301><CTL=ACK><DATA> --> ESTABLISHED
+```
+
+통신이 끝나면 **4 Way Handshake**를 통해 연결을 닫습니다.[^6]
+
+[^6]: 이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느리게 만드는 원인입니다.
+
+```plaintext
+    TCP A                                                TCP B
+1.  ESTABLISHED                                          ESTABLISHED
+
+2.  (Close)
+    FIN-WAIT-1  --> <SEQ=100><ACK=300><CTL=FIN,ACK>  --> CLOSE-WAIT
+
+3.  FIN-WAIT-2  <-- <SEQ=300><ACK=101><CTL=ACK>      <-- CLOSE-WAIT
+
+4.                                                       (Close)
+    TIME-WAIT   <-- <SEQ=300><ACK=101><CTL=FIN,ACK>  <-- LAST-ACK
+
+5.  TIME-WAIT   --> <SEQ=101><ACK=301><CTL=ACK>      --> CLOSED
+
+6.  (2 MSL)
+    CLOSED
+```
+
+여기서 **연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로**를 말합니다.
 이 때 연결을 위한 인터페이스로 **소켓**(**Socket**)이라는 파일을 사용합니다.
-소켓은 프로세스 간 통신을 위한 인터페이스입니다.
-기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+
+소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
 L3를 거치지 않는 **UDS**(**Unix Domain Socket**)를 사용하기도 합니다.
 대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 파일이 UDS입니다.
 
@@ -464,6 +502,7 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
   - [IT 엔지니어를 위한 네트워크 입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183) | 고재성, 이상훈
 - TCP/IP
   - [그림으로 공부하는 TCP/IP 구조](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414) | 미야타 히로시
+  - [(Youtube) TCP 송/수신 원리](https://youtu.be/K9L9YZhEjC0) | 널널한 개발자
   - [(Youtube) TCP Connection 이론편](https://youtu.be/X73Jl2nsqiE) | 쉬운코드
   - [(Youtube) TCP Connection 실제편](https://youtu.be/WwseO8l8rZc) | 쉬운코드
   - [(Youtube) byte-stream protocol vs message-oriented protocol](https://youtu.be/lLb2lMQpKbY) | 쉬운코드
