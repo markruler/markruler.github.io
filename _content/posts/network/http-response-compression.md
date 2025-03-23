@@ -5,8 +5,8 @@ date: 2025-03-23T00:10:00+09:00
 lastmod: 2025-03-23T00:10:00+09:00
 title: "HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기"
 description: "gzip compression"
-# featured_image: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
-images: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
+# featured_image: ["/images/master/markruler-wave.webp"]
+images: ["/images/master/markruler-wave.webp"]
 tags:
   - network
   - http

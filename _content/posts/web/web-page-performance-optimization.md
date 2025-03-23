@@ -1,12 +1,12 @@
 ---
 draft: true
 socialshare: true
-date: 2025-03-23T11:10:00+09:00
-lastmod: 2025-03-23T11:10:00+09:00
+date: 2025-03-23T12:10:00+09:00
+lastmod: 2025-03-23T12:10:00+09:00
 title: "웹 페이지 성능 측정과 최적화"
 description: "WebPageTest, Lighthouse와 CDN"
-# featured_image: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
-images: ["/images/network/network-layer/osi-7-layer-bytebytego.png"]
+# featured_image: ["/images/master/markruler-wave.webp"]
+images: ["/images/master/markruler-wave.webp"]
 tags:
   - network
   - http

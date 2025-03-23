@@ -9,7 +9,7 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Sun, 23 Mar 2025 11:10:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 23 Mar 2025 12:10:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -137,7 +137,7 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;계층에서 처리하는 한 덩어리의 데이터 단위를 &lt;strong&gt;PDU&lt;/strong&gt;(&lt;strong&gt;Protocol Data Unit&lt;/strong&gt;)라고 부릅니다.
 PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
 웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.&lt;/p&gt;
-&lt;p&gt;이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
+&lt;p&gt;PDU를 부르는 명칭도 계층마다 다릅니다.
 L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
 특히 L3의 &lt;strong&gt;IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체&lt;/strong&gt;를 일컫기도 합니다.
 뭉뚱그려서 &amp;lsquo;&lt;strong&gt;패킷&lt;/strong&gt;&amp;rsquo;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;이라고 부르죠.&lt;/p&gt;
@@ -382,21 +382,17 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
 별도의 하드웨어로도 사용하지만, Netfilter 프레임워크를 이용한 iptables 같은 소프트웨어 방화벽도 널리 사용됩니다.&lt;/p&gt;
 &lt;h2 id=&#34;l4-주요-프로토콜&#34;&gt;L4 주요 프로토콜&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
-&lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|            Length             |            Checksum           |
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              UDP Payload (Application data) ...                              
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
+&lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
 (&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)
-&lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 시작으로 연결 수립 후 통신합니다.
-TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
+&lt;strong&gt;3 Way Handshake&lt;/strong&gt;를 통해 연결을 열어서 &lt;strong&gt;통신&lt;/strong&gt;하고,
+&lt;strong&gt;4 Way Handshake&lt;/strong&gt;를 통해 연결을 닫습니다.
+여기서 &lt;strong&gt;연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로&lt;/strong&gt;를 말합니다.&lt;/p&gt;
+&lt;p&gt;이 때 연결을 위한 인터페이스로 &lt;strong&gt;소켓&lt;/strong&gt;(&lt;strong&gt;Socket&lt;/strong&gt;)이라는 파일을 사용합니다.
+소켓은 프로세스 간 통신을 위한 인터페이스입니다.
+기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+L3를 거치지 않는 &lt;strong&gt;UDS&lt;/strong&gt;(&lt;strong&gt;Unix Domain Socket&lt;/strong&gt;)를 사용하기도 합니다.
+대표적으로 Docker, MySQL, Python Gunicorn 등의 &lt;code&gt;.sock&lt;/code&gt; 파일이 UDS입니다.&lt;/p&gt;
+&lt;p&gt;TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
 &lt;strong&gt;흐름 제어&lt;/strong&gt;(&lt;strong&gt;Flow Control&lt;/strong&gt;)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
 &lt;strong&gt;혼잡 제어&lt;/strong&gt;(&lt;strong&gt;Congestion Control&lt;/strong&gt;)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
 &lt;strong&gt;재전송 제어&lt;/strong&gt;(&lt;strong&gt;Retransmission Control&lt;/strong&gt;)는 패킷 유실이 발생했을 때 수행하는 패킷 재전송 기능입니다.&lt;/p&gt;
@@ -418,6 +414,17 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|                    Options                    |    Padding    |
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              TCP Payload (Application data) ...                              
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
+&lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|          Source Port          |       Destination Port        |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|            Length             |            Checksum           |
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;|              UDP Payload (Application data) ...                              
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;포트-번호&#34;&gt;포트 번호&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;포트 번호&lt;/strong&gt;(&lt;strong&gt;Port Number&lt;/strong&gt;)는 &lt;strong&gt;프로세스 간 통신을 위한 번호&lt;/strong&gt;입니다.&lt;/p&gt;
@@ -448,7 +455,9 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
   &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h1 id=&#34;layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/h1&gt;
-&lt;p&gt;L7(응용 계층)은 사용자와 가장 가까운 계층으로, &lt;strong&gt;응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공&lt;/strong&gt;합니다.
+&lt;p&gt;L7(응용 계층)은 &lt;strong&gt;응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공&lt;/strong&gt;합니다.
+L4까지는 시스템 수준의 네트워크라면,
+L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페이스를 사용하여 통신합니다.
 이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.&lt;/p&gt;
 &lt;h2 id=&#34;l7-주요-프로토콜&#34;&gt;L7 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;HTTP&lt;/strong&gt;(&lt;strong&gt;HyperText Transfer Protocol&lt;/strong&gt;)는
@@ -484,6 +493,9 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 &lt;li&gt;TCP/IP
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt; | 미야타 히로시&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/X73Jl2nsqiE&#34;&gt;(Youtube) TCP Connection 이론편&lt;/a&gt; | 쉬운코드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/WwseO8l8rZc&#34;&gt;(Youtube) TCP Connection 실제편&lt;/a&gt; | 쉬운코드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/lLb2lMQpKbY&#34;&gt;(Youtube) byte-stream protocol vs message-oriented protocol&lt;/a&gt; | 쉬운코드&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;DNS

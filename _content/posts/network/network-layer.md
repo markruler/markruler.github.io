@@ -59,7 +59,7 @@ categories:
 PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
 웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.
 
-이처럼 PDU를 부르는 명칭도 계층마다 다릅니다.
+PDU를 부르는 명칭도 계층마다 다릅니다.
 L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
 특히 L3의 **IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체**를 일컫기도 합니다.
 뭉뚱그려서 '**패킷**'[^2]이라고 부르죠.
@@ -352,24 +352,18 @@ ALB(Application Load Balancer)는 L7을 지원합니다.
 
 ## L4 주요 프로토콜
 
-**UDP**(**User Datagram Protocol**)는 실시간성을 요하는 애플리케이션에 사용되는
-**비연결**(Connectionless) 지향 프로토콜입니다.([RFC768](https://datatracker.ietf.org/doc/html/rfc768))
-
-```plaintext
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|          Source Port          |       Destination Port        |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|            Length             |            Checksum           |
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|              UDP Payload (Application data) ...                              
-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
-```
-
 **TCP**(**Transmission Control Protocol**)는 데이터 전송의 신뢰성을 요구하는 애플리케이션에서 사용합니다.
 ([RFC793](https://datatracker.ietf.org/doc/html/rfc793))
-**3 Way Handshake**를 시작으로 연결 수립 후 통신합니다.
+**3 Way Handshake**를 통해 연결을 열어서 **통신**하고,
+**4 Way Handshake**를 통해 연결을 닫습니다.
+여기서 **연결(Connection)이란 프로세스 간의 안정적이고 논리적인 통신 통로**를 말합니다.
+
+이 때 연결을 위한 인터페이스로 **소켓**(**Socket**)이라는 파일을 사용합니다.
+소켓은 프로세스 간 통신을 위한 인터페이스입니다.
+기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
+L3를 거치지 않는 **UDS**(**Unix Domain Socket**)를 사용하기도 합니다.
+대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 파일이 UDS입니다.
+
 TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼잡 제어, 재전송 제어를 제공합니다.
 **흐름 제어**(**Flow Control**)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
 **혼잡 제어**(**Congestion Control**)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
@@ -397,6 +391,21 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 ```
 
+**UDP**(**User Datagram Protocol**)는 실시간성을 요하는 애플리케이션에 사용되는
+**비연결**(Connectionless) 지향 프로토콜입니다.([RFC768](https://datatracker.ietf.org/doc/html/rfc768))
+
+```plaintext
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|          Source Port          |       Destination Port        |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|            Length             |            Checksum           |
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+|              UDP Payload (Application data) ...                              
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
+```
+
 ### 포트 번호
 
 **포트 번호**(**Port Number**)는 **프로세스 간 통신을 위한 번호**입니다.
@@ -409,7 +418,9 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 
 # Layer 7 - Application Layer
 
-L7(응용 계층)은 사용자와 가장 가까운 계층으로, **응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공**합니다.
+L7(응용 계층)은 **응용 프로그램이 네트워크 서비스를 이용할 수 있도록 인터페이스를 제공**합니다.
+L4까지는 시스템 수준의 네트워크라면,
+L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페이스를 사용하여 통신합니다.
 이 계층은 파일 전송, 이메일, 원격 로그인, 디렉터리 서비스, 화상 통화 등 다양한 네트워크 응용 서비스에 대한 프로토콜을 정의하고 구현합니다.
 
 ## L7 주요 프로토콜
@@ -453,6 +464,9 @@ L7(응용 계층)은 사용자와 가장 가까운 계층으로, **응용 프로
   - [IT 엔지니어를 위한 네트워크 입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183) | 고재성, 이상훈
 - TCP/IP
   - [그림으로 공부하는 TCP/IP 구조](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414) | 미야타 히로시
+  - [(Youtube) TCP Connection 이론편](https://youtu.be/X73Jl2nsqiE) | 쉬운코드
+  - [(Youtube) TCP Connection 실제편](https://youtu.be/WwseO8l8rZc) | 쉬운코드
+  - [(Youtube) byte-stream protocol vs message-oriented protocol](https://youtu.be/lLb2lMQpKbY) | 쉬운코드
 - DNS
   - [DNS 실전 교과서](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600445) | 와타나베 유이, 사토 신타, 후지와라 가즈노리
 - HTTP
