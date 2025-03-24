@@ -11,7 +11,7 @@ tags:
   - network
   - http
 categories:
-  - wiki
+  - blog
 ---
 
 클라이언트 로딩 시간을 줄이기 위해 API 하나에 많은 걸 담기 시작했습니다.

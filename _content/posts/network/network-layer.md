@@ -151,6 +151,7 @@ L2(데이터 링크 계층)는 **직접 연결된 인접 노드(장치) 간 데�
 L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이터를 전송합니다.
 다른 계층과 달리 페이로드 뒤에 **트레일러**(**trailer**)가 포함될 수 있습니다.
 예를 들어, 이더넷의 **CRC**(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.
+TCP/IP 모델에서는 L1과 L2를 합쳐 Network Access Layer로 표현합니다.
 
 ## L2 주요 기기
 
@@ -383,7 +384,6 @@ ALB(Application Load Balancer)는 L7을 지원합니다.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 ```
 
-
 먼저 **3 Way Handshake**를 통해 연결을 열어서 통신합니다.
 
 ```plaintext
@@ -438,7 +438,7 @@ TCP는 데이터 전송의 신뢰성을 확보하기 위해 흐름 제어, 혼�
 **흐름 제어**(**Flow Control**)는 수신자가 송신자의 속도를 따라가도록 수신자의 흐름양을 조정합니다.
 대표적으로 슬라이딩 윈도우(Sliding Window) 기법이 있습니다.
 **혼잡 제어**(**Congestion Control**)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
-대표적으로 AIMD(Additive Increase/Multiplicative Decrease), 느린 시작(Slow Start), 빠른 재전송(Fast Retransmit), 빠른 회복(Fast Recovery) 등이 있습니다.
+대표적으로 AIMD(Additive Increase/Multiplicative Decrease), 저속 시작(Slow Start), 혼잡 회피(congestion avoidance), 빠른 재전송(Fast Retransmit), 빠른 회복(Fast Recovery) 등이 있습니다.
 
 **UDP**(**User Datagram Protocol**)는 실시간성을 요하는 애플리케이션에 사용되는
 **비연결**(Connectionless) 지향 프로토콜입니다.([RFC768](https://datatracker.ietf.org/doc/html/rfc768))
@@ -511,6 +511,8 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 - 네트워크 일반
   - [컴퓨터 네트워킹 하향식 접근](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318) | James F. Kurose, Keith W. Ross
   - [IT 엔지니어를 위한 네트워크 입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183) | 고재성, 이상훈
+  - [TCP/IP Illustrated, Volume 1](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632) | 케빈 폴,리차드 스티븐스
+  - [데이터 통신과 네트워킹](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890) | Behrouz A. Forouzan
 - TCP/IP
   - [그림으로 공부하는 TCP/IP 구조](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414) | 미야타 히로시
   - [(Youtube) TCP 송/수신 원리](https://youtu.be/K9L9YZhEjC0) | 널널한 개발자
