@@ -727,7 +727,9 @@ L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet
 <h1 id="layer-1---physical-layer">Layer 1 - Physical Layer</h1>
 <p>L1(물리 계층)은 실제 물리 매체를 통해 <strong>디지털 신호를 전기 신호나 광신호 등으로 상호 변환</strong>하여 송수신합니다.
 L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
-케이블이나 커넥터 형태, 핀 배열 등 물리적인 사양에 관해 모두 정의되어 있는 계층입니다.</p>
+케이블이나 커넥터 형태, 핀 배열 등 물리적인 사양에 관해 모두 정의되어 있는 계층입니다.
+TCP/IP 모델에서는 L1과 L2를 합쳐 Network Access Layer로 표현합니다.
+L1에서는 주로 물리적 사양을, L2에서는 통신 프로토콜을 기술합니다.</p>
 <h2 id="l1-주요-기기">L1 주요 기기</h2>
 <p><strong>NIC</strong>(<strong>Network Interface Card</strong>)는 컴퓨터를 네트워크에 연결하기 위해 필요한 하드웨어입니다.
 네트워크 인터페이스, 네트워크 어댑터라고도 부릅니다.
@@ -772,8 +774,7 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 <p>L2(데이터 링크 계층)는 <strong>직접 연결된 인접 노드(장치) 간 데이터 전송을 담당</strong>합니다.
 L2는 <strong>MAC 주소</strong>를 이용해 통신하며, <strong>프레임</strong> 단위로 데이터를 전송합니다.
 다른 계층과 달리 페이로드 뒤에 <strong>트레일러</strong>(<strong>trailer</strong>)가 포함될 수 있습니다.
-예를 들어, 이더넷의 <strong>CRC</strong>(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.
-TCP/IP 모델에서는 L1과 L2를 합쳐 Network Access Layer로 표현합니다.</p>
+예를 들어, 이더넷의 <strong>CRC</strong>(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.</p>
 <h2 id="l2-주요-기기">L2 주요 기기</h2>
 <p><strong>브리지</strong>(<strong>Bridge</strong>)는 포트와 포트 사이의 &lsquo;다리 bridge&rsquo; 역할을 합니다.
 단말에서 받아들인 MAC 주소를 테이블(MAC address table)로 관리하고 전송합니다.
@@ -793,12 +794,16 @@ MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화
 소비 전력이 적고 다양한 장치를 간단히 페어링할 수 있게 때문에 널리 보급되었습니다.
 초기 버전이었던 Classic Bluetooth(BR/EDR)을 넘어
 현재는 BLE(Bluetooth Low Energy) 스택이 널리 사용되고 있습니다.
-BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 비콘(Beacon)에서도 사용됩니다.</p>
+BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 <strong>비콘</strong>(<strong>Beacon</strong>)에서도 사용됩니다.</p>
 <p><strong>지그비 Zigbee</strong>는 <strong>IEEE 802.15.4</strong>에서 표준화된 저전력 단거리 무선 프로토콜입니다.
 무선 LAN에 비해 전송 속도나 전송 거리가 열악합니다.
 하지만 데이터 송수신 시 소비 전력이 적고 슬립 시 대기 전력이 블루투스보다도 적기 때문에
 스마트홈 가전이나 제조 공장의 센서 등
 필요할 때만 통신하는 일이 많은 <strong>IoT</strong>(<strong>Internet of Things</strong>)에서 사용됩니다.</p>
+<p><strong>WirelessMAN</strong>(<strong>IEEE 802.16</strong>)은 <strong>광대역 무선 접속</strong>을 위한 표준입니다.
+무선 LAN보다 더 넓은 범위를 커버할 수 있습니다.
+해외에서는 와이맥스(WiMAX, Worldwide Interoperability for Microwave Access)라는 이름으로 상용화되었습니다.
+국내에서는 과거 와이브로(Wireless Broadband)라는 이름의 모바일 와이맥스가 상용화되었던 적이 있습니다.</p>
 <p>IEEE 802 그룹 외에도 다양한 프로토콜도 있습니다.</p>
 <p><strong>RFID</strong>(<strong>Radio-Frequency Identification</strong>)는 무선 주파수로 <strong>태그</strong>와 <strong>리더</strong>기 간 통신 기술입니다.
 <strong>NFC</strong>(<strong>Near Field Communication</strong>)는 기본적으로 RFID를 기반으로 만들어졌습니다.
@@ -1094,20 +1099,20 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 <ul>
 <li>네트워크 일반
 <ul>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318">컴퓨터 네트워킹 하향식 접근</a> | James F. Kurose, Keith W. Ross</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183">IT 엔지니어를 위한 네트워크 입문</a> | 고재성, 이상훈</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908">TCP/IP 완벽 가이드</a> | Charles M. Kozierok</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632">TCP/IP Illustrated, Volume 1</a> | 케빈 폴,리차드 스티븐스</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890">데이터 통신과 네트워킹</a> | Behrouz A. Forouzan</li>
-</ul>
-</li>
-<li>TCP/IP
-<ul>
 <li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414">그림으로 공부하는 TCP/IP 구조</a> | 미야타 히로시</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183">IT 엔지니어를 위한 네트워크 입문</a> | 고재성, 이상훈</li>
 <li><a href="https://youtu.be/K9L9YZhEjC0">(Youtube) TCP 송/수신 원리</a> | 널널한 개발자</li>
 <li><a href="https://youtu.be/X73Jl2nsqiE">(Youtube) TCP Connection 이론편</a> | 쉬운코드</li>
 <li><a href="https://youtu.be/WwseO8l8rZc">(Youtube) TCP Connection 실제편</a> | 쉬운코드</li>
 <li><a href="https://youtu.be/lLb2lMQpKbY">(Youtube) byte-stream protocol vs message-oriented protocol</a> | 쉬운코드</li>
+</ul>
+</li>
+<li>네트워크 심화
+<ul>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318">컴퓨터 네트워킹 하향식 접근</a> | James F. Kurose, Keith W. Ross</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908">TCP/IP 완벽 가이드</a> | Charles M. Kozierok</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632">TCP/IP Illustrated, Volume 1</a> | 케빈 폴,리차드 스티븐스</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890">데이터 통신과 네트워킹</a> | Behrouz A. Forouzan</li>
 </ul>
 </li>
 <li>DNS

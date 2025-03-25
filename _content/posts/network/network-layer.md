@@ -93,6 +93,8 @@ L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet
 L1(물리 계층)은 실제 물리 매체를 통해 **디지털 신호를 전기 신호나 광신호 등으로 상호 변환**하여 송수신합니다.
 L1은 데이터 전송의 가장 기본적인 단위를 담당하며, 전송 매체의 물리적 특성을 정의합니다.
 케이블이나 커넥터 형태, 핀 배열 등 물리적인 사양에 관해 모두 정의되어 있는 계층입니다.
+TCP/IP 모델에서는 L1과 L2를 합쳐 Network Access Layer로 표현합니다.
+L1에서는 주로 물리적 사양을, L2에서는 통신 프로토콜을 기술합니다.
 
 ## L1 주요 기기
 
@@ -151,7 +153,6 @@ L2(데이터 링크 계층)는 **직접 연결된 인접 노드(장치) 간 데�
 L2는 **MAC 주소**를 이용해 통신하며, **프레임** 단위로 데이터를 전송합니다.
 다른 계층과 달리 페이로드 뒤에 **트레일러**(**trailer**)가 포함될 수 있습니다.
 예를 들어, 이더넷의 **CRC**(Cyclic Redundancy Check)는 오류 검출하는 용도로 트레일러에 추가됩니다.
-TCP/IP 모델에서는 L1과 L2를 합쳐 Network Access Layer로 표현합니다.
 
 ## L2 주요 기기
 
@@ -179,13 +180,18 @@ MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화
 소비 전력이 적고 다양한 장치를 간단히 페어링할 수 있게 때문에 널리 보급되었습니다.
 초기 버전이었던 Classic Bluetooth(BR/EDR)을 넘어
 현재는 BLE(Bluetooth Low Energy) 스택이 널리 사용되고 있습니다.
-BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 비콘(Beacon)에서도 사용됩니다.
+BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 **비콘**(**Beacon**)에서도 사용됩니다.
 
 **지그비 Zigbee**는 **IEEE 802.15.4**에서 표준화된 저전력 단거리 무선 프로토콜입니다.
 무선 LAN에 비해 전송 속도나 전송 거리가 열악합니다.
 하지만 데이터 송수신 시 소비 전력이 적고 슬립 시 대기 전력이 블루투스보다도 적기 때문에
 스마트홈 가전이나 제조 공장의 센서 등
 필요할 때만 통신하는 일이 많은 **IoT**(**Internet of Things**)에서 사용됩니다.
+
+**WirelessMAN**(**IEEE 802.16**)은 **광대역 무선 접속**을 위한 표준입니다.
+무선 LAN보다 더 넓은 범위를 커버할 수 있습니다.
+해외에서는 와이맥스(WiMAX, Worldwide Interoperability for Microwave Access)라는 이름으로 상용화되었습니다.
+국내에서는 과거 와이브로(Wireless Broadband)라는 이름의 모바일 와이맥스가 상용화되었던 적이 있습니다.
 
 IEEE 802 그룹 외에도 다양한 프로토콜도 있습니다.
 
@@ -509,17 +515,17 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 # 더 읽을 거리
 
 - 네트워크 일반
-  - [컴퓨터 네트워킹 하향식 접근](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318) | James F. Kurose, Keith W. Ross
-  - [IT 엔지니어를 위한 네트워크 입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183) | 고재성, 이상훈
-  - [TCP/IP 완벽 가이드](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908) | Charles M. Kozierok
-  - [TCP/IP Illustrated, Volume 1](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632) | 케빈 폴,리차드 스티븐스
-  - [데이터 통신과 네트워킹](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890) | Behrouz A. Forouzan
-- TCP/IP
   - [그림으로 공부하는 TCP/IP 구조](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414) | 미야타 히로시
+  - [IT 엔지니어를 위한 네트워크 입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183) | 고재성, 이상훈
   - [(Youtube) TCP 송/수신 원리](https://youtu.be/K9L9YZhEjC0) | 널널한 개발자
   - [(Youtube) TCP Connection 이론편](https://youtu.be/X73Jl2nsqiE) | 쉬운코드
   - [(Youtube) TCP Connection 실제편](https://youtu.be/WwseO8l8rZc) | 쉬운코드
   - [(Youtube) byte-stream protocol vs message-oriented protocol](https://youtu.be/lLb2lMQpKbY) | 쉬운코드
+- 네트워크 심화
+  - [컴퓨터 네트워킹 하향식 접근](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318) | James F. Kurose, Keith W. Ross
+  - [TCP/IP 완벽 가이드](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908) | Charles M. Kozierok
+  - [TCP/IP Illustrated, Volume 1](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632) | 케빈 폴,리차드 스티븐스
+  - [데이터 통신과 네트워킹](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890) | Behrouz A. Forouzan
 - DNS
   - [DNS 실전 교과서](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600445) | 와타나베 유이, 사토 신타, 후지와라 가즈노리
 - HTTP
