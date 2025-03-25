@@ -33,7 +33,7 @@
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2025-03-20T23:03:00+09:00">
-    <meta property="article:modified_time" content="2025-03-21T23:08:00+09:00">
+    <meta property="article:modified_time" content="2025-03-26T00:08:00+09:00">
     <meta property="article:tag" content="Network">
     <meta property="og:image" content="https://markruler.github.io/images/network/network-layer/osi-7-layer-bytebytego.png">
 
@@ -71,10 +71,9 @@
     
     
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.6664f0e1282ed64845cd248c3143bf78740b6cf9635c2c161dcb0df80b344a86.css" integrity="sha256-ZmTw4Sgu1khFzSSMMUO/eHQLbPljXCwWHcsN&#43;As0SoY=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.3a2069e072660e4e7e61d110ac704f0853f4543cdbf50480dc8430975aa8b656.css" integrity="sha256-OiBp4HJmDk5&#43;YdEQrHBPCFP0VDzb9QSA3IQwl1qotlY=" media="screen">
 
 
 
@@ -658,7 +657,6 @@
 하지만 개념을 이해하고 설명하기에는 OSI 모델이 더 적합하기 때문에 OSI 모델이 통용됩니다.</p>
 <p>이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
 일반적으로 사용되는 <strong>OSI 모델을 따르지만 5~7계층은 TCP/IP 모델처럼 합쳐진 5계층 모델</strong>을 설명합니다.</p>
-<!-- 첫 책 p12 -->
 <ul>
 <li><a href="#%EC%9A%A9%EC%96%B4">용어</a></li>
 <li><a href="#layer-1---physical-layer">Layer 1 - Physical Layer</a>
@@ -707,10 +705,17 @@
 <p>계층에서 처리하는 한 덩어리의 데이터 단위를 <strong>PDU</strong>(<strong>Protocol Data Unit</strong>)라고 부릅니다.
 PDU는 제어 정보를 포함한 헤더(header), 데이터 자체인 페이로드(payload)로 구성되어 있습니다.
 웹 서비스를 개발해보셨다면 HTTP 헤더와 바디를 생각하시면 됩니다.</p>
+<p><strong>MTU</strong>는 <strong>Maximum Transmission Unit</strong>의 약자로,
+**네트워크를 통해 한 번에 전송할 수 있는 최대 데이터 크기(바이트 단위)**를 의미합니다.
+즉, PDU의 최대 크기를 말합니다.
+일반적으로 MTU는 1500 바이트입니다.
+MTU가 작으면 큰 데이터를 전송할 때 데이터를 나눠서 보내야 하므로 전송 오버헤드<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>가 증가합니다.
+MTU가 크면<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> 큰 데이터를 한 번에 보낼 수 있지만, 중간 네트워크 장비가 처리할 수 있는 크기를 넘어서면 패킷 드랍(packet drop)이 발생할 수 있습니다.
+PMTUD(Path MTU Discovery)는 경로 중 최소 MTU를 찾아서 데이터를 전송하는 기법입니다.</p>
 <p>PDU를 부르는 명칭도 계층마다 다릅니다.
 L1에서는 비트(bit), L2에서는 프레임(frame), L3에서는 패킷(packet), L4 TCP에서는 세그먼트(segment), L4 UDP에서는 데이터그램(datagram), L7에서는 메시지(message)로 부릅니다.
 특히 L3의 <strong>IP 패킷은 넓은 의미로 네트워크를 통해 흐르는 데이터 그 자체</strong>를 일컫기도 합니다.
-뭉뚱그려서 &lsquo;<strong>패킷</strong>&rsquo;<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>이라고 부르죠.</p>
+뭉뚱그려서 &lsquo;<strong>패킷</strong>&rsquo;<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>이라고 부르죠.</p>
 <p>송신 측에서 데이터를 보낼 때는 <strong>상위 계층의 데이터에 하위 계층의 헤더(header)를 붙여서 캡슐화(encapsulation)하며</strong> 내려가고,
 수신 측에서는 그 과정을 역순으로 <strong>디캡슐화(decapsulation)하여</strong> 상위 계층으로 전달합니다.</p>
 <p><strong>호스트</strong>(<strong>Host</strong>)는 네트워크에 연결된 장치를 의미합니다.</p>
@@ -748,10 +753,10 @@ UTP는 실드 처리가 없기 때문에 전자석 노이즈에 약합니다.
 다중 모드 광섬유 케이블은 단파장(Short Wavelength) 레이저를 사용하며, 단거리 전송에 적합합니다.
 단일 모드 광섬유 케이블은 장파장(Long Wavelength) 레이저를 사용하며, 장거리 전송에 적합합니다.
 전기 신호는 감쇠가 심한 반면 광 케이블은 멀리(수십 km)까지 보낼 수 있습니다.
-해저 광 케이블<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>의 경우 추가 리피터없이 300km까지 전송이 가능하다고 합니다.
+해저 광 케이블<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>의 경우 추가 리피터없이 300km까지 전송이 가능하다고 합니다.
 다만 광 케이블은 구리선에 비해 비싼 편입니다.</p>
 <p>일반 구리선 LAN(Local Area Network) 케이블에 흐르는 전기 신호는
-전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨지고 데이터 수신에 문제가 발생합니다.<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>
+전송 거리가 길수록 감쇠(Signal Attenuation)하며, 100m 정도 되면 파형이 깨지고 데이터 수신에 문제가 발생합니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>
 <strong>리피터</strong>(<strong>Repeater</strong>)는 파형을 한 번 더 증폭해서 정돈한 뒤 다른 쪽으로 전송합니다.</p>
 <p><strong>미디어 컨버터</strong>(<strong>Media Converter</strong>)는 전기 신호와 광 신호를 서로 변환하는 기기입니다.
 광 케이블을 연결하지 못하는 기기만 있는 상황에서
@@ -957,7 +962,7 @@ L4는 포트 번호를 이용해 프로세스 간 통신을 가능하게 하며,
 L4 로드 밸런서는 L4 스위치 또는 애플리케이션 스위치라고 불리기도 합니다.
 IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상태를 확인하고,
 사용자가 지정한 로드 밸런싱 방식을 이용해 가용성 확보를 목표로 합니다.
-로드 밸런서는 L7에도 사용됩니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup></p>
+로드 밸런서는 L7에도 사용됩니다.<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup></p>
 <p><strong>방화벽</strong>(<strong>Firewall</strong>)은 단말 사이에서 교환되는 패킷을 검사하여 허용할지 막을지 결정하는 기기입니다.
 패킷의 IP 주소나 포트 번호를 보고, 통신을 허가하거나 차단합니다.
 이 통신 제어 기능을 스테이트풀 인스펙션(Stateful Inspection)이라고 합니다.
@@ -999,7 +1004,7 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 </span></span><span style="display:flex;"><span>--- 통신 시작
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>5.  ESTABLISHED --&gt; &lt;SEQ=101&gt;&lt;ACK=301&gt;&lt;CTL=ACK&gt;&lt;DATA&gt; --&gt; ESTABLISHED
-</span></span></code></pre></div><p>통신이 끝나면 <strong>4 Way Handshake</strong>를 통해 연결을 닫습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></p>
+</span></span></code></pre></div><p>통신이 끝나면 <strong>4 Way Handshake</strong>를 통해 연결을 닫습니다.<sup id="fnref:8"><a href="#fn:8" class="footnote-ref" role="doc-noteref">8</a></sup></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>    TCP A                                                TCP B
 </span></span><span style="display:flex;"><span>1.  ESTABLISHED                                          ESTABLISHED
 </span></span><span style="display:flex;"><span>
@@ -1046,7 +1051,7 @@ Unreliable 통신에선 네트워크가 <strong>혼잡</strong>(<strong>Congesti
       <tr>
           <th>Range</th>
           <th>Name</th>
-          <th>For</th>
+          <th>Description</th>
       </tr>
   </thead>
   <tbody>
@@ -1134,28 +1139,36 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 <p><a href="https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/">OSI 모델이란</a> | Cloudflare&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p>Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>오버헤드는 데이터를 전송하기 위해 추가로 붙는 정보입니다.
+헤더, 트레일러를 말합니다.
+PDU를 잘게 나누면 오버헤드가 PDU 수만큼 추가되어 전송 오버헤드가 증가합니다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://www.submarinecablemap.com/">전세계 해저 케이블 지도</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>고성능 컴퓨팅(HPC), 스토리지 장비, 기업 내부 전용망, 통신사 백본망 등에서는 MTU를 9000 바이트까지 설정하여 성능을 높이기도 합니다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
-<p><a href="https://youtu.be/WMOr3WSsu6Q">실제 테스트하는 영상</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
-<p>AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
-NLB(Network Load Balancer)는 L4,
-ALB(Application Load Balancer)는 L7을 지원합니다.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://www.submarinecablemap.com/">전세계 해저 케이블 지도</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:6">
-<p>이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느려지게 만드는 주요 원인입니다.&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://youtu.be/WMOr3WSsu6Q">실제 테스트하는 영상</a>&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p>AWS의 로드 밸런서인 ELB(Elastic Load Balancer)는 대표적으로 2가지 종류가 있습니다.
+NLB(Network Load Balancer)는 L4,
+ALB(Application Load Balancer)는 L7을 지원합니다.&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:8">
+<p>이 연결을 맺고 끊는 과정에서 발생하는 대기(WAIT)는 TCP가 UDP보다 느려지게 만드는 주요 원인입니다.&#160;<a href="#fnref:8" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">최종 수정: 2025-03-21</p>
+		    <p style="color:#777;">최종 수정: 2025-03-26</p>
                     
                 </div>
             </div>
