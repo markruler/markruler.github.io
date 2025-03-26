@@ -96,9 +96,9 @@ Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 �
 `defer`, `async` 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.[^5]
 다만 CSS 파일을 `defer`로 불러오거나
 Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 **Reflow**(**Layout Shift**), Repaint가 발생할 수 있습니다.
-여기서 Reflow의 경우 레이아웃을 다시 계산하는 것이기 때문에 CLS 지표에 악영향을 끼칩니다.
-그래서 Javascript에서 직접 DOM이나 CSSOM 조작하는 것을 줄이고,
-중요하지 않은 CSS 파일만 `defer`로 불러오는 것이 좋습니다.[^6]
+여기서 Reflow의 경우 레이아웃을 다시 계산해야 하기 때문에 CLS 지표에 악영향을 끼칩니다.
+그래서 Javascript에서 **직접 DOM이나 CSSOM 조작하는 것을 줄이고**,
+**중요하지 않은 CSS 파일만 `defer`로 불러오는 것**이 좋습니다.[^6]
 
 **Font**의 경우 `preload`를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.
 

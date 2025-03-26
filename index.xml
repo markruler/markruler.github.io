@@ -75,9 +75,9 @@ Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 �
 &lt;code&gt;defer&lt;/code&gt;, &lt;code&gt;async&lt;/code&gt; 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;
 다만 CSS 파일을 &lt;code&gt;defer&lt;/code&gt;로 불러오거나
 Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 &lt;strong&gt;Reflow&lt;/strong&gt;(&lt;strong&gt;Layout Shift&lt;/strong&gt;), Repaint가 발생할 수 있습니다.
-여기서 Reflow의 경우 레이아웃을 다시 계산하는 것이기 때문에 CLS 지표에 악영향을 끼칩니다.
-그래서 Javascript에서 직접 DOM이나 CSSOM 조작하는 것을 줄이고,
-중요하지 않은 CSS 파일만 &lt;code&gt;defer&lt;/code&gt;로 불러오는 것이 좋습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+여기서 Reflow의 경우 레이아웃을 다시 계산해야 하기 때문에 CLS 지표에 악영향을 끼칩니다.
+그래서 Javascript에서 &lt;strong&gt;직접 DOM이나 CSSOM 조작하는 것을 줄이고&lt;/strong&gt;,
+&lt;strong&gt;중요하지 않은 CSS 파일만 &lt;code&gt;defer&lt;/code&gt;로 불러오는 것&lt;/strong&gt;이 좋습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Font&lt;/strong&gt;의 경우 &lt;code&gt;preload&lt;/code&gt;를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;이미지-최적화&#34;&gt;이미지 최적화&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;WebP&lt;/code&gt;, &lt;code&gt;AVIF&lt;/code&gt;와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나&lt;sup id=&#34;fnref:7&#34;&gt;&lt;a href=&#34;#fn:7&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;

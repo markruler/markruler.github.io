@@ -514,9 +514,9 @@ Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 �
 <code>defer</code>, <code>async</code> 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>
 다만 CSS 파일을 <code>defer</code>로 불러오거나
 Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 <strong>Reflow</strong>(<strong>Layout Shift</strong>), Repaint가 발생할 수 있습니다.
-여기서 Reflow의 경우 레이아웃을 다시 계산하는 것이기 때문에 CLS 지표에 악영향을 끼칩니다.
-그래서 Javascript에서 직접 DOM이나 CSSOM 조작하는 것을 줄이고,
-중요하지 않은 CSS 파일만 <code>defer</code>로 불러오는 것이 좋습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></p>
+여기서 Reflow의 경우 레이아웃을 다시 계산해야 하기 때문에 CLS 지표에 악영향을 끼칩니다.
+그래서 Javascript에서 <strong>직접 DOM이나 CSSOM 조작하는 것을 줄이고</strong>,
+<strong>중요하지 않은 CSS 파일만 <code>defer</code>로 불러오는 것</strong>이 좋습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></p>
 <p><strong>Font</strong>의 경우 <code>preload</code>를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.</p>
 <h2 id="이미지-최적화">이미지 최적화</h2>
 <p><code>WebP</code>, <code>AVIF</code>와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>
