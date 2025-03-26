@@ -9,9 +9,157 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Mon, 24 Mar 2025 12:10:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 27 Mar 2025 00:45:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>오라클 DBMS SE2 세션 사후 진단</title>
+        <link>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</link>
+        <pubDate>Sun, 30 Apr 2023 23:58:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/</guid>
+        <description>임창수 https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ -&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;저희 팀에서 구독 중인 Oracle DBMS의 라이센스는 Standard Edition 2의 Processor 라이센스(이하 SE2)입니다.
+이 라이센스는 &lt;a href=&#34;https://www.cubrid.com/blog/3813513&#34;&gt;프로세서 최대 2개, CPU Threads 최대 16개&lt;/a&gt;까지 사용할 수 있습니다.
+만약 트래픽이 많지 않다면 이 정도 사양으로도 충분하겠지만,
+트래픽이 많아지거나 DB를 비효율적으로 사용하게 되면 성능 저하가 발생할 수 있습니다.
+&lt;strong&gt;하지만 우리는 성능 저하가 발생했을 때 이를 진단할 방법이 없었습니다.&lt;/strong&gt;
+SE2의 경우 AWR(Automatic Workload Repository), ASH(Active Session History)와 같은
+&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html#GUID-68A4128C-4F52-4441-8BC0-A66F5B3EEC35&#34;&gt;Oracle Diagnostics Pack&lt;/a&gt;을
+사용할 수 없습니다.&lt;/p&gt;
+&lt;h1 id=&#34;db-진단-도구가-필요합니다&#34;&gt;DB 진단 도구가 필요합니다&lt;/h1&gt;
+&lt;p&gt;연산이 오래 걸리는 쿼리의 경우 SQL을 튜닝해서 해결했습니다.
+검색 기능의 경우 Elasticsearch에 데이터를 연동해서 Inverted index로 성능을 향상시켰습니다.&lt;/p&gt;
+&lt;p&gt;하지만 어떤 경우에는 성능 저하가 발생했을 때 관련 애플리케이션 전체가 도미노처럼 쓰러졌습니다.
+Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때문에 지나간 정보를 확인할 수 없었습니다.
+이를 해결하기 위해 세션 정보를 수집하는 스크립트를 작성하고, 시각화할 필요가 있었습니다.&lt;/p&gt;
+&lt;p&gt;Oracle DBMS의 현재 세션 정보들을 확인할 수 있는 동적 성능 뷰(&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/V-SESSION.html&#34;&gt;V$SESSION&lt;/a&gt;)에서
+세션 정보를 수집하기 위해 사용한 SQL은 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; *
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;FROM&lt;/span&gt; (&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; sess.sid,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.serial#,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             ROUND(sess.wait_time_micro / &lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;)            wait_time_millis,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             ROUND(sess.time_since_last_wait_micro / &lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;) time_since_last_wait_millis,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             &lt;span style=&#34;color:#f00&#34;&gt;CASE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                 &lt;span style=&#34;color:#f00&#34;&gt;WHEN&lt;/span&gt; sess.status = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;ACTIVE&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                     &lt;span style=&#34;color:#f00&#34;&gt;THEN&lt;/span&gt; sess.last_call_et
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                 &lt;span style=&#34;color:#f00&#34;&gt;ELSE&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                 &lt;span style=&#34;color:#f00&#34;&gt;END&lt;/span&gt;                                          active_elapsed_time_secs,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.&lt;span style=&#34;color:#f00&#34;&gt;state&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.event,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.username,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.osuser,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.machine,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.program,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.&lt;span style=&#34;color:#f00&#34;&gt;type&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.sql_child_number,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.sql_exec_id,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.sql_exec_start,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.sql_id,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             (&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;.sql_fulltext
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f00&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f00&#34;&gt;WHERE&lt;/span&gt; sess.sql_id = &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;.sql_id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f00&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;ONLY&lt;/span&gt;) sql_fulltext,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.prev_exec_id,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.prev_exec_start,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             sess.prev_sql_id,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             (&lt;span style=&#34;color:#f00&#34;&gt;SELECT&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;.sql_fulltext
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f00&#34;&gt;FROM&lt;/span&gt; v$sql &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#f00&#34;&gt;WHERE&lt;/span&gt; sess.prev_sql_id = &lt;span style=&#34;color:#f00&#34;&gt;sql&lt;/span&gt;.sql_id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                  &lt;span style=&#34;color:#f00&#34;&gt;FETCH&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;FIRST&lt;/span&gt; &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;ROWS&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;ONLY&lt;/span&gt;) prev_sql_fulltext,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;             blocking_session
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f00&#34;&gt;FROM&lt;/span&gt; v$session sess
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f00&#34;&gt;WHERE&lt;/span&gt; sess.username != &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;SYS&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f00&#34;&gt;ORDER&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;BY&lt;/span&gt; logon_time &lt;span style=&#34;color:#f00&#34;&gt;DESC&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;WHERE&lt;/span&gt; (wait_time_millis &amp;gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;OR&lt;/span&gt; time_since_last_wait_millis &amp;gt; &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;/*아래는 DBMS 시스템 쿼리를 제외시키기 위함*/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;update user$ set spare6=DECODE(to_char(:2, &amp;#39;&amp;#39;YYYY-MM-DD&amp;#39;&amp;#39;), &amp;#39;&amp;#39;0000-00-00&amp;#39;&amp;#39;, to_date(NULL), :2) where user#=:1&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.get_status(:2, :3); END;&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(prev_sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;UPDATE &amp;#34;SYSTEM&amp;#34;.&amp;#34;SYS_EXPORT_SCHEMA_01&amp;#34; SET value_n = :1 WHERE process_order = :2&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;AND&lt;/span&gt; dbms_lob.compare(sql_fulltext, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&amp;#39;&lt;/span&gt;) != &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;중점적으로 수집하고 싶었던 데이터는 &lt;strong&gt;Wait Event&lt;/strong&gt;와 &lt;strong&gt;SQL Full Text&lt;/strong&gt;였습니다.
+이를 Elasticsearch에 저장하려면 식별자가 필요했습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;id = &lt;span style=&#34;color:#87ceeb&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;prev_exec_id&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;prev_sql_id&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;{&lt;/span&gt;unix_epoch_time(prev_exec_start)&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 고려했던 식별자는 &lt;code&gt;sql_exec_id&lt;/code&gt;와 &lt;code&gt;sql_id&lt;/code&gt;입니다.
+하지만 대기 상태라면 &lt;code&gt;sql_exec_id&lt;/code&gt;는 &lt;code&gt;NULL&lt;/code&gt;이기 때문에 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt;를 선택했습니다.
+어느 정도 데이터가 쌓이고 살펴보니 &lt;code&gt;prev_exec_id&lt;/code&gt;와 &lt;code&gt;prev_sql_id&lt;/code&gt; 만으로도 충분히 식별되었습니다.
+하지만 만에 하나를 위해 &lt;code&gt;prev_exec_start&lt;/code&gt;도 추가했습니다.
+누적된 데이터를 Kibana로 시각화하면 다음과 같습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/oracle-dbms-session-kibana.png&#34; alt=&#34;Oracle DBMS Session to Kibana&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;사용-사례&#34;&gt;사용 사례&lt;/h1&gt;
+&lt;p&gt;DBMS 성능 저하가 발생한 뒤 확인하는 Wait Event와 SQL은 후행 지표입니다.
+메트릭을 모니터링하고 알람을 줄 수 있는 지표가 아닙니다.
+이런 지표가 필요하다면 Prometheus나 Datadog을 사용합니다.
+우리가 처음 원했던 건 성능 저하가 발생했을 때 이를 진단할 방법이었습니다.&lt;/p&gt;
+&lt;h2 id=&#34;resmgrcpu-quantum&#34;&gt;resmgr:cpu quantum&lt;/h2&gt;
+&lt;p&gt;세션이 CPU 자원을 할당받기 위해 대기하는 이벤트&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;입니다.
+Oracle DBMS에 Resource Manager(resmgr)가 활성화되어 있고 CPU 사용량이 제한(throttling)되어 있을 때 발생합니다.&lt;/p&gt;
+&lt;p&gt;먼저 IDC에서 CPU 사용량 알람이 지속적으로 발생했습니다.
+대시보드를 확인해보니 Wait Event &lt;code&gt;resmgr:cpu quantum&lt;/code&gt;이 다수 발생했습니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-cpu-quantum.png&#34; alt=&#34;Wait Event - cpu quantum&#34;&gt;&lt;/p&gt;
+&lt;p&gt;해당 Wait Event가 발생한 SQL의 Execution Plan을 확인해보니,
+실행 시간은 빠르지만 CPU cost가 높은 것이 집중적으로 실행되었습니다.
+SE2는 리소스가 제한된 만큼 &lt;strong&gt;리소스를 효율적으로 사용하는 것이 속도만큼 중요했습니다&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;이는 Execution Plan을 확인하면서 SQL을 튜닝하는 방법으로 해결했습니다.
+주로 인덱스를 변경하거나 캐싱하는 방법으로 해결했습니다.
+불필요한 쿼리도 제거했습니다.&lt;/p&gt;
+&lt;h2 id=&#34;enq-tx---row-lock-contention&#34;&gt;enq: TX - row lock contention&lt;/h2&gt;
+&lt;p&gt;여러 개의 트랜잭션이 동시에 같은 데이터 블록에 접근하려고 할 때 발생하는 이벤트&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/db/wait-event-row-lock-contention.png&#34; alt=&#34;Wait Event - row lock contention&#34;&gt;&lt;/p&gt;
+&lt;p&gt;해당 Wait Event가 발생한 SQL을 확인해보니
+데이터 집계 후 집계 데이터를 마스터 테이블(Master Table)에 업데이트하는 쿼리가 많았습니다.&lt;/p&gt;
+&lt;p&gt;분명 이 쿼리가 만들어질 당시에는 데이터가 많지 않아서 문제가 없었을 것입니다&amp;hellip;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;주목할 것은, 오라클에서 발생하는 Lock 경합의 대부분을 차지하는 &lt;code&gt;enq: TM - contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;와
+&lt;code&gt;enq: TX - row lock contention&lt;/code&gt; 이벤트&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;가 Concurrency가 아닌 Application으로 분류돼 있다는 사실입니다.
+&amp;hellip;
+이런 유형의 프로그램 오류와 같이 분류한 것은 이들 문제가 DBA 이슈가 아니라 개발자 이슈임을 분명히 밝히고 있는 것입니다.
+Lock이 해제되지 않는 상황이 지속될 때 DBA가 할 수 있는 일은, Lock을 소유한 세션을 찾아 프로세스를 강제로 중지시키는 일뿐입니다.
+근본적인 해법은 애플리케이션 로직에서 찾아야 합니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
+&lt;p&gt;리소스를 효율적으로 사용하는 것은 어떤 기술을 사용하든 중요할 것입니다.
+애초에 RDB가 적합하지 않을 수도 있습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;기술 도입을 고려할 때 진단 도구도 중요한 고려 사항이라는 것을 느끼게 되었습니다.
+기술 도입 후 진단 도구가 제공되지 않는다는 걸 알았다면, 시스템 장애에 대비하기 위해 직접 준비해야 할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Oracle Database 19
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/dblic/Licensing-Information.html&#34;&gt;Licensing Information&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/oracle-wait-events.html&#34;&gt;Oracle Wait Events&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;오라클 성능 고도화 - 원리와 해법 1, 조시형&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;각주&#34;&gt;각주&lt;/h1&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-078224AC-3117-48ED-AC8A-4C570AD462A0&#34;&gt;resmgr:cpu quantum&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://docs.oracle.com/en/database/oracle/oracle-database/19/refrn/descriptions-of-wait-events.html#GUID-2A907B53-E98C-44C3-BBF0-4C649D73DF07&#34;&gt;enq: TX - row lock contention&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;DML 테이블 Lock 경합 시 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;DML 로우 Lock 경합 시 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;오라클 성능 고도화 - 원리와 해법 1, 100쪽&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;
+&lt;p&gt;적정 기술&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -3751,182 +3899,6 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)입니다.
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/shell/git-commands/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Go 언어로 컨테이너 이미지 빌드하기</title>
-        <link>https://markruler.github.io/posts/container/building-container-images-in-go/</link>
-        <pubDate>Sun, 28 Feb 2021 12:49:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/container/building-container-images-in-go/</guid>
-        <description>임창수 https://markruler.github.io/posts/container/building-container-images-in-go/ -&lt;blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;Ahmet Alp Balkan의 &lt;a href=&#34;https://ahmet.im/blog/building-container-images-in-go/&#34;&gt;Building container images in Go&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
-&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
-&lt;p&gt;이 글에서는 도커(Docker)를 사용하지 않고 어떻게 OCI 컨테이너 이미지를 만드는지 설명합니다.
-이를 위해 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;go-containerregistry&lt;/a&gt; 모듈을 이용해
-프로그래밍해서 레이어 및 이미지 매니페스트를 빌드합니다.
-예를 들어 &lt;a href=&#34;https://hub.docker.com/_/nginx&#34;&gt;nginx&lt;/a&gt; 이미지 위에
-정적 웹 사이트 콘텐츠를 추가하여 컨테이너 이미지를 빌드하고
-Go 프로그램을 사용하는 &lt;a href=&#34;https://gcr.io&#34;&gt;&lt;code&gt;gcr.io&lt;/code&gt;&lt;/a&gt; 같은 레지스트리에 푸시하겠습니다.&lt;/p&gt;
-&lt;p&gt;순서는 다음과 같습니다.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;도커 허브에서 &lt;code&gt;nginx&lt;/code&gt; 이미지를 가져 옵니다(pull).&lt;/li&gt;
-&lt;li&gt;기존 &lt;code&gt;/usr/share/nginx/html&lt;/code&gt; 디렉터리를 삭제하는 새 레이어를 만듭니다.&lt;/li&gt;
-&lt;li&gt;정적 HTML 콘텐츠과 애셋으로 새 레이어를 만듭니다.&lt;/li&gt;
-&lt;li&gt;이미지와 태그에 새 레이어를 추가합니다.&lt;/li&gt;
-&lt;li&gt;새 이미지를 레지스트리로 푸시합니다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;&lt;a href=&#34;https://gist.github.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6&#34;&gt;이 gist&lt;/a&gt;에서
-예제 코드를 찾을 수 있습니다.
-그럼 자세히 살펴보겠습니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry&#34;&gt;모듈&lt;/a&gt;을 다운로드합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go get -u github.com/google/go-containerregistry
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이미지 레퍼런스를 가져옵니다.
-&lt;code&gt;crane.Pull&lt;/code&gt; 메서드는 &lt;code&gt;nginx&lt;/code&gt;라는 레퍼런스를 &lt;code&gt;index.docker.io/library/nginx:latest&lt;/code&gt;로 바꾼 다음
-도커 허브에서 익명 자격 증명(anonymous credentials)을 처리합니다.
-그리고 &lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1#Image&#34;&gt;v1.Image&lt;/a&gt;를 반환합니다.
-(실제로는 &lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/remote#Image&#34;&gt;remote.Image&lt;/a&gt;)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;img, err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Pull&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이제 &lt;a href=&#34;https://github.com/opencontainers/image-spec/blob/v1.0.1/layer.md#whiteouts&#34;&gt;화이트아웃&lt;/a&gt; 파일&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;을
-사용하여 nginx 이미지에 딸려 있는 &lt;code&gt;/usr/share/nginx/html&lt;/code&gt; 디렉터리를 제거하는 레이어를 생성하겠습니다.&lt;/p&gt;
-&lt;p&gt;이를 위해 파일명 리스트와 인메모리 바이트 슬라이스로 타르볼(tarball)을 생성할 수 있는 헬퍼 메서드를 사용합니다.
-해당 레이어에서 경로를 지우기 위해 tar 파일 내부에 &lt;code&gt;usr/share/nginx/.wh.html&lt;/code&gt;이라는 파일이 필요합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;deleteMap := &lt;span style=&#34;color:#f00&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#ee82ee&#34;&gt;string&lt;/span&gt;][]&lt;span style=&#34;color:#ee82ee&#34;&gt;byte&lt;/span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;usr/share/nginx/.wh.html&amp;#34;&lt;/span&gt;: []&lt;span style=&#34;color:#ee82ee&#34;&gt;byte&lt;/span&gt;{},
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;deleteLayer, err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Layer&lt;/span&gt;(deleteMap)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이제 이 컨테이너 이미지에 추가할 정적 HTML 파일과 에셋이 포함된 디렉토리 트리를 스캔해야 합니다.
-다시 &lt;code&gt;crane.Layer&lt;/code&gt; 메서드를 사용할 수 있지만, 그러려면 모든 파일을 메모리에 올려야 합니다.&lt;/p&gt;
-&lt;p&gt;여기서는 &lt;code&gt;tar&lt;/code&gt; 명령어를 사용하여 타르볼을 생성하고 결과를 표준 출력(stdout)에 표시한 다음
-&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/tarball#LayerFromReader&#34;&gt;tarball.FromReader&lt;/a&gt;로
-전달할 수도 있습니다. 명령어는 다음과 같습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -cf- DIR &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;    --transform &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;s,^,usr/share/nginx/,&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    --owner=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; --group=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;또는 &lt;code&gt;tar.Writer&lt;/code&gt;를 사용하여 네이티브한 방식으로 타르볼을 빌드하고
-이 &lt;a href=&#34;https://gist.github.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6&#34;&gt;gist&lt;/a&gt;처럼
-인메모리 버퍼에 결과를 기록할 수 있습니다.
-여기서는 &lt;code&gt;filepath.Walk&lt;/code&gt; 메서드를 사용하여 디렉터리 트리의 파일을 스캔하고
-tar 아카이브에 디렉터리 및 파일 엔트리를 추가합니다.
-간단하게 디렉터리와 일반 파일만 구현했습니다. (symlink 등은 독자에게 예제로 남김)
-또한 파일 엔트리에 &lt;code&gt;usr/share/nginx/html&lt;/code&gt; 접두사를 추가합니다.&lt;/p&gt;
-&lt;p&gt;그런 다음 이러한 레이어를 새 이미지에 추가합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;newImg, err := mutate.&lt;span style=&#34;color:#ff0&#34;&gt;AppendLayers&lt;/span&gt;(img, deleteLayer, addLayer)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;또한 이미지의 진입점(entrypoint)과 전달 인자(arguments)를 변경할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;그런 다음 이미지에 태그를 지정합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tag, err := name.&lt;span style=&#34;color:#ff0&#34;&gt;NewTag&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;gcr.io/ahmetb-blog/blog:latest&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 때 로컬 자격 증명 키 체인과 헬퍼를 사용하여 원격 레지스트리에 이미지를 푸시하거나
-로컬 도커 데몬에 로드하여 다음을 테스트할 수 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 로컬 테스트를 위해 로컬 도커 엔진에 로드합니다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; s, err := daemon.&lt;span style=&#34;color:#ff0&#34;&gt;Write&lt;/span&gt;(tag, newImg); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#f00&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fmt.&lt;span style=&#34;color:#ff0&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pushed &amp;#34;&lt;/span&gt;+s)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 원격 레지스트리에 푸시합니다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Push&lt;/span&gt;(newImg, tag.&lt;span style=&#34;color:#ff0&#34;&gt;String&lt;/span&gt;()); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#f00&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fmt.&lt;span style=&#34;color:#ff0&#34;&gt;Println&lt;/span&gt;(s)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여기까지입니다.
-이 글로 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;go-containerregistry&lt;/a&gt;가
-무엇을 해 줄 수 있는지 생각해 볼 수 있는 좋은 연습이었기를 바랍니다.
-이 모듈은 매니페스트 수정, 레이어 재배치, 이미지 단순화&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;를 수행하는
-&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/mutate&#34;&gt;mutate&lt;/a&gt; 패키지처럼
-훨씬 더 많은 기능을 가지고 있습니다.
-(&lt;a href=&#34;https://github.com/google/ko&#34;&gt;ko&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md&#34;&gt;crane&lt;/a&gt;과
-같은 도구가 이 Go 모듈을 사용하여 만들어졌다는 것을 알고 계셨나요?)&lt;/p&gt;
-&lt;p&gt;꼭 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;리포지터리&lt;/a&gt;를
-별표(Star)하고 메인터이너의 트위터
-(&lt;a href=&#34;https://twitter.com/jonjonsonjr&#34;&gt;@jonjohnsonjr&lt;/a&gt;,
-&lt;a href=&#34;https://twitter.com/imjasonh&#34;&gt;@ImJasonH&lt;/a&gt;,
-&lt;a href=&#34;https://twitter.com/mattomata&#34;&gt;@mattomata&lt;/a&gt;)를 팔로우해서 커뮤니티에 참여하세요.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;실행 결과 맛보기 (역자)&lt;/p&gt;&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir create-oci-image
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd create-oci-image
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -O https://gist.githubusercontent.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6/raw/1431150eb52c2ecf81ea469ca685d4be3a30f895/demo.go
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go mod init demo
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: creating new go.mod: module demo&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go get
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/crane&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/tarball&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/mutate&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/daemon&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/name&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/crane in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/name in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1 in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/daemon in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/mutate in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/tarball in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo -i
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker images
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go run demo.go
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:294912,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[\u003e                                                  ]  294.9kB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:7077888,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[=============\u003e                                     ]  7.078MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:13860864,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[=========================\u003e                         ]  13.86MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:19759104,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[====================================\u003e              ]  19.76MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:25067520,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[==============================================\u003e    ]  25.07MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:26247168,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[================================================\u003e  ]  26.25MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:27095142,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]   27.1MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:294912,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[\u003e                                                  ]  294.9kB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:8847360,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[================\u003e                                  ]  8.847MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:16809984,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[===============================\u003e                   ]  16.81MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:24477696,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[==============================================\u003e    ]  24.48MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:26566376,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  26.57MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:599,&amp;#34;total&amp;#34;:599},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     599B/599B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9b23c8e1e6f9&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:599,&amp;#34;total&amp;#34;:599},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     599B/599B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9b23c8e1e6f9&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:894,&amp;#34;total&amp;#34;:894},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     894B/894B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;0f804d36244d&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:894,&amp;#34;total&amp;#34;:894},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     894B/894B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;0f804d36244d&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:666,&amp;#34;total&amp;#34;:666},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     666B/666B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9f65d1d4c869&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:666,&amp;#34;total&amp;#34;:666},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     666B/666B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9f65d1d4c869&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:1411,&amp;#34;total&amp;#34;:1411},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  1.411kB/1.411kB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;2acf82036f38&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:1411,&amp;#34;total&amp;#34;:1411},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  1.411kB/1.411kB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;2acf82036f38&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:110,&amp;#34;total&amp;#34;:110},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     110B/110B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;c99fc288b954&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:110,&amp;#34;total&amp;#34;:110},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     110B/110B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;c99fc288b954&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:39,&amp;#34;total&amp;#34;:39},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]      39B/39B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;5f70bf18a086&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:39,&amp;#34;total&amp;#34;:39},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]      39B/39B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;5f70bf18a086&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;stream&amp;#34;:&amp;#34;Loaded image: nginx:foo\n&amp;#34;}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker images
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# nginx               foo                 176899f2ab5f        10 days ago         133MB&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;화이트아웃 파일(whiteout file)은 경로를 삭제해야 함을 나타내는 특별한 파일명을 가진 빈(empty) 파일입니다.
-화이트아웃 파일명은 &lt;code&gt;.wh.&lt;/code&gt; 접두사와 삭제할 경로로 구성됩니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;code&gt;docker history&lt;/code&gt; 명령어를 사용하면 도커 이미지의 히스토리(이전 레이어들을 확인할 수 있습니다.
-이때 이미지 단순화(flatten images)란 필요한 이미지 정보만 추출해서 히스토리를 제거하고
-이미지 크기를 줄이는 작업을 일컫습니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/container/building-container-images-in-go/ - Im Changsu | Since 2020</description>
         </item>
     
     

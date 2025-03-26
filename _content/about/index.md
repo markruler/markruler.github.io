@@ -19,6 +19,7 @@ description: "Im Changsu — 임창수"
 - 제가 공부한 내용을 정리한 IT 기술 블로그입니다. 그래서 블로그와 위키가 섞여 있습니다.
   - [Blog](/categories/blog/)
   - [Wiki](/categories/wiki/)
+- 완벽한 글을 지향하진 않습니다.
 - 궁금하거나 틀린 내용이 있을 경우 이메일로 알려주시면 감사합니다.
 
 # 연락처

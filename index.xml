@@ -9,9 +9,143 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Mon, 24 Mar 2025 12:10:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 27 Mar 2025 00:45:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>웹 페이지 성능 측정과 최적화</title>
+        <link>https://markruler.github.io/posts/web/web-page-performance-optimization/</link>
+        <pubDate>Thu, 27 Mar 2025 00:45:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/web-page-performance-optimization/</guid>
+        <description>임창수 https://markruler.github.io/posts/web/web-page-performance-optimization/ -&lt;h1 id=&#34;성능-지표&#34;&gt;성능 지표&lt;/h1&gt;
+&lt;p&gt;먼저 웹 페이지의 성능을 개선하려면 어떤 지표를 기준으로 삼을 것인지 정해야 합니다.&lt;/p&gt;
+&lt;p&gt;Google이 제공하는 &lt;strong&gt;Web Vitals&lt;/strong&gt;는 사용자 경험을 측정하는 지표입니다.
+이 중 가장 중요한 측정 항목 3개를 모아서 Core Web Vitals이라고 합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/lcp&#34;&gt;LCP (Largest Contentful Paint)&lt;/a&gt;: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 &lt;strong&gt;로드 성능&lt;/strong&gt;을 측정.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/inp&#34;&gt;INP (Interaction to Next Paint)&lt;/a&gt;: 사용자 입력에 대한 응답 시간으로 &lt;strong&gt;상호작용&lt;/strong&gt;을 측정. (&lt;a href=&#34;https://web.dev/articles/fid&#34;&gt;FID, First Input Delay&lt;/a&gt;에서 대체)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/cls&#34;&gt;CLS (Cumulative Layout Shift)&lt;/a&gt;: &lt;strong&gt;시각적 안정성&lt;/strong&gt;을 측정.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이 외에도 웹 접근성(Web Accessibility)&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, SEO, PWA 등을 고려하여 웹 페이지의 품질을 측정할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;이 중 &lt;strong&gt;성능&lt;/strong&gt;(&lt;strong&gt;Performance&lt;/strong&gt;)과 관련된 것은 LCP, INP, 그리고 추가로
+리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 &lt;a href=&#34;https://web.dev/articles/ttfb&#34;&gt;Time to First Byte (TTFB)&lt;/a&gt;,
+사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 &lt;a href=&#34;https://web.dev/articles/fcp&#34;&gt;First Contentful Paint (FCP)&lt;/a&gt;가 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;성능-측정&#34;&gt;성능 측정&lt;/h1&gt;
+&lt;p&gt;앞서 언급한 성능 지표들은 모두 Google Chrome의 Performance 패널에서 측정할 수 있습니다.
+로컬에서 측정하는 것도 중요하긴 하지만, 캐시 없이 첫 방문하는 이용자나 다른 지역의 이용자들을 고려하여
+서버에서 측정하는 것도 중요합니다.&lt;/p&gt;
+&lt;p&gt;Google Chrome의 &lt;a href=&#34;https://github.com/GoogleChrome/lighthouse&#34;&gt;Lighthouse&lt;/a&gt;는
+대표적인 웹 페이지 성능 측정 CLI 도구입니다.
+성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
+Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
+&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse-ci&#34;&gt;CI 도구&lt;/a&gt;로도 제공되기 때문에
+CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# npm install -g lighthouse&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lighthouse http://example.com --output=json --output-path=./report.json
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://pagespeed.web.dev/&#34;&gt;Google PageSpeed Insights&lt;/a&gt;와 같은 온라인 툴에서도 Lighthouse 기능을 제공합니다.&lt;/p&gt;
+&lt;p&gt;Catchpoint의 &lt;a href=&#34;https://github.com/catchpoint/WebPageTest&#34;&gt;WebPageTest&lt;/a&gt;는
+오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
+Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문에
+실제로 성능 측정 시 주로 WebPageTest를 사용합니다.
+여기에는 Lighthouse도 포함합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;Datadog의 Synthetic Testing 중 &lt;a href=&#34;https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions&#34;&gt;Browser Testing&lt;/a&gt; 기능을
+사용하면 주기적으로 국가별&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; 성능 측정을 할 수 있습니다.
+글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,
+서비스 지역이 제한적이라면 직접 클라우드 서비스의 컴퓨팅 리소스를 사용해서 성능 측정하는 것도 좋은 방법입니다.&lt;/p&gt;
+&lt;h1 id=&#34;성능-개선&#34;&gt;성능 개선&lt;/h1&gt;
+&lt;p&gt;성능은 다방면으로 개선할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;정적-파일-최적화&#34;&gt;정적 파일 최적화&lt;/h2&gt;
+&lt;p&gt;HTML, CSS, JS 파일을 최적화하여 사용하면 성능을 개선할 수 있습니다.
+HTML의 리소스들은 기본적으로 위에서부터 아래로 불러옵니다.
+만약 상단에서 불러와야 하는 리소스가 많다면 사용자는 더 오래 기다려야 합니다.
+이를 &lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources&#34;&gt;렌더 블로킹(Render Blocking)&lt;/a&gt;이라고 합니다.
+먼저 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
+&lt;code&gt;defer&lt;/code&gt;, &lt;code&gt;async&lt;/code&gt; 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;
+다만 CSS 파일을 &lt;code&gt;defer&lt;/code&gt;로 불러오면 Layout Shift가 발생할 수 있습니다.
+그래서 중요하지 않은 CSS 파일만 &lt;code&gt;defer&lt;/code&gt;로 불러오는 것이 좋습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;
+Font의 경우 &lt;code&gt;preload&lt;/code&gt;를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;이미지-최적화&#34;&gt;이미지 최적화&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;WebP&lt;/code&gt;, &lt;code&gt;AVIF&lt;/code&gt;와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나&lt;sup id=&#34;fnref:7&#34;&gt;&lt;a href=&#34;#fn:7&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;
+Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sprite 이미지&lt;/strong&gt;를 사용해서 여러 이미지를 하나의 이미지로 합치면
+한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
+최근에는 HTTP/2와 HTTP/3를 사용하면서
+여러 리소스를 병렬로 불러올 수 있지만
+최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
+이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;비디오-최적화&#34;&gt;비디오 최적화&lt;/h2&gt;
+&lt;p&gt;비디오를 HLS 프로토콜(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC 8216&lt;/a&gt;)을
+사용하기 위해 &lt;code&gt;M3U&lt;/code&gt; 같은 포맷으로 트랜스코딩하고,
+사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
+예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.&lt;/p&gt;
+&lt;h2 id=&#34;캐시-활용&#34;&gt;캐시 활용&lt;/h2&gt;
+&lt;h3 id=&#34;cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/h3&gt;
+&lt;p&gt;사용자와 가까운 곳에 위치한 서버에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
+예를 들어, 영국에서 접속한 유저에게 영국에 위치한 서버에서 콘텐츠를 제공하면
+한국에 위치한 서버에서 콘텐츠를 제공하는 것보다 더 빠르게 콘텐츠를 제공할 수 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;브라우저-캐시&#34;&gt;브라우저 캐시&lt;/h3&gt;
+&lt;p&gt;브라우저 캐시를 활용해서 이미 불러온 리소스를 다시 불러오지 않도록 합니다.
+대표적으로 &lt;strong&gt;메모리 캐시&lt;/strong&gt;(Memory Cache), &lt;strong&gt;디스크 캐시&lt;/strong&gt;(Disk Cache)가 있습니다.
+메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Glossary/bfcache&#34;&gt;Back-forward cache(bfcache)&lt;/a&gt;는
+뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
+Google Chrome Dev tools의 Application 패널 &amp;gt; Background services &amp;gt; Back-forward cache에서 확인할 수 있습니다.
+이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
+다만 다른 출처의 iframe이나
+WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
+혹은 &lt;code&gt;unload&lt;/code&gt;, &lt;code&gt;beforeunload&lt;/code&gt; 이벤트를 사용하는 경우 등
+특정 상황에서는 bfcache가 적용되지 않습니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/google-chrome/&#34;&gt;유용한 구글 크롬(Google Chrome)의 기능&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/respond-web-page/&#34;&gt;웹 페이지 응답 방법과 프레임워크&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/vitals&#34;&gt;Core Web Vitals&lt;/a&gt; | web.dev
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-cls&#34;&gt;Optimize CLS&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-ttfb&#34;&gt;Optimize TTFB&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-lcp&#34;&gt;Optimize LCP&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/tti&#34;&gt;Time to Interactive (TTI)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/browser-level-image-lazy-loading&#34;&gt;Browser-level image lazy loading for the web&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/font-best-practices&#34;&gt;Best Practices for fonts&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Performance&#34;&gt;Web performance&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;웹 사이트, 도구, 기술이 장애를 가진 사용자들이 사용할 수 있도록 설계 및 개발된 것을 말합니다.
+(&lt;a href=&#34;https://www.w3.org/WAI/fundamentals/accessibility-intro/&#34;&gt;W3C&lt;/a&gt;)
+&lt;a href=&#34;https://nuli.navercorp.com/education/tools&#34;&gt;다양한 진단 도구&lt;/a&gt;가 있습니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/&#34;&gt;Kakao Entertainment의 사례&lt;/a&gt;,
+&lt;a href=&#34;https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/&#34;&gt;ChungJungSoo님의 사례&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1#L329&#34;&gt;GoogleChrome/lighthouse/README&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;AWS와 같은 클라우드 서비스를 사용하기 때문에 리전에 종속적입니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:5&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html&#34;&gt;async vs defer attributes&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:6&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://web.dev/articles/defer-non-critical-css&#34;&gt;Defer non-critical CSS&lt;/a&gt; | web.dev&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:7&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images&#34;&gt;Serve images in modern formats&lt;/a&gt; | web.dev&amp;#160;&lt;a href=&#34;#fnref:7&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/web/web-page-performance-optimization/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1807,165 +1941,6 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/network/onavo-facebook-ssl-mitm-technical-analysis/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>일상에서의 스왑 메모리 (Swap Memory)</title>
-        <link>https://markruler.github.io/posts/os/swap-memory/</link>
-        <pubDate>Thu, 05 Sep 2024 21:13:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/os/swap-memory/</guid>
-        <description>임창수 https://markruler.github.io/posts/os/swap-memory/ -&lt;p&gt;&lt;strong&gt;스왑 메모리는 물리 메모리 용량이 부족할 때 사용되는 가상 메모리 영역&lt;/strong&gt;입니다.
-고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법입니다.
-이 글은 &lt;strong&gt;Ubuntu&lt;/strong&gt;에서 &lt;strong&gt;스왑 메모리를 file로 설정&lt;/strong&gt;하고, 나의 환경에 맞게 조정하기 위해 &lt;strong&gt;모니터링 하는 방법&lt;/strong&gt;을 설명합니다.&lt;/p&gt;
-&lt;p&gt;먼저 스왑 메모리 설정을 확인합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon --show
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;설정되어 있지 않다면 아무것도 출력되지 않습니다.
-&lt;em&gt;Ubuntu 24.04 기준&lt;/em&gt;으로는 기본적으로 다음과 같이 &lt;code&gt;/swap.img&lt;/code&gt;가 설정되어 있습니다.
-하지만 이 글은 설정되어 있지 않다는 전제로 진행합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME      TYPE SIZE USED PRIO
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swap.img file   8G   0B   -2
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;스왑-설정-file&#34;&gt;스왑 설정: file&lt;/h1&gt;
-&lt;h2 id=&#34;스왑-파일-생성&#34;&gt;스왑 파일 생성&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;dd&lt;/code&gt; 명령으로 16 GiB 크기의 &lt;code&gt;/swapfile&lt;/code&gt; 이라는 파일을 생성합니다.
-(파일명은 뭘로 해도 상관없습니다.)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dd &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt;=/dev/zero &lt;span style=&#34;color:#eedd82&#34;&gt;of&lt;/span&gt;=/swapfile &lt;span style=&#34;color:#eedd82&#34;&gt;bs&lt;/span&gt;=1M &lt;span style=&#34;color:#eedd82&#34;&gt;count&lt;/span&gt;=16K
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 16384+0 records in&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 16384+0 records out&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 17179869184 bytes (17 GB, 16 GiB) copied, 11.2337 s, 1.5 GB/s&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;swapon&lt;/code&gt; 매뉴얼에도 명시&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;되어 있지만 &lt;code&gt;fallocate&lt;/code&gt;는 사용하지 않는 것을 권장합니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-연속된 블록에 실제 데이터를 파일에 쓰는 &lt;code&gt;dd&lt;/code&gt;와 달리 &lt;code&gt;fallocate&lt;/code&gt;는 논리적인 파일의 크기만 설정하고 데이터를 쓰지 않기 때문입니다.&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 합니다.
-그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋습니다.
-물리적으로 할당되지 않은 블록을 포함할 수 있는 &lt;strong&gt;Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에&lt;/strong&gt;
-스왑이 예상대로 동작하지 않을 수 있습니다.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;권한-설정&#34;&gt;권한 설정&lt;/h2&gt;
-&lt;p&gt;Swap 파일을 root만 읽고 쓰도록 권한을 설정합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo ls -hal /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# -rw------- 1 root root 16.0G  3월  9 16:43 /swapfile&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;파일-형태-변경&#34;&gt;파일 형태 변경&lt;/h2&gt;
-&lt;p&gt;파일 형태를 확인해보면 &lt;code&gt;data&lt;/code&gt; 파일입니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo file /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /swapfile: data&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Swap 파일을 Linux swap file로 설정합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mkswap /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Setting up swapspace version 1, size = 16 GiB (17179865088 bytes)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo file /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /swapfile: Linux swap file, 4k page size, little endian, version 1, size 4194303 pages, 0 bad pages, no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;swap-영역-설정&#34;&gt;Swap 영역 설정&lt;/h2&gt;
-&lt;p&gt;만든 Swap 파일을 swap 영역으로 설정합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;설정-확인&#34;&gt;설정 확인&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon --show
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME      TYPE SIZE USED PRIO
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swapfile file  16G   0B   -2
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사용되는 부분이 생기면 아래처럼 &lt;code&gt;USED&lt;/code&gt; 부분에 사이즈가 커집니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME      TYPE SIZE   USED PRIO
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swapfile file  16G 153.3M   -2
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;TYPE&lt;/code&gt; : Swap 메모리의 종류
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;file&lt;/code&gt;: 파일&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;partition&lt;/code&gt;: 디스크 파티션&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;SIZE&lt;/code&gt; : Swap 메모리의 크기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;USED&lt;/code&gt; : Swap 메모리의 사용량&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;PRIO&lt;/code&gt; : Swap 메모리의 우선순위. 값이 클수록 우선적으로 사용됩니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;부팅-시-자동-마운트-설정&#34;&gt;부팅 시 자동 마운트 설정&lt;/h1&gt;
-&lt;p&gt;Ubuntu 24.04 기준 기본 설정값에는 &lt;code&gt;/swap.img&lt;/code&gt; 파일이 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/fstab: static file system information.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Use &amp;#39;blkid&amp;#39; to print the universally unique identifier for a&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# device; this may be used with UUID= as a more robust way to name devices&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# that works even if disks are added and removed. See fstab(5).&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &amp;lt;file system&amp;gt; &amp;lt;mount point&amp;gt;   &amp;lt;type&amp;gt;  &amp;lt;options&amp;gt;       &amp;lt;dump&amp;gt;  &amp;lt;pass&amp;gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swap.img       none            swap    sw              &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;       &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;(위 설정이 없다는 전제 하에)
-새로 추가한 스왑 영역을 추가합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;/swapfile none swap sw 0 0&amp;#39;&lt;/span&gt; | sudo tee -a /etc/fstab
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;용량-늘리기&#34;&gt;용량 늘리기&lt;/h1&gt;
-&lt;p&gt;스왑 메모리 크기는 시스템의 물리 메모리 용량과 사용 용도에 따라 결정됩니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;free -h
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#                total        used        free      shared  buff/cache   available&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Mem:            31Gi        24Gi       490Mi       3.9Gi       5.8Gi       2.0Gi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Swap:          2.0Gi       1.3Gi       677Mi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈를 늘리기 전 swap에서 파일을 제거합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapoff /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈를 늘립니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 4GiB 추가&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo dd &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt;=/dev/zero &lt;span style=&#34;color:#eedd82&#34;&gt;of&lt;/span&gt;=/swapfile &lt;span style=&#34;color:#eedd82&#34;&gt;bs&lt;/span&gt;=1M &lt;span style=&#34;color:#eedd82&#34;&gt;count&lt;/span&gt;=4K &lt;span style=&#34;color:#eedd82&#34;&gt;oflag&lt;/span&gt;=append &lt;span style=&#34;color:#eedd82&#34;&gt;conv&lt;/span&gt;=notrunc
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 4096+0 records in&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 4096+0 records out&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 4294967296 bytes (4.3 GB, 4.0 GiB) copied, 4.60434 s, 933 MB/s&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;사이즈 늘린 것을 적용하려면 &lt;code&gt;swapon -v&lt;/code&gt; 명령어로 다시 설정해야 합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo mkswap /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# mkswap: /swapfile: warning: wiping old swap signature.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Setting up swapspace version 1, size = 8 GiB (8589930496 bytes)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# no label, UUID=1516c52d-9ed8-4a52-939f-30a892aff73f&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon -v /swapfile                                                                                                 ✭ ✱
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# swapon: /swapfile: found signature [pagesize=4096, signature=swap]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# swapon: /swapfile: pagesize=4096, swapsize=8589934592, devsize=8589934592&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# swapon /swapfile&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;free -h
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#                total        used        free      shared  buff/cache   available&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Mem:            31Gi        24Gi       433Mi       4.0Gi       5.8Gi       1.5Gi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Swap:          8.0Gi       1.3Gi       6.7Gi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;비활성화&#34;&gt;비활성화&lt;/h1&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapoff /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;/etc/fstab&lt;/code&gt; 파일에서 Swap 파일 설정을 제거합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/fstab&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /swapfile none swap sw 0 0&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;swap-file-교체&#34;&gt;swap file 교체&lt;/h2&gt;
-&lt;p&gt;만약 기존 swap file을 교체하고 싶다면 새로 생성한 파일로 swapon 후 기존 swap 파일을 swapoff 하면 swap에 올라가있던 데이터들은 자동으로 옮겨집니다.
-물론 애플리케이션에 따라 유실될 수도 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapon /swap2file
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sudo swapon --show&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME       TYPE SIZE USED PRIO
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swapfile  file  16G   2G   -2
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swap2file file  32G   0B   -3
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo swapoff /swapfile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# sudo swapon --show&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;NAME       TYPE SIZE USED PRIO
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/swap2file file  32G 1.5G   -2
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;kubernetes에서-swap-기능을-비활성화해야-하는-이유&#34;&gt;Kubernetes에서 Swap 기능을 비활성화해야 하는 이유&lt;/h1&gt;
-&lt;p&gt;가장 큰 이유는 스왑 메모리가 있다면 Kubernetes는 메모리 부족 상황을 정확하게 파악할 수 없다는 것입니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
-&lt;strong&gt;안정성을 위해&lt;/strong&gt; 스왑 메모리를 비활성화하는 것이 좋습니다.
-스왑이 자주 발생하면 디스크 입출력이 증가하면서 성능이 저하되는 문제도 있습니다.&lt;/p&gt;
-&lt;h1 id=&#34;prometheus-node-exporter를-이용한-모니터링&#34;&gt;Prometheus node-exporter를 이용한 모니터링&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/markruler/node-monitoring&#34;&gt;이 리포지터리&lt;/a&gt;를 클론해서
-Prometheus와 Grafana를 실행해서 모니터링 할 수 있습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker compose up -d
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/os/swap-memory/grafana-prometheus-swap-memory.png&#34; alt=&#34;Node Monitoring with Prometheus and Grafana&#34;&gt;&lt;/p&gt;
-&lt;p&gt;본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있습니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.kernel.org/doc/gorman/html/understand/understand014.html&#34;&gt;Swap Management | kernel.org&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://velog.io/@sjuhwan/Virtualization-101-3-1-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%A4%EB%B2%84%EC%BB%A4%EB%B0%8B%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%97%AC%EC%9C%A0%EA%B3%B5%EA%B0%84-%ED%99%95%EB%B3%B4-%EB%B0%A9%EB%B2%95&#34;&gt;Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/pull/31996&#34;&gt;kubelet swap on 체크 PR#31996&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES&#34;&gt;swapon(8) | Linux manual page&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal&#34;&gt;fallocatte vs. dd | StackExchange&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/issues/31676&#34;&gt;최초 이슈 kuberenetes#31676&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/os/swap-memory/ - Im Changsu | Since 2020</description>
         </item>
     
     

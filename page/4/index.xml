@@ -9,9 +9,185 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Mon, 24 Mar 2025 12:10:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 27 Mar 2025 00:45:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Go 언어로 컨테이너 이미지 빌드하기</title>
+        <link>https://markruler.github.io/posts/container/building-container-images-in-go/</link>
+        <pubDate>Sun, 28 Feb 2021 12:49:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/container/building-container-images-in-go/</guid>
+        <description>임창수 https://markruler.github.io/posts/container/building-container-images-in-go/ -&lt;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Ahmet Alp Balkan의 &lt;a href=&#34;https://ahmet.im/blog/building-container-images-in-go/&#34;&gt;Building container images in Go&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
+&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;p&gt;이 글에서는 도커(Docker)를 사용하지 않고 어떻게 OCI 컨테이너 이미지를 만드는지 설명합니다.
+이를 위해 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;go-containerregistry&lt;/a&gt; 모듈을 이용해
+프로그래밍해서 레이어 및 이미지 매니페스트를 빌드합니다.
+예를 들어 &lt;a href=&#34;https://hub.docker.com/_/nginx&#34;&gt;nginx&lt;/a&gt; 이미지 위에
+정적 웹 사이트 콘텐츠를 추가하여 컨테이너 이미지를 빌드하고
+Go 프로그램을 사용하는 &lt;a href=&#34;https://gcr.io&#34;&gt;&lt;code&gt;gcr.io&lt;/code&gt;&lt;/a&gt; 같은 레지스트리에 푸시하겠습니다.&lt;/p&gt;
+&lt;p&gt;순서는 다음과 같습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;도커 허브에서 &lt;code&gt;nginx&lt;/code&gt; 이미지를 가져 옵니다(pull).&lt;/li&gt;
+&lt;li&gt;기존 &lt;code&gt;/usr/share/nginx/html&lt;/code&gt; 디렉터리를 삭제하는 새 레이어를 만듭니다.&lt;/li&gt;
+&lt;li&gt;정적 HTML 콘텐츠과 애셋으로 새 레이어를 만듭니다.&lt;/li&gt;
+&lt;li&gt;이미지와 태그에 새 레이어를 추가합니다.&lt;/li&gt;
+&lt;li&gt;새 이미지를 레지스트리로 푸시합니다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;a href=&#34;https://gist.github.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6&#34;&gt;이 gist&lt;/a&gt;에서
+예제 코드를 찾을 수 있습니다.
+그럼 자세히 살펴보겠습니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry&#34;&gt;모듈&lt;/a&gt;을 다운로드합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go get -u github.com/google/go-containerregistry
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이미지 레퍼런스를 가져옵니다.
+&lt;code&gt;crane.Pull&lt;/code&gt; 메서드는 &lt;code&gt;nginx&lt;/code&gt;라는 레퍼런스를 &lt;code&gt;index.docker.io/library/nginx:latest&lt;/code&gt;로 바꾼 다음
+도커 허브에서 익명 자격 증명(anonymous credentials)을 처리합니다.
+그리고 &lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1#Image&#34;&gt;v1.Image&lt;/a&gt;를 반환합니다.
+(실제로는 &lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/remote#Image&#34;&gt;remote.Image&lt;/a&gt;)&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;img, err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Pull&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;nginx&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이제 &lt;a href=&#34;https://github.com/opencontainers/image-spec/blob/v1.0.1/layer.md#whiteouts&#34;&gt;화이트아웃&lt;/a&gt; 파일&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;을
+사용하여 nginx 이미지에 딸려 있는 &lt;code&gt;/usr/share/nginx/html&lt;/code&gt; 디렉터리를 제거하는 레이어를 생성하겠습니다.&lt;/p&gt;
+&lt;p&gt;이를 위해 파일명 리스트와 인메모리 바이트 슬라이스로 타르볼(tarball)을 생성할 수 있는 헬퍼 메서드를 사용합니다.
+해당 레이어에서 경로를 지우기 위해 tar 파일 내부에 &lt;code&gt;usr/share/nginx/.wh.html&lt;/code&gt;이라는 파일이 필요합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;deleteMap := &lt;span style=&#34;color:#f00&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#ee82ee&#34;&gt;string&lt;/span&gt;][]&lt;span style=&#34;color:#ee82ee&#34;&gt;byte&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;usr/share/nginx/.wh.html&amp;#34;&lt;/span&gt;: []&lt;span style=&#34;color:#ee82ee&#34;&gt;byte&lt;/span&gt;{},
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;deleteLayer, err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Layer&lt;/span&gt;(deleteMap)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이제 이 컨테이너 이미지에 추가할 정적 HTML 파일과 에셋이 포함된 디렉토리 트리를 스캔해야 합니다.
+다시 &lt;code&gt;crane.Layer&lt;/code&gt; 메서드를 사용할 수 있지만, 그러려면 모든 파일을 메모리에 올려야 합니다.&lt;/p&gt;
+&lt;p&gt;여기서는 &lt;code&gt;tar&lt;/code&gt; 명령어를 사용하여 타르볼을 생성하고 결과를 표준 출력(stdout)에 표시한 다음
+&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/tarball#LayerFromReader&#34;&gt;tarball.FromReader&lt;/a&gt;로
+전달할 수도 있습니다. 명령어는 다음과 같습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tar -cf- DIR &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;    --transform &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;s,^,usr/share/nginx/,&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    --owner=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; --group=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;또는 &lt;code&gt;tar.Writer&lt;/code&gt;를 사용하여 네이티브한 방식으로 타르볼을 빌드하고
+이 &lt;a href=&#34;https://gist.github.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6&#34;&gt;gist&lt;/a&gt;처럼
+인메모리 버퍼에 결과를 기록할 수 있습니다.
+여기서는 &lt;code&gt;filepath.Walk&lt;/code&gt; 메서드를 사용하여 디렉터리 트리의 파일을 스캔하고
+tar 아카이브에 디렉터리 및 파일 엔트리를 추가합니다.
+간단하게 디렉터리와 일반 파일만 구현했습니다. (symlink 등은 독자에게 예제로 남김)
+또한 파일 엔트리에 &lt;code&gt;usr/share/nginx/html&lt;/code&gt; 접두사를 추가합니다.&lt;/p&gt;
+&lt;p&gt;그런 다음 이러한 레이어를 새 이미지에 추가합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;newImg, err := mutate.&lt;span style=&#34;color:#ff0&#34;&gt;AppendLayers&lt;/span&gt;(img, deleteLayer, addLayer)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;또한 이미지의 진입점(entrypoint)과 전달 인자(arguments)를 변경할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;그런 다음 이미지에 태그를 지정합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tag, err := name.&lt;span style=&#34;color:#ff0&#34;&gt;NewTag&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;gcr.io/ahmetb-blog/blog:latest&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이 때 로컬 자격 증명 키 체인과 헬퍼를 사용하여 원격 레지스트리에 이미지를 푸시하거나
+로컬 도커 데몬에 로드하여 다음을 테스트할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 로컬 테스트를 위해 로컬 도커 엔진에 로드합니다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; s, err := daemon.&lt;span style=&#34;color:#ff0&#34;&gt;Write&lt;/span&gt;(tag, newImg); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#f00&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fmt.&lt;span style=&#34;color:#ff0&#34;&gt;Println&lt;/span&gt;(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;pushed &amp;#34;&lt;/span&gt;+s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 원격 레지스트리에 푸시합니다.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err := crane.&lt;span style=&#34;color:#ff0&#34;&gt;Push&lt;/span&gt;(newImg, tag.&lt;span style=&#34;color:#ff0&#34;&gt;String&lt;/span&gt;()); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  panic(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} &lt;span style=&#34;color:#f00&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fmt.&lt;span style=&#34;color:#ff0&#34;&gt;Println&lt;/span&gt;(s)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;여기까지입니다.
+이 글로 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;go-containerregistry&lt;/a&gt;가
+무엇을 해 줄 수 있는지 생각해 볼 수 있는 좋은 연습이었기를 바랍니다.
+이 모듈은 매니페스트 수정, 레이어 재배치, 이미지 단순화&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;를 수행하는
+&lt;a href=&#34;https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/mutate&#34;&gt;mutate&lt;/a&gt; 패키지처럼
+훨씬 더 많은 기능을 가지고 있습니다.
+(&lt;a href=&#34;https://github.com/google/ko&#34;&gt;ko&lt;/a&gt;,
+&lt;a href=&#34;https://github.com/google/go-containerregistry/blob/main/cmd/crane/doc/crane.md&#34;&gt;crane&lt;/a&gt;과
+같은 도구가 이 Go 모듈을 사용하여 만들어졌다는 것을 알고 계셨나요?)&lt;/p&gt;
+&lt;p&gt;꼭 &lt;a href=&#34;https://github.com/google/go-containerregistry&#34;&gt;리포지터리&lt;/a&gt;를
+별표(Star)하고 메인터이너의 트위터
+(&lt;a href=&#34;https://twitter.com/jonjonsonjr&#34;&gt;@jonjohnsonjr&lt;/a&gt;,
+&lt;a href=&#34;https://twitter.com/imjasonh&#34;&gt;@ImJasonH&lt;/a&gt;,
+&lt;a href=&#34;https://twitter.com/mattomata&#34;&gt;@mattomata&lt;/a&gt;)를 팔로우해서 커뮤니티에 참여하세요.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;실행 결과 맛보기 (역자)&lt;/p&gt;&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir create-oci-image
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cd create-oci-image
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -O https://gist.githubusercontent.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6/raw/1431150eb52c2ecf81ea469ca685d4be3a30f895/demo.go
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go mod init demo
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: creating new go.mod: module demo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go get
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/crane&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/tarball&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/mutate&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/v1/daemon&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: finding module for package github.com/google/go-containerregistry/pkg/name&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/crane in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/name in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1 in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/daemon in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/mutate in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# go: found github.com/google/go-containerregistry/pkg/v1/tarball in github.com/google/go-containerregistry v0.4.0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo -i
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker images
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go run demo.go
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:294912,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[\u003e                                                  ]  294.9kB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:7077888,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[=============\u003e                                     ]  7.078MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:13860864,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[=========================\u003e                         ]  13.86MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:19759104,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[====================================\u003e              ]  19.76MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:25067520,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[==============================================\u003e    ]  25.07MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:26247168,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[================================================\u003e  ]  26.25MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:27095142,&amp;#34;total&amp;#34;:27095142},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]   27.1MB/27.1MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9eb82f04c782&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:294912,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[\u003e                                                  ]  294.9kB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:8847360,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[================\u003e                                  ]  8.847MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:16809984,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[===============================\u003e                   ]  16.81MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:24477696,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[==============================================\u003e    ]  24.48MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:26566376,&amp;#34;total&amp;#34;:26566376},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  26.57MB/26.57MB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;ffd3d6313c9b&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:599,&amp;#34;total&amp;#34;:599},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     599B/599B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9b23c8e1e6f9&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:599,&amp;#34;total&amp;#34;:599},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     599B/599B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9b23c8e1e6f9&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:894,&amp;#34;total&amp;#34;:894},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     894B/894B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;0f804d36244d&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:894,&amp;#34;total&amp;#34;:894},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     894B/894B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;0f804d36244d&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:666,&amp;#34;total&amp;#34;:666},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     666B/666B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9f65d1d4c869&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:666,&amp;#34;total&amp;#34;:666},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     666B/666B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;9f65d1d4c869&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:1411,&amp;#34;total&amp;#34;:1411},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  1.411kB/1.411kB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;2acf82036f38&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:1411,&amp;#34;total&amp;#34;:1411},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]  1.411kB/1.411kB&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;2acf82036f38&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:110,&amp;#34;total&amp;#34;:110},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     110B/110B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;c99fc288b954&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:110,&amp;#34;total&amp;#34;:110},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]     110B/110B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;c99fc288b954&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:39,&amp;#34;total&amp;#34;:39},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]      39B/39B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;5f70bf18a086&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;status&amp;#34;:&amp;#34;Loading layer&amp;#34;,&amp;#34;progressDetail&amp;#34;:{&amp;#34;current&amp;#34;:39,&amp;#34;total&amp;#34;:39},&amp;#34;progress&amp;#34;:&amp;#34;[==================================================\u003e]      39B/39B&amp;#34;,&amp;#34;id&amp;#34;:&amp;#34;5f70bf18a086&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# {&amp;#34;stream&amp;#34;:&amp;#34;Loaded image: nginx:foo\n&amp;#34;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker images
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# nginx               foo                 176899f2ab5f        10 days ago         133MB&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;화이트아웃 파일(whiteout file)은 경로를 삭제해야 함을 나타내는 특별한 파일명을 가진 빈(empty) 파일입니다.
+화이트아웃 파일명은 &lt;code&gt;.wh.&lt;/code&gt; 접두사와 삭제할 경로로 구성됩니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;code&gt;docker history&lt;/code&gt; 명령어를 사용하면 도커 이미지의 히스토리(이전 레이어들을 확인할 수 있습니다.
+이때 이미지 단순화(flatten images)란 필요한 이미지 정보만 추출해서 히스토리를 제거하고
+이미지 크기를 줄이는 작업을 일컫습니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/container/building-container-images-in-go/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -2452,207 +2628,6 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;예를 들어 가상 CPE(vCPE, Virtual Customer Premises Equipment)의 경우 많은 구성요소를 작은 컨테이너로 분해하고 서로 연결(체이닝)할 수 있습니다.
 기능을 분해하면 소프트웨어 벤더들이 VNF의 작은 기능을 더 쉽게 개발할 수 있고 오버헤드도 줄일 수 있는 기회를 제공합니다.&lt;/p&gt;
 - https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>쿠버네티스 컴포넌트를 로컬에서 직접 빌드 및 디버깅하기</title>
-        <link>https://markruler.github.io/posts/kubernetes/local-build-kube/</link>
-        <pubDate>Sun, 11 Oct 2020 14:48:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/kubernetes/local-build-kube/</guid>
-        <description>임창수 https://markruler.github.io/posts/kubernetes/local-build-kube/ -&lt;blockquote&gt;
-&lt;p&gt;직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md&#34;&gt;kubernetes/build/README.md&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;사용할-명령어&#34;&gt;사용할 명령어&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# master 브랜치&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; https://github.com/kubernetes/kubernetes.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 특정 브랜치&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone --depth &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; --single-branch --branch release-1.19 https://github.com/kubernetes/kubernetes.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# cmd 디렉터리에 있는 다른 컴포넌트도 같은 방식으로 빌드할 수 있다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# cmd/kubeadm, kubectl, kubelet, kube-apiserver, kube-proxy, kube-controller-manager, kube-scheduler, ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;make all &lt;span style=&#34;color:#eedd82&#34;&gt;WHAT&lt;/span&gt;=cmd/kubectl &lt;span style=&#34;color:#eedd82&#34;&gt;GOFLAGS&lt;/span&gt;=-v
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 그냥 간단히 go build 명령도 가능하다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go build -o k cmd/kubectl
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;빌드-실행-따라가기&#34;&gt;빌드 실행 따라가기&lt;/h2&gt;
-&lt;h3 id=&#34;makefile&#34;&gt;Makefile&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;build/root/Makefile
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;실제로-빌드되는-makefile&#34;&gt;실제로 빌드되는 Makefile&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile&#34;&gt;build/root/Makefile&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build code.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Args:
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   WHAT: Directory names to build.  If any of these directories has a &amp;#39;main&amp;#39;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     package, the build will produce executable files under $(OUT_DIR)/bin.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     If not specified, &amp;#34;everything&amp;#34; will be built.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOFLAGS: Extra flags to pass to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOLDFLAGS: Extra linking flags passed to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   GOGCFLAGS: Additional go compile flags passed to &amp;#39;go&amp;#39; when building.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Example:
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all WHAT=cmd/kubelet GOFLAGS=-v
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   make all GOLDFLAGS=&amp;#34;&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     Note: Specify GOLDFLAGS as an empty string for building unstripped binaries, which allows
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           to &amp;#34;-s -w&amp;#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#           are documented at https://golang.org/cmd/link/
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;endef
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;.PHONY&lt;/span&gt;: all
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ifeq (&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;PRINT_HELP&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;,y)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	@echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$$&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;ALL_HELP_INFO&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;else
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;all&lt;/span&gt;: generated_files
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	hack/make-rules/build.sh &lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;WHAT&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endif
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;all-generated_files&#34;&gt;all: generated_files&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh&#34;&gt;hack/make-rules/build.sh&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This script sets up a go workspace locally and builds all go components.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o errexit
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o nounset
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;set -o pipefail
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;dirname &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;BASH_SOURCE&lt;/span&gt;[0]&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;/../..
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_ROOT&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;/hack/lib/init.sh&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/golang.sh&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::build_binaries &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$@&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::place_bins
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubegolang&#34;&gt;kube::golang::&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh&#34;&gt;hack/lib/golang.sh&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Build binaries targets specified&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Input:&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   $@ - targets and go flags.  If no targets are set then all binaries targets&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     are built.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#   KUBE_BUILD_PLATFORMS - Incoming variable of targets to build for.  If unset&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#     then just the host architecture is built.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::build_binaries() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This will take binaries from $GOPATH/bin and copy them to the appropriate&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# place in ${KUBE_OUTPUT_BINDIR}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Ideally this wouldn&amp;#39;t be necessary and we could just set GOBIN to&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# KUBE_OUTPUT_BINDIR but that won&amp;#39;t work in the face of cross compilation.  &amp;#39;go&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# install&amp;#39; will place binaries that match the host platform directly in $GOBIN&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# while placing cross compiled binaries into `platform_arch` subdirs.  This&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# complicates pretty much everything else we do around packaging and such.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::place_bins() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# V=2 kube::log::status ${KUBE_OUTPUT_BINPATH}&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# 위 로그 함수를 추가해서 빌드하면 어디에 빌드되었는지 확인할 수 있다.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;# &amp;gt; [%m%d %H:%M:%S] /home/kubernetes/kubernetes/_output/local/bin&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;로그-레벨&#34;&gt;로그 레벨&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh&#34;&gt;hack/lib/logging.sh&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This controls the verbosity of the build. Higher numbers mean more output.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt; ?= &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 👉 hack/lib/logging.sh
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#ff0&#34;&gt;kube&lt;/span&gt;::log::status() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  local &lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;:-&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; [[ &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; &amp;lt; &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;V&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt; ]]; &lt;span style=&#34;color:#f00&#34;&gt;then&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;fi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;=&lt;span style=&#34;color:#f00&#34;&gt;$(&lt;/span&gt;date +&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;[%m%d %H:%M:%S]&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;+++ &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;timestamp&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  shift
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; message; &lt;span style=&#34;color:#f00&#34;&gt;do&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    echo &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;    &lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;message&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;done&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cmdkubectl&#34;&gt;cmd/kubectl&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go&#34;&gt;kubectl.go&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;package&lt;/span&gt; main
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; (
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	goflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;flag&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;math/rand&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;os&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;github.com/spf13/pflag&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	cliflag &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/component-base/cli/flag&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubectl/pkg/util/logs&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/kubernetes/pkg/kubectl/cmd&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// Import to initialize client auth plugins.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	_ &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;k8s.io/client-go/plugin/pkg/client/auth&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;main&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	rand.&lt;span style=&#34;color:#ff0&#34;&gt;Seed&lt;/span&gt;(time.&lt;span style=&#34;color:#ff0&#34;&gt;Now&lt;/span&gt;().&lt;span style=&#34;color:#ff0&#34;&gt;UnixNano&lt;/span&gt;())
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	command := cmd.&lt;span style=&#34;color:#ff0&#34;&gt;NewDefaultKubectlCommand&lt;/span&gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// TODO: once we switch everything over to Cobra commands, we can go back to calling&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags() (by removing its pflag.Parse() call). For now, we have to set the&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// normalize func and add the go flag set by hand.&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;SetNormalizeFunc&lt;/span&gt;(cliflag.WordSepNormalizeFunc)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	pflag.CommandLine.&lt;span style=&#34;color:#ff0&#34;&gt;AddGoFlagSet&lt;/span&gt;(goflag.CommandLine)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#0f0&#34;&gt;// cliflag.InitFlags()&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	logs.&lt;span style=&#34;color:#ff0&#34;&gt;InitLogs&lt;/span&gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f00&#34;&gt;defer&lt;/span&gt; logs.&lt;span style=&#34;color:#ff0&#34;&gt;FlushLogs&lt;/span&gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err := command.&lt;span style=&#34;color:#ff0&#34;&gt;Execute&lt;/span&gt;(); err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		os.&lt;span style=&#34;color:#ff0&#34;&gt;Exit&lt;/span&gt;(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmd&#34;&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;&lt;/h3&gt;
-&lt;h2 id=&#34;디버깅&#34;&gt;디버깅&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/docs/editor/debugging&#34;&gt;launch.json&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;version&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0.2.0&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;configurations&amp;#34;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;type&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;go&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;request&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;launch&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;name&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;kubectl&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;program&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;${workspaceFolder}/cmd/kubectl/kubectl.go&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;#34;args&amp;#34;: [
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;config&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;view&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      ]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ]
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/kubernetes/vscode-debugging-golang.png&#34; alt=&#34;vscode-debugging-golang&#34;&gt;&lt;/p&gt;
-- https://markruler.github.io/posts/kubernetes/local-build-kube/ - Im Changsu | Since 2020</description>
         </item>
     
     

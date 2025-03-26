@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+
+<title>
+  
+  임창수
+  
+  | 웹 페이지 성능 측정과 최적화
+  
+  
+</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="WebPageTest, Lighthouse와 CDN">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
+
+
+
+<meta property="og:url" content="https://markruler.github.io/posts/web/web-page-performance-optimization/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="웹 페이지 성능 측정과 최적화">
+  <meta property="og:description" content="WebPageTest, Lighthouse와 CDN">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-03-27T00:45:00+09:00">
+    <meta property="article:modified_time" content="2025-03-27T00:45:00+09:00">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Http">
+    <meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.webp">
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.webp">
+  <meta name="twitter:title" content="웹 페이지 성능 측정과 최적화">
+  <meta name="twitter:description" content="WebPageTest, Lighthouse와 CDN">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+
+      <script defer src="/js/toc.js"></script>
+    
+    
+    
+  
+  
+  <link rel="stylesheet" href="/scss/dark-mode.min.8fc48c2ea7be95e8c4464eeff8bc5136ea3f3a258f6cdba7e220dfab2ab7f35f.css" integrity="sha256-j8SMLqe&#43;lejERk7v&#43;LxRNuo/OiWPbNun4iDfqyq3818=" media="screen">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ec%a7%80%ed%91%9c" class="nav-성능-지표">
+									성능 지표
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ec%b8%a1%ec%a0%95" class="nav-성능-측정">
+									성능 측정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ea%b0%9c%ec%84%a0" class="nav-성능-개선">
+									성능 개선
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%95%ec%a0%81-%ed%8c%8c%ec%9d%bc-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-정적-파일-최적화">
+									정적 파일 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%eb%af%b8%ec%a7%80-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-이미지-최적화">
+									이미지 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%eb%94%94%ec%98%a4-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-비디오-최적화">
+									비디오 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%ba%90%ec%8b%9c-%ed%99%9c%ec%9a%a9" class="nav-캐시-활용">
+									캐시 활용
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#cdn-content-delivery-network" class="nav-cdn-content-delivery-network">
+									CDN (Content Delivery Network)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80-%ec%ba%90%ec%8b%9c" class="nav-브라우저-캐시">
+									브라우저 캐시
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            📜
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            🌙
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+    v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <button
+        class="read-random-mobile"
+        data-target-prefix="/posts">
+        Navigate to Random Post
+    </button>
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    웹 페이지 성능 측정과 최적화
+                    
+                    <div class="post-subtitle">
+                        WebPageTest, Lighthouse와 CDN
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-03-27 00:45
+                        </time>
+                        
+
+                        
+                            <a href="/categories/wiki">[wiki]</a>
+                            &nbsp;
+                        
+
+                        
+                            
+                                <a href="/tags/network">network</a>
+                                &nbsp;
+                            
+                                <a href="/tags/http">http</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="성능-지표">성능 지표</h1>
+<p>먼저 웹 페이지의 성능을 개선하려면 어떤 지표를 기준으로 삼을 것인지 정해야 합니다.</p>
+<p>Google이 제공하는 <strong>Web Vitals</strong>는 사용자 경험을 측정하는 지표입니다.
+이 중 가장 중요한 측정 항목 3개를 모아서 Core Web Vitals이라고 합니다.</p>
+<ul>
+<li><a href="https://web.dev/articles/lcp">LCP (Largest Contentful Paint)</a>: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 <strong>로드 성능</strong>을 측정.</li>
+<li><a href="https://web.dev/articles/inp">INP (Interaction to Next Paint)</a>: 사용자 입력에 대한 응답 시간으로 <strong>상호작용</strong>을 측정. (<a href="https://web.dev/articles/fid">FID, First Input Delay</a>에서 대체)</li>
+<li><a href="https://web.dev/articles/cls">CLS (Cumulative Layout Shift)</a>: <strong>시각적 안정성</strong>을 측정.</li>
+</ul>
+<p>이 외에도 웹 접근성(Web Accessibility)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, SEO, PWA 등을 고려하여 웹 페이지의 품질을 측정할 수 있습니다.</p>
+<p>이 중 <strong>성능</strong>(<strong>Performance</strong>)과 관련된 것은 LCP, INP, 그리고 추가로
+리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 <a href="https://web.dev/articles/ttfb">Time to First Byte (TTFB)</a>,
+사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 <a href="https://web.dev/articles/fcp">First Contentful Paint (FCP)</a>가 있습니다.</p>
+<h1 id="성능-측정">성능 측정</h1>
+<p>앞서 언급한 성능 지표들은 모두 Google Chrome의 Performance 패널에서 측정할 수 있습니다.
+로컬에서 측정하는 것도 중요하긴 하지만, 캐시 없이 첫 방문하는 이용자나 다른 지역의 이용자들을 고려하여
+서버에서 측정하는 것도 중요합니다.</p>
+<p>Google Chrome의 <a href="https://github.com/GoogleChrome/lighthouse">Lighthouse</a>는
+대표적인 웹 페이지 성능 측정 CLI 도구입니다.
+성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
+Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
+<a href="https://github.com/GoogleChrome/lighthouse-ci">CI 도구</a>로도 제공되기 때문에
+CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># npm install -g lighthouse</span>
+</span></span><span style="display:flex;"><span>lighthouse http://example.com --output=json --output-path=./report.json
+</span></span></code></pre></div><p><a href="https://pagespeed.web.dev/">Google PageSpeed Insights</a>와 같은 온라인 툴에서도 Lighthouse 기능을 제공합니다.</p>
+<p>Catchpoint의 <a href="https://github.com/catchpoint/WebPageTest">WebPageTest</a>는
+오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
+Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문에
+실제로 성능 측정 시 주로 WebPageTest를 사용합니다.
+여기에는 Lighthouse도 포함합니다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
+<p>Datadog의 Synthetic Testing 중 <a href="https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions">Browser Testing</a> 기능을
+사용하면 주기적으로 국가별<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 성능 측정을 할 수 있습니다.
+글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,
+서비스 지역이 제한적이라면 직접 클라우드 서비스의 컴퓨팅 리소스를 사용해서 성능 측정하는 것도 좋은 방법입니다.</p>
+<h1 id="성능-개선">성능 개선</h1>
+<p>성능은 다방면으로 개선할 수 있습니다.</p>
+<h2 id="정적-파일-최적화">정적 파일 최적화</h2>
+<p>HTML, CSS, JS 파일을 최적화하여 사용하면 성능을 개선할 수 있습니다.
+HTML의 리소스들은 기본적으로 위에서부터 아래로 불러옵니다.
+만약 상단에서 불러와야 하는 리소스가 많다면 사용자는 더 오래 기다려야 합니다.
+이를 <a href="https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources">렌더 블로킹(Render Blocking)</a>이라고 합니다.
+먼저 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
+<code>defer</code>, <code>async</code> 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>
+다만 CSS 파일을 <code>defer</code>로 불러오면 Layout Shift가 발생할 수 있습니다.
+그래서 중요하지 않은 CSS 파일만 <code>defer</code>로 불러오는 것이 좋습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>
+Font의 경우 <code>preload</code>를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.</p>
+<h2 id="이미지-최적화">이미지 최적화</h2>
+<p><code>WebP</code>, <code>AVIF</code>와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>
+Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합니다.</p>
+<p><strong>Sprite 이미지</strong>를 사용해서 여러 이미지를 하나의 이미지로 합치면
+한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
+최근에는 HTTP/2와 HTTP/3를 사용하면서
+여러 리소스를 병렬로 불러올 수 있지만
+최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
+이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.</p>
+<h2 id="비디오-최적화">비디오 최적화</h2>
+<p>비디오를 HLS 프로토콜(<a href="https://datatracker.ietf.org/doc/html/rfc8216">RFC 8216</a>)을
+사용하기 위해 <code>M3U</code> 같은 포맷으로 트랜스코딩하고,
+사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
+예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.</p>
+<h2 id="캐시-활용">캐시 활용</h2>
+<h3 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h3>
+<p>사용자와 가까운 곳에 위치한 서버에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
+예를 들어, 영국에서 접속한 유저에게 영국에 위치한 서버에서 콘텐츠를 제공하면
+한국에 위치한 서버에서 콘텐츠를 제공하는 것보다 더 빠르게 콘텐츠를 제공할 수 있습니다.</p>
+<h3 id="브라우저-캐시">브라우저 캐시</h3>
+<p>브라우저 캐시를 활용해서 이미 불러온 리소스를 다시 불러오지 않도록 합니다.
+대표적으로 <strong>메모리 캐시</strong>(Memory Cache), <strong>디스크 캐시</strong>(Disk Cache)가 있습니다.
+메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.</p>
+<p><a href="https://developer.mozilla.org/en-US/docs/Glossary/bfcache">Back-forward cache(bfcache)</a>는
+뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
+Google Chrome Dev tools의 Application 패널 &gt; Background services &gt; Back-forward cache에서 확인할 수 있습니다.
+이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
+다만 다른 출처의 iframe이나
+WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
+혹은 <code>unload</code>, <code>beforeunload</code> 이벤트를 사용하는 경우 등
+특정 상황에서는 bfcache가 적용되지 않습니다.</p>
+<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<ul>
+<li><a href="https://markruler.github.io/posts/web/google-chrome/">유용한 구글 크롬(Google Chrome)의 기능</a></li>
+<li><a href="/posts/web/respond-web-page/">웹 페이지 응답 방법과 프레임워크</a></li>
+<li><a href="https://web.dev/articles/vitals">Core Web Vitals</a> | web.dev
+<ul>
+<li><a href="https://web.dev/articles/optimize-cls">Optimize CLS</a> | web.dev</li>
+<li><a href="https://web.dev/articles/optimize-ttfb">Optimize TTFB</a> | web.dev</li>
+<li><a href="https://web.dev/articles/optimize-lcp">Optimize LCP</a> | web.dev</li>
+<li><a href="https://web.dev/articles/tti">Time to Interactive (TTI)</a></li>
+<li><a href="https://web.dev/articles/browser-level-image-lazy-loading">Browser-level image lazy loading for the web</a> | web.dev</li>
+<li><a href="https://web.dev/articles/font-best-practices">Best Practices for fonts</a> | web.dev</li>
+</ul>
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Performance">Web performance</a> | MDN Web Docs</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>웹 사이트, 도구, 기술이 장애를 가진 사용자들이 사용할 수 있도록 설계 및 개발된 것을 말합니다.
+(<a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/">W3C</a>)
+<a href="https://nuli.navercorp.com/education/tools">다양한 진단 도구</a>가 있습니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/">Kakao Entertainment의 사례</a>,
+<a href="https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/">ChungJungSoo님의 사례</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1#L329">GoogleChrome/lighthouse/README</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>AWS와 같은 클라우드 서비스를 사용하기 때문에 리전에 종속적입니다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5">
+<p><a href="https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html">async vs defer attributes</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:6">
+<p><a href="https://web.dev/articles/defer-non-critical-css">Defer non-critical CSS</a> | web.dev&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:7">
+<p><a href="https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images">Serve images in modern formats</a> | web.dev&#160;<a href="#fnref:7" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+                    
+                    <hr id="EOF">
+                <p>최종 수정: 2025-03-27</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
+                
+                
+                
+                <a class="older-posts" href="/posts/network/http-response-compression/">
+			이전글<br>HTTP 응답 패킷을 압축해서 Outbound 네트워크 비용 절약하기
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            
+
+
+
+
+
+<section class="social-share">
+  <ul class="share-icons">
+    
+    
+    <li>
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fweb-page-performance-optimization%2f&amp;text=%ec%9b%b9%20%ed%8e%98%ec%9d%b4%ec%a7%80%20%ec%84%b1%eb%8a%a5%20%ec%b8%a1%ec%a0%95%ea%b3%bc%20%ec%b5%9c%ec%a0%81%ed%99%94" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">bg</title>
+    <circle cx="24" cy="24" fill="#1CB7EB" r="24" style="pointer-events:inherit" id="svg_1"></circle>
+    <path d="M36.8,15.4C35.9,15.9 34.8,16.2 33.8,16.3C34.9,15.6 35.7,14.5 36.1,13.2C35.1,13.8 34,14.3 32.7,14.6C31.7,13.5 30.4,12.8 28.9,12.8C26,12.8 23.6,15.3 23.6,18.5C23.6,18.9 23.6,19.4 23.7,19.8C19.3,19.6 15.4,17.3 12.8,13.9C12.3,14.7 12.1,15.7 12.1,16.8C12.1,18.8 13,20.5 14.4,21.5C13.5,21.5 12.7,21.2 12,20.8C12,20.8 12,20.9 12,20.9C12,23.6 13.8,25.9 16.2,26.5C15.8,26.6 15.3,26.7 14.8,26.7C14.5,26.7 14.1,26.7 13.8,26.6C14.5,28.9 16.4,30.5 18.7,30.5C16.9,32 14.6,32.9 12.2,32.9C11.8,32.9 11.4,32.9 10.9,32.8C13.2,34.4 16,35.4 19,35.4C28.7,35.4 34,26.8 34,19.3C34,19.1 34,18.8 34,18.6C35.2,17.6 36.1,16.6 36.8,15.4z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
+  </g>
+</svg>
+        <p>Twitter</p>
+      </a>
+    </li>
+    
+
+    
+    
+    <li>
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fweb-page-performance-optimization%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
+  <circle cx="24" cy="24" fill="#4E71A8" r="24" />
+  <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
+</svg>
+        <p>Facebook</p>
+        </a>
+    </li>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    <li>
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %ec%9b%b9%20%ed%8e%98%ec%9d%b4%ec%a7%80%20%ec%84%b1%eb%8a%a5%20%ec%b8%a1%ec%a0%95%ea%b3%bc%20%ec%b5%9c%ec%a0%81%ed%99%94.&amp;body=%ec%9b%b9%20%ed%8e%98%ec%9d%b4%ec%a7%80%20%ec%84%b1%eb%8a%a5%20%ec%b8%a1%ec%a0%95%ea%b3%bc%20%ec%b5%9c%ec%a0%81%ed%99%94%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aWebPageTest%2c%20Lighthouse%ec%99%80%20CDN%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fweb%2fweb-page-performance-optimization%2f%0a" target="_blank" class="share-btn email">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:none">
+    <title style="pointer-events:inherit">background</title>
+    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
+  </g>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">Layer 1</title>
+    <path d="M16,0C7.163,0 0,7.163 0,16C0,24.836 7.163,32 16,32S32,24.836 32,16C32,7.163 24.837,0 16,0z" fill="#333333" style="pointer-events:inherit" id="svg_2"></path>
+    <polygon fill="#FFFFFF" points="6.518,21.815 11.707,15.291 6.518,12.119   " style="pointer-events:inherit" id="svg_4"></polygon>
+    <polygon fill="#FFFFFF" points="19.5,15.746 15.989,17.908 12.472,15.758 7.11,22.5 24.867,22.5   " style="pointer-events:inherit" id="svg_5"></polygon>
+    <polygon fill="#FFFFFF" points="15.988,16.864 25.482,11.017 25.482,9.5 6.518,9.5 6.518,11.076   " style="pointer-events:inherit" id="svg_6"></polygon>
+    <polygon fill="#FFFFFF" points="20.263,15.276 25.482,21.843 25.482,12.062   " style="pointer-events:inherit" id="svg_7"></polygon>
+  </g>
+</svg>
+        <p>Email</p>
+      </a>
+    </li>
+  </ul>
+</section>
+
+
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+        <div
+            class="read-random a-block nav-link-item false"
+            data-target-prefix="/posts">
+            Navigate to Random Post
+        </div>
+    </div>
+
+    <div class="nav-footer">
+        
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu | Since 2020
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ec%a7%80%ed%91%9c" class="nav-성능-지표">
+									성능 지표
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ec%b8%a1%ec%a0%95" class="nav-성능-측정">
+									성능 측정
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%84%b1%eb%8a%a5-%ea%b0%9c%ec%84%a0" class="nav-성능-개선">
+									성능 개선
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ec%a0%95%ec%a0%81-%ed%8c%8c%ec%9d%bc-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-정적-파일-최적화">
+									정적 파일 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%9d%b4%eb%af%b8%ec%a7%80-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-이미지-최적화">
+									이미지 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b9%84%eb%94%94%ec%98%a4-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-비디오-최적화">
+									비디오 최적화
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ec%ba%90%ec%8b%9c-%ed%99%9c%ec%9a%a9" class="nav-캐시-활용">
+									캐시 활용
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#cdn-content-delivery-network" class="nav-cdn-content-delivery-network">
+									CDN (Content Delivery Network)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80-%ec%ba%90%ec%8b%9c" class="nav-브라우저-캐시">
+									브라우저 캐시
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            🔝
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="pagination-action-icon" id="darkModeToggleIcon">
+                🌙
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+
+
+Hugo Theme <a style="color: #0054B8; text-decoration: underline;" href="https://github.com/amazingrise/hugo-theme-diary">Diary</a>
+by <a style="color: #0054B8; text-decoration: underline;" href="https://risehere.net/">Rise</a>
+<br>
+Ported from <a style="color: #0054B8; text-decoration: underline;" href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s
+<a style="color: #0054B8; text-decoration: underline;" href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Im Changsu | Since 2020
+	
+</div>
+            </div>
+    
+    <script defer src="/js/journal.js"></script><script defer src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
+    </body>
+</html>
