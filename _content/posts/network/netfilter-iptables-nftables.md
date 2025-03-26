@@ -1,8 +1,8 @@
 ---
 draft: true
 socialshare: true
-date: 2025-03-24T11:13:00+09:00
-lastmod: 2025-03-24T11:13:00+09:00
+date: 2025-03-27T08:13:00+09:00
+lastmod: 2025-03-27T08:13:00+09:00
 title: "Netfilter 프레임워크와 리눅스의 기본 방화벽 iptables 그리고 nftables"
 description: "네트워크 패킷 필터링"
 # featured_image: ["/images/master/markruler-wave.webp"]
