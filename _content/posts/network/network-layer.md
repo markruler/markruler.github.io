@@ -448,7 +448,7 @@ ALB(Application Load Balancer)는 L7을 지원합니다.
 이 때 연결을 위해 **소켓**(**Socket**)이라는 네트워크 통신을 위한 추상화된 인터페이스를 사용합니다.
 소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
 L3를 거치지 않는 **UDS**(**Unix Domain Socket**)를 사용하기도 합니다.
-대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 파일이 UDS입니다.
+대표적으로 Docker, MySQL, Python Gunicorn 등의 `.sock` 장치 파일이 UDS입니다.
 
 네트워크에서는 L3까지 Unreliable 통신입니다.
 Unreliable 통신에선 네트워크가 **혼잡**(**Congestion**)한 상태가 될 수 있습니다.

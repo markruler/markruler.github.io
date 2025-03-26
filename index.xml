@@ -457,7 +457,7 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 이 때 연결을 위해 &lt;strong&gt;소켓&lt;/strong&gt;(&lt;strong&gt;Socket&lt;/strong&gt;)이라는 네트워크 통신을 위한 추상화된 인터페이스를 사용합니다.
 소켓은 기본적으로 L3까지 포함하지만 속도를 높이기 위해 Loopback 통신이 필요한 경우
 L3를 거치지 않는 &lt;strong&gt;UDS&lt;/strong&gt;(&lt;strong&gt;Unix Domain Socket&lt;/strong&gt;)를 사용하기도 합니다.
-대표적으로 Docker, MySQL, Python Gunicorn 등의 &lt;code&gt;.sock&lt;/code&gt; 파일이 UDS입니다.&lt;/p&gt;
+대표적으로 Docker, MySQL, Python Gunicorn 등의 &lt;code&gt;.sock&lt;/code&gt; 장치 파일이 UDS입니다.&lt;/p&gt;
 &lt;p&gt;네트워크에서는 L3까지 Unreliable 통신입니다.
 Unreliable 통신에선 네트워크가 &lt;strong&gt;혼잡&lt;/strong&gt;(&lt;strong&gt;Congestion&lt;/strong&gt;)한 상태가 될 수 있습니다.
 패킷 손실(packet loss), 패킷 순서 뒤바뀜(out of order), 패킷 중복 전송(duplicate), 과부하(network overload) 등의 오류가 발생할 수 있죠.&lt;/p&gt;
