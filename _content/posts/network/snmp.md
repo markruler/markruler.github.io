@@ -137,7 +137,7 @@ snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
 
 # MIB-2 OID (Object ID)
 
-![OID Tree](https://media.licdn.com/dms/image/C5112AQEFj7XwbdMicQ/article-inline_image-shrink_400_744/0/1574511512079?e=1726704000&v=beta&t=C8IfB-cyl1xnT9KHPDPx_RwA4jrP918cEjGYjQkeDqY)
+![OID Tree](/images/network/snmp/oid-tree.png)
 
 *[SNMP Explained: What You Must Know About Monitoring via MIB and OIDs](https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari)*
 
