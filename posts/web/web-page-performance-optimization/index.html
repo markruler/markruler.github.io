@@ -239,8 +239,8 @@
 						
 						
 							<li>
-								<a href="#%ec%a0%95%ec%a0%81-%ed%8c%8c%ec%9d%bc-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-정적-파일-최적화">
-									정적 파일 최적화
+								<a href="#html-css-js-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-html-css-js-최적화">
+									HTML, CSS, JS 최적화
 								</a>
 							</li>
 						
@@ -470,12 +470,15 @@
 <li><a href="https://web.dev/articles/cls">CLS (Cumulative Layout Shift)</a>: <strong>시각적 안정성</strong>을 측정.</li>
 </ul>
 <p>이 외에도 웹 접근성(Web Accessibility)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, SEO, PWA 등을 고려하여 웹 페이지의 품질을 측정할 수 있습니다.</p>
-<p>이 중 <strong>성능</strong>(<strong>Performance</strong>)과 관련된 것은 LCP, INP, 그리고 추가로
+<p>이 중 <strong>성능(Performance)과 관련된 지표</strong>은 LCP, INP, 그리고
 리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 <a href="https://web.dev/articles/ttfb">Time to First Byte (TTFB)</a>,
 사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 <a href="https://web.dev/articles/fcp">First Contentful Paint (FCP)</a>가 있습니다.</p>
 <h1 id="성능-측정">성능 측정</h1>
-<p>앞서 언급한 성능 지표들은 모두 Google Chrome의 Performance 패널에서 측정할 수 있습니다.
-로컬에서 측정하는 것도 중요하긴 하지만, 캐시 없이 첫 방문하는 이용자나 다른 지역의 이용자들을 고려하여
+<p>앞서 언급한 성능 지표들은 모두
+<a href="https://developer.chrome.com/docs/devtools/performance/overview">Google Chrome의 Performance 패널</a>에서
+측정할 수 있습니다.
+이 방법으로 로컬에서 간단히 측정하는 것도 중요하긴 하지만,
+캐시 없이 첫 방문하는 유저나 다른 지역의 유저들을 고려하여
 서버에서 측정하는 것도 중요합니다.</p>
 <p>Google Chrome의 <a href="https://github.com/GoogleChrome/lighthouse">Lighthouse</a>는
 대표적인 웹 페이지 성능 측정 CLI 도구입니다.
@@ -497,47 +500,72 @@ Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문�
 서비스 지역이 제한적이라면 직접 클라우드 서비스의 컴퓨팅 리소스를 사용해서 성능 측정하는 것도 좋은 방법입니다.</p>
 <h1 id="성능-개선">성능 개선</h1>
 <p>성능은 다방면으로 개선할 수 있습니다.</p>
-<h2 id="정적-파일-최적화">정적 파일 최적화</h2>
-<p>HTML, CSS, JS 파일을 최적화하여 사용하면 성능을 개선할 수 있습니다.
-HTML의 리소스들은 기본적으로 위에서부터 아래로 불러옵니다.
-만약 상단에서 불러와야 하는 리소스가 많다면 사용자는 더 오래 기다려야 합니다.
+<h2 id="html-css-js-최적화">HTML, CSS, JS 최적화</h2>
+<p><strong>웹 브라우저</strong>는 웹 페이지를 사용자에게 보여주기 위해 일련의 <strong>렌더링 과정</strong>을 거칩니다.
+먼저 HTML 파일을 파싱해서 DOM 트리를 만들고,
+CSS 파일을 파싱해서 CSSOM 트리를 만들고,
+이 두 트리를 결합해서 렌더 트리(Render Tree)를 만듭니다.
+이후 렌더 트리를 기반으로 레이아웃을 계산하고,
+레이아웃을 기반으로 픽셀을 그리는 과정(Painting)을 거칩니다.</p>
+<p>HTML 파서(parser)는 기본적으로 위에서부터 아래로 읽는데
+Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 및 실행이 끝날 때까지 기다리게 됩니다.
 이를 <a href="https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources">렌더 블로킹(Render Blocking)</a>이라고 합니다.
-먼저 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
+렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
 <code>defer</code>, <code>async</code> 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>
-다만 CSS 파일을 <code>defer</code>로 불러오면 Layout Shift가 발생할 수 있습니다.
-그래서 중요하지 않은 CSS 파일만 <code>defer</code>로 불러오는 것이 좋습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup>
-Font의 경우 <code>preload</code>를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.</p>
+다만 CSS 파일을 <code>defer</code>로 불러오거나
+Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 <strong>Reflow</strong>(<strong>Layout Shift</strong>), Repaint가 발생할 수 있습니다.
+여기서 Reflow의 경우 레이아웃을 다시 계산하는 것이기 때문에 CLS 지표에 악영향을 끼칩니다.
+그래서 Javascript에서 직접 DOM이나 CSSOM 조작하는 것을 줄이고,
+중요하지 않은 CSS 파일만 <code>defer</code>로 불러오는 것이 좋습니다.<sup id="fnref:6"><a href="#fn:6" class="footnote-ref" role="doc-noteref">6</a></sup></p>
+<p><strong>Font</strong>의 경우 <code>preload</code>를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.</p>
 <h2 id="이미지-최적화">이미지 최적화</h2>
 <p><code>WebP</code>, <code>AVIF</code>와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나<sup id="fnref:7"><a href="#fn:7" class="footnote-ref" role="doc-noteref">7</a></sup>
-Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합니다.</p>
+<strong>지연 로딩</strong>(<strong>Lazy Loading</strong>)을 사용해서
+LCP 지표를 개선합니다.</p>
 <p><strong>Sprite 이미지</strong>를 사용해서 여러 이미지를 하나의 이미지로 합치면
 한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
 최근에는 HTTP/2와 HTTP/3를 사용하면서
 여러 리소스를 병렬로 불러올 수 있지만
 최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
+크롬 브라우저는 다음 <a href="https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546">3가지 이유로 대기</a>할 수 있습니다.</p>
+<ul>
+<li>There are higher priority requests.</li>
+<li>There are already six TCP connections open for this origin, which is the limit. Applies to HTTP/1.0 and HTTP/1.1 only.</li>
+<li>The browser is briefly allocating space in the disk cache.</li>
+</ul>
+<p><code>Queueing</code>은 <strong>Connection Start 전</strong> 위 3가지 이유로 대기하는 상태입니다.
+Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 캐시가 없는 경우) 시
+요청 리소스가 많을 경우 Queueing이 길게 유지되는 것을 확인할 수 있습니다.
+<code>Stalled</code>는 <strong>Connection Start 후</strong> 위 3가지 이유로 대기하는 상태입니다.
 이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.</p>
 <h2 id="비디오-최적화">비디오 최적화</h2>
-<p>비디오를 HLS 프로토콜(<a href="https://datatracker.ietf.org/doc/html/rfc8216">RFC 8216</a>)을
+<p>비디오를 <strong>HLS 프로토콜</strong>(<a href="https://datatracker.ietf.org/doc/html/rfc8216">RFC 8216</a>)을
 사용하기 위해 <code>M3U</code> 같은 포맷으로 트랜스코딩하고,
 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
 예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.</p>
 <h2 id="캐시-활용">캐시 활용</h2>
 <h3 id="cdn-content-delivery-network">CDN (Content Delivery Network)</h3>
-<p>사용자와 가까운 곳에 위치한 서버에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
+<p><strong>사용자와 가까운 곳에 위치한 서버</strong>에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
 예를 들어, 영국에서 접속한 유저에게 영국에 위치한 서버에서 콘텐츠를 제공하면
 한국에 위치한 서버에서 콘텐츠를 제공하는 것보다 더 빠르게 콘텐츠를 제공할 수 있습니다.</p>
 <h3 id="브라우저-캐시">브라우저 캐시</h3>
 <p>브라우저 캐시를 활용해서 이미 불러온 리소스를 다시 불러오지 않도록 합니다.
 대표적으로 <strong>메모리 캐시</strong>(Memory Cache), <strong>디스크 캐시</strong>(Disk Cache)가 있습니다.
 메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.</p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Glossary/bfcache">Back-forward cache(bfcache)</a>는
+<p>대표적으로
+<a href="https://developer.mozilla.org/en-US/docs/Glossary/bfcache">Back-forward cache(bfcache)</a>는
 뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
 Google Chrome Dev tools의 Application 패널 &gt; Background services &gt; Back-forward cache에서 확인할 수 있습니다.
 이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
 다만 다른 출처의 iframe이나
 WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
-혹은 <code>unload</code>, <code>beforeunload</code> 이벤트를 사용하는 경우 등
-특정 상황에서는 bfcache가 적용되지 않습니다.</p>
+혹은 &lsquo;unload&rsquo;, &lsquo;beforeunload&rsquo; 이벤트를 사용하는 경우 등
+특정 상황에서는 bfcache가 적용되지 않습니다.
+간혹 뒤로가기, 앞으로가기 시
+항상 서버에 리소스를 새로 요청하도록 &lsquo;Cache-Control: no-store&rsquo; 헤더를 사용하거나
+뒤로가기 버튼을 눌렀을 때 이전 페이지를 새로 요청하는 경우가 있습니다.
+그럼 불필요한 오리진 서버 요청이 늘어날 수 있기 때문에
+반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.</p>
 <h1 id="더-읽을-거리">더 읽을 거리</h1>
 <ul>
 <li><a href="https://markruler.github.io/posts/web/google-chrome/">유용한 구글 크롬(Google Chrome)의 기능</a></li>
@@ -878,8 +906,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ec%a0%95%ec%a0%81-%ed%8c%8c%ec%9d%bc-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-정적-파일-최적화">
-									정적 파일 최적화
+								<a href="#html-css-js-%ec%b5%9c%ec%a0%81%ed%99%94" class="nav-html-css-js-최적화">
+									HTML, CSS, JS 최적화
 								</a>
 							</li>
 						

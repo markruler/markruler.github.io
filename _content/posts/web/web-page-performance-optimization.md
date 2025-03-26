@@ -31,14 +31,17 @@ Google이 제공하는 **Web Vitals**는 사용자 경험을 측정하는 지표
 ([W3C](https://www.w3.org/WAI/fundamentals/accessibility-intro/))
 [다양한 진단 도구](https://nuli.navercorp.com/education/tools)가 있습니다.
 
-이 중 **성능**(**Performance**)과 관련된 것은 LCP, INP, 그리고 추가로
+이 중 **성능(Performance)과 관련된 지표**은 LCP, INP, 그리고
 리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 [Time to First Byte (TTFB)](https://web.dev/articles/ttfb),
 사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 [First Contentful Paint (FCP)](https://web.dev/articles/fcp)가 있습니다.
 
 # 성능 측정
 
-앞서 언급한 성능 지표들은 모두 Google Chrome의 Performance 패널에서 측정할 수 있습니다.
-로컬에서 측정하는 것도 중요하긴 하지만, 캐시 없이 첫 방문하는 이용자나 다른 지역의 이용자들을 고려하여
+앞서 언급한 성능 지표들은 모두
+[Google Chrome의 Performance 패널](https://developer.chrome.com/docs/devtools/performance/overview)에서
+측정할 수 있습니다.
+이 방법으로 로컬에서 간단히 측정하는 것도 중요하긴 하지만,
+캐시 없이 첫 방문하는 유저나 다른 지역의 유저들을 고려하여
 서버에서 측정하는 것도 중요합니다.
 
 Google Chrome의 [Lighthouse](https://github.com/GoogleChrome/lighthouse)는
@@ -77,17 +80,27 @@ Datadog의 Synthetic Testing 중 [Browser Testing](https://docs.datadoghq.com/sy
 
 성능은 다방면으로 개선할 수 있습니다.
 
-## 정적 파일 최적화
+## HTML, CSS, JS 최적화
 
-HTML, CSS, JS 파일을 최적화하여 사용하면 성능을 개선할 수 있습니다.
-HTML의 리소스들은 기본적으로 위에서부터 아래로 불러옵니다.
-만약 상단에서 불러와야 하는 리소스가 많다면 사용자는 더 오래 기다려야 합니다.
+**웹 브라우저**는 웹 페이지를 사용자에게 보여주기 위해 일련의 **렌더링 과정**을 거칩니다.
+먼저 HTML 파일을 파싱해서 DOM 트리를 만들고,
+CSS 파일을 파싱해서 CSSOM 트리를 만들고,
+이 두 트리를 결합해서 렌더 트리(Render Tree)를 만듭니다.
+이후 렌더 트리를 기반으로 레이아웃을 계산하고,
+레이아웃을 기반으로 픽셀을 그리는 과정(Painting)을 거칩니다.
+
+HTML 파서(parser)는 기본적으로 위에서부터 아래로 읽는데
+Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 및 실행이 끝날 때까지 기다리게 됩니다.
 이를 [렌더 블로킹(Render Blocking)](https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources)이라고 합니다.
-먼저 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
+렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
 `defer`, `async` 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.[^5]
-다만 CSS 파일을 `defer`로 불러오면 Layout Shift가 발생할 수 있습니다.
-그래서 중요하지 않은 CSS 파일만 `defer`로 불러오는 것이 좋습니다.[^6]
-Font의 경우 `preload`를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.
+다만 CSS 파일을 `defer`로 불러오거나
+Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 **Reflow**(**Layout Shift**), Repaint가 발생할 수 있습니다.
+여기서 Reflow의 경우 레이아웃을 다시 계산하는 것이기 때문에 CLS 지표에 악영향을 끼칩니다.
+그래서 Javascript에서 직접 DOM이나 CSSOM 조작하는 것을 줄이고,
+중요하지 않은 CSS 파일만 `defer`로 불러오는 것이 좋습니다.[^6]
+
+**Font**의 경우 `preload`를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.
 
 [^5]: [async vs defer attributes](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
 [^6]: [Defer non-critical CSS](https://web.dev/articles/defer-non-critical-css) | web.dev
@@ -95,7 +108,8 @@ Font의 경우 `preload`를 사용해서 이미 연결된 호스트(ex: CDN)에�
 ## 이미지 최적화
 
 `WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나[^7]
-Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합니다.
+**지연 로딩**(**Lazy Loading**)을 사용해서
+LCP 지표를 개선합니다.
 
 [^7]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
 
@@ -104,11 +118,21 @@ Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합�
 최근에는 HTTP/2와 HTTP/3를 사용하면서
 여러 리소스를 병렬로 불러올 수 있지만
 최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
+크롬 브라우저는 다음 [3가지 이유로 대기](https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546)할 수 있습니다.
+
+- There are higher priority requests.
+- There are already six TCP connections open for this origin, which is the limit. Applies to HTTP/1.0 and HTTP/1.1 only.
+- The browser is briefly allocating space in the disk cache.
+
+`Queueing`은 **Connection Start 전** 위 3가지 이유로 대기하는 상태입니다.
+Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 캐시가 없는 경우) 시
+요청 리소스가 많을 경우 Queueing이 길게 유지되는 것을 확인할 수 있습니다.
+`Stalled`는 **Connection Start 후** 위 3가지 이유로 대기하는 상태입니다.
 이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.
 
 ## 비디오 최적화
 
-비디오를 HLS 프로토콜([RFC 8216](https://datatracker.ietf.org/doc/html/rfc8216))을
+비디오를 **HLS 프로토콜**([RFC 8216](https://datatracker.ietf.org/doc/html/rfc8216))을
 사용하기 위해 `M3U` 같은 포맷으로 트랜스코딩하고,
 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
 예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.
@@ -117,7 +141,7 @@ Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합�
 
 ### CDN (Content Delivery Network)
 
-사용자와 가까운 곳에 위치한 서버에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
+**사용자와 가까운 곳에 위치한 서버**에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
 예를 들어, 영국에서 접속한 유저에게 영국에 위치한 서버에서 콘텐츠를 제공하면
 한국에 위치한 서버에서 콘텐츠를 제공하는 것보다 더 빠르게 콘텐츠를 제공할 수 있습니다.
 
@@ -127,14 +151,20 @@ Lazy Loading을 사용해서 LCP(Largest Contentful Paint) 지표를 개선합�
 대표적으로 **메모리 캐시**(Memory Cache), **디스크 캐시**(Disk Cache)가 있습니다.
 메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.
 
+대표적으로
 [Back-forward cache(bfcache)](https://developer.mozilla.org/en-US/docs/Glossary/bfcache)는
 뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
 Google Chrome Dev tools의 Application 패널 > Background services > Back-forward cache에서 확인할 수 있습니다.
 이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
 다만 다른 출처의 iframe이나
 WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
-혹은 `unload`, `beforeunload` 이벤트를 사용하는 경우 등
+혹은 'unload', 'beforeunload' 이벤트를 사용하는 경우 등
 특정 상황에서는 bfcache가 적용되지 않습니다.
+간혹 뒤로가기, 앞으로가기 시
+항상 서버에 리소스를 새로 요청하도록 'Cache-Control: no-store' 헤더를 사용하거나
+뒤로가기 버튼을 눌렀을 때 이전 페이지를 새로 요청하는 경우가 있습니다.
+그럼 불필요한 오리진 서버 요청이 늘어날 수 있기 때문에
+반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.
 
 # 더 읽을 거리
 
