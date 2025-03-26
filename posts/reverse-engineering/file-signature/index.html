@@ -501,8 +501,9 @@ PDF 형식이라는 것을 유추할 수 있습니다.
 반면 네트워크 패널에서 응답(Response) 데이터는 16진수로 표현됩니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <p><img src="/images/reverse-engineering/file-signature/hex-pdf.png" alt="Hexadecimal PDF"></p>
 <p>크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답받으면
-&ldquo;The request has no response data available.&ldquo;이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
-최근 업데이트<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> 이후 16진수로 표현하도록 변경되었습니다.</p>
+&ldquo;The request has no response data available.&ldquo;이라는 메시지와 함께 표시하지 않거나 <strong>UTF-8</strong>로 디코딩하여 출력했습니다.
+Chrome 131 이후 16진수로 표현하도록 변경되었습니다.
+Chrome 134부터는 Base64, Hex Viewer, UTF-8 중 선택해서 표시할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
 <p><img src="/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png" alt="google-chrome-123.0.6312.122-network-img-response"></p>
 <p>크롬의 Preview 탭은 해당 파일 포맷에 맞게 미리보기가 출력됩니다.</p>
 <p><img src="/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-preview.png" alt="google-chrome-123.0.6312.122-network-img-preview"></p>
@@ -575,7 +576,7 @@ GUI 환경 데스크탑에서는 &ldquo;파일 확장자(File Extension)&ldquo;�
 <p><a href="https://developer.chrome.com/docs/devtools/memory-inspector">Memory Inspector</a>가 네트워크 패널에도 적용된 것으로 보입니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p>정확히 언제인지는 모르겠지만 Google Chrome 131 전후로&hellip;&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>정확히 어느 버전부터인지는 Release note에서 확인되지 않지만, 업데이트 후 버전을 확인했을 때 해당 버전들이었습니다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
 <p><a href="https://youtu.be/60FtdnBey-E?list=PLx4zTdLSy3x7wBShSxO-gykGUPrH1LF4L&amp;t=745">(Youtube) 삭제 파일 복구 기술</a> - DFRC (Digital Forensic Research Center)&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>

@@ -142,10 +142,11 @@ PDF 형식이라는 것을 유추할 수 있습니다.
 ![Hexadecimal PDF](/images/reverse-engineering/file-signature/hex-pdf.png)
 
 크롬 브라우저는 그동안 네트워크 패널에서 바이너리 데이터를 응답받으면
-"The request has no response data available."이라는 메시지와 함께 표시하지 않거나 UTF-8로 디코딩하여 출력했습니다.
-최근 업데이트[^2] 이후 16진수로 표현하도록 변경되었습니다.
+"The request has no response data available."이라는 메시지와 함께 표시하지 않거나 **UTF-8**로 디코딩하여 출력했습니다.
+Chrome 131 이후 16진수로 표현하도록 변경되었습니다.
+Chrome 134부터는 Base64, Hex Viewer, UTF-8 중 선택해서 표시할 수 있습니다.[^2]
 
-[^2]: 정확히 언제인지는 모르겠지만 Google Chrome 131 전후로...
+[^2]: 정확히 어느 버전부터인지는 Release note에서 확인되지 않지만, 업데이트 후 버전을 확인했을 때 해당 버전들이었습니다.
 
 ![google-chrome-123.0.6312.122-network-img-response](/images/reverse-engineering/file-signature/google-chrome-123.0.6312.122-network-img-response.png)
 
