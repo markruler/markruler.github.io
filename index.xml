@@ -46,15 +46,16 @@
 성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
 Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
 &lt;a href=&#34;https://github.com/GoogleChrome/lighthouse-ci&#34;&gt;CI 도구&lt;/a&gt;로도 제공되기 때문에
-CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+&lt;a href=&#34;https://pagespeed.web.dev/&#34;&gt;Google PageSpeed Insights&lt;/a&gt;와 같은 온라인 서비스에서도
+Lighthouse 기능을 무료로 제공합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# npm install -g lighthouse&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lighthouse http://example.com --output=json --output-path=./report.json
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://pagespeed.web.dev/&#34;&gt;Google PageSpeed Insights&lt;/a&gt;와 같은 온라인 툴에서도 Lighthouse 기능을 제공합니다.&lt;/p&gt;
-&lt;p&gt;Catchpoint의 &lt;a href=&#34;https://github.com/catchpoint/WebPageTest&#34;&gt;WebPageTest&lt;/a&gt;는
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Catchpoint의 &lt;a href=&#34;https://github.com/catchpoint/WebPageTest&#34;&gt;WebPageTest&lt;/a&gt;는
 오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
-Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문에
-실제로 성능 측정 시 주로 WebPageTest를 사용합니다.
-여기에는 Lighthouse도 포함합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+Waterfall 방식의 시각화와 다양한 성능 지표를 제공하고
+Lighthouse가 포함되어 있어&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; Web Vitals도 측정할 수 있습니다.
+&lt;a href=&#34;https://www.webpagetest.org/&#34;&gt;온라인 서비스&lt;/a&gt;를 무료로 이용할 수도 있습니다.&lt;/p&gt;
 &lt;p&gt;Datadog의 Synthetic Testing 중 &lt;a href=&#34;https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions&#34;&gt;Browser Testing&lt;/a&gt; 기능을
 사용하면 주기적으로 국가별&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; 성능 측정을 할 수 있습니다.
 글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,

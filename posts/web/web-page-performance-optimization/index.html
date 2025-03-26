@@ -485,15 +485,16 @@
 성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
 Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
 <a href="https://github.com/GoogleChrome/lighthouse-ci">CI 도구</a>로도 제공되기 때문에
-CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup></p>
+CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
+<a href="https://pagespeed.web.dev/">Google PageSpeed Insights</a>와 같은 온라인 서비스에서도
+Lighthouse 기능을 무료로 제공합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># npm install -g lighthouse</span>
 </span></span><span style="display:flex;"><span>lighthouse http://example.com --output=json --output-path=./report.json
-</span></span></code></pre></div><p><a href="https://pagespeed.web.dev/">Google PageSpeed Insights</a>와 같은 온라인 툴에서도 Lighthouse 기능을 제공합니다.</p>
-<p>Catchpoint의 <a href="https://github.com/catchpoint/WebPageTest">WebPageTest</a>는
+</span></span></code></pre></div><p>Catchpoint의 <a href="https://github.com/catchpoint/WebPageTest">WebPageTest</a>는
 오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
-Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문에
-실제로 성능 측정 시 주로 WebPageTest를 사용합니다.
-여기에는 Lighthouse도 포함합니다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
+Waterfall 방식의 시각화와 다양한 성능 지표를 제공하고
+Lighthouse가 포함되어 있어<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> Web Vitals도 측정할 수 있습니다.
+<a href="https://www.webpagetest.org/">온라인 서비스</a>를 무료로 이용할 수도 있습니다.</p>
 <p>Datadog의 Synthetic Testing 중 <a href="https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions">Browser Testing</a> 기능을
 사용하면 주기적으로 국가별<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 성능 측정을 할 수 있습니다.
 글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,

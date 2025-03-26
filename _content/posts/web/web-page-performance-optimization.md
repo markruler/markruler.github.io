@@ -50,6 +50,8 @@ Google Chrome의 [Lighthouse](https://github.com/GoogleChrome/lighthouse)는
 Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
 [CI 도구](https://github.com/GoogleChrome/lighthouse-ci)로도 제공되기 때문에
 CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.[^2]
+[Google PageSpeed Insights](https://pagespeed.web.dev/)와 같은 온라인 서비스에서도
+Lighthouse 기능을 무료로 제공합니다.
 
 [^2]: [Kakao Entertainment의 사례](https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/),
 [ChungJungSoo님의 사례](https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/)
@@ -59,13 +61,11 @@ CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있�
 lighthouse http://example.com --output=json --output-path=./report.json
 ```
 
-[Google PageSpeed Insights](https://pagespeed.web.dev/)와 같은 온라인 툴에서도 Lighthouse 기능을 제공합니다.
-
 Catchpoint의 [WebPageTest](https://github.com/catchpoint/WebPageTest)는
 오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
-Waterfall 방식의 시각화와 다양한 성능 지표를 제공하기 때문에
-실제로 성능 측정 시 주로 WebPageTest를 사용합니다.
-여기에는 Lighthouse도 포함합니다.[^3]
+Waterfall 방식의 시각화와 다양한 성능 지표를 제공하고
+Lighthouse가 포함되어 있어[^3] Web Vitals도 측정할 수 있습니다.
+[온라인 서비스](https://www.webpagetest.org/)를 무료로 이용할 수도 있습니다.
 
 [^3]: [GoogleChrome/lighthouse/README](https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1#L329)
 
