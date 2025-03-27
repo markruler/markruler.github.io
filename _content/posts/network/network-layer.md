@@ -517,6 +517,9 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 **LDAP**(**Lightweight Directory Access Protocol**)는
 디렉터리 서비스를 위한 프로토콜입니다.
 
+[BitTorrent](https://markruler.github.io/posts/go/building-bittorrent-client/)는
+파일 공유를 위한 P2P(Peer-to-Peer) 프로토콜입니다.
+
 **MQTT**(**Message Queuing Telemetry Transport**)는
 경량 발행-구독 메시징 프로토콜로 IoT 기기 간 메시지 전달에 적합합니다.
 
@@ -543,3 +546,8 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 - HTTP
   - [HTTP 완벽 가이드](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788966261208) | 데이빗 고울리, 브라이언 토티, 마조리 세이어, 세일루 레디, 안슈 아가왈
   - [HTTP/2 in Action](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161754475) | 배리 폴라드
+- BitTorrent
+  - [How Does BitTorrent Work? A Plain English Guide](https://skerritt.blog/bit-torrent/) | Skerritt.blog
+  - [Unofficial BitTorrent specification](https://wiki.theory.org/BitTorrentSpecification)
+  - [BEP 3 (v1)](https://www.bittorrent.org/beps/bep_0003.html)
+  - [BEP 52 (v2)](https://www.bittorrent.org/beps/bep_0052.html)
