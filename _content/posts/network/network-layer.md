@@ -506,12 +506,10 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 **SMTP**(**Simple Mail Transfer Protocol**)는
 이메일을 전송하는 프로토콜입니다.
 
-**SSH**(**Secure Shell**)는 원격 로그인을 위한 프로토콜입니다.
-([more](/posts/network/ssh/))
+[SSH(Secure Shell)](/posts/network/ssh/)는 원격 로그인을 위한 프로토콜입니다.
 
-**SNMP**(**Simple Network Management Protocol**)는
+[SNMP(Simple Network Management Protocol)](/posts/network/snmp/)는
 네트워크 장비의 상태를 모니터링하고 관리하기 위한 프로토콜입니다.
-([more](/posts/network/snmp/))
 
 **DHCP**(**Dynamic Host Configuration Protocol**)는
 단말에 대해 자동으로 IP 주소를 설정하는 방법입니다.
