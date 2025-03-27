@@ -4,7 +4,7 @@ socialshare: true
 date: 2025-03-27T00:45:00+09:00
 lastmod: 2025-03-27T08:45:00+09:00
 title: "웹 페이지 성능 측정과 최적화"
-description: "WebPageTest, Lighthouse와 CDN"
+description: "Web Vitals 그리고 Static Content"
 # featured_image: ["/images/master/markruler-wave.webp"]
 images: ["/images/master/markruler-wave.webp"]
 tags:
