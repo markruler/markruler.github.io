@@ -5,7 +5,7 @@
   
   임창수
   
-  | VIM 에디터 명령어 정리
+  | Vim 에디터 명령어 정리
   
   
 </title>
@@ -18,7 +18,7 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="VI/VIM">
+<meta name="description" content="Vi/Vim">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="/manifest.json">
@@ -27,13 +27,13 @@
 
 <meta property="og:url" content="https://markruler.github.io/posts/shell/vim-editor-shortcuts/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="VIM 에디터 명령어 정리">
-  <meta property="og:description" content="VI/VIM">
+  <meta property="og:title" content="Vim 에디터 명령어 정리">
+  <meta property="og:description" content="Vi/Vim">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2020-12-07T00:44:00+09:00">
-    <meta property="article:modified_time" content="2024-12-24T07:40:00+09:00">
+    <meta property="article:modified_time" content="2025-03-27T12:30:00+09:00">
     <meta property="article:tag" content="Editor">
     <meta property="article:tag" content="Vi">
     <meta property="article:tag" content="Vim">
@@ -47,8 +47,8 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://markruler.github.io/images/shell/vim.jpeg">
-  <meta name="twitter:title" content="VIM 에디터 명령어 정리">
-  <meta name="twitter:description" content="VI/VIM">
+  <meta name="twitter:title" content="Vim 에디터 명령어 정리">
+  <meta name="twitter:description" content="Vi/Vim">
 
 
 
@@ -171,24 +171,6 @@
 		
 		
 		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
-									설정 (.vimrc)
-								</a>
-							</li>
-						
-						
-					
-				
 			
 				
 				
@@ -386,6 +368,74 @@
 					
 				
 			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
+									설정 (.vimrc)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ed%94%8c%eb%9f%ac%ea%b7%b8%ec%9d%b8" class="nav-플러그인">
+									플러그인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
+								</a>
+							</li>
+						
+						
+					
+				
+			
 		</ul>
 	</div>
 
@@ -442,10 +492,10 @@
                 
             >
                 <div class="post-title">
-                    VIM 에디터 명령어 정리
+                    Vim 에디터 명령어 정리
                     
                     <div class="post-subtitle">
-                        VI/VIM
+                        Vi/Vim
                     </div>
                     
                     <div class="post-meta">
@@ -484,76 +534,32 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <blockquote>
-<p>서버에서 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
-제가 사용하는 설정 파일과 자주 쓰는 명령어를 정리합니다.</p></blockquote>
-<h1 id="설정-vimrc">설정 (.vimrc)</h1>
-<p>제가 사용하는 설정 파일(<code>~/.vimrc</code>)입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#0f0">&#34;이것은 주석</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">syntax</span> on                                                                       
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showcmd
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> statusline+=%F::%l,%c
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmatch
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ignorecase
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> smartcase
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> incsearch
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autowrite
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ruler
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autoindent
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cindent
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> shiftwidth=<span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tabstop=<span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> expandtab
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> laststatus=<span style="color:#f60">2</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> backspace=indent,eol,start
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmode
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> hls
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> colorcolumn=<span style="color:#f60">80</span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ff=unix
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> fileencodings=utf8
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> viminfo=&#39;<span style="color:#f60">50</span>,&lt;<span style="color:#f60">1000</span>
-</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;set history=1000</span>
-</span></span><span style="display:flex;"><span>au FileType make setlocal noexpandtab
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">highlight</span> TailingWhitespace ctermbg=red guibg=red
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cul
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> background=dark
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> nowrapscan
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> visualbell
-</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tenc=utf<span style="color:#f60">-8</span>
-</span></span></code></pre></div><ul>
-<li><code>syntax on</code> 구문강조 사용</li>
-<li><code>set showcmd</code> 명령어 입력시 상태표시줄에 보여줌</li>
-<li><code>set statusline+=%F::%l,%c</code> 상태표시줄에 파일명, 줄, 컬럼 표시</li>
-<li><code>set showmatch</code> 괄호 매칭 보여줌</li>
-<li><code>set ignorecase</code> 검색시 대소문자 무시</li>
-<li><code>set smartcase</code> 검색어에 대문자가 포함되어 있으면 대소문자 구분</li>
-<li><code>set incsearch</code> 검색어 입력시 점진적 검색</li>
-<li><code>set autowrite</code> 저장하지 않은 파일을 끝내기 전에 자동으로 저장</li>
-<li><code>set ruler</code> 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시</li>
-<li><code>set autoindent</code> 자동 들여쓰기</li>
-<li><code>set cindent</code> C언어 자동 들여쓰기</li>
-<li><code>set shiftwidth=2</code> 들여쓰기 2칸</li>
-<li><code>set tabstop=2</code> 탭을 2칸으로</li>
-<li><code>set expandtab</code> 탭을 스페이스로 대체</li>
-<li><code>set laststatus=2</code> 상태표시줄 항상 표시</li>
-<li><code>set backspace=indent,eol,start</code> 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제</li>
-<li><code>set showmode</code> 현재 모드 표시</li>
-<li><code>set hls</code> 검색어 하이라이팅</li>
-<li><code>set colorcolumn=80</code> 80칸에 세로줄 표시</li>
-<li><code>set ff=unix</code> 파일 포맷을 유닉스로</li>
-<li><code>set fileencodings=utf8</code> 파일 인코딩</li>
-<li><code>set viminfo='50,&lt;1000</code> 최근 50개의 명령어 기억</li>
-<li><code>set history=1000</code> vi 편집기록 기억갯수 <code>.viminfo</code>에 기록</li>
-<li><code>au FileType make setlocal noexpandtab</code> makefile에서 탭을 스페이스로 대체하지 않음</li>
-<li><code>highlight TailingWhitespace ctermbg=red guibg=red</code> 끝에 공백이 있는 경우 빨간색으로 표시</li>
-<li><code>set cul</code> 현재 커서가 있는 줄 강조</li>
-<li><code>set nowrapscan</code> 검색시 문서 끝에서 처음으로 이동하지 않음</li>
-<li><code>set visualbell</code> 경고음 대신 화면 깜빡임</li>
-<li><code>set tenc=utf-8</code> 터미널 인코딩을 UTF-8로</li>
+                    <p>서버에서 파일을 편집하기 위해 Vim 에디터를 사용할 일이 많은데,
+제가 사용하는 설정과 자주 쓰는 명령어를 정리합니다.</p>
+<ul>
+<li><a href="#%EC%9E%85%EB%A0%A5-%EB%AA%A8%EB%93%9C-insert-mode">입력 모드 (Insert Mode)</a></li>
+<li><a href="#%EB%A7%88%EC%A7%80%EB%A7%89-%ED%96%89-%EB%AA%A8%EB%93%9C-last-line-mode">마지막 행 모드 (Last Line Mode)</a>
+<ul>
+<li><a href="#last-line-command-">Last Line Command (:)</a></li>
+<li><a href="#search-mode--">Search mode (/, ?)</a></li>
 </ul>
-<p><img src="/images/shell/vim.png" alt="vim"></p>
+</li>
+<li><a href="#%EB%AA%85%EB%A0%B9-%EB%AA%A8%EB%93%9C-command-mode">명령 모드 (Command Mode)</a>
+<ul>
+<li><a href="#%EC%9D%B4%EB%8F%99">이동</a></li>
+<li><a href="#%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%8E%B8%EC%A7%91">간단한 편집</a></li>
+<li><a href="#%EC%82%AD%EC%A0%9C">삭제</a></li>
+<li><a href="#%EB%B9%84%EC%A3%BC%EC%96%BC-%EB%AA%A8%EB%93%9Cvisual-mode">비주얼 모드(visual mode)</a></li>
+<li><a href="#%ED%99%94%EB%A9%B4-%EB%B6%84%ED%95%A0">화면 분할</a></li>
+</ul>
+</li>
+<li><a href="#%EC%84%A4%EC%A0%95-vimrc">설정 (.vimrc)</a>
+<ul>
+<li><a href="#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8">플러그인</a></li>
+</ul>
+</li>
+<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC">더 읽을 거리</a></li>
+</ul>
 <h1 id="입력-모드-insert-mode">입력 모드 (Insert Mode)</h1>
 <ul>
 <li><code>i</code> 현재 커서에서 편집
@@ -689,10 +695,114 @@
 <li><code>Control + w</code> + <code>=</code> 창 폭, 높이 원래 상태로</li>
 <li><code>Control + w</code> + <code>o</code> only one window</li>
 </ul>
+<h1 id="설정-vimrc">설정 (.vimrc)</h1>
+<p>제가 사용하는 설정 파일(<code>~/.vimrc</code>)입니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#0f0">&#34; ~/.vimrc</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34; 이것은 주석</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">syntax</span> on                                                                       
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showcmd
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> statusline+=%F::%l,%c
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmatch
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ignorecase
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> smartcase
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> incsearch
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autowrite
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ruler
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> autoindent
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cindent
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> shiftwidth=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tabstop=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> expandtab
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> laststatus=<span style="color:#f60">2</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> backspace=indent,eol,start
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> showmode
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> hls
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> colorcolumn=<span style="color:#f60">80</span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> ff=unix
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> fileencodings=utf8
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> viminfo=&#39;<span style="color:#f60">50</span>,&lt;<span style="color:#f60">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;set history=1000</span>
+</span></span><span style="display:flex;"><span>au FileType make setlocal noexpandtab
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">highlight</span> TailingWhitespace ctermbg=red guibg=red
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> cul
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> background=dark
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> nowrapscan
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> visualbell
+</span></span><span style="display:flex;"><span><span style="color:#f00">set</span> tenc=utf<span style="color:#f60">-8</span>
+</span></span></code></pre></div><ul>
+<li><code>syntax</code> 구문강조 사용</li>
+<li><code>showcmd</code> 명령어 입력시 상태표시줄에 보여줌</li>
+<li><code>statusline+=%F::%l,%c</code> 상태표시줄에 파일명, 줄, 컬럼 표시</li>
+<li><code>showmatch</code> 괄호 매칭 보여줌</li>
+<li><code>ignorecase</code> 검색시 대소문자 무시</li>
+<li><code>smartcase</code> 검색어에 대문자가 포함되어 있으면 대소문자 구분</li>
+<li><code>incsearch</code> 검색어 입력시 점진적 검색</li>
+<li><code>autowrite</code> 저장하지 않은 파일을 끝내기 전에 자동으로 저장</li>
+<li><code>ruler</code> 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시</li>
+<li><code>autoindent</code> 자동 들여쓰기</li>
+<li><code>cindent</code> C언어 자동 들여쓰기</li>
+<li><code>shiftwidth=2</code> 들여쓰기 2칸</li>
+<li><code>tabstop=2</code> 탭을 2칸으로</li>
+<li><code>expandtab</code> 탭을 스페이스로 대체</li>
+<li><code>laststatus=2</code> 상태표시줄 항상 표시</li>
+<li><code>backspace=indent,eol,start</code> 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제</li>
+<li><code>showmode</code> 현재 모드 표시</li>
+<li><code>hls</code> 검색어 하이라이팅</li>
+<li><code>colorcolumn=80</code> 80칸에 세로줄 표시</li>
+<li><code>ff=unix</code> 파일 포맷을 유닉스로</li>
+<li><code>fileencodings=utf8</code> 파일 인코딩</li>
+<li><code>viminfo='50,&lt;1000</code> 최근 50개의 명령어 기억</li>
+<li><code>history=1000</code> vi 편집기록 기억갯수 <code>.viminfo</code>에 기록</li>
+<li><code>au FileType make setlocal noexpandtab</code> makefile에서 탭을 스페이스로 대체하지 않음</li>
+<li><code>highlight TailingWhitespace ctermbg=red guibg=red</code> 끝에 공백이 있는 경우 빨간색으로 표시</li>
+<li><code>cul</code> 현재 커서가 있는 줄 강조</li>
+<li><code>nowrapscan</code> 검색시 문서 끝에서 처음으로 이동하지 않음</li>
+<li><code>visualbell</code> 경고음 대신 화면 깜빡임</li>
+<li><code>tenc=utf-8</code> 터미널 인코딩을 UTF-8로</li>
+</ul>
+<p><img src="/images/shell/vim/vim.png" alt="vim"></p>
+<h2 id="플러그인">플러그인</h2>
+<p>Vim에서 플러그인은 일반적으로 3rd-party 플러그인 매니저를 사용해서 관리합니다.
+대표적으로 <a href="https://github.com/junegunn/vim-plug">vim-plug</a>,
+<a href="https://github.com/VundleVim/Vundle.vim">Vundle</a>,
+<a href="https://github.com/tpope/vim-pathogen">Pathogen</a> 등이 사용됩니다.
+Neovim을 사용한다면
+<a href="https://github.com/folke/lazy.nvim">lazy.nvim</a>과 같은 Neovim 전용 플러그인 매니저도 있습니다.</p>
+<p>여기서는 가장 널리 쓰이고 간단한 <strong>vim-plug</strong>를 사용합니다.
+먼저 플러그인 매니저를 설치합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+</span></span></code></pre></div><p><code>~/.vimrc</code>에 아래 내용을 추가합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span>call plug#begin(<span style="color:#87ceeb">&#39;~/.vim/plugged&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34; The default plugin directory will be as follows:</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;   - Vim (Linux/macOS): &#39;~/.vim/plugged&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;   - Vim (Windows): &#39;~/vimfiles/plugged&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;   - Neovim (Linux/macOS/Windows): stdpath(&#39;data&#39;) . &#39;/plugged&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34; You can specify a custom plugin directory by passing it as the argument</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;   - e.g. `call plug#begin(&#39;~/.vim/plugged&#39;)`</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">&#34;   - Avoid using standard Vim directory names like &#39;plugin&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;junegunn/fzf&#39;</span>, { <span style="color:#87ceeb">&#39;dir&#39;</span>: <span style="color:#87ceeb">&#39;~/.fzf&#39;</span>, <span style="color:#87ceeb">&#39;do&#39;</span>: <span style="color:#87ceeb">&#39;./install --all&#39;</span> }
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;scrooloose/syntastic&#39;</span>
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;vim-airline/vim-airline&#39;</span>
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;airblade/vim-gitgutter&#39;</span> <span style="color:#0f0">&#34;GitGutterToggle</span>
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;scrooloose/nerdtree&#39;</span>
+</span></span><span style="display:flex;"><span>Plug <span style="color:#87ceeb">&#39;tpope/vim-fugitive&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>call plug#end()
+</span></span></code></pre></div><p>Vim 데이터에서 아래 명령어를 통해 플러그인을 설치합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>:source %
+</span></span><span style="display:flex;"><span>:PlugInstall
+</span></span></code></pre></div><h1 id="더-읽을-거리">더 읽을 거리</h1>
+<ul>
+<li><a href="https://www.vim.org/docs.php">Vim Documentation</a></li>
+<li><a href="https://johngrib.github.io/wiki/two-views-of-vim/">Vim, 두 가지 관점</a> | 기계인간 John Grib</li>
+</ul>
 
                     
                     <hr id="EOF">
-                <p>최종 수정: 2024-12-24</p>
+                <p>최종 수정: 2025-03-27</p>
                     
                 </div>
             </div>
@@ -739,7 +849,7 @@
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fvim-editor-shortcuts%2f&amp;text=VIM%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fvim-editor-shortcuts%2f&amp;text=Vim%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:all">
@@ -775,7 +885,7 @@
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - VIM%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac.&amp;body=VIM%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aVI%2fVIM%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fvim-editor-shortcuts%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - Vim%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac.&amp;body=Vim%20%ec%97%90%eb%94%94%ed%84%b0%20%eb%aa%85%eb%a0%b9%ec%96%b4%20%ec%a0%95%eb%a6%ac%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aVi%2fVim%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fshell%2fvim-editor-shortcuts%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -924,24 +1034,6 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
-									설정 (.vimrc)
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
 								<a href="#%ec%9e%85%eb%a0%a5-%eb%aa%a8%eb%93%9c-insert-mode" class="nav-입력-모드-insert-mode">
 									입력 모드 (Insert Mode)
 								</a>
@@ -1122,6 +1214,74 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 							<li>
 								<a href="#%ed%99%94%eb%a9%b4-%eb%b6%84%ed%95%a0" class="nav-화면-분할">
 									화면 분할
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%ec%84%a4%ec%a0%95-vimrc" class="nav-설정-vimrc">
+									설정 (.vimrc)
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%ed%94%8c%eb%9f%ac%ea%b7%b8%ec%9d%b8" class="nav-플러그인">
+									플러그인
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						

@@ -2288,81 +2288,37 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
     
     
         <item>
-        <title>VIM 에디터 명령어 정리</title>
+        <title>Vim 에디터 명령어 정리</title>
         <link>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</link>
         <pubDate>Mon, 07 Dec 2020 00:44:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</guid>
-        <description>임창수 https://markruler.github.io/posts/shell/vim-editor-shortcuts/ -&lt;blockquote&gt;
-&lt;p&gt;서버에서 파일을 편집하기 위해 VIM 에디터를 사용할 일이 많은데,
-제가 사용하는 설정 파일과 자주 쓰는 명령어를 정리합니다.&lt;/p&gt;&lt;/blockquote&gt;
-&lt;h1 id=&#34;설정-vimrc&#34;&gt;설정 (.vimrc)&lt;/h1&gt;
-&lt;p&gt;제가 사용하는 설정 파일(&lt;code&gt;~/.vimrc&lt;/code&gt;)입니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;이것은 주석&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;syntax&lt;/span&gt; on                                                                       
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showcmd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; statusline+=%F::%l,%c
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmatch
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ignorecase
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; smartcase
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; incsearch
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autowrite
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autoindent
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cindent
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; shiftwidth=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tabstop=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; expandtab
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; laststatus=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; backspace=indent,eol,start
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmode
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; hls
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; colorcolumn=&lt;span style=&#34;color:#f60&#34;&gt;80&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ff=unix
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; fileencodings=utf8
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; viminfo=&amp;#39;&lt;span style=&#34;color:#f60&#34;&gt;50&lt;/span&gt;,&amp;lt;&lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;set history=1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;au FileType make setlocal noexpandtab
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;highlight&lt;/span&gt; TailingWhitespace ctermbg=red guibg=red
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cul
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; background=dark
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; nowrapscan
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; visualbell
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tenc=utf&lt;span style=&#34;color:#f60&#34;&gt;-8&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;syntax on&lt;/code&gt; 구문강조 사용&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set showcmd&lt;/code&gt; 명령어 입력시 상태표시줄에 보여줌&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set statusline+=%F::%l,%c&lt;/code&gt; 상태표시줄에 파일명, 줄, 컬럼 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set showmatch&lt;/code&gt; 괄호 매칭 보여줌&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set ignorecase&lt;/code&gt; 검색시 대소문자 무시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set smartcase&lt;/code&gt; 검색어에 대문자가 포함되어 있으면 대소문자 구분&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set incsearch&lt;/code&gt; 검색어 입력시 점진적 검색&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set autowrite&lt;/code&gt; 저장하지 않은 파일을 끝내기 전에 자동으로 저장&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set ruler&lt;/code&gt; 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set autoindent&lt;/code&gt; 자동 들여쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set cindent&lt;/code&gt; C언어 자동 들여쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set shiftwidth=2&lt;/code&gt; 들여쓰기 2칸&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set tabstop=2&lt;/code&gt; 탭을 2칸으로&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set expandtab&lt;/code&gt; 탭을 스페이스로 대체&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set laststatus=2&lt;/code&gt; 상태표시줄 항상 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set backspace=indent,eol,start&lt;/code&gt; 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set showmode&lt;/code&gt; 현재 모드 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set hls&lt;/code&gt; 검색어 하이라이팅&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set colorcolumn=80&lt;/code&gt; 80칸에 세로줄 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set ff=unix&lt;/code&gt; 파일 포맷을 유닉스로&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set fileencodings=utf8&lt;/code&gt; 파일 인코딩&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set viminfo=&#39;50,&amp;lt;1000&lt;/code&gt; 최근 50개의 명령어 기억&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set history=1000&lt;/code&gt; vi 편집기록 기억갯수 &lt;code&gt;.viminfo&lt;/code&gt;에 기록&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;au FileType make setlocal noexpandtab&lt;/code&gt; makefile에서 탭을 스페이스로 대체하지 않음&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;highlight TailingWhitespace ctermbg=red guibg=red&lt;/code&gt; 끝에 공백이 있는 경우 빨간색으로 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set cul&lt;/code&gt; 현재 커서가 있는 줄 강조&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set nowrapscan&lt;/code&gt; 검색시 문서 끝에서 처음으로 이동하지 않음&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set visualbell&lt;/code&gt; 경고음 대신 화면 깜빡임&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set tenc=utf-8&lt;/code&gt; 터미널 인코딩을 UTF-8로&lt;/li&gt;
+        <description>임창수 https://markruler.github.io/posts/shell/vim-editor-shortcuts/ -&lt;p&gt;서버에서 파일을 편집하기 위해 Vim 에디터를 사용할 일이 많은데,
+제가 사용하는 설정과 자주 쓰는 명령어를 정리합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9E%85%EB%A0%A5-%EB%AA%A8%EB%93%9C-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%A7%80%EB%A7%89-%ED%96%89-%EB%AA%A8%EB%93%9C-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#last-line-command-&#34;&gt;Last Line Command (:)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#search-mode--&#34;&gt;Search mode (/, ?)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%AA%85%EB%A0%B9-%EB%AA%A8%EB%93%9C-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%8F%99&#34;&gt;이동&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%8E%B8%EC%A7%91&#34;&gt;간단한 편집&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%82%AD%EC%A0%9C&#34;&gt;삭제&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%B9%84%EC%A3%BC%EC%96%BC-%EB%AA%A8%EB%93%9Cvisual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%99%94%EB%A9%B4-%EB%B6%84%ED%95%A0&#34;&gt;화면 분할&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-vimrc&#34;&gt;설정 (.vimrc)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8&#34;&gt;플러그인&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h1 id=&#34;입력-모드-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;i&lt;/code&gt; 현재 커서에서 편집
@@ -2497,6 +2453,110 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;-&lt;/code&gt; 창 높이 줄이기&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;=&lt;/code&gt; 창 폭, 높이 원래 상태로&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;o&lt;/code&gt; only one window&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;설정-vimrc&#34;&gt;설정 (.vimrc)&lt;/h1&gt;
+&lt;p&gt;제가 사용하는 설정 파일(&lt;code&gt;~/.vimrc&lt;/code&gt;)입니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; ~/.vimrc&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; 이것은 주석&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;syntax&lt;/span&gt; on                                                                       
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showcmd
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; statusline+=%F::%l,%c
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmatch
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ignorecase
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; smartcase
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; incsearch
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autowrite
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autoindent
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cindent
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; shiftwidth=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tabstop=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; expandtab
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; laststatus=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; backspace=indent,eol,start
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmode
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; hls
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; colorcolumn=&lt;span style=&#34;color:#f60&#34;&gt;80&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ff=unix
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; fileencodings=utf8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; viminfo=&amp;#39;&lt;span style=&#34;color:#f60&#34;&gt;50&lt;/span&gt;,&amp;lt;&lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;set history=1000&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;au FileType make setlocal noexpandtab
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;highlight&lt;/span&gt; TailingWhitespace ctermbg=red guibg=red
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cul
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; background=dark
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; nowrapscan
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; visualbell
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tenc=utf&lt;span style=&#34;color:#f60&#34;&gt;-8&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;syntax&lt;/code&gt; 구문강조 사용&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;showcmd&lt;/code&gt; 명령어 입력시 상태표시줄에 보여줌&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;statusline+=%F::%l,%c&lt;/code&gt; 상태표시줄에 파일명, 줄, 컬럼 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;showmatch&lt;/code&gt; 괄호 매칭 보여줌&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ignorecase&lt;/code&gt; 검색시 대소문자 무시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;smartcase&lt;/code&gt; 검색어에 대문자가 포함되어 있으면 대소문자 구분&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;incsearch&lt;/code&gt; 검색어 입력시 점진적 검색&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;autowrite&lt;/code&gt; 저장하지 않은 파일을 끝내기 전에 자동으로 저장&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ruler&lt;/code&gt; 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;autoindent&lt;/code&gt; 자동 들여쓰기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cindent&lt;/code&gt; C언어 자동 들여쓰기&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;shiftwidth=2&lt;/code&gt; 들여쓰기 2칸&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tabstop=2&lt;/code&gt; 탭을 2칸으로&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;expandtab&lt;/code&gt; 탭을 스페이스로 대체&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;laststatus=2&lt;/code&gt; 상태표시줄 항상 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;backspace=indent,eol,start&lt;/code&gt; 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;showmode&lt;/code&gt; 현재 모드 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;hls&lt;/code&gt; 검색어 하이라이팅&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;colorcolumn=80&lt;/code&gt; 80칸에 세로줄 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ff=unix&lt;/code&gt; 파일 포맷을 유닉스로&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;fileencodings=utf8&lt;/code&gt; 파일 인코딩&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;viminfo=&#39;50,&amp;lt;1000&lt;/code&gt; 최근 50개의 명령어 기억&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;history=1000&lt;/code&gt; vi 편집기록 기억갯수 &lt;code&gt;.viminfo&lt;/code&gt;에 기록&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;au FileType make setlocal noexpandtab&lt;/code&gt; makefile에서 탭을 스페이스로 대체하지 않음&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;highlight TailingWhitespace ctermbg=red guibg=red&lt;/code&gt; 끝에 공백이 있는 경우 빨간색으로 표시&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cul&lt;/code&gt; 현재 커서가 있는 줄 강조&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;nowrapscan&lt;/code&gt; 검색시 문서 끝에서 처음으로 이동하지 않음&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;visualbell&lt;/code&gt; 경고음 대신 화면 깜빡임&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tenc=utf-8&lt;/code&gt; 터미널 인코딩을 UTF-8로&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/vim/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;플러그인&#34;&gt;플러그인&lt;/h2&gt;
+&lt;p&gt;Vim에서 플러그인은 일반적으로 3rd-party 플러그인 매니저를 사용해서 관리합니다.
+대표적으로 &lt;a href=&#34;https://github.com/junegunn/vim-plug&#34;&gt;vim-plug&lt;/a&gt;,
+&lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle&lt;/a&gt;,
+&lt;a href=&#34;https://github.com/tpope/vim-pathogen&#34;&gt;Pathogen&lt;/a&gt; 등이 사용됩니다.
+Neovim을 사용한다면
+&lt;a href=&#34;https://github.com/folke/lazy.nvim&#34;&gt;lazy.nvim&lt;/a&gt;과 같은 Neovim 전용 플러그인 매니저도 있습니다.&lt;/p&gt;
+&lt;p&gt;여기서는 가장 널리 쓰이고 간단한 &lt;strong&gt;vim-plug&lt;/strong&gt;를 사용합니다.
+먼저 플러그인 매니저를 설치합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.vimrc&lt;/code&gt;에 아래 내용을 추가합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;call plug#begin(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;~/.vim/plugged&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; The default plugin directory will be as follows:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Vim (Linux/macOS): &amp;#39;~/.vim/plugged&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Vim (Windows): &amp;#39;~/vimfiles/plugged&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Neovim (Linux/macOS/Windows): stdpath(&amp;#39;data&amp;#39;) . &amp;#39;/plugged&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; You can specify a custom plugin directory by passing it as the argument&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - e.g. `call plug#begin(&amp;#39;~/.vim/plugged&amp;#39;)`&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Avoid using standard Vim directory names like &amp;#39;plugin&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;junegunn/fzf&amp;#39;&lt;/span&gt;, { &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;dir&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;~/.fzf&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;do&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;./install --all&amp;#39;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;scrooloose/syntastic&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;vim-airline/vim-airline&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;airblade/vim-gitgutter&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;GitGutterToggle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;scrooloose/nerdtree&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tpope/vim-fugitive&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;call plug#end()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Vim 데이터에서 아래 명령어를 통해 플러그인을 설치합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:source %
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:PlugInstall
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.vim.org/docs.php&#34;&gt;Vim Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://johngrib.github.io/wiki/two-views-of-vim/&#34;&gt;Vim, 두 가지 관점&lt;/a&gt; | 기계인간 John Grib&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/shell/vim-editor-shortcuts/ - Im Changsu | Since 2020</description>
         </item>

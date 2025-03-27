@@ -9,7 +9,6 @@ socialshare: true
 tags:
   - java
   - spring
-  - tomcat
   - monitoring
 categories:
   - wiki
