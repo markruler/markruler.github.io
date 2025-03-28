@@ -249,6 +249,10 @@ Vim 데이터에서 아래 명령어를 통해 플러그인을 설치합니다.
 :PlugInstall
 ```
 
+번거롭다면 유명한 vimrc를 가져와서 사용해도 됩니다.
+대표적으로 [amix/vimrc](https://github.com/amix/vimrc)가 있습니다.
+(플러그인 매니저로 Pathogen을 사용)
+
 # 더 읽을 거리
 
 - [Vim Documentation](https://www.vim.org/docs.php)

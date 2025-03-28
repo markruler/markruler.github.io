@@ -32,7 +32,7 @@ Google이 제공하는 **Web Vitals**는 사용자 경험을 측정하는 지표
 ([W3C](https://www.w3.org/WAI/fundamentals/accessibility-intro/))
 [다양한 진단 도구](https://nuli.navercorp.com/education/tools)가 있습니다.
 
-이 중 **성능(Performance)과 관련된 지표**은 LCP, INP, 그리고
+**이 외 성능(Performance) 지표**로
 리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 [Time to First Byte (TTFB)](https://web.dev/articles/ttfb),
 사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 [First Contentful Paint (FCP)](https://web.dev/articles/fcp)가 있습니다.
 
