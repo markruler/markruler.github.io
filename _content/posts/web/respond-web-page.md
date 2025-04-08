@@ -23,7 +23,7 @@ categories:
 - [SSG (Static Site Generation)](#ssg-static-site-generation)
 - [CMS (Content Management System)](#cms-content-management-system)
 - [Micro Frontend Architecture (MFA)](#micro-frontend-architecture-mfa)
-- [아일랜드 아키텍쳐 Island Architecture](#아일랜드-아키텍쳐-island-architecture)
+- [아일랜드 아키텍쳐 (Island Architecture)](#아일랜드-아키텍쳐-island-architecture)
 - [웹뷰(WebView) - 모바일 앱에서](#웹뷰webview---모바일-앱에서)
 - [더 읽을거리](#더-읽을거리)
 
@@ -118,7 +118,7 @@ categories:
 - 혹은 하나의 프로젝트에 여러 app이 포함됩니다.
   - 어떤 페이지는 JSP, 어떤 페이지는 React, 어떤 페이지는 Vue.
 
-# 아일랜드 아키텍쳐 Island Architecture
+# 아일랜드 아키텍쳐 (Island Architecture)
 
 - 웹페이지의 필요에 따라 일부는 SSG로 렌더링하고, 일부는 Progressive Hydration(Re-hydration)합니다.
   - 필요할 때만 자바스크립트를 로드하여 성능을 최적화합니다.
@@ -150,6 +150,9 @@ categories:
   - [Using shadow DOM](https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_shadow_DOM) | MDN Web Docs
   - [Using templates and slots](https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots) | MDN Web Docs
   - [웹 컴포넌트(5) - lit-html로 React 처럼 코딩하기](https://ui.toast.com/posts/ko_20171215) | TOAST UI
+- ReactJS
+  - [리액트 서버 컴포넌트 톺아보기 (번역)](https://roy-jung.github.io/250323-react-server-components/) | FE재남
+  - [알아두면 유용한 '리액트' 개념과 성능 최적화 팁](https://yozm.wishket.com/magazine/detail/2688/) | 곰씨네IT
 - 아일랜드 아키텍쳐
   - [The Island Architecture](https://patterns-dev-kr.github.io/rendering-patterns/the-island-architecture/) | Patterns.dev.kr
 - 웹뷰
