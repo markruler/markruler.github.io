@@ -1,7 +1,7 @@
 ---
 date: 2023-03-20T21:58:00+09:00
 lastmod: 2023-03-20T21:58:00+09:00
-title: "Too many open files"
+title: "Too many open files 에러 트러블슈팅"
 description: "소켓 '파일'을 몰랐을 때의 위험"
 # featured_image: "/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg"
 images: ["/images/java/too-many-open-files/swimming-pool-lane-pattern-stable-diffusion.jpg"]

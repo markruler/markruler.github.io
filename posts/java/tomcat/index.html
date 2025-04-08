@@ -369,40 +369,6 @@
 						
 						
 							<li>
-								<a href="#spec-%eb%b2%84%ec%a0%84-%ed%98%b8%ed%99%98%ec%84%b1" class="nav-spec-버전-호환성">
-									Spec 버전 호환성
-								</a>
-							</li>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#jmx%eb%a5%bc-%ed%86%b5%ed%95%9c-%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" class="nav-jmx를-통한-모니터링">
-									JMX를 통한 모니터링
-								</a>
-							</li>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
 								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
 									참조
 								</a>
@@ -651,129 +617,6 @@ Jasper 엔진을 사용해서 servlet을 관리합니다.</p>
 <h1 id="spring-application에서-httprequest의-흐름">Spring application에서 HttpRequest의 흐름</h1>
 <p><img src="/images/java/http-servlet-request-flow.png" alt="HTTP Servlet Request"></p>
 <p><em><a href="https://github.com/xpdojo/java/tree/study/request-lifecycle-servlet/">Demonstration</a></em></p>
-<h1 id="spec-버전-호환성">Spec 버전 호환성</h1>
-<p><a href="https://tomcat.apache.org/whichversion.html">출처 문서</a></p>
-<table>
-  <thead>
-      <tr>
-          <th>Servlet Spec</th>
-          <th>JSP Spec</th>
-          <th>EL Spec</th>
-          <th>WebSocket Spec</th>
-          <th>Authentication (JASPIC) Spec</th>
-          <th>Apache Tomcat Version</th>
-          <th>Supported Java Versions</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>6.0</td>
-          <td>3.1</td>
-          <td>5.0</td>
-          <td>2.1</td>
-          <td>3.0</td>
-          <td>10.1.x</td>
-          <td>11 and later</td>
-      </tr>
-      <tr>
-          <td>5.0</td>
-          <td>3.0</td>
-          <td>4.0</td>
-          <td>2.0</td>
-          <td>2.0</td>
-          <td>10.0.x</td>
-          <td>8 and later</td>
-      </tr>
-      <tr>
-          <td>4.0</td>
-          <td>2.3</td>
-          <td>3.0</td>
-          <td>1.1</td>
-          <td>1.1</td>
-          <td>9.0.x</td>
-          <td>8 and later</td>
-      </tr>
-      <tr>
-          <td>3.1</td>
-          <td>2.3</td>
-          <td>3.0</td>
-          <td>1.1</td>
-          <td>1.1</td>
-          <td>8.5.x</td>
-          <td>7 and later</td>
-      </tr>
-      <tr>
-          <td>3.1</td>
-          <td>2.3</td>
-          <td>3.0</td>
-          <td>1.1</td>
-          <td>N/A</td>
-          <td>8.0.x (superseded)</td>
-          <td>7 and later</td>
-      </tr>
-      <tr>
-          <td>3.0</td>
-          <td>2.2</td>
-          <td>2.2</td>
-          <td>1.1</td>
-          <td>N/A</td>
-          <td>7.0.x (archived)</td>
-          <td>6 and later (7 and later for WebSocket)</td>
-      </tr>
-      <tr>
-          <td>2.5</td>
-          <td>2.1</td>
-          <td>2.1</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>6.0.x (archived)</td>
-          <td>5 and later</td>
-      </tr>
-      <tr>
-          <td>2.4</td>
-          <td>2.0</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>5.5.x (archived)</td>
-          <td>1.4 and later</td>
-      </tr>
-      <tr>
-          <td>2.3</td>
-          <td>1.2</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>4.1.x (archived)</td>
-          <td>1.3 and later</td>
-      </tr>
-      <tr>
-          <td>2.2</td>
-          <td>1.1</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>N/A</td>
-          <td>3.3.x (archived)</td>
-          <td>1.1 and later</td>
-      </tr>
-  </tbody>
-</table>
-<h1 id="jmx를-통한-모니터링">JMX를 통한 모니터링</h1>
-<p><a href="https://en.wikipedia.org/wiki/Java_Management_Extensions">JMX(Java Management eXtensions)</a>는
-애플리케이션을 관리하고 모니터링하기 위한 Java API입니다.</p>
-<p><img src="/images/java/jmx-architecture.png" alt="JMX Architecture"></p>
-<p>Probe Level의 MBean(Managed Bean)은 JMX에서 관리되는 객체입니다.
-모니터링 및 관리할 수 있는 속성, 연산 및 알림을 제공합니다.
-Standard MBean, Dynamic MBean과 추가적으로 Model MBean, Open MBean, Monitor MBean으로 구분되며
-이를 통해 구현할 수 있습니다.</p>
-<p>MBean Server는 MBean을 관리하고 제공하는 JMX 인프라의 핵심 구성 요소입니다.
-애플리케이션은 MBean Server에 등록된 MBean을 조회하고 조작할 수 있습니다.
-MBean Server는 MBean의 생명주기를 관리하고,
-MBean의 속성 및 연산에 대한 액세스를 제공하며,
-알림을 수신하는 등의 작업을 수행합니다.</p>
-<p>JMX 에이전트는 JMX 서비스의 일부로 애플리케이션을 관리하기 위한 JMX 인터페이스를 외부로 노출합니다.
-에이전트는 MBean Server와 통신하고, 원격 액세스를 허용하며, MBean Server를 통해 애플리케이션의 관리 작업을 수행합니다.
-JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 프로세스로 실행될 수 있습니다.</p>
 <h1 id="참조">참조</h1>
 <ul>
 <li>책
@@ -791,6 +634,7 @@ JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 
 <li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/engine.html">Engine</a></li>
 <li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/host.html">Host</a></li>
 <li><a href="https://tomcat.apache.org/tomcat-8.5-doc/config/context.html">Context</a></li>
+<li><a href="https://tomcat.apache.org/whichversion.html">Apache Tomcat Versions</a></li>
 </ul>
 </li>
 <li><a href="https://howtodoinjava.com/tomcat/tomcats-architecture-and-server-xml-configuration-tutorial/">Tomcat - Architecture and server.xml configuration</a> | HowToDoInJava
@@ -803,11 +647,6 @@ JMX 에이전트는 Java 애플리케이션 내부에 포함되거나 별도의 
 <ul>
 <li><a href="https://ehdvudee.tistory.com/20">AJP 프로토콜 모든 것을 분석 해보자</a> | ehdvudee</li>
 <li><a href="https://cheershennah.tistory.com/142">아파치Apache - 톰캣 Tomcat  연동하는 이유?  AJP란?</a> | cheersHena</li>
-</ul>
-</li>
-<li><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jmx/">JMX (Java Management Extensions)</a> | Oracle
-<ul>
-<li><a href="https://www.datadoghq.com/blog/tomcat-architecture-and-performance/">Key metrics for monitoring Tomcat</a> | Datadog</li>
 </ul>
 </li>
 </ul>
@@ -1245,40 +1084,6 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 							<li>
 								<a href="#spring-application%ec%97%90%ec%84%9c-httprequest%ec%9d%98-%ed%9d%90%eb%a6%84" class="nav-spring-application에서-httprequest의-흐름">
 									Spring application에서 HttpRequest의 흐름
-								</a>
-							</li>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#spec-%eb%b2%84%ec%a0%84-%ed%98%b8%ed%99%98%ec%84%b1" class="nav-spec-버전-호환성">
-									Spec 버전 호환성
-								</a>
-							</li>
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#jmx%eb%a5%bc-%ed%86%b5%ed%95%9c-%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81" class="nav-jmx를-통한-모니터링">
-									JMX를 통한 모니터링
 								</a>
 							</li>
 						
