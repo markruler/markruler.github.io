@@ -7,9 +7,9 @@ description: "Java Virtual Machine"
 images: ["/images/java/jvm-monitoring/visualgc-with-visualvm.png"]
 socialshare: true
 tags:
+  - observability
   - java
   - spring
-  - monitoring
 categories:
   - wiki
 ---

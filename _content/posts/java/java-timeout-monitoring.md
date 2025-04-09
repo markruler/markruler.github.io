@@ -7,16 +7,11 @@ description: "이거 모르는 개발자 많다카더라"
 images: ["/images/datadog/alert-threshold.png"]
 socialshare: true
 tags:
+  - observability
   - java
-  - spring
-  - monitoring
-  - timeout
-  - datadog
 categories:
   - wiki
 ---
-
-> [Observability 용어 정리](/posts/cloud/monitor-trace-log-metric/)
 
 # 상황
 

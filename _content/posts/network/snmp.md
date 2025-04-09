@@ -6,6 +6,7 @@ description: "Simple Network Management Protocol"
 # featured_image: "/images/network/snmp/pexels-googledeepmind-17485706.webp"
 images: ["/images/network/snmp/pexels-googledeepmind-17485706.webp"]
 tags:
+  - observability
   - network
   - monitoring
 categories:

@@ -7,9 +7,9 @@ description: "Standard Edition 2는 Diagnostics Pack을 사용할 수 없다"
 images: ["/images/db/oracle-dbms-session-kibana.png"]
 socialshare: true
 tags:
+  - observability
   - oracle
   - dbms
-  - monitoring
 categories:
   - wiki
 ---

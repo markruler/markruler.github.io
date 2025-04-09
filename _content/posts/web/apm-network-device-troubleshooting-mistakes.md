@@ -6,9 +6,8 @@ description: "네트워크 장비 문제로 인한 레이턴시 증가 사례"
 # featured_image: "/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp"
 images: ["/images/web/apm-network-device-troubleshooting-mistakes/pexels-artyusufpatel-10440498.webp"]
 tags:
+  - observability
   - network
-  - monitoring
-  - APM
 categories:
   - blog
 ---

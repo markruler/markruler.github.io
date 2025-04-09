@@ -5,10 +5,8 @@ title: "Traceparent 헤더로 클라이언트부터 서버까지 추적하기"
 description: "W3C Trace Context"
 images: ["/images/web/traceparent-datadog/w3c.webp"]
 tags:
+  - observability
   - network
-  - monitoring
-  - APM
-  - trace
 categories:
   - blog
 ---
