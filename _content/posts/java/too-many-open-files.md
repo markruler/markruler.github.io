@@ -18,7 +18,7 @@ categories:
 
 # 증상
 
-Spring framework로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었습니다.
+스프링 프레임워크(Spring framework)로 만든 웹 애플리케이션에서 비동기로 HTTP 요청하는 기능을 개발하고 있었습니다.
 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, `Too many open files` 에러가 발생했습니다.
 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
 IDC에 위치한 서버(CentOS 7)에서는 `OutOfMemoryError`가 발생하면서 동작하지 않았습니다.

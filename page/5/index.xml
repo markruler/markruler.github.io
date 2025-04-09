@@ -217,47 +217,77 @@
     
     
         <item>
-        <title>Observability 용어 정리</title>
+        <title>관측 가능성(Observability)</title>
         <link>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</link>
         <pubDate>Fri, 02 Oct 2020 16:24:00 +0900</pubDate>
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</guid>
-        <description>임창수 https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ -&lt;h1 id=&#34;observability&#34;&gt;Observability&lt;/h1&gt;
+        <description>임창수 https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B4%80%EC%B8%A1-%EA%B0%80%EB%8A%A5%EC%84%B1-observability&#34;&gt;관측 가능성 (Observability)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A1%9C%EA%B7%B8event-logging-%EB%AC%B4%EC%8A%A8-%EC%9D%BC%EC%9D%B4-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80&#34;&gt;로그(Event Logging): 무슨 일이 있었는지&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A9%94%ED%8A%B8%EB%A6%ADmetric-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%83%81%ED%83%9C%EB%82%98-%EC%84%B1%EB%8A%A5%EC%9D%B4-%EC%96%B4%EB%96%A4%EC%A7%80&#34;&gt;메트릭(Metric): 시스템 상태나 성능이 어떤지&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8A%A4tracing-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%96%B4%EB%94%94%EC%84%9C-%EC%A7%80%EC%97%B0%EB%90%98%EA%B1%B0%EB%82%98-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%96%88%EB%8A%94%EC%A7%80&#34;&gt;트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;관측성&lt;/li&gt;
-&lt;li&gt;관찰성&lt;/li&gt;
-&lt;li&gt;관측 가능성&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8B%B1-distributed-tracing&#34;&gt;분산 트레이싱 (Distributed tracing)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#logging-vs-tracing&#34;&gt;Logging vs. Tracing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#trace-vs-track&#34;&gt;Trace vs. Track&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;제어 이론에서 &amp;lsquo;observability&amp;rsquo;라는 용어는
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81-monitoring&#34;&gt;모니터링 (Monitoring)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-profiling&#34;&gt;프로파일링 (Profiling)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;관측-가능성-observability&#34;&gt;관측 가능성 (Observability)&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;제어 이론에서&lt;/strong&gt;
 시스템의 내부 상태 변수와 그에 따른 행동을
 시스템에 대한 입력과 출력만 보고 결정할 수 있다면
-그 시스템이 관측 가능하다는 것을 나타낸다.&lt;/p&gt;
-&lt;h1 id=&#34;event-logging&#34;&gt;Event Logging&lt;/h1&gt;
+그 시스템이 &lt;strong&gt;관측 가능하다는 것&lt;/strong&gt;을 나타냅니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;그렇다면 &lt;strong&gt;관측 가능성&lt;/strong&gt;&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;이란
+시스템의 내부 상태를 외부에서 수집 가능한 데이터(로그, 메트릭, 트레이스 등)를 통해
+얼마나 잘 추론하고 이해할 수 있는지를 나타내는 시스템의 속성입니다.
+즉, 시스템이 자신의 상태를 얼마나 잘 &amp;ldquo;드러내는가&amp;quot;를 의미합니다.&lt;/p&gt;
+&lt;p&gt;관측 가능성은 시스템의 상태를 이해하는 데 필요한 모든 정보를 제공하는 것을 목표로 합니다.
+로그, 메트릭, 트레이스는 관측 가능성을 달성하기 위한 세 가지 기둥(주요 구성 요소)&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;입니다.&lt;/p&gt;
+&lt;h1 id=&#34;로그event-logging-무슨-일이-있었는지&#34;&gt;로그(Event Logging): 무슨 일이 있었는지&lt;/h1&gt;
+&lt;p&gt;로그는 시스템 프로세스의 개별 이벤트를 시간 순서대로 기록하는 것입니다.
+각 로그 레코드는 특정 시점에 발생한 일(예: 오류 발생, 사용자 로그인, 요청 처리 시작/종료 등)에
+대한 정보를 담고 있습니다.&lt;/p&gt;
+&lt;p&gt;하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에
+마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/kibana5-fluentd.png&#34; alt=&#34;kibana5-fluentd&#34;&gt;
 &lt;em&gt;Fluentd-Kibana&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다.
-하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에
-마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.fluentd.org/&#34;&gt;Fluentd&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.elastic.co/&#34;&gt;Elastic&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/&#34;&gt;Datadog Log Management&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;software-tracing&#34;&gt;Software Tracing&lt;/h1&gt;
+&lt;h1 id=&#34;메트릭metric-시스템-상태나-성능이-어떤지&#34;&gt;메트릭(Metric): 시스템 상태나 성능이 어떤지&lt;/h1&gt;
+&lt;p&gt;메트릭은 시스템의 성능과 동작을 측정한 수치입니다.
+예를 들면 CPU 사용률, 응답 시간, 오류율 등이 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://prometheus.io/&#34;&gt;Prometheus&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;트레이스tracing-요청이-어디서-지연되거나-문제가-발생했는지&#34;&gt;트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지&lt;/h1&gt;
+&lt;p&gt;사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적합니다.
+주로 서비스를 최적화하는 데 사용됩니다.
+예를 들어, 특정 서비스에 병목이 예상되는 경우
+트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있습니다.
+트레이싱은 구조화된 형태의 로그 이벤트라고 볼 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png&#34; alt=&#34;jaeger-embed-trace-view&#34;&gt;
 &lt;em&gt;Jaeger&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
-주로 서비스를 최적화하는 데 사용된다.
-예를 들어, 특정 서비스에 병목이 예상되는 경우
-트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있다.
-결국 트레이싱은 구조화된 형태의 로그 이벤트일 뿐이다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.jaegertracing.io/&#34;&gt;Jaeger&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://opentracing.io/&#34;&gt;OpenTracing&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/1/strace&#34;&gt;strace&lt;/a&gt; - Linux man page&lt;/li&gt;
-&lt;li&gt;구글 크롬의 &lt;a href=&#34;https://developers.google.com/web/tools/chrome-devtools/network/&#34;&gt;Network log&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;구글 크롬의 &lt;a href=&#34;https://developer.chrome.com/docs/devtools/network#load&#34;&gt;Network log&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;logging--tracing&#34;&gt;Logging : Tracing&lt;/h2&gt;
+&lt;h2 id=&#34;분산-트레이싱-distributed-tracing&#34;&gt;분산 트레이싱 (Distributed tracing)&lt;/h2&gt;
+&lt;p&gt;분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며,
+분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다.
+기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리
+종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며,
+이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;h2 id=&#34;logging-vs-tracing&#34;&gt;Logging vs. Tracing&lt;/h2&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
@@ -292,7 +322,7 @@
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id=&#34;trace--track&#34;&gt;Trace : Track&lt;/h2&gt;
+&lt;h2 id=&#34;trace-vs-track&#34;&gt;Trace vs. Track&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;track은 시작 지점에서 시작해서 현재 지점으로 새로운 경로를 계속 따라가는 것이다.
 &lt;ul&gt;
@@ -310,77 +340,81 @@ You go backward to the starting point.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&#34;distributed-tracing&#34;&gt;Distributed tracing&lt;/h2&gt;
-&lt;p&gt;분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며,
-분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다.
-기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리
-종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며,
-이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.&lt;/p&gt;
-&lt;h1 id=&#34;monitoring&#34;&gt;Monitoring&lt;/h1&gt;
+&lt;h1 id=&#34;모니터링-monitoring&#34;&gt;모니터링 (Monitoring)&lt;/h1&gt;
+&lt;p&gt;애플리케이션 계측(measure), 메트릭 수집(collect), 집계(aggregate), 분석(analyze) 등을 포함하는 시스템이다.
+진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 알림을 보낸다.
+예를 들어 설정한 임계점(threshold)을 넘을 경우 이메일을 보내거나 슬랙 채널에 메시지를 보낼 수 있다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/grafana-visualize.jpg&#34; alt=&#34;grafana-visualize&#34;&gt;
 &lt;em&gt;Grafana&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;애플리케이션 계측(measure), 메트릭 수집(collect), 집계(aggregate), 분석(analyze) 등을 포함하는 시스템이다.
-진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 알람을 보낸다.
-예를 들어 설정한 임계점(threshold)을 넘을 경우 이메일을 보내거나 슬랙 채널에 메시지를 보낼 수 있다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://prometheus.io/&#34;&gt;Prometheus&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://grafana.com/&#34;&gt;Grafana&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://thanos.io/&#34;&gt;Thanos&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/getting_started/&#34;&gt;Datadog&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/getting_started/&#34;&gt;Datadog&lt;/a&gt; (유료)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;profiling&#34;&gt;Profiling&lt;/h1&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/android-profiler-callouts.png&#34; alt=&#34;android-profiler-callouts&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;프로파일링-profiling&#34;&gt;프로파일링 (Profiling)&lt;/h1&gt;
 &lt;p&gt;프로그램의 공간(메모리) 또는 시간 복잡성, 특정 명령의 사용 또는 빈도를 측정하는
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_program_analysis&#34;&gt;동적 프로그램 분석(Dynamic program analysis)&lt;/a&gt;의 한 형태다.
 모니터링과 달리 벤치마킹에 주 목적이 있다.
 분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 통계에 쓰인다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/android-profiler-callouts.png&#34; alt=&#34;android-profiler-callouts&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/java-profilers&#34;&gt;A Guide to Java Profilers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/profiler/&#34;&gt;Datadog Continuous Profiler&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.android.com/studio/profile&#34;&gt;Android Profiler&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr&gt;
-&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;Observability
+&lt;li&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt; - Observability 파트&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Observability&#34;&gt;Observability&lt;/a&gt; | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;유리 슈쿠로 &amp;lt;마스터링 분산 추적&amp;gt; 6쪽&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Observability&#34;&gt;Observability&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791158391959&#34;&gt;&amp;lt;마스터링 분산 추적&amp;gt;&lt;/a&gt; | 유리 슈쿠로&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192987576&#34;&gt;&amp;lt;모니터링의 새로운 미래 관측 가능성&amp;gt;&lt;/a&gt; | 정현석, 진미란&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Logging
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Software_metric&#34;&gt;Metric&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Logging_(software)&#34;&gt;Logging&lt;/a&gt; | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Logging_(software)&#34;&gt;Logging&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_management&#34;&gt;Log management&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_analysis&#34;&gt;Log analysis&lt;/a&gt; - Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_management&#34;&gt;Log management&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_analysis&#34;&gt;Log analysis&lt;/a&gt; | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Tracing
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Tracing_(software)&#34;&gt;Tracing&lt;/a&gt; | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;유리 슈쿠로 &amp;lt;마스터링 분산 추적&amp;gt; 58쪽&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Tracing_(software)&#34;&gt;Tracing&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Audit_trail&#34;&gt;Audit trail&lt;/a&gt; - Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Audit_trail&#34;&gt;Audit trail&lt;/a&gt; | Wikipedia&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace&#34;&gt;Difference between Tracking and Tracing&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://opentracing.io/docs/overview/what-is-tracing/&#34;&gt;What is Distributed Tracing? - OpenTracing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.bmc.com/blogs/monitoring-logging-tracing&#34;&gt;Tracing vs Logging vs Monitoring: What’s the Difference?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.bmc.com/blogs/monitoring-logging-tracing&#34;&gt;Tracing vs Logging vs Monitoring: What&amp;rsquo;s the Difference?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://winderresearch.com/logging-vs-tracing-vs-monitoring/&#34;&gt;Logging vs Tracing vs Monitoring&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Monitoring
+&lt;li&gt;&lt;a href=&#34;https://www.betterevaluation.org/methods-approaches/themes/monitoring&#34;&gt;Monitoring&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Application_performance_management&#34;&gt;Application performance management&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Event_monitoring&#34;&gt;Event monitoring&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_monitor&#34;&gt;Log monitor&lt;/a&gt; - Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://techbeacon.com/enterprise-it/monitoring-demystified-guide-logging-tracing-metrics&#34;&gt;Monitoring demystified: A guide for logging, tracing, metrics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Application_performance_management&#34;&gt;Application performance management&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/System_monitor&#34;&gt;System monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Event_monitoring&#34;&gt;Event monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Network_monitoring&#34;&gt;Network monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_monitor&#34;&gt;Log monitor&lt;/a&gt; | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;Profiling
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Profiling_(computer_programming)&#34;&gt;Profiling&lt;/a&gt; - Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Profiling_(computer_programming)&#34;&gt;Profiling&lt;/a&gt; | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&amp;lt;마스터링 분산 추적&amp;gt; 6쪽 | 유리 슈쿠로&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;한국어로는 다양하게 번역되는데 &lt;strong&gt;관측 가능성&lt;/strong&gt;이 가장 많이 쓰이는 것 같습니다. (이 외에 관측성, 관찰성, 관찰 가능성, 가관측성)&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.crowdstrike.com/en-us/cybersecurity-101/observability/three-pillars-of-observability/&#34;&gt;The Three Pillars of Observability: Logs, Metrics, and Traces&lt;/a&gt; | CrowdStrike&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&amp;lt;마스터링 분산 추적&amp;gt; 58쪽 | 유리 슈쿠로&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
 - https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ - Im Changsu | Since 2020</description>
         </item>
     

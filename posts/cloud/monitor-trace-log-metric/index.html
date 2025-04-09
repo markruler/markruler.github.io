@@ -5,7 +5,7 @@
   
   임창수
   
-  | Observability 용어 정리
+  | 관측 가능성(Observability)
   
   
 </title>
@@ -18,7 +18,7 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="observability">
+<meta name="description" content="Observability, Logging, Tracing, Monitoring, Profiling">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 <link rel="manifest" href="/manifest.json">
@@ -27,13 +27,13 @@
 
 <meta property="og:url" content="https://markruler.github.io/posts/cloud/monitor-trace-log-metric/">
   <meta property="og:site_name" content="임창수">
-  <meta property="og:title" content="Observability 용어 정리">
-  <meta property="og:description" content="observability">
+  <meta property="og:title" content="관측 가능성(Observability)">
+  <meta property="og:description" content="Observability, Logging, Tracing, Monitoring, Profiling">
   <meta property="og:locale" content="ko_kr">
   <meta property="og:type" content="article">
     <meta property="article:section" content="posts">
     <meta property="article:published_time" content="2020-10-02T16:24:00+09:00">
-    <meta property="article:modified_time" content="2020-10-02T16:24:00+09:00">
+    <meta property="article:modified_time" content="2025-04-09T15:24:00+09:00">
     <meta property="article:tag" content="Cloud">
     <meta property="og:image" content="https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png">
 
@@ -44,8 +44,8 @@
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png">
-  <meta name="twitter:title" content="Observability 용어 정리">
-  <meta name="twitter:description" content="observability">
+  <meta name="twitter:title" content="관측 가능성(Observability)">
+  <meta name="twitter:description" content="Observability, Logging, Tracing, Monitoring, Profiling">
 
 
 
@@ -178,8 +178,8 @@
 						
 						
 							<li>
-								<a href="#observability" class="nav-observability">
-									Observability
+								<a href="#%ea%b4%80%ec%b8%a1-%ea%b0%80%eb%8a%a5%ec%84%b1-observability" class="nav-관측-가능성-observability">
+									관측 가능성 (Observability)
 								</a>
 							</li>
 						
@@ -195,8 +195,8 @@
 						
 						
 							<li>
-								<a href="#event-logging" class="nav-event-logging">
-									Event Logging
+								<a href="#%eb%a1%9c%ea%b7%b8event-logging-%eb%ac%b4%ec%8a%a8-%ec%9d%bc%ec%9d%b4-%ec%9e%88%ec%97%88%eb%8a%94%ec%a7%80" class="nav-로그event-logging-무슨-일이-있었는지">
+									로그(Event Logging): 무슨 일이 있었는지
 								</a>
 							</li>
 						
@@ -212,8 +212,25 @@
 						
 						
 							<li>
-								<a href="#software-tracing" class="nav-software-tracing">
-									Software Tracing
+								<a href="#%eb%a9%94%ed%8a%b8%eb%a6%admetric-%ec%8b%9c%ec%8a%a4%ed%85%9c-%ec%83%81%ed%83%9c%eb%82%98-%ec%84%b1%eb%8a%a5%ec%9d%b4-%ec%96%b4%eb%96%a4%ec%a7%80" class="nav-메트릭metric-시스템-상태나-성능이-어떤지">
+									메트릭(Metric): 시스템 상태나 성능이 어떤지
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8a%a4tracing-%ec%9a%94%ec%b2%ad%ec%9d%b4-%ec%96%b4%eb%94%94%ec%84%9c-%ec%a7%80%ec%97%b0%eb%90%98%ea%b1%b0%eb%82%98-%eb%ac%b8%ec%a0%9c%ea%b0%80-%eb%b0%9c%ec%83%9d%ed%96%88%eb%8a%94%ec%a7%80" class="nav-트레이스tracing-요청이-어디서-지연되거나-문제가-발생했는지">
+									트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지
 								</a>
 							</li>
 						
@@ -236,8 +253,8 @@
 						
 						
 							<li>
-								<a href="#logging--tracing" class="nav-logging--tracing">
-									Logging : Tracing
+								<a href="#%eb%b6%84%ec%82%b0-%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8b%b1-distributed-tracing" class="nav-분산-트레이싱-distributed-tracing">
+									분산 트레이싱 (Distributed tracing)
 								</a>
 							</li>
 						
@@ -253,8 +270,8 @@
 						
 						
 							<li>
-								<a href="#trace--track" class="nav-trace--track">
-									Trace : Track
+								<a href="#logging-vs-tracing" class="nav-logging-vs-tracing">
+									Logging vs. Tracing
 								</a>
 							</li>
 						
@@ -270,8 +287,8 @@
 						
 						
 							<li>
-								<a href="#distributed-tracing" class="nav-distributed-tracing">
-									Distributed tracing
+								<a href="#trace-vs-track" class="nav-trace-vs-track">
+									Trace vs. Track
 								</a>
 							</li>
 						
@@ -291,8 +308,8 @@
 						
 						
 							<li>
-								<a href="#monitoring" class="nav-monitoring">
-									Monitoring
+								<a href="#%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81-monitoring" class="nav-모니터링-monitoring">
+									모니터링 (Monitoring)
 								</a>
 							</li>
 						
@@ -308,8 +325,8 @@
 						
 						
 							<li>
-								<a href="#profiling" class="nav-profiling">
-									Profiling
+								<a href="#%ed%94%84%eb%a1%9c%ed%8c%8c%ec%9d%bc%eb%a7%81-profiling" class="nav-프로파일링-profiling">
+									프로파일링 (Profiling)
 								</a>
 							</li>
 						
@@ -325,8 +342,8 @@
 						
 						
 							<li>
-								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
-									참조
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						
@@ -389,10 +406,10 @@
                 
             >
                 <div class="post-title">
-                    Observability 용어 정리
+                    관측 가능성(Observability)
                     
                     <div class="post-subtitle">
-                        observability
+                        Observability, Logging, Tracing, Monitoring, Profiling
                     </div>
                     
                     <div class="post-meta">
@@ -422,42 +439,72 @@
                 
                 <div class="post-body" v-pre>
                 
-                    <h1 id="observability">Observability</h1>
+                    <ul>
+<li><a href="#%EA%B4%80%EC%B8%A1-%EA%B0%80%EB%8A%A5%EC%84%B1-observability">관측 가능성 (Observability)</a></li>
+<li><a href="#%EB%A1%9C%EA%B7%B8event-logging-%EB%AC%B4%EC%8A%A8-%EC%9D%BC%EC%9D%B4-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80">로그(Event Logging): 무슨 일이 있었는지</a></li>
+<li><a href="#%EB%A9%94%ED%8A%B8%EB%A6%ADmetric-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%83%81%ED%83%9C%EB%82%98-%EC%84%B1%EB%8A%A5%EC%9D%B4-%EC%96%B4%EB%96%A4%EC%A7%80">메트릭(Metric): 시스템 상태나 성능이 어떤지</a></li>
+<li><a href="#%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8A%A4tracing-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%96%B4%EB%94%94%EC%84%9C-%EC%A7%80%EC%97%B0%EB%90%98%EA%B1%B0%EB%82%98-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%96%88%EB%8A%94%EC%A7%80">트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지</a>
 <ul>
-<li>관측성</li>
-<li>관찰성</li>
-<li>관측 가능성</li>
+<li><a href="#%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8B%B1-distributed-tracing">분산 트레이싱 (Distributed tracing)</a></li>
+<li><a href="#logging-vs-tracing">Logging vs. Tracing</a></li>
+<li><a href="#trace-vs-track">Trace vs. Track</a></li>
 </ul>
-<p>제어 이론에서 &lsquo;observability&rsquo;라는 용어는
+</li>
+<li><a href="#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81-monitoring">모니터링 (Monitoring)</a></li>
+<li><a href="#%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-profiling">프로파일링 (Profiling)</a></li>
+<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC">더 읽을 거리</a></li>
+</ul>
+<h1 id="관측-가능성-observability">관측 가능성 (Observability)</h1>
+<p><strong>제어 이론에서</strong>
 시스템의 내부 상태 변수와 그에 따른 행동을
 시스템에 대한 입력과 출력만 보고 결정할 수 있다면
-그 시스템이 관측 가능하다는 것을 나타낸다.</p>
-<h1 id="event-logging">Event Logging</h1>
+그 시스템이 <strong>관측 가능하다는 것</strong>을 나타냅니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p>그렇다면 <strong>관측 가능성</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>이란
+시스템의 내부 상태를 외부에서 수집 가능한 데이터(로그, 메트릭, 트레이스 등)를 통해
+얼마나 잘 추론하고 이해할 수 있는지를 나타내는 시스템의 속성입니다.
+즉, 시스템이 자신의 상태를 얼마나 잘 &ldquo;드러내는가&quot;를 의미합니다.</p>
+<p>관측 가능성은 시스템의 상태를 이해하는 데 필요한 모든 정보를 제공하는 것을 목표로 합니다.
+로그, 메트릭, 트레이스는 관측 가능성을 달성하기 위한 세 가지 기둥(주요 구성 요소)<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>입니다.</p>
+<h1 id="로그event-logging-무슨-일이-있었는지">로그(Event Logging): 무슨 일이 있었는지</h1>
+<p>로그는 시스템 프로세스의 개별 이벤트를 시간 순서대로 기록하는 것입니다.
+각 로그 레코드는 특정 시점에 발생한 일(예: 오류 발생, 사용자 로그인, 요청 처리 시작/종료 등)에
+대한 정보를 담고 있습니다.</p>
+<p>하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에
+마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있습니다.</p>
 <p><img src="/images/cloud/kibana5-fluentd.png" alt="kibana5-fluentd">
 <em>Fluentd-Kibana</em></p>
-<p>로그는 시스템 프로세스의 개별 이벤트를 기록하는 것이다.
-하지만 각 로그 스트림은 단일 인스턴스에 대해서만 알려주기 때문에
-마이크로서비스에서 전체적인 모니터링을 하기에는 어려움이 있다.</p>
 <ul>
 <li><a href="https://www.fluentd.org/">Fluentd</a></li>
 <li><a href="https://www.elastic.co/">Elastic</a></li>
 <li><a href="https://docs.datadoghq.com/logs/">Datadog Log Management</a></li>
 </ul>
-<h1 id="software-tracing">Software Tracing</h1>
+<h1 id="메트릭metric-시스템-상태나-성능이-어떤지">메트릭(Metric): 시스템 상태나 성능이 어떤지</h1>
+<p>메트릭은 시스템의 성능과 동작을 측정한 수치입니다.
+예를 들면 CPU 사용률, 응답 시간, 오류율 등이 있습니다.</p>
+<ul>
+<li><a href="https://prometheus.io/">Prometheus</a></li>
+</ul>
+<h1 id="트레이스tracing-요청이-어디서-지연되거나-문제가-발생했는지">트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지</h1>
+<p>사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적합니다.
+주로 서비스를 최적화하는 데 사용됩니다.
+예를 들어, 특정 서비스에 병목이 예상되는 경우
+트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있습니다.
+트레이싱은 구조화된 형태의 로그 이벤트라고 볼 수 있습니다.</p>
 <p><img src="/images/cloud/jaeger-embed-trace-view.png" alt="jaeger-embed-trace-view">
 <em>Jaeger</em></p>
-<p>사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적한다.
-주로 서비스를 최적화하는 데 사용된다.
-예를 들어, 특정 서비스에 병목이 예상되는 경우
-트레이싱해서 어떤 부분인지 확인하고 최적화를 시도해볼 수 있다.
-결국 트레이싱은 구조화된 형태의 로그 이벤트일 뿐이다.</p>
 <ul>
 <li><a href="https://www.jaegertracing.io/">Jaeger</a></li>
 <li><a href="https://opentracing.io/">OpenTracing</a></li>
 <li><a href="https://linux.die.net/man/1/strace">strace</a> - Linux man page</li>
-<li>구글 크롬의 <a href="https://developers.google.com/web/tools/chrome-devtools/network/">Network log</a></li>
+<li>구글 크롬의 <a href="https://developer.chrome.com/docs/devtools/network#load">Network log</a></li>
 </ul>
-<h2 id="logging--tracing">Logging : Tracing</h2>
+<h2 id="분산-트레이싱-distributed-tracing">분산 트레이싱 (Distributed tracing)</h2>
+<p>분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며,
+분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다.
+기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리
+종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며,
+이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup></p>
+<h2 id="logging-vs-tracing">Logging vs. Tracing</h2>
 <table>
   <thead>
       <tr>
@@ -492,7 +539,7 @@
       </tr>
   </tbody>
 </table>
-<h2 id="trace--track">Trace : Track</h2>
+<h2 id="trace-vs-track">Trace vs. Track</h2>
 <ul>
 <li>track은 시작 지점에서 시작해서 현재 지점으로 새로운 경로를 계속 따라가는 것이다.
 <ul>
@@ -510,81 +557,85 @@ You go backward to the starting point.</li>
 </ul>
 </li>
 </ul>
-<h2 id="distributed-tracing">Distributed tracing</h2>
-<p>분산 추적은 종단 간 또는 워크플로 중심 추적이라고도 하며,
-분산 시스템의 구성 요소에 의해 수행되는 인과관계가 있는 활동의 상세한 실행 정보를 수집하는 것을 목적으로 하는 일련의 기법이다.
-기존의 코드 프로파일러나 dtrace 같은 호스트 레벨 추적 도구와는 달리
-종단 간 추적은 주로 여러 다른 프로세스에 의해 협력적으로 수행되는 개별 실행 정보를 프로파일링하는 데 초점을 맞추고 있으며,
-이와 같은 환경은 현대적이고 클라우드 네이티브한 마이크로서비스 기반 애플리케이션이 대표적이다.</p>
-<h1 id="monitoring">Monitoring</h1>
+<h1 id="모니터링-monitoring">모니터링 (Monitoring)</h1>
+<p>애플리케이션 계측(measure), 메트릭 수집(collect), 집계(aggregate), 분석(analyze) 등을 포함하는 시스템이다.
+진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 알림을 보낸다.
+예를 들어 설정한 임계점(threshold)을 넘을 경우 이메일을 보내거나 슬랙 채널에 메시지를 보낼 수 있다.</p>
 <p><img src="/images/cloud/grafana-visualize.jpg" alt="grafana-visualize">
 <em>Grafana</em></p>
-<p>애플리케이션 계측(measure), 메트릭 수집(collect), 집계(aggregate), 분석(analyze) 등을 포함하는 시스템이다.
-진단 목적으로 가장 많이 사용되고, 문제가 발생했을 경우 관리자에게 알람을 보낸다.
-예를 들어 설정한 임계점(threshold)을 넘을 경우 이메일을 보내거나 슬랙 채널에 메시지를 보낼 수 있다.</p>
 <ul>
-<li><a href="https://prometheus.io/">Prometheus</a></li>
 <li><a href="https://grafana.com/">Grafana</a></li>
 <li><a href="https://thanos.io/">Thanos</a></li>
-<li><a href="https://docs.datadoghq.com/getting_started/">Datadog</a></li>
+<li><a href="https://docs.datadoghq.com/getting_started/">Datadog</a> (유료)</li>
 </ul>
-<h1 id="profiling">Profiling</h1>
-<p><img src="/images/cloud/android-profiler-callouts.png" alt="android-profiler-callouts"></p>
+<h1 id="프로파일링-profiling">프로파일링 (Profiling)</h1>
 <p>프로그램의 공간(메모리) 또는 시간 복잡성, 특정 명령의 사용 또는 빈도를 측정하는
 <a href="https://en.wikipedia.org/wiki/Dynamic_program_analysis">동적 프로그램 분석(Dynamic program analysis)</a>의 한 형태다.
 모니터링과 달리 벤치마킹에 주 목적이 있다.
 분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 통계에 쓰인다.</p>
+<p><img src="/images/cloud/android-profiler-callouts.png" alt="android-profiler-callouts"></p>
 <ul>
 <li><a href="https://www.baeldung.com/java-profilers">A Guide to Java Profilers</a></li>
 <li><a href="https://docs.datadoghq.com/tracing/profiler/">Datadog Continuous Profiler</a></li>
 <li><a href="https://developer.android.com/studio/profile">Android Profiler</a></li>
 </ul>
-<hr>
-<h1 id="참조">참조</h1>
+<h1 id="더-읽을-거리">더 읽을 거리</h1>
 <ul>
-<li>Observability
+<li><a href="https://landscape.cncf.io/">CNCF Landscape</a> - Observability 파트</li>
+<li><a href="https://en.wikipedia.org/wiki/Observability">Observability</a> | Wikipedia
 <ul>
-<li>유리 슈쿠로 &lt;마스터링 분산 추적&gt; 6쪽</li>
-<li><a href="https://en.wikipedia.org/wiki/Observability">Observability</a> - Wikipedia</li>
-<li><a href="https://landscape.cncf.io/">CNCF Landscape</a></li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791158391959">&lt;마스터링 분산 추적&gt;</a> | 유리 슈쿠로</li>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192987576">&lt;모니터링의 새로운 미래 관측 가능성&gt;</a> | 정현석, 진미란</li>
 </ul>
 </li>
-<li>Logging
+<li><a href="https://en.wikipedia.org/wiki/Software_metric">Metric</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Logging_(software)">Logging</a> | Wikipedia
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Logging_(software)">Logging</a> - Wikipedia</li>
-<li><a href="https://en.wikipedia.org/wiki/Log_management">Log management</a> - Wikipedia</li>
-<li><a href="https://en.wikipedia.org/wiki/Log_analysis">Log analysis</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_management">Log management</a> | Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_analysis">Log analysis</a> | Wikipedia</li>
 </ul>
 </li>
-<li>Tracing
+<li><a href="https://en.wikipedia.org/wiki/Tracing_(software)">Tracing</a> | Wikipedia
 <ul>
-<li>유리 슈쿠로 &lt;마스터링 분산 추적&gt; 58쪽</li>
-<li><a href="https://en.wikipedia.org/wiki/Tracing_(software)">Tracing</a> - Wikipedia</li>
-<li><a href="https://en.wikipedia.org/wiki/Audit_trail">Audit trail</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Audit_trail">Audit trail</a> | Wikipedia</li>
 <li><a href="https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace">Difference between Tracking and Tracing</a></li>
 <li><a href="https://opentracing.io/docs/overview/what-is-tracing/">What is Distributed Tracing? - OpenTracing</a></li>
-<li><a href="https://www.bmc.com/blogs/monitoring-logging-tracing">Tracing vs Logging vs Monitoring: What’s the Difference?</a></li>
+<li><a href="https://www.bmc.com/blogs/monitoring-logging-tracing">Tracing vs Logging vs Monitoring: What&rsquo;s the Difference?</a></li>
 <li><a href="https://winderresearch.com/logging-vs-tracing-vs-monitoring/">Logging vs Tracing vs Monitoring</a></li>
 </ul>
 </li>
-<li>Monitoring
+<li><a href="https://www.betterevaluation.org/methods-approaches/themes/monitoring">Monitoring</a>
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/Application_performance_management">Application performance management</a> - Wikipedia</li>
-<li><a href="https://en.wikipedia.org/wiki/Event_monitoring">Event monitoring</a> - Wikipedia</li>
-<li><a href="https://en.wikipedia.org/wiki/Log_monitor">Log monitor</a> - Wikipedia</li>
-<li><a href="https://techbeacon.com/enterprise-it/monitoring-demystified-guide-logging-tracing-metrics">Monitoring demystified: A guide for logging, tracing, metrics</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Application_performance_management">Application performance management</a> | Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/System_monitor">System monitoring</a> | Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Event_monitoring">Event monitoring</a> | Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Network_monitoring">Network monitoring</a> | Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Log_monitor">Log monitor</a> | Wikipedia</li>
 </ul>
 </li>
-<li>Profiling
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Profiling_(computer_programming)">Profiling</a> - Wikipedia</li>
+<li><a href="https://en.wikipedia.org/wiki/Profiling_(computer_programming)">Profiling</a> | Wikipedia</li>
 </ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>&lt;마스터링 분산 추적&gt; 6쪽 | 유리 슈쿠로&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-</ul>
+<li id="fn:2">
+<p>한국어로는 다양하게 번역되는데 <strong>관측 가능성</strong>이 가장 많이 쓰이는 것 같습니다. (이 외에 관측성, 관찰성, 관찰 가능성, 가관측성)&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://www.crowdstrike.com/en-us/cybersecurity-101/observability/three-pillars-of-observability/">The Three Pillars of Observability: Logs, Metrics, and Traces</a> | CrowdStrike&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4">
+<p>&lt;마스터링 분산 추적&gt; 58쪽 | 유리 슈쿠로&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 
                     
                     <hr id="EOF">
-                <p>최종 수정: 2020-10-02</p>
+                <p>최종 수정: 2025-04-09</p>
                     
                 </div>
             </div>
@@ -631,7 +682,7 @@ You go backward to the starting point.</li>
     
     
     <li>
-      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;text=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f&amp;text=%ea%b4%80%ec%b8%a1%20%ea%b0%80%eb%8a%a5%ec%84%b1%28Observability%29" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:all">
@@ -667,7 +718,7 @@ You go backward to the starting point.</li>
     
     
     <li>
-      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac.&amp;body=Observability%20%ec%9a%a9%ec%96%b4%20%ec%a0%95%eb%a6%ac%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aobservability%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f%0a" target="_blank" class="share-btn email">
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %ea%b4%80%ec%b8%a1%20%ea%b0%80%eb%8a%a5%ec%84%b1%28Observability%29.&amp;body=%ea%b4%80%ec%b8%a1%20%ea%b0%80%eb%8a%a5%ec%84%b1%28Observability%29%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aObservability%2c%20Logging%2c%20Tracing%2c%20Monitoring%2c%20Profiling%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fcloud%2fmonitor-trace-log-metric%2f%0a" target="_blank" class="share-btn email">
         <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
   <defs></defs>
   <g style="pointer-events:none">
@@ -816,8 +867,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#observability" class="nav-observability">
-									Observability
+								<a href="#%ea%b4%80%ec%b8%a1-%ea%b0%80%eb%8a%a5%ec%84%b1-observability" class="nav-관측-가능성-observability">
+									관측 가능성 (Observability)
 								</a>
 							</li>
 						
@@ -833,8 +884,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#event-logging" class="nav-event-logging">
-									Event Logging
+								<a href="#%eb%a1%9c%ea%b7%b8event-logging-%eb%ac%b4%ec%8a%a8-%ec%9d%bc%ec%9d%b4-%ec%9e%88%ec%97%88%eb%8a%94%ec%a7%80" class="nav-로그event-logging-무슨-일이-있었는지">
+									로그(Event Logging): 무슨 일이 있었는지
 								</a>
 							</li>
 						
@@ -850,8 +901,25 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#software-tracing" class="nav-software-tracing">
-									Software Tracing
+								<a href="#%eb%a9%94%ed%8a%b8%eb%a6%admetric-%ec%8b%9c%ec%8a%a4%ed%85%9c-%ec%83%81%ed%83%9c%eb%82%98-%ec%84%b1%eb%8a%a5%ec%9d%b4-%ec%96%b4%eb%96%a4%ec%a7%80" class="nav-메트릭metric-시스템-상태나-성능이-어떤지">
+									메트릭(Metric): 시스템 상태나 성능이 어떤지
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8a%a4tracing-%ec%9a%94%ec%b2%ad%ec%9d%b4-%ec%96%b4%eb%94%94%ec%84%9c-%ec%a7%80%ec%97%b0%eb%90%98%ea%b1%b0%eb%82%98-%eb%ac%b8%ec%a0%9c%ea%b0%80-%eb%b0%9c%ec%83%9d%ed%96%88%eb%8a%94%ec%a7%80" class="nav-트레이스tracing-요청이-어디서-지연되거나-문제가-발생했는지">
+									트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지
 								</a>
 							</li>
 						
@@ -874,8 +942,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#logging--tracing" class="nav-logging--tracing">
-									Logging : Tracing
+								<a href="#%eb%b6%84%ec%82%b0-%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8b%b1-distributed-tracing" class="nav-분산-트레이싱-distributed-tracing">
+									분산 트레이싱 (Distributed tracing)
 								</a>
 							</li>
 						
@@ -891,8 +959,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#trace--track" class="nav-trace--track">
-									Trace : Track
+								<a href="#logging-vs-tracing" class="nav-logging-vs-tracing">
+									Logging vs. Tracing
 								</a>
 							</li>
 						
@@ -908,8 +976,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#distributed-tracing" class="nav-distributed-tracing">
-									Distributed tracing
+								<a href="#trace-vs-track" class="nav-trace-vs-track">
+									Trace vs. Track
 								</a>
 							</li>
 						
@@ -929,8 +997,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#monitoring" class="nav-monitoring">
-									Monitoring
+								<a href="#%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81-monitoring" class="nav-모니터링-monitoring">
+									모니터링 (Monitoring)
 								</a>
 							</li>
 						
@@ -946,8 +1014,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#profiling" class="nav-profiling">
-									Profiling
+								<a href="#%ed%94%84%eb%a1%9c%ed%8c%8c%ec%9d%bc%eb%a7%81-profiling" class="nav-프로파일링-profiling">
+									프로파일링 (Profiling)
 								</a>
 							</li>
 						
@@ -963,8 +1031,8 @@ Ported from <a style="color: #0054B8; text-decoration: underline;" href="https:/
 						
 						
 							<li>
-								<a href="#%ec%b0%b8%ec%a1%b0" class="nav-참조">
-									참조
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
 								</a>
 							</li>
 						
