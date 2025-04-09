@@ -1,6 +1,6 @@
 ---
 date: 2020-10-02T16:24:00+09:00
-lastmod: 2025-04-09T15:24:00+09:00
+lastmod: 2025-04-09T18:24:00+09:00
 title: "관측 가능성(Observability)"
 description: "Observability, Logging, Tracing, Monitoring, Profiling"
 # featured_image: "/images/cloud/jaeger-embed-trace-view.png"
