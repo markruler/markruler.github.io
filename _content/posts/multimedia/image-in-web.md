@@ -174,6 +174,10 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 복잡한 그래픽을 표현할 수 있습니다.
 웹에서 로고, 아이콘, 단순한 그래픽을 표현하는 데 적합합니다.
 
+![SVG와 PNG 비교](/images/multimedia/image-in-web/svg-vs-png.png)
+
+*[이미지 출처: Stack Overflow](https://stackoverflow.com/questions/2336522/what-are-the-different-usecases-of-png-vs-gif-vs-jpeg-vs-svg)*
+
 결론적으로, **사진**에는 JPEG 또는 WebP/AVIF,
 **로고나 아이콘**에는 SVG 또는 PNG,
 **애니메이션**에는 GIF 또는 WebP를 사용하는 것이 일반적인 권장 사항입니다.
@@ -293,6 +297,8 @@ Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 �
 
 - [웹 페이지 성능 측정과 최적화](/posts/web/web-page-performance-optimization/)
 - [Digital Image Processing](https://en.wikipedia.org/wiki/Digital_image_processing) | Wikipedia
+- How Digital Photography Works-Que | Ron White, Timothy Edward Downs (2007)
+- [Image performance](https://web.dev/learn/performance/image-performance) | web.dev
 
 [^1]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
 [^2]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
