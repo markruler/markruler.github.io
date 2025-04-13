@@ -106,15 +106,13 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 **Reflow**(**Layout 
 [^5]: [async vs defer attributes](https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html)
 [^6]: [Defer non-critical CSS](https://web.dev/articles/defer-non-critical-css) | web.dev
 
-## 이미지 최적화
+## 멀티미디어 최적화
 
-[웹과 멀티미디어: 이미지](/posts/multimedia/image-in-web/)
-
-## 비디오 최적화
-
-**HLS 프로토콜**([RFC 8216](https://datatracker.ietf.org/doc/html/rfc8216))을 사용하기 위해
-비디오는 HEVC 코덱으로 트랜스코딩하고 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
-예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.
+- [웹과 멀티미디어: 이미지](/posts/multimedia/image-in-web/)
+- 비디오
+  - **HLS 프로토콜**([RFC 8216](https://datatracker.ietf.org/doc/html/rfc8216))을 사용하기 위해
+    비디오는 HEVC 코덱으로 트랜스코딩하고 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
+    예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.
 
 ## 캐시 활용
 

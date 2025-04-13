@@ -377,12 +377,17 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 &lt;strong&gt;Reflow
 그래서 Javascript에서 &lt;strong&gt;직접 DOM이나 CSSOM 조작하는 것을 줄이고&lt;/strong&gt;,
 &lt;strong&gt;중요하지 않은 CSS 파일만 &lt;code&gt;defer&lt;/code&gt;로 불러오는 것&lt;/strong&gt;이 좋습니다.&lt;sup id=&#34;fnref:6&#34;&gt;&lt;a href=&#34;#fn:6&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Font&lt;/strong&gt;의 경우 &lt;code&gt;preload&lt;/code&gt;를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.&lt;/p&gt;
-&lt;h2 id=&#34;이미지-최적화&#34;&gt;이미지 최적화&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/multimedia/image-in-web/&#34;&gt;웹과 멀티미디어: 이미지&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;비디오-최적화&#34;&gt;비디오 최적화&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;HLS 프로토콜&lt;/strong&gt;(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC 8216&lt;/a&gt;)을 사용하기 위해
+&lt;h2 id=&#34;멀티미디어-최적화&#34;&gt;멀티미디어 최적화&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/multimedia/image-in-web/&#34;&gt;웹과 멀티미디어: 이미지&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;비디오
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;HLS 프로토콜&lt;/strong&gt;(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC 8216&lt;/a&gt;)을 사용하기 위해
 비디오는 HEVC 코덱으로 트랜스코딩하고 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
-예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.&lt;/p&gt;
+예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;캐시-활용&#34;&gt;캐시 활용&lt;/h2&gt;
 &lt;h3 id=&#34;cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;사용자와 가까운 곳에 위치한 서버&lt;/strong&gt;에서 콘텐츠를 제공하면 더 빠르게 콘텐츠를 받을 수 있습니다.
