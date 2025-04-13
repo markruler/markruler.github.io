@@ -88,7 +88,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 이후 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털화해야 합니다.
 **디지털 카메라**는 이미지 센서([CCD](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/),
 [CMOS](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/))가
-빛을 받아 RAW 데이터([RGB](https://en.wikipedia.org/wiki/RGB_color_model))로 저장합니다.
+빛을 받아 RAW 데이터[^1](RGB[^2])로 저장합니다.
 이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용되죠.
 
 ![이미지 센서](/images/multimedia/image-in-web/image-processing.avif)
@@ -98,7 +98,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 ## ISP: 이미지 신호 처리
 
 디지털 촬영 후에는 일반적으로 카메라에 내장된
-[이미지 신호 처리장치(ISP, Image Signal Processor)](https://en.wikipedia.org/wiki/Image_processor)가 이미지를 압축-보정해 저장합니다.[^1]
+[이미지 신호 처리장치(ISP, Image Signal Processor)](https://en.wikipedia.org/wiki/Image_processor)가 이미지를 압축-보정해 저장합니다.[^3]
 (RAW → JPEG, PNG 등)
 여기서 압축(손실/무손실), 보정(화이트 밸런스, 노출 보정, 색상 보정 등), 인코딩(포맷 변환) 등의 과정을 거칩니다.
 
@@ -149,8 +149,8 @@ WebP의 손실 압축 효율은 매우 뛰어나서,
 또한 8비트 알파 채널을 지원하여 PNG처럼 투명 배경 이미지를 저장할 수 있고,
 애니메이션 WebP는 GIF나 APNG보다 뛰어난 압축 효율로 다중 프레임을 저장합니다.
 
-하지만 WebP가 모든 이미지에 압축률이 높은 것은 아닙니다.[^2]
-또한 프로그레시브 렌더링(progressive JPEG처럼 저화질로 먼저 보여주고 점차 선명해지는 기능)을 지원하지 않습니다[^3].
+하지만 WebP가 모든 이미지에 압축률이 높은 것은 아닙니다.[^4]
+또한 프로그레시브 렌더링(progressive JPEG처럼 저화질로 먼저 보여주고 점차 선명해지는 기능)을 지원하지 않습니다[^5].
 
 ### AVIF: AV1 기반 이미지 포맷
 
@@ -188,7 +188,7 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 웹 페이지에 400x300 픽셀 크기로 표시될 이미지를 4000x3000 픽셀 원본 그대로 사용하는 것은 심각한 낭비입니다.
 이는 불필요하게 큰 파일을 다운로드하게 만듭니다.
 이미지가 표시될 최대 크기를 고려하여 이미지 자체의 해상도를 미리 조절(리사이징)하여 제공해야 합니다.
-`WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다[^4].
+`WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다[^6].
 
 ## 반응형 이미지 (Responsive Images)
 
@@ -300,7 +300,16 @@ Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 �
 - How Digital Photography Works-Que | Ron White, Timothy Edward Downs (2007)
 - [Image performance](https://web.dev/learn/performance/image-performance) | web.dev
 
-[^1]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
-[^2]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
-[^3]: [WebP FAQ](https://developers.google.com/speed/webp/faq) | Google
-[^4]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
+[^1]: [RAW 이미지 포맷](https://en.wikipedia.org/wiki/Raw_image_format)이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia
+[^2]: 사진에 사용되는 색상 모델은 빛의 삼원색을 기반으로 한 [RGB 모델](https://en.wikipedia.org/wiki/RGB_color_model)이 사용됩니다.
+반면 물체의 색은 빛의 반사에 의해 결정되므로, 물체의 색을 표현하기 위해서는 빛의 삼원색의 2차색을 사용합니다.
+2차색이란 RGB 빛을 한번씩 혼합하여 만들어지는 색으로,
+빨강과 초록을 혼합하면 노랑(Yellow), 빨강과 파랑을 혼합하면 자홍(Magenta), 초록과 파랑을 혼합하면 청록(Cyan)색이 만들어집니다.
+색의 삼원색(CMY)은 혼합할수록 어두워지지만 완전한 검정은 만들기 어려워서 검정(Black)색을 추가하여 [CMYK 모델](https://en.wikipedia.org/wiki/CMYK_color_model)이 주로 사용됩니다.
+디지털 디스플레이나 조명은 RGB 모델을 사용하고, 인쇄물이나 물감은 물체의 색을 표현하기 위해 색의 삼원색을 사용합니다.
+그래서 인쇄물의 디지털 작업 시 RGB에서 CMYK로 변환하는 과정이 필요할 뿐만 아니라
+RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 있습니다.
+[^3]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
+[^4]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
+[^5]: [WebP FAQ](https://developers.google.com/speed/webp/faq) | Google
+[^6]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
