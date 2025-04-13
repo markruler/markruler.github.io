@@ -88,7 +88,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 이후 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털화해야 합니다.
 **디지털 카메라**는 이미지 센서([CCD](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/),
 [CMOS](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/))가
-빛을 받아 RAW 데이터로 저장합니다.
+빛을 받아 RAW 데이터([RGB](https://en.wikipedia.org/wiki/RGB_color_model))로 저장합니다.
 이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용되죠.
 
 ![이미지 센서](/images/multimedia/image-in-web/image-processing.avif)
