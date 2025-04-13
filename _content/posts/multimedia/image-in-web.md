@@ -78,7 +78,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 이미지 렌더러(모니터, 프린터, 시네마 스크린) 사이의 모든 과정을
 [이미지 파이프라인](https://en.wikipedia.org/wiki/Color_image_pipeline)이라고 합니다.
 
-![이미지 파이프라인](/images/multimedia/image-in-web/image-pipeline.png)
+![이미지 파이프라인](/images/multimedia/image-in-web/image-pipeline-v2.png)
 
 ## 카메라: 필름 vs 디지털 센서
 
