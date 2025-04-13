@@ -108,28 +108,7 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 **Reflow**(**Layout 
 
 ## 이미지 최적화
 
-`WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용하거나[^7]
-**지연 로딩**(**Lazy Loading**)을 사용해서
-LCP 지표를 개선합니다.
-
-[^7]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
-
-**Sprite 이미지**를 사용해서 여러 이미지를 하나의 이미지로 합치면
-한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
-최근에는 HTTP/2와 HTTP/3를 사용하면서
-여러 리소스를 병렬로 불러올 수 있지만
-최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
-크롬 브라우저는 다음 [3가지 이유로 대기](https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546)할 수 있습니다.
-
-- There are higher priority requests.
-- There are already six TCP connections open for this origin, which is the limit. Applies to HTTP/1.0 and HTTP/1.1 only.
-- The browser is briefly allocating space in the disk cache.
-
-`Queueing`은 **Connection Start 전** 위 3가지 이유로 대기하는 상태입니다.
-Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 캐시가 없는 경우) 시
-요청 리소스가 많을 경우 Queueing이 길게 유지되는 것을 확인할 수 있습니다.
-`Stalled`는 **Connection Start 후** 위 3가지 이유로 대기하는 상태입니다.
-이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.
+[웹과 멀티미디어: 이미지](/posts/multimedia/image-in-web/)
 
 ## 비디오 최적화
 
