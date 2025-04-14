@@ -16,7 +16,9 @@ categories:
 ---
 
 - [개요](#개요)
-- [image 관련 용어](#image-관련-용어)
+- [image라는 단어](#image라는-단어)
+  - [IT 기술에서의 이미지](#it-기술에서의-이미지)
+- [화질(Quality)을 결정하는 요소](#화질quality을-결정하는-요소)
 - [이미지 파이프라인 (Image Pipeline)](#이미지-파이프라인-image-pipeline)
   - [카메라: 필름 vs 디지털 센서](#카메라-필름-vs-디지털-센서)
   - [ISP: 이미지 신호 처리](#isp-이미지-신호-처리)
@@ -32,23 +34,28 @@ categories:
 - [웹 페이지에서 이미지 최적화](#웹-페이지에서-이미지-최적화)
   - [반응형 이미지 (Responsive Images)](#반응형-이미지-responsive-images)
   - [지연 로딩 (Lazy Loading)](#지연-로딩-lazy-loading)
+  - [사전 로딩 (Preload)](#사전-로딩-preload)
   - [이미지 스프라이트 (Image Sprite)](#이미지-스프라이트-image-sprite)
+  - [브라우저 캐싱](#브라우저-캐싱)
+  - [압축 알고리즘 최적화](#압축-알고리즘-최적화)
+  - [단순 장식용 이미지는 CSS로](#단순-장식용-이미지는-css로)
 - [웹 접근성: alt 속성](#웹-접근성-alt-속성)
   - [왜 `alt` 속성이 중요한가](#왜-alt-속성이-중요한가)
   - [좋은 `alt` 텍스트를 작성하는 방법](#좋은-alt-텍스트를-작성하는-방법)
+- [이미지 보안](#이미지-보안)
 - [결론](#결론)
 - [더 읽을 거리](#더-읽을-거리)
 
 # 개요
 
-웹 페이지에서 이미지는 사용자 경험을 풍부하게 하고 정보를 효과적으로 전달하는 핵심 요소입니다.
-하지만 제대로 관리되지 않은 이미지는 웹사이트 로딩 속도를 저하시키고,
-사용자 이탈률을 높이며, 결국 비즈니스 목표 달성에 부정적인 영향을 미칩니다.
+이미지는 인터넷에서 매우 큰 비중을 차지합니다.
+d 웹페이지 기준으로 이미지가 차지하는 데이터 용량은 전체의 51%에 달하므로[^1],
+이미지의 속도나 크기를 개선하면 웹 성능에 상당한 영향을 미칩니다.
 
 이 글에서는 웹 개발자가 반드시 알아야 할 이미지 관련 지식을 총정리합니다.
 올바른 이미지 포맷 선택부터 다양한 최적화 기법, 접근성 고려 사항, 그리고 성능 및 SEO에 미치는 영향까지 다룹니다.
 
-# image 관련 용어
+# image라는 단어
 
 "image"는 라틴어에서 유래했습니다.
 라틴어 명사인 "imago"는 "모습, 상, 형태, 그림"을 뜻하며, 구체적으로 어떤 대상을 시각적으로 재현한 것을 의미합니다.
@@ -63,14 +70,47 @@ categories:
 | Picture | 사진, 그림, 시각 표현 | 일상적, 포괄적         |
 | Image   | 시각적 재현 (추상적)  | 형식적, 기술적, 디지털 |
 
+## IT 기술에서의 이미지
+
 IT 기술에서는 시스템, 파일, 환경의 상태를 하나의 단일 단위로 묶은 복제본을
 리눅스 컨테이너 이미지, 디스크 이미지, 머신 이미지 등으로 부릅니다.
 또 다른 '복제'라는 단어로 clone이 있습니다.
 clone은 즉시 A에서 B 위치로 복제하는 것을 말한다면, image는 원본을 복제해서 어디서나 복원할 준비가 된 상태를 말합니다.
 
-스냅샷(Snapshot)은 순간적인 장면을 촬영한 사진을 말합니다.
+**스냅샷**(**Snapshot**)은 순간적인 장면을 촬영한 사진을 말합니다.
 인물 사진에서는 자연스러운 동작이나 표정을 재빠르게 포착한 사진을 의미합니다.
 IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
+
+# 화질(Quality)을 결정하는 요소
+
+일반적으로 **해상도**(**Resolution**)는 디지털 이미지의 픽셀 단위 크기를 의미합니다.
+이는 가로와 세로 방향의 픽셀 수 (ex: 1920×1080처럼 픽셀 수로 표기)로 표현되어
+이미지에 얼마나 **정보**가 담겨 있는지 나타냅니다.
+해상도가 높을수록 더 많은 픽셀로 구성되어 있어 이미지의 디테일이 풍부해지고 선명해집니다.
+인쇄나 스캔 맥락에서의 해상도는 단위 길이당 **픽셀(점) 밀도**로 정의되며
+주로 PPI(Pixels Per Inch) 또는 DPI(Dots Per Inch)로 측정합니다.
+
+사진에 사용되는 색상 모델(color model)은 빛의 삼원색을 기반으로 한 [RGB 모델](https://en.wikipedia.org/wiki/RGB_color_model)이 사용됩니다.
+반면 물체의 색은 빛의 반사에 의해 결정되므로, 물체의 색을 표현하기 위해서는 빛의 삼원색의 2차색을 색의 삼원색(CMY)으로 사용합니다.
+색의 삼원색은 혼합할수록 어두워지지만 완전한 검정은 만들기 어려워서 검정(Black)색을 추가하여
+[CMYK 모델](https://en.wikipedia.org/wiki/CMYK_color_model)이 주로 사용됩니다.
+
+다시 말하면 RGB 모델은 빛의 삼원색을 조합하여 색을 표현하는 **가산혼합 방식**을 사용합니다.
+반면 CMYK 모델은 흰 빛에서 RGB 색을 빼는 **감산혼합 방식**을 사용합니다.
+흰 배경(종이) 위에 잉크를 덧칠하여 빛을 흡수시키는 방식으로 색이 만들어집니다.
+예를 들어, 파란 빛을 빼면 노란색이 남고, 빨간 빛을 빼면 청록색이 남습니다.
+
+디지털 디스플레이나 조명은 RGB 모델을 사용하고, 인쇄물이나 물감은 물체의 색을 표현하기 위해 CMYK 모델을 사용합니다.
+그래서 인쇄물의 디지털 작업 시 RGB에서 CMYK로 변환하는 과정이 필요할 뿐만 아니라
+RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 있습니다.
+이를 보정하기 위해 sRGB와 같은 표준 색 공간과 컬러 매니지먼트가 사용됩니다.
+
+비트 깊이(bit depth) 또는 **색 깊이(color depth)**는 각 픽셀 색상을 표현하기 위해 사용되는 비트 수를 의미합니다.
+다시 말해, 하나의 픽셀 당 표현 가능한 색상의 가짓수를 결정하는 지표입니다.
+디지털 이미지에서 흔히 쓰이는 24비트 색상은 픽셀 당 24비트로 색을 표현한다는 뜻으로,
+보통 RGB 각 채널 8비트씩 (8비트+8비트+8비트) 구성되어 있습니다.
+이렇게 하면 총 2^24가지 색상 — 약 16,777,216가지의 색을 표현할 수 있어 흔히 트루 컬러(True Color)라고 부릅니다.
+표준 컬러 이미지 포맷(JPEG, PNG 등)과 대부분의 웹 이미지가 이 모드를 사용합니다.
 
 # 이미지 파이프라인 (Image Pipeline)
 
@@ -88,7 +128,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 이후 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털화해야 합니다.
 **디지털 카메라**는 이미지 센서([CCD](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/),
 [CMOS](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/))가
-빛을 받아 RAW 데이터[^1](RGB[^2])로 저장합니다.
+빛을 받아 RAW 데이터[^2](RGB)로 저장합니다.
 이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용되죠.
 
 ![이미지 센서](/images/multimedia/image-in-web/image-processing.avif)
@@ -188,6 +228,7 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 웹 페이지에 400x300 픽셀 크기로 표시될 이미지를 4000x3000 픽셀 원본 그대로 사용하는 것은 심각한 낭비입니다.
 이는 불필요하게 큰 파일을 다운로드하게 만듭니다.
 이미지가 표시될 최대 크기를 고려하여 이미지 자체의 해상도를 미리 조절(리사이징)하여 제공해야 합니다.
+일부 CDN 서비스에서는 최초 요청 시 리사이징하거나 워터마크를 추가하는 기능을 지원하기도 합니다.
 `WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다[^6].
 
 ## 반응형 이미지 (Responsive Images)
@@ -232,13 +273,35 @@ HTML `<img>` 태그에 `loading="lazy"` 속성을 추가하는 것만으로 간�
 <img src="image.jpg" loading="lazy">
 ```
 
+`decoding="async"` 속성을 추가하면 브라우저가 이미지를 비동기적으로 디코딩하여
+메인 스레드 블로킹을 줄일 수 있습니다.
+
+```html
+<img src="image.jpg" decoding="async">
+```
+
+## 사전 로딩 (Preload)
+
+초기 화면에 꼭 보여야 하는 중요한 이미지는 최우선으로 가져오도록(**preloading**) 브라우저에 힌트 줄 수 있습니다.
+
+```html
+<head>
+  <link rel="preload" as="image">
+</head>
+```
+
+이때 `fetchpriority="high"`와 함께 쓰면 더욱 확실하게 우선순위를 높일 수 있습니다.
+다만 남용하면 다른 리소스가 늦어질 수 있으니 핵심 이미지에만 사용합니다.
+
 ## 이미지 스프라이트 (Image Sprite)
 
+다수의 작은 이미지가 있을 경우 **HTTP/2의 멀티플렉싱**으로 한 연결에서 병렬 전송하거나,
+**HTTP/3의 개선된 전송**으로 지연을 줄일 수 있습니다.
+하지만 경우에 따라 최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생할 수 있습니다.
+
+이미지 스프라이트나 inlining (작은 아이콘 데이터 URI를 인라인) 기법도 상황에 따라 고려합니다.
 **이미지 스프라이트**를 사용해서 여러 이미지를 하나의 이미지로 합치면
 한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
-최근에는 HTTP/2와 HTTP/3를 사용하면서
-여러 리소스를 병렬로 불러올 수 있지만
-최초 요청 시 Disk cache를 확보하기 위해 대기 시간(Wait Time)이 발생합니다.
 크롬 브라우저는 다음 [3가지 이유로 대기](https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546)할 수 있습니다.
 
 - There are higher priority requests.
@@ -250,6 +313,24 @@ Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 �
 요청 리소스가 많을 경우 Queueing이 길게 유지되는 것을 확인할 수 있습니다.
 `Stalled`는 **Connection Start 후** 위 3가지 이유로 대기하는 상태입니다.
 이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.
+
+## 브라우저 캐싱
+
+`Cache-Control` 헤더를 설정하여 한 번 받은 이미지를 사용자가 재방문 시 재활용하도록 합니다.
+변경이 드문 자원은 `max-age`를 길게 주고, 파일명에 버전 해시를 붙여 캐시 갱신을 관리하는 패턴이 일반적입니다.
+
+## 압축 알고리즘 최적화
+
+JPEG의 프로그레시브(progressive) 옵션을 켜서
+초기 러프한 버전을 빨리 보여주고 점진적으로 화질을 올리게 하거나,
+PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으로 용량을 조금이라도 더 줄일 수 있습니다.
+
+## 단순 장식용 이미지는 CSS로
+
+단순 장식용 이미지는 `<img>` 대신 CSS `background-image`로 넣어 콘텐츠 이미지와 구분합니다.
+이렇게 하면 필요 시 해당 영역을 아예 로드 안 하도록 (ex: 모바일에서 숨김) 처리하기도 쉽습니다.
+또한 `<picture>` 요소를 사용하면 CSS `background-image`의 미디어쿼리 대응처럼
+`<source media>`로 다양한 상황별 이미지를 지정할 수도 있습니다.
 
 # 웹 접근성: alt 속성
 
@@ -284,6 +365,34 @@ Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 �
 - 이미지가 **링크 역할을 할 경우**, 단순한 설명보다는 **링크의 목적지나 기능**을 설명해야 합니다. (ex: "장바구니 페이지로 이동")
 - 반대로, 이미지가 **순수하게 장식용**이라면, `alt` 속성을 빈 값(`alt=""`)으로 설정해야 스크린 리더가 그것을 무시할 수 있습니다. 시각적으로만 의미 있는 요소까지 읽게 되면, 오히려 사용자에게 혼란을 줄 수 있기 때문입니다.
 
+# 이미지 보안
+
+[XSS(Cross-Site Scripting)](https://www.invicti.com/web-vulnerability-scanner/vulnerabilities/cross-site-scripting-via-file-upload/)는
+악성 스크립트를 삽입해 사용자 브라우저에서 실행시키는 공격입니다.
+일반적으로는 텍스트 입력에 `<script>` 태그 등을 넣어 발생하지만, 이미지를 통해서도 XSS가 발생할 수 있습니다.
+
+이미지 XSS를 막으려면 입력 검증과 출력 인코딩 원칙을 지키는 것이 중요합니다.
+이미지 업로드 시 서버 측에서 **파일 시그니처**(**매직 넘버**)를 검사하여 실제 이미지 포맷이 맞는지 확인해야 합니다.
+업로드 폴더는 실행 권한을 끄고, 검증되지 않은 확장자는 거부해야 합니다.
+이미지 사용 시 파일 이름이나 메타데이터를 HTML에 출력할 일이 있다면 반드시 **HTML 이스케이프**를 거쳐야 합니다.
+이미지의 EXIF(이미지 메타데이터)에 스크립트를 심어두고, 웹앱이 그 EXIF 정보를 화면에 뿌리면 XSS가 될 수 있습니다.
+
+이미지 URL에 너무 많은 정보를 담지 않도록 합니다.
+예를 들어 `/uploads/2025/04/14/user123_profile.png`처럼 경로에 사용자 ID가 드러나면 그걸로 **정보 유출**이 될 수 있습니다.
+해시나 UUID를 쓰는 것이 일반적입니다.
+또한 업로드 폴더를 공개 디렉토리로 둘 경우 디렉토리 listing이 막혀있는지 확인해야 합니다.
+
+**Content Security Policy** (**CSP**)를 설정하여, 이미지 내 스크립트 실행 등을 방지할 수 있습니다.
+[img-src](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/img-src) 지시어로 허용 도메인을 제한하고,
+[object-src 'none'](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/object-src) 등으로
+플러그인이나 `<object>`를 통한 이미지 악용을 막습니다.
+`<meta http-equiv="Content-Security-Policy: ...">`를 SVG 내부에 넣어두어 SVG 스크립트를 억제할 수도 있습니다.
+
+프라이버시 문제도 고려해야 합니다.
+사진의 EXIF 메타데이터에는 촬영 장소의 GPS 정보 등이 포함될 수 있습니다.
+사용자가 모르는 사이에 위치 정보가 노출될 우려가 있으므로,
+서비스에서 유저 사진을 공개 갤러리에 보여줄 때는 EXIF에서 위치 데이터를 제거하는 것이 좋습니다.
+
 # 결론
 
 웹 개발에서 이미지는 필수적이지만, 그만큼 성능 저하의 주범이 되기도 쉽습니다. 오늘 살펴본 것처럼,
@@ -296,19 +405,13 @@ Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 �
 # 더 읽을 거리
 
 - [웹 페이지 성능 측정과 최적화](/posts/web/web-page-performance-optimization/)
-- [Digital Image Processing](https://en.wikipedia.org/wiki/Digital_image_processing) | Wikipedia
+  - [Image file type and format guide](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types) | MDN
+  - [Digital Image Processing](https://en.wikipedia.org/wiki/Digital_image_processing) | Wikipedia
+  - [Image performance](https://web.dev/learn/performance/image-performance) | web.dev
 - How Digital Photography Works-Que | Ron White, Timothy Edward Downs (2007)
-- [Image performance](https://web.dev/learn/performance/image-performance) | web.dev
 
-[^1]: [RAW 이미지 포맷](https://en.wikipedia.org/wiki/Raw_image_format)이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia
-[^2]: 사진에 사용되는 색상 모델은 빛의 삼원색을 기반으로 한 [RGB 모델](https://en.wikipedia.org/wiki/RGB_color_model)이 사용됩니다.
-반면 물체의 색은 빛의 반사에 의해 결정되므로, 물체의 색을 표현하기 위해서는 빛의 삼원색의 2차색을 사용합니다.
-2차색이란 RGB 빛을 한번씩 혼합하여 만들어지는 색으로,
-빨강과 초록을 혼합하면 노랑(Yellow), 빨강과 파랑을 혼합하면 자홍(Magenta), 초록과 파랑을 혼합하면 청록(Cyan)색이 만들어집니다.
-색의 삼원색(CMY)은 혼합할수록 어두워지지만 완전한 검정은 만들기 어려워서 검정(Black)색을 추가하여 [CMYK 모델](https://en.wikipedia.org/wiki/CMYK_color_model)이 주로 사용됩니다.
-디지털 디스플레이나 조명은 RGB 모델을 사용하고, 인쇄물이나 물감은 물체의 색을 표현하기 위해 색의 삼원색을 사용합니다.
-그래서 인쇄물의 디지털 작업 시 RGB에서 CMYK로 변환하는 과정이 필요할 뿐만 아니라
-RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 있습니다.
+[^1]: [Optimizing images on the web](https://blog.cloudflare.com/optimizing-images/)
+[^2]: [RAW 이미지 포맷](https://en.wikipedia.org/wiki/Raw_image_format)이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia
 [^3]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
 [^4]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
 [^5]: [WebP FAQ](https://developers.google.com/speed/webp/faq) | Google
