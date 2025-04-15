@@ -566,6 +566,13 @@ git push origin HEAD --set-upstream
 # Branch 'test-rebase' set up to track remote branch 'test-rebase' from 'origin'.
 ```
 
+local의 master 브랜치를 기준으로 다른 브랜치를 덮어쓰려면 `--force-with-lease` 옵션을 사용합니다.
+이 옵션을 사용하면 로컬 브랜치의 커밋이 원격 브랜치의 커밋보다 앞서 있는 경우에만 덮어씁니다.
+
+```sh
+git push origin master:develop --force-with-lease
+```
+
 ### upstream
 
 ![Triangular Workflow](/images/shell/git/triangular-workflow.png)
