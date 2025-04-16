@@ -13,8 +13,10 @@ Categories:
   - translate
 ---
 
-> - James Bowes([@jrbowes](https://twitter.com/jrbowes))의 [Level Triggering and Reconciliation in Kubernetes](https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d)를 번역한 글입니다.
-> - 저자의 허락을 받고 번역했습니다.
+- James Bowes([@jrbowes](https://twitter.com/jrbowes))의
+  [Level Triggering and Reconciliation in Kubernetes](https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d)를
+  번역한 글입니다.
+- 저자의 허락을 받고 번역했습니다.
 
 {{< youtube tCht7FvIDdY >}}
 
@@ -22,9 +24,10 @@ Categories:
 
 [쿠버네티스](https://kubernetes.io/)는 현재
 [가장 있기 있는](https://techcrunch.com/2017/12/18/as-kubernetes-surged-in-popularity-in-2017-it-created-a-vibrant-ecosystem/)
-컨테이너 오케스트레이터입니다. 이런 성공의 밑받침은 신뢰성입니다. 모든
-소프트웨어에는 버그가 있죠. 그러나 컨테이너를 실행하는 데 있어서 쿠버네티스는
-다른 소프트웨어보다 버그가 적습니다.
+컨테이너 오케스트레이터입니다.
+이런 성공의 밑받침은 신뢰성입니다.
+모든 소프트웨어에는 버그가 있죠.
+그러나 컨테이너를 실행하는 데 있어서 쿠버네티스는 다른 소프트웨어보다 버그가 적습니다.
 
 쿠버네티스는 원하는 수의 컨테이너를 제때에 실행합니다.
 그리고 그 숫자를 계속해서 유지하죠.
@@ -211,10 +214,12 @@ a is 7
 
 이 글에 포함된 다이어그램을 그려준 [Meg Smith](https://medium.com/@megthesmith)에게 특별히 감사드립니다.
 
-> 역주: 쿠버네티스의 조정(Reconciliation)과 관련하여 [컨트롤러 패턴](https://kubernetes.io/docs/concepts/architecture/controller/),
-> 파드 실행 흐름 등을 같이 익히는 것이 좋다고 생각합니다. 조 베다(Joe Beda)가 작성한 [좋은 글](https://blog.heptio.com/core-kubernetes-jazz-improv-over-orchestration-a7903ea92ca)이 있습니다.
-> [책 <쿠버네티스 패턴>](http://book.naver.com/bookdb/book_detail.nhn?bid=16320585)도 좋았습니다.
+---
+
+> 역주: 쿠버네티스의 조정(Reconciliation)과 관련하여 [컨트롤러 패턴](https://kubernetes.io/docs/concepts/architecture/controller/#controller-pattern),
+> 파드 실행 흐름 등을 같이 익히는 것이 좋다고 생각합니다.
+> 추천하는 텍스트로
+> 책([쿠버네티스 패턴](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909123))과
+> 조 베다(Joe Beda)가 작성한 글([Core Kubernetes: Jazz Improv over Orchestration](https://blog.heptio.com/core-kubernetes-jazz-improv-over-orchestration-a7903ea92ca))이 있습니다.
 
 ![typical-flow-scheduling-pod](/images/kubernetes/typical-flow-scheduling-pod.png)
-
-*출처: Core Kubernetes: Jazz Improv over Orchestration - Joe Beda*
