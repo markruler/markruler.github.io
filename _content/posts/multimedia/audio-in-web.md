@@ -438,7 +438,6 @@ recorder.start();
 setTimeout(() => {
   recorder.stop();
   stream.getTracks().forEach(track => track.stop());
-  audioCtx.close();
 }, 5000);
 ```
 
@@ -659,6 +658,7 @@ Web Audio API는 `AudioContext` 생성 시
   - [Getting started with Web Audio API](https://web.dev/articles/webaudio-intro) | web.dev
   - [Developing game audio with the Web Audio API](https://web.dev/articles/webaudio-games) | web.dev
   - [Streaming audio and video](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming) | MDN
+  - [Web Audio API & Threejs로 공간음향 인터랙티브 웹 만들기 - ASMR Room](https://roseline.oopy.io/dev/threejs-asmr-room) | Roseline
 - 음향
   - [음향시스템 핸드북](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661) | 장호준
   - [장인석의 음향입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108)
