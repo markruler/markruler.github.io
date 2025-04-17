@@ -422,17 +422,24 @@ MediaRecorder 사용 방법은 간단합니다.
 
 ```javascript
 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });  // audio/ogg, etc.
+const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
 const chunks = [];
 recorder.ondataavailable = e => { chunks.push(e.data); };
 recorder.onstop = () => {
   const blob = new Blob(chunks, { type: recorder.mimeType });
   console.log("녹음 완료 Blob:", blob);
-  // <audio> 요소에 clipURL을 src로 설정
-  const clipURL = URL.createObjectURL(blob);
-  document.querySelector("#test-audio-1").src = clipURL;
+  // <audio> 요소에 dataURL을 src로 설정
+  const dataURL = URL.createObjectURL(blob);
+  document.querySelector("#test-audio-1").src = dataURL;
 };
 recorder.start();
+
+// 5초 후 녹음 정지
+setTimeout(() => {
+  recorder.stop();
+  stream.getTracks().forEach(track => track.stop());
+  audioCtx.close();
+}, 5000);
 ```
 
 위 코드에서 `MediaRecorder(stream)`으로 recorder를 생성할 때
@@ -460,6 +467,34 @@ recorder.stop();
 - Blob을 `File` 객체로 변환하거나 [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)로 읽어
   [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
   혹은 [Data URL로 변환](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL)해 처리할 수도 있습니다.
+
+```javascript
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+const recorder = new MediaRecorder(stream, { mimeType: "audio/webm;codecs=opus" });
+const chunks = [];
+recorder.ondataavailable = e => { chunks.push(e.data); };
+recorder.onstop = () => {
+  const blob = new Blob(chunks, { type: recorder.mimeType });
+  console.log("녹음 완료 Blob:", blob);
+  // 파일 다운로드
+  const dataURL = URL.createObjectURL(blob);
+  // 다운로드 링크 생성
+  const a = document.createElement('a');
+  a.href = dataURL;
+  a.download = 'recording.webm'; // 확장자는 MIME 타입에 따라 변경
+  a.click();
+
+  // 리소스 해제
+  URL.revokeObjectURL(dataURL);
+};
+recorder.start();
+
+// 5초 후 녹음 정지
+setTimeout(() => {
+  recorder.stop();
+  stream.getTracks().forEach(track => track.stop());
+}, 5000);
+```
 
 이를 활용하면 웹에서 간단한 **음성 녹음기(Voice Recorder)** 를 만들 수 있습니다.
 MDN의 [Web Dictaphone](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API)
@@ -532,9 +567,9 @@ recorder.ondataavailable = e => { chunks.push(e.data); };
 recorder.onstop = () => {
   const blob = new Blob(chunks, { type: recorder.mimeType });
   console.log("녹음 완료 Blob:", blob);
-  // <audio> 요소에 clipURL을 src로 설정
-  const clipURL = URL.createObjectURL(blob);
-  document.querySelector("#test-audio-2").src = clipURL;
+  // <audio> 요소에 dataURL을 src로 설정
+  const dataURL = URL.createObjectURL(blob);
+  document.querySelector("#test-audio-2").src = dataURL;
 };
 recorder.start();
 
