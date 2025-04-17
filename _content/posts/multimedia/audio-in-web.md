@@ -1,8 +1,8 @@
 ---
-draft: true
+draft: false
 socialshare: true
-date: 2025-04-16T18:38:00+09:00
-lastmod: 2025-04-16T18:38:00+09:00
+date: 2025-04-17T18:08:00+09:00
+lastmod: 2025-04-17T18:08:00+09:00
 title: "웹과 멀티미디어: 오디오"
 description: "audio"
 # featured_image: ["/images/master/markruler-wave.webp"]
@@ -10,7 +10,7 @@ images: ["/images/master/markruler-wave.webp"]
 tags:
   - web
   - multimedia
-  - image
+  - audio
 categories:
   - wiki
 ---
@@ -32,7 +32,7 @@ categories:
 # 개요
 
 **물리적으로** 매질을 통해 전달된 모든 음파를 **사운드(sound)** 라고 합니다.
-예를 들어, 음성(voice)과 음악(music)을 포함한 사람의 귀로 들을 수 있는 모든 가청 영역의 소리를 말합니다.
+예를 들면 음성(voice)과 음악(music)을 포함한 사람의 귀로 들을 수 있는 모든 가청 영역의 소리를 말합니다.
 한편 가청 영역 밖에 해당하는 초저주파나 초고주파(초음파)까지 포함하며 전자 신호로 처리할 수 있는 모든 소리를
 **기술적으로** **오디오(audio)** 라고 합니다.
 
