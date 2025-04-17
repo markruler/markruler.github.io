@@ -312,11 +312,13 @@ gainNode.gain.value = 0.5;
   이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
   Web Audio 기반으로 **주파수 분석**을 하면, 예를 들어 저음/고음의 세기를 측정해 조명 효과를 조절하거나 하는 **인터랙티브 비주얼**도 가능해집니다.
 - **정밀 타이밍**: Web Audio API는 **고해상도 시계**를 사용하여 오디오 이벤트의 타이밍 정확도를 보장합니다.
-  `AudioContext.currentTime`을 기준으로 노드의 `start()`를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
+  [AudioContext.currentTime](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/currentTime)을
+  기준으로 노드의 `start()`를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
   이는 `<audio>` 요소의 JavaScript 타이밍 제어보다 정확도가 높아, 음악 애플리케이션이나 리듬 게임 등에서 유용합니다.
 
 Web Audio API의 유연성 덕분에, **게임 오디오**, **DAW 웹앱**, **오디오 시각화 데모** 등 수많은 응용이 웹에서 가능해졌습니다.
-다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다 (즉, `decodeAudioData`로 디코딩 가능해야 함).
+다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다.
+즉, [decodeAudioData](https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData)로 디코딩 가능해야 합니다.
 그리고 Web Audio는 **사용자 승인 없이 임의로 소리를 재생하지 못하도록** 브라우저의 **autoplay 정책** 영향을 받습니다.
 따라서 AudioContext를 만들어 소스를 `start()`하는 것도 사용자가 클릭 등 **인터랙션한 맥락 내**에서 이루어져야 합니다.
 이에 대해서는 아래 **브라우저의 미디어 정책**에서 추가로 다룹니다.
