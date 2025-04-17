@@ -9,9 +9,572 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Thu, 17 Apr 2025 18:08:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 17 Apr 2025 23:30:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>웹과 멀티미디어: 오디오</title>
+        <link>https://markruler.github.io/posts/multimedia/audio-in-web/</link>
+        <pubDate>Thu, 17 Apr 2025 23:30:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/multimedia/audio-in-web/</guid>
+        <description>임창수 https://markruler.github.io/posts/multimedia/audio-in-web/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%8B%A0%ED%98%B8-%EC%B2%98%EB%A6%AC&#34;&gt;오디오 신호 처리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EC%9A%94-%EC%98%A4%EB%94%94%EC%98%A4-%EC%BD%94%EB%8D%B1%EA%B3%BC-%ED%8F%AC%EB%A7%B7&#34;&gt;주요 오디오 코덱과 포맷&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%BD%94%EB%8D%B1&#34;&gt;손실 압축 코덱&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%AC%B4%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%BD%94%EB%8D%B1&#34;&gt;무손실 압축 코덱&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-html5-audio-mse-api-web-audio-api&#34;&gt;오디오 재생: HTML5 audio, MSE API, Web Audio API&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%9D%B4%ED%81%AC-%EC%9E%85%EB%A0%A5%EA%B3%BC-%EB%85%B9%EC%9D%8C-mediadevices-%EB%B0%8F-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#mediadevicesgetusermedia%EB%A1%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0&#34;&gt;MediaDevices.getUserMedia()로 오디오 입력 받기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#web-audio-api%EB%A1%9C-%EC%9E%85%EB%A0%A5-%EC%8A%A4%ED%8A%B8%EB%A6%BC-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mediarecorder%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EB%85%B9%EC%9D%8C&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#web-audio%EC%99%80-mediarecorder%EC%9D%98-%EC%A1%B0%ED%95%A9&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%9D%98-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-%EC%A0%95%EC%B1%85&#34;&gt;브라우저의 오디오 재생 정책&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%84%B1%EB%8A%A5&#34;&gt;오디오 성능&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EA%B2%B0%EB%A1%A0&#34;&gt;결론&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;물리적으로&lt;/strong&gt; 매질을 통해 전달된 모든 음파를 &lt;strong&gt;사운드(sound)&lt;/strong&gt; 라고 합니다.
+한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 &lt;strong&gt;기술적으로&lt;/strong&gt; &lt;strong&gt;오디오(audio)&lt;/strong&gt; 라고 합니다.&lt;/p&gt;
+&lt;p&gt;이 글에서는 오디오의 &lt;strong&gt;입력(녹음)부터 처리, 출력(재생)까지&lt;/strong&gt;의 전체 흐름을 다룹니다.
+주요 오디오 포맷의 특성과 브라우저 호환성, Web Audio API를 통한 &lt;strong&gt;실시간 처리&lt;/strong&gt;와
+MediaRecorder를 통한 &lt;strong&gt;녹음(Recording)&lt;/strong&gt;, 그리고 &lt;strong&gt;브라우저 정책&lt;/strong&gt;까지 다뤄보겠습니다.&lt;/p&gt;
+&lt;h1 id=&#34;오디오-신호-처리&#34;&gt;오디오 신호 처리&lt;/h1&gt;
+&lt;p&gt;마이크를 통해 음원(audio source)으로부터 수집한 &lt;strong&gt;아날로그 신호&lt;/strong&gt;는
+&lt;strong&gt;파동(wave)&lt;/strong&gt; 형태로 존재합니다.
+파동의 &lt;strong&gt;진폭(amplitude)이 클수록&lt;/strong&gt; 그 순간 &lt;strong&gt;소리의 크기는 커집니다&lt;/strong&gt;.
+&lt;strong&gt;파장(wavelength)이 짧을수록&lt;/strong&gt;(파동의 간격이 좁을수록) 생성되는 소리의 &lt;strong&gt;주파수(음높이)는 높아집니다&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-waveform.svg&#34; alt=&#34;오디오 파형&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;하지만 컴퓨터는 디지털입니다.
+컴퓨터가 처리할 수 있는 방식으로 표현하려면 소리를 디지털 형태로 변환해야 합니다.
+이것을 수행하는 것이 &lt;strong&gt;아날로그-디지털 변환기(analog to digital converter)&lt;/strong&gt; 입니다&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
+줄여서 ADC 혹은 A/D 변환기라고도 합니다.&lt;/p&gt;
+&lt;p&gt;대표적인 ADC 방식으로 &lt;a href=&#34;https://en.wikipedia.org/wiki/Pulse-code_modulation&#34;&gt;펄스 부호 변조(PCM, Pulse Code Modulation)&lt;/a&gt;가 있습니다.
+PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격으로 &lt;strong&gt;표본화&lt;/strong&gt;(&lt;strong&gt;Sampling&lt;/strong&gt;)합니다.
+이것을 &lt;strong&gt;펄스 진폭 변조&lt;/strong&gt;(&lt;strong&gt;PAM, Pulse Amplitude Modulation&lt;/strong&gt;)라고 합니다.
+이렇게 표현된 각각의 진폭을 &lt;strong&gt;샘플&lt;/strong&gt;(&lt;strong&gt;sample&lt;/strong&gt;)이라고 부릅니다.
+1초당 샘플의 갯수를 헤르츠(Hertz) 단위로 표현하며,
+이를 &lt;strong&gt;샘플 레이트&lt;/strong&gt;(&lt;strong&gt;sample rate&lt;/strong&gt;)라고 합니다.
+예를 들어, 44,100 Hz(44.1 kHz)는 1초에 44,100개(1개에 1/44.1 ms)의 샘플을 수집한 것입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-waveform-samples1.svg&#34; alt=&#34;오디오 파형 샘플링&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;ADC가 아날로그 신호를 전압으로 변환하면
+이때 각 샘플의 진폭을 &lt;a href=&#34;https://en.wikipedia.org/wiki/Quantization_(signal_processing)&#34;&gt;양자화(Quantization)&lt;/a&gt;하여
+이산적인 수치로 표현합니다.
+여기서 양자화란 진폭을 일정한 간격으로 나누어 그 구간에 해당하는 정수값으로 반올림하여 표현하는 것입니다.
+샘플별 양자화 값의 범위는 &lt;strong&gt;양자화 레벨(quantization level)&lt;/strong&gt; 이라고 하며
+비트(bit)로 표현됩니다.
+예를 들어, 16비트 ADC는 65,536개의 구간으로 나누어 진폭을 표현합니다.
+비트 수가 적을수록 구간이 넓어져 정밀도가 떨어지고
+양자화 노이즈(quantization noise)가 발생합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;압축되지 않은(raw) 오디오 데이터&lt;/strong&gt;는 용량과 대역폭을 크게 차지하기 때문에,
+현실적으로 &lt;strong&gt;코덱&lt;/strong&gt;을 통해 데이터량을 압축해서 전송합니다.
+예를 들어, CD 품질의 오디오는 44.1 kHz 샘플링, 16비트 PCM으로 인코딩되며,
+1초에 약 172.3 KiB의 대역폭을 차지합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2(Stereo) * 2 Bytes(16 bit) * 44100(sample rate) = 176,400 Bytes
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;3분(180초)의 음원을 다운로드한다면 약 30.3 MiB의 용량이 필요합니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Codec&#34;&gt;코덱(codec)&lt;/a&gt;은
+coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하거나 디코딩하는 요소입니다.
+&lt;strong&gt;포맷&lt;/strong&gt;은 그 데이터를 담는 &lt;strong&gt;컨테이너&lt;/strong&gt;라 할 수 있습니다.
+예를 들어 MP3라는 용어는 &lt;strong&gt;MPEG-1 Audio Layer III&lt;/strong&gt;라는 압축 코덱을 가리키면서,
+동시에 &lt;code&gt;.mp3&lt;/code&gt; 확장자의 파일 포맷(컨테이너)을 지칭하기도 합니다.
+코덱은 PCM과 같은 원시 오디오 데이터를 입력받아
+사람이 듣기에 품질 저하가 최소화되도록 데이터를 줄이고(손실 압축의 경우),
+반대로 압축된 데이터를 해석해 다시 PCM 등의 원시 형태로 복원합니다.&lt;/p&gt;
+&lt;p&gt;코덱에는 &lt;strong&gt;무손실(lossless)&lt;/strong&gt; 압축과 &lt;strong&gt;손실&lt;/strong&gt;(&lt;strong&gt;lossy&lt;/strong&gt;) 압축이 있으며,
+손실 압축은 &lt;strong&gt;심리음향&lt;/strong&gt;(&lt;strong&gt;psychoacoustics&lt;/strong&gt;)을 활용해 데이터량을 크게 줄입니다.
+예를 들어, 사람의 귀로 들을 수 있는 &lt;strong&gt;가청 주파수&lt;/strong&gt;(&lt;strong&gt;audio frequency&lt;/strong&gt;) 범위만 남긴다거나
+큰 소리 속에 섞인 작은 소리를 생략하는 등 지각하기 힘든 요소를 제거하는 &lt;strong&gt;지각 부호화(perceptual coding)&lt;/strong&gt; 등의
+기법을 활용할 수 있습니다.
+이렇게 하면 파일 크기를 극적으로 줄일 수 있지만,
+압축률을 높일수록 원음과 차이가 생기는 &lt;strong&gt;손실(loss)&lt;/strong&gt; 이 발생합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;압축된 오디오 비트스트림(bitstream, binary sequence)은 보통 컨테이너(container)에 저장되어 전송됩니다&lt;/strong&gt;.
+컨테이너는 말 그대로 데이터를 담는 그릇으로, 오디오의 메타데이터(ex: 샘플레이트, 채널 수)와 비트스트림을 일정한 포맷으로 정리합니다.
+흔히 &lt;strong&gt;파일 확장자&lt;/strong&gt;로 컨테이너를 구분할 수 있습니다.
+예를 들어 &lt;strong&gt;WAV&lt;/strong&gt;는 주로 PCM 데이터를 담는 컨테이너이고,
+&lt;strong&gt;MP4(M4A)&lt;/strong&gt; 는 AAC와 같은 MPEG-4 계열 코덱을 담는 컨테이너입니다.
+&lt;strong&gt;Ogg&lt;/strong&gt;는 Vorbis나 Opus같은 오디오 코덱을 담을 수 있는 오픈 컨테이너이고,
+&lt;strong&gt;WebM&lt;/strong&gt;은 웹용 미디어 컨테이너로 똑같이 Vorbis나 Opus를 담습니다.
+이러한 이유로 웹에서는 동일한 음원을 여러 포맷으로 제공하여
+&lt;a href=&#34;https://caniuse.com/?search=audio%20format&#34;&gt;브라우저 호환성&lt;/a&gt;을 확보하기도 합니다.&lt;/p&gt;
+&lt;h1 id=&#34;주요-오디오-코덱과-포맷&#34;&gt;주요 오디오 코덱과 포맷&lt;/h1&gt;
+&lt;p&gt;웹에서 주로 쓰이는 몇 가지 코덱으로 범위를 좁혀볼 수 있습니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+각 코덱마다 압축 효율, 음질, 지연(latency), 라이센스 조건 등이 다르며 브라우저 지원 여부도 상이합니다.&lt;/p&gt;
+&lt;h2 id=&#34;손실-압축-코덱&#34;&gt;손실 압축 코덱&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;MP3 (MPEG-1 Audio Layer III)&lt;/strong&gt; 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
+비교적 오래된 기술이지만 여전히 &lt;strong&gt;모든 최신 브라우저에서 재생 지원&lt;/strong&gt;하고 있습니다.
+&lt;code&gt;.mp3&lt;/code&gt; 파일은 내부적으로 MPEG 형식 컨테이너를 사용하지만 영상 트랙 없이 오디오 트랙만 들어있을 경우 관례적으로 &amp;ldquo;MP3 파일&amp;quot;로 불립니다.
+MP3는 압축 효율이 최신 코덱보다 떨어지지만,
+&lt;strong&gt;특허 만료&lt;/strong&gt;(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AAC (Advanced Audio Coding)&lt;/strong&gt; 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
+MP3 대비 낮은 비트레이트에서도 양호한 음질을 제공합니다.
+AAC는 MPEG-4 Part 3에 정의되어 있으며 주로 &lt;strong&gt;MP4(M4A)&lt;/strong&gt; 컨테이너에 담겨 &lt;code&gt;.mp4&lt;/code&gt; 혹은 &lt;code&gt;.m4a&lt;/code&gt; 확장자로 사용됩니다.
+웹 브라우저에서는 &lt;strong&gt;MP4 컨테이너의 AAC&lt;/strong&gt;를 거의 모두 지원합니다.
+다만 AAC는 특허 코덱으로서 기술이 &lt;strong&gt;비공개 및 라이선스 필요&lt;/strong&gt;하다는 점이 있지만,
+브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Opus&lt;/strong&gt; 는 비교적 최신(2012년 표준화) 코덱으로, &lt;strong&gt;Xiph.Org&lt;/strong&gt; 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
+Opus는 &lt;strong&gt;웹 실시간 통신(WebRTC)&lt;/strong&gt; 표준 코덱으로 지정될 정도로 &lt;strong&gt;낮은 지연(low latency)&lt;/strong&gt; 특성과 효율적인 압축을 모두 갖추고 있어,
+&lt;strong&gt;음성 통화&lt;/strong&gt;부터 &lt;strong&gt;음악 스트리밍&lt;/strong&gt;까지 폭넓게 활용됩니다.
+Opus는 &lt;strong&gt;5~66.5ms 정도의 매우 낮은 지연시간 범위&lt;/strong&gt;를 가지며,
+다른 일반 음악 코덱들이 대개 100ms 이상의 지연을 보이는 것과 대비됩니다.
+Opus는 &lt;strong&gt;완전 오픈소스/무특허&lt;/strong&gt; 코덱이라 라이선스 제약도 없습니다.
+단, &lt;strong&gt;브라우저 지원&lt;/strong&gt;은 약간 제약이 있습니다.
+Opus는 주로 &lt;strong&gt;Ogg&lt;/strong&gt; 또는 &lt;strong&gt;WebM(Matroska)&lt;/strong&gt; 컨테이너에 담겨 &lt;code&gt;.opus&lt;/code&gt; (Ogg Opus) 또는 &lt;code&gt;.webm&lt;/code&gt; (WebM Opus) 확장자로 사용되며,
+MP4 컨테이너에도 넣을 수 있지만 호환성은 케이스마다 다를 수 있습니다.
+최신 웹 환경에서는 Opus 지원이 점차 &lt;strong&gt;보편화&lt;/strong&gt;되고 있으므로
+라이브 오디오 스트리밍, 실시간 통신과 같이 &lt;strong&gt;낮은 지연이 중요한 애플리케이션&lt;/strong&gt;에서 고려할 만합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Vorbis&lt;/strong&gt; 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
+Ogg 컨테이너의 오디오 트랙으로 많이 사용되었고, MP3의 대안으로 한때 각광받았습니다.
+Vorbis는 MP3보다 같은 비트레이트에서 음질이 우수하며,
+&lt;strong&gt;가변 비트레이트(VBR)&lt;/strong&gt; 인코딩을 선도적으로 채택했습니다.
+다만 Opus가 등장하면서 압축 효율과 지연 면에서 Vorbis를 대체하게 되었고 게임 오디오 등 일부 분야에서만 사용되고 있습니다.
+Opus와 마찬가지로 브라우저 지원에 제약이 있으며,
+자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;WAV(PCM)&lt;/strong&gt; 는 &lt;strong&gt;비압축 PCM&lt;/strong&gt; 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
+용량이 크지만 구조가 단순하여 거의 모든 환경에서 &lt;strong&gt;기본 지원&lt;/strong&gt;됩니다.
+웹 브라우저도 WAV/PCM 재생을 지원하며, 특히 &lt;strong&gt;짧은 효과음이나 알림음&lt;/strong&gt; 등에서는 별도 압축 없이 WAV를 사용할 때도 있습니다.
+WAV의 단점은 앞서 언급한 대로 파일 크기가 크다는 것이므로 네트워크 전송에는 비효율적입니다.
+만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;무손실-압축-코덱&#34;&gt;무손실 압축 코덱&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;FLAC(Free Lossless Audio Codec)&lt;/strong&gt; 은 이름 그대로 &lt;strong&gt;무손실 압축&lt;/strong&gt; 코덱입니다.
+음악을 완전히 원음 품질로 저장하면서도 WAV에 비해 용량을 40~50% 가량 줄일 수 있다는 장점이 있습니다.
+FLAC도 오픈 소스/무특허이며 &lt;code&gt;.flac&lt;/code&gt; 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 &lt;code&gt;.ogg&lt;/code&gt;로 쓸 수도 있습니다.
+브라우저에서는 Chrome과 Firefox 등이 FLAC 재생을 지원하며, 주로 &lt;strong&gt;데스크톱&lt;/strong&gt; 환경에서 동작합니다 (모바일 브라우저 지원은 제한적일 수 있음).
+FLAC는 웹 스트리밍보다는 &lt;strong&gt;고음질 음원 다운로드&lt;/strong&gt; 제공 시 옵션으로 쓰이며, 대부분의 경우 손실 압축으로도 충분한 웹 오디오와는 다소 분야가 다릅니다.&lt;/p&gt;
+&lt;p&gt;이 밖에도 웹에서는 &lt;strong&gt;AMR(Adaptive Multi-Rate), G.711&lt;/strong&gt; 등의 &lt;strong&gt;음성 코덱&lt;/strong&gt;이 WebRTC나 SIP 통신에 사용되고,
+애플 기기 생태계에서는 무손실 압축 코덱으로 &lt;strong&gt;ALAC(Apple Lossless)&lt;/strong&gt; 이 쓰이기도 합니다.
+그러나 일반적인 웹 콘텐츠 오디오로는 앞서 언급한 코덱들이 주류를 이룹니다.
+&lt;strong&gt;요약하면, 웹에서 최대 범용성을 원한다면 AAC(MP4), MP3 두 가지를 우선 준비&lt;/strong&gt;하고,
+가능하다면 Opus(Ogg 혹은 WebM) 버전을 추가로 제공해 현대 브라우저에서 &lt;strong&gt;최적 품질/용량&lt;/strong&gt;을 활용하는 전략이 좋습니다.
+&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그를 사용할 경우 &lt;code&gt;&amp;lt;source&amp;gt;&lt;/code&gt; 요소를 통해 여러 포맷을 제공하면 브라우저가 지원되는 것을 골라 재생합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;audio controls&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;source src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio.ogg&amp;#34;&lt;/span&gt; type=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio/ogg; codecs=vorbis&amp;#34;&lt;/span&gt; /&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;source src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio.mp3&amp;#34;&lt;/span&gt; type=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio/mpeg&amp;#34;&lt;/span&gt; /&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  해당 브라우저에서는 오디오 재생을 지원하지 않습니다.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/audio&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위와 같이 작성하면 브라우저는 지원 가능한 코덱/포맷 조합을 가진 첫 번째 소스를 선택해 재생합니다&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+예를 들어 Safari는 Ogg/Vorbis를 지원하지 않으므로 무시하고 MP3 소스를 재생하며,
+Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3도 지원하여 둘 다 재생 가능합니다.
+이러한 다중 소스 제공을 통해 호환성을 극대화할 수 있습니다.
+(현 시점에서는 대부분 MP3와 AAC로 충분하지만, &lt;strong&gt;Opus&lt;/strong&gt;는 향후 점차 중요해질 것입니다.)&lt;/p&gt;
+&lt;h1 id=&#34;오디오-재생-html5-audio-mse-api-web-audio-api&#34;&gt;오디오 재생: HTML5 audio, MSE API, Web Audio API&lt;/h1&gt;
+&lt;p&gt;웹에서 오디오를 재생하는 방법은 크게
+&lt;strong&gt;다운로드 후 재생&lt;/strong&gt;과 &lt;strong&gt;스트리밍 재생&lt;/strong&gt; 두 가지로 나눌 수 있습니다.
+또한 &lt;strong&gt;디코딩&lt;/strong&gt;은 브라우저 내부에서 자동으로 이루어지지만,
+개발자가 &lt;strong&gt;Web Audio API&lt;/strong&gt; 등을 통해 수동으로 디코딩하여 사용하는 방식도 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;프로그레시브 다운로드(Progressive download)&lt;/strong&gt; 는
+가장 기본적인 오디오 전송 방법으로, 단순히 HTTP로 오디오 파일을 내려받으면서 바로 재생하는 것입니다.
+&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그에 MP3 등의 URL을 지정하면 브라우저가 파일을 점진적으로 다운로드하고 &lt;strong&gt;버퍼를 채우면서 곧바로 재생&lt;/strong&gt;합니다.
+사용자는 전체 파일이 다운로드되기 전에 중간부터 듣기 시작할 수 있고, 탐색(seek)하면 해당 위치의 데이터를 요청합니다.
+이 방식은 구현이 간단하지만, 네트워크 상태에 따라 재생 도중 버퍼가 소진되면 &lt;strong&gt;일시 정지/버퍼링&lt;/strong&gt;이 발생할 수 있습니다.
+&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소에서는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState&#34;&gt;readyState&lt;/a&gt;나
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/progress_event&#34;&gt;progress&lt;/a&gt;
+이벤트 등을 통해 버퍼링 상태를 파악할 수 있고,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplay_event&#34;&gt;canplay&lt;/a&gt;/&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event&#34;&gt;canplaythrough&lt;/a&gt;
+이벤트로 얼마나 로드되었는지 알 수 있습니다.
+일반적인 짧은 음원이나 배경음악 등은 이 방식으로 충분합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;audio id=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;player&amp;#34;&lt;/span&gt; src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;music.mp3&amp;#34;&lt;/span&gt; controls autoplay&amp;gt;&amp;lt;/audio&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;다중 포맷 소스&lt;/strong&gt;: 앞서 언급한 것처럼 &lt;code&gt;&amp;lt;source&amp;gt;&lt;/code&gt; 태그를 이용해 서로 다른 코덱/포맷의 파일을 제공하면 브라우저가 지원 가능한 것을 선택합니다.
+이를 통해 호환성을 높일 수 있습니다.
+또한 &lt;code&gt;.canPlayType()&lt;/code&gt; 메서드로 특정 MIME 유형 지원 여부를 사전 점검할 수도 있습니다 (ex: &lt;code&gt;audio.canPlayType(&#39;audio/ogg; codecs=opus&#39;)&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;미디어 이벤트&lt;/strong&gt;: &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;/&lt;code&gt;&amp;lt;video&amp;gt;&lt;/code&gt; 요소는 재생 상태를 알려주는 많은 이벤트를 지원합니다.
+예를 들어 &lt;code&gt;loadeddata&lt;/code&gt; (메타데이터 및 일부 데이터 로드 완료), &lt;code&gt;timeupdate&lt;/code&gt; (재생 시간이 변경될 때 주기적으로 발생), &lt;code&gt;ended&lt;/code&gt; (재생 끝) 등을 활용해 UI를 업데이트하거나 다음 행동을 취할 수 있습니다.
+또한 버퍼링 관련 &lt;code&gt;waiting&lt;/code&gt;/&lt;code&gt;playing&lt;/code&gt; 이벤트나 &lt;code&gt;progress&lt;/code&gt; 이벤트로 네트워크 상태에 따른 UX 대응도 가능합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;기본 컨트롤 vs 커스텀 UI&lt;/strong&gt;: &lt;code&gt;controls&lt;/code&gt; 속성을 사용하면 브라우저 기본 컨트롤(UI)이 보이지만, 이를 숨기고 커스텀 플레이어를 만들 수도 있습니다.
+JavaScript로 play/pause를 제어하고, &lt;code&gt;&amp;lt;input type=&amp;quot;range&amp;quot;&amp;gt;&lt;/code&gt;로 진행바를 구현하며, 볼륨 조절, 음소거 등을 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 속성(&lt;code&gt;volume&lt;/code&gt;, &lt;code&gt;muted&lt;/code&gt;)으로 제어할 수 있습니다.
+MDN의 예제에서는 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소를 숨기고 JavaScript로 사용자 정의 UI와 동기화하는 방법을 소개하고 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;제한 사항&lt;/strong&gt;: &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소는 &lt;strong&gt;단일 트랙&lt;/strong&gt; 재생에는 간편하지만, 여러 소리를 믹싱하거나 실시간 신호 처리, 분석 등의 고급 기능에는 한계가 있습니다.
+또한 브라우저 &lt;strong&gt;오디오 정책&lt;/strong&gt;에 따라 &lt;code&gt;autoplay&lt;/code&gt;가 제한되기도 합니다 (뒤에서 설명).
+이러한 한계를 넘어서기 위해 고안된 것이 &lt;strong&gt;Web Audio API&lt;/strong&gt;입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;라이브 인터넷 라디오, 장시간 음악 스트리밍 서비스와 같이
+&lt;strong&gt;실시간성 또는 장시간 재생이 필요한 오디오&lt;/strong&gt;의 경우
+&lt;strong&gt;스트리밍 프로토콜&lt;/strong&gt;을 사용합니다.
+대표적인 것이 &lt;strong&gt;HLS(HTTP Live Streaming)&lt;/strong&gt; 와 &lt;strong&gt;DASH(MPEG-DASH)&lt;/strong&gt; 입니다.
+HLS는 Apple이 주도하여 개발한 스트리밍 방식으로,
+미디어를 짧은 세그먼트로 쪼개어 전송하고 재생 플레이리스트(M3U)를 제공하는 형태입니다.
+DASH는 MPEG에서 표준화한 비슷한 개념의 스트리밍입니다.
+이러한 &lt;strong&gt;적응형 스트리밍&lt;/strong&gt; 기술은 네트워크 상황에 맞춰 품질(비트레이트)을 조절할 수 있어 끊김 없이 재생하기에 유리합니다.
+다만 &lt;strong&gt;브라우저 지원&lt;/strong&gt;에 차이가 있는데,
+Safari는 HLS를 네이티브로 지원하지만 다른 브라우저는 기본적으로는 지원하지 않아서
+자바스크립트 라이브러리(&lt;code&gt;hls.js&lt;/code&gt; 등)나
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API&#34;&gt;Media Source Extensions(MSE) API&lt;/a&gt;를 통해 구현합니다.
+MSE를 사용하면 분할된 미디어 데이터를 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;/&lt;code&gt;&amp;lt;video&amp;gt;&lt;/code&gt; 요소에 공급할 수 있어 스트리밍을 직접 구현할 수 있습니다.
+예를 들어 MSE로 MPEG-DASH 스트리밍을 파싱하여 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소에 추가하면 브라우저가 이를 하나의 연속된 미디어로 취급해 재생합니다.&lt;/p&gt;
+&lt;p&gt;사용자가 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소를 통해 오디오를 재생하면
+브라우저는 해당 파일의 &lt;strong&gt;MIME 타입&lt;/strong&gt;과 내용에 따라 &lt;strong&gt;지원되는 코덱인지 판단&lt;/strong&gt;하고,
+네이티브 디코더(브라우저 또는 OS 내장 코덱)를 이용해 &lt;strong&gt;PCM 신호로 디코딩&lt;/strong&gt;합니다.
+이 과정은 개발자가 신경쓰지 않아도 자동 처리됩니다.
+그러나 개발자가 &lt;strong&gt;오디오 데이터를 직접 조작하거나 시각화&lt;/strong&gt;하려는 경우,
+&lt;strong&gt;Web Audio API&lt;/strong&gt;의
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData&#34;&gt;AudioContext.decodeAudioData()&lt;/a&gt;
+등을 통해 ArrayBuffer 형태의 압축 오디오 데이터를 &lt;strong&gt;수동으로 디코딩&lt;/strong&gt;할 수 있습니다.
+아래 코드는 Fetch API로 가져온 오디오 파일을 Web Audio API로 디코딩한 후 재생하는 간단한 예시입니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioContext = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;fetch(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio.mp3&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .then(response =&amp;gt; response.arrayBuffer())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .then(arrayBuffer =&amp;gt; audioContext.decodeAudioData(arrayBuffer))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .then(audioBuffer =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; source = audioContext.createBufferSource();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    source.buffer = audioBuffer;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    source.connect(audioContext.destination);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    source.start();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  })
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(error =&amp;gt; console.error(error));
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드는 &lt;code&gt;sound.mp3&lt;/code&gt;를 가져와 &lt;code&gt;AudioContext&lt;/code&gt;로 디코딩한 뒤
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode&#34;&gt;AudioBufferSourceNode&lt;/a&gt;로 재생합니다.
+이렇게 디코딩하면 &lt;strong&gt;PCM 샘플 데이터에 직접 접근&lt;/strong&gt;할 수 있으므로,
+오디오를 재생하기 전에 파형 데이터를 얻어 시각화하거나 이펙트를 적용하는 등 &lt;strong&gt;세밀한 제어&lt;/strong&gt;가 가능합니다.
+&lt;code&gt;decodeAudioData()&lt;/code&gt;는 &lt;strong&gt;Promise&lt;/strong&gt;를 반환하며,
+브라우저의 내장 코덱을 사용하므로 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소가 지원하는 포맷이면 디코딩이 성공합니다.&lt;/p&gt;
+&lt;p&gt;Web Audio API는 실시간 오디오 처리를 위해 별도의 스트리밍 메커니즘을 가지고 있습니다.
+예를 들어 &lt;strong&gt;마이크 입력&lt;/strong&gt;이나 기타 &lt;strong&gt;MediaStream&lt;/strong&gt;을
+Web Audio로 받아올 때
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource&#34;&gt;AudioContext.createMediaStreamSource(stream)&lt;/a&gt;를 사용하면
+스트림이 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioNode&#34;&gt;AudioNode&lt;/a&gt;
+체인으로 실시간으로 흘러들어오게 됩니다.
+개발자는 일일이 버퍼를 관리하지 않아도 되며, Web Audio 엔진이 내부 버퍼링과 스트리밍을 처리해 줍니다.
+따라서 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia&#34;&gt;getUserMedia&lt;/a&gt;로 받은 실시간 오디오나
+&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 재생 음원을 Web Audio로 입력받아 &lt;strong&gt;이펙트 처리 후 출력&lt;/strong&gt;하거나 &lt;strong&gt;분석&lt;/strong&gt;할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;요약하면, &lt;strong&gt;짧은 파일 재생&lt;/strong&gt;은 그냥 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그로 링크하는 것만으로 충분하고,
+&lt;strong&gt;긴 시간 재생&lt;/strong&gt;이나 &lt;strong&gt;실시간/적응형 스트리밍&lt;/strong&gt;은 HLS/DASH + MSE 같은 방법을 사용합니다.
+한편 &lt;strong&gt;Web Audio API&lt;/strong&gt;를 사용하면
+네이티브 미디어 요소보다는 더 저수준에서 스트리밍 제어와 디코딩 데이터를 다룰 수 있습니다.&lt;/p&gt;
+&lt;p&gt;다음으로 이렇게 전달된 오디오 데이터를 &lt;strong&gt;브라우저에서 어떻게 출력하고 처리하는지&lt;/strong&gt; 살펴보겠습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;AudioContext와 AudioNode&lt;/strong&gt;: Web Audio를 사용하려면 먼저 &lt;code&gt;AudioContext&lt;/code&gt;를 생성합니다.
+이 컨텍스트는 오디오 처리의 &lt;strong&gt;작업공간&lt;/strong&gt;이며, 여기서 소스, 이펙트, 출력 노드를 연결합니다.
+예를 들어, 하나의 오디오 버퍼를 재생하려면 &lt;code&gt;audioCtx.createBufferSource()&lt;/code&gt; 노드를 만들어 &lt;code&gt;audioCtx.destination&lt;/code&gt; (기본 출력, 보통 스피커)에 연결합니다.
+또는 HTML 미디어 요소(&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;/&lt;code&gt;&amp;lt;video&amp;gt;&lt;/code&gt;)를 소스로 쓰고 싶다면 &lt;code&gt;audioCtx.createMediaElementSource(audioElement)&lt;/code&gt;로 AudioNode를 얻어 이 역시 destination에 연결할 수 있습니다.
+즉, Web Audio로 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 출력도 가로채 가공할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;재생 제어&lt;/strong&gt;: &lt;code&gt;AudioBufferSourceNode&lt;/code&gt;의 &lt;code&gt;start(when)&lt;/code&gt; 메서드를 호출하면 재생이 시작됩니다.
+여러 소스를 동시에 &lt;code&gt;start()&lt;/code&gt;하면 자동으로 믹싱되어 출력됩니다. Web Audio는 &lt;strong&gt;내부적으로 부동소수점 PCM&lt;/strong&gt; 오디오 스트림을 처리하며, 각 노드는 일정 크기의 버퍼 단위로 신호를 전달합니다.
+개발자는 이러한 세부사항을 크게 신경쓰지 않아도 노드 연결만으로 실시간 처리가 가능하도록 추상화되어 있습니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;오디오 파라미터&lt;/strong&gt;: Web Audio는 Gain(볼륨), Panner(좌우/3D 위치), BiquadFilter(필터 효과), Convolver(리버브) 등 다양한 &lt;strong&gt;AudioNode&lt;/strong&gt;를 제공합니다.
+예를 들어 간단히 음량을 조절하려면 &lt;code&gt;GainNode&lt;/code&gt;를 사용합니다. 다음과 같이 작성하면 소리 크기를 절반으로 줄여 출력할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; gainNode = audioCtx.createGain();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source.connect(gainNode).connect(audioCtx.destination);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gainNode.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;0.5&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;시각화 (AnalyserNode)&lt;/strong&gt;: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
+&lt;code&gt;AnalyserNode&lt;/code&gt;는 입력 신호의 &lt;strong&gt;주파수 스펙트럼&lt;/strong&gt; 또는 &lt;strong&gt;파형(time-domain) 데이터&lt;/strong&gt;를 실시간으로 제공합니다.
+&lt;code&gt;analyser.getByteFrequencyData()&lt;/code&gt;로 FFT 기반 주파수 데이터를,
+&lt;code&gt;analyser.getByteTimeDomainData()&lt;/code&gt;로 파형 샘플 데이터를 받으면,
+이를 Canvas나 WebGL로 그려서 &lt;strong&gt;스펙트럼 애니메이션&lt;/strong&gt;, &lt;strong&gt;오실로스코프 형태 파형 시각화&lt;/strong&gt; 등을 구현할 수 있습니다.
+이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
+Web Audio 기반으로 &lt;strong&gt;주파수 분석&lt;/strong&gt;을 하면, 예를 들어 저음/고음의 세기를 측정해 조명 효과를 조절하거나 하는 &lt;strong&gt;인터랙티브 비주얼&lt;/strong&gt;도 가능해집니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;정밀 타이밍&lt;/strong&gt;: Web Audio API는 &lt;strong&gt;고해상도 시계&lt;/strong&gt;를 사용하여 오디오 이벤트의 타이밍 정확도를 보장합니다.
+&lt;code&gt;AudioContext.currentTime&lt;/code&gt;을 기준으로 노드의 &lt;code&gt;start()&lt;/code&gt;를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
+이는 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 JavaScript 타이밍 제어보다 정확도가 높아, 음악 애플리케이션이나 리듬 게임 등에서 유용합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Web Audio API의 유연성 덕분에, &lt;strong&gt;게임 오디오&lt;/strong&gt;, &lt;strong&gt;DAW 웹앱&lt;/strong&gt;, &lt;strong&gt;오디오 시각화 데모&lt;/strong&gt; 등 수많은 응용이 웹에서 가능해졌습니다.
+다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다 (즉, &lt;code&gt;decodeAudioData&lt;/code&gt;로 디코딩 가능해야 함).
+그리고 Web Audio는 &lt;strong&gt;사용자 승인 없이 임의로 소리를 재생하지 못하도록&lt;/strong&gt; 브라우저의 &lt;strong&gt;autoplay 정책&lt;/strong&gt; 영향을 받습니다.
+따라서 AudioContext를 만들어 소스를 &lt;code&gt;start()&lt;/code&gt;하는 것도 사용자가 클릭 등 &lt;strong&gt;인터랙션한 맥락 내&lt;/strong&gt;에서 이루어져야 합니다.
+이에 대해서는 아래 &lt;strong&gt;브라우저의 미디어 정책&lt;/strong&gt;에서 추가로 다룹니다.&lt;/p&gt;
+&lt;h1 id=&#34;마이크-입력과-녹음-mediadevices-및-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/h1&gt;
+&lt;p&gt;이제 오디오의 &lt;strong&gt;입력&lt;/strong&gt; 측면을 살펴보겠습니다.
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia&#34;&gt;getUserMedia API&lt;/a&gt;를 통해
+사용자의 오디오 입력을 웹 애플리케이션으로 가져올 수 있고,
+이렇게 입력된 오디오를 실시간 처리하거나 녹음하여 파일로 저장할 수 있습니다.
+웹에서 오디오 입력/녹음의 기본 흐름은 다음과 같습니다.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;MediaDevices.getUserMedia()&lt;/strong&gt; 로 &lt;strong&gt;마이크 접근 권한&lt;/strong&gt;을 요청하여 &lt;strong&gt;MediaStream&lt;/strong&gt;을 얻는다.&lt;/li&gt;
+&lt;li&gt;얻어진 MediaStream을 &lt;strong&gt;Web Audio API&lt;/strong&gt;에 연결하거나, &lt;strong&gt;MediaRecorder&lt;/strong&gt;로 기록하거나, 혹은 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소로 바로 들려줄 수도 있다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Web Audio API&lt;/strong&gt;를 사용하면 입력 신호에 필터나 이펙트를 걸거나 시각화할 수 있으며, MediaRecorder를 사용하면 실시간으로 스트림을 인코딩하여 Blob 데이터로 축적할 수 있다.&lt;/li&gt;
+&lt;li&gt;MediaRecorder로 녹음된 오디오 파일을 Blob으로 다운로드하거나, &lt;code&gt;URL.createObjectURL()&lt;/code&gt; 등을 통해 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;로 재생할 수 있다.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;순서대로 조금 더 상세히 설명합니다.&lt;/p&gt;
+&lt;h2 id=&#34;mediadevicesgetusermedia로-오디오-입력-받기&#34;&gt;MediaDevices.getUserMedia()로 오디오 입력 받기&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;navigator.mediaDevices.getUserMedia(constraints)&lt;/code&gt; 메서드는 사용자에게 &lt;strong&gt;마이크나 카메라 사용 권한&lt;/strong&gt;을 요청하고,
+승인되면 해당 &lt;strong&gt;MediaStream&lt;/strong&gt; (오디오/비디오 흐름 객체)을 반환합니다.
+오디오만 필요하다면 &lt;code&gt;constraints&lt;/code&gt; 파라미터로 &lt;code&gt;{ audio: true, video: false }&lt;/code&gt; 또는 &lt;code&gt;{ audio: true }&lt;/code&gt; 만 전달하면 됩니다.
+이 API는 &lt;strong&gt;프라미스(Promise)&lt;/strong&gt; 기반이며, 성공 시 &lt;code&gt;MediaStream&lt;/code&gt;을, 실패 시 에러를 줍니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;마이크 스트림 얻기 성공:&amp;#34;&lt;/span&gt;, stream);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이때 브라우저는 처음 호출 시 사용자의 &lt;strong&gt;허용/거부&lt;/strong&gt; 동의를 묻는 팝업을 표시합니다.
+또한 &lt;strong&gt;보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)&lt;/strong&gt; 에서만 동작합니다.
+(로컬 개발에서는 &lt;code&gt;localhost&lt;/code&gt;나 &lt;code&gt;file://&lt;/code&gt;도 허용됩니다.)
+사용자가 허용했다면 &lt;code&gt;MediaStream&lt;/code&gt;에는
+하나 이상의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack&#34;&gt;MediaStreamTrack&lt;/a&gt;이 포함되는데,
+오디오만 요청한 경우 보통 하나의 오디오 트랙이 있습니다.&lt;/p&gt;
+&lt;h2 id=&#34;web-audio-api로-입력-스트림-처리하기&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/h2&gt;
+&lt;p&gt;얻은 &lt;code&gt;MediaStream&lt;/code&gt;은 다양한 용도로 활용할 수 있습니다.
+우선, &lt;strong&gt;실시간 처리&lt;/strong&gt;를 위해 Web Audio API와 연계하는 방법부터 보겠습니다.
+Web Audio API는 &lt;code&gt;MediaStreamAudioSourceNode&lt;/code&gt;를 통해 외부 스트림을 오디오 노드 그래프로 가져올 수 있습니다.
+&lt;code&gt;AudioContext.createMediaStreamSource(stream)&lt;/code&gt;을 호출하면 해당 스트림을 소스로 가지는 AudioNode를 얻습니다.
+이를 다른 노드에 연결하여 실시간 처리를 시작할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// AudioContext 생성
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioCtx = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 마이크 MediaStream을 AudioNode로 변환
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; sourceNode = audioCtx.createMediaStreamSource(stream);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 마이크 스트림을 AudioContext 출력에 연결
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;sourceNode.connect(audioCtx.destination);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 연결 종료
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;audioCtx.close().then(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;AudioContext 종료&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;});
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드에서 마이크 스트림으로부터 &lt;code&gt;sourceNode&lt;/code&gt;를 만들고,
+오디오 출력 노드(&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode&#34;&gt;AudioDestinationNode&lt;/a&gt;)에 연결했습니다.
+이렇게 하면 사용자가 말하는 소리가 곧바로 스피커로 출력됩니다.
+&lt;code&gt;audioCtx.destination&lt;/code&gt;은 기본 출력 장치, 즉 스피커를 의미합니다.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Tip: 마이크를 실시간 출력하면 사용자에게 자신의 목소리가 약간 지연되어 들리는데,
+이를 사운드 모니터링이라고 합니다.
+보통 수백 ms 이하의 지연이지만, 이 딜레이 때문에 약간 어색하게 들릴 수 있습니다.
+전문 오디오 장비 없이 웹에서 완전 무지연 모니터링은 어려우므로,
+필요할 때만 출력하거나 헤드폰 사용을 권장합니다.
+또한 &lt;code&gt;sourceNode.connect(audioCtx.destination)&lt;/code&gt; 부분을 빼면
+모니터링 없이 무음으로 입력 처리를 할 수 있습니다.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;Web Audio를 사용하면 입력 신호에 대해
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode&#34;&gt;AnalyserNode&lt;/a&gt;를 활용해서 &lt;strong&gt;실시간 분석&lt;/strong&gt;하거나
+&lt;strong&gt;이펙트&lt;/strong&gt;도 적용할 수 있습니다.
+예를 들면 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/GainNode&#34;&gt;GainNode&lt;/a&gt;로 증폭/감쇠,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode&#34;&gt;BiquadFilterNode&lt;/a&gt;로 노이즈를 제거할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;또한 간단한 &lt;strong&gt;VU 미터(Volume Unit Meter)&lt;/strong&gt; 를 구현하려면
+각 애니메이션 프레임마다
+&lt;code&gt;AnalyserNode&lt;/code&gt;의 &lt;code&gt;getByteTimeDomainData()&lt;/code&gt;로 파형(waveform) 데이터를 가져와
+&lt;strong&gt;평균 진폭&lt;/strong&gt;이나 &lt;strong&gt;최대치&lt;/strong&gt;를 계산해서 그래프로 그리면 됩니다.&lt;/p&gt;
+&lt;h2 id=&#34;mediarecorder를-사용한-오디오-녹음&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/h2&gt;
+&lt;p&gt;마이크에서 들어온 &lt;code&gt;MediaStream&lt;/code&gt;을 파일로 저장하려면 &lt;strong&gt;MediaStream Recording API&lt;/strong&gt;,
+즉 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder&#34;&gt;MediaRecorder&lt;/a&gt;를 사용하면 됩니다.
+MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정한 코덱으로 실시간 인코딩&lt;/strong&gt;하여 &lt;strong&gt;Blob&lt;/strong&gt;으로 축적해 줍니다.
+스트림에는 비디오가 포함될 수도 있지만 여기서는 오디오 스트림으로 한정해 설명합니다.&lt;/p&gt;
+&lt;p&gt;MediaRecorder 사용 방법은 간단합니다.&lt;/p&gt;
+&lt;p&gt;&lt;audio controls id=&#34;test-audio-1&#34;&gt;&lt;/audio&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;id=&amp;ldquo;test-audo-1&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; recorder = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; MediaRecorder(stream, { mimeType: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio/webm&amp;#34;&lt;/span&gt; });  &lt;span style=&#34;color:#0f0&#34;&gt;// audio/ogg, etc.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; chunks = [];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.ondataavailable = e =&amp;gt; { chunks.push(e.data); };
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.onstop = () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; blob = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Blob(chunks, { type: recorder.mimeType });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;녹음 완료 Blob:&amp;#34;&lt;/span&gt;, blob);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// &amp;lt;audio&amp;gt; 요소에 clipURL을 src로 설정
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; clipURL = URL.createObjectURL(blob);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  document.querySelector(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#test-audio-1&amp;#34;&lt;/span&gt;).src = clipURL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.start();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드에서 &lt;code&gt;MediaRecorder(stream)&lt;/code&gt;으로 recorder를 생성할 때
+&lt;code&gt;{ mimeType: &amp;quot;audio/webm&amp;quot; }&lt;/code&gt;과 같이 원하는 출력 컨테이너와 코덱의 MIME 유형을 지정할 수 있습니다.
+지정하지 않으면 &lt;strong&gt;브라우저 기본값&lt;/strong&gt;으로 인코딩됩니다.
+예를 들어 Chrome은 기본적으로 &lt;code&gt;audio/webm&lt;/code&gt; Opus, Firefox는 &lt;code&gt;audio/ogg&lt;/code&gt; Opus로 녹음합니다.
+&lt;code&gt;recorder.start()&lt;/code&gt;를 호출하면 녹음이 시작되고,
+이어서 &lt;code&gt;dataavailable&lt;/code&gt; 이벤트가 발생할 때마다 &lt;code&gt;chunks&lt;/code&gt; 배열에 Blob 조각을 모읍니다.
+&lt;code&gt;MediaRecorder&lt;/code&gt;는 내부적으로 일정 간격마다 데이터를 내보내는데, &lt;code&gt;start(timeslice)&lt;/code&gt;에 밀리초 단위로 값을 주면 해당 간격마다 &lt;code&gt;dataavailable&lt;/code&gt; 이벤트를 받을 수 있습니다.
+또는 &lt;code&gt;recorder.requestData()&lt;/code&gt;를 호출해서 수동으로 현재까지의 데이터를 받을 수도 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.stop();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;녹음을 중지하려면 &lt;code&gt;recorder.stop()&lt;/code&gt;을 호출합니다.
+그러면 마지막 데이터 조각과 함께 &lt;code&gt;stop&lt;/code&gt; 이벤트가 발생하고,
+그 시점에 우리가 모은 &lt;code&gt;chunks&lt;/code&gt;들을 합쳐 하나의 Blob을 만들 수 있습니다.
+&lt;code&gt;onstop&lt;/code&gt; 핸들러는 Blob을 생성하고 있습니다.
+이렇게 얻은 Blob 객체를 다룰 방법은 여러 가지가 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;앞서 본 코드처럼 객체 URL을 만들어서 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 &lt;code&gt;src&lt;/code&gt;로 설정하면 녹음한 내용을 &lt;strong&gt;즉시 재생&lt;/strong&gt;해볼 수 있습니다.&lt;/li&gt;
+&lt;li&gt;서버로 Blob을 업로드하여 저장하거나
+&lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; 태그의 &lt;code&gt;href&lt;/code&gt;에 객체 URL을 넣고 &lt;code&gt;download&lt;/code&gt; 속성을 주어 &lt;strong&gt;파일 다운로드&lt;/strong&gt; 링크를 제공할 수도 있습니다.&lt;/li&gt;
+&lt;li&gt;Blob을 &lt;code&gt;File&lt;/code&gt; 객체로 변환하거나 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader&#34;&gt;FileReader&lt;/a&gt;로 읽어
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer&#34;&gt;ArrayBuffer&lt;/a&gt;
+혹은 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL&#34;&gt;Data URL로 변환&lt;/a&gt;해 처리할 수도 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이를 활용하면 웹에서 간단한 &lt;strong&gt;음성 녹음기(Voice Recorder)&lt;/strong&gt; 를 만들 수 있습니다.
+MDN의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API&#34;&gt;Web Dictaphone&lt;/a&gt;
+예제를 따라해보세요.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://mdn.github.io/dom-examples/media/web-dictaphone/&#34;&gt;demo&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone&#34;&gt;source code&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/web-dictaphone.png&#34; alt=&#34;Web Dictaphone 화면&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;web-audio와-mediarecorder의-조합&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/h2&gt;
+&lt;p&gt;여기까지 마이크 입력을 실시간 처리(Web Audio)하거나 파일로 저장(MediaRecorder)하는 방법을 개별적으로 살펴봤습니다.
+실제로는 이 둘을 &lt;strong&gt;조합&lt;/strong&gt;하여, &lt;strong&gt;실시간 처리된 오디오를 녹음&lt;/strong&gt;하거나 하는 것도 가능합니다.
+예를 들어 &lt;strong&gt;노이즈 필터&lt;/strong&gt;를 Web Audio로 적용한 뒤 깨끗해진 신호를 녹음하거나, 여러 오디오 소스를 믹싱한 결과를 하나의 스트림으로 녹음하는 경우입니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-context.png&#34; alt=&#34;Audio Context&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;이를 위해 Web Audio API는 &lt;code&gt;AudioContext.createMediaStreamDestination()&lt;/code&gt; 노드를 제공합니다.
+이 노드는 AudioNode 그래프의 출력을 &lt;strong&gt;MediaStream으로 변환&lt;/strong&gt;해줍니다.
+&lt;code&gt;const dest = audioCtx.createMediaStreamDestination();&lt;/code&gt;를 호출하면 얻어지는 &lt;code&gt;dest.stream&lt;/code&gt;은
+MediaStream으로써 AudioContext에서 만들어진 모든 소리가 실시간으로 입력됩니다.
+이 스트림을 앞서처럼 &lt;code&gt;new MediaRecorder(dest.stream)&lt;/code&gt;에 넘기면 Web Audio 출력 자체를 녹음할 수 있습니다.
+이렇게 하면 &lt;strong&gt;효과 처리 후의 오디오&lt;/strong&gt;나 &lt;strong&gt;다중 소스 믹스&lt;/strong&gt;를 녹음하는 것이 가능해집니다.&lt;/p&gt;
+&lt;p&gt;예를 들어, 마이크 입력에 에코 효과를 주고 싶은 경우 다음과 같이 구현할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;audio controls id=&#34;test-audio-2&#34;&gt;&lt;/audio&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;id=&amp;ldquo;test-audo-2&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioCtx = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; source = audioCtx.createMediaStreamSource(stream);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- Delay + Feedback 구성 (피드백 에코) ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; delay = audioCtx.createDelay(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;delay.delayTime.value = &lt;span style=&#34;color:#f60&#34;&gt;0.4&lt;/span&gt;; &lt;span style=&#34;color:#0f0&#34;&gt;// 400ms 지연
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; feedbackGain = audioCtx.createGain();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;feedbackGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;0.4&lt;/span&gt;; &lt;span style=&#34;color:#0f0&#34;&gt;// 에코 반복 감쇠
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;delay.connect(feedbackGain);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;feedbackGain.connect(delay); &lt;span style=&#34;color:#0f0&#34;&gt;// 피드백 루프
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- Dry/Wet 믹스 ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dryGain = audioCtx.createGain();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dryGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;1.0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; wetGain = audioCtx.createGain();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wetGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;0.6&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- 믹서로 합성 &amp;amp; 출력 대상 구성 ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; merger = audioCtx.createGain(); &lt;span style=&#34;color:#0f0&#34;&gt;// 믹서 역할
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dest = audioCtx.createMediaStreamDestination(); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- 연결 구성 ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;source.connect(dryGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 원본
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;source.connect(delay).connect(wetGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 에코 포함
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;merger.connect(audioCtx.destination); &lt;span style=&#34;color:#0f0&#34;&gt;// 스피커 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;merger.connect(dest); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- MediaRecorder로 녹음 ---
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; recorder = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; MediaRecorder(dest.stream);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; chunks = [];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.ondataavailable = e =&amp;gt; { chunks.push(e.data); };
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.onstop = () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; blob = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Blob(chunks, { type: recorder.mimeType });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;녹음 완료 Blob:&amp;#34;&lt;/span&gt;, blob);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// &amp;lt;audio&amp;gt; 요소에 clipURL을 src로 설정
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; clipURL = URL.createObjectURL(blob);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  document.querySelector(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#test-audio-2&amp;#34;&lt;/span&gt;).src = clipURL;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.start();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 5초 후 녹음 정지
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;setTimeout(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  recorder.stop();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  stream.getTracks().forEach(track =&amp;gt; track.stop());
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  audioCtx.close();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}, &lt;span style=&#34;color:#f60&#34;&gt;5000&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 &lt;code&gt;dest&lt;/code&gt;는 &lt;code&gt;createMediaStreamDestination()&lt;/code&gt;으로 만든 것이고,
+이 &lt;code&gt;dest.stream&lt;/code&gt;에 녹음하면 에코가 섞인 마이크 소리를 저장할 수 있습니다.
+이처럼 Web Audio와 MediaRecorder를 조합하면 &lt;strong&gt;자유로운 오디오 파이프라인&lt;/strong&gt; 구성이 가능하며,
+웹에서 간단한 &lt;strong&gt;DAW(Digital Audio Workstation)&lt;/strong&gt; 기능 흉내까지 낼 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;브라우저의-오디오-재생-정책&#34;&gt;브라우저의 오디오 재생 정책&lt;/h1&gt;
+&lt;p&gt;웹에서 오디오를 다룰 때는 브라우저 정책들을 알아두어야 합니다.
+대표적으로 &lt;strong&gt;autoplay 차단&lt;/strong&gt;과 &lt;strong&gt;사용자 권한 요구&lt;/strong&gt;,
+그리고 오디오 관련 &lt;strong&gt;보안 이슈&lt;/strong&gt;가 있습니다.&lt;/p&gt;
+&lt;p&gt;현대 브라우저들은 사용자의 의도 없이 웹페이지가 함부로 소리를 재생하지 못하도록 &lt;strong&gt;자동 재생을 차단&lt;/strong&gt;하는 정책을 가지고 있습니다.
+*&amp;ldquo;Autoplay&amp;rdquo;*란 &lt;strong&gt;사용자 조작 없이 자동으로 재생이 시작되는 것&lt;/strong&gt;을 말하며, HTML 속성이나 JS로 플레이를 트리거하는 모든 경우를 포함합니다&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.
+일반적으로 &lt;strong&gt;사용자가 페이지와 상호작용(예: 클릭, 키누름)하기 전까지&lt;/strong&gt;는 audio/video의 재생을 시작할 수 없습니다.
+예를 들어 &lt;code&gt;&amp;lt;audio autoplay&amp;gt;&lt;/code&gt;로 설정해도 무음이 아닌 이상 대기 상태에 머물다, 사용자가 화면을 터치하거나 클릭하면 그제서야 재생됩니다.
+Web Audio API에서도 &lt;code&gt;AudioBufferSourceNode.start()&lt;/code&gt; 등을 사용자 gesture 없이 호출하면 재생이 안되고 AudioContext가 &lt;strong&gt;suspended&lt;/strong&gt; 상태로 머무를 수 있습니다.
+이러한 정책은 브라우저마다 구현 세부사항은 다르지만(일부는 무음인 경우 허용 등), &lt;strong&gt;공통적으로 사용자 경험을 해치지 않기 위한 조치&lt;/strong&gt;입니다. 개발자는 &lt;strong&gt;사용자 액션 시점에 재생을 시작&lt;/strong&gt;하도록 유도하는 것이 좋습니다.
+예를 들어 &amp;ldquo;재생&amp;rdquo; 버튼을 제공하고 그 클릭 핸들러 안에서 &lt;code&gt;audio.play()&lt;/code&gt;나 Web Audio &lt;code&gt;context.resume()&lt;/code&gt;/&lt;code&gt;start()&lt;/code&gt;를 호출하면 대부분 문제없이 동작합니다.
+반대로, 페이지 로드시 배경음악을 자동틀도록 설계하면 사용자 동의 없이는 소리가 안 날 가능성이 높습니다.
+만약 반드시 자동 재생이 필요한 경우 (예: 웹 게임의 배경음 등), 첫 사용자 진입 때 &lt;strong&gt;mute(음소거) 상태로 자동 재생&lt;/strong&gt;을 해두고 &amp;ldquo;소리 켜기&amp;rdquo; 버튼을 눌러야만 음소거를 해제하는 방식을 쓸 수도 있습니다.
+이렇게 하면 무음 재생은 허용되는 브라우저에서 사전에 오디오 스트림을 준비해 둘 수 있는 장점이 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;getUserMedia&lt;/strong&gt;는 민감한 개인정보(목소리)를 다루므로 &lt;strong&gt;반드시 사용자 허가&lt;/strong&gt;가 필요합니다.
+사용자가 한번 허용하면 권한이 일정 기간(또는 세션 등) 기억될 수 있지만,
+&lt;strong&gt;https&lt;/strong&gt;가 아닌 경우 아예 동작하지 않으며,
+iframe 등에서는 추가적인 &lt;code&gt;allow&lt;/code&gt; 속성 설정(&lt;code&gt;allow=&amp;quot;microphone&amp;quot;&lt;/code&gt;)이 필요할 수 있습니다.
+이렇듯 &lt;strong&gt;마이크/카메라 접근에는 권한 정책&lt;/strong&gt;을 따라야 합니다.
+음성 녹음 데이터를 서버로 전송할 경우에도 &lt;strong&gt;사용자 프라이버시&lt;/strong&gt;에 대한 고지와 정책 준수가 필요합니다.&lt;/p&gt;
+&lt;p&gt;또 다른 권한 이슈로 &lt;strong&gt;AudioContext의 출력 장치 선택&lt;/strong&gt;이 있습니다.
+기본적으로 오디오는 시스템 기본 출력(스피커 등)으로 나가지만,
+Chrome 등의 일부 브라우저는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput&#34;&gt;selectAudioOutput() API&lt;/a&gt;로
+출력 디바이스를 지정할 수 있게 합니다.
+이것도 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput#security_requirements&#34;&gt;사용자 권한&lt;/a&gt;이 필요합니다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그로 외부 도메인 리소스를 가져올 때 &lt;strong&gt;CORS&lt;/strong&gt; 이슈는 일반적으로 없지만,
+Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
+&lt;code&gt;decodeAudioData&lt;/code&gt;로 디코딩하려면 &lt;strong&gt;CORS 허용 헤더&lt;/strong&gt;가 필요합니다.
+이것은 다른 이미지/JS 불러오는 것과 비슷합니다.&lt;/p&gt;
+&lt;h1 id=&#34;오디오-성능&#34;&gt;오디오 성능&lt;/h1&gt;
+&lt;p&gt;Web Audio API는 &lt;code&gt;AudioContext&lt;/code&gt; 생성 시
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext#latencyhint&#34;&gt;{ latencyHint: &amp;lsquo;interactive&amp;rsquo; }&lt;/a&gt; 등으로 힌트를 줄 수 있지만,
+실제 지연은 기기와 브라우저에 따라 달라집니다.
+일반적으로 20~50ms 정도 출력 지연은 감안해야 하며,
+&lt;code&gt;MediaRecorder&lt;/code&gt;로 녹음할 때도 수십 ms 단위 버퍼링이 있습니다.
+오디오 처리는 CPU 부하를 줄 수 있으므로 다음과 같은 최적화도 고려하면 좋습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;분석/시각화 연산을 너무 짧은 주기로 하지 않기&lt;/li&gt;
+&lt;li&gt;필요 이상으로 많은 노드 사용 자제&lt;/li&gt;
+&lt;li&gt;오디오 처리를 담당하는 함수에서는 불필요한 DOM 접근 피하기&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
+&lt;p&gt;웹에서 오디오를 입력부터 출력까지 다루는 과정을 살펴보았습니다.
+&lt;strong&gt;오디오 포맷과 코덱&lt;/strong&gt;의 개념을 이해함으로써 어떤 형식의 오디오를 제공해야 할지 판단할 수 있고,
+&lt;strong&gt;스트리밍과 디코딩 방식&lt;/strong&gt;을 알면 다양한 시나리오 (로컬 재생, 라이브 스트리밍 등)에 대응할 수 있습니다.
+또한 &lt;strong&gt;getUserMedia + Web Audio API&lt;/strong&gt;를 통해 &lt;strong&gt;실시간 오디오 처리와 시각화&lt;/strong&gt;를 구현하고,
+&lt;strong&gt;MediaRecorder&lt;/strong&gt;를 이용해 그 결과를 저장하거나 전송하는 방법도 익혔습니다.
+요즘 브라우저들은 데스크톱이든 모바일이든 풍부한 오디오 관련 API를 제공하며,
+이것들을 조합하면 웬만한 오디오 응용 프로그램을 웹으로 구현할 수 있을 정도입니다.&lt;/p&gt;
+&lt;p&gt;마지막으로, 웹 오디오를 다룰 때는 항상 &lt;strong&gt;사용자의 권한과 환경을 존중&lt;/strong&gt;하는 것이 중요합니다.
+자동으로 소리가 재생되지 않게 하고, 녹음 시 명확한 안내를 제공하며,
+최적의 포맷을 선택해 &lt;strong&gt;끊김없고 품질 좋은 사운드 경험&lt;/strong&gt;을 제공하길 바랍니다.
+이 가이드가 웹 오디오 파이프라인을 이해하고 활용하는 데 도움이 되었기를 바랍니다.
+필요한 경우 MDN의 관련 문서와 각종 예제를 참고하여 더 깊이있는 구현으로 나아가 보세요.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Codec
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/&#34;&gt;A Guide for Choosing the Right Codec&lt;/a&gt; | Audiokinetic&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Web API
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/webaudio-examples&#34;&gt;Web Audio API - code examples&lt;/a&gt; | MDN GitHub&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-intro&#34;&gt;Getting started with Web Audio API&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-games&#34;&gt;Developing game audio with the Web Audio API&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming&#34;&gt;Streaming audio and video&lt;/a&gt; | MDN&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;음향
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661&#34;&gt;음향시스템 핸드북&lt;/a&gt; | 장호준&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108&#34;&gt;장인석의 음향입문&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;신호 처리
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155&#34;&gt;기초 신호 및 시스템&lt;/a&gt; | 이철희&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;Digital audio concepts&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs&#34;&gt;Web audio codec guide&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Audio_and_video_delivery/Cross-browser_audio_basics&#34;&gt;Cross-browser audio basics&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay&#34;&gt;Autoplay guide for media and Web Audio APIs&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/multimedia/audio-in-web/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -1864,217 +2427,6 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/reverse-engineering/file-signature/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>웹 페이지 응답 방법과 프레임워크</title>
-        <link>https://markruler.github.io/posts/web/respond-web-page/</link>
-        <pubDate>Sun, 24 Nov 2024 23:32:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/web/respond-web-page/</guid>
-        <description>임창수 https://markruler.github.io/posts/web/respond-web-page/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#cgi-common-gateway-interface&#34;&gt;CGI (Common Gateway Interface)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#ssr-server-side-rendering&#34;&gt;SSR (Server-Side Rendering)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%9C%EB%B2%84-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%97%94%EC%A7%84&#34;&gt;서버 템플릿 엔진&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#csr-client-side-rendering&#34;&gt;CSR (Client-side Rendering)&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#spa-single-page-application&#34;&gt;SPA (Single Page Application)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#web-api-web-component&#34;&gt;Web API: Web Component&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#pwa-progressive-web-apps&#34;&gt;PWA (Progressive Web Apps)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#ssg-static-site-generation&#34;&gt;SSG (Static Site Generation)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#cms-content-management-system&#34;&gt;CMS (Content Management System)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#micro-frontend-architecture-mfa&#34;&gt;Micro Frontend Architecture (MFA)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%95%84%EC%9D%BC%EB%9E%9C%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90-island-architecture&#34;&gt;아일랜드 아키텍쳐 (Island Architecture)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9B%B9%EB%B7%B0webview---%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%95%B1%EC%97%90%EC%84%9C&#34;&gt;웹뷰(WebView) - 모바일 앱에서&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;cgi-common-gateway-interface&#34;&gt;CGI (Common Gateway Interface)&lt;/h1&gt;
-&lt;p&gt;웹 서버와 외부 프로그램(애플리케이션) 간에 데이터를 주고받기 위한 인터페이스입니다.
-웹 서버가 클라이언트(브라우저)로부터 요청을 받으면, CGI 프로그램을 호출하여 동적으로 콘텐츠를 생성한 뒤, 그 결과를 클라이언트에 반환합니다.&lt;/p&gt;
-&lt;h1 id=&#34;ssr-server-side-rendering&#34;&gt;SSR (Server-Side Rendering)&lt;/h1&gt;
-&lt;p&gt;서버에서 콘텐츠를 렌더링하여 완전한 HTML을 클라이언트에게 전달합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;여기서 렌더링한다는 의미는 화면을 그린다는 게 아니라 DOM 구조를 만든다는 것입니다.&lt;/li&gt;
-&lt;li&gt;렌더링을 서버에서 수행하기 때문에 CSR에 비해 상대적으로 최초 페이지 응답 속도가 느립니다.
-&lt;ul&gt;
-&lt;li&gt;서버가 한국에 있고 클라이언트가 해외에 있다면 빈 페이지도 받지 못하고 오래 기다리게 됩니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;검색 엔진 봇이 완전한 HTML을 받기 때문에 SEO에 유리합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;서버-템플릿-엔진&#34;&gt;서버 템플릿 엔진&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Tomcat의 Jasper
-&lt;ul&gt;
-&lt;li&gt;JSP(JavaServer Pages) 파일을 서블릿 코드로 변환하고 컴파일하는 데 사용되는 JSP 엔진입니다.&lt;/li&gt;
-&lt;li&gt;include 지시어를 사용해서 여러 부분으로 코드 조각을 나눌 수 있습니다.&lt;/li&gt;
-&lt;li&gt;static include 방식을 이용해 빌드된 React, Vue 프로젝트의 &lt;code&gt;index.html&lt;/code&gt;을 포함시킬 수도 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Microsoft의 Razor
-&lt;ul&gt;
-&lt;li&gt;C# 코드와 HTML을 결합합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Twig, Smarty, Blade
-&lt;ul&gt;
-&lt;li&gt;PHP 템플릿 엔진들입니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;csr-client-side-rendering&#34;&gt;CSR (Client-side Rendering)&lt;/h1&gt;
-&lt;p&gt;클라이언트(브라우저)에서 콘텐츠를 렌더링합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;물을 부어 보충한다는 의미로 Hydration한다고도 합니다. 초기 렌더링(SSR)과 구분지어 표현하기 위해 사용하는 듯합니다.&lt;/li&gt;
-&lt;li&gt;서버에서 HTML 문서를 응답받아서 브라우저가 DOM을 렌더링 한 후 추가로 렌더링합니다.&lt;/li&gt;
-&lt;li&gt;경우에 따라 오리진 서버에서 받을 필요가 없기 때문에 캐시된 문서를 받을 수 있습니다.&lt;/li&gt;
-&lt;li&gt;동일한 페이지라면 서버에서 렌더링하는 SSR보다 페이지 응답 속도가 빠릅니다.&lt;/li&gt;
-&lt;li&gt;검색 엔진 봇이 크롤링할 때 빈 페이지로 보입니다. 이 경우 화면이 그려질 때까지 기다렸다가 스크래핑하는 경우도 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;spa-single-page-application&#34;&gt;SPA (Single Page Application)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;Vue, React, Angular&lt;/li&gt;
-&lt;li&gt;사용자가 웹 애플리케이션 상호 작용할 때 전체 페이지를 새로 고치지 않고, 필요한 데이터만 서버와 교환하여 동적으로 콘텐츠를 업데이트하는 웹 애플리케이션 구조입니다.&lt;/li&gt;
-&lt;li&gt;Vue를 JSP와 비교해서 예를 들면,
-&lt;ul&gt;
-&lt;li&gt;Vue App
-&lt;ul&gt;
-&lt;li&gt;JSP 페이지 하나와 동일.&lt;/li&gt;
-&lt;li&gt;컴포넌트들의 모임.&lt;/li&gt;
-&lt;li&gt;여러 JSP로 분리시켜서 include한다면 include 지시어가 명시된 root 페이지가 app&lt;/li&gt;
-&lt;li&gt;정확하게는 다름. JSP는 Component 단위별로 분리하는 것이 아니라 head, footer, 공통 스크립트 등으로 분리하는 경우가 많음.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Vue Component
-&lt;ul&gt;
-&lt;li&gt;공통 컴포넌트.&lt;/li&gt;
-&lt;li&gt;분리된 JSP.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;web-api-web-component&#34;&gt;Web API: Web Component&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;기능들을 나머지 코드로부터 캡슐화하여 재사용 가능한 커스텀 엘리먼트를 생성하고 웹 앱에서 활용할 수 있도록 해주는 다양한 기술들의 모음입니다.&lt;/li&gt;
-&lt;li&gt;Web 생태계에서 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_APIs&#34;&gt;표준적으로 사용&lt;/a&gt;되기 때문에 React, Vue와 같은 프레임워크에 종속되지 않습니다.
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API&#34;&gt;Web APIs&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;pwa-progressive-web-apps&#34;&gt;PWA (Progressive Web Apps)&lt;/h2&gt;
-&lt;p&gt;단일 코드베이스로 모든 기기의 모든 웹 사용자에게 도달하는 동시에 향상된 기능을 제공하기 위해 최신 API로 빌드되고 향상된 웹 앱입니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;캐시된 페이지를 기반으로 오프라인에서도 동작할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;웹 앱이지만 모바일 앱처럼 설치할 수 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;ssg-static-site-generation&#34;&gt;SSG (Static Site Generation)&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;Gatsby(Javascript), Hugo(Go), Jekyll(Ruby)&lt;/li&gt;
-&lt;li&gt;주로 템플릿을 활용해서 정적 웹 페이지를 생성 후 웹 서버로 서빙합니다.&lt;/li&gt;
-&lt;li&gt;DB가 필요없는 경우 사용합니다.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/&#34;&gt;블로그&lt;/a&gt;나 &lt;a href=&#34;https://beott.kr/&#34;&gt;웹진&lt;/a&gt;, 혹은 회사 소개 페이지 등에 사용할 수 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;cms-content-management-system&#34;&gt;CMS (Content Management System)&lt;/h1&gt;
-&lt;p&gt;웹사이트나 애플리케이션의 콘텐츠를 생성, 수정, 관리, 출판할 수 있는 시스템입니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;구축되면 개발자가 아닌 사람도 쉽게 글을 작성할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;잼스택(JAMStack)
-&lt;ul&gt;
-&lt;li&gt;DB 없이 JavaScript, API, Markup을 기반으로 하는 웹 아키텍처입니다.&lt;/li&gt;
-&lt;li&gt;내 블로그처럼 Hugo로 빌드한 웹 사이트를 GitHub Pages로 배포한 것도 JAMStack에 해당합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;DB 사용
-&lt;ul&gt;
-&lt;li&gt;스트라피(Strapi), 워드프레스(WordPress), 줌라(Joomla), 드루팔(Drupal)&lt;/li&gt;
-&lt;li&gt;CMS를 위한 별도 DB와 서버를 사용합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;micro-frontend-architecture-mfa&#34;&gt;Micro Frontend Architecture (MFA)&lt;/h1&gt;
-&lt;p&gt;각 &amp;lsquo;마이크로-프론트엔드&amp;rsquo;는 독립적으로 개발 및 배포가 가능합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;각자 다른 기술 스택을 사용할 수도 있습니다.&lt;/li&gt;
-&lt;li&gt;대규모 프로젝트에서 서로 다른 팀들이 각각의 프론트엔드 파트를 개발하는 데 적합합니다.&lt;/li&gt;
-&lt;li&gt;하나의 app(페이지)에 여러 app 혹은 component가 포함됩니다.&lt;/li&gt;
-&lt;li&gt;혹은 하나의 프로젝트에 여러 app이 포함됩니다.
-&lt;ul&gt;
-&lt;li&gt;어떤 페이지는 JSP, 어떤 페이지는 React, 어떤 페이지는 Vue.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;아일랜드-아키텍쳐-island-architecture&#34;&gt;아일랜드 아키텍쳐 (Island Architecture)&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;웹페이지의 필요에 따라 일부는 SSG로 렌더링하고, 일부는 Progressive Hydration(Re-hydration)합니다.
-&lt;ul&gt;
-&lt;li&gt;필요할 때만 자바스크립트를 로드하여 성능을 최적화합니다.&lt;/li&gt;
-&lt;li&gt;전체 페이지가 아니라 개별 컴포넌트 단위로 자바스크립트를 실행해 불필요한 코드 로드를 방지합니다.&lt;/li&gt;
-&lt;li&gt;하나의 app(페이지)에 여러 프레임워크의 Component가 있을 수 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;대표적으로 Astro, Ebay의 Marko 같은 도구가 Island Architecture를 지원합니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;웹뷰webview---모바일-앱에서&#34;&gt;웹뷰(WebView) - 모바일 앱에서&lt;/h1&gt;
-&lt;p&gt;웹뷰란 네이티브 앱에 내재되어 있는 웹 브라우저입니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;특별한 경우가 아니라면 앱 스토어의 검수를 받을 필요가 없기 때문에 자주 업데이트 할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;네이티브 앱은 서버에서 웹 페이지를 응답 받을 필요없이 디바이스에서 바로 렌더링합니다. 반면 웹뷰는 서버에서 웹 페이지를 받아야 하기 때문에 레이턴시가 발생합니다.&lt;/li&gt;
-&lt;li&gt;네이티브 앱은 수정 사항을 배포할 때 앱 스토어의 검수가 필요합니다. (약 1~3일 소요)&lt;/li&gt;
-&lt;li&gt;웹뷰만으로 구성된 앱은 스토어 심사가 어려울 수도 있습니다.&lt;/li&gt;
-&lt;li&gt;추가로 고려해야 할 부분: 웹뷰 간 이동, 웹뷰-네이티브 간 이동, 뒤로가기 제스처나 버튼, DeepLink&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://patterns-dev-kr.github.io/&#34;&gt;모던 웹 앱 디자인 패턴&lt;/a&gt; | Patterns.dev.kr
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.patterns.dev/&#34;&gt;origin&lt;/a&gt; | Patterns.dev&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;CMS
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://medium.com/pinkfong/strapi-1%EB%85%84%EC%9D%B4%EB%A9%B4-%ED%92%80%EC%8A%A4%ED%83%9D%EC%9D%84-%EC%9D%8A%EB%8A%94%EB%8B%A4-part-1-2-5641f5651097&#34;&gt;Strapi 1년이면 풀스택을 읊는다&lt;/a&gt; | 더핑크퐁컴퍼니&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;PWA
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/what-are-pwas&#34;&gt;What are Progressive Web Apps?&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;Web Components
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components&#34;&gt;Web Components&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_custom_elements&#34;&gt;Using custom elements&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_shadow_DOM&#34;&gt;Using shadow DOM&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots&#34;&gt;Using templates and slots&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ui.toast.com/posts/ko_20171215&#34;&gt;웹 컴포넌트(5) - lit-html로 React 처럼 코딩하기&lt;/a&gt; | TOAST UI&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;ReactJS
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://roy-jung.github.io/250323-react-server-components/&#34;&gt;리액트 서버 컴포넌트 톺아보기 (번역)&lt;/a&gt; | FE재남&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://yozm.wishket.com/magazine/detail/2688/&#34;&gt;알아두면 유용한 &amp;lsquo;리액트&amp;rsquo; 개념과 성능 최적화 팁&lt;/a&gt; | 곰씨네IT&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;아일랜드 아키텍쳐
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://patterns-dev-kr.github.io/rendering-patterns/the-island-architecture/&#34;&gt;The Island Architecture&lt;/a&gt; | Patterns.dev.kr&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;웹뷰
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.tosspayments.com/resources/glossary/webview&#34;&gt;웹뷰(WebView)&lt;/a&gt; | Toss Payments 용어 사전&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/4UD4EB00AME&#34;&gt;아니, 여기도 웹뷰였어요?&lt;/a&gt; | 2024 당근 테크 밋업&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://boostbrothers.github.io/hospital-detail-webview/&#34;&gt;병원 상세 웹뷰 통신 및 크로스 브라우징&lt;/a&gt; | BBROS&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/web/respond-web-page/ - Im Changsu | Since 2020</description>
         </item>
     
     

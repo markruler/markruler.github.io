@@ -9,9 +9,220 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Thu, 17 Apr 2025 18:08:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 17 Apr 2025 23:30:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>웹 페이지 응답 방법과 프레임워크</title>
+        <link>https://markruler.github.io/posts/web/respond-web-page/</link>
+        <pubDate>Sun, 24 Nov 2024 23:32:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/web/respond-web-page/</guid>
+        <description>임창수 https://markruler.github.io/posts/web/respond-web-page/ -&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#cgi-common-gateway-interface&#34;&gt;CGI (Common Gateway Interface)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssr-server-side-rendering&#34;&gt;SSR (Server-Side Rendering)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%84%9C%EB%B2%84-%ED%85%9C%ED%94%8C%EB%A6%BF-%EC%97%94%EC%A7%84&#34;&gt;서버 템플릿 엔진&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#csr-client-side-rendering&#34;&gt;CSR (Client-side Rendering)&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#spa-single-page-application&#34;&gt;SPA (Single Page Application)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#web-api-web-component&#34;&gt;Web API: Web Component&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#pwa-progressive-web-apps&#34;&gt;PWA (Progressive Web Apps)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ssg-static-site-generation&#34;&gt;SSG (Static Site Generation)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cms-content-management-system&#34;&gt;CMS (Content Management System)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#micro-frontend-architecture-mfa&#34;&gt;Micro Frontend Architecture (MFA)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%95%84%EC%9D%BC%EB%9E%9C%EB%93%9C-%EC%95%84%ED%82%A4%ED%85%8D%EC%B3%90-island-architecture&#34;&gt;아일랜드 아키텍쳐 (Island Architecture)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%9B%B9%EB%B7%B0webview---%EB%AA%A8%EB%B0%94%EC%9D%BC-%EC%95%B1%EC%97%90%EC%84%9C&#34;&gt;웹뷰(WebView) - 모바일 앱에서&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;cgi-common-gateway-interface&#34;&gt;CGI (Common Gateway Interface)&lt;/h1&gt;
+&lt;p&gt;웹 서버와 외부 프로그램(애플리케이션) 간에 데이터를 주고받기 위한 인터페이스입니다.
+웹 서버가 클라이언트(브라우저)로부터 요청을 받으면, CGI 프로그램을 호출하여 동적으로 콘텐츠를 생성한 뒤, 그 결과를 클라이언트에 반환합니다.&lt;/p&gt;
+&lt;h1 id=&#34;ssr-server-side-rendering&#34;&gt;SSR (Server-Side Rendering)&lt;/h1&gt;
+&lt;p&gt;서버에서 콘텐츠를 렌더링하여 완전한 HTML을 클라이언트에게 전달합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;여기서 렌더링한다는 의미는 화면을 그린다는 게 아니라 DOM 구조를 만든다는 것입니다.&lt;/li&gt;
+&lt;li&gt;렌더링을 서버에서 수행하기 때문에 CSR에 비해 상대적으로 최초 페이지 응답 속도가 느립니다.
+&lt;ul&gt;
+&lt;li&gt;서버가 한국에 있고 클라이언트가 해외에 있다면 빈 페이지도 받지 못하고 오래 기다리게 됩니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;검색 엔진 봇이 완전한 HTML을 받기 때문에 SEO에 유리합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;서버-템플릿-엔진&#34;&gt;서버 템플릿 엔진&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Tomcat의 Jasper
+&lt;ul&gt;
+&lt;li&gt;JSP(JavaServer Pages) 파일을 서블릿 코드로 변환하고 컴파일하는 데 사용되는 JSP 엔진입니다.&lt;/li&gt;
+&lt;li&gt;include 지시어를 사용해서 여러 부분으로 코드 조각을 나눌 수 있습니다.&lt;/li&gt;
+&lt;li&gt;static include 방식을 이용해 빌드된 React, Vue 프로젝트의 &lt;code&gt;index.html&lt;/code&gt;을 포함시킬 수도 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Microsoft의 Razor
+&lt;ul&gt;
+&lt;li&gt;C# 코드와 HTML을 결합합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Twig, Smarty, Blade
+&lt;ul&gt;
+&lt;li&gt;PHP 템플릿 엔진들입니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;csr-client-side-rendering&#34;&gt;CSR (Client-side Rendering)&lt;/h1&gt;
+&lt;p&gt;클라이언트(브라우저)에서 콘텐츠를 렌더링합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;물을 부어 보충한다는 의미로 Hydration한다고도 합니다. 초기 렌더링(SSR)과 구분지어 표현하기 위해 사용하는 듯합니다.&lt;/li&gt;
+&lt;li&gt;서버에서 HTML 문서를 응답받아서 브라우저가 DOM을 렌더링 한 후 추가로 렌더링합니다.&lt;/li&gt;
+&lt;li&gt;경우에 따라 오리진 서버에서 받을 필요가 없기 때문에 캐시된 문서를 받을 수 있습니다.&lt;/li&gt;
+&lt;li&gt;동일한 페이지라면 서버에서 렌더링하는 SSR보다 페이지 응답 속도가 빠릅니다.&lt;/li&gt;
+&lt;li&gt;검색 엔진 봇이 크롤링할 때 빈 페이지로 보입니다. 이 경우 화면이 그려질 때까지 기다렸다가 스크래핑하는 경우도 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;spa-single-page-application&#34;&gt;SPA (Single Page Application)&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Vue, React, Angular&lt;/li&gt;
+&lt;li&gt;사용자가 웹 애플리케이션 상호 작용할 때 전체 페이지를 새로 고치지 않고, 필요한 데이터만 서버와 교환하여 동적으로 콘텐츠를 업데이트하는 웹 애플리케이션 구조입니다.&lt;/li&gt;
+&lt;li&gt;Vue를 JSP와 비교해서 예를 들면,
+&lt;ul&gt;
+&lt;li&gt;Vue App
+&lt;ul&gt;
+&lt;li&gt;JSP 페이지 하나와 동일.&lt;/li&gt;
+&lt;li&gt;컴포넌트들의 모임.&lt;/li&gt;
+&lt;li&gt;여러 JSP로 분리시켜서 include한다면 include 지시어가 명시된 root 페이지가 app&lt;/li&gt;
+&lt;li&gt;정확하게는 다름. JSP는 Component 단위별로 분리하는 것이 아니라 head, footer, 공통 스크립트 등으로 분리하는 경우가 많음.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Vue Component
+&lt;ul&gt;
+&lt;li&gt;공통 컴포넌트.&lt;/li&gt;
+&lt;li&gt;분리된 JSP.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;web-api-web-component&#34;&gt;Web API: Web Component&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;기능들을 나머지 코드로부터 캡슐화하여 재사용 가능한 커스텀 엘리먼트를 생성하고 웹 앱에서 활용할 수 있도록 해주는 다양한 기술들의 모음입니다.&lt;/li&gt;
+&lt;li&gt;Web 생태계에서 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_APIs&#34;&gt;표준적으로 사용&lt;/a&gt;되기 때문에 React, Vue와 같은 프레임워크에 종속되지 않습니다.
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API&#34;&gt;Web APIs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;pwa-progressive-web-apps&#34;&gt;PWA (Progressive Web Apps)&lt;/h2&gt;
+&lt;p&gt;단일 코드베이스로 모든 기기의 모든 웹 사용자에게 도달하는 동시에 향상된 기능을 제공하기 위해 최신 API로 빌드되고 향상된 웹 앱입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;캐시된 페이지를 기반으로 오프라인에서도 동작할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;웹 앱이지만 모바일 앱처럼 설치할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;ssg-static-site-generation&#34;&gt;SSG (Static Site Generation)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;Gatsby(Javascript), Hugo(Go), Jekyll(Ruby)&lt;/li&gt;
+&lt;li&gt;주로 템플릿을 활용해서 정적 웹 페이지를 생성 후 웹 서버로 서빙합니다.&lt;/li&gt;
+&lt;li&gt;DB가 필요없는 경우 사용합니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/&#34;&gt;블로그&lt;/a&gt;나 &lt;a href=&#34;https://beott.kr/&#34;&gt;웹진&lt;/a&gt;, 혹은 회사 소개 페이지 등에 사용할 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;cms-content-management-system&#34;&gt;CMS (Content Management System)&lt;/h1&gt;
+&lt;p&gt;웹사이트나 애플리케이션의 콘텐츠를 생성, 수정, 관리, 출판할 수 있는 시스템입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;구축되면 개발자가 아닌 사람도 쉽게 글을 작성할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;잼스택(JAMStack)
+&lt;ul&gt;
+&lt;li&gt;DB 없이 JavaScript, API, Markup을 기반으로 하는 웹 아키텍처입니다.&lt;/li&gt;
+&lt;li&gt;내 블로그처럼 Hugo로 빌드한 웹 사이트를 GitHub Pages로 배포한 것도 JAMStack에 해당합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;DB 사용
+&lt;ul&gt;
+&lt;li&gt;스트라피(Strapi), 워드프레스(WordPress), 줌라(Joomla), 드루팔(Drupal)&lt;/li&gt;
+&lt;li&gt;CMS를 위한 별도 DB와 서버를 사용합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;micro-frontend-architecture-mfa&#34;&gt;Micro Frontend Architecture (MFA)&lt;/h1&gt;
+&lt;p&gt;각 &amp;lsquo;마이크로-프론트엔드&amp;rsquo;는 독립적으로 개발 및 배포가 가능합니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;각자 다른 기술 스택을 사용할 수도 있습니다.&lt;/li&gt;
+&lt;li&gt;대규모 프로젝트에서 서로 다른 팀들이 각각의 프론트엔드 파트를 개발하는 데 적합합니다.&lt;/li&gt;
+&lt;li&gt;하나의 app(페이지)에 여러 app 혹은 component가 포함됩니다.&lt;/li&gt;
+&lt;li&gt;혹은 하나의 프로젝트에 여러 app이 포함됩니다.
+&lt;ul&gt;
+&lt;li&gt;어떤 페이지는 JSP, 어떤 페이지는 React, 어떤 페이지는 Vue.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;아일랜드-아키텍쳐-island-architecture&#34;&gt;아일랜드 아키텍쳐 (Island Architecture)&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;웹페이지의 필요에 따라 일부는 SSG로 렌더링하고, 일부는 Progressive Hydration(Re-hydration)합니다.
+&lt;ul&gt;
+&lt;li&gt;필요할 때만 자바스크립트를 로드하여 성능을 최적화합니다.&lt;/li&gt;
+&lt;li&gt;전체 페이지가 아니라 개별 컴포넌트 단위로 자바스크립트를 실행해 불필요한 코드 로드를 방지합니다.&lt;/li&gt;
+&lt;li&gt;하나의 app(페이지)에 여러 프레임워크의 Component가 있을 수 있습니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;대표적으로 Astro, Ebay의 Marko 같은 도구가 Island Architecture를 지원합니다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;웹뷰webview---모바일-앱에서&#34;&gt;웹뷰(WebView) - 모바일 앱에서&lt;/h1&gt;
+&lt;p&gt;웹뷰란 네이티브 앱에 내재되어 있는 웹 브라우저입니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;특별한 경우가 아니라면 앱 스토어의 검수를 받을 필요가 없기 때문에 자주 업데이트 할 수 있습니다.&lt;/li&gt;
+&lt;li&gt;네이티브 앱은 서버에서 웹 페이지를 응답 받을 필요없이 디바이스에서 바로 렌더링합니다. 반면 웹뷰는 서버에서 웹 페이지를 받아야 하기 때문에 레이턴시가 발생합니다.&lt;/li&gt;
+&lt;li&gt;네이티브 앱은 수정 사항을 배포할 때 앱 스토어의 검수가 필요합니다. (약 1~3일 소요)&lt;/li&gt;
+&lt;li&gt;웹뷰만으로 구성된 앱은 스토어 심사가 어려울 수도 있습니다.&lt;/li&gt;
+&lt;li&gt;추가로 고려해야 할 부분: 웹뷰 간 이동, 웹뷰-네이티브 간 이동, 뒤로가기 제스처나 버튼, DeepLink&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://patterns-dev-kr.github.io/&#34;&gt;모던 웹 앱 디자인 패턴&lt;/a&gt; | Patterns.dev.kr
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.patterns.dev/&#34;&gt;origin&lt;/a&gt; | Patterns.dev&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;CMS
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://medium.com/pinkfong/strapi-1%EB%85%84%EC%9D%B4%EB%A9%B4-%ED%92%80%EC%8A%A4%ED%83%9D%EC%9D%84-%EC%9D%8A%EB%8A%94%EB%8B%A4-part-1-2-5641f5651097&#34;&gt;Strapi 1년이면 풀스택을 읊는다&lt;/a&gt; | 더핑크퐁컴퍼니&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PWA
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/what-are-pwas&#34;&gt;What are Progressive Web Apps?&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Web Components
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components&#34;&gt;Web Components&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_custom_elements&#34;&gt;Using custom elements&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/ko/docs/Web/API/Web_components/Using_shadow_DOM&#34;&gt;Using shadow DOM&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_components/Using_templates_and_slots&#34;&gt;Using templates and slots&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://ui.toast.com/posts/ko_20171215&#34;&gt;웹 컴포넌트(5) - lit-html로 React 처럼 코딩하기&lt;/a&gt; | TOAST UI&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ReactJS
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://roy-jung.github.io/250323-react-server-components/&#34;&gt;리액트 서버 컴포넌트 톺아보기 (번역)&lt;/a&gt; | FE재남&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://yozm.wishket.com/magazine/detail/2688/&#34;&gt;알아두면 유용한 &amp;lsquo;리액트&amp;rsquo; 개념과 성능 최적화 팁&lt;/a&gt; | 곰씨네IT&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;아일랜드 아키텍쳐
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://patterns-dev-kr.github.io/rendering-patterns/the-island-architecture/&#34;&gt;The Island Architecture&lt;/a&gt; | Patterns.dev.kr&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;웹뷰
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.tosspayments.com/resources/glossary/webview&#34;&gt;웹뷰(WebView)&lt;/a&gt; | Toss Payments 용어 사전&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/4UD4EB00AME&#34;&gt;아니, 여기도 웹뷰였어요?&lt;/a&gt; | 2024 당근 테크 밋업&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://boostbrothers.github.io/hospital-detail-webview/&#34;&gt;병원 상세 웹뷰 통신 및 크로스 브라우징&lt;/a&gt; | BBROS&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/web/respond-web-page/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -2018,120 +2229,6 @@ SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/network/ssh/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>서버 to 서버 요청 시 발생한 DNS 레이턴시</title>
-        <link>https://markruler.github.io/posts/network/server-to-server-dns/</link>
-        <pubDate>Thu, 13 Jun 2024 17:40:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/network/server-to-server-dns/</guid>
-        <description>임창수 https://markruler.github.io/posts/network/server-to-server-dns/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B0%B0%EA%B2%BD&#34;&gt;배경&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B6%84%EC%84%9D-dig-%EC%9C%BC%EB%A1%9C-%ED%85%8C%EC%8A%A4%ED%8A%B8&#34;&gt;분석: dig 으로 테스트&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#nameserver-8888-%EB%A1%9C-%EC%A7%80%EC%A0%95&#34;&gt;nameserver 8.8.8.8 로 지정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#nameserver%EB%8A%94-resolvconf-%EC%84%A4%EC%A0%95%EC%9D%84-%EB%94%B0%EB%A5%B8%EB%8B%A4&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따른다&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B9%84%EA%B5%90&#34;&gt;비교&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%95%B4%EA%B2%B0-%ED%98%B8%EC%8A%A4%ED%8A%B8-%ED%8C%8C%EC%9D%BC-%EC%88%98%EC%A0%95&#34;&gt;해결: 호스트 파일 수정&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;배경&#34;&gt;배경&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;약 200ms 응답 속도가 예상되는 API가 불규칙적으로 2s까지 스파이크가 발생했습니다.
-&lt;ul&gt;
-&lt;li&gt;해당 API에는 서버 to 서버로 요청하는 기능이 여러 개 포함되어 있습니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;환경: On-Premise(IDC) 환경에 애플리케이션 서버는 컨테이너가 아닌 스탠드얼론 호스트로 실행됩니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;분석-dig-으로-테스트&#34;&gt;분석: dig 으로 테스트&lt;/h1&gt;
-&lt;h2 id=&#34;nameserver-8888-로-지정&#34;&gt;nameserver 8.8.8.8 로 지정&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dig @8.8.8.8 api.example.com
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;첫번째 요청 292 msec&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; Query time: &lt;span style=&#34;color:#f60&#34;&gt;292&lt;/span&gt; msec
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: Tue Jun &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 11:00:54 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;2번째 요청 36 msec&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; Query time: &lt;span style=&#34;color:#f60&#34;&gt;36&lt;/span&gt; msec
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 8.8.8.8#53(8.8.8.8) (UDP)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: Tue Jun &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 11:00:57 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;nameserver는-resolvconf-설정을-따른다&#34;&gt;nameserver는 &lt;code&gt;resolv.conf&lt;/code&gt; 설정을 따른다&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# /etc/resolv.conf&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# LG 메인 네임 서버&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nameserver 164.124.101.2
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# LG 보조 네임 서버&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nameserver 203.248.252.2
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dig api.example.com
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;첫번째 시도&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; Query time: &lt;span style=&#34;color:#f60&#34;&gt;17&lt;/span&gt; msec
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 164.124.101.2#53(164.124.101.2)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: 화  6월 &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 17:14:45 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;두번째 시도: 간헐적으로 튀는 걸 확인할 수 있었습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; Query time: &lt;span style=&#34;color:#f60&#34;&gt;230&lt;/span&gt; msec
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; SERVER: 164.124.101.2#53(164.124.101.2)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; WHEN: 화  6월 &lt;span style=&#34;color:#f60&#34;&gt;11&lt;/span&gt; 17:25:41 KST &lt;span style=&#34;color:#f60&#34;&gt;2024&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;;; MSG SIZE  rcvd: &lt;span style=&#34;color:#f60&#34;&gt;154&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;비교&#34;&gt;비교&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;LG DNS&lt;/code&gt;는 캐시가 되는 것 같은데 200~300 msec 응답 속도가 불규칙적으로 자주 발생했습니다.
-(현재 서버가 위치한 IDC 회선이 LG라서 LG DNS 사용)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;watch -n &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;dig @164.124.101.2 api.example.com | grep \&amp;#34;Query time\&amp;#34;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 3 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 227 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 5 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 5 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 4 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 5 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 7 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 228 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 4 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 14 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 3 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 5 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 3 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 10 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;8.8.8.8&lt;/code&gt; 은 레이턴시가 더 길었습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;watch -n &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;dig @8.8.8.8 api.example.com | grep \&amp;#34;Query time\&amp;#34;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 303 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 121 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 342 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 49 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 239 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 305 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 49 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 239 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 129 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 120 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 50 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 39 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 162 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 48 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 37 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 37 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 277 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 173 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 50 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ;; Query time: 334 msec&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;해결-호스트-파일-수정&#34;&gt;해결: 호스트 파일 수정&lt;/h1&gt;
-&lt;p&gt;server -&amp;gt; L4 Switch -&amp;gt; server는 프록시 없이 설정할 수 없다고 합니다.
-실제로 호스트 파일(&lt;code&gt;/etc/hosts&lt;/code&gt;)에 아래와 같이 설정하면 Connection도 얻지 못하고 타임아웃이 발생했습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# &amp;lt;L4_IP_ADDRESS&amp;gt; api.example.com&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;아래와 같이 설정해서 각 노드에 있는 web server에서 서버 A, B로 로드 밸런싱 되도록 설정했습니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;127.0.0.1 api.example.com
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/image-20240611-080044.webp&#34; alt=&#34;Datadog Timeseries&#34;&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;처음에 서버 A(빨간색) 먼저 수정 후 응답 속도가 줄어든 것을 확인했습니다.&lt;/li&gt;
-&lt;li&gt;이후 서버 B(초록색)도 수정 후 응답 속도가 줄었습니다.&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/network/server-to-server-dns/ - Im Changsu | Since 2020</description>
         </item>
     
     

@@ -1,8 +1,8 @@
 ---
-draft: true
+draft: false
 socialshare: true
-date: 2025-04-17T18:08:00+09:00
-lastmod: 2025-04-17T18:08:00+09:00
+date: 2025-04-17T23:30:00+09:00
+lastmod: 2025-04-17T23:30:00+09:00
 title: "웹과 멀티미디어: 오디오"
 description: "audio"
 # featured_image: ["/images/master/markruler-wave.webp"]
@@ -18,6 +18,8 @@ categories:
 - [개요](#개요)
 - [오디오 신호 처리](#오디오-신호-처리)
 - [주요 오디오 코덱과 포맷](#주요-오디오-코덱과-포맷)
+  - [손실 압축 코덱](#손실-압축-코덱)
+  - [무손실 압축 코덱](#무손실-압축-코덱)
 - [오디오 재생: HTML5 audio, MSE API, Web Audio API](#오디오-재생-html5-audio-mse-api-web-audio-api)
 - [마이크 입력과 녹음: MediaDevices 및 MediaRecorder](#마이크-입력과-녹음-mediadevices-및-mediarecorder)
   - [MediaDevices.getUserMedia()로 오디오 입력 받기](#mediadevicesgetusermedia로-오디오-입력-받기)
@@ -32,12 +34,10 @@ categories:
 # 개요
 
 **물리적으로** 매질을 통해 전달된 모든 음파를 **사운드(sound)** 라고 합니다.
-예를 들면 음성(voice)과 음악(music)을 포함한 사람의 귀로 들을 수 있는 모든 가청 영역의 소리를 말합니다.
-한편 가청 영역 밖에 해당하는 초저주파나 초고주파(초음파)까지 포함하며 전자 신호로 처리할 수 있는 모든 소리를
-**기술적으로** **오디오(audio)** 라고 합니다.
+한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 **기술적으로** **오디오(audio)** 라고 합니다.
 
 이 글에서는 오디오의 **입력(녹음)부터 처리, 출력(재생)까지**의 전체 흐름을 다룹니다.
-주요 오디오 포맷의 특성과 브라우저 호환성, Web Audio API를 통한 실시간 처리와 **시각화(Visualization)**,
+주요 오디오 포맷의 특성과 브라우저 호환성, Web Audio API를 통한 **실시간 처리**와
 MediaRecorder를 통한 **녹음(Recording)**, 그리고 **브라우저 정책**까지 다뤄보겠습니다.
 
 # 오디오 신호 처리
@@ -121,55 +121,50 @@ coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하�
 웹에서 주로 쓰이는 몇 가지 코덱으로 범위를 좁혀볼 수 있습니다[^2].
 각 코덱마다 압축 효율, 음질, 지연(latency), 라이센스 조건 등이 다르며 브라우저 지원 여부도 상이합니다.
 
-- **MP3 (MPEG-1 Audio Layer III)** 는 가장 널리 알려진 손실 압축 오디오 코덱으로,
-  음악 스트리밍과 디지털 음원 시장을 개척한 장본인입니다.
-  MP3는 비교적 오래된 기술이지만 여전히 **모든 최신 브라우저에서 재생 지원**됩니다.
+## 손실 압축 코덱
+
+- **MP3 (MPEG-1 Audio Layer III)** 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
+  비교적 오래된 기술이지만 여전히 **모든 최신 브라우저에서 재생 지원**하고 있습니다.
   `.mp3` 파일은 내부적으로 MPEG 형식 컨테이너를 사용하지만 영상 트랙 없이 오디오 트랙만 들어있을 경우 관례적으로 "MP3 파일"로 불립니다.
   MP3는 압축 효율이 최신 코덱보다 떨어지지만,
   **특허 만료**(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.
-  일반적으로 **128~320 kbps** 범위의 비트레이트로 스테레오 음악을 인코딩하며,
-  **192 kbps 이상**에서는 원본 CD음질에 근접한 품질을 기대할 수 있습니다.
-- **AAC (Advanced Audio Coding)** 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱으로, MP3 대비 낮은 비트레이트에서도 양호한 음질을 제공합니다.
+- **AAC (Advanced Audio Coding)** 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
+  MP3 대비 낮은 비트레이트에서도 양호한 음질을 제공합니다.
   AAC는 MPEG-4 Part 3에 정의되어 있으며 주로 **MP4(M4A)** 컨테이너에 담겨 `.mp4` 혹은 `.m4a` 확장자로 사용됩니다.
-  웹 브라우저에서는 **MP4 컨테이너의 AAC**를 거의 모두 지원합니다 (모든 주요 브라우저에서 지원되는 매우 호환성 좋은 조합).
-  특히 H.264/MP4 비디오와 함께 쓰이기도 하고, iTunes나 유튜브 등에서도 채택되어 있습니다.
+  웹 브라우저에서는 **MP4 컨테이너의 AAC**를 거의 모두 지원합니다.
   다만 AAC는 특허 코덱으로서 기술이 **비공개 및 라이선스 필요**하다는 점이 있지만,
   브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.
-  **256 kbps AAC**는 투명도(원음과의 차이를 느끼기 어려운 정도)가 높아 음원 다운로드에 종종 권장되며,
-  **애플 기기** 및 **Safari** 브라우저 환경에서 특히 기본적인 포맷으로 취급됩니다.
-- **Opus** 는 비교적 최신(2012년 표준화) 코덱으로, **Xiph.Org**와 **Mozilla** 등이 개발한 **오픈 소스** **손실 압축** 코덱입니다.
+- **Opus** 는 비교적 최신(2012년 표준화) 코덱으로, **Xiph.Org** 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
   Opus는 **웹 실시간 통신(WebRTC)** 표준 코덱으로 지정될 정도로 **낮은 지연(low latency)** 특성과 효율적인 압축을 모두 갖추고 있어,
   **음성 통화**부터 **음악 스트리밍**까지 폭넓게 활용됩니다.
   Opus는 **5~66.5ms 정도의 매우 낮은 지연시간 범위**를 가지며,
   다른 일반 음악 코덱들이 대개 100ms 이상의 지연을 보이는 것과 대비됩니다.
-  음질 면에서도 Opus는 동일 비트레이트에서 MP3나 Vorbis보다 우수한 품질을 내며,
-  합리적인 비트레이트(예: 스테레오 음악 128 kbps 정도)에서 투명도에 도달한다고 평가됩니다.
   Opus는 **완전 오픈소스/무특허** 코덱이라 라이선스 제약도 없습니다.
-  단, **브라우저 지원**은 과거에 약간 제약이 있었습니다.
-  Chrome, Firefox, Opera 등은 오래전부터 Opus를 지원했지만, Safari는 한동안 Opus를 직접 지원하지 않아 왔습니다.
-  (Safari 11~14에서는 Opus 코덱을 **CAF 컨테이너**에 담은 경우에만 제한적으로 지원하는 등 제약이 있었고, 2020년대 중반에 들어 Safari도 WebM/Opus 지원을 도입하는 추세입니다.)
+  단, **브라우저 지원**은 약간 제약이 있습니다.
   Opus는 주로 **Ogg** 또는 **WebM(Matroska)** 컨테이너에 담겨 `.opus` (Ogg Opus) 또는 `.webm` (WebM Opus) 확장자로 사용되며,
   MP4 컨테이너에도 넣을 수 있지만 호환성은 케이스마다 다를 수 있습니다.
-  최신 웹 환경에서는 Opus 지원이 점차 **보편화**되고 있으므로, **낮은 지연이 중요한 애플리케이션(예: 라이브 오디오 스트리밍, 실시간 통신)**에서 최우선으로 고려할 만합니다.
-- **Vorbis** 는 Xiph.Org에서 개발한 이전 세대 **오픈소스 손실 압축** 코덱입니다.
+  최신 웹 환경에서는 Opus 지원이 점차 **보편화**되고 있으므로
+  라이브 오디오 스트리밍, 실시간 통신과 같이 **낮은 지연이 중요한 애플리케이션**에서 고려할 만합니다.
+- **Vorbis** 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
   Ogg 컨테이너의 오디오 트랙으로 많이 사용되었고, MP3의 대안으로 한때 각광받았습니다.
   Vorbis는 MP3보다 같은 비트레이트에서 음질이 우수하며,
   **가변 비트레이트(VBR)** 인코딩을 선도적으로 채택했습니다.
-  다만 Opus가 등장하면서 압축 효율과 지연 면에서 Vorbis를 대체하였고, 현재는 **과도기적 코덱**으로 평가됩니다.
-  **브라우저 호환성** 측면에서 Vorbis 자체는 Chrome, Firefox 등에서 지원되지만 **Safari는 Ogg 컨테이너를 지원하지 않아** Vorbis 재생이 기본적으로 불가능했습니다.
-  (Safari에서 Vorbis를 재생하려면 별도 플러그인이나 변환이 필요했습니다.)
-  결과적으로 **최대 호환성**을 원한다면 Vorbis보다는 AAC나 MP3를 함께 제공하는 편이 좋습니다.
-  완전 자유 라이선스이므로 특허 비용 없이 사용할 수 있다는 장점이 있습니다.
+  다만 Opus가 등장하면서 압축 효율과 지연 면에서 Vorbis를 대체하게 되었고 게임 오디오 등 일부 분야에서만 사용되고 있습니다.
+  Opus와 마찬가지로 브라우저 지원에 제약이 있으며,
+  자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.
 - **WAV(PCM)** 는 **비압축 PCM** 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
   용량이 크지만 구조가 단순하여 거의 모든 환경에서 **기본 지원**됩니다.
   웹 브라우저도 WAV/PCM 재생을 지원하며, 특히 **짧은 효과음이나 알림음** 등에서는 별도 압축 없이 WAV를 사용할 때도 있습니다.
-  WAV의 단점은 앞서 언급한 대로 파일 크기가 크다는 것이므로, 네트워크 전송에는 비효율적입니다.
-  만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나, 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.
-- **FLAC(Free Lossless Audio Codec)** 은 이름 그대로 **무손실 압축** 코덱입니다.
-  음악을 완전히 원음 품질로 저장하면서도 WAV에 비해 용량을 40~50% 가량 줄일 수 있다는 장점이 있습니다.
-  FLAC도 오픈 소스/무특허이며 `.flac` 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 `.ogg`로 쓸 수도 있습니다.
-  브라우저에서는 Chrome과 Firefox 등이 FLAC 재생을 지원하며, 주로 **데스크톱** 환경에서 동작합니다 (모바일 브라우저 지원은 제한적일 수 있음).
-  FLAC는 웹 스트리밍보다는 **고음질 음원 다운로드** 제공 시 옵션으로 쓰이며, 대부분의 경우 손실 압축으로도 충분한 웹 오디오와는 다소 분야가 다릅니다.
+  WAV의 단점은 앞서 언급한 대로 파일 크기가 크다는 것이므로 네트워크 전송에는 비효율적입니다.
+  만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.
+
+## 무손실 압축 코덱
+
+**FLAC(Free Lossless Audio Codec)** 은 이름 그대로 **무손실 압축** 코덱입니다.
+음악을 완전히 원음 품질로 저장하면서도 WAV에 비해 용량을 40~50% 가량 줄일 수 있다는 장점이 있습니다.
+FLAC도 오픈 소스/무특허이며 `.flac` 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 `.ogg`로 쓸 수도 있습니다.
+브라우저에서는 Chrome과 Firefox 등이 FLAC 재생을 지원하며, 주로 **데스크톱** 환경에서 동작합니다 (모바일 브라우저 지원은 제한적일 수 있음).
+FLAC는 웹 스트리밍보다는 **고음질 음원 다운로드** 제공 시 옵션으로 쓰이며, 대부분의 경우 손실 압축으로도 충분한 웹 오디오와는 다소 분야가 다릅니다.
 
 이 밖에도 웹에서는 **AMR(Adaptive Multi-Rate), G.711** 등의 **음성 코덱**이 WebRTC나 SIP 통신에 사용되고,
 애플 기기 생태계에서는 무손실 압축 코덱으로 **ALAC(Apple Lossless)** 이 쓰이기도 합니다.
@@ -211,6 +206,10 @@ Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3
 이벤트로 얼마나 로드되었는지 알 수 있습니다.
 일반적인 짧은 음원이나 배경음악 등은 이 방식으로 충분합니다.
 
+```html
+<audio id="player" src="music.mp3" controls autoplay></audio>
+```
+
 - **다중 포맷 소스**: 앞서 언급한 것처럼 `<source>` 태그를 이용해 서로 다른 코덱/포맷의 파일을 제공하면 브라우저가 지원 가능한 것을 선택합니다.
   이를 통해 호환성을 높일 수 있습니다.
   또한 `.canPlayType()` 메서드로 특정 MIME 유형 지원 여부를 사전 점검할 수도 있습니다 (ex: `audio.canPlayType('audio/ogg; codecs=opus')`).
@@ -224,14 +223,10 @@ Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3
   또한 브라우저 **오디오 정책**에 따라 `autoplay`가 제한되기도 합니다 (뒤에서 설명).
   이러한 한계를 넘어서기 위해 고안된 것이 **Web Audio API**입니다.
 
-```html
-<audio id="player" src="music.mp3" controls autoplay></audio>
-```
-
 라이브 인터넷 라디오, 장시간 음악 스트리밍 서비스와 같이
 **실시간성 또는 장시간 재생이 필요한 오디오**의 경우
 **스트리밍 프로토콜**을 사용합니다.
-대표적인 것이 **HLS(HTTP Live Streaming)**와 **DASH(MPEG-DASH)**입니다.
+대표적인 것이 **HLS(HTTP Live Streaming)** 와 **DASH(MPEG-DASH)** 입니다.
 HLS는 Apple이 주도하여 개발한 스트리밍 방식으로,
 미디어를 짧은 세그먼트로 쪼개어 전송하고 재생 플레이리스트(M3U)를 제공하는 형태입니다.
 DASH는 MPEG에서 표준화한 비슷한 개념의 스트리밍입니다.
@@ -288,6 +283,7 @@ Web Audio로 받아올 때
 **긴 시간 재생**이나 **실시간/적응형 스트리밍**은 HLS/DASH + MSE 같은 방법을 사용합니다.
 한편 **Web Audio API**를 사용하면
 네이티브 미디어 요소보다는 더 저수준에서 스트리밍 제어와 디코딩 데이터를 다룰 수 있습니다.
+
 다음으로 이렇게 전달된 오디오 데이터를 **브라우저에서 어떻게 출력하고 처리하는지** 살펴보겠습니다.
 
 - **AudioContext와 AudioNode**: Web Audio를 사용하려면 먼저 `AudioContext`를 생성합니다.
@@ -318,7 +314,7 @@ gainNode.gain.value = 0.5;
   `AudioContext.currentTime`을 기준으로 노드의 `start()`를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
   이는 `<audio>` 요소의 JavaScript 타이밍 제어보다 정확도가 높아, 음악 애플리케이션이나 리듬 게임 등에서 유용합니다.
 
-Web Audio API의 유연성 덕분에, **게임 오디오**, **뮤직DAW 웹앱**, **오디오 시각화 데모** 등 수많은 응용이 웹에서 가능해졌습니다.
+Web Audio API의 유연성 덕분에, **게임 오디오**, **DAW 웹앱**, **오디오 시각화 데모** 등 수많은 응용이 웹에서 가능해졌습니다.
 다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다 (즉, `decodeAudioData`로 디코딩 가능해야 함).
 그리고 Web Audio는 **사용자 승인 없이 임의로 소리를 재생하지 못하도록** 브라우저의 **autoplay 정책** 영향을 받습니다.
 따라서 AudioContext를 만들어 소스를 `start()`하는 것도 사용자가 클릭 등 **인터랙션한 맥락 내**에서 이루어져야 합니다.
@@ -329,7 +325,7 @@ Web Audio API의 유연성 덕분에, **게임 오디오**, **뮤직DAW 웹앱**
 이제 오디오의 **입력** 측면을 살펴보겠습니다.
 [getUserMedia API](https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia)를 통해
 사용자의 오디오 입력을 웹 애플리케이션으로 가져올 수 있고,
-이렇게 들어온 오디오를 실시간 처리하거나 녹음하여 파일로 저장할 수 있습니다.
+이렇게 입력된 오디오를 실시간 처리하거나 녹음하여 파일로 저장할 수 있습니다.
 웹에서 오디오 입력/녹음의 기본 흐름은 다음과 같습니다.
 
 1. **MediaDevices.getUserMedia()** 로 **마이크 접근 권한**을 요청하여 **MediaStream**을 얻는다.
@@ -347,113 +343,129 @@ Web Audio API의 유연성 덕분에, **게임 오디오**, **뮤직DAW 웹앱**
 이 API는 **프라미스(Promise)** 기반이며, 성공 시 `MediaStream`을, 실패 시 에러를 줍니다.
 
 ```javascript
-try {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  console.log("마이크 스트림 얻기 성공:", stream);
-} catch(err) {
-  console.error("마이크 스트림 얻기 실패:", err);
-}
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+console.log("마이크 스트림 얻기 성공:", stream);
 ```
 
 이때 브라우저는 처음 호출 시 사용자의 **허용/거부** 동의를 묻는 팝업을 표시합니다.
-또한 **보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)**에서만 동작합니다.
+또한 **보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)** 에서만 동작합니다.
 (로컬 개발에서는 `localhost`나 `file://`도 허용됩니다.)
-사용자가 허용했다면 `MediaStream`에는 하나 이상의 **MediaStreamTrack**이 포함되는데, 오디오만 요청한 경우 보통 하나의 오디오 트랙이 있습니다.
+사용자가 허용했다면 `MediaStream`에는
+하나 이상의 [MediaStreamTrack](https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack)이 포함되는데,
+오디오만 요청한 경우 보통 하나의 오디오 트랙이 있습니다.
 
 ## Web Audio API로 입력 스트림 처리하기
 
 얻은 `MediaStream`은 다양한 용도로 활용할 수 있습니다.
 우선, **실시간 처리**를 위해 Web Audio API와 연계하는 방법부터 보겠습니다.
-Web Audio API는 `MediaStreamAudioSourceNode`를 통해 외부 스트림을 오디오 노드 그래프로 끌어들일 수 있습니다.
+Web Audio API는 `MediaStreamAudioSourceNode`를 통해 외부 스트림을 오디오 노드 그래프로 가져올 수 있습니다.
 `AudioContext.createMediaStreamSource(stream)`을 호출하면 해당 스트림을 소스로 가지는 AudioNode를 얻습니다.
 이를 다른 노드에 연결하여 실시간 처리를 시작할 수 있습니다.
 
-**예시**: 마이크 입력을 받아 Web Audio로 **시각화 및 출력**해보겠습니다.
-
 ```javascript
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+// AudioContext 생성
 const audioCtx = new AudioContext();
-const sourceNode = audioCtx.createMediaStreamSource(stream);  // 마이크 MediaStream을 AudioNode로 변환
-const analyser = audioCtx.createAnalyser();
-sourceNode.connect(analyser);
+
+// 마이크 MediaStream을 AudioNode로 변환
+const sourceNode = audioCtx.createMediaStreamSource(stream);
+
+// 마이크 스트림을 AudioContext 출력에 연결
 sourceNode.connect(audioCtx.destination);
+
+// 연결 종료
+audioCtx.close().then(() => {
+  console.log("AudioContext 종료");
+});
 ```
 
-위 코드에서 마이크 스트림으로부터 `sourceNode`를 만들고, 이것을 `AnalyserNode`와 오디오 출력(`destination`)에 연결했습니다.
-이렇게 하면 사용자가 말하는 소리가 곧바로 스피커로 출력됨과 동시에 `analyser` 노드를 통해 주파수 데이터 등을 획득할 수 있습니다.
-(`audioCtx.destination`은 기본 출력 장치, 즉 스피커를 의미합니다.)
+위 코드에서 마이크 스트림으로부터 `sourceNode`를 만들고,
+오디오 출력 노드([AudioDestinationNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode))에 연결했습니다.
+이렇게 하면 사용자가 말하는 소리가 곧바로 스피커로 출력됩니다.
+`audioCtx.destination`은 기본 출력 장치, 즉 스피커를 의미합니다.
 
-> Tip: 마이크를 실시간 출력하면 사용자에게 자신의 목소리가 약간 지연되어 들리는데, 이를 사운드 모니터링이라고 합니다.
+> Tip: 마이크를 실시간 출력하면 사용자에게 자신의 목소리가 약간 지연되어 들리는데,
+> 이를 사운드 모니터링이라고 합니다.
 > 보통 수백 ms 이하의 지연이지만, 이 딜레이 때문에 약간 어색하게 들릴 수 있습니다.
-> 전문 오디오 장비 없이 웹에서 완전 무지연 모니터링은 어려우므로, 필요할 때만 출력하거나, 헤드폰 사용을 권장해야 합니다.
-> 또한 sourceNode.connect(audioCtx.destination) 부분을 빼면 모니터링 없이 무음으로 입력 처리를 할 수 있습니다 (분석이나 녹음만 할 때 유용).
+> 전문 오디오 장비 없이 웹에서 완전 무지연 모니터링은 어려우므로,
+> 필요할 때만 출력하거나 헤드폰 사용을 권장합니다.
+> 또한 `sourceNode.connect(audioCtx.destination)` 부분을 빼면
+> 모니터링 없이 무음으로 입력 처리를 할 수 있습니다.
 
-이처럼 Web Audio를 사용하면 입력 신호에 대해 **실시간 분석**(AnalyserNode 활용)이나 **이펙트 적용**(예: GainNode로 증폭/감쇠, BiquadFilterNode로 노이즈 제거 등)이 가능합니다.
-가령 간단한 **VU 미터**(볼륨 레벨 표시)를 구현하려면 각 애니메이션 프레임마다
-`analyser.getByteTimeDomainData()`로 웨이브폼 데이터를 가져와 그 **평균 진폭**이나 **최대치**를 계산, 이를 그래프로 그리면 됩니다.
+Web Audio를 사용하면 입력 신호에 대해
+[AnalyserNode](https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode)를 활용해서 **실시간 분석**하거나
+**이펙트**도 적용할 수 있습니다.
+예를 들면 [GainNode](https://developer.mozilla.org/en-US/docs/Web/API/GainNode)로 증폭/감쇠,
+[BiquadFilterNode](https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode)로 노이즈를 제거할 수 있습니다.
+
+또한 간단한 **VU 미터(Volume Unit Meter)** 를 구현하려면
+각 애니메이션 프레임마다
+`AnalyserNode`의 `getByteTimeDomainData()`로 파형(waveform) 데이터를 가져와
+**평균 진폭**이나 **최대치**를 계산해서 그래프로 그리면 됩니다.
 
 ## MediaRecorder를 사용한 오디오 녹음
 
 마이크에서 들어온 `MediaStream`을 파일로 저장하려면 **MediaStream Recording API**,
 즉 [MediaRecorder](https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder)를 사용하면 됩니다.
-MediaRecorder는 MediaStream을 받아 해당 스트림을 **지정한 코덱으로 실시간 인코딩**하여 **블랍(Blob)**으로 축적해 줍니다.
+MediaRecorder는 MediaStream을 받아 해당 스트림을 **지정한 코덱으로 실시간 인코딩**하여 **Blob**으로 축적해 줍니다.
 스트림에는 비디오가 포함될 수도 있지만 여기서는 오디오 스트림으로 한정해 설명합니다.
 
 MediaRecorder 사용 방법은 간단합니다.
 
+<audio controls id="test-audio-1"></audio>
+
+*id="test-audo-1"*
+
 ```javascript
-const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });  // 또는 audio/ogg 등
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+const recorder = new MediaRecorder(stream, { mimeType: "audio/webm" });  // audio/ogg, etc.
 const chunks = [];
-recorder.ondataavailable = e => chunks.push(e.data);
-recorder.onstop = e => {
+recorder.ondataavailable = e => { chunks.push(e.data); };
+recorder.onstop = () => {
   const blob = new Blob(chunks, { type: recorder.mimeType });
   console.log("녹음 완료 Blob:", blob);
+  // <audio> 요소에 clipURL을 src로 설정
+  const clipURL = URL.createObjectURL(blob);
+  document.querySelector("#test-audio-1").src = clipURL;
 };
 recorder.start();
-// ... 필요 시 recorder.stop() 호출
 ```
 
-위 코드에서, `MediaRecorder(stream)`으로 recorder를 생성할 때 `{ mimeType: "audio/webm" }`과 같이 원하는 출력 컨테이너와 코덱의 MIME 유형을 지정할 수 있습니다.
-지정하지 않으면 **브라우저 기본값**으로 인코딩됩니다 (예를 들어 Chrome은 기본적으로 `audio/webm` Opus, Firefox는 `audio/ogg` Opus 등).
-`recorder.start()`를 호출하면 녹음이 시작되고, 이어서 `dataavailable` 이벤트가 발생할 때마다 `chunks` 배열에 Blob 조각을 모읍니다.
+위 코드에서 `MediaRecorder(stream)`으로 recorder를 생성할 때
+`{ mimeType: "audio/webm" }`과 같이 원하는 출력 컨테이너와 코덱의 MIME 유형을 지정할 수 있습니다.
+지정하지 않으면 **브라우저 기본값**으로 인코딩됩니다.
+예를 들어 Chrome은 기본적으로 `audio/webm` Opus, Firefox는 `audio/ogg` Opus로 녹음합니다.
+`recorder.start()`를 호출하면 녹음이 시작되고,
+이어서 `dataavailable` 이벤트가 발생할 때마다 `chunks` 배열에 Blob 조각을 모읍니다.
 `MediaRecorder`는 내부적으로 일정 간격마다 데이터를 내보내는데, `start(timeslice)`에 밀리초 단위로 값을 주면 해당 간격마다 `dataavailable` 이벤트를 받을 수 있습니다.
 또는 `recorder.requestData()`를 호출해서 수동으로 현재까지의 데이터를 받을 수도 있습니다.
 
-녹음을 중지하려면 `recorder.stop()`을 호출합니다.
-그러면 마지막 데이터 조각과 함께 `stop` 이벤트가 발생하고, 그 시점에 우리가 모은 `chunks`들을 합쳐 하나의 Blob을 만들 수 있습니다.
-위 코드의 `onstop` 핸들러는 Blob을 생성하고 있습니다.
-이렇게 얻은 Blob 객체를 다룰 방법은 여러 가지가 있습니다:
-
-- `URL.createObjectURL(blob)`으로 객체 URL을 만든 뒤, 이를 `<audio>` 요소의 `src`로 설정하면 녹음한 내용을 **즉시 재생**해볼 수 있습니다. (예: `audioElem.src = URL.createObjectURL(blob)`).
-- 서버로 Blob을 업로드하여 저장하거나, `<a>` 태그의 `href`에 객체 URL을 넣고 `download` 속성을 주어 **파일 다운로드** 링크를 제공할 수도 있습니다.
-- Blob을 `File` 객체로 변환하거나, FileReader로 읽어 ArrayBuffer/데이터URL로 변환해 처리할 수도 있습니다.
-
-**MediaRecorder의 코덱**: `MediaRecorder.mimeType`으로 현재 녹음에 사용된 실제 MIME 정보를 알 수 있습니다.
-브라우저별로 지원하는 MIME 타입이 다를 수 있으므로, `MediaRecorder.isTypeSupported()` 정적 메서드로 **사용 가능 여부**를 사전에 확인하는 것이 좋습니다.
-예를 들어 Safari는 과거 `audio/webm`을 지원하지 않았고 `audio/mp4` (AAC) 형태로만 작동한 적이 있으므로, 호환성을 위해 조건 분기를 둘 수 있습니다.
-기본적으로 Chrome/Firefox/Edge 등은 `audio/webm;codecs=opus`나 `audio/ogg;codecs=opus`를 지원하며, 대부분 Opus 코덱으로 녹음됩니다.
-Opus는 음성/음악 모두에 적합한 현대적인 코덱이고, 브라우저가 알아서 인코딩을 최적화해주므로 개발자는 신경쓸 부분이 적습니다.
-
-**예시**: 사용자가 버튼을 눌러 녹음을 시작/정지하고, 녹음된 파일을 리스트에 추가하여 재생할 수 있게 하는 간단한 활용은 다음과 같은 흐름입니다.
-
 ```javascript
-recorder.start();
-// ... 녹음 진행중, UI에 녹음중 표시
-recorder.ondataavailable = e => { chunks.push(e.data); };
-
-recorder.onstop = () => {
-  const blob = new Blob(chunks, { type: recorder.mimeType });
-  chunks.length = 0;
-  const clipURL = URL.createObjectURL(blob);
-  // 새로운 <audio> 요소 동적으로 생성하여 clipURL을 src로 설정, 리스트에 추가
-};
+recorder.stop();
 ```
 
-위 로직을 이용하면 사용자가 여러 음성 클립을 녹음하여 순차적으로 플레이하거나 삭제할 수 있는 간단한 **웹 보이스 레코더**를 만들 수 있습니다.
-실제 MDN의 Web Dictaphone 예제가 이와 동일한 아이디어로 구현되어 있으며, 녹음된 Blob을 `<audio>`로 추가하고, 이름을 붙이고, 삭제 버튼을 다는 등의 UI를 보여줍니다.
+녹음을 중지하려면 `recorder.stop()`을 호출합니다.
+그러면 마지막 데이터 조각과 함께 `stop` 이벤트가 발생하고,
+그 시점에 우리가 모은 `chunks`들을 합쳐 하나의 Blob을 만들 수 있습니다.
+`onstop` 핸들러는 Blob을 생성하고 있습니다.
+이렇게 얻은 Blob 객체를 다룰 방법은 여러 가지가 있습니다.
 
-MediaRecorder API의 편의성 덕분에, 별도 서버없이도 **클라이언트 사이드**에서 오디오 녹음 기능을 쉽게 제공할 수 있습니다.
-다만, **Mobile Safari** 등 일부 환경에서는 MediaRecorder 지원이 늦게 이루어졌으므로 (iOS 14+ 지원 등), 사용자 플랫폼에 따라 폴백 전략이 필요할 수 있습니다.
-폴백으로는 Flash 기반 솔루션(과거)이나, Web Audio로 입력을 받아 manually WAV로 인코딩하는 방법(성능 부담 큼) 등이 있을 수 있지만, 최근에는 대부분 브라우저에서 MediaRecorder를 지원합니다.
+- 앞서 본 코드처럼 객체 URL을 만들어서 `<audio>` 요소의 `src`로 설정하면 녹음한 내용을 **즉시 재생**해볼 수 있습니다.
+- 서버로 Blob을 업로드하여 저장하거나
+  `<a>` 태그의 `href`에 객체 URL을 넣고 `download` 속성을 주어 **파일 다운로드** 링크를 제공할 수도 있습니다.
+- Blob을 `File` 객체로 변환하거나 [FileReader](https://developer.mozilla.org/en-US/docs/Web/API/FileReader)로 읽어
+  [ArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
+  혹은 [Data URL로 변환](https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL)해 처리할 수도 있습니다.
+
+이를 활용하면 웹에서 간단한 **음성 녹음기(Voice Recorder)** 를 만들 수 있습니다.
+MDN의 [Web Dictaphone](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API)
+예제를 따라해보세요.
+
+- [demo](https://mdn.github.io/dom-examples/media/web-dictaphone/)
+- [source code](https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone)
+
+![Web Dictaphone 화면](/images/multimedia/audio-in-web/web-dictaphone.png)
 
 ## Web Audio와 MediaRecorder의 조합
 
@@ -461,24 +473,80 @@ MediaRecorder API의 편의성 덕분에, 별도 서버없이도 **클라이언�
 실제로는 이 둘을 **조합**하여, **실시간 처리된 오디오를 녹음**하거나 하는 것도 가능합니다.
 예를 들어 **노이즈 필터**를 Web Audio로 적용한 뒤 깨끗해진 신호를 녹음하거나, 여러 오디오 소스를 믹싱한 결과를 하나의 스트림으로 녹음하는 경우입니다.
 
+![Audio Context](/images/multimedia/audio-in-web/audio-context.png)
+
+*[이미지 출처: MDN](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)*
+
 이를 위해 Web Audio API는 `AudioContext.createMediaStreamDestination()` 노드를 제공합니다.
 이 노드는 AudioNode 그래프의 출력을 **MediaStream으로 변환**해줍니다.
-`const dest = audioCtx.createMediaStreamDestination();`를 호출하면 얻어지는 `dest.stream`은 MediaStream으로서, 여기에는 AudioContext에서 만들어진 모든 소리가 실시간 포함됩니다.
+`const dest = audioCtx.createMediaStreamDestination();`를 호출하면 얻어지는 `dest.stream`은
+MediaStream으로써 AudioContext에서 만들어진 모든 소리가 실시간으로 입력됩니다.
 이 스트림을 앞서처럼 `new MediaRecorder(dest.stream)`에 넘기면 Web Audio 출력 자체를 녹음할 수 있습니다.
 이렇게 하면 **효과 처리 후의 오디오**나 **다중 소스 믹스**를 녹음하는 것이 가능해집니다.
 
 예를 들어, 마이크 입력에 에코 효과를 주고 싶은 경우 다음과 같이 구현할 수 있습니다.
 
+<audio controls id="test-audio-2"></audio>
+
+*id="test-audo-2"*
+
 ```javascript
-const sourceNode = audioCtx.createMediaStreamSource(stream);
-const echo = audioCtx.createDelay(0.3);
-sourceNode.connect(echo).connect(audioCtx.destination); // 출력 (에코 포함)
-sourceNode.connect(echo).connect(dest);                 // MediaStreamDestination에도 연결
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+const audioCtx = new AudioContext();
+const source = audioCtx.createMediaStreamSource(stream);
+
+// --- Delay + Feedback 구성 (피드백 에코) ---
+const delay = audioCtx.createDelay(1);
+delay.delayTime.value = 0.4; // 400ms 지연
+
+const feedbackGain = audioCtx.createGain();
+feedbackGain.gain.value = 0.4; // 에코 반복 감쇠
+
+delay.connect(feedbackGain);
+feedbackGain.connect(delay); // 피드백 루프
+
+// --- Dry/Wet 믹스 ---
+const dryGain = audioCtx.createGain();
+dryGain.gain.value = 1.0;
+
+const wetGain = audioCtx.createGain();
+wetGain.gain.value = 0.6;
+
+// --- 믹서로 합성 & 출력 대상 구성 ---
+const merger = audioCtx.createGain(); // 믹서 역할
+const dest = audioCtx.createMediaStreamDestination(); // 녹음용
+
+// --- 연결 구성 ---
+source.connect(dryGain).connect(merger); // 원본
+source.connect(delay).connect(wetGain).connect(merger); // 에코 포함
+merger.connect(audioCtx.destination); // 스피커 출력
+merger.connect(dest); // 녹음용 출력
+
+// --- MediaRecorder로 녹음 ---
 const recorder = new MediaRecorder(dest.stream);
+const chunks = [];
+recorder.ondataavailable = e => { chunks.push(e.data); };
+recorder.onstop = () => {
+  const blob = new Blob(chunks, { type: recorder.mimeType });
+  console.log("녹음 완료 Blob:", blob);
+  // <audio> 요소에 clipURL을 src로 설정
+  const clipURL = URL.createObjectURL(blob);
+  document.querySelector("#test-audio-2").src = clipURL;
+};
+recorder.start();
+
+// 5초 후 녹음 정지
+setTimeout(() => {
+  recorder.stop();
+  stream.getTracks().forEach(track => track.stop());
+  audioCtx.close();
+}, 5000);
 ```
 
-위에서 `dest`는 `createMediaStreamDestination()`으로 만든 것이고, 이 dest.stream을 녹음하면 에코가 섞인 마이크 소리가 파일로 저장됩니다.
-이처럼 Web Audio와 MediaRecorder를 조합하면 **자유로운 오디오 파이프라인** 구성이 가능하며, 웹에서 간단한 **DAW(Digital Audio Workstation)** 기능 흉내까지 낼 수 있습니다.
+위에서 `dest`는 `createMediaStreamDestination()`으로 만든 것이고,
+이 `dest.stream`에 녹음하면 에코가 섞인 마이크 소리를 저장할 수 있습니다.
+이처럼 Web Audio와 MediaRecorder를 조합하면 **자유로운 오디오 파이프라인** 구성이 가능하며,
+웹에서 간단한 **DAW(Digital Audio Workstation)** 기능 흉내까지 낼 수 있습니다.
 
 # 브라우저의 오디오 재생 정책
 
@@ -522,8 +590,7 @@ Web Audio API는 `AudioContext` 생성 시
 실제 지연은 기기와 브라우저에 따라 달라집니다.
 일반적으로 20~50ms 정도 출력 지연은 감안해야 하며,
 `MediaRecorder`로 녹음할 때도 수십 ms 단위 버퍼링이 있습니다.
-Voice chat 등의 경우 WebRTC를 쓰지만, 만약 Web Audio만으로 구현한다면 이 지연에 유의해야 합니다.
-또한 오디오 처리는 CPU 부하를 줄 수 있으므로 다음과 같은 최적화도 고려하면 좋습니다.
+오디오 처리는 CPU 부하를 줄 수 있으므로 다음과 같은 최적화도 고려하면 좋습니다.
 
 - 분석/시각화 연산을 너무 짧은 주기로 하지 않기
 - 필요 이상으로 많은 노드 사용 자제
@@ -547,11 +614,18 @@ Voice chat 등의 경우 WebRTC를 쓰지만, 만약 Web Audio만으로 구현�
 
 # 더 읽을 거리
 
-- [Web Audio API - code examples](https://github.com/mdn/webaudio-examples) | MDN GitHub
-- [Getting started with Web Audio API](https://web.dev/articles/webaudio-intro) | web.dev
-- [Encoding and decoding audio - Audio Toolbox](https://developer.apple.com/documentation/audiotoolbox/encoding-and-decoding-audio) | Apple Developer
-- [Streaming audio and video](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming) | MDN
-- [Using the MediaStream Recording API](https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API) | MDN
+- Codec
+  - [A Guide for Choosing the Right Codec](https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/) | Audiokinetic
+- Web API
+  - [Web Audio API - code examples](https://github.com/mdn/webaudio-examples) | MDN GitHub
+  - [Getting started with Web Audio API](https://web.dev/articles/webaudio-intro) | web.dev
+  - [Developing game audio with the Web Audio API](https://web.dev/articles/webaudio-games) | web.dev
+  - [Streaming audio and video](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming) | MDN
+- 음향
+  - [음향시스템 핸드북](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661) | 장호준
+  - [장인석의 음향입문](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108)
+- 신호 처리
+  - [기초 신호 및 시스템](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155) | 이철희
 
 [^1]: [Digital audio concepts](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts) | MDN
 [^2]: [Web audio codec guide](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs) | MDN

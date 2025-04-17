@@ -9,9 +9,261 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Thu, 17 Apr 2025 18:08:00 +0900</lastBuildDate>
+    <lastBuildDate>Thu, 17 Apr 2025 23:30:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>모니터링과 타임아웃의 중요성</title>
+        <link>https://markruler.github.io/posts/java/java-timeout-monitoring/</link>
+        <pubDate>Wed, 11 May 2022 02:19:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/java/java-timeout-monitoring/</guid>
+        <description>임창수 https://markruler.github.io/posts/java/java-timeout-monitoring/ -&lt;h1 id=&#34;상황&#34;&gt;상황&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.&lt;/li&gt;
+&lt;li&gt;계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다.&lt;/li&gt;
+&lt;li&gt;장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/datadog/transaction-deadlock.png&#34; alt=&#34;transaction-deadlock&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;code&gt;RedisSystemException&lt;/code&gt;은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다.
+만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;분석&#34;&gt;분석&lt;/h2&gt;
+&lt;p&gt;시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다.
+설정하지 않으면 &lt;strong&gt;default 값은 -1&lt;/strong&gt; 로 타임아웃이 발생하지 않는다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// org.springframework.transaction.support.AbstractPlatformTransactionManager&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TransactionDefinition.TIMEOUT_DEFAULT = -1;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;하지만 트랜잭션이 왜 저렇게 오래 유지되는지 알 수 없었다.
+그래도 서버 장애가 발생하는 이유는 알 수 있었다.
+TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(Deadlock)이 발생했고
+하나의 서비스 뿐만 아니라 해당 테이블을 사용하는 모든 서비스에 장애가 발생했다.&lt;/p&gt;
+&lt;h2 id=&#34;해결&#34;&gt;해결&lt;/h2&gt;
+&lt;h3 id=&#34;sql-튜닝&#34;&gt;SQL 튜닝&lt;/h3&gt;
+&lt;p&gt;가장 먼저 시도한 건 SQL 튜닝이었다.
+해당 트랜잭션이 왜 끊기지 않았는지 파악할 수 없었지만 해당 SQL을 실행시켰을 때 무려 8초 가량이 소요되었다.
+튜닝을 통해 개선한 SQL은 약 1.1초 가량 소요되었다. (이후 1초 이내로 튜닝해보자..!)&lt;/p&gt;
+&lt;h3 id=&#34;timeout-설정&#34;&gt;Timeout 설정&lt;/h3&gt;
+&lt;p&gt;Transaction Timeout은 &lt;code&gt;TransactionManager&lt;/code&gt; 에 설정해야 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;bean id=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;transactionManager&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt;=&amp;#34;org.springframework.jdbc.datasource.DataSourceTransactionManager&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;    &amp;lt;constructor-arg ref=&amp;#34;&lt;/span&gt;dataSource&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;    &amp;lt;property name=&amp;#34;&lt;/span&gt;defaultTimeout&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34; value=&amp;#34;&lt;/span&gt;30&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;lt;/bean&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;만약 특정 메서드에만 다른 타임아웃 값을 설정하고 싶다면 메서드 레벨에 &lt;code&gt;@Transactional&lt;/code&gt; 을 설정한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// timeout은 seconds 단위&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Transactional(readOnly = &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt;, timeout = 10)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Result &lt;span style=&#34;color:#ff0&#34;&gt;list&lt;/span&gt;(Param param) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; repository.list(param);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;추가적인-문제&#34;&gt;추가적인 문제&lt;/h1&gt;
+&lt;p&gt;우리 팀은 모니터링 도구로 Datadog을 사용하고 있다.
+그런데 알람 임계점(Alert threshold)이 낮게 설정되어 있어서 불필요한 알람이 아주 많이 발생했다.
+개발팀은 이 알람들을 무시하고 있었고, 실제로 장애가 발생했을 때 백이면 백 개발팀보다 다른 팀에서 먼저 감지했다.&lt;/p&gt;
+&lt;h2 id=&#34;monitoring&#34;&gt;Monitoring&lt;/h2&gt;
+&lt;p&gt;그래서 임계점을 높게 설정했다.
+이미 Datadog 도입 시점부터 알람이 자주 발생했는데도 고치지 않았던 것으로 보인다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/datadog/alert-threshold.png&#34; alt=&#34;alert-threshold&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;10 minutes Average Latency&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;위 Average Latency 그래프에서 스파이크(spike) 부분이 서버 장애가 발생했던 시점이다.
+그런데 이전부터 거의 구분할 수 없을 정도로 Alert가 발생하던 것을 확인할 수 있다.
+임계점을 높인 이후에는 정상적인 애플리케이션에서는 &lt;code&gt;OK&lt;/code&gt;가 표시된다.&lt;/p&gt;
+&lt;p&gt;임계점에 대한 기준은 과거 이력을 보고 설정했다.
+장애가 발생하던 시점에 전조가 보이기 시작한 값을 경고 임계점(Warning threshold)으로 설정하고,
+증상이 나타났을 때 값을 알람 임계점으로 설정했다.
+— 정확한 기준이라고는 할 수 없다. 앞으로도 알람이 발생할 때마다 조정할 예정이다.&lt;/p&gt;
+&lt;h2 id=&#34;log-tracing--error-tracking&#34;&gt;Log Tracing &amp;amp; Error Tracking&lt;/h2&gt;
+&lt;p&gt;Datadog의 APM(Application Performance Management) 서비스는
+애플리케이션의 성능을 실시간으로 분석할 수 있게 도와주고
+에러가 발생했을 때 트레이싱 할 수 있도록 도와준다.
+하지만 제대로 트레이싱하기 위해서는 이해할 수 있는 로그가 남아야 한다.&lt;/p&gt;
+&lt;p&gt;우리 팀에서 작성한 애플리케이션은 Logback을 Logging Framework로 사용하고 있었는데
+이를 사용하지 않고 표준 출력(&lt;code&gt;System.out&lt;/code&gt;)을 사용하는 부분이 군데군데 보였다.
+게다가 공통 로깅을 AOP로 분리하지 않고 각각의 메서드에서 처리하고 있었다.&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;System.out&lt;/code&gt; 을 사용하면 로그 레벨이나 목적별로 분리해서 설정할 수 없을 뿐더러
+애플리케이션 로그 파일에 로그가 남지 않고 Tomcat의 &lt;code&gt;catalina.out&lt;/code&gt; 에 남는다.
+그럼 특정 기능에서 에러가 발생하는데도 로그를 확인하기 어렵다.
+Checkstyle을 도입해서 모든 &lt;code&gt;System.out&lt;/code&gt;, &lt;code&gt;System.err&lt;/code&gt;(&lt;code&gt;printStackTrace&lt;/code&gt; 포함)을 Logger로 대체했다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;lt;!-- checkstyle.xml --&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;module name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;RegexpSinglelineJava&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;SystemOutput&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;format&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;^.*System\.(out|err).*$&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;ignoreComments&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;message&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Don&amp;#39;t use System.out/err, use Logger instead.&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/module&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;module name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;RegexpSinglelineJava&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;id&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;printStackTrace&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;format&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;printStackTrace&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;ignoreComments&amp;#34;&lt;/span&gt; value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;property name=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;message&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              value=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Don&amp;#39;t use printStackTrace, use Logger instead.&amp;#34;&lt;/span&gt;/&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/module&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;특히 선임 중 한 분이 &lt;a href=&#34;https://twitter.com/rpbaltazar/status/1458979690790539266&#34;&gt;“200 OK, But”&lt;/a&gt; 방식을 선호했다.
+이 방식은 오류가 발생해도 잡아서(catch) &lt;code&gt;200 OK&lt;/code&gt; 응답을 보낸다.
+&lt;strong&gt;에러가 발생하는데도 모니터링 도구에서는 마치 애플리케이션이 정상적인 것처럼 보인다.&lt;/strong&gt;
+이런 방식은 HTTP가 네트워크 프로토콜이라는 것을 고려해보면
+서버와 클라이언트 간 커뮤니케이션을 더 힘들게 만든다는 것을 알 수 있다.
+그래서 그 분이 퇴사하시자마자 HTTP 상태 코드를 분리했다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/web/200-ok-but.webp&#34; alt=&#34;200-ok-but&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;200 OK, but&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;h2 id=&#34;spring-aop&#34;&gt;Spring AOP&lt;/h2&gt;
+&lt;p&gt;마지막으로 AOP를 이용해서 공통 로깅을 분리했다.
+예를 들어 트랜잭션 타임아웃이 발생하면 &lt;code&gt;TransactionTimedOutException&lt;/code&gt; 예외가 발생한다.
+그래서 해당 예외를 위한 핸들러를 추가했다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// org.springframework.transaction.TransactionTimedOutException&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;org.springframework.transaction.TransactionTimedOutException: Transaction timed out: deadline was Wed May 04 16:42:38 KST 2022
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.springframework.transaction.support.ResourceHolderSupport.checkTransactionTimeout(ResourceHolderSupport.java:141)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInMillis(ResourceHolderSupport.java:130)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.springframework.transaction.support.ResourceHolderSupport.getTimeToLiveInSeconds(ResourceHolderSupport.java:114)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.mybatis.spring.transaction.SpringManagedTransaction.getTimeout(SpringManagedTransaction.java:139)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.SimpleExecutor.prepareStatement(SimpleExecutor.java:87)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.SimpleExecutor.doQuery(SimpleExecutor.java:62)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.BaseExecutor.queryFromDatabase(BaseExecutor.java:325)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.BaseExecutor.query(BaseExecutor.java:156)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:109)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.executor.CachingExecutor.query(CachingExecutor.java:89)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:151)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:145)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectList(DefaultSqlSession.java:140)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.session.defaults.DefaultSqlSession.selectOne(DefaultSqlSession.java:76)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at sun.reflect.GeneratedMethodAccessor113.invoke(Unknown Source)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.lang.reflect.Method.invoke(Method.java:498)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:434)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at com.sun.proxy.$Proxy36.selectOne(Unknown Source)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.mybatis.spring.SqlSessionTemplate.selectOne(SqlSessionTemplate.java:167)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:87)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.binding.MapperProxy$PlainMethodInvoker.invoke(MapperProxy.java:145)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:86)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ...
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@ControllerAdvice
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; ServerErrorAdvice {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ResponseBody
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @ExceptionHandler(TransactionTimedOutException.class)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; ErrorResponse &lt;span style=&#34;color:#ff0&#34;&gt;handleTransactionTimedOutException&lt;/span&gt;(TransactionTimedOutException e) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; ErrorResponse(e.toString());
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이때까지만 해도 해결된 것으로 보였다.&lt;/p&gt;
+&lt;h1 id=&#34;상황-2&#34;&gt;상황 2&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/datadog/transaction-timeout.png&#34; alt=&#34;transaction-timeout&#34;&gt;&lt;/p&gt;
+&lt;p&gt;주말이 지나고 월요일 아침, 갑자기 레이턴시가 높아지고 &lt;code&gt;TransactionTimedOutException&lt;/code&gt; 예외가 발생했다.&lt;/p&gt;
+&lt;h2 id=&#34;분석-2&#34;&gt;분석 2&lt;/h2&gt;
+&lt;p&gt;예외가 발생한 코드는 다음과 같은 구조를 가졌다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Service
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;@Transactional
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;class&lt;/span&gt; ServiceImpl &lt;span style=&#34;color:#f00&#34;&gt;implements&lt;/span&gt; Service {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Override
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; List&amp;lt;Result&amp;gt; &lt;span style=&#34;color:#ff0&#34;&gt;list&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Response response = callHttpClientWithoutTimeout(); &lt;span style=&#34;color:#0f0&#34;&gt;// (2) TransactionTimedOutException 발생&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; accessDb(response);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    @Override
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;public&lt;/span&gt; Response &lt;span style=&#34;color:#ff0&#34;&gt;callHttpClientWithoutTimeout&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        CloseableHttpClient httpClient = HttpClients.createDefault();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        HttpGet request = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; HttpGet(url);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        CloseableHttpResponse response = httpClient.execute(request); &lt;span style=&#34;color:#0f0&#34;&gt;// (1) HttpHostConnectException 발생&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; response;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;먼저 로그를 확인해보았다.
+해당 시간대에 IPInfoDB API 서버로 요청하는 부분에서
+일시적으로 Connection Timeout이 발생했던 것을 확인할 수 있었다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[2022-05-09 06:32:57:8502224037446002723 2136207119638956779] ERROR org.apache.http.conn.HttpHostConnectException: Connect to api.ipinfodb.com:80 [api.ipinfodb.com/45.32.138.106] failed: 연결 시간 &lt;span style=&#34;color:#ff0&#34;&gt;초과&lt;/span&gt; (Connection timed out)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;org.apache.http.conn.HttpHostConnectException: Connect to api.ipinfodb.com:80 [api.ipinfodb.com/45.32.138.106] failed: 연결 시간 &lt;span style=&#34;color:#ff0&#34;&gt;초과&lt;/span&gt; (Connection timed out)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:159)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.conn.PoolingHttpClientConnectionManager.connect(PoolingHttpClientConnectionManager.java:373)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.execchain.MainClientExec.establishRoute(MainClientExec.java:394)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.execchain.MainClientExec.execute(MainClientExec.java:237)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.execchain.ProtocolExec.execute(ProtocolExec.java:185)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.execchain.RetryExec.execute(RetryExec.java:89)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.execchain.RedirectExec.execute(RedirectExec.java:110)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.client.InternalHttpClient.doExecute(InternalHttpClient.java:185)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:83)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.client.CloseableHttpClient.execute(CloseableHttpClient.java:108)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:343)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:798)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:66)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:808)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1498)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.lang.Thread.run(Thread.java:748)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Caused by: java.net.ConnectException: 연결 시간 &lt;span style=&#34;color:#ff0&#34;&gt;초과&lt;/span&gt; (Connection timed out)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.PlainSocketImpl.socketConnect(Native Method)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at java.net.Socket.connect(Socket.java:589)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.conn.socket.PlainConnectionSocketFactory.connectSocket(PlainConnectionSocketFactory.java:75)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        at org.apache.http.impl.conn.DefaultHttpClientConnectionOperator.connect(DefaultHttpClientConnectionOperator.java:142)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ... 134 common frames omitted
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;로그에서 보듯이 HTTP 요청에 사용한 라이브러리는 &lt;code&gt;org.apache.httpcomponents.httpclient&lt;/code&gt; 이며 Timeout 기본값이 &lt;code&gt;-1&lt;/code&gt; 이다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// org.apache.http.client.config.RequestConfig&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;connectionRequestTimeout = -1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;connectTimeout = -1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;socketTimeout = -1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;해당 값들은 Connection Manager에서 &lt;code&gt;0&lt;/code&gt;으로 설정된다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// org.apache.http.impl.execchain.MainClientExec&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;this&lt;/span&gt;.connManager.connect(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        managedConn,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        route,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        timeout &amp;gt; 0 ? timeout : 0,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        context);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;0&lt;/code&gt;으로 설정된 커넥션 타임아웃은 발생하지 않기 때문에 끊기지 않고 계속 대기한다.
+그러다가 트랜잭션 타임아웃이 발생하면서 커넥션이 끊긴 것이다.
+데드락과 달리 연쇄 서버 장애는 아닌 셈이다.&lt;/p&gt;
+&lt;h2 id=&#34;해결-2&#34;&gt;해결 2&lt;/h2&gt;
+&lt;p&gt;네트워크 연결이 필요할 경우 반드시 Timeout 값을 설정해야 한다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#ee82ee&#34;&gt;int&lt;/span&gt; timeout = 5;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;RequestConfig config = RequestConfig.custom()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .setConnectTimeout(timeout * 1000)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .setConnectionRequestTimeout(timeout * 1000)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .setSocketTimeout(timeout * 1000)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .build();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;HttpClient httpClient = 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
+&lt;p&gt;Timeout을 설정하지 않으면 데드락부터 연쇄 서버 장애까지 많은 것을 겪을 수 있다.
+부디 Timeout 설정을 잊지 말고 이것을 관찰할 수 있도록 유의미한 로깅과 모니터링을 하자! 🧑‍💻&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h2 id=&#34;logging&#34;&gt;Logging&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.slipp.net/questions/350&#34;&gt;Exception 처리 권고사안&lt;/a&gt; - benelog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gmlwjd9405.github.io/2019/01/04/logging-with-slf4j.html&#34;&gt;SLF4J를 이용한 Logging&lt;/a&gt; - heejeong Kwon&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://xlffm3.github.io/spring%20&amp;amp;%20spring%20boot/async-logger-performance/&#34;&gt;Log4j2 및 Logback의 Async Logging 성능 테스트 비교&lt;/a&gt; - Jinhong&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;monitoring-1&#34;&gt;Monitoring&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.44bits.io/ko/keyword/datadog&#34;&gt;데이터독(Datadog)이란?&lt;/a&gt; - 44bits&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/alerting-101-metric-checks/&#34;&gt;Alerting 101: Timeseries metric checks&lt;/a&gt; - Datadog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.datadoghq.com/blog/introducing-recovery-thresholds/&#34;&gt;Introducing recovery thresholds for metric alerts&lt;/a&gt; - Datadog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/guide/week_over_week_p50_comparison/&#34;&gt;Compare a Service’s latency to the previous week&lt;/a&gt; - Datadog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://engineering.linecorp.com/ko/blog/line-failure-reporting-and-follow-up-process-culture/&#34;&gt;LINE의 장애 보고와 후속 절차 문화&lt;/a&gt; - LINE Engineering&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;transaction&#34;&gt;Transaction&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.spring.io/spring-framework/docs/5.3.2/reference/html/data-access.html#transaction&#34;&gt;Data Access - Transaction Management&lt;/a&gt; - Spring Docs
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://godekdls.github.io/Spring%20Data%20Access/transactionmanagement/&#34;&gt;번역&lt;/a&gt; - 토리맘의 한글라이즈 프로젝트&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://techblog.woowahan.com/2606/&#34;&gt;응? 이게 왜 롤백되는거지?&lt;/a&gt; - 우아한형제들 기술 블로그&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://techblog.woowahan.com/2664/&#34;&gt;HikariCP Dead lock에서 벗어나기 (이론편)&lt;/a&gt; - 우아한형제들 기술 블로그&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://techblog.woowahan.com/2663/&#34;&gt;HikariCP Dead lock에서 벗어나기 (실전편)&lt;/a&gt; - 우아한형제들 기술 블로그&lt;/li&gt;
+&lt;/ul&gt;
+- https://markruler.github.io/posts/java/java-timeout-monitoring/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -2685,7 +2937,7 @@ Bash는 (아직도 사용하기 쉽지 않지만) 더 안전하고 강력하기 
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-      &lt;iframe allow=&#34;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&#34; loading=&#34;eager&#34; referrerpolicy=&#34;strict-origin-when-cross-origin&#34; src=&#34;https://www.youtube.com/embed/tCht7FvIDdY?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; title=&#34;YouTube video&#34;&gt;&lt;/iframe&gt;
+      &lt;iframe allow=&#34;accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share&#34; allowfullscreen=&#34;allowfullscreen&#34; loading=&#34;eager&#34; referrerpolicy=&#34;strict-origin-when-cross-origin&#34; src=&#34;https://www.youtube.com/embed/tCht7FvIDdY?autoplay=0&amp;amp;controls=1&amp;amp;end=0&amp;amp;loop=0&amp;amp;mute=0&amp;amp;start=0&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; title=&#34;YouTube video&#34;&gt;&lt;/iframe&gt;
     &lt;/div&gt;
 
 &lt;h1 id=&#34;시스템-프로그래밍-개념으로-보는-쿠버네티스가-클러스터를-관리하는-방법&#34;&gt;시스템 프로그래밍 개념으로 보는 쿠버네티스가 클러스터를 관리하는 방법&lt;/h1&gt;
@@ -3897,285 +4149,6 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://markruler.github.io/posts/go/building-bittorrent-client/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Vim 에디터 명령어 정리</title>
-        <link>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</link>
-        <pubDate>Mon, 07 Dec 2020 00:44:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/shell/vim-editor-shortcuts/</guid>
-        <description>임창수 https://markruler.github.io/posts/shell/vim-editor-shortcuts/ -&lt;p&gt;서버에서 파일을 편집하기 위해 Vim 에디터를 사용할 일이 많은데,
-제가 사용하는 설정과 자주 쓰는 명령어를 정리합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9E%85%EB%A0%A5-%EB%AA%A8%EB%93%9C-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%A7%80%EB%A7%89-%ED%96%89-%EB%AA%A8%EB%93%9C-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#last-line-command-&#34;&gt;Last Line Command (:)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#search-mode--&#34;&gt;Search mode (/, ?)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%AA%85%EB%A0%B9-%EB%AA%A8%EB%93%9C-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%8F%99&#34;&gt;이동&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%8E%B8%EC%A7%91&#34;&gt;간단한 편집&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%82%AD%EC%A0%9C&#34;&gt;삭제&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B9%84%EC%A3%BC%EC%96%BC-%EB%AA%A8%EB%93%9Cvisual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%99%94%EB%A9%B4-%EB%B6%84%ED%95%A0&#34;&gt;화면 분할&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-vimrc&#34;&gt;설정 (.vimrc)&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8&#34;&gt;플러그인&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;입력-모드-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;i&lt;/code&gt; 현재 커서에서 편집
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Shift + i&lt;/code&gt; 현재 줄의 처음으로 커서를 옮긴 후 편집&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;s&lt;/code&gt; 현재 커서 한 글자 삭제 후 바로 입력 모드
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Shift + s&lt;/code&gt; 현재 줄 삭제 후 바로 입력 모드&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;a&lt;/code&gt; 다음 칸으로 커서를 옮긴 후 편집
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Shift + a&lt;/code&gt; 현재 줄의 끝으로 커서를 옮긴 후 편집&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;o&lt;/code&gt; 다음 줄로 커서를 옮긴 후 편집
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;Shift + o&lt;/code&gt; 이전 줄로 커서를 옮긴 후 편집&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;마지막-행-모드-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/h1&gt;
-&lt;h2 id=&#34;last-line-command-&#34;&gt;Last Line Command (:)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;:q&lt;/code&gt; 종료&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:q!&lt;/code&gt; 강제 종료&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:w&lt;/code&gt; 저장&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:%s/old/new/gi&lt;/code&gt; 문자열 교체 (old -&amp;gt; new)
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;g&lt;/code&gt; 옵션을 빼면 해당 줄의 첫 번째 문자열만 교체&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:!&lt;/code&gt; 명령어 실행
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;:!ls&lt;/code&gt; 현재 디렉토리 파일 목록 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:!pwd&lt;/code&gt; 현재 디렉토리 경로 출력&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:!date&lt;/code&gt; 현재 시간 출력&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:tabnew [file]&lt;/code&gt; 새로운 탭 열기 (file이 없으면 빈 탭)
-&lt;ul&gt;
-&lt;li&gt;실제로는 에디터 밖에서도 사용할 수 있는 tmux나 terminal 자체 기능을 활용하는 편입니다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;gt&lt;/code&gt; 다음 탭으로 이동하기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;gT&lt;/code&gt; 이전 탭으로 이동하기&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;search-mode--&#34;&gt;Search mode (/, ?)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;/regex-pattern&lt;/code&gt; (&lt;code&gt;?regex-pattern&lt;/code&gt;) 검색
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;n&lt;/code&gt; 다음 단어 (?는 반대)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;N&lt;/code&gt; 이전 단어 (?는 반대)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;명령-모드-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;u&lt;/code&gt; - undo&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;control + r&lt;/code&gt; - redo&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;.&lt;/code&gt; - 이전 명령 다시 실행&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;이동&#34;&gt;이동&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;hjkl&lt;/code&gt; 좌하상우 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + b&lt;/code&gt; 이전 페이지로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + f&lt;/code&gt; 다음 페이지로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + u&lt;/code&gt; 이전 half page로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + d&lt;/code&gt; 다음 half page로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;gg&lt;/code&gt; 문서 맨 앞으로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;G&lt;/code&gt; 문서 맨 뒤로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;^&lt;/code&gt; 현재 줄 앞으로 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$&lt;/code&gt; 현재 줄 끝으로 이동&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;간단한-편집&#34;&gt;간단한 편집&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;y&lt;/code&gt; 복사 (yank)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;p&lt;/code&gt; 붙여넣기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;gt;&lt;/code&gt; 들여쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;lt;&lt;/code&gt; 내어쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Shift + j&lt;/code&gt; 현재 줄의 끝과 다음 줄의 앞부분을 합칩니다.&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;삭제&#34;&gt;삭제&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;r&lt;/code&gt; 현재 커서 한 글자 교체(replace)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;x&lt;/code&gt; 현재 커서 한 글자 삭제 (delete)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Shift + x&lt;/code&gt; 현재 커서 앞에 한 글자 삭제 (backspace)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:1,.d&lt;/code&gt; 첫 번째 줄부터 현재 커서까지 삭제 (LLM)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;:5,10d&lt;/code&gt; 5번 줄부터 10번 줄까지 삭제 (LLM)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dd&lt;/code&gt; 현재 줄 삭제 (이후 p를 통해 삭제한 줄을 붙여넣을 수 있습니다)
-&lt;ul&gt;
-&lt;li&gt;이동키와 조합해 삭제할 수도 있다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;5dd&lt;/code&gt; 현재 줄 포함 아래로 5줄 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dgg&lt;/code&gt; 현재 커서에서 첫 줄까지 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dG&lt;/code&gt; 현재 커서에서 마지막 줄까지 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;d$&lt;/code&gt; 현재 커서에서 현재 줄 마지막 단어까지 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;d^&lt;/code&gt; 현재 커서에서 현재 줄 첫 단어까지 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;dw&lt;/code&gt; 현재 커서에서 현재 단어까지 삭제&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;비주얼-모드visual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;v&lt;/code&gt; 비주얼 모드&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;shift + v&lt;/code&gt; 비주얼 라인&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Ctrl + v&lt;/code&gt; 비주얼 블록
-&lt;ul&gt;
-&lt;li&gt;비주얼 블록 모드에서 &lt;code&gt;Shift + i&lt;/code&gt;를 누르면 블록의 첫 줄에 커서가 위치하고, 입력 모드로 전환됩니다.&lt;/li&gt;
-&lt;li&gt;입력을 마치고 &lt;code&gt;ESC&lt;/code&gt;를 누르면 블록의 모든 줄에 입력한 내용이 삽입됩니다. (여러 줄을 주석 처리할 때 유용)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;화면-분할&#34;&gt;화면 분할&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;탭 기능과 동일하게 터미널 자체 기능을 선호하는 편입니다.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;s&lt;/code&gt; horizontal split
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;new&lt;/code&gt; horizontal split한 후 새로운 창 생성&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;v&lt;/code&gt; vertical split
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;vs&lt;/code&gt; vertical split한 후 현재 창 복제&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;방향키&lt;/code&gt; 분할된 창 간 이동&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;&amp;gt;&lt;/code&gt; 창 폭 늘리기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;&amp;lt;&lt;/code&gt; 창 폭 줄이기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;+&lt;/code&gt; 창 높이 늘리기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;-&lt;/code&gt; 창 높이 줄이기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;=&lt;/code&gt; 창 폭, 높이 원래 상태로&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;Control + w&lt;/code&gt; + &lt;code&gt;o&lt;/code&gt; only one window&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;설정-vimrc&#34;&gt;설정 (.vimrc)&lt;/h1&gt;
-&lt;p&gt;제가 사용하는 설정 파일(&lt;code&gt;~/.vimrc&lt;/code&gt;)입니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; ~/.vimrc&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; 이것은 주석&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;syntax&lt;/span&gt; on                                                                       
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showcmd
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; statusline+=%F::%l,%c
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmatch
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ignorecase
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; smartcase
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; incsearch
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autowrite
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ruler
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; autoindent
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cindent
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; shiftwidth=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tabstop=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; expandtab
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; laststatus=&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; backspace=indent,eol,start
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; showmode
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; hls
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; colorcolumn=&lt;span style=&#34;color:#f60&#34;&gt;80&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; ff=unix
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; fileencodings=utf8
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; viminfo=&amp;#39;&lt;span style=&#34;color:#f60&#34;&gt;50&lt;/span&gt;,&amp;lt;&lt;span style=&#34;color:#f60&#34;&gt;1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;set history=1000&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;au FileType make setlocal noexpandtab
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;highlight&lt;/span&gt; TailingWhitespace ctermbg=red guibg=red
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; cul
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; background=dark
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; nowrapscan
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; visualbell
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;set&lt;/span&gt; tenc=utf&lt;span style=&#34;color:#f60&#34;&gt;-8&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;syntax&lt;/code&gt; 구문강조 사용&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;showcmd&lt;/code&gt; 명령어 입력시 상태표시줄에 보여줌&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;statusline+=%F::%l,%c&lt;/code&gt; 상태표시줄에 파일명, 줄, 컬럼 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;showmatch&lt;/code&gt; 괄호 매칭 보여줌&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ignorecase&lt;/code&gt; 검색시 대소문자 무시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;smartcase&lt;/code&gt; 검색어에 대문자가 포함되어 있으면 대소문자 구분&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;incsearch&lt;/code&gt; 검색어 입력시 점진적 검색&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;autowrite&lt;/code&gt; 저장하지 않은 파일을 끝내기 전에 자동으로 저장&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ruler&lt;/code&gt; 화면 우측 하단에 현재 커서의 위치(줄,칸) 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;autoindent&lt;/code&gt; 자동 들여쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;cindent&lt;/code&gt; C언어 자동 들여쓰기&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;shiftwidth=2&lt;/code&gt; 들여쓰기 2칸&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tabstop=2&lt;/code&gt; 탭을 2칸으로&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;expandtab&lt;/code&gt; 탭을 스페이스로 대체&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;laststatus=2&lt;/code&gt; 상태표시줄 항상 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;backspace=indent,eol,start&lt;/code&gt; 백스페이스로 들여쓰기, 줄 끝, 줄 시작 삭제&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;showmode&lt;/code&gt; 현재 모드 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;hls&lt;/code&gt; 검색어 하이라이팅&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;colorcolumn=80&lt;/code&gt; 80칸에 세로줄 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ff=unix&lt;/code&gt; 파일 포맷을 유닉스로&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;fileencodings=utf8&lt;/code&gt; 파일 인코딩&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;viminfo=&#39;50,&amp;lt;1000&lt;/code&gt; 최근 50개의 명령어 기억&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;history=1000&lt;/code&gt; vi 편집기록 기억갯수 &lt;code&gt;.viminfo&lt;/code&gt;에 기록&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;au FileType make setlocal noexpandtab&lt;/code&gt; makefile에서 탭을 스페이스로 대체하지 않음&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;highlight TailingWhitespace ctermbg=red guibg=red&lt;/code&gt; 끝에 공백이 있는 경우 빨간색으로 표시&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;cul&lt;/code&gt; 현재 커서가 있는 줄 강조&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;nowrapscan&lt;/code&gt; 검색시 문서 끝에서 처음으로 이동하지 않음&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;visualbell&lt;/code&gt; 경고음 대신 화면 깜빡임&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;tenc=utf-8&lt;/code&gt; 터미널 인코딩을 UTF-8로&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/vim/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;플러그인&#34;&gt;플러그인&lt;/h2&gt;
-&lt;p&gt;Vim에서 플러그인은 일반적으로 3rd-party 플러그인 매니저를 사용해서 관리합니다.
-대표적으로 &lt;a href=&#34;https://github.com/junegunn/vim-plug&#34;&gt;vim-plug&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/tpope/vim-pathogen&#34;&gt;Pathogen&lt;/a&gt; 등이 사용됩니다.
-Neovim을 사용한다면
-&lt;a href=&#34;https://github.com/folke/lazy.nvim&#34;&gt;lazy.nvim&lt;/a&gt;과 같은 Neovim 전용 플러그인 매니저도 있습니다.&lt;/p&gt;
-&lt;p&gt;여기서는 가장 널리 쓰이고 간단한 &lt;strong&gt;vim-plug&lt;/strong&gt;를 사용합니다.
-먼저 플러그인 매니저를 설치합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;~/.vimrc&lt;/code&gt;에 아래 내용을 추가합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-vim&#34; data-lang=&#34;vim&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;call plug#begin(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;~/.vim/plugged&amp;#39;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; The default plugin directory will be as follows:&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Vim (Linux/macOS): &amp;#39;~/.vim/plugged&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Vim (Windows): &amp;#39;~/vimfiles/plugged&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Neovim (Linux/macOS/Windows): stdpath(&amp;#39;data&amp;#39;) . &amp;#39;/plugged&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34; You can specify a custom plugin directory by passing it as the argument&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - e.g. `call plug#begin(&amp;#39;~/.vim/plugged&amp;#39;)`&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;   - Avoid using standard Vim directory names like &amp;#39;plugin&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;junegunn/fzf&amp;#39;&lt;/span&gt;, { &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;dir&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;~/.fzf&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;do&amp;#39;&lt;/span&gt;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;./install --all&amp;#39;&lt;/span&gt; }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;scrooloose/syntastic&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;vim-airline/vim-airline&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;airblade/vim-gitgutter&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#0f0&#34;&gt;&amp;#34;GitGutterToggle&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;scrooloose/nerdtree&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Plug &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tpope/vim-fugitive&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;call plug#end()
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Vim 데이터에서 아래 명령어를 통해 플러그인을 설치합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:source %
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:PlugInstall
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;번거롭다면 유명한 vimrc를 가져와서 사용해도 됩니다.
-대표적으로 &lt;a href=&#34;https://github.com/amix/vimrc&#34;&gt;amix/vimrc&lt;/a&gt;가 있습니다.
-(플러그인 매니저로 Pathogen을 사용)&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.vim.org/docs.php&#34;&gt;Vim Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://johngrib.github.io/wiki/two-views-of-vim/&#34;&gt;Vim, 두 가지 관점&lt;/a&gt; | 기계인간 John Grib&lt;/li&gt;
-&lt;/ul&gt;
-- https://markruler.github.io/posts/shell/vim-editor-shortcuts/ - Im Changsu | Since 2020</description>
         </item>
     
     
