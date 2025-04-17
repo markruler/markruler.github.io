@@ -22,7 +22,7 @@ categories:
   - [무손실 압축 코덱](#무손실-압축-코덱)
 - [오디오 재생: HTML5 audio, MSE API, Web Audio API](#오디오-재생-html5-audio-mse-api-web-audio-api)
 - [마이크 입력과 녹음: MediaDevices 및 MediaRecorder](#마이크-입력과-녹음-mediadevices-및-mediarecorder)
-  - [MediaDevices.getUserMedia()로 오디오 입력 받기](#mediadevicesgetusermedia로-오디오-입력-받기)
+  - [MediaDevices 오디오 입력 받기](#mediadevices-오디오-입력-받기)
   - [Web Audio API로 입력 스트림 처리하기](#web-audio-api로-입력-스트림-처리하기)
   - [MediaRecorder를 사용한 오디오 녹음](#mediarecorder를-사용한-오디오-녹음)
   - [Web Audio와 MediaRecorder의 조합](#web-audio와-mediarecorder의-조합)
@@ -305,7 +305,8 @@ gainNode.gain.value = 0.5;
 
 - **시각화 (AnalyserNode)**: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
   `AnalyserNode`는 입력 신호의 **주파수 스펙트럼** 또는 **파형(time-domain) 데이터**를 실시간으로 제공합니다.
-  `analyser.getByteFrequencyData()`로 FFT 기반 주파수 데이터를,
+  `analyser.getByteFrequencyData()`로
+  [FFT(Fast Fourier transform)](https://en.wikipedia.org/wiki/Fast_Fourier_transform) 기반 주파수 데이터를,
   `analyser.getByteTimeDomainData()`로 파형 샘플 데이터를 받으면,
   이를 Canvas나 WebGL로 그려서 **스펙트럼 애니메이션**, **오실로스코프 형태 파형 시각화** 등을 구현할 수 있습니다.
   이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
@@ -335,7 +336,7 @@ Web Audio API의 유연성 덕분에, **게임 오디오**, **DAW 웹앱**, **�
 
 순서대로 조금 더 상세히 설명합니다.
 
-## MediaDevices.getUserMedia()로 오디오 입력 받기
+## MediaDevices 오디오 입력 받기
 
 `navigator.mediaDevices.getUserMedia(constraints)` 메서드는 사용자에게 **마이크나 카메라 사용 권한**을 요청하고,
 승인되면 해당 **MediaStream** (오디오/비디오 흐름 객체)을 반환합니다.

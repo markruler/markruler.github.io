@@ -317,8 +317,8 @@
 						
 						
 							<li>
-								<a href="#mediadevicesgetusermedia%eb%a1%9c-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%85%eb%a0%a5-%eb%b0%9b%ea%b8%b0" class="nav-mediadevicesgetusermedia로-오디오-입력-받기">
-									MediaDevices.getUserMedia()로 오디오 입력 받기
+								<a href="#mediadevices-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%85%eb%a0%a5-%eb%b0%9b%ea%b8%b0" class="nav-mediadevices-오디오-입력-받기">
+									MediaDevices 오디오 입력 받기
 								</a>
 							</li>
 						
@@ -555,7 +555,7 @@
 <li><a href="#%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-html5-audio-mse-api-web-audio-api">오디오 재생: HTML5 audio, MSE API, Web Audio API</a></li>
 <li><a href="#%EB%A7%88%EC%9D%B4%ED%81%AC-%EC%9E%85%EB%A0%A5%EA%B3%BC-%EB%85%B9%EC%9D%8C-mediadevices-%EB%B0%8F-mediarecorder">마이크 입력과 녹음: MediaDevices 및 MediaRecorder</a>
 <ul>
-<li><a href="#mediadevicesgetusermedia%EB%A1%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0">MediaDevices.getUserMedia()로 오디오 입력 받기</a></li>
+<li><a href="#mediadevices-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0">MediaDevices 오디오 입력 받기</a></li>
 <li><a href="#web-audio-api%EB%A1%9C-%EC%9E%85%EB%A0%A5-%EC%8A%A4%ED%8A%B8%EB%A6%BC-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0">Web Audio API로 입력 스트림 처리하기</a></li>
 <li><a href="#mediarecorder%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EB%85%B9%EC%9D%8C">MediaRecorder를 사용한 오디오 녹음</a></li>
 <li><a href="#web-audio%EC%99%80-mediarecorder%EC%9D%98-%EC%A1%B0%ED%95%A9">Web Audio와 MediaRecorder의 조합</a></li>
@@ -796,7 +796,8 @@ Web Audio로 받아올 때
 </span></span></code></pre></div><ul>
 <li><strong>시각화 (AnalyserNode)</strong>: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
 <code>AnalyserNode</code>는 입력 신호의 <strong>주파수 스펙트럼</strong> 또는 <strong>파형(time-domain) 데이터</strong>를 실시간으로 제공합니다.
-<code>analyser.getByteFrequencyData()</code>로 FFT 기반 주파수 데이터를,
+<code>analyser.getByteFrequencyData()</code>로
+<a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">FFT(Fast Fourier transform)</a> 기반 주파수 데이터를,
 <code>analyser.getByteTimeDomainData()</code>로 파형 샘플 데이터를 받으면,
 이를 Canvas나 WebGL로 그려서 <strong>스펙트럼 애니메이션</strong>, <strong>오실로스코프 형태 파형 시각화</strong> 등을 구현할 수 있습니다.
 이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
@@ -823,7 +824,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 <li>MediaRecorder로 녹음된 오디오 파일을 Blob으로 다운로드하거나, <code>URL.createObjectURL()</code> 등을 통해 <code>&lt;audio&gt;</code>로 재생할 수 있다.</li>
 </ol>
 <p>순서대로 조금 더 상세히 설명합니다.</p>
-<h2 id="mediadevicesgetusermedia로-오디오-입력-받기">MediaDevices.getUserMedia()로 오디오 입력 받기</h2>
+<h2 id="mediadevices-오디오-입력-받기">MediaDevices 오디오 입력 받기</h2>
 <p><code>navigator.mediaDevices.getUserMedia(constraints)</code> 메서드는 사용자에게 <strong>마이크나 카메라 사용 권한</strong>을 요청하고,
 승인되면 해당 <strong>MediaStream</strong> (오디오/비디오 흐름 객체)을 반환합니다.
 오디오만 필요하다면 <code>constraints</code> 파라미터로 <code>{ audio: true, video: false }</code> 또는 <code>{ audio: true }</code> 만 전달하면 됩니다.
@@ -1467,8 +1468,8 @@ Ported from <span>Makito</span>'s
 						
 						
 							<li>
-								<a href="#mediadevicesgetusermedia%eb%a1%9c-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%85%eb%a0%a5-%eb%b0%9b%ea%b8%b0" class="nav-mediadevicesgetusermedia로-오디오-입력-받기">
-									MediaDevices.getUserMedia()로 오디오 입력 받기
+								<a href="#mediadevices-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%85%eb%a0%a5-%eb%b0%9b%ea%b8%b0" class="nav-mediadevices-오디오-입력-받기">
+									MediaDevices 오디오 입력 받기
 								</a>
 							</li>
 						

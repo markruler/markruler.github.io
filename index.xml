@@ -33,7 +33,7 @@
 &lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-html5-audio-mse-api-web-audio-api&#34;&gt;오디오 재생: HTML5 audio, MSE API, Web Audio API&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%9D%B4%ED%81%AC-%EC%9E%85%EB%A0%A5%EA%B3%BC-%EB%85%B9%EC%9D%8C-mediadevices-%EB%B0%8F-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#mediadevicesgetusermedia%EB%A1%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0&#34;&gt;MediaDevices.getUserMedia()로 오디오 입력 받기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mediadevices-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0&#34;&gt;MediaDevices 오디오 입력 받기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#web-audio-api%EB%A1%9C-%EC%9E%85%EB%A0%A5-%EC%8A%A4%ED%8A%B8%EB%A6%BC-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#mediarecorder%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EB%85%B9%EC%9D%8C&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#web-audio%EC%99%80-mediarecorder%EC%9D%98-%EC%A1%B0%ED%95%A9&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/a&gt;&lt;/li&gt;
@@ -274,7 +274,8 @@ Web Audio로 받아올 때
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;시각화 (AnalyserNode)&lt;/strong&gt;: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
 &lt;code&gt;AnalyserNode&lt;/code&gt;는 입력 신호의 &lt;strong&gt;주파수 스펙트럼&lt;/strong&gt; 또는 &lt;strong&gt;파형(time-domain) 데이터&lt;/strong&gt;를 실시간으로 제공합니다.
-&lt;code&gt;analyser.getByteFrequencyData()&lt;/code&gt;로 FFT 기반 주파수 데이터를,
+&lt;code&gt;analyser.getByteFrequencyData()&lt;/code&gt;로
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Fast_Fourier_transform&#34;&gt;FFT(Fast Fourier transform)&lt;/a&gt; 기반 주파수 데이터를,
 &lt;code&gt;analyser.getByteTimeDomainData()&lt;/code&gt;로 파형 샘플 데이터를 받으면,
 이를 Canvas나 WebGL로 그려서 &lt;strong&gt;스펙트럼 애니메이션&lt;/strong&gt;, &lt;strong&gt;오실로스코프 형태 파형 시각화&lt;/strong&gt; 등을 구현할 수 있습니다.
 이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
@@ -301,7 +302,7 @@ Web Audio 기반으로 &lt;strong&gt;주파수 분석&lt;/strong&gt;을 하면, 
 &lt;li&gt;MediaRecorder로 녹음된 오디오 파일을 Blob으로 다운로드하거나, &lt;code&gt;URL.createObjectURL()&lt;/code&gt; 등을 통해 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;로 재생할 수 있다.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;순서대로 조금 더 상세히 설명합니다.&lt;/p&gt;
-&lt;h2 id=&#34;mediadevicesgetusermedia로-오디오-입력-받기&#34;&gt;MediaDevices.getUserMedia()로 오디오 입력 받기&lt;/h2&gt;
+&lt;h2 id=&#34;mediadevices-오디오-입력-받기&#34;&gt;MediaDevices 오디오 입력 받기&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;navigator.mediaDevices.getUserMedia(constraints)&lt;/code&gt; 메서드는 사용자에게 &lt;strong&gt;마이크나 카메라 사용 권한&lt;/strong&gt;을 요청하고,
 승인되면 해당 &lt;strong&gt;MediaStream&lt;/strong&gt; (오디오/비디오 흐름 객체)을 반환합니다.
 오디오만 필요하다면 &lt;code&gt;constraints&lt;/code&gt; 파라미터로 &lt;code&gt;{ audio: true, video: false }&lt;/code&gt; 또는 &lt;code&gt;{ audio: true }&lt;/code&gt; 만 전달하면 됩니다.
