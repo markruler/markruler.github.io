@@ -4,7 +4,7 @@ socialshare: true
 date: 2025-01-13T19:13:00+09:00
 lastmod: 2025-01-13T19:13:00+09:00
 title: "네트워크 대역폭과 NFS 지연"
-description: "사실 아직도 정확히 이해하지 못한 문제"
+description: "부하 테스트 없이 배포한 시스템에서 발생한 장애"
 images: ["/images/network/nfs-network-bandwidth/static-file-server.png"]
 tags:
   - NFS
