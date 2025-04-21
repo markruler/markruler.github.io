@@ -1,10 +1,11 @@
 ---
 date: 2024-07-17T22:40:00+09:00
-lastmod: 2024-08-28T22:42:00+09:00
+lastmod: 2025-04-19T22:42:00+09:00
 title: "일상에서의 SSH"
 description: "Secure Shell"
+# scripts/venv/bin/python scripts/create_post_image.py "일상에서의 SSH" --output _content/images/network/ssh/meta-image.png
+images: ["/images/network/ssh/meta-image.png"]
 # featured_image: "/images/network/ssh/pexels-mo-eid-1268975-8347500.webp"
-images: ["/images/network/ssh/pexels-mo-eid-1268975-8347500.webp"]
 tags:
   - network
   - shell
@@ -27,16 +28,20 @@ categories:
   - [Git](#git)
   - [Local Forward](#local-forward)
 - [Password 입력 없이 SSH Key로 Client에서 Server로 접속하기](#password-입력-없이-ssh-key로-client에서-server로-접속하기)
+  - [클라이언트에서 설정](#클라이언트에서-설정)
+  - [서버에서 설정](#서버에서-설정)
 - [참조](#참조)
 
 # SSH key 생성
 
 ```sh
 # RSA
-ssh-keygen -t rsa -b 4096 -C ""
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/cs.im.rsa -C "Changsu Im" -N "password"
+```
 
+```sh
 # ED25519
-ssh-keygen -t ed25519 -f $HOME/.ssh/my-ed25519 -C "comment" -N "password"
+ssh-keygen -t ed25519 -f ~/.ssh/cs.im.ed25519 -C "Changsu Im" -N "password"
 ```
 
 # SSH Server
@@ -53,12 +58,15 @@ systemctl status ssh
 
 ## authoized_keys
 
-- 역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일입니다. (사용자 인증 방식)
-- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/authorized_keys`에 위치합니다.
-- 내용: 클라이언트의 공개 키가 저장됩니다.
+- **역할**:
+  SSH 서버가 접속을 허용할 클라이언트의 **공개키(pub)를 저장**하는 파일입니다. (사용자 인증 방식)
+- **위치**:
+  보통 사용자의 홈 디렉토리 아래의 `~/.ssh/authorized_keys`에 위치합니다.
+- **내용**:
+  클라이언트의 공개 키가 저장됩니다.
   서버는 클라이언트의 접속 시도 시,
   이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행합니다.
-- 보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
+- **보안**: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
   공개 키 인증 방식이 비밀번호 인증보다 더 안전합니다.
   특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높습니다.
 
@@ -163,13 +171,18 @@ sudo apt install openssh-client
 
 ## known_hosts
 
-- 역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일입니다. (서버 인증 방식)
-- 위치: 보통 사용자의 홈 디렉토리 아래의 `~/.ssh/known_hosts`에 위치합니다.
-- 내용: 서버의 호스트 키 정보가 저장됩니다.
+- **역할**:
+  SSH 클라이언트가 접속하려는 서버의 **HostKey(공개키)를 저장**하는 파일입니다. (서버 인증 방식)
+  Password 인증 방식도 한번 인증하고나면 client 측에 `known_hosts` 파일이 생성됩니다.
+- **위치**:
+  사용자의 홈 디렉토리 아래의 `~/.ssh/known_hosts`에 위치합니다.
+- **내용**:
+  서버의 호스트 키 정보가 저장됩니다.
   클라이언트가 처음 특정 서버에 접속할 때,
   서버의 호스트 키를 확인하고 `known_hosts` 파일에 저장합니다.
   이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인합니다.
-- 보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
+- **보안**:
+  서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
   이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘입니다.
 
 ## 주로 사용하는 Host 설정
@@ -218,7 +231,8 @@ Host bitbucket.org
   User git
 ```
 
-위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 합니다.
+위에서 Github 주소를 회사 repository와 구분해서 관리할 경우
+remote repository 주소도 변경해야 합니다.
 새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 됩니다.
 
 ```sh
@@ -268,17 +282,48 @@ ssh -vv -f -N \
 
 # Password 입력 없이 SSH Key로 Client에서 Server로 접속하기
 
-Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속합니다.
+## 클라이언트에서 설정
+
+User가 SSH Key를 생성하고 `ssh-copy-id` 명령어를 사용하여 공개키를 복사하면
+Server의 `authorized_keys` 파일에 공개키가 등록됩니다.
+
+```sh
+# client
+ssh-keygen -t ed25519 -f ~/.ssh/mykey -C "comment" -N "password"
+ssh-copy-id -i ~/.ssh/mykey user@host
+```
+
+```sh
+# ~/.ssh/config
+Host host1
+  HostName 192.168.0.10
+  User markruler
+  IdentityFile ~/.ssh/mykey
+```
+
+```sh
+ssh host1
+```
+
+## 서버에서 설정
+
+Server에서 `authorized_keys` 파일에 공개키를 등록하고
+Client에서 개인키를 사용하여 접속합니다.
 (AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)
 
 ```sh
-# server: SSH Key 생성
-touch ~/.ssh/authorized_keys
-# 600(rw)
-chmod 600 ~/.ssh/authorized_keys
-cat ~/.ssh/mykey.pub >> ~/.ssh/authorized_keys
+# server
+# 디렉토리 권한 설정
+# 750(rwx r-x ---)
+chmod 750 ~
 
-# server > client private key 전달 (최대한 안전한 방식으로)
+# 700(rwx --- ---)
+chmod 700 ~/.ssh
+
+# 600(rw- --- ---)
+chmod 600 ~/.ssh/authorized_keys
+
+# server > client private key 전달 (안전한 방식으로)
 # scp ~/.ssh/mykey client@host2:~/.ssh/mykey
 
 # client

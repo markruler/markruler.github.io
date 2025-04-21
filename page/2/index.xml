@@ -1998,27 +1998,34 @@ SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다
 &lt;li&gt;&lt;a href=&#34;#local-forward&#34;&gt;Local Forward&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EC%97%90%EC%84%9C-%EC%84%A4%EC%A0%95&#34;&gt;클라이언트에서 설정&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EC%84%9C%EB%B2%84%EC%97%90%EC%84%9C-%EC%84%A4%EC%A0%95&#34;&gt;서버에서 설정&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;ssh-key-생성&#34;&gt;SSH key 생성&lt;/h1&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RSA&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t rsa -b &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ED25519&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t ed25519 -f &lt;span style=&#34;color:#eedd82&#34;&gt;$HOME&lt;/span&gt;/.ssh/my-ed25519 -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t rsa -b &lt;span style=&#34;color:#f60&#34;&gt;4096&lt;/span&gt; -f ~/.ssh/cs.im.rsa -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Changsu Im&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ED25519&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t ed25519 -f ~/.ssh/cs.im.ed25519 -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Changsu Im&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;ssh-server&#34;&gt;SSH Server&lt;/h1&gt;
 &lt;p&gt;SSH 데몬 설정 파일은 &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;이다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install openssh-server
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl status ssh
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;authoized_keys&#34;&gt;authoized_keys&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;역할: SSH 서버가 접속을 허용할 클라이언트의 공개키를 저장하는 파일입니다. (사용자 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치합니다.&lt;/li&gt;
-&lt;li&gt;내용: 클라이언트의 공개 키가 저장됩니다.
+&lt;li&gt;&lt;strong&gt;역할&lt;/strong&gt;:
+SSH 서버가 접속을 허용할 클라이언트의 &lt;strong&gt;공개키(pub)를 저장&lt;/strong&gt;하는 파일입니다. (사용자 인증 방식)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;위치&lt;/strong&gt;:
+보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/authorized_keys&lt;/code&gt;에 위치합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;내용&lt;/strong&gt;:
+클라이언트의 공개 키가 저장됩니다.
 서버는 클라이언트의 접속 시도 시,
 이 파일에 저장된 공개 키와 클라이언트가 제공한 키를 비교하여 인증을 수행합니다.&lt;/li&gt;
-&lt;li&gt;보안: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
+&lt;li&gt;&lt;strong&gt;보안&lt;/strong&gt;: 비밀번호 대신 공개 키를 사용하여 인증하기 때문에,
 공개 키 인증 방식이 비밀번호 인증보다 더 안전합니다.
 특히, 비밀번호를 통한 무차별 대입 공격에 대한 저항력이 높습니다.&lt;/li&gt;
 &lt;/ul&gt;
@@ -2101,13 +2108,18 @@ SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다
 &lt;/ol&gt;
 &lt;h2 id=&#34;known_hosts&#34;&gt;known_hosts&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;역할: SSH 클라이언트가 접속하려는 서버의 HostKey(공개키)를 저장하는 파일입니다. (서버 인증 방식)&lt;/li&gt;
-&lt;li&gt;위치: 보통 사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치합니다.&lt;/li&gt;
-&lt;li&gt;내용: 서버의 호스트 키 정보가 저장됩니다.
+&lt;li&gt;&lt;strong&gt;역할&lt;/strong&gt;:
+SSH 클라이언트가 접속하려는 서버의 &lt;strong&gt;HostKey(공개키)를 저장&lt;/strong&gt;하는 파일입니다. (서버 인증 방식)
+Password 인증 방식도 한번 인증하고나면 client 측에 &lt;code&gt;known_hosts&lt;/code&gt; 파일이 생성됩니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;위치&lt;/strong&gt;:
+사용자의 홈 디렉토리 아래의 &lt;code&gt;~/.ssh/known_hosts&lt;/code&gt;에 위치합니다.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;내용&lt;/strong&gt;:
+서버의 호스트 키 정보가 저장됩니다.
 클라이언트가 처음 특정 서버에 접속할 때,
 서버의 호스트 키를 확인하고 &lt;code&gt;known_hosts&lt;/code&gt; 파일에 저장합니다.
 이후 동일 서버에 접속할 때는 이 파일을 참조하여 서버의 신원을 확인합니다.&lt;/li&gt;
-&lt;li&gt;보안: 서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
+&lt;li&gt;&lt;strong&gt;보안&lt;/strong&gt;:
+서버의 호스트 키가 변경되면 SSH 클라이언트는 보안 경고를 출력하고 접속을 차단합니다.
 이는 중간자 공격(MITM, Man-in-the-Middle Attack)을 방지하기 위한 메커니즘입니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;주로-사용하는-host-설정&#34;&gt;주로 사용하는 Host 설정&lt;/h2&gt;
@@ -2148,7 +2160,8 @@ SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host bitbucket.org
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/bitbucket_ed25519
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User git
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우 remote repository 주소도 변경해야 합니다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위에서 Github 주소를 회사 repository와 구분해서 관리할 경우
+remote repository 주소도 변경해야 합니다.
 새로 clone 받는 경우에는 clone 받을 때 주소만 변경해주면 됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@work.github.com:xpdojo/kubernetes.git
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-toml&#34; data-lang=&#34;toml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# .git/config&lt;/span&gt;
@@ -2174,15 +2187,34 @@ SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -L 14000:something.abcd.ap-northeast-2.rds.amazonaws.com:1521 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  ec2-111.222.111.222.ap-northeast-2.compute.amazonaws.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;password-입력-없이-ssh-key로-client에서-server로-접속하기&#34;&gt;Password 입력 없이 SSH Key로 Client에서 Server로 접속하기&lt;/h1&gt;
-&lt;p&gt;Server에서 authorized_keys 파일에 공개키를 등록하고 Client에서 개인키를 사용하여 접속합니다.
+&lt;h2 id=&#34;클라이언트에서-설정&#34;&gt;클라이언트에서 설정&lt;/h2&gt;
+&lt;p&gt;User가 SSH Key를 생성하고 &lt;code&gt;ssh-copy-id&lt;/code&gt; 명령어를 사용하여 공개키를 복사하면
+Server의 &lt;code&gt;authorized_keys&lt;/code&gt; 파일에 공개키가 등록됩니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-keygen -t ed25519 -f ~/.ssh/mykey -C &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;comment&amp;#34;&lt;/span&gt; -N &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;password&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh-copy-id -i ~/.ssh/mykey user@host
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# ~/.ssh/config&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host host1
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  HostName 192.168.0.10
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  User markruler
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  IdentityFile ~/.ssh/mykey
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ssh host1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;서버에서-설정&#34;&gt;서버에서 설정&lt;/h2&gt;
+&lt;p&gt;Server에서 &lt;code&gt;authorized_keys&lt;/code&gt; 파일에 공개키를 등록하고
+Client에서 개인키를 사용하여 접속합니다.
 (AWS에서 EC2 인스턴스 생성 시, Key Pair를 생성하고 PEM 파일을 다운로드 하는 이유)&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server: SSH Key 생성&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;touch ~/.ssh/authorized_keys
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 600(rw)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cat ~/.ssh/mykey.pub &amp;gt;&amp;gt; ~/.ssh/authorized_keys
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 디렉토리 권한 설정&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 750(rwx r-x ---)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;750&lt;/span&gt; ~
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server &amp;gt; client private key 전달 (최대한 안전한 방식으로)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 700(rwx --- ---)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;700&lt;/span&gt; ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 600(rw- --- ---)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# server &amp;gt; client private key 전달 (안전한 방식으로)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# scp ~/.ssh/mykey client@host2:~/.ssh/mykey&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# client&lt;/span&gt;
