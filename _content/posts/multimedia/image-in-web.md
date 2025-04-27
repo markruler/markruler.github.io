@@ -18,7 +18,7 @@ categories:
 - [개요](#개요)
 - [image라는 단어](#image라는-단어)
   - [IT 기술에서의 이미지](#it-기술에서의-이미지)
-- [화질(Quality)을 결정하는 요소](#화질quality을-결정하는-요소)
+  - [화질(Quality)을 결정하는 요소](#화질quality을-결정하는-요소)
 - [이미지 파이프라인 (Image Pipeline)](#이미지-파이프라인-image-pipeline)
   - [카메라: 필름 vs 디지털 센서](#카메라-필름-vs-디지털-센서)
   - [ISP: 이미지 신호 처리](#isp-이미지-신호-처리)
@@ -49,11 +49,13 @@ categories:
 # 개요
 
 이미지는 인터넷에서 매우 큰 비중을 차지합니다.
-d 웹페이지 기준으로 이미지가 차지하는 데이터 용량은 전체의 51%에 달하므로[^1],
+웹페이지 기준으로 이미지가 차지하는 데이터 용량은 전체의 51%에 달하므로[^1],
 이미지의 속도나 크기를 개선하면 웹 성능에 상당한 영향을 미칩니다.
 
 이 글에서는 웹 개발자가 반드시 알아야 할 이미지 관련 지식을 총정리합니다.
 올바른 이미지 포맷 선택부터 다양한 최적화 기법, 접근성 고려 사항, 그리고 성능 및 SEO에 미치는 영향까지 다룹니다.
+
+먼저 이미지 관련 용어들을 정리하겠습니다.
 
 # image라는 단어
 
@@ -75,15 +77,16 @@ d 웹페이지 기준으로 이미지가 차지하는 데이터 용량은 전체
 IT 기술에서는 시스템, 파일, 환경의 상태를 하나의 단일 단위로 묶은 복제본을
 리눅스 컨테이너 이미지, 디스크 이미지, 머신 이미지 등으로 부릅니다.
 또 다른 '복제'라는 단어로 clone이 있습니다.
-clone은 즉시 A에서 B 위치로 복제하는 것을 말한다면, image는 원본을 복제해서 어디서나 복원할 준비가 된 상태를 말합니다.
+**clone**은 즉시 A에서 B 위치로 정확하게 복제하는 것을 말한다면,
+**image**는 원본을 복제해서 어디서나 복원할 준비가 된 상태를 말합니다[^2].
 
 **스냅샷**(**Snapshot**)은 순간적인 장면을 촬영한 사진을 말합니다.
 인물 사진에서는 자연스러운 동작이나 표정을 재빠르게 포착한 사진을 의미합니다.
 IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 
-# 화질(Quality)을 결정하는 요소
+## 화질(Quality)을 결정하는 요소
 
-일반적으로 **해상도**(**Resolution**)는 디지털 이미지의 픽셀 단위 크기를 의미합니다.
+일반적으로 **해상도(Resolution)** 는 디지털 이미지의 픽셀 단위 크기를 의미합니다.
 이는 가로와 세로 방향의 픽셀 수 (ex: 1920×1080처럼 픽셀 수로 표기)로 표현되어
 이미지에 얼마나 **정보**가 담겨 있는지 나타냅니다.
 해상도가 높을수록 더 많은 픽셀로 구성되어 있어 이미지의 디테일이 풍부해지고 선명해집니다.
@@ -105,7 +108,7 @@ IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.
 RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 있습니다.
 이를 보정하기 위해 sRGB와 같은 표준 색 공간과 컬러 매니지먼트가 사용됩니다.
 
-비트 깊이(bit depth) 또는 **색 깊이(color depth)**는 각 픽셀 색상을 표현하기 위해 사용되는 비트 수를 의미합니다.
+**비트 심도(bit depth)** 또는 **색 심도(color depth)** 는 각 픽셀 색상을 표현하기 위해 사용되는 비트 수를 의미합니다.
 다시 말해, 하나의 픽셀 당 표현 가능한 색상의 가짓수를 결정하는 지표입니다.
 디지털 이미지에서 흔히 쓰이는 24비트 색상은 픽셀 당 24비트로 색을 표현한다는 뜻으로,
 보통 RGB 각 채널 8비트씩 (8비트+8비트+8비트) 구성되어 있습니다.
@@ -114,8 +117,8 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 
 # 이미지 파이프라인 (Image Pipeline)
 
-이미지 소스(카메라, 스캐너, 컴퓨터 게임의 렌더링 엔진)와
-이미지 렌더러(모니터, 프린터, 시네마 스크린) 사이의 모든 과정을
+**이미지 소스**(카메라, 스캐너, 컴퓨터 게임의 렌더링 엔진)와
+**이미지 렌더러**(모니터, 프린터, 시네마 스크린) **사이의 모든 과정**을
 [이미지 파이프라인](https://en.wikipedia.org/wiki/Color_image_pipeline)이라고 합니다.
 
 ![이미지 파이프라인](/images/multimedia/image-in-web/image-pipeline-v2.png)
@@ -128,8 +131,8 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 이후 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털화해야 합니다.
 **디지털 카메라**는 이미지 센서([CCD](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/),
 [CMOS](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/))가
-빛을 받아 RAW 데이터[^2](RGB)로 저장합니다.
-이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용되죠.
+빛을 받아 RAW 데이터[^3](RGB)로 저장합니다.
+이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용됩니다.
 
 ![이미지 센서](/images/multimedia/image-in-web/image-processing.avif)
 
@@ -138,8 +141,8 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 ## ISP: 이미지 신호 처리
 
 디지털 촬영 후에는 일반적으로 카메라에 내장된
-[이미지 신호 처리장치(ISP, Image Signal Processor)](https://en.wikipedia.org/wiki/Image_processor)가 이미지를 압축-보정해 저장합니다.[^3]
-(RAW → JPEG, PNG 등)
+[이미지 신호 처리장치(ISP, Image Signal Processor)](https://en.wikipedia.org/wiki/Image_processor)가
+이미지를 압축-보정해 저장합니다.[^4] (RAW → JPEG, PNG 등)
 여기서 압축(손실/무손실), 보정(화이트 밸런스, 노출 보정, 색상 보정 등), 인코딩(포맷 변환) 등의 과정을 거칩니다.
 
 # 이미지 포맷
@@ -189,8 +192,8 @@ WebP의 손실 압축 효율은 매우 뛰어나서,
 또한 8비트 알파 채널을 지원하여 PNG처럼 투명 배경 이미지를 저장할 수 있고,
 애니메이션 WebP는 GIF나 APNG보다 뛰어난 압축 효율로 다중 프레임을 저장합니다.
 
-하지만 WebP가 모든 이미지에 압축률이 높은 것은 아닙니다.[^4]
-또한 프로그레시브 렌더링(progressive JPEG처럼 저화질로 먼저 보여주고 점차 선명해지는 기능)을 지원하지 않습니다[^5].
+하지만 WebP가 모든 이미지에 압축률이 높은 것은 아닙니다.[^5]
+또한 프로그레시브 렌더링(progressive JPEG처럼 저화질로 먼저 보여주고 점차 선명해지는 기능)을 지원하지 않습니다[^6].
 
 ### AVIF: AV1 기반 이미지 포맷
 
@@ -229,7 +232,7 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 이는 불필요하게 큰 파일을 다운로드하게 만듭니다.
 이미지가 표시될 최대 크기를 고려하여 이미지 자체의 해상도를 미리 조절(리사이징)하여 제공해야 합니다.
 일부 CDN 서비스에서는 최초 요청 시 리사이징하거나 워터마크를 추가하는 기능을 지원하기도 합니다.
-`WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다[^6].
+`WebP`, `AVIF`와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다[^7].
 
 ## 반응형 이미지 (Responsive Images)
 
@@ -411,8 +414,15 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 - How Digital Photography Works-Que | Ron White, Timothy Edward Downs (2007)
 
 [^1]: [Optimizing images on the web](https://blog.cloudflare.com/optimizing-images/)
-[^2]: [RAW 이미지 포맷](https://en.wikipedia.org/wiki/Raw_image_format)이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia
-[^3]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
-[^4]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
-[^5]: [WebP FAQ](https://developers.google.com/speed/webp/faq) | Google
-[^6]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
+[^2]: 사실 기술적으로 명확한 구분인지 모르겠습니다. 다음 글을 참조해주세요.
+[SmartDeploy](https://www.smartdeploy.com/blog/what-is-computer-imaging/)에서는
+컴퓨터를 이미징하는 방식을 섹터 기반과 파일 기반으로 나누고,
+이 중 섹터 기반 이미징을 cloning이라고 합니다.
+[Macrium Software](https://www.macrium.com/blog/techie-tuesday-image-or-clone-e6be74abb089)에서는
+복제본이 생성되었을 당시의 상태로 완전히 복원하는 데 필요한 모든 정보를 저장해서 일관된 백업을 보장하는 것을 disk imaging이라고 하고,
+압축없이 빠르게 복제하기 위해 사용하는 것을 disk cloning이라고 합니다.
+[^3]: [RAW 이미지 포맷](https://en.wikipedia.org/wiki/Raw_image_format)이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia
+[^4]: [디지털 신호 처리장치(DSP, Digital Signal Processor)](https://en.wikipedia.org/wiki/Digital_signal_processor)의 일종.
+[^5]: [WebP 기술의 장단점 분석 (2021)](https://news.hada.io/topic?id=12375) — [원본: WebP is so great… except it's not](https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/)
+[^6]: [WebP FAQ](https://developers.google.com/speed/webp/faq) | Google
+[^7]: [Serve images in modern formats](https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images) | web.dev
