@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2025-04-13T22:38:00+09:00
-lastmod: 2025-04-13T22:38:00+09:00
+lastmod: 2025-04-27T12:07:00+09:00
 title: "웹과 멀티미디어: 이미지"
 description: "image"
 # featured_image: ["/images/master/markruler-wave.webp"]
