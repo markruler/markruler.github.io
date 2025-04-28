@@ -125,8 +125,8 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 
 이미지는 사진이나 컴퓨터 그래픽으로부터 시작됩니다.
 그 중 **사진**은 촬영 장비의 특성에 따라 이미지 품질과 후처리 방식이 달라집니다.
-**필름 카메라**는 물리적 필름에 빛을 감광시켜 현상(現像, Photographic Development) 과정을 거칩니다.
-이후 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털화해야 합니다.
+**필름 카메라**는 물리적 필름에 빛을 감광시켜 현상(Photographic Development) 과정을 거칩니다.
+인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털 이미지로 만들어야 합니다.
 **디지털 카메라**는 이미지 센서([CCD](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/),
 [CMOS](https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/))가
 빛을 받아 RAW 데이터[^3](RGB)로 저장합니다.
@@ -158,7 +158,7 @@ JPEG(Joint Photographic Experts Group)는 사진 이미지를 효율적으로 �
 줄여서 JPG라고도 부릅니다.
 [이산 코사인 변환(DCT)](https://en.wikipedia.org/wiki/Discrete_cosine_transform)
 기반의 손실 압축을 사용하여 인간 시각에 덜 중요하게 여겨지는 정보는 버리고 용량을 줄입니다.
-압축률(퀄리티)을 조절 가능하여 고품질부터 고압축 저품질까지 선택할 수 있으며,
+압축률(퀄리티)을 조절할 수 있어 고품질부터 고압축 저품질까지 선택할 수 있으며,
 일반적으로 동일 화질 대비 PNG보다 파일 크기가 훨씬 작게 저장됩니다.
 다만 압축률이 높을수록 블록 노이즈 등의 압축 아티팩트(손실로 인한 왜곡)가 생길 수 있습니다.
 
