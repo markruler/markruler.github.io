@@ -48,8 +48,10 @@
 &lt;p&gt;&lt;strong&gt;물리적으로&lt;/strong&gt; 매질을 통해 전달된 모든 음파를 &lt;strong&gt;사운드(sound)&lt;/strong&gt; 라고 합니다.
 한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 &lt;strong&gt;기술적으로&lt;/strong&gt; &lt;strong&gt;오디오(audio)&lt;/strong&gt; 라고 합니다.&lt;/p&gt;
 &lt;p&gt;이 글에서는 오디오의 &lt;strong&gt;입력(녹음)부터 처리, 출력(재생)까지&lt;/strong&gt;의 전체 흐름을 다룹니다.
-주요 오디오 포맷의 특성과 브라우저 호환성, Web Audio API를 통한 &lt;strong&gt;실시간 처리&lt;/strong&gt;와
-MediaRecorder를 통한 &lt;strong&gt;녹음(Recording)&lt;/strong&gt;, 그리고 &lt;strong&gt;브라우저 정책&lt;/strong&gt;까지 다뤄보겠습니다.&lt;/p&gt;
+주요 오디오 포맷의 특성과 브라우저 호환성,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API&#34;&gt;Web Audio API&lt;/a&gt;를 통한 &lt;strong&gt;실시간 처리&lt;/strong&gt;와
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API&#34;&gt;MediaStream Recording API&lt;/a&gt;를 통한
+&lt;strong&gt;녹음(Recording)&lt;/strong&gt;, 그리고 &lt;strong&gt;브라우저 정책&lt;/strong&gt;까지 다뤄보겠습니다.&lt;/p&gt;
 &lt;h1 id=&#34;오디오-신호-처리&#34;&gt;오디오 신호 처리&lt;/h1&gt;
 &lt;p&gt;마이크를 통해 음원(audio source)으로부터 수집한 &lt;strong&gt;아날로그 신호&lt;/strong&gt;는
 &lt;strong&gt;파동(wave)&lt;/strong&gt; 형태로 존재합니다.
@@ -60,7 +62,7 @@ MediaRecorder를 통한 &lt;strong&gt;녹음(Recording)&lt;/strong&gt;, 그리�
 &lt;p&gt;하지만 컴퓨터는 디지털입니다.
 컴퓨터가 처리할 수 있는 방식으로 표현하려면 소리를 디지털 형태로 변환해야 합니다.
 이것을 수행하는 것이 &lt;strong&gt;아날로그-디지털 변환기(analog to digital converter)&lt;/strong&gt; 입니다&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
-줄여서 ADC 혹은 A/D 변환기라고도 합니다.&lt;/p&gt;
+줄여서 ADC 혹은 A/D 변환기라고 합니다.&lt;/p&gt;
 &lt;p&gt;대표적인 ADC 방식으로 &lt;a href=&#34;https://en.wikipedia.org/wiki/Pulse-code_modulation&#34;&gt;펄스 부호 변조(PCM, Pulse Code Modulation)&lt;/a&gt;가 있습니다.
 PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격으로 &lt;strong&gt;표본화&lt;/strong&gt;(&lt;strong&gt;Sampling&lt;/strong&gt;)합니다.
 이것을 &lt;strong&gt;펄스 진폭 변조&lt;/strong&gt;(&lt;strong&gt;PAM, Pulse Amplitude Modulation&lt;/strong&gt;)라고 합니다.
@@ -113,19 +115,18 @@ coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하�
 &lt;p&gt;웹에서 주로 쓰이는 몇 가지 코덱으로 범위를 좁혀볼 수 있습니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
 각 코덱마다 압축 효율, 음질, 지연(latency), 라이센스 조건 등이 다르며 브라우저 지원 여부도 상이합니다.&lt;/p&gt;
 &lt;h2 id=&#34;손실-압축-코덱&#34;&gt;손실 압축 코덱&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;MP3 (MPEG-1 Audio Layer III)&lt;/strong&gt; 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
+&lt;p&gt;&lt;strong&gt;MP3 (MPEG-1 Audio Layer III)&lt;/strong&gt; 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
 비교적 오래된 기술이지만 여전히 &lt;strong&gt;모든 최신 브라우저에서 재생 지원&lt;/strong&gt;하고 있습니다.
 &lt;code&gt;.mp3&lt;/code&gt; 파일은 내부적으로 MPEG 형식 컨테이너를 사용하지만 영상 트랙 없이 오디오 트랙만 들어있을 경우 관례적으로 &amp;ldquo;MP3 파일&amp;quot;로 불립니다.
 MP3는 압축 효율이 최신 코덱보다 떨어지지만,
-&lt;strong&gt;특허 만료&lt;/strong&gt;(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;AAC (Advanced Audio Coding)&lt;/strong&gt; 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
+&lt;strong&gt;특허 만료&lt;/strong&gt;(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;AAC (Advanced Audio Coding)&lt;/strong&gt; 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
 MP3 대비 낮은 비트레이트에서도 양호한 음질을 제공합니다.
 AAC는 MPEG-4 Part 3에 정의되어 있으며 주로 &lt;strong&gt;MP4(M4A)&lt;/strong&gt; 컨테이너에 담겨 &lt;code&gt;.mp4&lt;/code&gt; 혹은 &lt;code&gt;.m4a&lt;/code&gt; 확장자로 사용됩니다.
 웹 브라우저에서는 &lt;strong&gt;MP4 컨테이너의 AAC&lt;/strong&gt;를 거의 모두 지원합니다.
 다만 AAC는 특허 코덱으로서 기술이 &lt;strong&gt;비공개 및 라이선스 필요&lt;/strong&gt;하다는 점이 있지만,
-브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Opus&lt;/strong&gt; 는 비교적 최신(2012년 표준화) 코덱으로, &lt;strong&gt;Xiph.Org&lt;/strong&gt; 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
+브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Opus&lt;/strong&gt; 는 비교적 최신(2012년 표준화) 코덱으로, &lt;strong&gt;Xiph.Org&lt;/strong&gt; 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
 Opus는 &lt;strong&gt;웹 실시간 통신(WebRTC)&lt;/strong&gt; 표준 코덱으로 지정될 정도로 &lt;strong&gt;낮은 지연(low latency)&lt;/strong&gt; 특성과 효율적인 압축을 모두 갖추고 있어,
 &lt;strong&gt;음성 통화&lt;/strong&gt;부터 &lt;strong&gt;음악 스트리밍&lt;/strong&gt;까지 폭넓게 활용됩니다.
 Opus는 &lt;strong&gt;5~66.5ms 정도의 매우 낮은 지연시간 범위&lt;/strong&gt;를 가지며,
@@ -135,24 +136,23 @@ Opus는 &lt;strong&gt;완전 오픈소스/무특허&lt;/strong&gt; 코덱이라 
 Opus는 주로 &lt;strong&gt;Ogg&lt;/strong&gt; 또는 &lt;strong&gt;WebM(Matroska)&lt;/strong&gt; 컨테이너에 담겨 &lt;code&gt;.opus&lt;/code&gt; (Ogg Opus) 또는 &lt;code&gt;.webm&lt;/code&gt; (WebM Opus) 확장자로 사용되며,
 MP4 컨테이너에도 넣을 수 있지만 호환성은 케이스마다 다를 수 있습니다.
 최신 웹 환경에서는 Opus 지원이 점차 &lt;strong&gt;보편화&lt;/strong&gt;되고 있으므로
-라이브 오디오 스트리밍, 실시간 통신과 같이 &lt;strong&gt;낮은 지연이 중요한 애플리케이션&lt;/strong&gt;에서 고려할 만합니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Vorbis&lt;/strong&gt; 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
+라이브 오디오 스트리밍, 실시간 통신과 같이 &lt;strong&gt;낮은 지연이 중요한 애플리케이션&lt;/strong&gt;에서 고려할 만합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Vorbis&lt;/strong&gt; 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
 Ogg 컨테이너의 오디오 트랙으로 많이 사용되었고, MP3의 대안으로 한때 각광받았습니다.
 Vorbis는 MP3보다 같은 비트레이트에서 음질이 우수하며,
 &lt;strong&gt;가변 비트레이트(VBR)&lt;/strong&gt; 인코딩을 선도적으로 채택했습니다.
 다만 Opus가 등장하면서 압축 효율과 지연 면에서 Vorbis를 대체하게 되었고 게임 오디오 등 일부 분야에서만 사용되고 있습니다.
 Opus와 마찬가지로 브라우저 지원에 제약이 있으며,
-자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;WAV(PCM)&lt;/strong&gt; 는 &lt;strong&gt;비압축 PCM&lt;/strong&gt; 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
+자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;WAV(PCM)&lt;/strong&gt; 는 &lt;strong&gt;비압축 PCM&lt;/strong&gt; 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
 용량이 크지만 구조가 단순하여 거의 모든 환경에서 &lt;strong&gt;기본 지원&lt;/strong&gt;됩니다.
 웹 브라우저도 WAV/PCM 재생을 지원하며, 특히 &lt;strong&gt;짧은 효과음이나 알림음&lt;/strong&gt; 등에서는 별도 압축 없이 WAV를 사용할 때도 있습니다.
 WAV의 단점은 앞서 언급한 대로 파일 크기가 크다는 것이므로 네트워크 전송에는 비효율적입니다.
-만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.&lt;/li&gt;
-&lt;/ul&gt;
+만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.&lt;/p&gt;
 &lt;h2 id=&#34;무손실-압축-코덱&#34;&gt;무손실 압축 코덱&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;FLAC(Free Lossless Audio Codec)&lt;/strong&gt; 은 이름 그대로 &lt;strong&gt;무손실 압축&lt;/strong&gt; 코덱입니다.
 음악을 완전히 원음 품질로 저장하면서도 WAV에 비해 용량을 40~50% 가량 줄일 수 있다는 장점이 있습니다.
-FLAC도 오픈 소스/무특허이며 &lt;code&gt;.flac&lt;/code&gt; 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 &lt;code&gt;.ogg&lt;/code&gt;로 쓸 수도 있습니다.
+FLAC도 오픈 소스이며 &lt;code&gt;.flac&lt;/code&gt; 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 &lt;code&gt;.ogg&lt;/code&gt;로 쓸 수도 있습니다.
 브라우저에서는 Chrome과 Firefox 등이 FLAC 재생을 지원하며, 주로 &lt;strong&gt;데스크톱&lt;/strong&gt; 환경에서 동작합니다 (모바일 브라우저 지원은 제한적일 수 있음).
 FLAC는 웹 스트리밍보다는 &lt;strong&gt;고음질 음원 다운로드&lt;/strong&gt; 제공 시 옵션으로 쓰이며, 대부분의 경우 손실 압축으로도 충분한 웹 오디오와는 다소 분야가 다릅니다.&lt;/p&gt;
 &lt;p&gt;이 밖에도 웹에서는 &lt;strong&gt;AMR(Adaptive Multi-Rate), G.711&lt;/strong&gt; 등의 &lt;strong&gt;음성 코덱&lt;/strong&gt;이 WebRTC나 SIP 통신에 사용되고,
@@ -623,7 +623,6 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#image%EB%9D%BC%EB%8A%94-%EB%8B%A8%EC%96%B4&#34;&gt;image라는 단어&lt;/a&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#it-%EA%B8%B0%EC%88%A0%EC%97%90%EC%84%9C%EC%9D%98-%EC%9D%B4%EB%AF%B8%EC%A7%80&#34;&gt;IT 기술에서의 이미지&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%ED%99%94%EC%A7%88quality%EC%9D%84-%EA%B2%B0%EC%A0%95%ED%95%98%EB%8A%94-%EC%9A%94%EC%86%8C&#34;&gt;화질(Quality)을 결정하는 요소&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
@@ -711,15 +710,16 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
       &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h2 id=&#34;it-기술에서의-이미지&#34;&gt;IT 기술에서의 이미지&lt;/h2&gt;
-&lt;p&gt;IT 기술에서는 시스템, 파일, 환경의 상태를 하나의 단일 단위로 묶은 복제본을
+&lt;blockquote&gt;
+&lt;p&gt;IT에서는 시스템, 파일, 환경의 상태를 하나의 단일 단위로 묶은 복제본을
 리눅스 컨테이너 이미지, 디스크 이미지, 머신 이미지 등으로 부릅니다.
 또 다른 &amp;lsquo;복제&amp;rsquo;라는 단어로 clone이 있습니다.
 &lt;strong&gt;clone&lt;/strong&gt;은 즉시 A에서 B 위치로 정확하게 복제하는 것을 말한다면,
-&lt;strong&gt;image&lt;/strong&gt;는 원본을 복제해서 어디서나 복원할 준비가 된 상태를 말합니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;스냅샷&lt;/strong&gt;(&lt;strong&gt;Snapshot&lt;/strong&gt;)은 순간적인 장면을 촬영한 사진을 말합니다.
+&lt;strong&gt;image&lt;/strong&gt;는 원본을 복제해서 어디서나 복원할 준비가 된 상태를 말합니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;br&gt;
+&lt;br&gt;
+&lt;strong&gt;스냅샷&lt;/strong&gt;(&lt;strong&gt;Snapshot&lt;/strong&gt;)은 순간적인 장면을 촬영한 사진을 말합니다.
 인물 사진에서는 자연스러운 동작이나 표정을 재빠르게 포착한 사진을 의미합니다.
-IT 기술에서는 특정 시점의 상태를 저장한 것을 말합니다.&lt;/p&gt;
+IT에서는 특정 시점의 상태를 저장한 것을 말합니다.&lt;/p&gt;&lt;/blockquote&gt;
 &lt;h2 id=&#34;화질quality을-결정하는-요소&#34;&gt;화질(Quality)을 결정하는 요소&lt;/h2&gt;
 &lt;p&gt;일반적으로 &lt;strong&gt;해상도(Resolution)&lt;/strong&gt; 는 디지털 이미지의 픽셀 단위 크기를 의미합니다.
 이는 가로와 세로 방향의 픽셀 수 (ex: 1920×1080처럼 픽셀 수로 표기)로 표현되어
@@ -772,7 +772,7 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 &lt;h2 id=&#34;래스터-이미지&#34;&gt;래스터 이미지&lt;/h2&gt;
 &lt;p&gt;래스터(raster) 이미지는 픽셀로 구성된 정적 비트맵 이미지입니다.&lt;/p&gt;
 &lt;h3 id=&#34;jpg-손실-압축-이미지-포맷&#34;&gt;JPG: 손실 압축 이미지 포맷&lt;/h3&gt;
-&lt;p&gt;JPEG(Joint Photographic Experts Group)는 사진 이미지를 효율적으로 저장하기 위해 설계된 손실 압축 포맷입니다.
+&lt;p&gt;JPEG(Joint Photographic Experts Group)는 사진 이미지를 효율적으로 저장하기 위해 설계된 &lt;strong&gt;손실 압축&lt;/strong&gt; 포맷입니다.
 줄여서 JPG라고도 부릅니다.
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Discrete_cosine_transform&#34;&gt;이산 코사인 변환(DCT)&lt;/a&gt;
 기반의 손실 압축을 사용하여 인간 시각에 덜 중요하게 여겨지는 정보는 버리고 용량을 줄입니다.
@@ -780,19 +780,19 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 일반적으로 동일 화질 대비 PNG보다 파일 크기가 훨씬 작게 저장됩니다.
 다만 압축률이 높을수록 블록 노이즈 등의 압축 아티팩트(손실로 인한 왜곡)가 생길 수 있습니다.&lt;/p&gt;
 &lt;p&gt;JPEG 포맷은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Alpha_compositing&#34;&gt;알파 채널&lt;/a&gt;을 지원하지 않으므로
-투명도(Transparency)를 표현할 수 없습니다.
+&lt;strong&gt;투명도(Transparency)를 표현할 수 없습니다&lt;/strong&gt;.
 또한 프레임 기반 애니메이션(멀티프레임)은 지원하지 않는 정적 이미지 포맷입니다.&lt;/p&gt;
 &lt;h3 id=&#34;gif-팔레트-기반-애니메이션-포맷&#34;&gt;GIF: 팔레트 기반 애니메이션 포맷&lt;/h3&gt;
 &lt;p&gt;GIF(Graphics Interchange Format)는 1987년 도입된 초기 웹 그래픽 포맷으로,
 256색 팔레트(8비트) 기반의 래스터 이미지를 무손실 압축(LZW)으로 저장합니다.&lt;/p&gt;
 &lt;h3 id=&#34;png-무손실-압축-이미지-포맷&#34;&gt;PNG: 무손실 압축 이미지 포맷&lt;/h3&gt;
-&lt;p&gt;PNG(Portable Network Graphics)는 무손실 압축을 지원하는 래스터 이미지 포맷입니다.
+&lt;p&gt;PNG(Portable Network Graphics)는 &lt;strong&gt;무손실 압축&lt;/strong&gt;을 지원하는 래스터 이미지 포맷입니다.
 PKZIP(&lt;code&gt;.zip&lt;/code&gt;)처럼 Deflate 알고리즘(LZ77+허프만 코딩)으로 압축하여 품질 저하 없이 용량을 줄입니다.
-트루 컬러(24비트)와 인덱스 컬러(8비트) 모드를 지원하며, 투명도를 표현할 수 있습니다.
-특허가 있는 LZW 압축 알고리즘을 사용한느 GIF를 대체하기 위해 개발되었다고 합니다.&lt;/p&gt;
+트루 컬러(24비트)와 인덱스 컬러(8비트) 모드를 지원하며, &lt;strong&gt;투명도를 표현&lt;/strong&gt;할 수 있습니다.
+특허가 있는 LZW 압축 알고리즘을 사용하는 GIF를 대체하기 위해 개발되었다고 합니다.&lt;/p&gt;
 &lt;h3 id=&#34;webp&#34;&gt;WebP&lt;/h3&gt;
 &lt;p&gt;WebP는 구글에서 2010년경 발표한 현대적인 이미지 포맷으로,
-손실 압축과 무손실 압축을 모두 지원하며 투명도와 애니메이션까지 가능한 만능 포맷입니다.
+&lt;strong&gt;손실 압축과 무손실 압축을 모두 지원하며 투명도와 애니메이션까지 가능한 만능 포맷입니다&lt;/strong&gt;.
 WebP는 내부적으로 비디오 코덱인 &lt;strong&gt;VP8&lt;/strong&gt;를 기반으로 한 프레임 압축을 사용합니다.&lt;/p&gt;
 &lt;p&gt;WebP의 손실 압축 효율은 매우 뛰어나서,
 동일 화질 기준 JPEG 대비 25~35% 정도 파일 크기가 작다고 알려져 있습니다.
@@ -808,7 +808,7 @@ AOMedia에서 별도의 이미지 컨테이너로 개발한 것입니다.
 WebP의 뒤를 잇는 차세대 웹 이미지 포맷으로 각광받고 있지만
 현재는 브라우저 지원이 부족하여 사용에 주의가 필요합니다.&lt;/p&gt;
 &lt;h2 id=&#34;벡터-이미지&#34;&gt;벡터 이미지&lt;/h2&gt;
-&lt;p&gt;픽셀 대신 벡터(vector) 형태로 그래픽을 표현하는 이미지 포맷입니다.&lt;/p&gt;
+&lt;p&gt;픽셀 대신 &lt;strong&gt;벡터(vector) 형태로 그래픽을 표현&lt;/strong&gt;하는 이미지 포맷입니다.&lt;/p&gt;
 &lt;h3 id=&#34;svg&#34;&gt;SVG&lt;/h3&gt;
 &lt;p&gt;SVG(Scalable Vector Graphics)는
 XML 코드로 정의된 벡터 기반 이미지 포맷입니다.
@@ -819,9 +819,10 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 웹에서 로고, 아이콘, 단순한 그래픽을 표현하는 데 적합합니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/image-in-web/svg-vs-png.png&#34; alt=&#34;SVG와 PNG 비교&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://stackoverflow.com/questions/2336522/what-are-the-different-usecases-of-png-vs-gif-vs-jpeg-vs-svg&#34;&gt;이미지 출처: Stack Overflow&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;결론적으로, &lt;strong&gt;사진&lt;/strong&gt;에는 JPEG 또는 WebP/AVIF,
+&lt;p&gt;결론적으로
+&lt;strong&gt;사진&lt;/strong&gt;에는 JPEG 또는 WebP/AVIF,
 &lt;strong&gt;로고나 아이콘&lt;/strong&gt;에는 SVG 또는 PNG,
-&lt;strong&gt;애니메이션&lt;/strong&gt;에는 GIF 또는 WebP를 사용하는 것이 일반적인 권장 사항입니다.
+&lt;strong&gt;애니메이션&lt;/strong&gt;에는 GIF 또는 WebP를 사용합니다.
 상황에 따라 최적의 포맷을 선택하는 것이 중요합니다.&lt;/p&gt;
 &lt;h1 id=&#34;웹-페이지에서-이미지-최적화&#34;&gt;웹 페이지에서 이미지 최적화&lt;/h1&gt;
 &lt;p&gt;웹 페이지에 400x300 픽셀 크기로 표시될 이미지를 4000x3000 픽셀 원본 그대로 사용하는 것은 심각한 낭비입니다.
@@ -884,32 +885,32 @@ HTML &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그에 &lt;code&gt;loading=
 Disable cache 옵션을 활성화하고 Hard Reload(혹은 처음 접속해서 캐시가 없는 경우) 시
 요청 리소스가 많을 경우 Queueing이 길게 유지되는 것을 확인할 수 있습니다.
 &lt;code&gt;Stalled&lt;/code&gt;는 &lt;strong&gt;Connection Start 후&lt;/strong&gt; 위 3가지 이유로 대기하는 상태입니다.
-이를 줄이기 위해 적절한 사이즈의 Sprite 이미지를 사용할 수 있습니다.&lt;/p&gt;
+이를 줄이기 위해 적절한 사이즈의 이미지 스프라이트를 사용할 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;브라우저-캐싱&#34;&gt;브라우저 캐싱&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;Cache-Control&lt;/code&gt; 헤더를 설정하여 한 번 받은 이미지를 사용자가 재방문 시 재활용하도록 합니다.
-변경이 드문 자원은 &lt;code&gt;max-age&lt;/code&gt;를 길게 주고, 파일명에 버전 해시를 붙여 캐시 갱신을 관리하는 패턴이 일반적입니다.&lt;/p&gt;
+변경이 드문 자원은 &lt;code&gt;max-age&lt;/code&gt;를 길게 주고, 파일명에 버전 해시를 붙여 캐시 갱신을 관리할 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;압축-알고리즘-최적화&#34;&gt;압축 알고리즘 최적화&lt;/h2&gt;
 &lt;p&gt;JPEG의 프로그레시브(progressive) 옵션을 켜서
 초기 러프한 버전을 빨리 보여주고 점진적으로 화질을 올리게 하거나,
 PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으로 용량을 조금이라도 더 줄일 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;단순-장식용-이미지는-css로&#34;&gt;단순 장식용 이미지는 CSS로&lt;/h2&gt;
 &lt;p&gt;단순 장식용 이미지는 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 대신 CSS &lt;code&gt;background-image&lt;/code&gt;로 넣어 콘텐츠 이미지와 구분합니다.
-이렇게 하면 필요 시 해당 영역을 아예 로드 안 하도록 (ex: 모바일에서 숨김) 처리하기도 쉽습니다.
-또한 &lt;code&gt;&amp;lt;picture&amp;gt;&lt;/code&gt; 요소를 사용하면 CSS &lt;code&gt;background-image&lt;/code&gt;의 미디어쿼리 대응처럼
-&lt;code&gt;&amp;lt;source media&amp;gt;&lt;/code&gt;로 다양한 상황별 이미지를 지정할 수도 있습니다.&lt;/p&gt;
+필요 시 해당 영역을 아예 불러오지 않도록 처리하기도 쉽습니다.
+예를 들면 미디어 쿼리를 사용해서 모바일 환경에서는 요소를 불러오지 않도록 할 수 있습니다.
+또한 &lt;code&gt;&amp;lt;picture&amp;gt;&lt;/code&gt; 요소를 사용하면 &lt;code&gt;&amp;lt;source media&amp;gt;&lt;/code&gt;로 다양한 상황별 이미지를 지정할 수도 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;웹-접근성-alt-속성&#34;&gt;웹 접근성: alt 속성&lt;/h1&gt;
-&lt;p&gt;이미지를 최적화하는 것만큼이나 웹 개발자에게 중요한 과제가 바로 **웹 접근성(accessibility)**입니다.
-특히 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그의 &lt;code&gt;alt&lt;/code&gt; 속성, 즉 **대체 텍스트(Alternative Text)**는 단순한 보조 정보가 아니라,
+&lt;p&gt;이미지를 최적화하는 것만큼이나 웹 개발자에게 중요한 과제가 바로 &lt;strong&gt;웹 접근성(accessibility)&lt;/strong&gt; 입니다.
+특히 &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그의 &lt;code&gt;alt&lt;/code&gt; 속성, 즉 &lt;strong&gt;대체 텍스트(Alternative Text)&lt;/strong&gt; 는 단순한 보조 정보가 아니라,
 모든 사용자가 웹페이지의 정보를 동등하게 이해할 수 있도록 돕는 &lt;strong&gt;핵심적인 수단&lt;/strong&gt;입니다.&lt;/p&gt;
 &lt;h2 id=&#34;왜-alt-속성이-중요한가&#34;&gt;왜 &lt;code&gt;alt&lt;/code&gt; 속성이 중요한가&lt;/h2&gt;
-&lt;p&gt;첫째, 시각 장애가 있는 사용자들은 웹페이지를 스크린 리더(screen reader)를 통해 탐색합니다.
+&lt;p&gt;첫째, &lt;strong&gt;시각 장애가 있는 사용자들&lt;/strong&gt;은 웹페이지를 스크린 리더(screen reader)를 통해 탐색합니다.
 이때 스크린 리더는 이미지의 시각적 내용을 읽어줄 수 없기 때문에,
 &lt;code&gt;alt&lt;/code&gt; 속성에 작성된 대체 텍스트를 대신 읽어줍니다.
 즉, 이 텍스트는 이미지의 의미를 음성으로 전달해주는 유일한 수단이 됩니다.&lt;/p&gt;
-&lt;p&gt;둘째, 이미지가 네트워크 오류나 기타 문제로 인해 제대로 로딩되지 않을 때,
+&lt;p&gt;둘째, &lt;strong&gt;이미지가 네트워크 오류나 기타 문제로 인해 제대로 로딩되지 않을 때&lt;/strong&gt;,
 &lt;code&gt;alt&lt;/code&gt; 텍스트는 이미지 대신 화면에 표시되어 사용자가 어떤 이미지가 있어야 했는지를 유추할 수 있게 해줍니다.
 이는 콘텐츠의 연속성과 이해를 돕는 데 중요한 역할을 합니다.&lt;/p&gt;
-&lt;p&gt;셋째, 검색 엔진 최적화(SEO) 측면에서도 &lt;code&gt;alt&lt;/code&gt; 속성은 유용합니다.
+&lt;p&gt;셋째, &lt;strong&gt;검색 엔진 최적화(SEO)&lt;/strong&gt; 측면에서도 &lt;code&gt;alt&lt;/code&gt; 속성은 유용합니다.
 검색 엔진은 이미지 자체의 시각적 내용을 이해하지 못하므로,
 &lt;code&gt;alt&lt;/code&gt; 텍스트를 통해 해당 이미지가 무엇을 의미하는지 파악합니다.
 이는 이미지 검색 결과에 노출될 가능성을 높이고,
@@ -917,12 +918,15 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;h2 id=&#34;좋은-alt-텍스트를-작성하는-방법&#34;&gt;좋은 &lt;code&gt;alt&lt;/code&gt; 텍스트를 작성하는 방법&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;alt&lt;/code&gt; 텍스트는 단순히 &amp;ldquo;있는 것보다 낫다&amp;rdquo; 수준에서 끝나는 것이 아니라,
 &lt;strong&gt;명확하고, 간결하고, 의미 있는&lt;/strong&gt; 내용으로 작성되어야 합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;이미지의 내용과 맥락을 정확하게 설명&lt;/strong&gt;해야 합니다. 예를 들어 제품 이미지라면, 단순히 &amp;ldquo;스마트폰&amp;quot;이 아니라 &amp;ldquo;파란색 케이스를 씌운 스마트폰 정면&amp;quot;처럼 구체적인 묘사가 필요합니다.&lt;/li&gt;
-&lt;li&gt;&amp;ldquo;사진&amp;rdquo;, &amp;ldquo;그림&amp;quot;과 같은 표현은 &lt;strong&gt;굳이 포함하지 않아도 됩니다&lt;/strong&gt;. 스크린 리더는 해당 요소가 이미지라는 것을 이미 인식하고 있으므로, 중복된 설명은 피하는 것이 좋습니다.&lt;/li&gt;
-&lt;li&gt;이미지가 &lt;strong&gt;링크 역할을 할 경우&lt;/strong&gt;, 단순한 설명보다는 &lt;strong&gt;링크의 목적지나 기능&lt;/strong&gt;을 설명해야 합니다. (ex: &amp;ldquo;장바구니 페이지로 이동&amp;rdquo;)&lt;/li&gt;
-&lt;li&gt;반대로, 이미지가 &lt;strong&gt;순수하게 장식용&lt;/strong&gt;이라면, &lt;code&gt;alt&lt;/code&gt; 속성을 빈 값(&lt;code&gt;alt=&amp;quot;&amp;quot;&lt;/code&gt;)으로 설정해야 스크린 리더가 그것을 무시할 수 있습니다. 시각적으로만 의미 있는 요소까지 읽게 되면, 오히려 사용자에게 혼란을 줄 수 있기 때문입니다.&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;이미지의 내용과 맥락을 정확하게 설명&lt;/strong&gt;해야 합니다.
+예를 들어 제품 이미지라면 단순히 &amp;ldquo;스마트폰&amp;quot;이 아니라 &amp;ldquo;파란색 케이스를 씌운 스마트폰 정면&amp;quot;처럼 구체적인 묘사가 필요합니다.&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;사진&amp;rdquo;, &amp;ldquo;그림&amp;quot;과 같은 표현은 &lt;strong&gt;굳이 포함하지 않아도 됩니다&lt;/strong&gt;.
+스크린 리더는 해당 요소가 이미지라는 것을 이미 인식하고 있으므로 중복된 설명은 피하는 것이 좋습니다.&lt;/p&gt;
+&lt;p&gt;이미지가 &lt;strong&gt;링크 역할을 할 경우&lt;/strong&gt;, 단순한 설명보다는 &lt;strong&gt;링크의 목적지나 기능&lt;/strong&gt;을 설명해야 합니다.
+예를 들어 &amp;ldquo;장바구니&amp;quot;보다 &amp;ldquo;장바구니 페이지로 이동&amp;quot;이라고 작성합니다.&lt;/p&gt;
+&lt;p&gt;반대로, 이미지가 &lt;strong&gt;순수하게 장식용&lt;/strong&gt;이라면
+&lt;code&gt;alt&lt;/code&gt; 속성을 빈 값(&lt;code&gt;alt=&amp;quot;&amp;quot;&lt;/code&gt;)으로 설정해야 스크린 리더가 그것을 무시할 수 있습니다.
+시각적으로만 의미 있는 요소까지 읽게 되면 오히려 사용자에게 혼란을 줄 수 있기 때문입니다.&lt;/p&gt;
 &lt;h1 id=&#34;이미지-보안&#34;&gt;이미지 보안&lt;/h1&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.invicti.com/web-vulnerability-scanner/vulnerabilities/cross-site-scripting-via-file-upload/&#34;&gt;XSS(Cross-Site Scripting)&lt;/a&gt;는
 악성 스크립트를 삽입해 사용자 브라우저에서 실행시키는 공격입니다.

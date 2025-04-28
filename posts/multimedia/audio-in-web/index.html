@@ -15,10 +15,8 @@
 
 <meta charset="utf-8">
 <meta name="X-UA-Compatible" content="IE=edge">
-
-  <meta name="google-site-verification" content="60VmMXH5SqMxrPFmaJ27RuE-pn2Yg7hw1BtEkXLmOwc" />
-
-<meta content="width=device-width" name="viewport">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
 <meta content="telephone=no" name="format-detection">
 <meta name="description" content="audio">
 <meta name="renderer" content="webkit">
@@ -572,8 +570,10 @@
 <p><strong>물리적으로</strong> 매질을 통해 전달된 모든 음파를 <strong>사운드(sound)</strong> 라고 합니다.
 한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 <strong>기술적으로</strong> <strong>오디오(audio)</strong> 라고 합니다.</p>
 <p>이 글에서는 오디오의 <strong>입력(녹음)부터 처리, 출력(재생)까지</strong>의 전체 흐름을 다룹니다.
-주요 오디오 포맷의 특성과 브라우저 호환성, Web Audio API를 통한 <strong>실시간 처리</strong>와
-MediaRecorder를 통한 <strong>녹음(Recording)</strong>, 그리고 <strong>브라우저 정책</strong>까지 다뤄보겠습니다.</p>
+주요 오디오 포맷의 특성과 브라우저 호환성,
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API">Web Audio API</a>를 통한 <strong>실시간 처리</strong>와
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API">MediaStream Recording API</a>를 통한
+<strong>녹음(Recording)</strong>, 그리고 <strong>브라우저 정책</strong>까지 다뤄보겠습니다.</p>
 <h1 id="오디오-신호-처리">오디오 신호 처리</h1>
 <p>마이크를 통해 음원(audio source)으로부터 수집한 <strong>아날로그 신호</strong>는
 <strong>파동(wave)</strong> 형태로 존재합니다.
@@ -584,7 +584,7 @@ MediaRecorder를 통한 <strong>녹음(Recording)</strong>, 그리고 <strong>�
 <p>하지만 컴퓨터는 디지털입니다.
 컴퓨터가 처리할 수 있는 방식으로 표현하려면 소리를 디지털 형태로 변환해야 합니다.
 이것을 수행하는 것이 <strong>아날로그-디지털 변환기(analog to digital converter)</strong> 입니다<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.
-줄여서 ADC 혹은 A/D 변환기라고도 합니다.</p>
+줄여서 ADC 혹은 A/D 변환기라고 합니다.</p>
 <p>대표적인 ADC 방식으로 <a href="https://en.wikipedia.org/wiki/Pulse-code_modulation">펄스 부호 변조(PCM, Pulse Code Modulation)</a>가 있습니다.
 PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격으로 <strong>표본화</strong>(<strong>Sampling</strong>)합니다.
 이것을 <strong>펄스 진폭 변조</strong>(<strong>PAM, Pulse Amplitude Modulation</strong>)라고 합니다.
@@ -637,19 +637,18 @@ coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하�
 <p>웹에서 주로 쓰이는 몇 가지 코덱으로 범위를 좁혀볼 수 있습니다<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>.
 각 코덱마다 압축 효율, 음질, 지연(latency), 라이센스 조건 등이 다르며 브라우저 지원 여부도 상이합니다.</p>
 <h2 id="손실-압축-코덱">손실 압축 코덱</h2>
-<ul>
-<li><strong>MP3 (MPEG-1 Audio Layer III)</strong> 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
+<p><strong>MP3 (MPEG-1 Audio Layer III)</strong> 는 가장 널리 알려진 손실 압축 오디오 코덱입니다.
 비교적 오래된 기술이지만 여전히 <strong>모든 최신 브라우저에서 재생 지원</strong>하고 있습니다.
 <code>.mp3</code> 파일은 내부적으로 MPEG 형식 컨테이너를 사용하지만 영상 트랙 없이 오디오 트랙만 들어있을 경우 관례적으로 &ldquo;MP3 파일&quot;로 불립니다.
 MP3는 압축 효율이 최신 코덱보다 떨어지지만,
-<strong>특허 만료</strong>(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.</li>
-<li><strong>AAC (Advanced Audio Coding)</strong> 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
+<strong>특허 만료</strong>(미국 기준 2017년 만료)로 인한 자유로운 사용과 폭넓은 호환성 덕분에 웹에서 기본 지원 포맷으로 자리잡았습니다.</p>
+<p><strong>AAC (Advanced Audio Coding)</strong> 는 MP3 이후 MPEG 표준으로 채택된 손실 압축 코덱입니다.
 MP3 대비 낮은 비트레이트에서도 양호한 음질을 제공합니다.
 AAC는 MPEG-4 Part 3에 정의되어 있으며 주로 <strong>MP4(M4A)</strong> 컨테이너에 담겨 <code>.mp4</code> 혹은 <code>.m4a</code> 확장자로 사용됩니다.
 웹 브라우저에서는 <strong>MP4 컨테이너의 AAC</strong>를 거의 모두 지원합니다.
 다만 AAC는 특허 코덱으로서 기술이 <strong>비공개 및 라이선스 필요</strong>하다는 점이 있지만,
-브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.</li>
-<li><strong>Opus</strong> 는 비교적 최신(2012년 표준화) 코덱으로, <strong>Xiph.Org</strong> 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
+브라우저나 OS 차원에서 라이선스가 처리되어 일반 웹개발자가 신경쓸 부분은 아닌 경우가 많습니다.</p>
+<p><strong>Opus</strong> 는 비교적 최신(2012년 표준화) 코덱으로, <strong>Xiph.Org</strong> 재단이 주도하여 개발한 오픈 소스 손실 압축 코덱입니다.
 Opus는 <strong>웹 실시간 통신(WebRTC)</strong> 표준 코덱으로 지정될 정도로 <strong>낮은 지연(low latency)</strong> 특성과 효율적인 압축을 모두 갖추고 있어,
 <strong>음성 통화</strong>부터 <strong>음악 스트리밍</strong>까지 폭넓게 활용됩니다.
 Opus는 <strong>5~66.5ms 정도의 매우 낮은 지연시간 범위</strong>를 가지며,
@@ -659,24 +658,23 @@ Opus는 <strong>완전 오픈소스/무특허</strong> 코덱이라 라이선스
 Opus는 주로 <strong>Ogg</strong> 또는 <strong>WebM(Matroska)</strong> 컨테이너에 담겨 <code>.opus</code> (Ogg Opus) 또는 <code>.webm</code> (WebM Opus) 확장자로 사용되며,
 MP4 컨테이너에도 넣을 수 있지만 호환성은 케이스마다 다를 수 있습니다.
 최신 웹 환경에서는 Opus 지원이 점차 <strong>보편화</strong>되고 있으므로
-라이브 오디오 스트리밍, 실시간 통신과 같이 <strong>낮은 지연이 중요한 애플리케이션</strong>에서 고려할 만합니다.</li>
-<li><strong>Vorbis</strong> 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
+라이브 오디오 스트리밍, 실시간 통신과 같이 <strong>낮은 지연이 중요한 애플리케이션</strong>에서 고려할 만합니다.</p>
+<p><strong>Vorbis</strong> 는 Xiph.Org에서 개발한 이전 세대 오픈소스 손실 압축 코덱입니다.
 Ogg 컨테이너의 오디오 트랙으로 많이 사용되었고, MP3의 대안으로 한때 각광받았습니다.
 Vorbis는 MP3보다 같은 비트레이트에서 음질이 우수하며,
 <strong>가변 비트레이트(VBR)</strong> 인코딩을 선도적으로 채택했습니다.
 다만 Opus가 등장하면서 압축 효율과 지연 면에서 Vorbis를 대체하게 되었고 게임 오디오 등 일부 분야에서만 사용되고 있습니다.
 Opus와 마찬가지로 브라우저 지원에 제약이 있으며,
-자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.</li>
-<li><strong>WAV(PCM)</strong> 는 <strong>비압축 PCM</strong> 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
+자유 오픈소스이므로 로열티 없이 사용할 수 있다는 장점이 있습니다.</p>
+<p><strong>WAV(PCM)</strong> 는 <strong>비압축 PCM</strong> 오디오 데이터(또는 일부 무손실 압축)를 담는 컨테이너 포맷입니다.
 용량이 크지만 구조가 단순하여 거의 모든 환경에서 <strong>기본 지원</strong>됩니다.
 웹 브라우저도 WAV/PCM 재생을 지원하며, 특히 <strong>짧은 효과음이나 알림음</strong> 등에서는 별도 압축 없이 WAV를 사용할 때도 있습니다.
 WAV의 단점은 앞서 언급한 대로 파일 크기가 크다는 것이므로 네트워크 전송에는 비효율적입니다.
-만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.</li>
-</ul>
+만약 WAV를 사용하더라도 압축이 필요 없는 특수한 경우나 파일 크기가 매우 작을 때로 한정하는 것이 좋습니다.</p>
 <h2 id="무손실-압축-코덱">무손실 압축 코덱</h2>
 <p><strong>FLAC(Free Lossless Audio Codec)</strong> 은 이름 그대로 <strong>무손실 압축</strong> 코덱입니다.
 음악을 완전히 원음 품질로 저장하면서도 WAV에 비해 용량을 40~50% 가량 줄일 수 있다는 장점이 있습니다.
-FLAC도 오픈 소스/무특허이며 <code>.flac</code> 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 <code>.ogg</code>로 쓸 수도 있습니다.
+FLAC도 오픈 소스이며 <code>.flac</code> 자체의 컨테이너를 사용하거나, Ogg 컨테이너에 담아 <code>.ogg</code>로 쓸 수도 있습니다.
 브라우저에서는 Chrome과 Firefox 등이 FLAC 재생을 지원하며, 주로 <strong>데스크톱</strong> 환경에서 동작합니다 (모바일 브라우저 지원은 제한적일 수 있음).
 FLAC는 웹 스트리밍보다는 <strong>고음질 음원 다운로드</strong> 제공 시 옵션으로 쓰이며, 대부분의 경우 손실 압축으로도 충분한 웹 오디오와는 다소 분야가 다릅니다.</p>
 <p>이 밖에도 웹에서는 <strong>AMR(Adaptive Multi-Rate), G.711</strong> 등의 <strong>음성 코덱</strong>이 WebRTC나 SIP 통신에 사용되고,
