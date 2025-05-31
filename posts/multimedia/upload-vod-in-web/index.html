@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+
+<title>
+  
+  임창수
+  
+  | 웹과 멀티미디어: VOD 업로드
+  
+  
+</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5, user-scalable=5" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Upload VOD">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="/manifest.json">
+
+
+
+<meta property="og:url" content="https://markruler.github.io/posts/multimedia/upload-vod-in-web/">
+  <meta property="og:site_name" content="임창수">
+  <meta property="og:title" content="웹과 멀티미디어: VOD 업로드">
+  <meta property="og:description" content="Upload VOD">
+  <meta property="og:locale" content="ko_kr">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-31T11:45:00+09:00">
+    <meta property="article:modified_time" content="2025-05-31T11:45:00+09:00">
+    <meta property="article:tag" content="Web">
+    <meta property="article:tag" content="Multimedia">
+    <meta property="article:tag" content="Video">
+    <meta property="article:tag" content="Vod">
+    <meta property="og:image" content="https://markruler.github.io/images/master/markruler-wave.webp">
+
+
+
+
+
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://markruler.github.io/images/master/markruler-wave.webp">
+  <meta name="twitter:title" content="웹과 멀티미디어: VOD 업로드">
+  <meta name="twitter:description" content="Upload VOD">
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="https://markruler.github.io/images/favicon.ico">
+
+
+
+
+
+    
+
+    
+  
+  
+  <link rel="stylesheet" href="/scss/dark-mode.min.a8fcd429f5f2d978c22560570adfec871037cb6f6e4fc00405c8e4d5b98b7ae5.css" integrity="sha256-qPzUKfXy2XjCJWBXCt/shxA3y29uT8AEBcjk1bmLeuU=" media="screen">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Posts
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#vod-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%9b%8c%ed%81%ac%ed%94%8c%eb%a1%9c%ec%9a%b0" class="nav-vod-업로드-워크플로우">
+									VOD 업로드 워크플로우
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#http%ec%99%80-%ed%8c%8c%ec%9d%bc-%ec%97%85%eb%a1%9c%eb%93%9c" class="nav-http와-파일-업로드">
+									HTTP와 파일 업로드
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#vod-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%84%9c%eb%b2%84-%ea%b5%ac%ed%98%84" class="nav-vod-업로드-서버-구현">
+									VOD 업로드 서버 구현
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linux-%ec%84%9c%eb%b2%84%ec%97%90%ec%84%9c-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%84%b1%eb%8a%a5-%eb%b6%84%ec%84%9d%ea%b3%bc-%eb%b3%91%eb%aa%a9-%ec%a7%80%ec%a0%90-%ec%a7%84%eb%8b%a8%ed%95%98%ea%b8%b0" class="nav-linux-서버에서-업로드-성능-분석과-병목-지점-진단하기">
+									Linux 서버에서 업로드 성능 분석과 병목 지점 진단하기
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b2%b0%eb%a1%a0" class="nav-결론">
+									결론
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
+								</a>
+							</li>
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            📜
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://markruler.github.io/">
+            임창수
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            🌙
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+    v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <button
+        class="read-random-mobile"
+        data-target-prefix="/posts">
+        Navigate to Random Post
+    </button>
+    <a href="https://markruler.github.io/">
+        <div class="single-column-header-title">임창수</div>
+        
+        <div class="single-column-header-subtitle">What, Why, How.</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    웹과 멀티미디어: VOD 업로드
+                    
+                    <div class="post-subtitle">
+                        Upload VOD
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2025-05-31 11:45
+                        </time>
+                        
+
+                        
+                            <a href="/categories/wiki">[wiki]</a>
+                            &nbsp;
+                        
+
+                        
+                            
+                                <a href="/tags/web">web</a>
+                                &nbsp;
+                            
+                                <a href="/tags/multimedia">multimedia</a>
+                                &nbsp;
+                            
+                                <a href="/tags/video">video</a>
+                                &nbsp;
+                            
+                                <a href="/tags/vod">vod</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="개요">개요</h1>
+<p><strong>VOD</strong>(Video on Demand) 업로드란 사용자가 사전에 녹화된 비디오 콘텐츠를 VOD 플랫폼이나 미디어 서버에 <strong>파일 형태로 전송</strong>하는 과정을 말합니다.
+라이브 스트리밍이 실시간으로 영상을 전송하는 것과 달리, VOD는 영상을 <strong>서버에 먼저 저장</strong>하고 <strong>처리</strong>한 후에 사용자들이 원하는 시간에 재생할 수 있도록 제공합니다.
+이 글에서는 라이브 스트리밍이 아닌 VOD 업로드에 초점을 맞추어, 웹에서의 VOD 업로드 프로세스와 관련 기술을 살펴보겠습니다.</p>
+<h1 id="vod-업로드-워크플로우">VOD 업로드 워크플로우</h1>
+<p>클라이언트는 HTTP를 통해 서버로 파일을 전송할 수 있습니다.
+파일 업로드 API를 통해 업로드하거나 서버로부터 업로드에 필요한 URL(presigned URL)을 요청합니다.
+그럼 서버는 업로드를 식별할 수 있는 고유 ID 혹은 업로드 전용 URL을 반환합니다.</p>
+<p>클라이언트는 선택한 비디오 파일을 서버로 전송합니다.
+이때 파일이 매우 클 경우 <strong>청크(chunk)로 나누어</strong> 전송하는 기법이 활용됩니다.
+청크 단위로 업로드하면 전송 중 연결이 끊어지더라도 중단된 지점부터 업로드를 <strong>재개</strong>할 수 있다는 이점이 있습니다.
+예를 들어 5 MiB 청크 단위로 나눠서 전송하는 순차적으로 또는 병렬로 업로드하고,
+각 청크에는 미리 받은 업로드 ID와 청크 번호, ETag, 바이트 범위 등의 메타데이터를 함께 전송합니다.
+업로드 도중 네트워크 문제가 발생하면 마지막으로 전송한 청크 이후부터 이어서 전송하면 됩니다.</p>
+<p>모든 청크가 전송되면 클라이언트는 <strong>업로드 완료</strong> 신호를 서버에 보냅니다.
+서버는 받은 청크를 올바른 순서로 <strong>조립하여 하나의 파일로 완성</strong>하고, 업로드가 성공적으로 끝났음을 응답합니다.
+이후 이 파일에 대해 <strong>트랜스코딩(인코딩)</strong>, <strong>썸네일 생성</strong>, <strong>HLS/DASH 세그멘테이션</strong> 등의 후처리가 진행됩니다.</p>
+<p>대용량 비디오 파일을 업로드할 경우에는 위에서 언급한 <strong>청크 단위 업로드와 이어받기(resumable upload)</strong> 기능이 특히 중요합니다.
+업로드 중 일시적 네트워크 불안정이 있더라도 처음부터 다시 하지 않고 중단된 부분부터 이어서 전송할 수 있어 업로드 효율과 사용자 경험이 크게 향상됩니다.
+이러한 기능을 구현하기 위해 <a href="https://tus.io/">Tus 프로토콜</a>이 활용되기도 합니다.</p>
+<h1 id="http와-파일-업로드">HTTP와 파일 업로드</h1>
+<p>일반적으로 웹 사이트에서 VOD 업로드하기에는 <strong>HTTP</strong>를 사용합니다.
+HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
+각 버전은 전송 방식과 성능 특성에 차이가 있습니다.</p>
+<p>기존의 <strong>HTTP/1.1은 텍스트 기반</strong> 프로토콜로서 하나의 커넥션에서 한 번에 하나의 요청/응답만 처리합니다.
+다중 요청을 병렬로 보내기 위해 브라우저는 도메인당 여러 TCP 커넥션을 여는 식으로 우회했으나,
+근본적으로는 커넥션마다 순차 처리로 인해 <strong>HOL(Head-of-Line) Blocking</strong> 문제가 있습니다.
+파일 업로드의 경우 클라이언트가 하나의 파일을 보내면 <strong>TCP</strong> 상에서 데이터를 스트리밍하며 전송합니다.
+HTTP/1.1은 <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked Transfer Encoding</a>을 통해
+콘텐츠 길이를 모른 채 스트리밍 전송할 수 있지만 결국 순차적으로 전달됩니다.
+장점은 구현이 단순하고 광범위한 호환성을 지니며 모든 시스템이 HTTP/1.1을 이해한다는 점입니다.
+다만 대용량 업로드 시 하나의 TCP 커넥션에 의존하기 때문에 한 패킷이라도 손실되면 해당 패킷이 재전송될 때까지 전송이 정체될 수 있습니다.</p>
+<p><strong>HTTP/2(SPDY)는 이진 프레이밍 기반</strong> 프로토콜로, 하나의 TCP 연결 위에서 <strong>다중 스트림</strong>을 동시 전송할 수 있는 <strong>멀티플렉싱(Multiplexing)</strong> 을 지원합니다.
+이를 통해 여러 개의 요청/응답을 병렬로 주고받을 수 있고, 헤더도 HPACK으로 압축하여 효율을 높입니다.
+단일 파일을 업로드하는 경우 눈에 띄는 속도 향상이 발생하지 않을 수도 있지만,
+여러 개의 업로드나 요청이 동시에 있을 때는 하나의 연결로 모두 처리하므로 연결 설정 오버헤드가 감소하고 효율적인 대역폭 활용이 가능합니다.
+하지만 HTTP/2는 여전히 기본 전송으로 TCP를 사용하므로, <strong>TCP 레벨의 HOL 블로킹</strong> 문제에서 완전히 자유롭진 않습니다.
+하나의 패킷 손실로 인해 해당 TCP 연결에 매핑된 모든 스트림 전송이 지연될 수 있기 때문입니다.
+특히 HTTP/2는 TCP에 의존하면서도 <strong>스트림별 흐름 제어(Window)</strong> 를 추가로 도입했는데, 기본 설정으로 스트림당 초기 윈도우 크기가 65,535바이트로 제한됩니다.
+이러한 추가 흐름 제어는 네트워크 <strong>대역폭-지연 곱(BDP)</strong> 이 큰 환경에서 병목을 일으킬 수 있습니다.
+<a href="https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/">Cloudflare의 실험</a>을 보면
+HTTP/1.1에서는 단일 버퍼를 사용하고 TCP 소켓 버퍼가 흐름 제어를 합니다.
+TCP 소켓 버퍼는 최근 OS에서 자동으로 조정됩니다.
+HTTP/2에서도 애플리케이션 계층에서 수신 흐름 제어를 하지만,
+NGINX를 사용하면 수신 버퍼에 고정 크기를 사용합니다.
+이는 현재 네트워크의 <a href="https://en.wikipedia.org/wiki/Bandwidth-delay_product">BDP(Bandwidth-delay product)</a>
+가 정해진 수신 버퍼 크기보다 큰 경우 업로드 속도를 제약하고,
+버퍼 크기가 너무 작은 경우에 HTTP/2 흐름 제어에서 병목이 발생합니다.
+그래서 버퍼 크기를 조정하거나 자동 조정(autotune) 설정을 고려해야 합니다.</p>
+<p><strong>HTTP/3(QUIC)는 UDP 기반</strong>으로 구현된 전송 프로토콜로, TCP의 단점을 개선하기 위해 등장했습니다.
+HTTP/3에서는 TCP 대신 <strong>UDP를 사용</strong>하므로, 패킷 손실 시에도 스트림 간 간섭이 줄어듭니다.
+즉, 하나의 스트림에서 패킷이 손실되더라도 그 패킷만 재전송하면 되고, 다른 스트림의 전송에는 <strong>HOL 블로킹이 발생하지 않습니다</strong>.
+또한 QUIC은 TCP+TLS 핸드셰이크 과정을 통합하여 초기 연결 설정을 빠르게 수행하므로, <strong>0-RTT</strong>로 연결을 설정해 <strong>왕복 지연(RTT)을 줄이는</strong> 기능도 제공합니다.
+이러한 특성 덕분에 HTTP/3는 대역폭이 크거나 지연이 큰 네트워크 환경에서 더 나은 업로드 성능을 기대할 수 있습니다.
+다만, 개별 스트림 내의 전송은 여전히 순서를 보장하므로 손실 패킷이 있을 경우 해당 스트림만 일시 정지되는 것은 TCP와 유사합니다.
+HTTP/3의 또 다른 특징은 <strong>TLS 1.3 암호화가 의무화</strong>되어 보안이 기본적으로 강화되었다는 점입니다.
+현재 HTTP/3는 최신 브라우저들(Chrome, Firefox, Edge, Safari 등)에서 지원되고 있으며,
+서버도 별도 설정으로 QUIC을 활성화해 둘 경우 클라이언트가 자동으로 HTTP/3를 시도합니다.
+다만 완벽한 지원을 위해서는 양쪽이 모두 HTTP/3를 사용 가능해야 하고,
+아직까지는 HTTP/1.1이나 HTTP/2에 비해 <strong>지원 범위가 제한적</strong>이므로
+호환성을 위해 HTTP/3와 이전 버전을 <strong>병행 지원</strong>하는 형태로 운영하는 경우가 많습니다.</p>
+<blockquote>
+<p>이것을 살펴본 이유는 유튜브 때문이었습니다.
+제가 업로드 기능을 구현하기 위해 살펴본 웹 서비스는 유튜브(Youtube), 드롭박스(Dropbox), 틱톡(Tiktok), 네이버 TV(NAVER TV)가 있습니다.
+모두 청크 업로드 기반으로 구현되었으며, HTTP 버전은 제각각이었습니다.
+신기했던 점은 모바일 웹 브라우저(Google Chrome)에서 HTTP/3를 사용하는 유튜브만 PC 웹과 거의 비슷한 업로드 속도를 보장했습니다.
+아직까지도 유튜브가 어떤 마법을 부렸는지 모르겠습니다.</p></blockquote>
+<h1 id="vod-업로드-서버-구현">VOD 업로드 서버 구현</h1>
+<p>대규모 미디어 서비스를 개발할 때 저장 공간을 <strong>클라우드 스토리지</strong> 혹은 <strong>온프레미스 서버</strong>를 선택할 수 있습니다.
+다만 어디에 저장하든 업로드 구현 방식은 유사합니다.</p>
+<p><strong>Amazon S3</strong>는 대용량 객체 업로드를 위해 <strong>Multipart Upload API</strong>를 제공합니다.
+멀티파트 업로드를 사용하면 하나의 파일을 여러 &ldquo;파트(part)&ldquo;로 나누어 <strong>병렬로 업로드</strong>한 후 최종 조립하여 하나의 객체로 만들 수 있습니다.
+업로드 절차는 (1) <strong>업로드 초기화</strong> 요청을 보내 고유한 Upload ID를 발급받고,
+(2) 파일을 청크 단위로 여러 번 나눠 각 부분을 <strong>업로드</strong>하며,
+(3) 모든 파트가 업로드되면 <strong>완료(Complete)</strong> 요청으로 각 파트의 정보를 보내 객체 생성을 마무리하는 3단계로 이뤄집니다.</p>
+<p>멀티파트 업로드의 가장 큰 장점은 <strong>신뢰성과 속도의 향상</strong>입니다.
+네트워크 문제로 일부 파트 전송이 실패해도 전체 업로드에 영향 없이 해당 부분만 재전송하면 되고,
+여러 파트를 동시에 올릴 수 있어 <strong>가용한 네트워크 대역폭을 최대한 활용</strong>할 수 있습니다.
+또한 파일 크기를 미리 몰라도 업로드를 시작할 수 있고, 필요에 따라 업로드를 일시 중지했다가 재개할 수도 있습니다.
+AWS에서는 <strong>100MB 이상의 파일</strong>에 대해서는 멀티파트 업로드 사용을 권장하고 있고<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>,
+특히 수 GB에 달하는 영상 파일의 경우 멀티파트 업로드는 사실상 필수적인 기능입니다.
+S3 멀티파트 업로드는 AWS SDK가 이러한 절차를 내부적으로 처리해주므로 개발자가 일일이 HTTP 요청을 관리하지 않아도 쉽게 사용할 수 있습니다.
+클라이언트 측에서는 AWS의 사전 서명 URL 기능을 이용해 각 파트를 <strong>브라우저에서 바로 S3로 업로드</strong>하도록 할 수도 있습니다.
+단, S3에 업로드된 후에 영상 처리가 필요하다면 AWS Lambda 등을 연계하거나, 업로드 완료 신호를 애플리케이션 서버로 받아 후처리를 진행해야 합니다.</p>
+<p><strong>자체적으로 제어하는 미디어 서버나 스토리지로 파일을 업로드할 경우</strong>에도 구현 방식은 동일합니다.
+가장 단순히는 클라이언트가 HTTP POST/PUT으로 <strong>전체 파일을 한 번에 전송</strong>하고 서버가 이를 받아 저장하는 방법이 있습니다.
+이 경우 구현은 쉽지만, 전송 도중 실패하면 <strong>처음부터 다시 업로드</strong>해야 한다는 문제가 있습니다.
+따라서 앞서 언급한 청크 업로드/재개 기능을 자체 서버에서도 구현하는 것이 좋습니다.</p>
+<p>일반적인 접근은 S3 멀티파트와 유사하게 <strong>업로드 세션 관리</strong>를 하는 것입니다.
+예를 들어 <code>/upload/init</code> 엔드포인트를 만들어 클라이언트가 호출하면 고유 Upload ID를 응답하고,
+클라이언트는 파일을 나눈 각 조각을 <code>/upload/&lt;ID&gt;</code>로 번호와 함께 보내도록 합니다.
+서버는 각 조각을 일시적으로 저장하거나 최종 파일에 <strong>바이트 범위로 직접 기록</strong>하고, 모든 조각을 다 받으면 완료시켜 저장을 마칩니다.
+이때 HTTP/1.1의 <strong>Range 헤더</strong>나 <code>Content-Range</code> 헤더를 활용하여 <strong>임의 위치 쓰기</strong>를 구현할 수도 있지만,
+별도의 경로로 조각 번호를 전송하는 식으로 많이 구현합니다.
+표준 방식은 없습니다.</p>
+<p>이러한 기능을 직접 구축할 경우 앞서 언급했듯 <strong>Tus 프로토콜</strong> 같은 표준화된 솔루션을 채택할 수도 있습니다.
+Tus는 <strong>HTTP 기반의 오픈 프로토콜</strong>로 파일 업로드를 구간별로 수행하고 중단 시 이어받기를 할 수 있게 해주며,
+서버 구현(tusd 등)과 클라이언트 구현이 여러 언어로 공개되어 있습니다.
+자체 서버에 Tus를 구축하면 클라이언트는 마치 S3 멀티파트처럼 안정적인 업로드를 할 수 있습니다.</p>
+<p>자체 서버 업로드의 장점은 <strong>선택의 자유도</strong>입니다.
+예를 들어 업로드와 동시에 데이터베이스에 메타데이터를 기록하거나, 전송 중간에 실시간으로 썸네일을 생성하는 등 서비스를 특화시킬 수 있습니다.
+반면 단점은 멀티파트 처리, 오류 복구, 보안 등을 모두 책임져야 한다는 것입니다.
+서비스 규모가 커지면 이러한 업로드 전용 모듈을 별도로 구성하고 로드밸런싱, 분산 파일 시스템과 연계하는 등의 추가 설계도 필요합니다.</p>
+<p>요약하면 <strong>AWS S3와 같은 클라우드 스토리지의 멀티파트 업로드</strong>는 이미 <strong>검증된 대용량 업로드 메커니즘</strong>을 제공하므로 편리하고 신뢰할 만하며,
+자체 서버를 구축하는 경우 <strong>더 큰 유연성</strong>과 <strong>통합성</strong>을 얻는 대신 그 복잡도를 직접 관리해야 합니다.
+어떤 방식을 선택하든, 핵심은 대용량 업로드 시 <strong>전송 단위를 나누고 병렬화</strong>하며 <strong>오류 발생 시 재개</strong>할 수 있게 하는 것입니다.</p>
+<h1 id="linux-서버에서-업로드-성능-분석과-병목-지점-진단하기">Linux 서버에서 업로드 성능 분석과 병목 지점 진단하기</h1>
+<p>큰 사이즈의 데이터를 전송하는 미디어 서버 개발자에게는 업로드 기능을 구현한 뒤 실제 <strong>성능을 측정</strong>하고 <strong>병목(Bottleneck)을 찾아내는</strong> 일이 중요합니다.
+업로드 속도는 네트워크, 디스크 I/O, CPU 등 다양한 요소의 영향을 받으므로, 전체 시스템을 살펴보아야 최적화 지점을 파악할 수 있습니다.
+리눅스 환경에서 유용한 성능 지표 확인 도구와 그 활용 방법은 다음과 같습니다:</p>
+<ul>
+<li><strong><code>iostat</code></strong> – <strong>디스크 I/O 성능</strong>을 모니터링하는 도구입니다.
+업로드된 파일을 디스크에 기록하는 경우, 디스크 쓰기 속도가 업로드의 병목이 될 수 있습니다.
+<code>iostat -mx 1</code> 등의 명령을 통해 CPU 사용률과 함께 디스크별 IOPS, 처리량, <code>await</code>(평균 대기 시간), <code>%util</code>(디바이스 사용률) 등을 실시간으로 확인할 수 있습니다.
+만약 업로드 중 디스크 <code>%util</code>이 100%에 가깝게 나오고 대기 시간이 크다면, 저장 장치의 한계로 인해 업로드가 느려지고 있음을 의미합니다.
+이 경우 SSD로의 교체나 레이드 구성, 비동기 I/O 도입 등을 고려해야 합니다.</li>
+<li><strong><code>iftop</code></strong> – <strong>네트워크 대역폭 사용량</strong>을 실시간으로 보여주는 툴입니다.
+업로드 시 초당 몇 Mb/s의 트래픽이 발생하는지, 어떤 소스/목적지 IP와 포트에 얼마만큼의 대역을 쓰고 있는지를 확인할 수 있습니다.
+예를 들어 <code>iftop -P</code> 옵션을 주면 포트 번호까지 포함하여 각 연결별 송수신 속도를 볼 수 있습니다.
+이를 통해 클라이언트-서버 간 <strong>업로드 트래픽이 네트워크 회선의 한계를 가까이 사용하고 있는지</strong>, 아니면 네트워크에는 여유가 있는데 다른 요인으로 느린 것인지를 판단할 수 있습니다.
+또한 업로드 중 <strong>예상치 못한 다른 트래픽이 발생</strong>하여 대역을 잠식하고 있지는 않은지도 파악할 수 있습니다.</li>
+<li><strong><code>netstat</code> (또는 <code>ss</code>)</strong> – <strong>네트워크 상태와 통계</strong>를 확인하는데 쓰입니다.
+<code>netstat -anp</code>로 현재 열려 있는 소켓 연결들의 상태를 확인하고, <code>netstat -s</code>로 TCP/UDP의 상세 통계를 볼 수 있습니다.
+예를 들어 <code>netstat -s</code> 출력 중 재전송 횟수나 패킷 손실 관련 카운터가 비정상적으로 높다면 업로드 지연이 <strong>패킷 재전송/손실</strong> 때문에 발생하는 것일 수 있습니다.
+또한 동시 업로드 연결 수가 많을 때 소켓이 TIME_WAIT이나 CLOSE_WAIT 상태로 지나치게 쌓여 있지는 않은지도 살펴봐야 합니다 (커널 튜닝으로 개선 가능).
+최신 리눅스에서는 <code>ss -s</code> 명령으로 유사한 통계를 볼 수 있으며, <code>ss -tuna</code>로 소켓 상태를 더 빠르게 조회할 수 있습니다.</li>
+</ul>
+<p>이 밖에도 <a href="/posts/network/wireshark/">tcpdump</a>,
+<strong>dstat</strong>, <strong>vmstat</strong>, <strong>sar</strong>, <strong>nload</strong>, <strong>NetHogs</strong> 등의 도구를 활용하여 시스템 전반의 자원 사용률을 모니터링할 수 있습니다.</p>
+<p>핵심은 업로드 성능을 종합적으로 살펴보는 것입니다.
+<strong>네트워크 대역폭, 디스크 쓰기 속도, CPU, 메모리 버퍼</strong> 등이 모두 원활한지 확인하고,
+가장 <strong>높은 지연이나 사용률</strong>을 보이는 자원이 병목일 가능성이 큽니다.
+이를 근거로 하드웨어를 증설하거나, 코드/설정을 최적화하여 업로드 성능을 향상시킬 수 있습니다.</p>
+<hr>
+<h1 id="결론">결론</h1>
+<p>사용자들에게 끊김없고 효율적인 VOD 업로드 경험을 제공하기 위해서는 단순히 파일을 보내는 일을 넘어,
+프로토콜에 대한 이해, 대용량 파일을 위한 기술 (청크 분할, 멀티파트), 그리고 모니터링과 성능 최적화까지 폭넓은 고려가 필요합니다.</p>
+<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<ul>
+<li>가상 면접 사례로 배우는 대규모 시스템 설계 기초 (유튜브 설계 챕터) | 알렉스 쉬</li>
+<li>시스템 성능 분석과 최적화 | 브렌던 그레그</li>
+<li>속도 체크
+<ul>
+<li><a href="https://speed.cloudflare.com/">Cloudflare Speed Test</a></li>
+<li><a href="https://fast.com/">Netflix Fast.com</a></li>
+<li><a href="https://www.google.com/search?q=speed+test">Google Speed Test</a></li>
+<li><a href="https://fast.com/">Netflix Fast.com</a></li>
+<li><a href="https://www.speedtest.net/">Speedtest by Ookla</a></li>
+</ul>
+</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html">원문</a>:
+It&rsquo;s a best practice to use multipart upload for objects that are 100 MB or larger instead of uploading them in a single operation.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+                    
+                    <hr id="EOF">
+                <p>최종 수정: 2025-05-31</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <div class="newer-posts">
+			다음글<br>다음글이 없습니다.
+                </div>
+                
+                
+                
+                <a class="older-posts" href="/posts/multimedia/audio-in-web/">
+			이전글<br>웹과 멀티미디어: 오디오
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+            
+
+
+
+
+
+<section class="social-share">
+  <ul class="share-icons">
+    
+    
+    <li>
+      <a href="https://twitter.com/intent/tweet?hashtags=markruler,dev&amp;url=https%3a%2f%2fmarkruler.github.io%2fposts%2fmultimedia%2fupload-vod-in-web%2f&amp;text=%ec%9b%b9%ea%b3%bc%20%eb%a9%80%ed%8b%b0%eb%af%b8%eb%94%94%ec%96%b4%3a%20VOD%20%ec%97%85%eb%a1%9c%eb%93%9c" target="_blank" rel="noopener" aria-label="Share on Twitter" class="share-btn twitter">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" id="twitter" viewBox="0 0 48 48" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">bg</title>
+    <circle cx="24" cy="24" fill="#1CB7EB" r="24" style="pointer-events:inherit" id="svg_1"></circle>
+    <path d="M36.8,15.4C35.9,15.9 34.8,16.2 33.8,16.3C34.9,15.6 35.7,14.5 36.1,13.2C35.1,13.8 34,14.3 32.7,14.6C31.7,13.5 30.4,12.8 28.9,12.8C26,12.8 23.6,15.3 23.6,18.5C23.6,18.9 23.6,19.4 23.7,19.8C19.3,19.6 15.4,17.3 12.8,13.9C12.3,14.7 12.1,15.7 12.1,16.8C12.1,18.8 13,20.5 14.4,21.5C13.5,21.5 12.7,21.2 12,20.8C12,20.8 12,20.9 12,20.9C12,23.6 13.8,25.9 16.2,26.5C15.8,26.6 15.3,26.7 14.8,26.7C14.5,26.7 14.1,26.7 13.8,26.6C14.5,28.9 16.4,30.5 18.7,30.5C16.9,32 14.6,32.9 12.2,32.9C11.8,32.9 11.4,32.9 10.9,32.8C13.2,34.4 16,35.4 19,35.4C28.7,35.4 34,26.8 34,19.3C34,19.1 34,18.8 34,18.6C35.2,17.6 36.1,16.6 36.8,15.4z" fill="#FFFFFF" style="pointer-events:inherit" id="svg_4"></path>
+  </g>
+</svg>
+        <p>Twitter</p>
+      </a>
+    </li>
+    
+
+    
+    
+    <li>
+      <a href="https://www.facebook.com/sharer.php?u=https%3a%2f%2fmarkruler.github.io%2fposts%2fmultimedia%2fupload-vod-in-web%2f" target="_blank" rel="noopener" aria-label="Share on Facebook" class="share-btn facebook">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 48 48" id="facebook" version="1.1" viewBox="0 0 48 48" xml:space="preserve">
+  <circle cx="24" cy="24" fill="#4E71A8" r="24" />
+  <path d="M29.9,19.5h-4v-2.6c0-1,0.7-1.2,1.1-1.2c0.5,0,2.8,0,2.8,0v-4.4l-3.9,0c-4.4,0-5.3,3.3-5.3,5.3v2.9h-2.5V24  h2.5c0,5.8,0,12.7,0,12.7h5.3c0,0,0-7,0-12.7h3.6L29.9,19.5z" fill="#FFFFFF" />
+</svg>
+        <p>Facebook</p>
+        </a>
+    </li>
+    
+
+    
+    
+
+    
+    
+
+    
+    
+    <li>
+      <a href="mailto:?subject=%ec%9e%84%ec%b0%bd%ec%88%98 - %ec%9b%b9%ea%b3%bc%20%eb%a9%80%ed%8b%b0%eb%af%b8%eb%94%94%ec%96%b4%3a%20VOD%20%ec%97%85%eb%a1%9c%eb%93%9c.&amp;body=%ec%9b%b9%ea%b3%bc%20%eb%a9%80%ed%8b%b0%eb%af%b8%eb%94%94%ec%96%b4%3a%20VOD%20%ec%97%85%eb%a1%9c%eb%93%9c%2c%20by%20%ec%9e%84%ec%b0%bd%ec%88%98%0aUpload%20VOD%0a%0ahttps%3a%2f%2fmarkruler.github.io%2fposts%2fmultimedia%2fupload-vod-in-web%2f%0a" target="_blank" class="share-btn email">
+        <svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" id="email" overflow="hidden">
+  <defs></defs>
+  <g style="pointer-events:none">
+    <title style="pointer-events:inherit">background</title>
+    <rect x="-1" y="-1" width="582" height="402" id="canvas_background" fill="none" style="pointer-events:inherit"></rect>
+  </g>
+  <g style="pointer-events:all">
+    <title style="pointer-events:inherit">Layer 1</title>
+    <path d="M16,0C7.163,0 0,7.163 0,16C0,24.836 7.163,32 16,32S32,24.836 32,16C32,7.163 24.837,0 16,0z" fill="#333333" style="pointer-events:inherit" id="svg_2"></path>
+    <polygon fill="#FFFFFF" points="6.518,21.815 11.707,15.291 6.518,12.119   " style="pointer-events:inherit" id="svg_4"></polygon>
+    <polygon fill="#FFFFFF" points="19.5,15.746 15.989,17.908 12.472,15.758 7.11,22.5 24.867,22.5   " style="pointer-events:inherit" id="svg_5"></polygon>
+    <polygon fill="#FFFFFF" points="15.988,16.864 25.482,11.017 25.482,9.5 6.518,9.5 6.518,11.076   " style="pointer-events:inherit" id="svg_6"></polygon>
+    <polygon fill="#FFFFFF" points="20.263,15.276 25.482,21.843 25.482,12.062   " style="pointer-events:inherit" id="svg_7"></polygon>
+  </g>
+</svg>
+        <p>Email</p>
+      </a>
+    </li>
+  </ul>
+</section>
+
+
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://markruler.github.io/">
+    
+        <div class="nav-title">
+            임창수
+        </div>
+        
+        <div class="nav-subtitle">
+            What, Why, How.
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Posts
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+        <div
+            class="read-random a-block nav-link-item false"
+            data-target-prefix="/posts">
+            Navigate to Random Post
+        </div>
+    </div>
+
+    <div class="nav-footer">
+        
+
+
+Hugo Theme <span>Diary</span>
+by <span>Rise</span>
+<br>
+Ported from <span>Makito</span>'s
+<span>Journal.</span> <br>
+<br>
+
+&copy;
+	
+	Im Changsu | Since 2020
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 목차 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b0%9c%ec%9a%94" class="nav-개요">
+									개요
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#vod-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%9b%8c%ed%81%ac%ed%94%8c%eb%a1%9c%ec%9a%b0" class="nav-vod-업로드-워크플로우">
+									VOD 업로드 워크플로우
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#http%ec%99%80-%ed%8c%8c%ec%9d%bc-%ec%97%85%eb%a1%9c%eb%93%9c" class="nav-http와-파일-업로드">
+									HTTP와 파일 업로드
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#vod-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%84%9c%eb%b2%84-%ea%b5%ac%ed%98%84" class="nav-vod-업로드-서버-구현">
+									VOD 업로드 서버 구현
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#linux-%ec%84%9c%eb%b2%84%ec%97%90%ec%84%9c-%ec%97%85%eb%a1%9c%eb%93%9c-%ec%84%b1%eb%8a%a5-%eb%b6%84%ec%84%9d%ea%b3%bc-%eb%b3%91%eb%aa%a9-%ec%a7%80%ec%a0%90-%ec%a7%84%eb%8b%a8%ed%95%98%ea%b8%b0" class="nav-linux-서버에서-업로드-성능-분석과-병목-지점-진단하기">
+									Linux 서버에서 업로드 성능 분석과 병목 지점 진단하기
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%ea%b2%b0%eb%a1%a0" class="nav-결론">
+									결론
+								</a>
+							</li>
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
+									더 읽을 거리
+								</a>
+							</li>
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            🔝
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="pagination-action-icon" id="darkModeToggleIcon">
+                🌙
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+
+
+Hugo Theme <span>Diary</span>
+by <span>Rise</span>
+<br>
+Ported from <span>Makito</span>'s
+<span>Journal.</span> <br>
+<br>
+
+&copy;
+	
+	Im Changsu | Since 2020
+	
+</div>
+            </div>
+    
+    <script defer src="/js/journal.js"></script><script defer src="/js/read-random.js"></script>
+
+    <script>
+        
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/js/sw.js')
+            .then(registration => {
+              console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('Service Worker registration failed:', error);
+            });
+        }
+      </script>
+    </body>
+</html>
