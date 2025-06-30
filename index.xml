@@ -9,9 +9,163 @@
     <managingEditor>imcxsu@gmail.com (Im Changsu)</managingEditor>
     <webMaster>imcxsu@gmail.com (Im Changsu)</webMaster>
     <copyright>Im Changsu | Since 2020</copyright>
-    <lastBuildDate>Sat, 31 May 2025 11:45:00 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 30 Jun 2025 21:00:00 +0900</lastBuildDate>
     
         <atom:link href="https://markruler.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>웹과 멀티미디어: VOD 트랜스코딩과 다운로드</title>
+        <link>https://markruler.github.io/posts/multimedia/download-vod-in-web/</link>
+        <pubDate>Mon, 30 Jun 2025 21:00:00 +0900</pubDate>
+        <author>imcxsu@gmail.com (Im Changsu)</author>
+        <guid>https://markruler.github.io/posts/multimedia/download-vod-in-web/</guid>
+        <description>임창수 https://markruler.github.io/posts/multimedia/download-vod-in-web/ -&lt;p&gt;&lt;strong&gt;VOD&lt;/strong&gt;(Video on Demand)는 원하는 동영상을 보고 싶은 시간에 바로 시청할 수 있는 주문형 비디오 서비스를 말합니다. 넷플릭스나 유튜브처럼 사용자 요청 시 콘텐츠를 제공하는 플랫폼들이 모두 VOD 시스템입니다. VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로, VOD를 통해 이용자는 ‘보고 싶을 때 바로 재생’하는 편리함을 얻습니다.&lt;/p&gt;
+&lt;p&gt;보고 싶을 때 바로 재생하기 위해서는 우선 서비스가 제공하는 VOD를 다운로드해야 합니다. 여기서 다운로드는 사용자가 동영상을 &lt;strong&gt;스트리밍&lt;/strong&gt;(실시간 전송)하거나 &lt;strong&gt;파일로 저장&lt;/strong&gt;하여 시청하는 것을 모두 포함합니다.
+초창기 인터넷 동영상은 재생과 동시에 파일을 처음부터 끝까지 순차적으로 &lt;strong&gt;프로그레시브 다운로드&lt;/strong&gt;하는 형태였기 때문에 중간 건너뛰기가 어렵고 버퍼링이 잦았습니다.
+반면 오늘날 VOD는 HLS 등의 스트리밍 기술을 통해 네트워크 상황에 맞춰 동영상을 조각 전송하여 버퍼링 없이 시청이 가능합니다. 필요에 따라 사용자가 동영상을 &lt;strong&gt;오프라인 환경에서도 재생할 수 있도록 저장&lt;/strong&gt;할 수 있는데, 이 경우 적절한 포맷과 품질로 파일을 내려받아 기기에 보관하게 됩니다.&lt;/p&gt;
+&lt;p&gt;좀 더 효율적으로 VOD를 다운로드하려면 동영상을 &lt;strong&gt;트랜스코딩&lt;/strong&gt;(Transcoding)해야 합니다. 트랜스코딩은 &lt;strong&gt;동영상을 다른 형식으로 변환&lt;/strong&gt;하는 과정입니다. 예를 들어 고용량의 원본 동영상을 인터넷 전송에 적합한 형식으로 바꾸는 것을 말합니다.
+이미 한 차례 인코딩된(압축된) 비디오 파일을 다시 &lt;strong&gt;코덱&lt;/strong&gt;, &lt;strong&gt;해상도&lt;/strong&gt;, &lt;strong&gt;비트레이트&lt;/strong&gt; 등을 변경하여 새로운 파일로 만드는 작업이며, VOD 시스템에서는 업로드된 동영상을 다양한 조건에 맞게 변환하는 데 필수적입니다.
+특히 VOD 서비스에서는 라이브 스트리밍보다 훨씬 다양한 포맷과 품질 요건을 다루게 됩니다.&lt;/p&gt;
+&lt;h1 id=&#34;주요-vod-포맷&#34;&gt;주요 VOD 포맷&lt;/h1&gt;
+&lt;p&gt;VOD에서 콘텐츠를 전달하거나 저장할 때는 다양한 포맷이 활용됩니다. 그중 &lt;strong&gt;MP4&lt;/strong&gt;, &lt;strong&gt;MOV&lt;/strong&gt;, &lt;strong&gt;M3U&lt;/strong&gt;(HLS)는 대표적인 VOD 인코딩 포맷입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MP4&lt;/strong&gt;는 가장 널리 쓰이는 표준 &lt;strong&gt;컨테이너 포맷&lt;/strong&gt;입니다. 동영상과 오디오, 자막을 한 파일에 담을 수 있고, MPEG-4 표준을 기반으로 거의 모든 플레이어와 디바이스에서 재생 가능합니다. 효율적인 손실 압축으로 파일 용량이 비교적 작아 네트워크 대역폭 부담이 낮고, 온라인 스트리밍과 공유에 적합합니다. 유튜브, Vimeo 등 대부분의 스트리밍 서비스가 배포 포맷으로 MP4(H.264)를 사용할 만큼 범용성이 뛰어납니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;MOV&lt;/strong&gt;는 애플의 QuickTime용 컨테이너로, MP4와 구조는 유사하지만 &lt;strong&gt;품질 우선 포맷&lt;/strong&gt;입니다. 고품질의 동영상과 음향을 담을 수 있어 전문 영상 편집에 선호되며, 다양한 코덱을 지원하지만 주로 Apple 생태계에서 최적화되어 있습니다. 다만 &lt;strong&gt;파일 크기가 크고&lt;/strong&gt; 다른 플랫폼과의 호환성은 MP4보다 떨어집니다. &lt;strong&gt;동영상 스트리밍에는 비효율적&lt;/strong&gt;이어서, 일반적인 VOD 배포보다는 제작 단계나 특수 목적에 쓰입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;M3U&lt;/strong&gt;는 정확히 말하면 비디오 컨테이너가 아니라 &lt;strong&gt;HLS 플레이리스트&lt;/strong&gt;입니다. &lt;strong&gt;텍스트 기반 재생 목록 파일&lt;/strong&gt;로 영상 데이터를 담지는 않습니다. 텍스트 인코딩이 &lt;code&gt;UTF-8&lt;/code&gt;인 &lt;code&gt;.m3u8&lt;/code&gt;이 널리 쓰입니다. &lt;strong&gt;HLS(HTTP Live Streaming)&lt;/strong&gt; 프로토콜에서 쓰이는 포맷으로 여러 &lt;strong&gt;품질별 스트림 경로&lt;/strong&gt;와 &lt;strong&gt;세그먼트&lt;/strong&gt; 파일 목록을 포함합니다. 예를 들어 하나의 HLS 마스터 플레이리스트(&lt;code&gt;.m3u8&lt;/code&gt;)에 240p, 480p, 720p 등 각 해상도 스트림의 경로가 정의되고, 각각 또 다른 M3U에 잘게 쪼개진 TS 또는 MP4 &lt;strong&gt;조각 파일&lt;/strong&gt;들의 URL이 나열되는 식입니다. 플레이어는 이용자의 &lt;strong&gt;네트워크 속도에 따라&lt;/strong&gt; 적절한 화질의 세그먼트를 순차적으로 다운받아 재생하므로, 끊김 없이 &lt;strong&gt;적응형 스트리밍&lt;/strong&gt;이 가능합니다. 과거처럼 영상 전체를 받지 않고도 원하는 시점의 조각만 불러올 수 있어 건너뛰기(Seek) 기능도 효율적으로 만들 수 있습니다. 다만 M3U는 &lt;strong&gt;스트리밍 전용 포맷&lt;/strong&gt;이므로 사용자에게 하나의 파일로 내려받게 하려면 MP4 등으로 다시 합치거나 순차적으로 받아 클라이언트 측에서 합치는 기능을 추가해야 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/posts/multimedia/download-vod-in-web/m3u8file.png&#34; alt=&#34;https://publit.io/community/blog/hls-video-streaming-encryption&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://publit.io/community/blog/hls-video-streaming-encryption&#34;&gt;이미지 출처&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;위 그림은 M3U 플레이리스트 구조를 간략히 보여줍니다. 왼쪽의 &lt;strong&gt;마스터 플레이리스트&lt;/strong&gt;(.m3u8)가 &lt;strong&gt;여러 화질의 플레이리스트&lt;/strong&gt;를 가리키고, 각 플레이리스트는 일정 길이로 분할된 &lt;strong&gt;TS 세그먼트&lt;/strong&gt;들의 URL 목록을 담고 있습니다.&lt;/p&gt;
+&lt;p&gt;플레이어는 먼저 마스터 파일을 받아 현재 네트워크 상황에 맞는 화질을 선택한 뒤, 해당 화질의 세그먼트들을 순서대로 다운로드하여 재생합니다. 이러한 구조 덕분에 클라이언트는 동영상 전체를 다운로드하지 않고도 원하는 구간을 바로 재생할 수 있고, 네트워크 속도 변화에 따라 화질을 자동으로 조정할 수 있습니다. 서버 입장에서는 동영상을 CDN 서버에 효율적으로 캐싱할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;M3U 구조를 좀 더 자세히 살펴보겠습니다. &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC-8216: HLS (HTTP Live Streaming)&lt;/a&gt; 문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 &lt;code&gt;EXTM3U&lt;/code&gt; 태그로 시작해야 합니다. 마스터 플레이리스트는 &lt;code&gt;EXT-X-STREAM-INF&lt;/code&gt; 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 &lt;code&gt;EXTINF&lt;/code&gt; 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.&lt;/p&gt;
+&lt;p&gt;Master Playlist: &lt;code&gt;x36xhzz.m3u8&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTM3U&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2149280,CODECS=&amp;#34;mp4a.40.2,avc1.64001f&amp;#34;,RESOLUTION=1280x720,NAME=&amp;#34;720&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_0/193039199_mp4_h264_aac_hd_7.m3u8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=246440,CODECS=&amp;#34;mp4a.40.5,avc1.42000d&amp;#34;,RESOLUTION=320x184,NAME=&amp;#34;240&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_2/193039199_mp4_h264_aac_ld_7.m3u8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=460560,CODECS=&amp;#34;mp4a.40.5,avc1.420016&amp;#34;,RESOLUTION=512x288,NAME=&amp;#34;380&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_4/193039199_mp4_h264_aac_7.m3u8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=836280,CODECS=&amp;#34;mp4a.40.2,avc1.64001f&amp;#34;,RESOLUTION=848x480,NAME=&amp;#34;480&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_6/193039199_mp4_h264_aac_hq_7.m3u8
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6221600,CODECS=&amp;#34;mp4a.40.2,avc1.640028&amp;#34;,RESOLUTION=1920x1080,NAME=&amp;#34;1080&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_8/193039199_mp4_h264_aac_fhd_7.m3u8
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Media Playlist: &lt;code&gt;url_8/193039199_mp4_h264_aac_fhd_7.m3u8&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTM3U&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-VERSION:3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-PLAYLIST-TYPE:VOD&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-TARGETDURATION:11&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:10.000,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_590/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:10.000,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_591/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:10.000,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_592/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:10.000,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_593/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:9.933,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_597/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:4.567,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_653/193039199_mp4_h264_aac_fhd_7.ts
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-ENDLIST&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://hlsjs.video-dev.org/demo/&#34;&gt;hls.js 데모 페이지&lt;/a&gt;에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 &lt;a href=&#34;https://demo.unified-streaming.com/k8s/features/stable/#!/hls&#34;&gt;Unified Streaming&lt;/a&gt;에서 확인할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;트랜스코딩&#34;&gt;트랜스코딩&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;이용자가 업로드하는 대부분의 모바일 촬영 동영상은 안드로이드 기종(삼성, 구글 등)은 MP4, 애플 기종일 경우 MOV(HEVC) 포맷입니다.
+설정에서 변경할 수도 있습니다.
+전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;효과적인 트랜스코딩을 위해서는 동영상을 구성하는 요소들을 이해하고 최적화하는 것이 중요합니다. 트랜스코딩 설정을 어떻게 하느냐에 따라 동영상 품질과 파일 크기, 그리고 다양한 기기에서의 호환성이 결정됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;비트레이트&lt;/strong&gt;(Bitrate)는 영상/음성 데이터를 1초간 얼마나 전송할지 나타내는 지표(kbps, Mbps 등)로, &lt;strong&gt;품질과 파일 크기에 직접적인 영향&lt;/strong&gt;을 미칩니다. 트랜스코딩 시 목표 비트레이트를 정해야 하는데, 너무 낮으면 블록 노이즈 등 품질 저하가 생기고 너무 높으면 저장공간과 대역폭 낭비가 발생합니다.
+일반적으로 해상도별로 적정 비트레이트 &lt;strong&gt;비트레이트 레더&lt;/strong&gt;(ladder)를 설계합니다. 예를 들어 1080p 영상은 5~8Mbps, 720p는 2~4Mbps, 480p는 1Mbps 정도로 설정해 단계별로 품질을 조정합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
+최근에는 고정 비트레이트(CBR)보다 &lt;strong&gt;가변 비트레이트&lt;/strong&gt;(VBR)나 &lt;strong&gt;CQ/CRF&lt;/strong&gt; 방식(정해진 화질 수준을 유지하면서 복잡도에 따라 비트레이트를 가변 조절)이 선호되어 &lt;strong&gt;화질 대비 용량 효율&lt;/strong&gt;을 높입니다.
+또한 HLS 같은 적응 스트리밍에서는 여러 비트레이트 스트림을 제공하여 재생 중 실시간으로 전환하므로, 각 해상도마다 &lt;strong&gt;다중 비트레이트 프로파일&lt;/strong&gt;을 준비하기도 합니다.
+궁극적으로 트랜스코딩의 목표는 &lt;strong&gt;필요한 품질을 만족하는 최저 비트레이트&lt;/strong&gt;를 찾는 것입니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;코덱&lt;/strong&gt;(Codec)은 &lt;strong&gt;압축 및 압축 해제 알고리즘&lt;/strong&gt;으로, 영상/음성 데이터를 특정 방식으로 압축 저장하고 재생 시 복원합니다.
+현재 VOD에서 가장 흔한 비디오 코덱은 &lt;strong&gt;H.264(AVC)&lt;/strong&gt; 입니다. 비교적 &lt;strong&gt;작은 용량으로 양호한 화질&lt;/strong&gt;을 제공하면서도 디코딩에 높은 성능을 요구하지 않기 때문에 널리 사용됩니다.
+&lt;strong&gt;H.265&lt;/strong&gt;(HEVC)는 H.264 대비 약 &lt;strong&gt;30~50% 낮은 비트레이트로 동일 품질을 구현&lt;/strong&gt;할 수 있는 차세대 코덱입니다.
+고화질 영상을 더 작은 파일로 만들 수 있습니다. 단, H.265는 인코딩/디코딩 시 연산량이 훨씬 높아 &lt;strong&gt;최신 하드웨어 지원&lt;/strong&gt;이 필요하고 옛 디바이스에서는 호환성이 떨어질 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
+이 밖에도 &lt;strong&gt;VP9&lt;/strong&gt;, &lt;strong&gt;AV1&lt;/strong&gt; 등의 코덱이 있으며, AV1은 압축 효율이 뛰어나지만 현재는 소프트웨어 디코딩 위주로 &lt;strong&gt;보급 단계&lt;/strong&gt;에 있습니다.
+음성 코덱으로는 &lt;strong&gt;AAC&lt;/strong&gt;가 스트리밍과 기기 호환성 면에서 표준처럼 쓰이며, Dolby Digital(AC-3)이나 Opus 등이 상황에 따라 사용됩니다. 트랜스코딩 시에는 대상 플랫폼과 품질 요구에 맞춰 &lt;strong&gt;적절한 코덱 선택&lt;/strong&gt;이 선행되어야 합니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;해상도&lt;/strong&gt;(Resolution)는 영상의 픽셀 크기를 말하며, &lt;strong&gt;1920x1080(1080p)&lt;/strong&gt;, &lt;strong&gt;1280x720(720p)&lt;/strong&gt;, &lt;strong&gt;640x360(360p)&lt;/strong&gt; 등으로 표현합니다.
+높은 해상도일수록 선명하지만 그만큼 비트레이트와 용량이 커집니다.
+VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상도 버전&lt;/strong&gt;을 만들어 두는 것이 일반적입니다. 예를 들어 PC나 TV 시청자를 위해 1080p, 모바일 데이터 사용자를 위해 480p 등을 준비합니다.
+이렇게 다중 해상도를 제공하면 네트워크 대역폭이나 화면 크기에 따라 가장 적합한 해상도로 재생할 수 있어 &lt;strong&gt;사용자 경험을 최적화&lt;/strong&gt;할 수 있습니다. 트랜스코딩 단계에서 &lt;strong&gt;영상 다운스케일링&lt;/strong&gt;(예: 4K 원본을 1080p/720p로 생성) 기술을 활용하며, 해상도별 &lt;strong&gt;화면비 유지&lt;/strong&gt;와 세부 튜닝(예: 샤프닝 필터 등)도 고려할 수 있습니다.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;프레임레이트&lt;/strong&gt;(Frame Rate)는 1초당 재생되는 프레임 수로, 일반적으로 24fps(영화), 30fps(일반 동영상), 60fps(게임 또는 고품질 동영상) 등으로 설정됩니다.
+트랜스코딩 시 프레임레이트를 낮추면 용량을 줄일 수 있지만, 모션이 부자연스럽거나 끊겨 보일 수 있어 주의가 필요합니다.
+특히 움직임이 많은 콘텐츠(예: 스포츠, 액션 등)는 낮은 프레임레이트에서 품질 저하가 더 두드러집니다. 반대로 프레임레이트를 인위적으로 높이는 업샘플링은 잔상이나 블러가 생길 수 있어 원본과 동일하거나 호환 범위 내에서만 조정하는 것이 안전합니다.&lt;/p&gt;
+&lt;p&gt;위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 &lt;strong&gt;FFmpeg&lt;/strong&gt;을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ffmpeg -i input.mp4 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:v libx264 -b:v 1000k -s 1280x720 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:a aac -b:a 128k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  output_720p.mp4
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 명령은 &lt;code&gt;input.mp4&lt;/code&gt; 파일을 입력 받아, 비디오 코덱을 H.264(libx264)로, 비디오 비트레이트를 1000kbps(1Mbps)로 설정하고, 해상도를 1280x720으로 다운스케일합니다.
+오디오도 AAC 코덱에 128kbps 비트레이트로 변환하며, 이렇게 압축된 스트림들을 MP4 컨테이너로 묶어 &lt;code&gt;output_720p.mp4&lt;/code&gt;로 출력합니다.
+실제 트랜스코딩 환경에서는 영상 내용에 따라 최적 비트레이트를 달리 설정하거나, &lt;code&gt;-crf&lt;/code&gt; 옵션으로 목표 화질 중심의 인코딩을 하기도 합니다. 또한 H.265/AV1 인코딩, 2패스 인코딩 등 고급 최적화 기법을 적용해 파일 크기를 더 줄이면서 품질을 확보할 수도 있습니다.&lt;/p&gt;
+&lt;p&gt;H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ffmpeg -y &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -i input.mp4 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:v libx264 -crf &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt; -c:a aac -ar &lt;span style=&#34;color:#f60&#34;&gt;44100&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:0 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;360&lt;/span&gt; -maxrate:v:0 600k  -b:a:0 500k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:1 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;480&lt;/span&gt; -maxrate:v:1 1500k -b:a:1 1000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:2 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;720&lt;/span&gt; -maxrate:v:2 3000k -b:a:2 2000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -var_stream_map &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -preset faster &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -threads &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -f hls &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_time &lt;span style=&#34;color:#f60&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_list_size &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_flags independent_segments &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -master_pl_name &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;.m3u8&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-%v.m3u8&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;다운로드&#34;&gt;다운로드&lt;/h1&gt;
+&lt;p&gt;사용자 기기나 서버 모두 저장 공간은 한정되어 있습니다. 다운로드 기능을 제공한다면 &lt;strong&gt;해상도/품질 옵션&lt;/strong&gt;을 두어 사용자가 기기 용량에 맞게 선택하도록 합니다.
+서버 측에서는 &lt;strong&gt;스토리지 비용&lt;/strong&gt;을 고려해 자주 쓰이지 않는 품질의 파일은 저장하지 않거나, &lt;strong&gt;스토리지 계층화(storage tiering)&lt;/strong&gt; 로 보관 비용을 줄일 수 있습니다.
+예를 들어 &lt;a href=&#34;https://www.tencentcloud.com/products/vod&#34;&gt;Tencent Cloud VOD&lt;/a&gt;는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 &lt;strong&gt;콘텐츠 수명주기 관리&lt;/strong&gt;를 통해 저장 공간을 효율화할 수 있습니다.
+또한 H.265/AV1 같은 고효율 코덱을 도입하면 같은 품질이라도 파일 크기를 크게 줄여 저장 공간 부담을 낮출 수 있습니다.&lt;/p&gt;
+&lt;p&gt;대용량 동영상 전송에서는 네트워크 최적화가 필수입니다. &lt;strong&gt;CDN&lt;/strong&gt;(콘텐츠 전송 네트워크)을 활용하면 사용자와 가까운 엣지 서버에서 동영상을 제공하여 지연을 줄이고 원본 서버 부하를 낮출 수 있습니다.
+이는 특히 동시 시청자가 많을 때 효과적입니다.
+또한 HLS와 같은 프로토콜을 활용해 적응형 스트리밍으로 &lt;strong&gt;필요한 품질만 전송&lt;/strong&gt;하면 불필요한 대역폭 소모를 막고, 사용자의 네트워크 환경에 맞춰 동영상을 전송하면 &lt;strong&gt;버퍼링을 최소화&lt;/strong&gt;할 수 있습니다.
+만약 사용자가 전체 파일을 다운로드받는 시나리오라면, &lt;strong&gt;HTTP Range 요청&lt;/strong&gt;을 통한 이어받기(resume)나 &lt;strong&gt;병렬 다운로드&lt;/strong&gt; 등을 지원해 네트워크 불안정 시에도 중단 없이 받을 수 있게 해야 합니다.
+모바일 앱의 경우 &lt;strong&gt;Wi-Fi에서만 다운로드&lt;/strong&gt; 옵션이나 &lt;strong&gt;백그라운드 다운로드&lt;/strong&gt;를 구현하여 사용자의 데이터 요금과 편의를 배려하는 것도 중요합니다.&lt;/p&gt;
+&lt;p&gt;VOD 시스템에서 콘텐츠 준비와 전달은 대개 &lt;strong&gt;자동화된 파이프라인&lt;/strong&gt;으로 처리됩니다.
+예를 들어 사용자가 동영상을 업로드하면 &lt;strong&gt;이벤트 트리거&lt;/strong&gt;로 트랜스코딩 작업이 자동 실행되고, 완료 후 결과 파일들이 CDN에 배포되며, 최종으로 재생용 URL이 발급되는 흐름을 스크립트나 서버 프로그램이 관리합니다.
+이러한 &lt;strong&gt;미디어 파이프라인 자동화&lt;/strong&gt;를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.&lt;/p&gt;
+&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/&#34;&gt;IVS Core team&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/&#34;&gt;Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
+&lt;p&gt;동영상이 무엇인지에 따라 다릅니다. 예를 들어 스포츠 중계는 움직임이 많아 더 높은 비트레이트가 필요할 수 있고, 정적인 강의 동영상은 낮은 비트레이트로도 충분할 수 있습니다. 따라서 &lt;strong&gt;콘텐츠 특성에 맞는 비트레이트 설정&lt;/strong&gt;이 중요합니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
+&lt;p&gt;HEVC는 프로세서에 따라 호환성이 떨어지고 크롬 브라우저를 사용한다면 Hardware Accelerator가 필수적인 옵션이 됩니다.
+&lt;code&gt;chrome://gpu&lt;/code&gt;에서 현재 활성화중인지 확인 후 비활성화 상태라면 &lt;code&gt;chrome://settings/system&lt;/code&gt;에서 &lt;code&gt;Use graphics acceleration when available&lt;/code&gt; 옵션을 활성화하면 됩니다.
+지원 여부는 다음 페이지들에서 확인할 수 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html&#34;&gt;Intel CPU 지원 여부 확인&lt;/a&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html&#34;&gt;Media Capabilities Supported by Intel Hardware&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/NVDEC#GPU_support&#34;&gt;NVIDIA 그래픽 카드 지원 여부 확인&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+- https://markruler.github.io/posts/multimedia/download-vod-in-web/ - Im Changsu | Since 2020</description>
+        </item>
     
     
     
@@ -2266,198 +2420,6 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# wireshark GUI로 파일 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wireshark capture.pcap
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://markruler.github.io/posts/network/wireshark/ - Im Changsu | Since 2020</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기</title>
-        <link>https://markruler.github.io/posts/reverse-engineering/game-localization/</link>
-        <pubDate>Mon, 16 Dec 2024 21:26:00 +0900</pubDate>
-        <author>imcxsu@gmail.com (Im Changsu)</author>
-        <guid>https://markruler.github.io/posts/reverse-engineering/game-localization/</guid>
-        <description>임창수 https://markruler.github.io/posts/reverse-engineering/game-localization/ -&lt;p&gt;스팀(Steam) 게임들은 PC에 파일이 설치되기 때문에 다른 플랫폼보다 게임 모드(Mod)나 패치 도구가 꽤 많습니다.
-그래서 콘솔이나 고전게임보다 한국어 패치 제작 난이도가 쉽습니다.
-한국어 패치 제작에 입문하기 좋은 플랫폼이라고 생각합니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B2%8C%EC%9E%84-%EC%A0%80%EC%9E%91%EA%B6%8C%EA%B3%BC-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%8C%A8%EC%B9%98&#34;&gt;게임 저작권과 한국어 패치&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8C%80%ED%91%9C%EC%A0%81%EC%9D%B8-%EA%B2%8C%EC%9E%84-%EC%97%94%EC%A7%84%EB%B3%84-%ED%95%9C%EA%B5%AD%EC%96%B4-%ED%8C%A8%EC%B9%98-%EC%A0%9C%EC%9E%91-%EB%B0%A9%EB%B2%95&#34;&gt;대표적인 게임 엔진별 한국어 패치 제작 방법&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%96%B8%ED%8C%A9-%EB%8F%84%EA%B5%AC-%EC%82%AC%EC%9A%A9%ED%95%98%EA%B8%B0&#34;&gt;언팩 도구 사용하기&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9C%A0%EB%8B%88%ED%8B%B0-unity&#34;&gt;유니티 (Unity)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%96%B8%EB%A6%AC%EC%96%BC-%EC%97%94%EC%A7%84-unreal-engine&#34;&gt;언리얼 엔진 (Unreal Engine)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B2%8C%EC%9E%84%EB%A9%94%EC%9D%B4%EC%BB%A4-gamemaker-studio-2&#34;&gt;게임메이커 (GameMaker Studio 2)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A0%8C%ED%8C%8C%EC%9D%B4-renpy---pygame&#34;&gt;렌파이 (Ren&amp;rsquo;Py - PyGame)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B3%A0%EB%8F%84-godot&#34;&gt;고도 (Godot)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A6%AC%EB%B2%84%EC%8A%A4-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4%EB%A7%81-reverse-engineering&#34;&gt;리버스 엔지니어링 (Reverse Engineering)&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#love2d&#34;&gt;Love2D&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B3%A0%EC%A0%84-%EA%B2%8C%EC%9E%84&#34;&gt;고전 게임&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%8B%A4%EC%8B%9C%EA%B0%84-%EB%B2%88%EC%97%AD&#34;&gt;실시간 번역&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#xunity-auto-translator&#34;&gt;XUnity Auto Translator&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#mort-monkeyheads-ocr-realtime-translator&#34;&gt;MORT (MonkeyHead&amp;rsquo;s OCR Realtime Translator)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;게임-저작권과-한국어-패치&#34;&gt;게임 저작권과 한국어 패치&lt;/h1&gt;
-&lt;p&gt;먼저 저작권부터 이야기해야 할 것 같습니다.
-엄연히 게임 파일을 수정하고 배포하는 것은 저작권법 위반입니다.
-당연히 배포가 목적이라면 게임 개발사에 허락을 받아야 합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;한국어 패치 제작자들은 호의로 패치하는 경우가 대부분이고,
-인디 게임 개발사에서는 번역할 여건이 되지 않기 때문에 이에 긍정적으로 반응하는 경우가 대부분입니다.
-제가 번역한 게임의 개발사도 크레딧(Credit)에 제 이름을 명시해주겠다는 제의까지 해주셨습니다.
-하지만 일부 개발사들은 고소까지 하는 사례도 있다고 하니 법적인 책임을 반드시 숙지해야 합니다.&lt;/p&gt;
-&lt;p&gt;고소까지 하는 저작권자의 마음도 충분히 이해가 갑니다.
-첫번째 이유는 이미 한국어 패치를 계획하고 있다면
-게임 개발사, 유통사, 번역사 모두에게 손해가 발생할 수 있기 때문입니다.
-두번째 이유는 게임 데이터를 얻고 변조한다는 점에서
-한국어 패치 제작과 게임 핵 제작은 한끗 차이이기 때문입니다.
-패치 제작자의 의도에 따라 완전히 다른 패치 프로그램(Patcher)이 만들어지는 것이죠.
-그래서 멀티 게임을 운영하는 개발사에서는 유독 민감하게 반응하는 것 같습니다.&lt;/p&gt;
-&lt;h1 id=&#34;대표적인-게임-엔진별-한국어-패치-제작-방법&#34;&gt;대표적인 게임 엔진별 한국어 패치 제작 방법&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/blockquote&gt;
-&lt;p&gt;기본적으로 제가 패치하는 방법은 다음과 같습니다.&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;게임 엔진별 언팩 도구를 사용하여 게임 파일을 추출합니다(unpack).&lt;/li&gt;
-&lt;li&gt;스크립트(script 혹은 dialog)를 번역하고 수정합니다.&lt;/li&gt;
-&lt;li&gt;한글을 지원하지 않는 폰트인 경우 폰트를 생성합니다.&lt;/li&gt;
-&lt;li&gt;번역된 스크립트와 폰트를 다시 패키징하여(repack) 게임에 적용합니다.&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;한 가지 언어(주로 영어)만 제공하는 게임은 스크립트가 별도로 있지 않고,
-게임 장면에 직접 포함되어 있는 경우가 있습니다.
-이 경우 파일 카빙을 하거나 개발사에 직접 요청해야 합니다.
-폰트도 한글을 지원하지 않는 경우가 많습니다.&lt;/p&gt;
-&lt;h2 id=&#34;언팩-도구-사용하기&#34;&gt;언팩 도구 사용하기&lt;/h2&gt;
-&lt;p&gt;인기 있는 게임 엔진들은 이미 언팩(unpack) 도구가 존재합니다.&lt;/p&gt;
-&lt;h3 id=&#34;유니티-unity&#34;&gt;유니티 (Unity)&lt;/h3&gt;
-&lt;p&gt;언팩-리팩 과정은 &lt;a href=&#34;https://github.com/nesrak1/UABEA&#34;&gt;UABEA&lt;/a&gt;를 사용합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html&#34;&gt;SDF(Signed Distance Fields)&lt;/a&gt; 폰트 생성 시
-Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
-자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/21&#34;&gt;Snowyegret&lt;/a&gt;님의 글을 참고하세요.&lt;/p&gt;
-&lt;p&gt;IL2CPP&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;로 빌드된 유니티 게임은 &lt;a href=&#34;https://github.com/nesrak1/AddressablesTools&#34;&gt;nesrak1/AddressablesTools&lt;/a&gt;을 사용해서
-&lt;code&gt;catalog.json&lt;/code&gt; 파일을 수정해야 합니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Example patchcrc catalog.json
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;언리얼-엔진-unreal-engine&#34;&gt;언리얼 엔진 (Unreal Engine)&lt;/h3&gt;
-&lt;p&gt;5는 툴이 없어서 시도해보지 못했습니다.
-4는 해외 커뮤니티에서 &lt;a href=&#34;https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/&#34;&gt;masagrator라는 유저가 작성한 글과 툴&lt;/a&gt;을 참고하세요.&lt;/p&gt;
-&lt;p&gt;다른 게임과 달리 Epic Games는 언팩 도구(&lt;code&gt;UnrealPak&lt;/code&gt;)를 직접 제공합니다.
-패치 파일을 원본 pak 파일 위치에 &lt;code&gt;_p&lt;/code&gt;라는 접미사를 붙이면 적용됩니다.&lt;/p&gt;
-&lt;h3 id=&#34;게임메이커-gamemaker-studio-2&#34;&gt;게임메이커 (GameMaker Studio 2)&lt;/h3&gt;
-&lt;p&gt;언팩-리팩 과정은 언더테일 모드 툴인 &lt;a href=&#34;https://github.com/UnderminersTeam/UndertaleModTool/releases&#34;&gt;UnderminersTeam/UndertaleModTool&lt;/a&gt;을 사용합니다.&lt;/p&gt;
-&lt;p&gt;자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/65&#34;&gt;Snowyegret&lt;/a&gt;님의 글을 참고하세요.
-폰트 교체 시 데이터 구조를 알고 파이썬과 같은 스크립트 언어를 안다면 좀 더 수월하게 패치할 수 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;렌파이-renpy---pygame&#34;&gt;렌파이 (Ren&amp;rsquo;Py - PyGame)&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/shizmob/rpatool&#34;&gt;rpatool&lt;/a&gt;로 패치할 파일을 언팩-리팩해서 게임 경로에 두면 적용됩니다.&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone git@github.com:shizmob/rpatool.git
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# origin.rpa에 포함된 파일 목록 조회&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -l origin.rpa
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# RPA 파일을 추출해서 patch라는 폴더에 저장&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -o output -x origin.rpa
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 수정 후 패치 파일 리팩&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 rpatool -c patch.rpa output
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;고도-godot&#34;&gt;고도 (Godot)&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/GDRETools/gdsdecomp&#34;&gt;GDRETools/gdsdecomp&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;del&gt;&lt;code&gt;translation.csv&lt;/code&gt; 파일 추출을 지원하지 않아서 시도하지 못했었는데, &lt;a href=&#34;https://github.com/GDRETools/gdsdecomp/releases/tag/v0.8.0&#34;&gt;v0.8.0&lt;/a&gt; 버전부터 가능해졌다고 합니다.&lt;/del&gt;&lt;/p&gt;
-&lt;p&gt;먼저 GDRE로 언팩할 때 암호화가 되어 있어서 에러가 발생했다면 encryption key를 찾아야 합니다.
-&lt;a href=&#34;https://github.com/godotengine/godot/tree/3.5.2-stable&#34;&gt;Godot 3.5.2&lt;/a&gt; 기준
-Ghidra를 사용해서 &lt;code&gt;script_encryption_key&lt;/code&gt;를 찾습니다.
-변수명과 함수명 등은 컴파일 과정에서 모두 사라지기 때문에
-근처에 하드코딩된 문자열을 찾아서 키를 유추해야 합니다.&lt;/p&gt;
-&lt;p&gt;준비가 되었다면 &lt;code&gt;.pck&lt;/code&gt; 파일을 언팩합니다.
-번역 파일이 만약 &lt;code&gt;csv&lt;/code&gt;나 &lt;code&gt;po&lt;/code&gt;와 같은 텍스트 파일이라면 간단하게 에디터로 수정 후
-GDRE에서 &lt;code&gt;PCK&lt;/code&gt; &amp;gt; &lt;code&gt;Create PCK archive from folder...&lt;/code&gt;로 패키징하면 됩니다.
-만약 &lt;code&gt;.translation&lt;/code&gt; 파일처럼 바이너리 형태라면 헥사 에디터와 같은 도구를 사용해서
-바이트 크기를 정확하게 맞춰서 수정해야 합니다.
-&lt;code&gt;translation&lt;/code&gt; 파일을 텍스트 형식으로 편집할 수 있는 툴은 아직 없는 것 같습니다.&lt;/p&gt;
-&lt;h2 id=&#34;리버스-엔지니어링-reverse-engineering&#34;&gt;리버스 엔지니어링 (Reverse Engineering)&lt;/h2&gt;
-&lt;p&gt;만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이때 기드라(Ghidra)와 같은 툴을 이용해서 &lt;a href=&#34;../file-signature/#%ED%8C%8C%EC%9D%BC-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98&#34;&gt;파일 시그니처&lt;/a&gt;나 암호키를 찾아야 할 수도 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;love2d&#34;&gt;Love2D&lt;/h3&gt;
-&lt;p&gt;Love2D 게임은 &lt;code&gt;.love&lt;/code&gt; 파일로 패키징되어 있습니다.
-&lt;code&gt;.love&lt;/code&gt; 파일은 ZIP 파일 기반의 포맷입니다.
-일반적인 unzip 도구로 압축을 풀면 게임 파일을 확인할 수 있지만,
-패치 도구(Patch)를 만들기 위해 직접 언팩하려면 파일 시그니처를 찾아야 합니다.
-ZIP 포맷의 파일 시그니처는 &lt;code&gt;PK&lt;/code&gt;이기 때문에 이를 찾아내어 파일을 추출하고,
-Love2D 개발툴을 사용해서 다시 패키징합니다.&lt;/p&gt;
-&lt;h3 id=&#34;고전-게임&#34;&gt;고전 게임&lt;/h3&gt;
-&lt;p&gt;고전 게임은 롬 카트리지에 저장되어 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;
-구동 가능한 롬 파일을 직접 제작하거나 구해야 하는데, 아직 이 부분은 저도 모르겠습니다.
-YY-CHR와 같은 툴로 롬 파일을 열어서 스프라이트 폰트를 수정하고,
-HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
-패치 과정 자체는 스팀 게임과 동일하지만 Hex Editor를 들여다보는 일에 많은 인내가 필요합니다.&lt;/p&gt;
-&lt;h2 id=&#34;실시간-번역&#34;&gt;실시간 번역&lt;/h2&gt;
-&lt;p&gt;화면에 스크립트가 렌더링되고 텍스트를 추출해서 번역하는 방식입니다.
-그래서 딜레이가 꽤 있습니다.
-번역 방식은 인터넷을 통해 기계 번역하는 방법과 미리 번역된 파일을 활용해서 치환하는 방법이 있습니다.&lt;/p&gt;
-&lt;h3 id=&#34;xunity-auto-translator&#34;&gt;XUnity Auto Translator&lt;/h3&gt;
-&lt;p&gt;한국어가 없는 신규 출시 유니티 게임을 플레이하고 싶을 때 유저들이 많이 사용하는 편입니다.
-&lt;strong&gt;BepInEx&lt;/strong&gt;을 사용해서 게임 텍스트를 추출하고 치환합니다.
-다만 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/bbepis/XUnity.AutoTranslator&#34;&gt;bbepis/XUnity.AutoTranslator&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://page.onstove.com/indie/global/view/9835166&#34;&gt;사용 방법&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;mort-monkeyheads-ocr-realtime-translator&#34;&gt;MORT (MonkeyHead&amp;rsquo;s OCR Realtime Translator)&lt;/h3&gt;
-&lt;p&gt;국내 유저가 만들고 계속 업데이트 중인 툴입니다.
-유니티 외 게임에서도 사용할 수 있습니다.
-&lt;strong&gt;OCR&lt;/strong&gt;을 사용해서 화면에 출력된 텍스트를 읽는다고 합니다.
-그래서 게임 텍스트 자체를 치환하는 것이 아닌 추가 레이어를 두기 때문에 게임 플레이 시 몰입을 방해할 수 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.naver.com/killkimno/223497997082&#34;&gt;MORT&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.inven.co.kr/webzine/news/?news=289168&#34;&gt;[인터뷰] 저작권법과 유저 한글패치&lt;/a&gt; - 인벤 &amp;amp; 이철우 게임·엔터테인먼트 전문 변호사&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://cafe.naver.com/hansicgu/19375&#34;&gt;더 다양한 한국어 패치 방법&lt;/a&gt; - 한식구&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/%ED%95%9C%EA%B8%80_%EC%99%84%EC%84%B1%ED%98%95_%EC%9D%B8%EC%BD%94%EB%94%A9&#34;&gt;한글 완성형 인코딩&lt;/a&gt; - 위키백과&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://namu.wiki/w/%EC%99%84%EC%84%B1%ED%98%95&#34;&gt;완성형 한글&lt;/a&gt; - 나무위키&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C101%EC%A1%B0%EC%9D%984&#34;&gt;제101조의4(프로그램코드역분석)&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://steamdb.info/tech/&#34;&gt;What are games built with and what technologies do they use?&lt;/a&gt; - SteamDB&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;원본 패치 툴인 &lt;a href=&#34;https://github.com/SeriousCache/UABE&#34;&gt;UABE (Unity Asset Bundle Extractor)&lt;/a&gt;는 업데이트가 중단되었습니다.&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.unity3d.com/6000.0/Documentation/Manual/scripting-backends-il2cpp.html&#34;&gt;IL2CPP&lt;/a&gt;는 유니티의 스크립트를 C++로 컴파일하는 기술입니다.
-유니티는 기본적으로 &lt;strong&gt;Mono&lt;/strong&gt; 런타임을 사용해 C# 코드를 &lt;strong&gt;Intermediate Language — IL&lt;/strong&gt;로 컴파일하고,
-이를 런타임에서 Just-In-Time (JIT) 방식으로 실행합니다.
-&lt;strong&gt;AOT&lt;/strong&gt;(Ahead-of-Time Compilation) 컴파일은 런타임에서 코드를 컴파일하는 것이 아니라
-미리 네이티브 코드로 컴파일하는 방식입니다.
-JIT를 사용할 수 없는 플랫폼(ex: iOS, WebGL, Console)에서 사용됩니다.
-IL2CPP는 AOT 방식의 일종으로 IL 코드를 C++ 코드로 변환 후 네이티브 코드로 컴파일합니다.
-C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 사용하면 플랫폼 호환성이 높아집니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;롬 카트리지(&lt;a href=&#34;https://en.wikipedia.org/wiki/ROM_cartridge&#34;&gt;ROM cartridge&lt;/a&gt;)에 저장된 패키지 게임입니다.
-예를 들어, SFC(Super Famicom), GBA(Gameboy Advance), SNK NEOGEO, PS1, PCE(PC Engine) 등의 콘솔 게임들이 있습니다.
-파일 시그니처를 모른채 직접 패턴을 파악해야 해서 난이도가 어렵다고 생각합니다.&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-- https://markruler.github.io/posts/reverse-engineering/game-localization/ - Im Changsu | Since 2020</description>
         </item>
     
     
