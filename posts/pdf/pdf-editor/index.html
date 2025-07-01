@@ -74,7 +74,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.a8fcd429f5f2d978c22560570adfec871037cb6f6e4fc00405c8e4d5b98b7ae5.css" integrity="sha256-qPzUKfXy2XjCJWBXCt/shxA3y29uT8AEBcjk1bmLeuU=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.9acf27a9e03a12f74eeb1be68697d885569f38d2d479d609054ecb8f613ca62b.css" integrity="sha256-ms8nqeA6EvdO6xvmhpfYhVafONLUedYJBU7Lj2E8pis=" media="screen">
 
 
 
@@ -380,8 +380,8 @@
 </span></span></code></pre></div><p><code>QThread</code>를 사용해서 OCR 작업을 별도의 스레드에서 처리해야 Blocking 되는 것을 피할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#0f0"># https://wikidocs.net/71014</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">class</span> Worker(QThread):
-</span></span><span style="display:flex;"><span>  <span style="color:#f00">def</span> __init__(self, parent=<span style="color:#f00">None</span>):
-</span></span><span style="display:flex;"><span>    super().__init__(parent)
+</span></span><span style="display:flex;"><span>  <span style="color:#f00">def</span> <span style="color:#ff0">__init__</span>(self, parent=<span style="color:#f00">None</span>):
+</span></span><span style="display:flex;"><span>    super().<span style="color:#ff0">__init__</span>(parent)
 </span></span><span style="display:flex;"><span>    self.filename = <span style="color:#f00">None</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">def</span> <span style="color:#ff0">run</span>(self):
