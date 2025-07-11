@@ -1905,7 +1905,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 &lt;p&gt;파일의 라인마다 마지막 수정 정보를 확인할 수 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git blame README.md
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 69번째 라인의 변경 이력을 확인&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git blame -L &lt;span style=&#34;color:#f60&#34;&gt;69&lt;/span&gt; README.md
@@ -1936,7 +1936,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;boat&amp;#39;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo gently &amp;gt;&amp;gt; test.txt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;gently&amp;#39;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i -e &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;s/boat/bug/g&amp;#39;&lt;/span&gt; test.txt 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sed -i -e &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;s/boat/bug/g&amp;#39;&lt;/span&gt; test.txt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Changing the word &amp;#39;boat&amp;#39; to &amp;#39;bug&amp;#39;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;echo down &amp;gt;&amp;gt; test.txt
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add -A &amp;amp;&amp;amp; git commit -m &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Adding the word &amp;#39;down&amp;#39;&amp;#34;&lt;/span&gt;
@@ -2251,6 +2251,11 @@ Git의 내부 데이터 구조를 조작하거나 확인하는 &lt;strong&gt;저
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 100644 f496d9afc494b5312dd6efd73f43b5b5e40e5e63 0 pom.xml&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 100644 e148a4810619ea951091909d82ef0955fe3e0e8f 0 src/main/resources-dev/logback.xml&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 모든 파일 출력&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;LFS(Large File Storage)가 아닐 경우 용량 체크할 때 사용할 수 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  git ls-files &lt;span style=&#34;color:#0f0&#34;&gt;# staged&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  git ls-files --others --exclude-standard &lt;span style=&#34;color:#0f0&#34;&gt;# unstaged&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;} | xargs du -h | sort -hr | head -n &lt;span style=&#34;color:#f60&#34;&gt;20&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;cat-file&#34;&gt;cat-file&lt;/h2&gt;
 &lt;p&gt;저장소에 저장된 객체의 내용, 타입, 사이즈 정보를 확인할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;&amp;lt;checksum&amp;gt;&lt;/code&gt;을 가진 객체의 타입을 알려줍니다.&lt;/p&gt;

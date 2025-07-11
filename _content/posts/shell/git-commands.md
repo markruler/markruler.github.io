@@ -1,6 +1,6 @@
 ---
 date: 2021-12-01T23:28:00+09:00
-lastmod: 2024-12-29T11:55:00+09:00
+lastmod: 2025-07-11T08:55:00+09:00
 title: "깃(Git) CLI 환경에서 소스 코드 관리하기"
 description: "자주 쓰는 Git 명령어"
 # featured_image: "/images/shell/git-logo-2color.png"
@@ -1196,7 +1196,7 @@ This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 ```sh
 git blame README.md
 # 0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash
-# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33) 
+# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33)
 # dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash
 ```
 
@@ -1235,7 +1235,7 @@ echo boat >> test.txt
 git add -A && git commit -m "Adding the word 'boat'"
 echo gently >> test.txt
 git add -A && git commit -m "Adding the word 'gently'"
-sed -i -e 's/boat/bug/g' test.txt 
+sed -i -e 's/boat/bug/g' test.txt
 git add -A && git commit -m "Changing the word 'boat' to 'bug'"
 echo down >> test.txt
 git add -A && git commit -m "Adding the word 'down'"
@@ -1740,6 +1740,15 @@ git ls-files -s
 # 100644 f496d9afc494b5312dd6efd73f43b5b5e40e5e63 0 pom.xml
 # 100644 e148a4810619ea951091909d82ef0955fe3e0e8f 0 src/main/resources-dev/logback.xml
 # 모든 파일 출력
+```
+
+LFS(Large File Storage)가 아닐 경우 용량 체크할 때 사용할 수 있습니다.
+
+```sh
+{
+  git ls-files # staged
+  git ls-files --others --exclude-standard # unstaged
+} | xargs du -h | sort -hr | head -n 20
 ```
 
 ## cat-file
