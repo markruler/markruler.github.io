@@ -1638,18 +1638,25 @@ git diff <before> <after>
 ```
 
 ```sh
-# 마지막 커밋과 그 전 커밋을 비교한다.
+# 마지막 커밋과 그 전 커밋을 비교합니다.
 git diff HEAD~1 HEAD~0
 ```
 
 ```sh
-# 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.
+# 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교합니다.
 git diff HEAD^
 ```
 
 ```sh
-# 직전 커밋과 비교해서 변경 사항을 확인한다.
+# 직전 커밋과 비교해서 변경 사항을 확인합니다.
 git diff <commit>~ <commit>
+```
+
+```sh
+# 현재 staged 파일들의 추가/삭제 라인수를 계산합니다.
+git diff --staged --numstat
+# 추가/삭제 라인수를 합산해서 출력합니다.
+git diff --staged --numstat | awk '{added += $1; removed += $2} END {print "Added lines:", added, "\nRemoved lines:", removed, "\nTotal changed lines:", added + removed}'
 ```
 
 ## push

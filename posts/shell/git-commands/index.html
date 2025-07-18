@@ -2678,12 +2678,16 @@ reflog에 남아있을 때만 조회할 수 있기 때문에 너무 오래된 �
 <h2 id="diff">diff</h2>
 <p>변경 사항을 비교합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git diff &lt;before&gt; &lt;after&gt;
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋과 그 전 커밋을 비교한다.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 마지막 커밋과 그 전 커밋을 비교합니다.</span>
 </span></span><span style="display:flex;"><span>git diff HEAD~1 HEAD~0
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교한다.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 수정된 파일 내용(local)을 마지막 커밋 내용과 비교합니다.</span>
 </span></span><span style="display:flex;"><span>git diff HEAD^
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 직전 커밋과 비교해서 변경 사항을 확인한다.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 직전 커밋과 비교해서 변경 사항을 확인합니다.</span>
 </span></span><span style="display:flex;"><span>git diff &lt;commit&gt;~ &lt;commit&gt;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 현재 staged 파일들의 추가/삭제 라인수를 계산합니다.</span>
+</span></span><span style="display:flex;"><span>git diff --staged --numstat
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 추가/삭제 라인수를 합산해서 출력합니다.</span>
+</span></span><span style="display:flex;"><span>git diff --staged --numstat | awk <span style="color:#87ceeb">&#39;{added += $1; removed += $2} END {print &#34;Added lines:&#34;, added, &#34;\nRemoved lines:&#34;, removed, &#34;\nTotal changed lines:&#34;, added + removed}&#39;</span>
 </span></span></code></pre></div><h2 id="push">push</h2>
 <p>local 저장소의 내용을 remote 저장소에 반영합니다.
 히스토리가 일치하지 않으면 push할 수 없습니다.
