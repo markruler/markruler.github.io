@@ -1765,19 +1765,7 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;p&gt;북마클릿은 1990년대 후반에 등장했으며, 특히 브라우저에서 반복적인 작업을 자동화하거나 웹 페이지를 개인화하기 위한 도구로 널리 사용되었습니다.
 그 후로 웹 개발자들과 사용자들 사이에서 인기를 끌게 되었습니다.&lt;/p&gt;
 &lt;h2 id=&#34;유용한-북마클릿&#34;&gt;유용한 북마클릿&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; sleep() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Promise((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#f60&#34;&gt;1_000&lt;/span&gt;));
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; sleep().then(() =&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; images = document.querySelectorAll(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;img&amp;#34;&lt;/span&gt;);
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    images.forEach((img) =&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      img.style.border = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;2px solid red&amp;#34;&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  });
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})();
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 현재 탭 복제
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 현재 탭 복제
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(location));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// wayback - wayback machine에 현재 페이지 저장
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://web.archive.org/save/&amp;#34;&lt;/span&gt;+document.location.href));
@@ -1791,6 +1779,18 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt;()=&amp;gt;{&lt;span style=&#34;color:#f00&#34;&gt;try&lt;/span&gt;{prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;Selected HEX color:&amp;#39;&lt;/span&gt;,(&lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; EyeDropper().open()).sRGBHex);}&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(e){alert(e);}})();
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 3D Webpage - 현재 페이지를 3D로 보여준다.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; js=document.body.appendChild(document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;script&amp;#34;&lt;/span&gt;));js.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Error! The Script Could Not Be Loaded!&amp;#34;&lt;/span&gt;)};js.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://rawgit.com/Krazete/bookmarklets/master/tri.js&amp;#34;&lt;/span&gt;})();
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; sleep() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Promise((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#f60&#34;&gt;1_000&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; sleep().then(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; images = document.querySelectorAll(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;img&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    images.forEach((img) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      img.style.border = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;2px solid red&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  });
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})();
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;자바스크립트-스니펫&#34;&gt;자바스크립트 스니펫&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://goo.gle/devtools-snippets&#34;&gt;자바스크립트 스니펫 실행&lt;/a&gt; | Run snippets of JavaScript
@@ -1885,7 +1885,7 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/network/reference?hl=ko#export&#34;&gt;자세한 내용&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/blog/new-in-devtools-62?hl=ko#har-imports&#34;&gt;Chrome 62&lt;/a&gt; | HAR imports in the Network panel&lt;/li&gt;
-&lt;li&gt;HAR 파일을 가져와서 Network 패널에 로드하면 동일한 요청-응답 정보를 다시 볼 수 있습니다.
+&lt;li&gt;HAR(HTTP Archive format) 파일을 가져와서 Network 패널에 로드하면 동일한 요청-응답 정보를 다시 볼 수 있습니다.
 &lt;ul&gt;
 &lt;li&gt;그럼 주고 받은 요청-응답 정보를 다른 사람과 공유하거나, 본인도 나중에 다시 확인 수 있습니다.&lt;/li&gt;
 &lt;/ul&gt;

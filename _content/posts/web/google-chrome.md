@@ -54,21 +54,6 @@ Categories:
 ## 유용한 북마클릿
 
 ```js
-// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
-javascript: (async () => {
-  async function sleep() {
-    return new Promise((r) => setTimeout(r, 1_000));
-  }
-  await sleep().then(() => {
-    const images = document.querySelectorAll("img");
-    images.forEach((img) => {
-      img.style.border = "2px solid red";
-    });
-  });
-})();
-```
-
-```js
 // 현재 탭 복제
 javascript:void(window.open(location));
 ```
@@ -101,6 +86,21 @@ javascript:void(async()=>{try{prompt('Selected HEX color:',(await new EyeDropper
 ```js
 // 3D Webpage - 현재 페이지를 3D로 보여준다.
 javascript:(function(){var js=document.body.appendChild(document.createElement("script"));js.onerror=function(){alert("Error! The Script Could Not Be Loaded!")};js.src="https://rawgit.com/Krazete/bookmarklets/master/tri.js"})();
+```
+
+```js
+// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
+javascript: (async () => {
+  async function sleep() {
+    return new Promise((r) => setTimeout(r, 1_000));
+  }
+  await sleep().then(() => {
+    const images = document.querySelectorAll("img");
+    images.forEach((img) => {
+      img.style.border = "2px solid red";
+    });
+  });
+})();
 ```
 
 ## 자바스크립트 스니펫
@@ -179,7 +179,7 @@ javascript:(function(){var js=document.body.appendChild(document.createElement("
 
 - [자세한 내용](https://developer.chrome.com/docs/devtools/network/reference?hl=ko#export)
 - [Chrome 62](https://developer.chrome.com/blog/new-in-devtools-62?hl=ko#har-imports) | HAR imports in the Network panel
-- HAR 파일을 가져와서 Network 패널에 로드하면 동일한 요청-응답 정보를 다시 볼 수 있습니다.
+- HAR(HTTP Archive format) 파일을 가져와서 Network 패널에 로드하면 동일한 요청-응답 정보를 다시 볼 수 있습니다.
   - 그럼 주고 받은 요청-응답 정보를 다른 사람과 공유하거나, 본인도 나중에 다시 확인 수 있습니다.
 
 ![Save all network requests to a HAR file](/images/web/google-chrome/selecting-save-as-har-c-543367c2a7051_856.png)
