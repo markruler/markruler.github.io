@@ -1396,6 +1396,22 @@ Git을 관리하는 &lt;strong&gt;상위 수준의 인터페이스&lt;/strong&gt
 &lt;p&gt;현재 디렉토리에 &lt;code&gt;.git&lt;/code&gt; 디렉터리를 생성하고 Git 프로젝트로 초기화합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git init
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# Initialized empty Git repository in /home/markruler/toy/.git/&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;init&lt;/code&gt;하면 기본 브랜치명을 설정하라고 도움말을 출력해줍니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: Using &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt; as the name &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; the initial branch. This default branch name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: is subject to change. To configure the initial branch name to use in all
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: of your new repositories, which will suppress this warning, call:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:   git config --global init.defaultBranch &amp;lt;name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: Names commonly chosen instead of &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;master&amp;#39;&lt;/span&gt; are &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;main&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;trunk&amp;#39;&lt;/span&gt; and
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;development&amp;#39;&lt;/span&gt;. The just-created branch can be renamed via this command:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:   git branch -m &amp;lt;name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hint: Disable this message with &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;git config set advice.defaultBranchName false&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;소프트웨어 엔지니어링 시 master라는 명칭보다 main, trunk와 같은 다른 명칭을 쓰길 권장합니다.
+분산 클러스터 구성 시에도 master/slave, master/worker 등의 명칭에서 master/replica 혹은 primary/data 등으로 변경되고 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git config --global init.defaultBranch main
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;clone&#34;&gt;clone&lt;/h2&gt;
 &lt;p&gt;remote 리포지토리의 설정 정보를 제외한 모든 데이터를 로컬 머신에 복제합니다.
 그 과정은 다음과 같습니다.&lt;/p&gt;

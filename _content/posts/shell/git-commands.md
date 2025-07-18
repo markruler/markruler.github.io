@@ -1,6 +1,6 @@
 ---
 date: 2021-12-01T23:28:00+09:00
-lastmod: 2025-07-11T08:55:00+09:00
+lastmod: 2025-07-18T08:55:00+09:00
 title: "깃(Git) CLI 환경에서 소스 코드 관리하기"
 description: "자주 쓰는 Git 명령어"
 # featured_image: "/images/shell/git-logo-2color.png"
@@ -364,6 +364,30 @@ Git을 관리하는 **상위 수준의 인터페이스**입니다.
 ```sh
 git init
 # Initialized empty Git repository in /home/markruler/toy/.git/
+```
+
+`init`하면 기본 브랜치명을 설정하라고 도움말을 출력해줍니다.
+
+```sh
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, which will suppress this warning, call:
+hint:
+hint:   git config --global init.defaultBranch <name>
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint:   git branch -m <name>
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+```
+
+소프트웨어 엔지니어링 시 master라는 명칭보다 main, trunk와 같은 다른 명칭을 쓰길 권장합니다.
+분산 클러스터 구성 시에도 master/slave, master/worker 등의 명칭에서 master/replica 혹은 primary/data 등으로 변경되고 있습니다.
+
+```sh
+git config --global init.defaultBranch main
 ```
 
 ## clone
