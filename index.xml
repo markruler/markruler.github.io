@@ -125,7 +125,58 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_flags independent_segments &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -master_pl_name &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;.m3u8&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-%v.m3u8&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;다운로드&#34;&gt;다운로드&lt;/h1&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;오디오-스트림이-없는-경우-발생한-에러-트러블슈팅&#34;&gt;오디오 스트림이 없는 경우 발생한 에러 트러블슈팅&lt;/h2&gt;
+&lt;p&gt;위 명령을 그대로 사용할 경우 문제가 되는 상황이 있습니다.
+비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
+비디오 인코딩이 목적이니 비디오 스트림이 없는 경우는 제외하고 오디오 스트림이 없는 경우만 상정하겠습니다.
+보통 동영상은 비디오 스트림과 오디오 스트림이 함께 담긴 컨테이너입니다.
+이를 &lt;a href=&#34;https://ffmpeg.org/ffmpeg.html#Transcoding&#34;&gt;트랜스코딩&lt;/a&gt;하려면 입력 소스와 출력을 매핑시킵니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──────────┬─────────────────────┐
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│ demuxer  │                     │       audio packets
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;╞══════════╡ stream 0 (audio)    ├─────────────────────────────────────╮
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │                                     │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│INPUT.mkv ├─────────────────────┤ video    ┌─────────┐     raw        │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │ packets  │  video  │ video frames   │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │ stream 1 (video)    ├─────────►│ decoder ├──────────────╮ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │          │         │              │ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└──────────┴─────────────────────┘          └─────────┘              │ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                     ▼ ▼
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                     │ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──────────┬─────────────────────┐ video    ┌─────────┐              │ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│ muxer    │                     │ packets  │  video  │              │ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;╞══════════╡ stream 0 (video)    │◄─────────┤ encoder ├──────────────╯ │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │          │(libx264)│                │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│OUTPUT.mp4├─────────────────────┤          └─────────┘                │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │                                     │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │ stream 1 (audio)    │◄────────────────────────────────────╯
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│          │                     │
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;└──────────┴─────────────────────┘
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다음 명령 옵션은 입력 스트림을 어떤 순서로 출력 파일에 매핑할지를 지정하는 FFmpeg의 핵심 옵션입니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# -map [입력_번호]:[스트림_타입]:[스트림_인덱스]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-map 0:v:0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;-map 0:a:0
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;첫번째 &amp;lsquo;입력 번호&amp;rsquo;는 &lt;code&gt;-i&lt;/code&gt;로 지정된 여러 입력 소스 중 매핑할 소스의 인덱스를 지정합니다.
+입력 소스가 하나라면 0을 입력합니다.
+스트림 인덱스는 입력 소스 안에 여러 스트림이 있다면 스트림 인덱스를 지정합니다.
+스트림이 하나라면 0을 입력합니다.
+&lt;a href=&#34;https://ffmpeg.org/ffmpeg.html#Stream-specifiers-1&#34;&gt;스트림 타입&lt;/a&gt;은 5가지가 있습니다.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;v&lt;/code&gt; video (비디오)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt; audio (오디오)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;s&lt;/code&gt; subtitle (자막)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d&lt;/code&gt; data (메타데이터)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;t&lt;/code&gt; attachment (font, cover art:썸네일)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;이 때 오디오 스트림이 없다면 Invalid argument 에러가 발생합니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Stream map &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;0:a:0&amp;#39;&lt;/span&gt; matches no streams.
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Failed to set value &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;0:a:0&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; option &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;map&amp;#39;&lt;/span&gt;: Invalid argument
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;FFmpeg process failed with exit code &lt;span style=&#34;color:#f60&#34;&gt;234&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;그래서 트랜스코딩 전 &lt;code&gt;ffprobe&lt;/code&gt;를 사용해서 오디오 트랙이 있는지 먼저 확인하는 방법도 있습니다.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ffprobe -v error -select_streams a:0 -show_entries &lt;span style=&#34;color:#eedd82&#34;&gt;stream&lt;/span&gt;=index -of &lt;span style=&#34;color:#eedd82&#34;&gt;csv&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;p&lt;/span&gt;=&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; noaudio.mp4
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# 있으면 1, 없으면 출력 없음.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;저의 경우 운영 중인 서비스에서 오디오는 반드시 포함되어야 한다는 정책이 추가되어 예외 처리만 추가했습니다.&lt;/p&gt;
+&lt;h1 id=&#34;다운로드&#34;&gt;다운로드&lt;/h1&gt;
 &lt;p&gt;사용자 기기나 서버 모두 저장 공간은 한정되어 있습니다. 다운로드 기능을 제공한다면 &lt;strong&gt;해상도/품질 옵션&lt;/strong&gt;을 두어 사용자가 기기 용량에 맞게 선택하도록 합니다.
 서버 측에서는 &lt;strong&gt;스토리지 비용&lt;/strong&gt;을 고려해 자주 쓰이지 않는 품질의 파일은 저장하지 않거나, &lt;strong&gt;스토리지 계층화(storage tiering)&lt;/strong&gt; 로 보관 비용을 줄일 수 있습니다.
 예를 들어 &lt;a href=&#34;https://www.tencentcloud.com/products/vod&#34;&gt;Tencent Cloud VOD&lt;/a&gt;는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 &lt;strong&gt;콘텐츠 수명주기 관리&lt;/strong&gt;를 통해 저장 공간을 효율화할 수 있습니다.

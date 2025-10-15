@@ -135,7 +135,7 @@ struct files_struct {
 };
 ```
 
-*정확히 fd를 어떻게 찾는지는 확인하지 않았습니다. 나중에 [이 블로그](https://m.blog.naver.com/arcyze/60048807080)를 참고해서 공부해봐야겠습니다.*
+*정확히 fd를 어떻게 찾는지는 확인하지 않았습니다.*
 
 `fdtable`의 0번 fd는 표준 입력(`stdin`), 1번 fd는 표준 출력(`stdout`),
 2번 fd는 표준 에러(`stderr`)입니다.
@@ -244,4 +244,7 @@ public class MyHttpClient {
 스레드를 새로 생성할 필요도 없으니 성능 또한 개선되었습니다.
 (평균 10초 → 3초)
 
-시스템 제한 설정을 변경할 필요 없이 `Too many open files` 에러도 발생하지 않았습니다.
+시스템 제한 설정을 변경[^1][^2]할 필요 없이 `Too many open files` 에러도 발생하지 않았습니다.
+
+[^1]: [ulimit](https://www.man7.org/linux/man-pages/man3/ulimit.3.html)
+[^2]: [limits.txt](https://www.man7.org/linux/man-pages/man8/pam_limits.8.html)
