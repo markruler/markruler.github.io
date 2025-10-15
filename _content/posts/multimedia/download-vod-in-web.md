@@ -2,7 +2,7 @@
 draft: false
 socialshare: true
 date: 2025-06-30T21:00:00+09:00
-lastmod: 2025-07-01T12:10:00+09:00
+lastmod: 2025-10-15T17:40:00+09:00
 title: "웹과 멀티미디어: VOD 트랜스코딩과 다운로드"
 description: "Download VOD"
 # featured_image: ["/images/master/markruler-wave.webp"]
