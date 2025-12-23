@@ -77,7 +77,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -380,8 +380,8 @@
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						
@@ -543,7 +543,8 @@
 <ul>
 <li><a href="https://twitter.com/radzikowski_m">Maciej Radzikowski</a>가 작성한 <a href="https://betterdev.blog/minimal-safe-bash-script-template/">Minimal safe Bash script template (2020-12-14)</a>를 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
-</ul></blockquote>
+</ul>
+</blockquote>
 <p>Bash 스크립트.
 거의 모든 사람들이 언젠가 작성해야 하는 것입니다.
 하지만 그 중 누구도 &ldquo;맞아요, 저는 Bash 스크립트 작성하는 것을 사랑합니다&quot;라고 말하지 않습니다.
@@ -557,7 +558,8 @@
 <p>&ldquo;자전거 타는 거랑 비슷해&quot;의 반대말은 &ldquo;bash 프로그래밍이랑 비슷해&quot;이다.<br>
 몇 번을 했던지 상관없이 매번 다시 배워야 한다는 말.<br>
 <br>
-- <a href="https://twitter.com/JakeWharton/status/1334177665356587008">Jake Wharton</a></p></blockquote>
+- <a href="https://twitter.com/JakeWharton/status/1334177665356587008">Jake Wharton</a></p>
+</blockquote>
 <p>하지만 Bash는 널리 사랑받는 언어인 JavaScript처럼 쉽게 사라지지 않을 것입니다.
 주요 언어가 되지 않길 바라더라도 Bash는 항상 우리와 가까운 곳에 있습니다.</p>
 <p>Bash는 <a href="https://www.quora.com/Is-Bash-considered-the-lingua-franca-of-shells/answer/Paul-Reiber">셸(shell) 왕좌를 물려받았고</a>
@@ -577,7 +579,7 @@ Python, Ruby, fish 또는 다른 인터프리터가 어디에서나 사용할 �
 <h1 id="bash-스크립트-템플릿">Bash 스크립트 템플릿</h1>
 <p>거두절미하고 템플릿은 다음과 같습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
-</span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>set -Eeuo pipefail
 </span></span><span style="display:flex;"><span>trap cleanup SIGINT SIGTERM ERR EXIT
 </span></span><span style="display:flex;"><span>
@@ -686,7 +688,7 @@ Python, Ruby, fish 또는 다른 인터프리터가 어디에서나 사용할 �
 0 외의 종료 상태 코드를 반환합니다. 다음 단계로 잘 넘어갑니다.
 이제 다음과 같이 짧은 스크립트를 살펴보겠습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
-</span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>cp important_file ./backups/
+</span></span></span><span style="display:flex;"><span>cp important_file ./backups/
 </span></span><span style="display:flex;"><span>rm important_file
 </span></span></code></pre></div><p>여기서 <code>backups</code> 디렉토리가 존재하지 않을 경우 어떻게 될까요?
 정확히 말하면 콘솔에 오류 메시지가 표시되지만
@@ -764,7 +766,8 @@ Python, Ruby, fish 또는 다른 인터프리터가 어디에서나 사용할 �
 <a href="https://medium.com/@jdxcode/12-factor-cli-apps-dd3c227a0e46">12 팩터 CLI 앱</a>이라는 좋은 글을 인용합니다.</p>
 <blockquote>
 <p><strong><em>요컨대 stdout은 출력용이고 stderr는 메시지용입니다.</em></strong></p>
-<p><a href="https://jdxcode.com/">Jeff Dickey</a>, who <a href="https://github.com/oclif/oclif/graphs/contributors">knows a little</a> about <a href="https://github.com/heroku/cli/graphs/contributors">building CLI apps</a></p></blockquote>
+<p><a href="https://jdxcode.com/">Jeff Dickey</a>, who <a href="https://github.com/oclif/oclif/graphs/contributors">knows a little</a> about <a href="https://github.com/heroku/cli/graphs/contributors">building CLI apps</a></p>
+</blockquote>
 <p>그래서 대부분의 경우 <code>stdout</code>에 색상을 사용하지 않는 것이 좋습니다.</p>
 <p><code>msg()</code>로 출력된 메시지는 <code>stderr</code> 스트림으로 전송되며 색상과 같은 특수 시퀀스를 지원합니다.
 또한 <code>stderr</code> 출력이 대화형 터미널이 아니거나 <a href="https://no-color.org/">표준 파라미터 중 하나</a>가 전달되면 색상이 비활성화됩니다.</p>
@@ -855,7 +858,7 @@ Alpine은 미니멀리즘 시스템으로서 매우 가벼운 ash (Almquist shel
 적어도 저에게는 그렇지 않습니다.
 Bash는 (아직도 사용하기 쉽지 않지만) 더 안전하고 강력하기 때문에
 거의 다룰 일 없는 몇 가지 리눅스 배포판을 지원하지 않는 것 정도는 받아들일 수 있습니다.</p>
-<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<h1 id="더-읽을거리">더 읽을거리</h1>
 <p>Bash 또는 기타 <del>더 나은</del> 언어로 CLI 스크립트를 만들 때 몇 가지 범용 규칙이 있습니다.
 다음 자료들은 작은 스크립트와 대형 CLI 애플리케이션을 안정적으로 만드는 방법으로 안내합니다.</p>
 <ul>
@@ -1326,8 +1329,8 @@ Ported from <span>Makito</span>'s
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						

@@ -1,11 +1,12 @@
 ---
+draft: false
+socialshare: true
 date: 2022-08-23T02:45:00+09:00
 lastmod: 2025-03-27T12:39:00+09:00
 title: "Tomcat 이해하기"
 description: "Servlet Container"
 # featured_image: "/images/java/http-servlet-request-flow.png"
 images: ["/images/java/http-servlet-request-flow.png"]
-socialshare: true
 tags:
   - web
   - java

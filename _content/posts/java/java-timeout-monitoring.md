@@ -1,11 +1,12 @@
 ---
+draft: false
+socialshare: true
 date: 2022-05-11T02:19:00+09:00
 lastmod: 2022-05-11T02:19:00+09:00
 title: "모니터링과 타임아웃의 중요성"
 description: "이거 모르는 개발자 많다카더라"
 # featured_image: "/images/datadog/alert-threshold.png"
 images: ["/images/datadog/alert-threshold.png"]
-socialshare: true
 tags:
   - observability
   - java
@@ -294,7 +295,7 @@ RequestConfig config = RequestConfig.custom()
         .setSocketTimeout(timeout * 1000)
         .build();
 
-HttpClient httpClient = 
+HttpClient httpClient =
     HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 ```
 
@@ -303,7 +304,7 @@ HttpClient httpClient =
 Timeout을 설정하지 않으면 데드락부터 연쇄 서버 장애까지 많은 것을 겪을 수 있다.
 부디 Timeout 설정을 잊지 말고 이것을 관찰할 수 있도록 유의미한 로깅과 모니터링을 하자! 🧑‍💻
 
-# 더 읽을 거리
+# 더 읽을거리
 
 ## Logging
 

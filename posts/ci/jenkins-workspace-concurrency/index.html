@@ -78,7 +78,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -415,7 +415,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    triggers {
 </span></span><span style="display:flex;"><span>        cron(<span style="color:#87ceeb">&#34;* * * * *&#34;</span>) <span style="color:#0f0">// HERE
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>    }
+</span></span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    stages {...}
 </span></span><span style="display:flex;"><span>
@@ -494,15 +494,15 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>    <span style="color:#0f0">// https://www.jenkins.io/doc/book/pipeline/syntax/#options
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>    options {
+</span></span></span><span style="display:flex;"><span>    options {
 </span></span><span style="display:flex;"><span>        <span style="color:#0f0">// cron 설정에 따라 빌드 간 겹치지 않도록 타임아웃을 설정합니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
+</span></span></span><span style="display:flex;"><span>        timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
 </span></span><span style="display:flex;"><span>    
 </span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 빌드 스케줄이 2개 생성되면 &#39;job_name&#39;, &#39;job_name@2&#39; workspace가 생성되고
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// metadata를 각각 관리하게 됩니다. abortPrevious 값을 true로 설정하면
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// 이미 빌드 중인 프로세스와 겹쳐서 &#39;job_name@2&#39; workspace가 생성되더라도
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        <span style="color:#0f0">// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &#39;job_name&#39; workspace에서 실행됩니다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>        disableConcurrentBuilds(abortPrevious: <span style="color:#f00">true</span>)
+</span></span></span><span style="display:flex;"><span>        <span style="color:#0f0">// metadata를 각각 관리하게 됩니다. abortPrevious 값을 true로 설정하면
+</span></span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 이미 빌드 중인 프로세스와 겹쳐서 &#39;job_name@2&#39; workspace가 생성되더라도
+</span></span></span><span style="display:flex;"><span>        <span style="color:#0f0">// 이후 빌드부터는 기존 빌드 프로세스가 제거되고 &#39;job_name&#39; workspace에서 실행됩니다.
+</span></span></span><span style="display:flex;"><span>        disableConcurrentBuilds(abortPrevious: <span style="color:#f00">true</span>)
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    stages {...}

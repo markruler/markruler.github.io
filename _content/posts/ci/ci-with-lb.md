@@ -27,7 +27,7 @@ categories:
   - [Akamai 에러 페이지 응답](#akamai-에러-페이지-응답)
   - [HAProxy 전환](#haproxy-전환)
   - [선언형 배포 (GitOps?)](#선언형-배포-gitops)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
   - [각주](#각주)
 
 # 개요
@@ -113,7 +113,7 @@ New status:     enabled
 
       ```bash
       #!/usr/bin/env bash
-      
+
       while ! curl --silent --output /dev/null --head --fail --max-time 3 --location ${1}; do
         echo "Healthchecking...${1}"
         sleep 2
@@ -478,7 +478,7 @@ Jenkins Pipeline을 활용하면 `Jenkinsfile` 을 사용해서 선언형 배포
 — 다만 기존에는 반영 사항을 공유할 때 Bamboo와 연동되어 있는 Jira 이슈만 간단히 캡처하면 됐지만,
 아직 Jenkins와 Jira를 연동하지 못해서 어떻게 공유해야 할지 고민이 필요하다.
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - CI/CD
   - [CI/CD 정리](https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md) - markruler

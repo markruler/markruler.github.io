@@ -21,7 +21,7 @@ categories:
   - [타겟 (Target)](#타겟-target)
   - [예시 명령어](#예시-명령어)
 - [nftables](#nftables)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # Netfilter
 
@@ -130,7 +130,7 @@ iptables -L -v
 
 <!-- https://developers.redhat.com/blog/2017/04/11/benchmarking-nftables -->
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [netfilter.org](https://www.netfilter.org/)
 - [Netfilter](https://en.wikipedia.org/wiki/Netfilter) | Wikipedia

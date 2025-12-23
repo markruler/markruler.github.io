@@ -78,7 +78,8 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 &lt;blockquote&gt;
 &lt;p&gt;이용자가 업로드하는 대부분의 모바일 촬영 동영상은 안드로이드 기종(삼성, 구글 등)은 MP4, 애플 기종일 경우 MOV(HEVC) 포맷입니다.
 설정에서 변경할 수도 있습니다.
-전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.&lt;/p&gt;&lt;/blockquote&gt;
+전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;효과적인 트랜스코딩을 위해서는 동영상을 구성하는 요소들을 이해하고 최적화하는 것이 중요합니다. 트랜스코딩 설정을 어떻게 하느냐에 따라 동영상 품질과 파일 크기, 그리고 다양한 기기에서의 호환성이 결정됩니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;비트레이트&lt;/strong&gt;(Bitrate)는 영상/음성 데이터를 1초간 얼마나 전송할지 나타내는 지표(kbps, Mbps 등)로, &lt;strong&gt;품질과 파일 크기에 직접적인 영향&lt;/strong&gt;을 미칩니다. 트랜스코딩 시 목표 비트레이트를 정해야 하는데, 너무 낮으면 블록 노이즈 등 품질 저하가 생기고 너무 높으면 저장공간과 대역폭 낭비가 발생합니다.
 일반적으로 해상도별로 적정 비트레이트 &lt;strong&gt;비트레이트 레더&lt;/strong&gt;(ladder)를 설계합니다. 예를 들어 1080p 영상은 5~8Mbps, 720p는 2~4Mbps, 480p는 1Mbps 정도로 설정해 단계별로 품질을 조정합니다.&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;
@@ -100,31 +101,31 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 특히 움직임이 많은 콘텐츠(예: 스포츠, 액션 등)는 낮은 프레임레이트에서 품질 저하가 더 두드러집니다. 반대로 프레임레이트를 인위적으로 높이는 업샘플링은 잔상이나 블러가 생길 수 있어 원본과 동일하거나 호환 범위 내에서만 조정하는 것이 안전합니다.&lt;/p&gt;
 &lt;p&gt;위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 &lt;strong&gt;FFmpeg&lt;/strong&gt;을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ffmpeg -i input.mp4 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:v libx264 -b:v 1000k -s 1280x720 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:a aac -b:a 128k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  output_720p.mp4
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -c:v libx264 -b:v 1000k -s 1280x720 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -c:a aac -b:a 128k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  output_720p.mp4
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 명령은 &lt;code&gt;input.mp4&lt;/code&gt; 파일을 입력 받아, 비디오 코덱을 H.264(libx264)로, 비디오 비트레이트를 1000kbps(1Mbps)로 설정하고, 해상도를 1280x720으로 다운스케일합니다.
 오디오도 AAC 코덱에 128kbps 비트레이트로 변환하며, 이렇게 압축된 스트림들을 MP4 컨테이너로 묶어 &lt;code&gt;output_720p.mp4&lt;/code&gt;로 출력합니다.
 실제 트랜스코딩 환경에서는 영상 내용에 따라 최적 비트레이트를 달리 설정하거나, &lt;code&gt;-crf&lt;/code&gt; 옵션으로 목표 화질 중심의 인코딩을 하기도 합니다. 또한 H.265/AV1 인코딩, 2패스 인코딩 등 고급 최적화 기법을 적용해 파일 크기를 더 줄이면서 품질을 확보할 수도 있습니다.&lt;/p&gt;
 &lt;p&gt;H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ffmpeg -y &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -i input.mp4 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -c:v libx264 -crf &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt; -c:a aac -ar &lt;span style=&#34;color:#f60&#34;&gt;44100&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:0 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;360&lt;/span&gt; -maxrate:v:0 600k  -b:a:0 500k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:1 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;480&lt;/span&gt; -maxrate:v:1 1500k -b:a:1 1000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -filter:v:2 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;720&lt;/span&gt; -maxrate:v:2 3000k -b:a:2 2000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -var_stream_map &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -preset faster &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -threads &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -f hls &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_time &lt;span style=&#34;color:#f60&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_list_size &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -hls_flags independent_segments &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -master_pl_name &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;.m3u8&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-%v.m3u8&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -i input.mp4 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -map 0:v:0 -map 0:a:0 &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -c:v libx264 -crf &lt;span style=&#34;color:#f60&#34;&gt;22&lt;/span&gt; -c:a aac -ar &lt;span style=&#34;color:#f60&#34;&gt;44100&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -filter:v:0 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;360&lt;/span&gt; -maxrate:v:0 600k  -b:a:0 500k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -filter:v:1 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;480&lt;/span&gt; -maxrate:v:1 1500k -b:a:1 1000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -filter:v:2 &lt;span style=&#34;color:#eedd82&#34;&gt;scale&lt;/span&gt;=&lt;span style=&#34;color:#eedd82&#34;&gt;w&lt;/span&gt;=-2:h=&lt;span style=&#34;color:#f60&#34;&gt;720&lt;/span&gt; -maxrate:v:2 3000k -b:a:2 2000k &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -var_stream_map &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -preset faster &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -threads &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -f hls &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -hls_time &lt;span style=&#34;color:#f60&#34;&gt;10&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -hls_list_size &lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -hls_flags independent_segments &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -master_pl_name &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;.m3u8&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;$playlist_name&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;-%v.m3u8&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;오디오-스트림이-없는-경우-발생한-에러-트러블슈팅&#34;&gt;오디오 스트림이 없는 경우 발생한 에러 트러블슈팅&lt;/h2&gt;
 &lt;p&gt;위 명령을 그대로 사용할 경우 문제가 되는 상황이 있습니다.
 비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
@@ -189,7 +190,7 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 &lt;p&gt;VOD 시스템에서 콘텐츠 준비와 전달은 대개 &lt;strong&gt;자동화된 파이프라인&lt;/strong&gt;으로 처리됩니다.
 예를 들어 사용자가 동영상을 업로드하면 &lt;strong&gt;이벤트 트리거&lt;/strong&gt;로 트랜스코딩 작업이 자동 실행되고, 완료 후 결과 파일들이 CDN에 배포되며, 최종으로 재생용 URL이 발급되는 흐름을 스크립트나 서버 프로그램이 관리합니다.
 이러한 &lt;strong&gt;미디어 파이프라인 자동화&lt;/strong&gt;를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/&#34;&gt;IVS Core team&lt;/a&gt;
 &lt;ul&gt;
@@ -295,7 +296,8 @@ HTTP/3의 또 다른 특징은 &lt;strong&gt;TLS 1.3 암호화가 의무화&lt;/
 제가 업로드 기능을 구현하기 위해 살펴본 웹 서비스는 유튜브(Youtube), 드롭박스(Dropbox), 틱톡(Tiktok), 네이버 TV(NAVER TV)가 있습니다.
 모두 청크 업로드 기반으로 구현되었으며, HTTP 버전은 제각각이었습니다.
 신기했던 점은 모바일 웹 브라우저(Google Chrome)에서 HTTP/3를 사용하는 유튜브만 PC 웹과 거의 비슷한 업로드 속도를 보장했습니다.
-아직까지도 유튜브가 어떤 마법을 부렸는지 모르겠습니다.&lt;/p&gt;&lt;/blockquote&gt;
+아직까지도 유튜브가 어떤 마법을 부렸는지 모르겠습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h1 id=&#34;vod-업로드-서버-구현&#34;&gt;VOD 업로드 서버 구현&lt;/h1&gt;
 &lt;p&gt;대규모 미디어 서비스를 개발할 때 저장 공간을 &lt;strong&gt;클라우드 스토리지&lt;/strong&gt; 혹은 &lt;strong&gt;온프레미스 서버&lt;/strong&gt;를 선택할 수 있습니다.
 다만 어디에 저장하든 업로드 구현 방식은 유사합니다.&lt;/p&gt;
@@ -366,7 +368,7 @@ Tus는 &lt;strong&gt;HTTP 기반의 오픈 프로토콜&lt;/strong&gt;로 파일
 &lt;h1 id=&#34;결론&#34;&gt;결론&lt;/h1&gt;
 &lt;p&gt;사용자들에게 끊김없고 효율적인 VOD 업로드 경험을 제공하기 위해서는 단순히 파일을 보내는 일을 넘어,
 프로토콜에 대한 이해, 대용량 파일을 위한 기술 (청크 분할, 멀티파트), 그리고 모니터링과 성능 최적화까지 폭넓은 고려가 필요합니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;가상 면접 사례로 배우는 대규모 시스템 설계 기초 (유튜브 설계 챕터) | 알렉스 쉬&lt;/li&gt;
 &lt;li&gt;시스템 성능 분석과 최적화 | 브렌던 그레그&lt;/li&gt;
@@ -421,7 +423,7 @@ It&amp;rsquo;s a best practice to use multipart upload for objects that are 100 
 &lt;li&gt;&lt;a href=&#34;#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%9D%98-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-%EC%A0%95%EC%B1%85&#34;&gt;브라우저의 오디오 재생 정책&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%84%B1%EB%8A%A5&#34;&gt;오디오 성능&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B2%B0%EB%A1%A0&#34;&gt;결론&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;물리적으로&lt;/strong&gt; 매질을 통해 전달된 모든 음파를 &lt;strong&gt;사운드(sound)&lt;/strong&gt; 라고 합니다.
@@ -705,16 +707,16 @@ Web Audio API는 &lt;code&gt;MediaStreamAudioSourceNode&lt;/code&gt;를 통해 �
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// AudioContext 생성
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioCtx = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioCtx = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 마이크 MediaStream을 AudioNode로 변환
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; sourceNode = audioCtx.createMediaStreamSource(stream);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; sourceNode = audioCtx.createMediaStreamSource(stream);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 마이크 스트림을 AudioContext 출력에 연결
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;sourceNode.connect(audioCtx.destination);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sourceNode.connect(audioCtx.destination);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 연결 종료
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;audioCtx.close().then(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;audioCtx.close().then(() =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;AudioContext 종료&amp;#34;&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드에서 마이크 스트림으로부터 &lt;code&gt;sourceNode&lt;/code&gt;를 만들고,
@@ -728,7 +730,8 @@ Web Audio API는 &lt;code&gt;MediaStreamAudioSourceNode&lt;/code&gt;를 통해 �
 전문 오디오 장비 없이 웹에서 완전 무지연 모니터링은 어려우므로,
 필요할 때만 출력하거나 헤드폰 사용을 권장합니다.
 또한 &lt;code&gt;sourceNode.connect(audioCtx.destination)&lt;/code&gt; 부분을 빼면
-모니터링 없이 무음으로 입력 처리를 할 수 있습니다.&lt;/p&gt;&lt;/blockquote&gt;
+모니터링 없이 무음으로 입력 처리를 할 수 있습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;Web Audio를 사용하면 입력 신호에 대해
 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode&#34;&gt;AnalyserNode&lt;/a&gt;를 활용해서 &lt;strong&gt;실시간 분석&lt;/strong&gt;하거나
 &lt;strong&gt;이펙트&lt;/strong&gt;도 적용할 수 있습니다.
@@ -754,13 +757,13 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; blob = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Blob(chunks, { type: recorder.mimeType });
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;녹음 완료 Blob:&amp;#34;&lt;/span&gt;, blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// &amp;lt;audio&amp;gt; 요소에 dataURL을 src로 설정
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  document.querySelector(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#test-audio-1&amp;#34;&lt;/span&gt;).src = dataURL;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.start();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 5초 후 녹음 정지
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;setTimeout(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setTimeout(() =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  recorder.stop();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  stream.getTracks().forEach(track =&amp;gt; track.stop());
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}, &lt;span style=&#34;color:#f60&#34;&gt;5000&lt;/span&gt;);
@@ -794,20 +797,20 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; blob = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Blob(chunks, { type: recorder.mimeType });
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;녹음 완료 Blob:&amp;#34;&lt;/span&gt;, blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// 파일 다운로드
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// 다운로드 링크 생성
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; a = document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; a = document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;a&amp;#39;&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  a.href = dataURL;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  a.download = &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;recording.webm&amp;#39;&lt;/span&gt;; &lt;span style=&#34;color:#0f0&#34;&gt;// 확장자는 MIME 타입에 따라 변경
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  a.click();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  a.click();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// 리소스 해제
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  URL.revokeObjectURL(dataURL);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  URL.revokeObjectURL(dataURL);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.start();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 5초 후 녹음 정지
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;setTimeout(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setTimeout(() =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  recorder.stop();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  stream.getTracks().forEach(track =&amp;gt; track.stop());
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}, &lt;span style=&#34;color:#f60&#34;&gt;5000&lt;/span&gt;);
@@ -839,47 +842,47 @@ MediaStream으로써 AudioContext에서 만들어진 모든 소리가 실시간�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; source = audioCtx.createMediaStreamSource(stream);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- Delay + Feedback 구성 (피드백 에코) ---
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; delay = audioCtx.createDelay(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; delay = audioCtx.createDelay(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;delay.delayTime.value = &lt;span style=&#34;color:#f60&#34;&gt;0.4&lt;/span&gt;; &lt;span style=&#34;color:#0f0&#34;&gt;// 400ms 지연
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; feedbackGain = audioCtx.createGain();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;feedbackGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;0.4&lt;/span&gt;; &lt;span style=&#34;color:#0f0&#34;&gt;// 에코 반복 감쇠
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;delay.connect(feedbackGain);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;feedbackGain.connect(delay); &lt;span style=&#34;color:#0f0&#34;&gt;// 피드백 루프
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- Dry/Wet 믹스 ---
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dryGain = audioCtx.createGain();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dryGain = audioCtx.createGain();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;dryGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;1.0&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; wetGain = audioCtx.createGain();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wetGain.gain.value = &lt;span style=&#34;color:#f60&#34;&gt;0.6&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- 믹서로 합성 &amp;amp; 출력 대상 구성 ---
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; merger = audioCtx.createGain(); &lt;span style=&#34;color:#0f0&#34;&gt;// 믹서 역할
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dest = audioCtx.createMediaStreamDestination(); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; merger = audioCtx.createGain(); &lt;span style=&#34;color:#0f0&#34;&gt;// 믹서 역할
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dest = audioCtx.createMediaStreamDestination(); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- 연결 구성 ---
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;source.connect(dryGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 원본
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;source.connect(delay).connect(wetGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 에코 포함
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;merger.connect(audioCtx.destination); &lt;span style=&#34;color:#0f0&#34;&gt;// 스피커 출력
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;merger.connect(dest); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용 출력
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source.connect(dryGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 원본
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;source.connect(delay).connect(wetGain).connect(merger); &lt;span style=&#34;color:#0f0&#34;&gt;// 에코 포함
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;merger.connect(audioCtx.destination); &lt;span style=&#34;color:#0f0&#34;&gt;// 스피커 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;merger.connect(dest); &lt;span style=&#34;color:#0f0&#34;&gt;// 녹음용 출력
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// --- MediaRecorder로 녹음 ---
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; recorder = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; MediaRecorder(dest.stream);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; recorder = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; MediaRecorder(dest.stream);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; chunks = [];
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.ondataavailable = e =&amp;gt; { chunks.push(e.data); };
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.onstop = () =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; blob = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Blob(chunks, { type: recorder.mimeType });
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;녹음 완료 Blob:&amp;#34;&lt;/span&gt;, blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// &amp;lt;audio&amp;gt; 요소에 dataURL을 src로 설정
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; dataURL = URL.createObjectURL(blob);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  document.querySelector(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;#test-audio-2&amp;#34;&lt;/span&gt;).src = dataURL;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;recorder.start();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 5초 후 녹음 정지
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;setTimeout(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setTimeout(() =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  recorder.stop();
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  stream.getTracks().forEach(track =&amp;gt; track.stop());
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  audioCtx.close();
@@ -942,7 +945,7 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 최적의 포맷을 선택해 &lt;strong&gt;끊김없고 품질 좋은 사운드 경험&lt;/strong&gt;을 제공하길 바랍니다.
 이 가이드가 웹 오디오 파이프라인을 이해하고 활용하는 데 도움이 되었기를 바랍니다.
 필요한 경우 MDN의 관련 문서와 각종 예제를 참고하여 더 깊이있는 구현으로 나아가 보세요.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;Codec
 &lt;ul&gt;
@@ -1048,7 +1051,7 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%B3%B4%EC%95%88&#34;&gt;이미지 보안&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B2%B0%EB%A1%A0&#34;&gt;결론&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;이미지는 인터넷에서 매우 큰 비중을 차지합니다.
@@ -1098,7 +1101,8 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;br&gt;
 &lt;strong&gt;스냅샷&lt;/strong&gt;(&lt;strong&gt;Snapshot&lt;/strong&gt;)은 순간적인 장면을 촬영한 사진을 말합니다.
 인물 사진에서는 자연스러운 동작이나 표정을 재빠르게 포착한 사진을 의미합니다.
-IT에서는 특정 시점의 상태를 저장한 것을 말합니다.&lt;/p&gt;&lt;/blockquote&gt;
+IT에서는 특정 시점의 상태를 저장한 것을 말합니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;화질-image-quality&#34;&gt;화질 (Image Quality)&lt;/h2&gt;
 &lt;p&gt;화질이란 이미지의 시각적 품질을 의미합니다.
 화질을 결정하는 요소들은 일상 생활에서도 익숙하게 볼 수 있습니다.&lt;/p&gt;
@@ -1337,7 +1341,7 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;code&gt;alt&lt;/code&gt; 텍스트를 통해 &lt;strong&gt;웹 접근성&lt;/strong&gt;을 확보하는 습관을 들인다면,
 여러분의 웹사이트는 사용자에게 훨씬 더 쾌적한 경험을 제공하고,
 검색 엔진에서도 좋은 평가를 받을 수 있을 것입니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/web-page-performance-optimization/&#34;&gt;웹 페이지 성능 측정과 최적화&lt;/a&gt;
 &lt;ul&gt;
@@ -1406,7 +1410,7 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;성능-지표&#34;&gt;성능 지표&lt;/h1&gt;
 &lt;p&gt;먼저 웹 페이지의 성능을 개선하려면 어떤 지표를 기준으로 삼을 것인지 정해야 합니다.&lt;/p&gt;
@@ -1501,7 +1505,7 @@ WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
 뒤로가기 버튼을 눌렀을 때 이전 페이지를 새로 요청하는 경우가 있습니다.
 그럼 불필요한 오리진 서버 요청이 늘어날 수 있기 때문에
 반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/google-chrome/&#34;&gt;유용한 구글 크롬(Google Chrome)의 기능&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;../respond-web-page/&#34;&gt;웹 페이지 응답 방법과 프레임워크&lt;/a&gt;&lt;/li&gt;
@@ -1585,7 +1589,7 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;네트워크 대역폭(Bandwidth)과 처리량(Throughput)에 따라 응답 사이즈가 크지 않다면 속도에는 별 차이 없는 것 같습니다.
 하지만 사이즈 자체가 작아지면서 네트워크 비용을 줄일 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/before-after-http-response-compression.png&#34; alt=&#34;before and after http response compression&#34;&gt;&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression&#34;&gt;Compression in HTTP&lt;/a&gt; | MDN&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding&#34;&gt;Content-Encoding&lt;/a&gt; | MDN&lt;/li&gt;
@@ -1663,7 +1667,7 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;#l7-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L7 주요 프로토콜&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을 거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
 &lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
@@ -2069,7 +2073,7 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 &lt;p&gt;&lt;strong&gt;SIP&lt;/strong&gt;(&lt;strong&gt;Session Initiation Protocol&lt;/strong&gt;)는
 음성, 비디오, 메시징 애플리케이션을 포함하는 통신 세션을 시작, 유지, 종료하는 데 사용되는 신호 프로토콜입니다.
 흔히 VoIP 통화를 위해 사용됩니다.&lt;/p&gt;
-&lt;h1 id=&#34;더-읽을-거리&#34;&gt;더 읽을 거리&lt;/h1&gt;
+&lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;네트워크 일반
 &lt;ul&gt;
@@ -2165,7 +2169,8 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C30%EC%A1%B0&#34;&gt;저작권법 제30조&lt;/a&gt;를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;제30조(사적이용을 위한 복제) 공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있다.
-다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;&lt;/blockquote&gt;
+다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;이 조항에 대해서도 인터넷 커뮤니티에서는 &amp;ldquo;개인이 구매한 서적만 가능한 것이다&amp;quot;라고 해석하는 경우가 많은 것 같습니다.
 유명한 테크 유튜브 채널인 &lt;a href=&#34;https://youtu.be/NUfQGNMfwis?t=491&#34;&gt;테크몽&lt;/a&gt;에서도 &lt;strong&gt;한국저작권위원회&lt;/strong&gt;에 직접 문의한 결과 문제가 없다고 합니다.
 &lt;strong&gt;한국저작권보호원&lt;/strong&gt;의 &lt;a href=&#34;https://www.youtube.com/watch?v=9fSDhWAP7A0&#34;&gt;영상 댓글&lt;/a&gt;에서도 이 경우에는 문제없다고 하죠.&lt;/p&gt;
@@ -2173,7 +2178,8 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;p&gt;공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있습니다(저작권법 제30조).
 이를 &amp;lsquo;사적이용을 위한 복제&amp;rsquo; 통칭 사적 복제라고 하며, 구입한 CD를 핸드폰에 넣어 듣기 위하여 mp3파일로 변환하는 행위, 다운로드받은 영화를 TV에서 보기 위하여 usb에 옮기는 행위, 구입한 책에 필기를 하기 위하여 복사하는 행위 등이 해당할 수 있습니다.
 관련하여, 도서관에서 빌린 책을 직접 스캔 또는 사진으로 찍어 귀하 소유의 핸드폰으로 읽는 것은 사적복제로서 저작권 침해가 되지 않습니다.
-그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;&lt;/blockquote&gt;
+그러나 이를 업체 등에 맡겨 스캔하거나, 스캔한 결과물을 한정된 범위 외의 다른 사람에게 보여주게 되면 사적 복제의 범위를 넘어 복제권 침해가 성립할 수 있음을 주의하여 주시기 바랍니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;즉, &lt;strong&gt;자신이 소유한 또는 도서관에서 빌린 서적&lt;/strong&gt;을 &lt;strong&gt;개인적으로 이용&lt;/strong&gt;하기 위해 &lt;strong&gt;자신이 소유한 복제기기&lt;/strong&gt;로 직접 스캔한 경우 적법한 행위입니다.
 이쯤이면 저작권법 제30조가 다르게 해석&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;될 여지는 없을 것 같습니다.&lt;/p&gt;
 &lt;h1 id=&#34;pdf-읽기&#34;&gt;PDF 읽기&lt;/h1&gt;
@@ -2454,7 +2460,8 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 실제로 서버에서 패킷을 캡처하는 경우 의존성이 적고 가벼운 &lt;code&gt;tcpdump&lt;/code&gt;를 더 많이 사용하는 편입니다.
 &lt;strong&gt;파일로 출력할 때는 Wireshark display-filter(&lt;code&gt;-Y&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;tshark: Display filters aren&amp;rsquo;t supported when capturing and saving the captured packets.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;tshark: Display filters aren&amp;rsquo;t supported when capturing and saving the captured packets.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tcp 프로토콜의 port 33000을 경유하는 패킷 5초간 캡처해서 tcp_33000.pcap 파일로 저장&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -i any -f &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;tcp port 33000&amp;#39;&lt;/span&gt; -w tcp_33000.pcap -a duration:5
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo timeout &lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt; tcpdump -i any -n tcp and port &lt;span style=&#34;color:#f60&#34;&gt;33000&lt;/span&gt; -w tcp_33000.pcap
@@ -2463,7 +2470,8 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 특정 필드만 출력하거나 JSON 형식으로 출력할 때는 CLI로 읽는 게 편합니다.
 &lt;strong&gt;파일을 읽을 때는 pcap-filter(&lt;code&gt;-f&lt;/code&gt;)를 사용할 수 없습니다.&lt;/strong&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;tshark: Only read filters, not capture filters, can be specified when reading a capture file.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;tshark: Only read filters, not capture filters, can be specified when reading a capture file.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# tshark로 파일 읽기&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tshark -r capture.pcap --color
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# JSON 형식으로 읽기&lt;/span&gt;

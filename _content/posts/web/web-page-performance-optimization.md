@@ -23,7 +23,7 @@ categories:
   - [캐시 활용](#캐시-활용)
     - [CDN (Content Delivery Network)](#cdn-content-delivery-network)
     - [브라우저 캐시](#브라우저-캐시)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # 성능 지표
 
@@ -153,7 +153,7 @@ WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
 그럼 불필요한 오리진 서버 요청이 늘어날 수 있기 때문에
 반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [유용한 구글 크롬(Google Chrome)의 기능](https://markruler.github.io/posts/web/google-chrome/)
 - [웹 페이지 응답 방법과 프레임워크](../respond-web-page/)

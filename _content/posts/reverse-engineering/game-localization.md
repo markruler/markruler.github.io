@@ -5,7 +5,7 @@ date: 2024-12-16T21:26:00+09:00
 lastmod: 2025-01-02T19:43:00+09:00
 title: "한국어를 지원하지 않는 게임의 비공식 한국어 패치 만들기"
 description: "한국어 패치 제작자분들 감사합니다"
-images: ["/images/reverse-engineering/game-localization/jupiter-hell.png"]
+images: ["/images/reverse-engineering/game-localization/glyphs.png"]
 tags:
   - game
   - reverse-engineering
@@ -31,6 +31,7 @@ categories:
   - [실시간 번역](#실시간-번역)
     - [XUnity Auto Translator](#xunity-auto-translator)
     - [MORT (MonkeyHead's OCR Realtime Translator)](#mort-monkeyheads-ocr-realtime-translator)
+- [패치 프로그램(Patcher) 제작](#패치-프로그램patcher-제작)
 - [더 읽을거리](#더-읽을거리)
 
 # 게임 저작권과 한국어 패치
@@ -63,8 +64,8 @@ categories:
 기본적으로 제가 패치하는 방법은 다음과 같습니다.
 
 1. 게임 엔진별 언팩 도구를 사용하여 게임 파일을 추출합니다(unpack).
-2. 스크립트(script 혹은 dialog)를 번역하고 수정합니다.
-3. 한글을 지원하지 않는 폰트인 경우 폰트를 생성합니다.
+2. 한글을 지원하지 않는 폰트인 경우 글리프(Glyph) 테이블을 생성해서 폰트 적용이 되는지 확인합니다.
+3. 한글 폰트가 적용된다면 스크립트(script 혹은 dialog)를 번역하고 수정합니다.
 4. 번역된 스크립트와 폰트를 다시 패키징하여(repack) 게임에 적용합니다.
 
 한 가지 언어(주로 영어)만 제공하는 게임은 스크립트가 별도로 있지 않고,
@@ -83,7 +84,7 @@ categories:
 [^3]: 원본 패치 툴인 [UABE (Unity Asset Bundle Extractor)](https://github.com/SeriousCache/UABE)는 업데이트가 중단되었습니다.
 
 [SDF(Signed Distance Fields)](https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html) 폰트 생성 시
-Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
+글리프 관련 필드를 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
 자세한 폰트 교체 방법은 [Snowyegret](https://snowyegret.tistory.com/21)님의 글을 참고하세요.
 
 IL2CPP[^4]로 빌드된 유니티 게임은 [nesrak1/AddressablesTools](https://github.com/nesrak1/AddressablesTools)을 사용해서
@@ -101,6 +102,13 @@ C++ 언어는 대부분의 플랫폼에서 지원되기 때문에 이 방식을 
 ```sh
 Example patchcrc catalog.json
 ```
+
+게임이 하나의 언어만 제공하는 경우,
+보통은 텍스트 스크립트(혹은 String Bank)가 나뉘어있지 않을 수 있습니다.
+이 경우 DLL 파일에 포함된 텍스트를 수정하거나
+모드 툴인 [BepInEx](https://github.com/BepInEx/BepInEx)을 사용할 수 있습니다.
+[XUnity Auto Translator](#xunity-auto-translator)에도 사용된 방법이기 때문에
+XUnity Auto Translator가 적용되는 게임이라면 모드 툴을 사용해서 제작해볼 수 있습니다.
 
 ### 언리얼 엔진 (Unreal Engine)
 
@@ -187,12 +195,11 @@ HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
 
 ### XUnity Auto Translator
 
+- [bbepis/XUnity.AutoTranslator](https://github.com/bbepis/XUnity.AutoTranslator)
+
 한국어가 없는 신규 출시 유니티 게임을 플레이하고 싶을 때 유저들이 많이 사용하는 편입니다.
 **BepInEx**을 사용해서 게임 텍스트를 추출하고 치환합니다.
 다만 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.
-
-- [bbepis/XUnity.AutoTranslator](https://github.com/bbepis/XUnity.AutoTranslator)
-  - [사용 방법](https://page.onstove.com/indie/global/view/9835166)
 
 ### MORT (MonkeyHead's OCR Realtime Translator)
 
@@ -202,6 +209,12 @@ HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
 그래서 게임 텍스트 자체를 치환하는 것이 아닌 추가 레이어를 두기 때문에 게임 플레이 시 몰입을 방해할 수 있습니다.
 
 - [MORT](https://blog.naver.com/killkimno/223497997082)
+
+# 패치 프로그램(Patcher) 제작
+
+하나의 게임 리소스 안에 텍스트 외 다른 리소스(음원, 이미지)가 포함될 수 있기 때문에
+별도의 패치 프로그램을 제작하는 것도 좋은 방법입니다.
+혹은 언더테일 패치 프로그램처럼 [xdelta](https://en.wikipedia.org/wiki/Xdelta)를 사용하는 것도 방법입니다.
 
 # 더 읽을거리
 

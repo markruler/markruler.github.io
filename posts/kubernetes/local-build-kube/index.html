@@ -75,7 +75,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -464,7 +464,8 @@
                 <div class="post-body" v-pre>
                 
                     <blockquote>
-<p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p></blockquote>
+<p>직접 빌드해서 사용한다면 쿠버네티스 기능을 확장해서 사용할 수 있다.</p>
+</blockquote>
 <h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md">kubernetes/build/README.md</a></li>
@@ -489,7 +490,8 @@
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>build/root/Makefile
 </span></span></code></pre></div><h3 id="실제로-빌드되는-makefile">실제로 빌드되는 Makefile</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile">build/root/Makefile</a></p></blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile">build/root/Makefile</a></p>
+</blockquote>
 <ul>
 <li>all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.</li>
 </ul>
@@ -512,7 +514,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0">#           you to use code debugging tools like delve. When GOLDFLAGS is unspecified, it defaults
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0">#           to &#34;-s -w&#34; which strips debug information. Other flags that can be used for GOLDFLAGS 
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0">#           are documented at https://golang.org/cmd/link/
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>endef
+</span></span></span><span style="display:flex;"><span>endef
 </span></span><span style="display:flex;"><span><span style="color:#ff0">.PHONY</span>: all
 </span></span><span style="display:flex;"><span>ifeq (<span style="color:#f00">$(</span><span style="color:#eedd82">PRINT_HELP</span><span style="color:#f00">)</span>,y)
 </span></span><span style="display:flex;"><span><span style="color:#ff0">all</span>:
@@ -523,9 +525,10 @@
 </span></span><span style="display:flex;"><span>endif
 </span></span></code></pre></div><h3 id="all-generated_files">all: generated_files</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh">hack/make-rules/build.sh</a></p></blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh">hack/make-rules/build.sh</a></p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
-</span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># This script sets up a go workspace locally and builds all go components.</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>set -o errexit
@@ -541,7 +544,8 @@
 </span></span><span style="display:flex;"><span>kube::golang::place_bins
 </span></span></code></pre></div><h3 id="kubegolang">kube::golang::</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh">hack/lib/golang.sh</a></p></blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh">hack/lib/golang.sh</a></p>
+</blockquote>
 <ul>
 <li>참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.</li>
 </ul>
@@ -572,13 +576,14 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="로그-레벨">로그 레벨</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh">hack/lib/logging.sh</a></p></blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh">hack/lib/logging.sh</a></p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-makefile" data-lang="makefile"><span style="display:flex;"><span><span style="color:#0f0"># This controls the verbosity of the build. Higher numbers mean more output.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#eedd82">KUBE_VERBOSE</span> ?= <span style="color:#f60">4</span>
+</span></span></span><span style="display:flex;"><span><span style="color:#eedd82">KUBE_VERBOSE</span> ?= <span style="color:#f60">4</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 찾아보면 V=4까지 있는 것 같아서 4로 지정했다.
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 👉 hack/lib/logging.sh
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#ff0">kube</span>::log::status() {
+</span></span></span><span style="display:flex;"><span><span style="color:#ff0">kube</span>::log::status() {
 </span></span><span style="display:flex;"><span>  local <span style="color:#eedd82">V</span>=<span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">${</span><span style="color:#eedd82">V</span><span style="color:#f00">:-</span><span style="color:#eedd82">0</span><span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> [[ <span style="color:#87ceeb">${</span><span style="color:#eedd82">KUBE_VERBOSE</span><span style="color:#87ceeb">}</span> &lt; <span style="color:#87ceeb">${</span><span style="color:#eedd82">V</span><span style="color:#87ceeb">}</span> ]]; <span style="color:#f00">then</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">return</span>
@@ -593,7 +598,8 @@
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><h3 id="cmdkubectl">cmd/kubectl</h3>
 <blockquote>
-<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go">kubectl.go</a></p></blockquote>
+<p><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go">kubectl.go</a></p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">package</span> main
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> (
@@ -633,7 +639,8 @@
 </span></span></code></pre></div><h3 id="pkgkubectlcmd"><a href="https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go">pkg/kubectl/cmd</a></h3>
 <h2 id="디버깅">디버깅</h2>
 <blockquote>
-<p>환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.</p></blockquote>
+<p>환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.</p>
+</blockquote>
 <ul>
 <li><a href="https://code.visualstudio.com/docs/editor/debugging">launch.json</a></li>
 </ul>

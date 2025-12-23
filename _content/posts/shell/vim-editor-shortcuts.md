@@ -29,7 +29,7 @@ categories:
   - [화면 분할](#화면-분할)
 - [설정 (.vimrc)](#설정-vimrc)
   - [플러그인](#플러그인)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # 입력 모드 (Insert Mode)
 
@@ -138,7 +138,7 @@ categories:
 ```vim
 " ~/.vimrc
 " 이것은 주석
-syntax on                                                                       
+syntax on
 set showcmd
 set statusline+=%F::%l,%c
 set showmatch
@@ -253,7 +253,7 @@ Vim 데이터에서 아래 명령어를 통해 플러그인을 설치합니다.
 대표적으로 [amix/vimrc](https://github.com/amix/vimrc)가 있습니다.
 (플러그인 매니저로 Pathogen을 사용)
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [Vim Documentation](https://www.vim.org/docs.php)
 - [Vim, 두 가지 관점](https://johngrib.github.io/wiki/two-views-of-vim/) | 기계인간 John Grib

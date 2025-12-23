@@ -29,7 +29,7 @@ categories:
 - [브라우저의 오디오 재생 정책](#브라우저의-오디오-재생-정책)
 - [오디오 성능](#오디오-성능)
 - [결론](#결론)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # 개요
 
@@ -655,7 +655,7 @@ Web Audio API는 `AudioContext` 생성 시
 이 가이드가 웹 오디오 파이프라인을 이해하고 활용하는 데 도움이 되었기를 바랍니다.
 필요한 경우 MDN의 관련 문서와 각종 예제를 참고하여 더 깊이있는 구현으로 나아가 보세요.
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - Codec
   - [A Guide for Choosing the Right Codec](https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/) | Audiokinetic

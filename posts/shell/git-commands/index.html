@@ -76,7 +76,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -1610,7 +1610,8 @@
 <p>Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
 GUI 프로그램의 대부분은 Git 기능 중 일부만 구현하기 때문에 비교적 단순하다.
 CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하지 않는다. -
-&lt;<a href="https://git-scm.com/book/en/v2">Pro Git</a>&gt; Scott Chacon, Ben Straub</p></blockquote>
+&lt;<a href="https://git-scm.com/book/en/v2">Pro Git</a>&gt; Scott Chacon, Ben Straub</p>
+</blockquote>
 <h1 id="git-internal">Git Internal</h1>
 <h2 id="차이가-아니라-스냅샷">차이가 아니라 스냅샷</h2>
 <ul>
@@ -1644,7 +1645,8 @@ CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하�
 파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구합니다.</p>
 <blockquote>
 <p><em><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0">Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
-정말 그렇게 되면 어떤 일이 벌어질까?</a></em></p></blockquote>
+정말 그렇게 되면 어떤 일이 벌어질까?</a></em></p>
+</blockquote>
 <p>이미 있는 SHA-1 값이 Git 데이터베이스에 커밋되면 새로운 객체라고 해도 이미 커밋된 것으로 생각하고 이전의 커밋을 재사용합니다.
 그래서 해당 SHA-1 값의 커밋을 Checkout 하면 항상 처음 저장한 커밋만 Checkout 됩니다.</p>
 <p>그러나 해시 값이 중복되는 일은 일어나기 어렵습니다.
@@ -2199,7 +2201,8 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 <p>Git 서버의 Pull Request는 협업 과정에서 &ldquo;제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~&ldquo;라고 하는 것과 같습니다.</p>
 <h2 id="rebase">rebase</h2>
 <blockquote>
-<p><a href="https://www.facebook.com/photo?fbid=4291246567585200">rebase는 Git의 꽃이다.</a></p></blockquote>
+<p><a href="https://www.facebook.com/photo?fbid=4291246567585200">rebase는 Git의 꽃이다.</a></p>
+</blockquote>
 <p>merge는 병합하려는 commit 객체를 그대로 가져오는 non-destructive 명령입니다.
 반면 rebase는 내용은 같지만 새로운 commit 객체를 생성해서 HEAD에 배치합니다.
 그래서 만약 rebase를 이용해 소스를 병합한다면 이미 병합한 작업 브랜치는 더 이상 사용할 수 없습니다.</p>
@@ -2222,15 +2225,15 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 <p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">Rebasing the feature branch onto main</a></em></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>o---o---o---o---o  main
 </span></span><span style="display:flex;"><span>        <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>         o---o---o---o---o  featureA
+</span></span></span><span style="display:flex;"><span>         o---o---o---o---o  featureA
 </span></span><span style="display:flex;"><span>              <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>               o---o---o  featureB
+</span></span></span><span style="display:flex;"><span>               o---o---o  featureB
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git rebase --onto main featureA featureB
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>                      o---o---o  featureB
 </span></span><span style="display:flex;"><span>                     /
 </span></span><span style="display:flex;"><span>    o---o---o---o---o  main
 </span></span><span style="display:flex;"><span>     <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>      o---o---o---o---o  featureA
+</span></span></span><span style="display:flex;"><span>      o---o---o---o---o  featureA
 </span></span></code></pre></div><p>interactive 모드를 사용하면 커밋 목록을 나열한 후 todo 목록을 작성해서 rebase 작업을 진행할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 돌아가고 싶은 커밋의 직전 커밋까지</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># -i 옵션은 --interactive의 short option</span>
@@ -2350,7 +2353,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git log --oneline --graph stash@{0}
 </span></span><span style="display:flex;"><span>*   3bd5af8 (refs/stash) On master: haha
 </span></span><span style="display:flex;"><span>|<span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>| * 09162cd index on master: 49ef168 test
+</span></span></span><span style="display:flex;"><span>| * 09162cd index on master: 49ef168 test
 </span></span><span style="display:flex;"><span>|/
 </span></span><span style="display:flex;"><span>* 49ef168 (HEAD -&gt; master) test
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat .git/refs/stash
@@ -2833,7 +2836,7 @@ Git의 내부 데이터 구조를 조작하거나 확인하는 <strong>저수준
 <p><em><a href="https://www.atlassian.com/git/tutorials/git-hooks">Maintaining a hook using a symlink to version-controlled script</a></em></p>
 <p>예를 들어, 아래와 같은 <code>pre-push</code> hook은 <code>git push</code> 명령어를 실행시켰을 때 <code>push</code> 가 실행되기 전 <code>gradle test</code> 명령어가 먼저 실행됩니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#e5e5e5">#!/usr/bin/env bash
-</span></span></span><span style="display:flex;"><span><span style="color:#e5e5e5"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 해당 스크립트의 실행 권한을 부여한다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># chmod +x .githooks/pre-push</span>
 </span></span><span style="display:flex;"><span>

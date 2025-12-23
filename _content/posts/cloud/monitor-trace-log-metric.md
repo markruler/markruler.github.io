@@ -18,7 +18,7 @@ categories:
   - [분산 트레이싱 (Distributed tracing)](#분산-트레이싱-distributed-tracing)
 - [모니터링 (Monitoring)](#모니터링-monitoring)
 - [프로파일링 (Profiling)](#프로파일링-profiling)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # 관측 가능성 (Observability)
 
@@ -124,7 +124,7 @@ categories:
 - [Datadog Continuous Profiler](https://docs.datadoghq.com/tracing/profiler/)
 - [Android Profiler](https://developer.android.com/studio/profile)
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [CNCF Landscape](https://landscape.cncf.io/) - Observability 파트
 - [Observability](https://en.wikipedia.org/wiki/Observability) | Wikipedia

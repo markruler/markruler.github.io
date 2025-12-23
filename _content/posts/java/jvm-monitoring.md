@@ -1,11 +1,12 @@
 ---
+draft: false
+socialshare: true
 date: 2022-05-23T00:09:00+09:00
 lastmod: 2025-04-08T22:00:00+09:00
 title: "JVM 모니터링"
 description: "Java Virtual Machine"
 # featured_image: "/images/java/jvm-monitoring/visualgc-with-visualvm.png"
 images: ["/images/java/jvm-monitoring/visualgc-with-visualvm.png"]
-socialshare: true
 tags:
   - observability
   - java
@@ -204,7 +205,7 @@ JVM 옵션으로 메모리를 확장하면 이를 피할 수 있습니다.
 # It can be overridden on command line by using --jdkhome <dir>
 # Be careful when changing jdkhome.
 # There are two VisualVM launchers for Windows (32-bit and 64-bit) and
-# installer points to one of those in the VisualVM application shortcut 
+# installer points to one of those in the VisualVM application shortcut
 # based on the Java version selected at installation time.
 #
 #visualvm_jdkhome="/path/to/jdk"
@@ -427,7 +428,7 @@ jhat -J-Xmx6g -port 7000 /path/app.hprof
 - [Java Profiler Features](https://www.yourkit.com/java/profiler) | YourKit
 - [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) (유료)
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - JMX
   - [JSR 3: JMX Specification](https://www.jcp.org/en/jsr/detail?id=3)

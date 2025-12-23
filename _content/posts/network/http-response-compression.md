@@ -60,7 +60,7 @@ Origin 응답 트래픽 양이 줄어들었습니다.
 
 ![before and after http response compression](/images/network/http-response-compression/before-after-http-response-compression.png)
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [Compression in HTTP](https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression) | MDN
 - [Content-Encoding](https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding) | MDN

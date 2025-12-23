@@ -43,7 +43,7 @@ categories:
   - [좋은 `alt` 텍스트를 작성하는 방법](#좋은-alt-텍스트를-작성하는-방법)
 - [이미지 보안](#이미지-보안)
 - [결론](#결론)
-- [더 읽을 거리](#더-읽을-거리)
+- [더 읽을거리](#더-읽을거리)
 
 # 개요
 
@@ -412,7 +412,7 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 여러분의 웹사이트는 사용자에게 훨씬 더 쾌적한 경험을 제공하고,
 검색 엔진에서도 좋은 평가를 받을 수 있을 것입니다.
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [웹 페이지 성능 측정과 최적화](/posts/web/web-page-performance-optimization/)
   - [Image file type and format guide](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types) | MDN

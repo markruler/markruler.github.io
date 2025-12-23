@@ -252,7 +252,7 @@ VOD 시스템에서 콘텐츠 준비와 전달은 대개 **자동화된 파이�
 예를 들어 사용자가 동영상을 업로드하면 **이벤트 트리거**로 트랜스코딩 작업이 자동 실행되고, 완료 후 결과 파일들이 CDN에 배포되며, 최종으로 재생용 URL이 발급되는 흐름을 스크립트나 서버 프로그램이 관리합니다.
 이러한 **미디어 파이프라인 자동화**를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.
 
-# 더 읽을 거리
+# 더 읽을거리
 
 - [IVS Core team](https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/)
   - [Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명](https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/)

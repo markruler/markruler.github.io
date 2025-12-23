@@ -78,7 +78,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -262,8 +262,8 @@
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						
@@ -423,7 +423,8 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 <blockquote>
 <p>이용자가 업로드하는 대부분의 모바일 촬영 동영상은 안드로이드 기종(삼성, 구글 등)은 MP4, 애플 기종일 경우 MOV(HEVC) 포맷입니다.
 설정에서 변경할 수도 있습니다.
-전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.</p></blockquote>
+전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.</p>
+</blockquote>
 <p>효과적인 트랜스코딩을 위해서는 동영상을 구성하는 요소들을 이해하고 최적화하는 것이 중요합니다. 트랜스코딩 설정을 어떻게 하느냐에 따라 동영상 품질과 파일 크기, 그리고 다양한 기기에서의 호환성이 결정됩니다.</p>
 <p><strong>비트레이트</strong>(Bitrate)는 영상/음성 데이터를 1초간 얼마나 전송할지 나타내는 지표(kbps, Mbps 등)로, <strong>품질과 파일 크기에 직접적인 영향</strong>을 미칩니다. 트랜스코딩 시 목표 비트레이트를 정해야 하는데, 너무 낮으면 블록 노이즈 등 품질 저하가 생기고 너무 높으면 저장공간과 대역폭 낭비가 발생합니다.
 일반적으로 해상도별로 적정 비트레이트 <strong>비트레이트 레더</strong>(ladder)를 설계합니다. 예를 들어 1080p 영상은 5~8Mbps, 720p는 2~4Mbps, 480p는 1Mbps 정도로 설정해 단계별로 품질을 조정합니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
@@ -445,31 +446,31 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 특히 움직임이 많은 콘텐츠(예: 스포츠, 액션 등)는 낮은 프레임레이트에서 품질 저하가 더 두드러집니다. 반대로 프레임레이트를 인위적으로 높이는 업샘플링은 잔상이나 블러가 생길 수 있어 원본과 동일하거나 호환 범위 내에서만 조정하는 것이 안전합니다.</p>
 <p>위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 <strong>FFmpeg</strong>을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ffmpeg -i input.mp4 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -c:v libx264 -b:v 1000k -s 1280x720 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -c:a aac -b:a 128k <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  output_720p.mp4
+</span></span></span><span style="display:flex;"><span>  -c:v libx264 -b:v 1000k -s 1280x720 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -c:a aac -b:a 128k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  output_720p.mp4
 </span></span></code></pre></div><p>위 명령은 <code>input.mp4</code> 파일을 입력 받아, 비디오 코덱을 H.264(libx264)로, 비디오 비트레이트를 1000kbps(1Mbps)로 설정하고, 해상도를 1280x720으로 다운스케일합니다.
 오디오도 AAC 코덱에 128kbps 비트레이트로 변환하며, 이렇게 압축된 스트림들을 MP4 컨테이너로 묶어 <code>output_720p.mp4</code>로 출력합니다.
 실제 트랜스코딩 환경에서는 영상 내용에 따라 최적 비트레이트를 달리 설정하거나, <code>-crf</code> 옵션으로 목표 화질 중심의 인코딩을 하기도 합니다. 또한 H.265/AV1 인코딩, 2패스 인코딩 등 고급 최적화 기법을 적용해 파일 크기를 더 줄이면서 품질을 확보할 수도 있습니다.</p>
 <p>H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ffmpeg -y <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -i input.mp4 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -c:v libx264 -crf <span style="color:#f60">22</span> -c:a aac -ar <span style="color:#f60">44100</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -filter:v:0 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">360</span> -maxrate:v:0 600k  -b:a:0 500k <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -filter:v:1 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">480</span> -maxrate:v:1 1500k -b:a:1 1000k <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -filter:v:2 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">720</span> -maxrate:v:2 3000k -b:a:2 2000k <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -var_stream_map <span style="color:#87ceeb">&#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&#34;</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -preset faster <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -threads <span style="color:#f60">0</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -f hls <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -hls_time <span style="color:#f60">10</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -hls_list_size <span style="color:#f60">0</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -hls_flags independent_segments <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  -master_pl_name <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">.m3u8&#34;</span> <span style="color:#87ceeb">\
-</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb"></span>  <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">-%v.m3u8&#34;</span>
+</span></span></span><span style="display:flex;"><span>  -i input.mp4 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -c:v libx264 -crf <span style="color:#f60">22</span> -c:a aac -ar <span style="color:#f60">44100</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:0 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">360</span> -maxrate:v:0 600k  -b:a:0 500k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:1 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">480</span> -maxrate:v:1 1500k -b:a:1 1000k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:2 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">720</span> -maxrate:v:2 3000k -b:a:2 2000k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -var_stream_map <span style="color:#87ceeb">&#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&#34;</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -preset faster <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -threads <span style="color:#f60">0</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -f hls <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_time <span style="color:#f60">10</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_list_size <span style="color:#f60">0</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_flags independent_segments <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -master_pl_name <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">.m3u8&#34;</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">-%v.m3u8&#34;</span>
 </span></span></code></pre></div><h2 id="오디오-스트림이-없는-경우-발생한-에러-트러블슈팅">오디오 스트림이 없는 경우 발생한 에러 트러블슈팅</h2>
 <p>위 명령을 그대로 사용할 경우 문제가 되는 상황이 있습니다.
 비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
@@ -534,7 +535,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 <p>VOD 시스템에서 콘텐츠 준비와 전달은 대개 <strong>자동화된 파이프라인</strong>으로 처리됩니다.
 예를 들어 사용자가 동영상을 업로드하면 <strong>이벤트 트리거</strong>로 트랜스코딩 작업이 자동 실행되고, 완료 후 결과 파일들이 CDN에 배포되며, 최종으로 재생용 URL이 발급되는 흐름을 스크립트나 서버 프로그램이 관리합니다.
 이러한 <strong>미디어 파이프라인 자동화</strong>를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.</p>
-<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<h1 id="더-읽을거리">더 읽을거리</h1>
 <ul>
 <li><a href="https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/">IVS Core team</a>
 <ul>
@@ -874,8 +875,8 @@ Ported from <span>Makito</span>'s
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						

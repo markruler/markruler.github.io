@@ -51,6 +51,7 @@
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ED%8C%A8%EC%B9%98-%ED%94%84%EB%A1%9C%EA%B7%B8%EB%9E%A8patcher-%EC%A0%9C%EC%9E%91&#34;&gt;패치 프로그램(Patcher) 제작&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;게임-저작권과-한국어-패치&#34;&gt;게임 저작권과 한국어 패치&lt;/h1&gt;
@@ -70,12 +71,13 @@
 그래서 멀티 게임을 운영하는 개발사에서는 유독 민감하게 반응하는 것 같습니다.&lt;/p&gt;
 &lt;h1 id=&#34;대표적인-게임-엔진별-한국어-패치-제작-방법&#34;&gt;대표적인 게임 엔진별 한국어 패치 제작 방법&lt;/h1&gt;
 &lt;blockquote&gt;
-&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;SteamDB 기준 가장 많이 사용된 게임 엔진부터 나열했습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;기본적으로 제가 패치하는 방법은 다음과 같습니다.&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;게임 엔진별 언팩 도구를 사용하여 게임 파일을 추출합니다(unpack).&lt;/li&gt;
-&lt;li&gt;스크립트(script 혹은 dialog)를 번역하고 수정합니다.&lt;/li&gt;
-&lt;li&gt;한글을 지원하지 않는 폰트인 경우 폰트를 생성합니다.&lt;/li&gt;
+&lt;li&gt;한글을 지원하지 않는 폰트인 경우 글리프(Glyph) 테이블을 생성해서 폰트 적용이 되는지 확인합니다.&lt;/li&gt;
+&lt;li&gt;한글 폰트가 적용된다면 스크립트(script 혹은 dialog)를 번역하고 수정합니다.&lt;/li&gt;
 &lt;li&gt;번역된 스크립트와 폰트를 다시 패키징하여(repack) 게임에 적용합니다.&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;한 가지 언어(주로 영어)만 제공하는 게임은 스크립트가 별도로 있지 않고,
@@ -87,12 +89,18 @@
 &lt;h3 id=&#34;유니티-unity&#34;&gt;유니티 (Unity)&lt;/h3&gt;
 &lt;p&gt;언팩-리팩 과정은 &lt;a href=&#34;https://github.com/nesrak1/UABEA&#34;&gt;UABEA&lt;/a&gt;를 사용합니다.&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://docs.unity3d.com/Packages/com.unity.textmeshpro@4.0/manual/FontAssetsSDF.html&#34;&gt;SDF(Signed Distance Fields)&lt;/a&gt; 폰트 생성 시
-Glyph 관련 부분을 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
+글리프 관련 필드를 제외한 모든 부분을 원본과 동일하게 만들어야 한다는 것에 유의해야 합니다.
 자세한 폰트 교체 방법은 &lt;a href=&#34;https://snowyegret.tistory.com/21&#34;&gt;Snowyegret&lt;/a&gt;님의 글을 참고하세요.&lt;/p&gt;
 &lt;p&gt;IL2CPP&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;로 빌드된 유니티 게임은 &lt;a href=&#34;https://github.com/nesrak1/AddressablesTools&#34;&gt;nesrak1/AddressablesTools&lt;/a&gt;을 사용해서
 &lt;code&gt;catalog.json&lt;/code&gt; 파일을 수정해야 합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Example patchcrc catalog.json
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;언리얼-엔진-unreal-engine&#34;&gt;언리얼 엔진 (Unreal Engine)&lt;/h3&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;게임이 하나의 언어만 제공하는 경우,
+보통은 텍스트 스크립트(혹은 String Bank)가 나뉘어있지 않을 수 있습니다.
+이 경우 DLL 파일에 포함된 텍스트를 수정하거나
+모드 툴인 &lt;a href=&#34;https://github.com/BepInEx/BepInEx&#34;&gt;BepInEx&lt;/a&gt;을 사용할 수 있습니다.
+&lt;a href=&#34;#xunity-auto-translator&#34;&gt;XUnity Auto Translator&lt;/a&gt;에도 사용된 방법이기 때문에
+XUnity Auto Translator가 적용되는 게임이라면 모드 툴을 사용해서 제작해볼 수 있습니다.&lt;/p&gt;
+&lt;h3 id=&#34;언리얼-엔진-unreal-engine&#34;&gt;언리얼 엔진 (Unreal Engine)&lt;/h3&gt;
 &lt;p&gt;5는 툴이 없어서 시도해보지 못했습니다.
 4는 해외 커뮤니티에서 &lt;a href=&#34;https://gbatemp.net/threads/how-to-unpack-and-repack-unreal-engine-4-files.531784/&#34;&gt;masagrator라는 유저가 작성한 글과 툴&lt;/a&gt;을 참고하세요.&lt;/p&gt;
 &lt;p&gt;다른 게임과 달리 Epic Games는 언팩 도구(&lt;code&gt;UnrealPak&lt;/code&gt;)를 직접 제공합니다.
@@ -148,16 +156,12 @@ HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
 그래서 딜레이가 꽤 있습니다.
 번역 방식은 인터넷을 통해 기계 번역하는 방법과 미리 번역된 파일을 활용해서 치환하는 방법이 있습니다.&lt;/p&gt;
 &lt;h3 id=&#34;xunity-auto-translator&#34;&gt;XUnity Auto Translator&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/bbepis/XUnity.AutoTranslator&#34;&gt;bbepis/XUnity.AutoTranslator&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;한국어가 없는 신규 출시 유니티 게임을 플레이하고 싶을 때 유저들이 많이 사용하는 편입니다.
 &lt;strong&gt;BepInEx&lt;/strong&gt;을 사용해서 게임 텍스트를 추출하고 치환합니다.
 다만 게임과의 충돌로 인해 게임이 실행되지 않을 수도 있고, 게임 플레이 도중에 진행 불가 버그가 발생할 수도 있습니다.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/bbepis/XUnity.AutoTranslator&#34;&gt;bbepis/XUnity.AutoTranslator&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://page.onstove.com/indie/global/view/9835166&#34;&gt;사용 방법&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
 &lt;h3 id=&#34;mort-monkeyheads-ocr-realtime-translator&#34;&gt;MORT (MonkeyHead&amp;rsquo;s OCR Realtime Translator)&lt;/h3&gt;
 &lt;p&gt;국내 유저가 만들고 계속 업데이트 중인 툴입니다.
 유니티 외 게임에서도 사용할 수 있습니다.
@@ -166,6 +170,10 @@ HxD와 같은 Hex Editor로 폰트 매핑과 스크립트를 수정합니다.
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://blog.naver.com/killkimno/223497997082&#34;&gt;MORT&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;h1 id=&#34;패치-프로그램patcher-제작&#34;&gt;패치 프로그램(Patcher) 제작&lt;/h1&gt;
+&lt;p&gt;하나의 게임 리소스 안에 텍스트 외 다른 리소스(음원, 이미지)가 포함될 수 있기 때문에
+별도의 패치 프로그램을 제작하는 것도 좋은 방법입니다.
+혹은 언더테일 패치 프로그램처럼 &lt;a href=&#34;https://en.wikipedia.org/wiki/Xdelta&#34;&gt;xdelta&lt;/a&gt;를 사용하는 것도 방법입니다.&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.inven.co.kr/webzine/news/?news=289168&#34;&gt;[인터뷰] 저작권법과 유저 한글패치&lt;/a&gt; - 인벤 &amp;amp; 이철우 게임·엔터테인먼트 전문 변호사&lt;/li&gt;
@@ -641,19 +649,22 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;p&gt;[2024-07-28] - 이는 &lt;a href=&#34;https://techcrunch.com/2019/01/29/facebook-project-atlas/&#34;&gt;2019년에 TechCrunch가 공개한&lt;/a&gt; 내용과 다릅니다.
 당시 페이스북은 10대 청소년들에게 사용 습관 데이터를 수집하기 위해 돈을 지불했고,
 그 결과 Onavo 앱은 앱 스토어에서 삭제되고 &lt;a href=&#34;https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data&#34;&gt;벌금이 부과되었습니다&lt;/a&gt;.
-이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &amp;ldquo;가로채기&amp;rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.&lt;/p&gt;&lt;/blockquote&gt;
+이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &amp;ldquo;가로채기&amp;rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;blockquote&gt;
 &lt;p&gt;*한 HN 사용자는 다음과 같이 &lt;a href=&#34;https://news.ycombinator.com/item?id=41091505&amp;amp;ref=doubleagent.net&#34;&gt;명확히 합니다&lt;/a&gt;.&lt;br&gt;
 &lt;br&gt;
 &amp;ldquo;이것은 도청법 위반 소송이 아닙니다. 독점 금지 소송으로, 청구 내용은 모두 셔먼법&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 위반에 관한 것입니다.
-원고 측 변호사들이 자료 조사 과정에서 페이스북이 도청법을 위반했을 가능성이 있다는 증거를 &lt;em&gt;우연히&lt;/em&gt; 발견했습니다.&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
+원고 측 변호사들이 자료 조사 과정에서 페이스북이 도청법을 위반했을 가능성이 있다는 증거를 &lt;em&gt;우연히&lt;/em&gt; 발견했습니다.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://doubleagent.net/content/images/2024/07/image-1.png&#34; alt=&#34;Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;*Case 3:20-cv-08570-JD Document 735 Filed 03/23/24 Page 1&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;이 글은 제한적이고 부분적인 정보로 인해 일부 사실이 부정확하거나 불완전할 수 있습니다.
 따라서 수정이 필요하거나 새로운 사실이 발견될 경우 이 글은 업데이트될 수 있습니다.
 새로운 콘텐츠를 받아보고 싶으시면 &lt;a href=&#34;https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/&#34;&gt;저자의 블로그&lt;/a&gt;를 구독하시거나
-&lt;a href=&#34;https://twitter.com/haxrob&#34;&gt;저자의 X&lt;/a&gt;를 팔로우하세요.&lt;/p&gt;&lt;/blockquote&gt;
+&lt;a href=&#34;https://twitter.com/haxrob&#34;&gt;저자의 X&lt;/a&gt;를 팔로우하세요.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#%EB%8F%99%EA%B8%B0&#34;&gt;동기&lt;/a&gt;&lt;/li&gt;
@@ -700,7 +711,8 @@ GUI 환경 데스크탑에서는 &amp;ldquo;파일 확장자(File Extension)&amp
 &lt;p&gt;&lt;em&gt;Page 3 - Case 3:20-cv-08570-JD Document 736&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;구글(Google)이 자사의 운영 체제에서 접근성 기능 사용에 대해 다음과 같이 말하고 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다.&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&amp;ldquo;장애가 있는 사람들이 기기에 접근하거나 그들의 장애로 인한 문제를 해결하는 데 도움을 주기 위해 설계된 서비스만이 접근성 도구로 선언될 자격이 있습니다.&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;장애가 있는 사람들을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업이 있다는 것을 짐작할 수 있습니다.
 Android 접근성 기능의 남용은 주로
 &lt;a href=&#34;https://blog.pradeo.com/accessibility-services-mobile-analysis-malware&#34;&gt;뱅킹 멀웨어&lt;/a&gt;와 같은 악성 애플리케이션에 의해 발생하는 것으로 알려져 있습니다.&lt;/p&gt;
@@ -734,7 +746,8 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 또한 그해 애플(Apple)은 &lt;a href=&#34;https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app&#34;&gt;페이스북의 개발자 프로그램 인증서를 철회하는&lt;/a&gt;
 강력한 조치를 취해 분명한 메시지를 전달했습니다.&lt;br&gt;
 &lt;br&gt;
-서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.&lt;/p&gt;&lt;/blockquote&gt;
+서비스 종료된 앱이지만, 이 글에서 제공하는 기술적 인사이트를 얻을 수 있는 오래된 버전의 앱을 찾을 수 있었습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h1 id=&#34;분석&#34;&gt;분석&lt;/h1&gt;
 &lt;p&gt;최종 사용자 디바이스의 웹사이트와 애플리케이션은 디바이스 내 신뢰 저장소에 저장된 public 인증서를 통해 HTTPS/TLS를 사용하는 원격 웹사이트나 서버를 신뢰합니다.
 이러한 &amp;ldquo;인증 기관(CA)&amp;rdquo; 인증서는 애플리케이션이 신뢰할 수 있는 상대방과 통신하고 있음을 확인해 주는 &amp;ldquo;신뢰 앵커(trust anchor)&amp;rdquo; 역할을 합니다.
@@ -748,7 +761,8 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 &lt;br&gt;
 &amp;ldquo;&lt;em&gt;HTTPS는 사용자에게 개인정보보호 및 보안을 제공하기 위해 설계되었습니다.
 사용자 동의나 인지 없이 HTTPS 터널을 복호화하는 것은 윤리 규범을 위반할 수 있으며,
-관할 지역에서 불법일 수 있습니다.&lt;/em&gt;&amp;rdquo;&lt;/p&gt;&lt;/blockquote&gt;
+관할 지역에서 불법일 수 있습니다.&lt;/em&gt;&amp;rdquo;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;아이폰의 iOS와 달리 구글은 대부분의 모바일 애플리케이션에서 신뢰할 수 있는 CA 인증서를 설치하기가 매우 어렵도록 수많은 변경 사항을 적용했습니다.
 2020년 9월에 출시된 안드로이드 11에서는 앱이 사용자에게 인증서를 설치하라는 메시지를 표시하는 메커니즘을 완전히 차단했습니다.
 그리고 어떤 애플리케이션도 기본적으로 사용자 저장소에 있는 인증서를 신뢰하지 않습니다.&lt;/p&gt;
@@ -757,7 +771,8 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 &lt;br&gt;
 나중에 살펴보겠지만, 당시 스냅챗 앱은 분석 도메인에 대한 인증서 고정을 구현하지 않았습니다.
 이는 다른 앱 도메인의 경우에도 마찬가지일 것입니다.
-따라서 페이스북은 경쟁사의 이러한 기술적 제한/실수를 이용한 것으로 보입니다.&lt;/p&gt;&lt;/blockquote&gt;
+따라서 페이스북은 경쟁사의 이러한 기술적 제한/실수를 이용한 것으로 보입니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;현재는 2016년부터 2019년까지 페이스북이 했던 일을 하는 것은 기술적으로 불가능합니다.
 하지만 그들은 어떻게 해냈을까요?
 다행히도 우리는 안드로이드와 Play 스토어 생태계를 통해 오래된 안드로이드 앱 패키지를 종종 찾을 수 있습니다.&lt;/p&gt;
@@ -773,7 +788,8 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;li&gt;과거 및 삭제된 앱 사용 내역에 액세스 (Access past and deleted app usage)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;&amp;ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;&amp;ldquo;앱에서 사용하는 모바일 데이터의 양을 표시하려면 이 권한이 필요합니다.&amp;rdquo;&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;그들이 설명하지 않은 것은 이 기능이 앱을 설치한 사용자를 위한 것이 아니라 실제로는 Onavo/Facebook을 위한 것이라는 점입니다.
 이러한 정보는 매우 가치가 있으며, 이는 페이스북이 인수에 지불한 1억 2천만 달러라는 금액만 보더라도 알 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/GJpCkIEbkAAsckm?format=jpg&amp;amp;name=small&#34; alt=&#34;Onavo App Permissions&#34;&gt;&lt;/p&gt;
@@ -801,7 +817,8 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 이제 Facebook의 CA 인증서를 앱 내에서 직접 설치하는 것은 불가능해졌습니다.&lt;/p&gt;
 &lt;p&gt;Android 7에서 주목할 만한 또 다른 변경 사항은 &lt;a href=&#34;https://developer.android.com/privacy-and-security/security-config&#34;&gt;Android 문서&lt;/a&gt;에 따르면 다음과 같습니다(강조는 필자).&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;기본적으로 모든 앱의 보안 연결(TLS 및 HTTPS와 같은 프로토콜 사용)은 사전 설치된 시스템 CA를 신뢰하며, &lt;strong&gt;Android 6.0(API 레벨 23) 이하를 대상으로 하는 앱은 기본적으로 사용자가 추가한 CA 저장소도 신뢰합니다&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;기본적으로 모든 앱의 보안 연결(TLS 및 HTTPS와 같은 프로토콜 사용)은 사전 설치된 시스템 CA를 신뢰하며, &lt;strong&gt;Android 6.0(API 레벨 23) 이하를 대상으로 하는 앱은 기본적으로 사용자가 추가한 CA 저장소도 신뢰합니다&lt;/strong&gt;.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;즉, Android Marshmallow(Android 6)와 그 이전 버전에서는 다른 앱들이 사용자 저장소에 있는 인증서를 신뢰했지만,
 2016년 8월 22일에 출시된 Android 7부터는 앱의 매니페스트 파일에 보안 구성(security configuration)이 있는 경우를 제외하고는 다른 앱에서 더 이상 이를 신뢰하지 않게 되었습니다.&lt;/p&gt;
 &lt;p&gt;Android 7의 또 다른 개선 사항은 기기를 완전히 루팅하지 않는 한 어떤 방법으로도 시스템 저장소에 인증서를 설치할 수 없게 되었다는 점입니다.&lt;/p&gt;
@@ -812,7 +829,8 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;SSL bump에 사용되는 키는 어디에서 생성되며, 어떻게 남용으로부터 보호되나요?
 (예: 기기에서 생성되어, 해당 기기에만 사용되고, 기기를 벗어나지 않는지, 혹은 앱과 함께 다운로드되어 설치되는 공유 키가 있는지)&lt;/em&gt;&lt;br&gt;
 &lt;br&gt;
-&lt;strong&gt;인증서는 서버에서 생성되어 기기로 전송됩니다.&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;strong&gt;인증서는 서버에서 생성되어 기기로 전송됩니다.&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;&lt;img src=&#34;https://doubleagent.net/content/images/2024/04/image-15.png&#34; alt=&#34;Page 3 - Case 3:20-cv-08570-JD Document 736&#34;&gt;&lt;/p&gt;
 &lt;p&gt;따라서 2019년 이전의 훨씬 더 오래된 버전으로 돌아가야 하며, 특히 2017년 9월 버전이 필요합니다.
 이 버전에서는 &amp;ldquo;&lt;code&gt;old_ca.cer&lt;/code&gt;&amp;ldquo;와 &amp;ldquo;&lt;code&gt;new_ca.cer&lt;/code&gt;&amp;ldquo;라는 이름의 인증서가 &lt;code&gt;assets&lt;/code&gt;에 포함되어 있습니다.
@@ -853,7 +871,8 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://pbs.twimg.com/media/GKBnQNdb0AA2M8t?format=png&amp;amp;name=medium&#34; alt=&#34;old Snapchat did not use certificate pinning&#34;&gt;&lt;/p&gt;
 &lt;p&gt;앞서 논의한 것처럼, 페이스북은 안드로이드의 보안 강화 및 인증서 고정의 광범위한 도입을 인지하고 있었으며, 이에 대한 언급이 포함되어 있습니다. (이전 &lt;code&gt;Page 3 - Case 3:20-cv-08570-JD Document 736&lt;/code&gt; 참조)&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;em&gt;인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.&lt;/em&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;em&gt;인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.&lt;/em&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h1 id=&#34;또-무엇이-있을까요&#34;&gt;또 무엇이 있을까요?&lt;/h1&gt;
 &lt;p&gt;제 눈에 띈 것은 &lt;a href=&#34;https://en.wikipedia.org/wiki/International_mobile_subscriber_identity&#34;&gt;모바일 가입자 IMSI&lt;/a&gt;를 얻으려는 요청이었습니다.
 이는 매우 민감한 데이터입니다.&lt;/p&gt;
@@ -928,7 +947,8 @@ controls&gt;&lt;/video&gt;&lt;/p&gt;
 &lt;p&gt;스왑 파일은 물리 메모리가 부족할 때 디스크에 데이터를 저장하는 역할을 합니다.
 그리고 파일 시스템과 커널은 스왑 파일에 데이터를 효율적으로 읽고 쓰기 위해 파일의 실제 물리적 위치가 명확한 것이 좋습니다.
 물리적으로 할당되지 않은 블록을 포함할 수 있는 &lt;strong&gt;Sparse file은 파일의 논리적인 크기와 실제 디스크에 할당된 크기가 다를 수 있기 때문에&lt;/strong&gt;
-스왑이 예상대로 동작하지 않을 수 있습니다.&lt;/p&gt;&lt;/blockquote&gt;
+스왑이 예상대로 동작하지 않을 수 있습니다.&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;권한-설정&#34;&gt;권한 설정&lt;/h2&gt;
 &lt;p&gt;Swap 파일을 root만 읽고 쓰도록 권한을 설정합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo chmod &lt;span style=&#34;color:#f60&#34;&gt;600&lt;/span&gt; /swapfile
@@ -1193,7 +1213,8 @@ and the geographic information from the Internet registries to determine the loc
 In addition, we use the latency information contained within the trace and the latency information gathered from pinging routers,
 along with the limitations imposed by speed-of-light bounds,
 in order to weed out bad data and increase the probability of the location we choose being correct.&lt;/li&gt;
-&lt;/ul&gt;&lt;/blockquote&gt;
+&lt;/ul&gt;
+&lt;/blockquote&gt;
 &lt;h2 id=&#34;제로-트러스트&#34;&gt;제로 트러스트!&lt;/h2&gt;
 &lt;p&gt;하지만 하루만에 문제가 발생했습니다.
 간헐적으로 한국에서 접속한 사용자가 미국에서 접속한 것으로 전달되었습니다.&lt;/p&gt;
@@ -1346,31 +1367,31 @@ Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 랜덤 바이트 생성
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 브라우저에서 사용하기 위해 Node.js의 Buffer 대신 Uint8Array 사용.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; randomBytes(size) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; randomBytes(size) {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; bytes = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Uint8Array(size);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  window.crypto.getRandomValues(bytes);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; bytes;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 16진수 문자열로 변환
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; bufferHex(buffer) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; bufferHex(buffer) {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; Array.from(buffer)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .map((b) =&amp;gt; b.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;))
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    .join(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 10진수 숫자를 16진수 문자열로 변환
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; toHex(number) {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; toHex(number) {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; number.toString(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;).padStart(&lt;span style=&#34;color:#f60&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0&amp;#34;&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 버전, traceId, id, flags 생성
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; make() {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; make() {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; version = toHex(&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// 현재 버전은 항상 `00`이므로 0으로 설정
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;16&lt;/span&gt;));
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; parentId = bufferHex(randomBytes(&lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt;));
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; traceFlags = toHex(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;); &lt;span style=&#34;color:#0f0&#34;&gt;// Datadog: Sampled (01) / not sampled (00)
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Traceparent(version, traceId, parentId, traceFlags);
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Traceparent(version, traceId, parentId, traceFlags);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;export&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;default&lt;/span&gt; {
@@ -1408,13 +1429,13 @@ _traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{w
 이를 &lt;code&gt;tracecontext,datadog&lt;/code&gt;으로 변경하면 W3C Trace ID를 우선합니다.
 물론 여기서는 클라이언트에서 전달한 Trace ID를 사용합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nohup ~/.jdk/temurin-17.0.6/bin/java &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.service.name=my-service &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -Ddd.trace.propagation.style=tracecontext,datadog &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  -jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;ARTIFACT_PATH&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/app.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;  --spring.profiles.active=prod &lt;span style=&#34;color:#87ceeb&#34;&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;&lt;/span&gt;&amp;gt; /dev/null &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -javaagent:/home/encar/tools/datadog/apm-java/dd-java-agent-1.37.0.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -Ddd.service.name=my-service &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -Ddd.trace.propagation.style=tracecontext,datadog &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  -jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;ARTIFACT_PATH&lt;/span&gt;&lt;span style=&#34;color:#87ceeb&#34;&gt;}&lt;/span&gt;/app.jar &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  --spring.profiles.active=prod &lt;span style=&#34;color:#87ceeb&#34;&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;gt; /dev/null &amp;amp;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/DataDog/dd-trace-java/releases&#34;&gt;dd-java-agent 다운로드&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
@@ -1766,21 +1787,21 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 그 후로 웹 개발자들과 사용자들 사이에서 인기를 끌게 되었습니다.&lt;/p&gt;
 &lt;h2 id=&#34;유용한-북마클릿&#34;&gt;유용한 북마클릿&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 현재 탭 복제
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(location));
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(location));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// wayback - wayback machine에 현재 페이지 저장
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://web.archive.org/save/&amp;#34;&lt;/span&gt;+document.location.href));
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(window.open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://web.archive.org/save/&amp;#34;&lt;/span&gt;+document.location.href));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Decoded URL - 현재 페이지의 디코딩된 URL를 복사한다.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:console.log(prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;copy (Control+C) this link:&amp;#39;&lt;/span&gt;, decodeURIComponent(window.location)));
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:console.log(prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;copy (Control+C) this link:&amp;#39;&lt;/span&gt;, decodeURIComponent(window.location)));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Webpage Stats - 페이지 통계
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; el=document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;script&amp;#39;&lt;/span&gt;);el.type=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;text/javascript&amp;#39;&lt;/span&gt;;el.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#39;&lt;/span&gt;;el.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Looks like the Content Security Policy directive is blocking the use of bookmarklets\n\nYou can copy and paste the content of:\n\n\&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js\&amp;#34;\n\ninto your console instead\n\n(link is in console already)&amp;#34;&lt;/span&gt;);console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#34;&lt;/span&gt;);};document.getElementsByTagName(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;].appendChild(el);})();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; el=document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;script&amp;#39;&lt;/span&gt;);el.type=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;text/javascript&amp;#39;&lt;/span&gt;;el.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#39;&lt;/span&gt;;el.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Looks like the Content Security Policy directive is blocking the use of bookmarklets\n\nYou can copy and paste the content of:\n\n\&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js\&amp;#34;\n\ninto your console instead\n\n(link is in console already)&amp;#34;&lt;/span&gt;);console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://micmro.github.io/performance-bookmarklet/dist/performanceBookmarklet.min.js&amp;#34;&lt;/span&gt;);};document.getElementsByTagName(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;body&amp;#39;&lt;/span&gt;)[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;].appendChild(el);})();
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// PageSpeed Insights - 현재 페이지 분석
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://pagespeed.web.dev/analysis?url=&amp;#39;&lt;/span&gt; + encodeURIComponent(location.href)));
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(open(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;https://pagespeed.web.dev/analysis?url=&amp;#39;&lt;/span&gt; + encodeURIComponent(location.href)));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// EyeDropper - 색상의 HEX 코드를 찾을 수 있는 Eye Dropper를 실행
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt;()=&amp;gt;{&lt;span style=&#34;color:#f00&#34;&gt;try&lt;/span&gt;{prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;Selected HEX color:&amp;#39;&lt;/span&gt;,(&lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; EyeDropper().open()).sRGBHex);}&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(e){alert(e);}})();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:&lt;span style=&#34;color:#f00&#34;&gt;void&lt;/span&gt;(&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt;()=&amp;gt;{&lt;span style=&#34;color:#f00&#34;&gt;try&lt;/span&gt;{prompt(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#39;Selected HEX color:&amp;#39;&lt;/span&gt;,(&lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; EyeDropper().open()).sRGBHex);}&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(e){alert(e);}})();
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 3D Webpage - 현재 페이지를 3D로 보여준다.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; js=document.body.appendChild(document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;script&amp;#34;&lt;/span&gt;));js.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Error! The Script Could Not Be Loaded!&amp;#34;&lt;/span&gt;)};js.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://rawgit.com/Krazete/bookmarklets/master/tri.js&amp;#34;&lt;/span&gt;})();
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript:(&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){&lt;span style=&#34;color:#f00&#34;&gt;var&lt;/span&gt; js=document.body.appendChild(document.createElement(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;script&amp;#34;&lt;/span&gt;));js.onerror=&lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt;(){alert(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;Error! The Script Could Not Be Loaded!&amp;#34;&lt;/span&gt;)};js.src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;https://rawgit.com/Krazete/bookmarklets/master/tri.js&amp;#34;&lt;/span&gt;})();
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// 1000ms(1초) 후에 모든 이미지에 빨간 테두리 추가
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;javascript: (&lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; () =&amp;gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;async&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;function&lt;/span&gt; sleep() {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; Promise((r) =&amp;gt; setTimeout(r, &lt;span style=&#34;color:#f60&#34;&gt;1_000&lt;/span&gt;));
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
@@ -1919,9 +1940,9 @@ Trace Context는 &lt;a href=&#34;https://www.w3.org/news/2020/trace-context-is-a
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Please type ‘allow pasting’ below and hit Enter to allow pasting.
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;웹 브라우저에 따라 입력하는 것이 다릅니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Google Chrome
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;allow pasting
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;allow pasting
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-js&#34; data-lang=&#34;js&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// Microsoft Edge
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;&lt;/span&gt;console.profile()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;console.profile()
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;참조&#34;&gt;참조&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://developer.chrome.com/docs/devtools/news?hl=ko&#34;&gt;DevTools의 새로운 기능&lt;/a&gt; | What&amp;rsquo;s New in DevTools&lt;/li&gt;
@@ -1952,7 +1973,8 @@ DB 문제는 아니었습니다.&lt;/p&gt;
 &lt;p&gt;발생 시점에 반영된 소스 코드를 보니까 Public IP로 요청하던 내부 API를 Private IP로 요청하도록 변경했습니다.
 이 시점에는 이게 문제라고 생각하지 않았습니다.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;&amp;ldquo;Private IP로 요청하면 더 빠른 거 아냐?&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;&amp;ldquo;Private IP로 요청하면 더 빠른 거 아냐?&amp;rdquo;&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;모니터링 할 수 있는 모든 지표를 확인했지만, 레이턴시가 높아지는 시점에 아무런 이상이 없었습니다.
 혹시 몰라서 라우터 장비에 &lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP&lt;/a&gt; 모니터링을 추가했습니다.
 IDC 매니저와 확인해보니 Private IP 망에 연결된 라우터의 UDP 케이블 전송 속도가 예상 속도 1Gbps가 아닌 10Mbps가 나오고 있었습니다.&lt;/p&gt;

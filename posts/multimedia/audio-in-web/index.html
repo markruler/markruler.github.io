@@ -77,7 +77,7 @@
     
   
   
-  <link rel="stylesheet" href="/scss/dark-mode.min.343f2e2d623b1ad811389b53ae6d35754913bbfe76bbc7fa6066c604600db1ff.css" integrity="sha256-ND8uLWI7GtgROJtTrm01dUkTu/52u8f6YGbGBGANsf8=" media="screen">
+  <link rel="stylesheet" href="/scss/dark-mode.min.97d73f63b9dbfb03ec8a79efc36ca0f247b04bca7a4bba6afe131c3f4ee06d20.css" integrity="sha256-l9c/Y7nb&#43;wPsinnvw2yg8kewS8p6S7pq/hMcP07gbSA=" media="screen">
 
 
 
@@ -442,8 +442,8 @@
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						
@@ -564,7 +564,7 @@
 <li><a href="#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%9D%98-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-%EC%A0%95%EC%B1%85">브라우저의 오디오 재생 정책</a></li>
 <li><a href="#%EC%98%A4%EB%94%94%EC%98%A4-%EC%84%B1%EB%8A%A5">오디오 성능</a></li>
 <li><a href="#%EA%B2%B0%EB%A1%A0">결론</a></li>
-<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84-%EA%B1%B0%EB%A6%AC">더 읽을 거리</a></li>
+<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC">더 읽을거리</a></li>
 </ul>
 <h1 id="개요">개요</h1>
 <p><strong>물리적으로</strong> 매질을 통해 전달된 모든 음파를 <strong>사운드(sound)</strong> 라고 합니다.
@@ -848,16 +848,16 @@ Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// AudioContext 생성
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> audioCtx = <span style="color:#f00">new</span> AudioContext();
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> audioCtx = <span style="color:#f00">new</span> AudioContext();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 마이크 MediaStream을 AudioNode로 변환
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> sourceNode = audioCtx.createMediaStreamSource(stream);
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> sourceNode = audioCtx.createMediaStreamSource(stream);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 마이크 스트림을 AudioContext 출력에 연결
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>sourceNode.connect(audioCtx.destination);
+</span></span></span><span style="display:flex;"><span>sourceNode.connect(audioCtx.destination);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 연결 종료
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>audioCtx.close().then(() =&gt; {
+</span></span></span><span style="display:flex;"><span>audioCtx.close().then(() =&gt; {
 </span></span><span style="display:flex;"><span>  console.log(<span style="color:#87ceeb">&#34;AudioContext 종료&#34;</span>);
 </span></span><span style="display:flex;"><span>});
 </span></span></code></pre></div><p>위 코드에서 마이크 스트림으로부터 <code>sourceNode</code>를 만들고,
@@ -871,7 +871,8 @@ Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트
 전문 오디오 장비 없이 웹에서 완전 무지연 모니터링은 어려우므로,
 필요할 때만 출력하거나 헤드폰 사용을 권장합니다.
 또한 <code>sourceNode.connect(audioCtx.destination)</code> 부분을 빼면
-모니터링 없이 무음으로 입력 처리를 할 수 있습니다.</p></blockquote>
+모니터링 없이 무음으로 입력 처리를 할 수 있습니다.</p>
+</blockquote>
 <p>Web Audio를 사용하면 입력 신호에 대해
 <a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode">AnalyserNode</a>를 활용해서 <strong>실시간 분석</strong>하거나
 <strong>이펙트</strong>도 적용할 수 있습니다.
@@ -897,13 +898,13 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> blob = <span style="color:#f00">new</span> Blob(chunks, { type: recorder.mimeType });
 </span></span><span style="display:flex;"><span>  console.log(<span style="color:#87ceeb">&#34;녹음 완료 Blob:&#34;</span>, blob);
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// &lt;audio&gt; 요소에 dataURL을 src로 설정
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
 </span></span><span style="display:flex;"><span>  document.querySelector(<span style="color:#87ceeb">&#34;#test-audio-1&#34;</span>).src = dataURL;
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>recorder.start();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 5초 후 녹음 정지
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>setTimeout(() =&gt; {
+</span></span></span><span style="display:flex;"><span>setTimeout(() =&gt; {
 </span></span><span style="display:flex;"><span>  recorder.stop();
 </span></span><span style="display:flex;"><span>  stream.getTracks().forEach(track =&gt; track.stop());
 </span></span><span style="display:flex;"><span>}, <span style="color:#f60">5000</span>);
@@ -937,20 +938,20 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> blob = <span style="color:#f00">new</span> Blob(chunks, { type: recorder.mimeType });
 </span></span><span style="display:flex;"><span>  console.log(<span style="color:#87ceeb">&#34;녹음 완료 Blob:&#34;</span>, blob);
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 파일 다운로드
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 다운로드 링크 생성
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">const</span> a = document.createElement(<span style="color:#87ceeb">&#39;a&#39;</span>);
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> a = document.createElement(<span style="color:#87ceeb">&#39;a&#39;</span>);
 </span></span><span style="display:flex;"><span>  a.href = dataURL;
 </span></span><span style="display:flex;"><span>  a.download = <span style="color:#87ceeb">&#39;recording.webm&#39;</span>; <span style="color:#0f0">// 확장자는 MIME 타입에 따라 변경
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  a.click();
+</span></span></span><span style="display:flex;"><span>  a.click();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 리소스 해제
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  URL.revokeObjectURL(dataURL);
+</span></span></span><span style="display:flex;"><span>  URL.revokeObjectURL(dataURL);
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>recorder.start();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 5초 후 녹음 정지
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>setTimeout(() =&gt; {
+</span></span></span><span style="display:flex;"><span>setTimeout(() =&gt; {
 </span></span><span style="display:flex;"><span>  recorder.stop();
 </span></span><span style="display:flex;"><span>  stream.getTracks().forEach(track =&gt; track.stop());
 </span></span><span style="display:flex;"><span>}, <span style="color:#f60">5000</span>);
@@ -982,47 +983,47 @@ MediaStream으로써 AudioContext에서 만들어진 모든 소리가 실시간�
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> source = audioCtx.createMediaStreamSource(stream);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// --- Delay + Feedback 구성 (피드백 에코) ---
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> delay = audioCtx.createDelay(<span style="color:#f60">1</span>);
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> delay = audioCtx.createDelay(<span style="color:#f60">1</span>);
 </span></span><span style="display:flex;"><span>delay.delayTime.value = <span style="color:#f60">0.4</span>; <span style="color:#0f0">// 400ms 지연
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> feedbackGain = audioCtx.createGain();
 </span></span><span style="display:flex;"><span>feedbackGain.gain.value = <span style="color:#f60">0.4</span>; <span style="color:#0f0">// 에코 반복 감쇠
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>delay.connect(feedbackGain);
 </span></span><span style="display:flex;"><span>feedbackGain.connect(delay); <span style="color:#0f0">// 피드백 루프
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// --- Dry/Wet 믹스 ---
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> dryGain = audioCtx.createGain();
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> dryGain = audioCtx.createGain();
 </span></span><span style="display:flex;"><span>dryGain.gain.value = <span style="color:#f60">1.0</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> wetGain = audioCtx.createGain();
 </span></span><span style="display:flex;"><span>wetGain.gain.value = <span style="color:#f60">0.6</span>;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// --- 믹서로 합성 &amp; 출력 대상 구성 ---
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> merger = audioCtx.createGain(); <span style="color:#0f0">// 믹서 역할
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> dest = audioCtx.createMediaStreamDestination(); <span style="color:#0f0">// 녹음용
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> merger = audioCtx.createGain(); <span style="color:#0f0">// 믹서 역할
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> dest = audioCtx.createMediaStreamDestination(); <span style="color:#0f0">// 녹음용
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// --- 연결 구성 ---
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>source.connect(dryGain).connect(merger); <span style="color:#0f0">// 원본
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>source.connect(delay).connect(wetGain).connect(merger); <span style="color:#0f0">// 에코 포함
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>merger.connect(audioCtx.destination); <span style="color:#0f0">// 스피커 출력
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>merger.connect(dest); <span style="color:#0f0">// 녹음용 출력
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>
+</span></span></span><span style="display:flex;"><span>source.connect(dryGain).connect(merger); <span style="color:#0f0">// 원본
+</span></span></span><span style="display:flex;"><span>source.connect(delay).connect(wetGain).connect(merger); <span style="color:#0f0">// 에코 포함
+</span></span></span><span style="display:flex;"><span>merger.connect(audioCtx.destination); <span style="color:#0f0">// 스피커 출력
+</span></span></span><span style="display:flex;"><span>merger.connect(dest); <span style="color:#0f0">// 녹음용 출력
+</span></span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// --- MediaRecorder로 녹음 ---
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span><span style="color:#f00">const</span> recorder = <span style="color:#f00">new</span> MediaRecorder(dest.stream);
+</span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> recorder = <span style="color:#f00">new</span> MediaRecorder(dest.stream);
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> chunks = [];
 </span></span><span style="display:flex;"><span>recorder.ondataavailable = e =&gt; { chunks.push(e.data); };
 </span></span><span style="display:flex;"><span>recorder.onstop = () =&gt; {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> blob = <span style="color:#f00">new</span> Blob(chunks, { type: recorder.mimeType });
 </span></span><span style="display:flex;"><span>  console.log(<span style="color:#87ceeb">&#34;녹음 완료 Blob:&#34;</span>, blob);
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// &lt;audio&gt; 요소에 dataURL을 src로 설정
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
+</span></span></span><span style="display:flex;"><span>  <span style="color:#f00">const</span> dataURL = URL.createObjectURL(blob);
 </span></span><span style="display:flex;"><span>  document.querySelector(<span style="color:#87ceeb">&#34;#test-audio-2&#34;</span>).src = dataURL;
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>recorder.start();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// 5초 후 녹음 정지
-</span></span></span><span style="display:flex;"><span><span style="color:#0f0"></span>setTimeout(() =&gt; {
+</span></span></span><span style="display:flex;"><span>setTimeout(() =&gt; {
 </span></span><span style="display:flex;"><span>  recorder.stop();
 </span></span><span style="display:flex;"><span>  stream.getTracks().forEach(track =&gt; track.stop());
 </span></span><span style="display:flex;"><span>  audioCtx.close();
@@ -1085,7 +1086,7 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 최적의 포맷을 선택해 <strong>끊김없고 품질 좋은 사운드 경험</strong>을 제공하길 바랍니다.
 이 가이드가 웹 오디오 파이프라인을 이해하고 활용하는 데 도움이 되었기를 바랍니다.
 필요한 경우 MDN의 관련 문서와 각종 예제를 참고하여 더 깊이있는 구현으로 나아가 보세요.</p>
-<h1 id="더-읽을-거리">더 읽을 거리</h1>
+<h1 id="더-읽을거리">더 읽을거리</h1>
 <ul>
 <li>Codec
 <ul>
@@ -1622,8 +1623,8 @@ Ported from <span>Makito</span>'s
 						
 						
 							<li>
-								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84-%ea%b1%b0%eb%a6%ac" class="nav-더-읽을-거리">
-									더 읽을 거리
+								<a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac" class="nav-더-읽을거리">
+									더 읽을거리
 								</a>
 							</li>
 						
