@@ -71,8 +71,7 @@ make deploy
 ## Theme 변경
 
 ```sh
-# git submodule add -b main git@github.com:AmazingRise/hugo-theme-diary.git themes/hugo-theme-diary
-git submodule add -b develop git@github.com:markruler/hugo-theme-diary.git themes/hugo-theme-diary
+git submodule add -b main git@github.com:markruler/hugo-brutalist.git themes/hugo-brutalist
 ```
 
 ```sh
@@ -87,16 +86,16 @@ git submodule update --init --recursive
 git submodule update --remote --merge
 
 # theme submodule 삭제 시
-git rm -f ./hugo-theme-diary
-rm -rf .git/modules/themes/hugo-theme-diary
+git rm -f ./hugo-brutalist
+rm -rf .git/modules/themes/hugo-brutalist
 ```
 
 ### submodule 삭제
 
 ```sh
-git submodule deinit -f themes/hugo-theme-diary
-rm -rf .git/modules/themes/hugo-theme-diary
-git rm -f themes/hugo-theme-diary
+git submodule deinit -f themes/hugo-brutalist
+rm -rf .git/modules/themes/hugo-brutalist
+git rm -f themes/hugo-brutalist
 ```
 
 ## Install Make

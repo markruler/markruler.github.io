@@ -51,7 +51,7 @@ run: clean
 
 # git submodule
 submodule-add:
-	git submodule add -b develop git@github.com:markruler/hugo-theme-diary.git themes/hugo-theme-diary
+	git submodule add -b develop git@github.com:markruler/hugo-brutalist.git themes/hugo-brutalist
 .PHONY: submodule-add
 
 submodule-update:
@@ -59,7 +59,7 @@ submodule-update:
 .PHONY: submodule-update
 
 submodule-delete:
-	git submodule deinit -f themes/hugo-theme-diary
-	$(RM) .git/modules/themes/hugo-theme-diary
-	git rm -f themes/hugo-theme-diary
+	git submodule deinit -f themes/hugo-brutalist
+	$(RM) .git/modules/themes/hugo-brutalist
+	git rm -f themes/hugo-brutalist
 .PHONY: submodule-delete
