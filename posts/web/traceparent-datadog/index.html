@@ -547,7 +547,9 @@
 <p><img src="/images/web/traceparent-datadog/akamai-read-error.jpeg" alt="Akamai ERR_READ_ERROR"></p>
 <p>원인을 찾기 위해 클라이언트에서 요청하는 부분부터 추적하고 싶었습니다.
 우리팀에서 사용하는 APM 도구인 데이터독(Datadog)에서는
-<a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum">RUM(Real User Monitoring)을 APM과 연결하면</a>
+<a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=browserrum&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RUM(Real User Monitoring)을 APM과 연결하면</a>
+
+
 클라이언트부터 서버 Span까지 한눈에 확인할 수 있습니다.
 하지만 응답 속도가 Akamai에선 4초 이상이라고 측정되고 Datadog RUM에선 수백ms로 측정되었습니다.
 그래서 Datadog 측에 확인을 요청했습니다.
@@ -561,7 +563,9 @@ Datadog RUM에서는 브라우저에서 서버까지의 duration만 측정한다
 Datadog에서 해당 스펙을 지원하고 있기 때문에 활용해보기로 했습니다.
 Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병목이 발생하는지 확인하기로 했습니다.</p>
 <p><img src="/images/web/traceparent-datadog/datadog-trace-context.webp" alt="datadog-trace-context.png"></p>
-<p><em><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/">Monitor OTel instrumented apps with support for W3C Trace Context | Datadog</a></em></p>
+<p><em><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Monitor OTel instrumented apps with support for W3C Trace Context | Datadog</a>
+
+</em></p>
 <h2 id="traceparent-헤더-형식">Traceparent 헤더 형식</h2>
 <ul>
 <li>해당 권고안에 명시된 헤더가 2개(traceparent, tracestate<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>) 있지만 여기서는 추적을 위한 <code>traceparent</code> 헤더만 살펴보겠습니다.</li>
@@ -570,7 +574,9 @@ Log와 Trace를 연결해서 어디서 에러가 발생하는지, 어디서 병�
 <li><code>version</code>: 8 bits(1 byte). 현재는 00 고정입니다. 2글자의 16진수. ff is forbidden.</li>
 <li><code>trace-id</code>: <strong>128 bits(16 bytes) trace ID, 32글자의 16진수. All zeroes forbidden.</strong></li>
 <li><code>parent-id</code>: 64 bits(8 bytes) span ID, 16글자의 16진수. All zeroes forbidden.</li>
-<li><code>trace-flags</code>: 8 bits(1 byte) <a href="https://en.wikipedia.org/wiki/Bit_field">비트 필드</a>.
+<li><code>trace-flags</code>: 8 bits(1 byte) <a href="https://en.wikipedia.org/wiki/Bit_field?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">비트 필드</a>
+
+.
 데이터독에서는 2가지를 지정할 수 있습니다: Sampled (<code>01</code>), not sampled (<code>00</code>).</li>
 </ul>
 </li>
@@ -668,7 +674,9 @@ _trace_id %{regex(&#34;[a-zA-Z0-9]*&#34;):traceparent.trace_id}
 _parent_id %{regex(&#34;[a-zA-Z0-9]*&#34;):traceparent.parent_id}
 _flags %{regex(&#34;[a-zA-Z0-9]*&#34;):traceparent.flags}
 </code></pre><h2 id="3-apache-http-serverhttpd에서-traceparent-헤더-로그-남기기">3. Apache HTTP Server(httpd)에서 Traceparent 헤더 로그 남기기</h2>
-<p>LogFormat에  <code>%{header_name}i</code> 으로 남기면 <a href="https://httpd.apache.org/docs/2.4/mod/mod_log_config.html#formats">헤더의 값을 로그로 남길 수</a> 있습니다.
+<p>LogFormat에  <code>%{header_name}i</code> 으로 남기면 <a href="https://httpd.apache.org/docs/2.4/mod/mod_log_config.html?utm_source=markruler.github.io#formats" target="_blank" rel="noopener noreferrer">헤더의 값을 로그로 남길 수</a>
+
+ 있습니다.
 httpd의 로그도 Grok Parser를 활용해 traceparent 헤더에서 trace_id를 추출합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#0f0">&lt;!-- httpd.conf --&gt;</span>
 </span></span><span style="display:flex;"><span>&lt;IfModule log_config_module&gt;
@@ -690,7 +698,9 @@ _traceparent (%{word:traceparent.version})?(-%{word:traceparent.trace_id})?(-%{w
 </span></span></span><span style="display:flex;"><span>  --spring.profiles.active=prod <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>&gt; /dev/null &amp;
 </span></span></code></pre></div><ul>
-<li><a href="https://github.com/DataDog/dd-trace-java/releases">dd-java-agent 다운로드</a></li>
+<li><a href="https://github.com/DataDog/dd-trace-java/releases?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">dd-java-agent 다운로드</a>
+
+</li>
 <li>W3C의 traceparent는 128비트 Trace ID(32 lowercase hexadecimal characters)인 반면,
 Datadog은 기본적으로 64비트 Trace ID(decimal numbers)를 지원합니다.</li>
 <li>Datadog도 옵션 <code>dd.trace.128.bit.traceid.generation.enabled</code>을 추가해서 128비트 Trace ID를 출력할 수 있다고 합니다.</li>
@@ -711,27 +721,53 @@ Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 
 <p>이것을 꼼수라고 해야 할지 모르겠지만, 어찌됐건 해당 작업 후 원인을 알 수 없던 문제들을 해결할 수 있었습니다.</p>
 <h1 id="참조">참조</h1>
 <ul>
-<li><a href="https://www.w3.org/TR/trace-context/">Trace Context | W3C</a>
+<li><a href="https://www.w3.org/TR/trace-context/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Trace Context | W3C</a>
+
+
 <ul>
-<li><a href="https://github.com/w3c/trace-context/tree/main/spec">Github(w3c/trace-context) | W3C</a></li>
-<li><a href="https://cloud.google.com/trace/docs/trace-context">Trace context | Google Cloud</a></li>
-<li><a href="https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext">Elastic APM adopts W3C TraceContext | Elastic</a></li>
+<li><a href="https://github.com/w3c/trace-context/tree/main/spec?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Github(w3c/trace-context) | W3C</a>
+
+</li>
+<li><a href="https://cloud.google.com/trace/docs/trace-context?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Trace context | Google Cloud</a>
+
+</li>
+<li><a href="https://www.elastic.co/blog/elastic-apm-adopts-w3c-tracecontext?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Elastic APM adopts W3C TraceContext | Elastic</a>
+
+</li>
 </ul>
 </li>
 <li>Datadog
 <ul>
-<li><a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext">Connect RUM and Traces</a></li>
-<li><a href="https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers">Parsing</a>
+<li><a href="https://docs.datadoghq.com/real_user_monitoring/platform/connect_rum_and_traces/?tab=w3ctracecontext&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Connect RUM and Traces</a>
+
+</li>
+<li><a href="https://docs.datadoghq.com/logs/log_configuration/parsing/?tab=matchers&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Parsing</a>
+
+
 <ul>
-<li><a href="https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers">Grok Parser</a></li>
-<li><a href="https://docs.datadoghq.com/standard-attributes/">Default Standard Attributes</a></li>
+<li><a href="https://docs.datadoghq.com/service_management/events/pipelines_and_processors/grok_parser/?tab=matchers&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Grok Parser</a>
+
+</li>
+<li><a href="https://docs.datadoghq.com/standard-attributes/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Default Standard Attributes</a>
+
+</li>
 </ul>
 </li>
-<li><a href="https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java">Trace Context Propagation</a></li>
-<li><a href="https://docs.datadoghq.com/tracing/trace_collection/library_config/java/">Configuring the Java Tracing Library</a></li>
-<li><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/">Monitor OTel instrumented apps with support for W3C Trace Context</a></li>
-<li><a href="https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/">Remap Custom Severity Values to the Official Log Status</a></li>
-<li><a href="https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs">Correlated Logs Are Not Showing Up In The Trace ID Panel</a></li>
+<li><a href="https://docs.datadoghq.com/tracing/trace_collection/trace_context_propagation/?tab=java&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Trace Context Propagation</a>
+
+</li>
+<li><a href="https://docs.datadoghq.com/tracing/trace_collection/library_config/java/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Configuring the Java Tracing Library</a>
+
+</li>
+<li><a href="https://www.datadoghq.com/blog/monitor-otel-with-w3c-trace-context/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Monitor OTel instrumented apps with support for W3C Trace Context</a>
+
+</li>
+<li><a href="https://docs.datadoghq.com/logs/guide/remap-custom-severity-to-official-log-status/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Remap Custom Severity Values to the Official Log Status</a>
+
+</li>
+<li><a href="https://docs.datadoghq.com/tracing/troubleshooting/correlated-logs-not-showing-up-in-the-trace-id-panel/?tab=jsonlogs&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Correlated Logs Are Not Showing Up In The Trace ID Panel</a>
+
+</li>
 </ul>
 </li>
 </ul>
@@ -740,18 +776,32 @@ Akamai Datastream에서 정확한 duration을 확인할 수 있었는데 해당 
 <hr>
 <ol>
 <li id="fn:1">
-<p>W3C의 권고안에는 <a href="https://www.w3.org/2004/02/Process-20040205/tr.html#maturity-levels">레벨</a>이 있는데
-Trace Context는 <a href="https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/">2020년 2월</a> 최고 레벨인 Recommendation(REC)으로 전환된 권고안입니다.
-올해(2024년)에는 <a href="https://www.w3.org/TR/trace-context-2/">Level 2</a>와 <a href="https://w3c.github.io/trace-context/">Level 3</a>까지 나왔습니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>W3C의 권고안에는 <a href="https://www.w3.org/2004/02/Process-20040205/tr.html?utm_source=markruler.github.io#maturity-levels" target="_blank" rel="noopener noreferrer">레벨</a>
+
+이 있는데
+Trace Context는 <a href="https://www.w3.org/news/2020/trace-context-is-a-w3c-recommendation/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">2020년 2월</a>
+
+ 최고 레벨인 Recommendation(REC)으로 전환된 권고안입니다.
+올해(2024년)에는 <a href="https://www.w3.org/TR/trace-context-2/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Level 2</a>
+
+와 <a href="https://w3c.github.io/trace-context/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Level 3</a>
+
+까지 나왔습니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://www.w3.org/TR/trace-context/#problem-statement">Problem Statement</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://www.w3.org/TR/trace-context/?utm_source=markruler.github.io#problem-statement" target="_blank" rel="noopener noreferrer">Problem Statement</a>
+
+&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://www.w3.org/TR/trace-context/#tracestate-header">tracestate</a>는 <code>key=value</code> 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항입니다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://www.w3.org/TR/trace-context/?utm_source=markruler.github.io#tracestate-header" target="_blank" rel="noopener noreferrer">tracestate</a>
+
+는 <code>key=value</code> 형태로 메타데이터를 전달하기 위해 사용하라고 되어 있는데 선택 사항입니다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
-<p>Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, <a href="https://github.com/DataDog/browser-sdk/issues/1538">beforeSend API를 사용해야 한다고 합니다</a>. 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 것 같습니다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Datadog Log Collection에도 Traceparent 헤더를 추가할 수 있지만, <a href="https://github.com/DataDog/browser-sdk/issues/1538?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">beforeSend API를 사용해야 한다고 합니다</a>
+
+. 2024년 8월 기준 RUM보다 직접 추가하는 것이 나은 것 같습니다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>

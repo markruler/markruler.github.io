@@ -23,7 +23,11 @@
         <guid>https://markruler.github.io/posts/web/cs-visualized-cors/</guid>
         <description>임창수 https://markruler.github.io/posts/web/cs-visualized-cors/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;리디아 할리(Lydia Hallie, &lt;a href=&#34;https://twitter.com/lydiahallie&#34;&gt;@lydiahallie&lt;/a&gt;)가 쓴 &lt;a href=&#34;https://dev.to/lydiahallie/cs-visualized-cors-5b8h&#34;&gt;CS Visualized: CORS&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;리디아 할리(Lydia Hallie, &lt;a href=&#34;https://twitter.com/lydiahallie?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;@lydiahallie&lt;/a&gt;
+
+)가 쓴 &lt;a href=&#34;https://dev.to/lydiahallie/cs-visualized-cors-5b8h?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CS Visualized: CORS&lt;/a&gt;
+
+를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
@@ -35,7 +39,9 @@
 &lt;blockquote&gt;
 &lt;p&gt;❗️ 이 글에서는 HTTP 기본에 대해 설명하지 않겠습니다.
 HTTP 요청과 응답에 대해 더 자세히 알고 싶으시다면 제가 얼마 전에
-작성한 &lt;a href=&#34;https://www.lydiahallie.dev/blog/http11&#34;&gt;짧은 글&lt;/a&gt;이
+작성한 &lt;a href=&#34;https://www.lydiahallie.dev/blog/http11?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;짧은 글&lt;/a&gt;
+
+이
 있습니다. 🙂 제가 사용한 예시에서 HTTP/2 대신 HTTP/1.1을
 사용하지만 CORS에 영향을 미치지는 않습니다.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -112,7 +118,9 @@ HTTP 응답의 특정 CORS 헤더 값에 따라 CORS 메커니즘을 사용할 �
 확인시켜줄 수 있습니다. 이 헤더는 모두 &lt;code&gt;Access-Control-*&lt;/code&gt;로 시작합니다. 🔥
 이 CORS 응답 헤더의 값에 따라 브라우저는 일반적으로 같은 출처
 정책에 의해 차단되는 특정 다른 출처 응답을 허용할 수 있습니다!&lt;/p&gt;
-&lt;p&gt;사용할 수 있는 &lt;a href=&#34;https://fetch.spec.whatwg.org/#http-responses&#34;&gt;여러 CORS 헤더&lt;/a&gt;가
+&lt;p&gt;사용할 수 있는 &lt;a href=&#34;https://fetch.spec.whatwg.org/?utm_source=markruler.github.io#http-responses&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;여러 CORS 헤더&lt;/a&gt;
+
+가
 있지만 브라우저가 다른 출처 자원 접근을 허용하기 위해 필요한 헤더는 하나입니다.
 바로 &lt;code&gt;Access-Control-Allow-Origin&lt;/code&gt;입니다! 🙂 이 헤더 값은 서버의
 &lt;strong&gt;자원에 접근할 수 있는 출처&lt;/strong&gt;를 지정합니다.&lt;/p&gt;
@@ -156,7 +164,9 @@ CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.&lt;/p
 &lt;code&gt;PATCH&lt;/code&gt; 또는 &lt;code&gt;DELETE&lt;/code&gt;와 같은 다른 메서드들은 차단됩니다. ❌&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;다른 CORS 헤더는 무엇이 있으며 어떤 용도로 사용되는지 궁금하다면
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers&#34;&gt;이 목록을 확인해보세요&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS?utm_source=markruler.github.io#The_HTTP_response_headers&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이 목록을 확인해보세요&lt;/a&gt;
+
+.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;CORS는 실제로 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;PATCH&lt;/code&gt;, &lt;code&gt;DELETE&lt;/code&gt; 요청에 대해서는
 다르게 처리합니다! 🙃 이렇게 &amp;ldquo;&lt;em&gt;단순하지 않은&lt;/em&gt;&amp;rdquo; 요청은
@@ -170,7 +180,9 @@ CORS가 나열된 메서드들만 다른 출처 요청을 허용합니다.&lt;/p
 예비 요청은 &lt;code&gt;PUT&lt;/code&gt;, &lt;code&gt;PATCH&lt;/code&gt; 또는 &lt;code&gt;DELETE&lt;/code&gt; 메서드와 같은 다른 모든 요청입니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;단순 요청이 되기 위해 어떤 요구 사항을 충족해야 하는지 궁금하다면 MDN에
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Simple_requests&#34;&gt;유용한 목록&lt;/a&gt;이 있습니다!&lt;/p&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS?utm_source=markruler.github.io#Simple_requests&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;유용한 목록&lt;/a&gt;
+
+이 있습니다!&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;알겠어요, 근데 &amp;ldquo;예비 요청&amp;quot;은 뭐고 왜 이런 일이 일어나는 건가요?&lt;/p&gt;
 &lt;hr&gt;
@@ -215,8 +227,12 @@ CORS 헤더 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt;를 추가�
 (좀 더 많은 사랑을 받아야 합니다 ㅋㅋㅋ) ✨&lt;/p&gt;
 &lt;p&gt;제가 이 블로그 포스트에서 다룰 수 있었던 것보다 더 많은 자료들이 있습니다!
 더 궁금하다면 운 좋게도
-&lt;a href=&#34;https://livebook.manning.com/book/cors-in-action/part-1/&#34;&gt;CORS in Action&lt;/a&gt;이나
-&lt;a href=&#34;https://www.w3.org/wiki/CORS_Enabled&#34;&gt;W3 규격&lt;/a&gt;과 같은 좋은 자료들이 있습니다. 💪🏼&lt;/p&gt;
+&lt;a href=&#34;https://livebook.manning.com/book/cors-in-action/part-1/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CORS in Action&lt;/a&gt;
+
+이나
+&lt;a href=&#34;https://www.w3.org/wiki/CORS_Enabled?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;W3 규격&lt;/a&gt;
+
+과 같은 좋은 자료들이 있습니다. 💪🏼&lt;/p&gt;
 &lt;p&gt;그리고 언제나 그랬듯이 저(Lydia Hallie)와 소통해요! 😊&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
@@ -232,12 +248,24 @@ CORS 헤더 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt;를 추가�
   &lt;/thead&gt;
   &lt;tbody&gt;
       &lt;tr&gt;
-          &lt;td&gt;&lt;a href=&#34;https://www.twitter.com/lydiahallie&#34;&gt;Twitter&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://www.instagram.com/theavocoder&#34;&gt;Instagram&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://www.github.com/lydiahallie&#34;&gt;GitHub&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://www.linkedin.com/in/lydia-hallie&#34;&gt;LinkedIn&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;https://www.youtube.com/channel/UC4EWKIKdKiDtAscQ9BIXwUw&#34;&gt;YouTube&lt;/a&gt;&lt;/td&gt;
-          &lt;td&gt;&lt;a href=&#34;mailto:lydiahallie.dev@gmail.com&#34;&gt;Email&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.twitter.com/lydiahallie?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Twitter&lt;/a&gt;
+
+&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.instagram.com/theavocoder?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Instagram&lt;/a&gt;
+
+&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.github.com/lydiahallie?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;GitHub&lt;/a&gt;
+
+&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.linkedin.com/in/lydia-hallie?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;LinkedIn&lt;/a&gt;
+
+&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;https://www.youtube.com/channel/UC4EWKIKdKiDtAscQ9BIXwUw?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;YouTube&lt;/a&gt;
+
+&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;mailto:lydiahallie.dev@gmail.com&#34;&gt;Email&lt;/a&gt;
+
+&lt;/td&gt;
           &lt;td&gt;&lt;/td&gt;
       &lt;/tr&gt;
   &lt;/tbody&gt;
@@ -255,13 +283,19 @@ CORS 헤더 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt;를 추가�
         <guid>https://markruler.github.io/posts/go/building-bittorrent-client/</guid>
         <description>임창수 https://markruler.github.io/posts/go/building-bittorrent-client/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.jse.li/posts/torrent/&#34;&gt;Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.jse.li/posts/torrent/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)&lt;/a&gt;
+
+를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;&lt;strong&gt;거두절미(tl;dr):&lt;/strong&gt; The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요?
 이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트 프로토콜을 구현할 것입니다.
-바로 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client/&#34;&gt;소스 코드&lt;/a&gt;를 보거나 &lt;a href=&#34;#%EB%AA%A8%EB%91%90-%ED%95%A9%EC%B9%98%EA%B8%B0&#34;&gt;마지막 부분&lt;/a&gt;으로 넘어갈 수 있습니다.&lt;/p&gt;
+바로 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;소스 코드&lt;/a&gt;
+
+를 보거나 &lt;a href=&#34;#%eb%aa%a8%eb%91%90-%ed%95%a9%ec%b9%98%ea%b8%b0&#34;&gt;마지막 부분&lt;/a&gt;
+
+으로 넘어갈 수 있습니다.&lt;/p&gt;
 &lt;p&gt;비트토렌트(BitTorrent)는 인터넷을 통해 파일을 다운로드하고 배포하기 위한 프로토콜입니다.
 다운로더가 중앙 서버와 연결하는 기존의 클라이언트/서버 관계 (예: 넷플릭스에서
 영화를 보거나 지금 읽고 있는 웹 페이지를 불러 오는 것)와 달리,
@@ -270,15 +304,21 @@ CORS 헤더 &lt;code&gt;Access-Control-Allow-Credentials&lt;/code&gt;를 추가�
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/go/bit-torrent/client-server-p2p.png&#34; alt=&#34;client-server-p2p&#34;&gt;&lt;/p&gt;
 &lt;p&gt;이 프로토콜은 지난 20년 동안 진화했으며, 다양한 사람들과 조직들이 암호화(encryption),
 비공개 토렌트(private torrent), 새로운 피어 탐색법과 같은 기능들을 추가했습니다.
-우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 &lt;a href=&#34;https://www.bittorrent.org/beps/bep_0003.html&#34;&gt;2001년 규격&lt;/a&gt;을 구현할 것입니다.&lt;/p&gt;
-&lt;p&gt;저의 실험 재료로 적당한 350MB의 &lt;a href=&#34;https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/#indexlist&#34;&gt;데비안 ISO&lt;/a&gt; 파일을 사용하겠습니다.
+우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 &lt;a href=&#34;https://www.bittorrent.org/beps/bep_0003.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;2001년 규격&lt;/a&gt;
+
+을 구현할 것입니다.&lt;/p&gt;
+&lt;p&gt;저의 실험 재료로 적당한 350MB의 &lt;a href=&#34;https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/?utm_source=markruler.github.io#indexlist&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;데비안 ISO&lt;/a&gt;
+
+ 파일을 사용하겠습니다.
 널리 사용되는 리눅스 배포판은 빠르고 협력적인 피어들이 많이 연결될 것입니다.
 그리고 불법 복제 콘텐츠 다운로드와 관련된 법적, 윤리적 문제를 피할 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;피어-찾기&#34;&gt;피어 찾기&lt;/h1&gt;
 &lt;p&gt;다음과 같은 문제가 있습니다. 우리는 비트토렌트로 파일을 다운로드하려고 하지만 P2P 프로토콜이고 파일을 다운로드할 피어를 찾을 수 없습니다.
 이것은 마치 새로운 도시로 이사해서 친구를 사귀는 것과 같습니다. 어쩌면 우리가 동네 술집이나 밋업 그룹에 가는 것처럼요!
 중앙 집중식 서버는 피어들이 서로를 알 수 있도록 알려주는 &lt;strong&gt;트래커(tracker)&lt;/strong&gt; 의 핵심입니다.
-이들은 HTTP&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 웹 서버일 뿐이며, 데비안의 서버는 &lt;a href=&#34;http://bttracker.debian.org:6969/stat&#34;&gt;http://bttracker.debian.org:6969/stat&lt;/a&gt;에서 찾을 수 있습니다.&lt;/p&gt;
+이들은 HTTP&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 웹 서버일 뿐이며, 데비안의 서버는 &lt;a href=&#34;http://bttracker.debian.org:6969/stat?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;http://bttracker.debian.org:6969/stat&lt;/a&gt;
+
+에서 찾을 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/go/bit-torrent/trackers.png&#34; alt=&#34;trackers&#34;&gt;&lt;/p&gt;
 &lt;p&gt;물론 이러한 중앙 서버는 피어들이 불법 컨텐츠를 교환할 수 있게 둔다면 정부의 단속을 받기 쉽습니다.
 여러분은 불법 컨텐츠로 인해 폐쇄된 TorrentSpy, Popcorn Time, 그리고 KickassTorrents 와 같은 트래커에 대해 읽었을 수 있습니다.
@@ -322,11 +362,19 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 피어들에게서 이 조각들을 다운로드해서 토렌트 파일에 있는 해시와 대조해 보고, 조립해 보고, 파일을 가지게 되는 겁니다!&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/go/bit-torrent/pieces.png&#34; alt=&#34;pieces&#34;&gt;&lt;/p&gt;
 &lt;p&gt;이 메커니즘을 통해 각 조각의 무결성을 검증할 수 있습니다.
-비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 &lt;strong&gt;토렌트 포이즈닝&lt;/strong&gt;(&lt;a href=&#34;https://en.wikipedia.org/wiki/Torrent_poisoning&#34;&gt;torrent poisoning&lt;/a&gt;) 을 막을 수 있습니다.
-공격자가 역상 공격(&lt;a href=&#34;https://en.wikipedia.org/wiki/Preimage_attack&#34;&gt;preimage attack&lt;/a&gt;)을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.&lt;/p&gt;
+비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 &lt;strong&gt;토렌트 포이즈닝&lt;/strong&gt;(&lt;a href=&#34;https://en.wikipedia.org/wiki/Torrent_poisoning?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;torrent poisoning&lt;/a&gt;
+
+) 을 막을 수 있습니다.
+공격자가 역상 공격(&lt;a href=&#34;https://en.wikipedia.org/wiki/Preimage_attack?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;preimage attack&lt;/a&gt;
+
+)을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.&lt;/p&gt;
 &lt;p&gt;B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목적이 아닙니다.
-이해하기 쉬운 Fredrik Lundh의 &lt;a href=&#34;https://effbot.org/zone/bencode.htm&#34;&gt;50줄짜리 파서&lt;/a&gt;를 찾았지만,
-이 프로젝트에서는 &lt;a href=&#34;https://github.com/jackpal/bencode-go&#34;&gt;github.com/jackpal/bencode-go&lt;/a&gt; 을 사용했습니다.&lt;/p&gt;
+이해하기 쉬운 Fredrik Lundh의 &lt;a href=&#34;https://effbot.org/zone/bencode.htm?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;50줄짜리 파서&lt;/a&gt;
+
+를 찾았지만,
+이 프로젝트에서는 &lt;a href=&#34;https://github.com/jackpal/bencode-go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/jackpal/bencode-go&lt;/a&gt;
+
+ 을 사용했습니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;import&lt;/span&gt; (
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;github.com/jackpal/bencode-go&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
@@ -352,7 +400,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &amp;amp;bto, &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;저는 구조체를 상대적으로 평평하게 유지하는 것을 좋아하고
 애플리케이션 구조체를 직렬화 구조체와 분리하는 것을 좋아하기 때문에
 &lt;code&gt;TorrentFile&lt;/code&gt;이라는 다른 평탄한 구조체를 내보내고
@@ -374,7 +424,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;func&lt;/span&gt; (bto bencodeTorrent) &lt;span style=&#34;color:#ff0&#34;&gt;toTorrentFile&lt;/span&gt;() (TorrentFile, &lt;span style=&#34;color:#ee82ee&#34;&gt;error&lt;/span&gt;) {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// …&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go#L120-L138&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.github.io#L120-L138&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h2 id=&#34;트래커로부터-피어-찾기&#34;&gt;트래커로부터 피어 찾기&lt;/h2&gt;
 &lt;p&gt;이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 &lt;strong&gt;알리고&lt;/strong&gt; 다른 피어들의 목록을 검색해 보겠습니다.
 .torrent 파일에 제공된 &amp;lsquo;announce&amp;rsquo; URL에 몇 가지 쿼리 파라미터와 함께 GET 요청을 하면 됩니다.&lt;/p&gt;
@@ -395,11 +447,15 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  base.RawQuery = params.&lt;span style=&#34;color:#ff0&#34;&gt;Encode&lt;/span&gt;()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; base.&lt;span style=&#34;color:#ff0&#34;&gt;String&lt;/span&gt;(), &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go#L19-L35&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go?utm_source=markruler.github.io#L19-L35&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;여기서 중요한 것은 다음과 같습니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;info_hash&lt;/strong&gt;: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 &lt;code&gt;info&lt;/code&gt; 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;peer_id&lt;/strong&gt;: 트래커와 피어들에게 &lt;code&gt;우리&lt;/code&gt;를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 &lt;code&gt;-TR2940-k8hj0wgej6ch&lt;/code&gt;와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다. &lt;a href=&#34;https://www.bittorrent.org/beps/bep_0020.html&#34;&gt;(Peer ID Conventions)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;peer_id&lt;/strong&gt;: 트래커와 피어들에게 &lt;code&gt;우리&lt;/code&gt;를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 &lt;code&gt;-TR2940-k8hj0wgej6ch&lt;/code&gt;와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다. &lt;a href=&#34;https://www.bittorrent.org/beps/bep_0020.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;(Peer ID Conventions)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/go/bit-torrent/info-hash-peer-id.png&#34; alt=&#34;info-hash-peer-id&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;트래커-응답-분석&#34;&gt;트래커 응답 분석&lt;/h2&gt;
@@ -441,7 +497,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; peers, &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go&#34;&gt;github.com/veggiedefender/torrent-client/peers/peers.go&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/peers/peers.go&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h1 id=&#34;피어로부터-다운로드하기&#34;&gt;피어로부터 다운로드하기&lt;/h1&gt;
 &lt;p&gt;이제 피어 목록이 있습니다.
 피어와 연결하여 조각을 다운로드할 시간입니다!
@@ -457,7 +515,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt; {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;, err
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go#L65-L69&#34;&gt;github.com/veggiedefender/torrent-client/client/client.go#L65-L69&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go?utm_source=markruler.github.io#L65-L69&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/client/client.go#L65-L69&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;연결할 수 없는 피어에 너무 많은 시간을 낭비하지 않도록 시간 제한을 설정했습니다.
 대부분의 경우 표준 TCP 연결입니다.&lt;/p&gt;
 &lt;h2 id=&#34;핸드셰이크-완료&#34;&gt;핸드셰이크 완료&lt;/h2&gt;
@@ -473,7 +533,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;ol&gt;
 &lt;li&gt;항상 19로 지정된 프로토콜 식별자의 길이. (16진수로는 0x13)&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;pstr&lt;/strong&gt;이라 불리는 프로토콜 식별자는 항상 &lt;code&gt;BitTorrent protocol&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;모두 0으로 지정된 &lt;strong&gt;8개의 예약된 바이트&lt;/strong&gt;. 그 중 일부를 1로 뒤집어서 특정 &lt;a href=&#34;http://www.bittorrent.org/beps/bep_0010.html&#34;&gt;확장 기능&lt;/a&gt;을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.&lt;/li&gt;
+&lt;li&gt;모두 0으로 지정된 &lt;strong&gt;8개의 예약된 바이트&lt;/strong&gt;. 그 중 일부를 1로 뒤집어서 특정 &lt;a href=&#34;http://www.bittorrent.org/beps/bep_0010.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;확장 기능&lt;/a&gt;
+
+을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.&lt;/li&gt;
 &lt;li&gt;우리가 원하는 파일을 식별할 앞서 계산한 &lt;strong&gt;infohash&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;우리 스스로를 식별하기 위해 만든 &lt;strong&gt;Peer ID&lt;/strong&gt;.&lt;/li&gt;
 &lt;/ol&gt;
@@ -509,7 +571,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// 역직렬화 수행&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#0f0&#34;&gt;// ...&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go&#34;&gt;github.com/veggiedefender/torrent-client/handshake/handshake.go&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/handshake/handshake.go&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h2 id=&#34;메시지-주고-받기&#34;&gt;메시지 주고 받기&lt;/h2&gt;
 &lt;p&gt;첫 핸드셰이크를 마치면 &lt;code&gt;메시지&lt;/code&gt;를 주고받을 수 있습니다.
 하지만 나머지 피어들이 메시지를 받아들일 준비가 안 되어 있다면,
@@ -562,7 +626,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  copy(buf[&lt;span style=&#34;color:#f60&#34;&gt;5&lt;/span&gt;:], m.Payload)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; buf
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L90-L103&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L90-L103&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.github.io#L90-L103&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L90-L103&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
 우리는 4바이트를 읽고 메시지의 &lt;strong&gt;길이&lt;/strong&gt;를 얻기 위해 &lt;code&gt;uint32&lt;/code&gt;로 해석합니다.
 그런 다음 &lt;strong&gt;ID&lt;/strong&gt;(처음 1바이트) 및 &lt;strong&gt;payload&lt;/strong&gt;(나머지 바이트)를 얻습니다.&lt;/p&gt;
@@ -593,7 +659,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &amp;amp;m, &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go#L105-L131&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L105-L131&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.github.io#L105-L131&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/message/message.go#L105-L131&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h3 id=&#34;비트-필드-bitfields&#34;&gt;비트 필드 (Bitfields)&lt;/h3&gt;
 &lt;p&gt;가장 흥미로운 유형의 메시지 중 하나는 &lt;strong&gt;비트 필드(bitfield)&lt;/strong&gt; 입니다.
 이 자료 구조는 피어들이 우리에게 보낼 수 있는 조각을 효율적으로 인코딩하는 데 사용됩니다.
@@ -622,7 +690,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  offset := index % &lt;span style=&#34;color:#f60&#34;&gt;8&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  bf[byteIndex] |= &lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt; &amp;lt;&amp;lt; (&lt;span style=&#34;color:#f60&#34;&gt;7&lt;/span&gt; - offset)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go&#34;&gt;github.com/veggiedefender/torrent-client/bitfield/bitfield.go&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/bitfield/bitfield.go&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h2 id=&#34;모두-합치기&#34;&gt;모두 합치기&lt;/h2&gt;
 &lt;p&gt;이제 토렌트를 다운로드하는 데 필요한 모든 도구를 확보했습니다.
 트래커에서 얻은 피어 목록이 있으며, TCP로 연결하고 핸드셰이크를 하며,
@@ -631,7 +701,9 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 상호 작용하는 피어들의 &lt;strong&gt;상태&lt;/strong&gt;를 관리하는 것입니다.
 둘 다 고전적으로 어려운 문제입니다.&lt;/p&gt;
 &lt;h3 id=&#34;동시성-관리-채널channel을-큐queue로&#34;&gt;동시성 관리: 채널(channel)을 큐(queue)로&lt;/h3&gt;
-&lt;p&gt;Go에서는 &lt;a href=&#34;https://blog.golang.org/share-memory-by-communicating&#34;&gt;통신을 통해 메모리를 공유&lt;/a&gt;하며
+&lt;p&gt;Go에서는 &lt;a href=&#34;https://blog.golang.org/share-memory-by-communicating?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;통신을 통해 메모리를 공유&lt;/a&gt;
+
+하며
 Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;두 채널을 설정하여 동시적인 작업자들(concurrent workers)을 동기화합니다.
 하나는 피어 간에 작업(다운로드할 조각)을 분배하기 위한 채널이고,
@@ -661,7 +733,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  donePieces++
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;close(workQueue)
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L188-L214&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L188-L214&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;트래커에서 받은 피어마다 작업자 고루틴을 생성합니다.
 피어와 연결하고 핸드셰이크한 다음 &lt;code&gt;workQueue&lt;/code&gt;에서 작업을 검색하여 다운로드를 시도하고,
 &lt;code&gt;results&lt;/code&gt; 채널을 통해 다운로드한 조각들을 다시 보냅니다.&lt;/p&gt;
@@ -703,7 +777,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    results &amp;lt;- &amp;amp;pieceResult{pw.index, buf}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L133-L169&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L133-L169&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h3 id=&#34;상태-관리&#34;&gt;상태 관리&lt;/h3&gt;
 &lt;p&gt;구조체에 있는 각 피어들을 추적하고 메시지를 읽을 때 해당 구조체의 필드값을 수정합니다.
 피어에서 다운로드한 용량, 요청한 용량, 중단(choked) 여부 등의 데이터가 포함됩니다.
@@ -735,7 +811,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L53-L83&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L53-L83&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h3 id=&#34;요청을-보낼-시간입니다&#34;&gt;요청을 보낼 시간입니다!&lt;/h3&gt;
 &lt;p&gt;파일, 조각 및 조각 해시는 전부가 아닙니다. 조각을 &lt;strong&gt;블록&lt;/strong&gt;으로 세분하여 더 발전시킬 수 있습니다.
 블록은 조각의 일부입니다. 해당 블록이 속한 조각의 &lt;strong&gt;인덱스&lt;/strong&gt;,
@@ -753,7 +831,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/go/bit-torrent/pipelining.png&#34; alt=&#34;pipelining&#34;&gt;&lt;/p&gt;
 &lt;p&gt;일반적으로 비트토렌트 클라이언트는 5개의 파이프라인 요청 큐를 유지했으며, 이것이 제가 사용할 값입니다.
 파이프라인을 늘리면 다운로드 속도가 최대 두 배까지 빨라진다는 것을 알았습니다.&lt;/p&gt;
-&lt;p&gt;최신 클라이언트는 &lt;a href=&#34;https://luminarys.com/posts/writing-a-bittorrent-client.html&#34;&gt;적응형(adaptive)&lt;/a&gt; 큐 크기를
+&lt;p&gt;최신 클라이언트는 &lt;a href=&#34;https://luminarys.com/posts/writing-a-bittorrent-client.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;적응형(adaptive)&lt;/a&gt;
+
+ 큐 크기를
 사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
 이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// MaxBlockSize 요청할 수 있는 최대 바이트 수&lt;/span&gt;
@@ -801,7 +881,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;return&lt;/span&gt; state.buf, &lt;span style=&#34;color:#f00&#34;&gt;nil&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go#L85-L123&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L85-L123&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h3 id=&#34;maingo&#34;&gt;main.go&lt;/h3&gt;
 &lt;p&gt;아주 간단합니다. 거의 다 왔어요.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;package&lt;/span&gt; main
@@ -827,12 +909,18 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      log.&lt;span style=&#34;color:#ff0&#34;&gt;Fatal&lt;/span&gt;(err)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  }
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go&#34;&gt;github.com/veggiedefender/torrent-client/main.go&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL&#34;&gt;데모 영상&lt;/a&gt;&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;github.com/veggiedefender/torrent-client/main.go&lt;/a&gt;
+
+&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;데모 영상&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;h1 id=&#34;이것이-전부가-아닙니다&#34;&gt;이것이 전부가 아닙니다&lt;/h1&gt;
 &lt;p&gt;간결함을 위해 몇 가지 중요한 부분 코드만 포함시켰습니다.
 특히 글루 코드, 파싱, 유닛 테스트, 글자를 만드는 지루한 부분은 생략했습니다.
-관심 있으시다면 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client&#34;&gt;전체 소스 코드&lt;/a&gt;를 확인하세요.&lt;/p&gt;
+관심 있으시다면 &lt;a href=&#34;https://github.com/veggiedefender/torrent-client?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;전체 소스 코드&lt;/a&gt;
+
+를 확인하세요.&lt;/p&gt;
 &lt;hr&gt;
 &lt;blockquote&gt;
 &lt;p&gt;역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.&lt;/p&gt;
@@ -849,7 +937,9 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;일부 트래커는 대역폭을 절약하기 위해 &lt;a href=&#34;http://bittorrent.org/beps/bep_0015.html&#34;&gt;[UDP]&lt;/a&gt; 바이너리 프로토콜을 사용합니다&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;일부 트래커는 대역폭을 절약하기 위해 &lt;a href=&#34;http://bittorrent.org/beps/bep_0015.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;[UDP]&lt;/a&gt;
+
+ 바이너리 프로토콜을 사용합니다&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;역주: network byte order -&amp;gt; big-endian / host byte order -&amp;gt; little-endian&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
@@ -873,28 +963,54 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
         <description>임창수 https://markruler.github.io/posts/shell/vim-editor-shortcuts/ -&lt;p&gt;서버에서 파일을 편집하기 위해 Vim 에디터를 사용할 일이 많은데,
 제가 사용하는 설정과 자주 쓰는 명령어를 정리합니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9E%85%EB%A0%A5-%EB%AA%A8%EB%93%9C-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%A7%80%EB%A7%89-%ED%96%89-%EB%AA%A8%EB%93%9C-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9e%85%eb%a0%a5-%eb%aa%a8%eb%93%9c-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%a7%88%ec%a7%80%eb%a7%89-%ed%96%89-%eb%aa%a8%eb%93%9c-last-line-mode&#34;&gt;마지막 행 모드 (Last Line Mode)&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#last-line-command-&#34;&gt;Last Line Command (:)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#search-mode--&#34;&gt;Search mode (/, ?)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#last-line-command-&#34;&gt;Last Line Command (:)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#search-mode--&#34;&gt;Search mode (/, ?)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%AA%85%EB%A0%B9-%EB%AA%A8%EB%93%9C-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%aa%85%eb%a0%b9-%eb%aa%a8%eb%93%9c-command-mode&#34;&gt;명령 모드 (Command Mode)&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%8F%99&#34;&gt;이동&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%84%EB%8B%A8%ED%95%9C-%ED%8E%B8%EC%A7%91&#34;&gt;간단한 편집&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%82%AD%EC%A0%9C&#34;&gt;삭제&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B9%84%EC%A3%BC%EC%96%BC-%EB%AA%A8%EB%93%9Cvisual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%99%94%EB%A9%B4-%EB%B6%84%ED%95%A0&#34;&gt;화면 분할&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9d%b4%eb%8f%99&#34;&gt;이동&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b0%84%eb%8b%a8%ed%95%9c-%ed%8e%b8%ec%a7%91&#34;&gt;간단한 편집&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%82%ad%ec%a0%9c&#34;&gt;삭제&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b9%84%ec%a3%bc%ec%96%bc-%eb%aa%a8%eb%93%9cvisual-mode&#34;&gt;비주얼 모드(visual mode)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%99%94%eb%a9%b4-%eb%b6%84%ed%95%a0&#34;&gt;화면 분할&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%A4%EC%A0%95-vimrc&#34;&gt;설정 (.vimrc)&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%84%a4%ec%a0%95-vimrc&#34;&gt;설정 (.vimrc)&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%94%8C%EB%9F%AC%EA%B7%B8%EC%9D%B8&#34;&gt;플러그인&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%94%8c%eb%9f%ac%ea%b7%b8%ec%9d%b8&#34;&gt;플러그인&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;입력-모드-insert-mode&#34;&gt;입력 모드 (Insert Mode)&lt;/h1&gt;
 &lt;ul&gt;
@@ -1101,11 +1217,19 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/shell/vim/vim.png&#34; alt=&#34;vim&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;플러그인&#34;&gt;플러그인&lt;/h2&gt;
 &lt;p&gt;Vim에서 플러그인은 일반적으로 3rd-party 플러그인 매니저를 사용해서 관리합니다.
-대표적으로 &lt;a href=&#34;https://github.com/junegunn/vim-plug&#34;&gt;vim-plug&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/VundleVim/Vundle.vim&#34;&gt;Vundle&lt;/a&gt;,
-&lt;a href=&#34;https://github.com/tpope/vim-pathogen&#34;&gt;Pathogen&lt;/a&gt; 등이 사용됩니다.
+대표적으로 &lt;a href=&#34;https://github.com/junegunn/vim-plug?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;vim-plug&lt;/a&gt;
+
+,
+&lt;a href=&#34;https://github.com/VundleVim/Vundle.vim?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Vundle&lt;/a&gt;
+
+,
+&lt;a href=&#34;https://github.com/tpope/vim-pathogen?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Pathogen&lt;/a&gt;
+
+ 등이 사용됩니다.
 Neovim을 사용한다면
-&lt;a href=&#34;https://github.com/folke/lazy.nvim&#34;&gt;lazy.nvim&lt;/a&gt;과 같은 Neovim 전용 플러그인 매니저도 있습니다.&lt;/p&gt;
+&lt;a href=&#34;https://github.com/folke/lazy.nvim?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;lazy.nvim&lt;/a&gt;
+
+과 같은 Neovim 전용 플러그인 매니저도 있습니다.&lt;/p&gt;
 &lt;p&gt;여기서는 가장 널리 쓰이고 간단한 &lt;strong&gt;vim-plug&lt;/strong&gt;를 사용합니다.
 먼저 플러그인 매니저를 설치합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -1131,12 +1255,18 @@ Neovim을 사용한다면
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:source %
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;:PlugInstall
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;번거롭다면 유명한 vimrc를 가져와서 사용해도 됩니다.
-대표적으로 &lt;a href=&#34;https://github.com/amix/vimrc&#34;&gt;amix/vimrc&lt;/a&gt;가 있습니다.
+대표적으로 &lt;a href=&#34;https://github.com/amix/vimrc?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;amix/vimrc&lt;/a&gt;
+
+가 있습니다.
 (플러그인 매니저로 Pathogen을 사용)&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.vim.org/docs.php&#34;&gt;Vim Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://johngrib.github.io/wiki/two-views-of-vim/&#34;&gt;Vim, 두 가지 관점&lt;/a&gt; | 기계인간 John Grib&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.vim.org/docs.php?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Vim Documentation&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://johngrib.github.io/wiki/two-views-of-vim/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Vim, 두 가지 관점&lt;/a&gt;
+
+ | 기계인간 John Grib&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/posts/shell/vim-editor-shortcuts/ - Im Changsu | Since 2020</description>
         </item>
@@ -1151,7 +1281,9 @@ Neovim을 사용한다면
         <guid>https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/</guid>
         <description>임창수 https://markruler.github.io/posts/nfv/beginners-guide-docker-container-nfv/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to Docker Container in NFV&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to Docker Container in NFV&lt;/a&gt;
+
+를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;li&gt;2016년 3월 3일에 쓰여진 글입니다.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1191,7 +1323,9 @@ LXC와 도커 모두 리눅스에 뿌리를 두고 있습니다.&lt;/p&gt;
 &lt;p&gt;이제 NFV 아키텍처를 살펴보겠습니다.&lt;/p&gt;
 &lt;h2 id=&#34;1단계-nfv-아키텍처에서-하이퍼바이저-살펴보기&#34;&gt;1단계: NFV 아키텍처에서 하이퍼바이저 살펴보기&lt;/h2&gt;
 &lt;p&gt;아래 다이어그램은 여러분이 여러 번 봤을 법한 NFV 아키텍처를 보여줍니다.
-(모르시는 분은 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;여기를 확인해주세요&lt;/a&gt;)&lt;/p&gt;
+(모르시는 분은 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;여기를 확인해주세요&lt;/a&gt;
+
+)&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/hypervisor-in-nfv.png&#34; alt=&#34;hypervisor-in-nfv&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;그림 1&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;이 논의를 위해 NFVI (NFV Infrastructure) 부분만 확대해서 살펴보겠습니다.
@@ -1284,7 +1418,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;reference&#34;&gt;Reference&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md&#34;&gt;kubernetes/build/README.md&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/README.md?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;kubernetes/build/README.md&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;사용할-명령어&#34;&gt;사용할 명령어&lt;/h2&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# master 브랜치&lt;/span&gt;
@@ -1306,7 +1442,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;build/root/Makefile
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;실제로-빌드되는-makefile&#34;&gt;실제로 빌드되는 Makefile&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile&#34;&gt;build/root/Makefile&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/build/root/Makefile?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;build/root/Makefile&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;all 타겟은 WHAT 전달인자와 함께 build.sh 쉘 스크립트 파일을 실행시킨다.&lt;/li&gt;
@@ -1341,7 +1479,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;endif
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;all-generated_files&#34;&gt;all: generated_files&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh&#34;&gt;hack/make-rules/build.sh&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;hack/make-rules/build.sh&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e5e5e5&#34;&gt;#!/usr/bin/env bash
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1360,7 +1500,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;kube::golang::place_bins
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kubegolang&#34;&gt;kube::golang::&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh&#34;&gt;hack/lib/golang.sh&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/lib/golang.sh?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;hack/lib/golang.sh&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
 &lt;li&gt;참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.&lt;/li&gt;
@@ -1392,7 +1534,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;로그-레벨&#34;&gt;로그 레벨&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh&#34;&gt;hack/lib/logging.sh&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/master/hack/lib/logging.sh?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;hack/lib/logging.sh&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-makefile&#34; data-lang=&#34;makefile&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# This controls the verbosity of the build. Higher numbers mean more output.
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#eedd82&#34;&gt;KUBE_VERBOSE&lt;/span&gt; ?= &lt;span style=&#34;color:#f60&#34;&gt;4&lt;/span&gt;
@@ -1414,7 +1558,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;cmdkubectl&#34;&gt;cmd/kubectl&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go&#34;&gt;kubectl.go&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/cmd/kubectl/kubectl.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;kubectl.go&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;package&lt;/span&gt; main
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
@@ -1452,13 +1598,17 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		os.&lt;span style=&#34;color:#ff0&#34;&gt;Exit&lt;/span&gt;(&lt;span style=&#34;color:#f60&#34;&gt;1&lt;/span&gt;)
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmd&#34;&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;&lt;/h3&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;pkgkubectlcmd&#34;&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.19/pkg/kubectl/cmd/cmd.go?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;pkg/kubectl/cmd&lt;/a&gt;
+
+&lt;/h3&gt;
 &lt;h2 id=&#34;디버깅&#34;&gt;디버깅&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;환경은 VS Code에 github.com/go-delve/delve/cmd/dlv 를 설치한다.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/docs/editor/debugging&#34;&gt;launch.json&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://code.visualstudio.com/docs/editor/debugging?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;launch.json&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;#34;version&amp;#34;: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;0.2.0&amp;#34;&lt;/span&gt;,
@@ -1488,17 +1638,33 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/cloud/monitor-trace-log-metric/</guid>
         <description>임창수 https://markruler.github.io/posts/cloud/monitor-trace-log-metric/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B4%80%EC%B8%A1-%EA%B0%80%EB%8A%A5%EC%84%B1-observability&#34;&gt;관측 가능성 (Observability)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A9%94%ED%8A%B8%EB%A6%ADmetric-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EC%83%81%ED%83%9C%EB%82%98-%EC%84%B1%EB%8A%A5%EC%9D%B4-%EC%96%B4%EB%96%A4%EC%A7%80&#34;&gt;메트릭(Metric): 시스템 상태나 성능이 어떤지&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A1%9C%EA%B7%B8event-logging-%EB%AC%B4%EC%8A%A8-%EC%9D%BC%EC%9D%B4-%EC%9E%88%EC%97%88%EB%8A%94%EC%A7%80&#34;&gt;로그(Event Logging): 무슨 일이 있었는지&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8A%A4tracing-%EC%9A%94%EC%B2%AD%EC%9D%B4-%EC%96%B4%EB%94%94%EC%84%9C-%EC%A7%80%EC%97%B0%EB%90%98%EA%B1%B0%EB%82%98-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%96%88%EB%8A%94%EC%A7%80&#34;&gt;트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b4%80%ec%b8%a1-%ea%b0%80%eb%8a%a5%ec%84%b1-observability&#34;&gt;관측 가능성 (Observability)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%a9%94%ed%8a%b8%eb%a6%admetric-%ec%8b%9c%ec%8a%a4%ed%85%9c-%ec%83%81%ed%83%9c%eb%82%98-%ec%84%b1%eb%8a%a5%ec%9d%b4-%ec%96%b4%eb%96%a4%ec%a7%80&#34;&gt;메트릭(Metric): 시스템 상태나 성능이 어떤지&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%a1%9c%ea%b7%b8event-logging-%eb%ac%b4%ec%8a%a8-%ec%9d%bc%ec%9d%b4-%ec%9e%88%ec%97%88%eb%8a%94%ec%a7%80&#34;&gt;로그(Event Logging): 무슨 일이 있었는지&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8a%a4tracing-%ec%9a%94%ec%b2%ad%ec%9d%b4-%ec%96%b4%eb%94%94%ec%84%9c-%ec%a7%80%ec%97%b0%eb%90%98%ea%b1%b0%eb%82%98-%eb%ac%b8%ec%a0%9c%ea%b0%80-%eb%b0%9c%ec%83%9d%ed%96%88%eb%8a%94%ec%a7%80&#34;&gt;트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B6%84%EC%82%B0-%ED%8A%B8%EB%A0%88%EC%9D%B4%EC%8B%B1-distributed-tracing&#34;&gt;분산 트레이싱 (Distributed tracing)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b6%84%ec%82%b0-%ed%8a%b8%eb%a0%88%ec%9d%b4%ec%8b%b1-distributed-tracing&#34;&gt;분산 트레이싱 (Distributed tracing)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81-monitoring&#34;&gt;모니터링 (Monitoring)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%94%84%EB%A1%9C%ED%8C%8C%EC%9D%BC%EB%A7%81-profiling&#34;&gt;프로파일링 (Profiling)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%aa%a8%eb%8b%88%ed%84%b0%eb%a7%81-monitoring&#34;&gt;모니터링 (Monitoring)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%94%84%eb%a1%9c%ed%8c%8c%ec%9d%bc%eb%a7%81-profiling&#34;&gt;프로파일링 (Profiling)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;관측-가능성-observability&#34;&gt;관측 가능성 (Observability)&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;제어 이론에서&lt;/strong&gt;
@@ -1515,7 +1681,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;메트릭은 시스템의 성능과 동작을 측정한 수치입니다.
 예를 들면 CPU 사용률, 응답 시간, 오류율 등이 있습니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://prometheus.io/&#34;&gt;Prometheus&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://prometheus.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Prometheus&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;로그event-logging-무슨-일이-있었는지&#34;&gt;로그(Event Logging): 무슨 일이 있었는지&lt;/h1&gt;
 &lt;p&gt;로그는 시스템 프로세스의 개별 이벤트를 시간 순서대로 기록하는 것입니다.
@@ -1526,9 +1694,17 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/kibana5-fluentd.png&#34; alt=&#34;kibana5-fluentd&#34;&gt;
 &lt;em&gt;Fluentd-Kibana&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/&#34;&gt;Elastic Stack&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.fluentd.org/&#34;&gt;Fluentd&lt;/a&gt; + &lt;a href=&#34;https://grafana.com/oss/loki/&#34;&gt;Grafana Loki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/&#34;&gt;Datadog Log Management&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.elastic.co/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Elastic Stack&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.fluentd.org/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Fluentd&lt;/a&gt;
+
+ + &lt;a href=&#34;https://grafana.com/oss/loki/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Grafana Loki&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/logs/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Datadog Log Management&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;트레이스tracing-요청이-어디서-지연되거나-문제가-발생했는지&#34;&gt;트레이스(Tracing): 요청이 어디서 지연되거나 문제가 발생했는지&lt;/h1&gt;
 &lt;p&gt;사용자의 트래픽이 지나가는 애플리케이션의 전체 스택을 추적합니다.
@@ -1540,10 +1716,18 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/jaeger-embed-trace-view.png&#34; alt=&#34;jaeger-embed-trace-view&#34;&gt;
 &lt;em&gt;Jaeger&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.jaegertracing.io/&#34;&gt;Jaeger&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://opentracing.io/&#34;&gt;OpenTracing&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/1/strace&#34;&gt;strace&lt;/a&gt; - Linux man page&lt;/li&gt;
-&lt;li&gt;구글 크롬의 &lt;a href=&#34;https://developer.chrome.com/docs/devtools/network#load&#34;&gt;Network log&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.jaegertracing.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Jaeger&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://opentracing.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;OpenTracing&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://linux.die.net/man/1/strace?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;strace&lt;/a&gt;
+
+ - Linux man page&lt;/li&gt;
+&lt;li&gt;구글 크롬의 &lt;a href=&#34;https://developer.chrome.com/docs/devtools/network?utm_source=markruler.github.io#load&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Network log&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;분산-트레이싱-distributed-tracing&#34;&gt;분산 트레이싱 (Distributed tracing)&lt;/h2&gt;
 &lt;p&gt;분산 트레이싱은 &amp;lsquo;종단 간 트레이싱&amp;rsquo; 또는 &amp;lsquo;워크플로 중심 트레이싱&amp;rsquo;이라고도 불립니다.
@@ -1573,54 +1757,106 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/grafana-visualize.jpg&#34; alt=&#34;grafana-visualize&#34;&gt;
 &lt;em&gt;Grafana&lt;/em&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://grafana.com/&#34;&gt;Grafana&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://thanos.io/&#34;&gt;Thanos&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/getting_started/&#34;&gt;Datadog&lt;/a&gt; (유료)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://grafana.com/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Grafana&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://thanos.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Thanos&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/getting_started/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Datadog&lt;/a&gt;
+
+ (유료)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;프로파일링-profiling&#34;&gt;프로파일링 (Profiling)&lt;/h1&gt;
 &lt;p&gt;프로그램의 공간(메모리) 또는 시간 복잡성, 특정 명령의 사용 또는 빈도를 측정하는
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_program_analysis&#34;&gt;동적 프로그램 분석(Dynamic program analysis)&lt;/a&gt;의 한 형태입니다.
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Dynamic_program_analysis?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;동적 프로그램 분석(Dynamic program analysis)&lt;/a&gt;
+
+의 한 형태입니다.
 모니터링과 달리 벤치마킹하는 데에 중점을 둡니다.
 분산 환경보다 단일 애플리케이션을 배포하기 전 성능 테스트 및 계측에 쓰입니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/cloud/android-profiler-callouts.png&#34; alt=&#34;android-profiler-callouts&#34;&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/java-profilers&#34;&gt;A Guide to Java Profilers&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/profiler/&#34;&gt;Datadog Continuous Profiler&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.android.com/studio/profile&#34;&gt;Android Profiler&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.baeldung.com/java-profilers?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;A Guide to Java Profilers&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.datadoghq.com/tracing/profiler/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Datadog Continuous Profiler&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.android.com/studio/profile?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Android Profiler&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://landscape.cncf.io/&#34;&gt;CNCF Landscape&lt;/a&gt; - Observability 파트&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Observability&#34;&gt;Observability&lt;/a&gt; | Wikipedia
+&lt;li&gt;&lt;a href=&#34;https://landscape.cncf.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CNCF Landscape&lt;/a&gt;
+
+ - Observability 파트&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Observability?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Observability&lt;/a&gt;
+
+ | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791158391959&#34;&gt;&amp;lt;마스터링 분산 추적&amp;gt;&lt;/a&gt; | 유리 슈쿠로&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192987576&#34;&gt;&amp;lt;모니터링의 새로운 미래 관측 가능성&amp;gt;&lt;/a&gt; | 정현석, 진미란&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791162243053&#34;&gt;&amp;lt;BPF로 리눅스 관측 가능성 향상하기&amp;gt;&lt;/a&gt; | 데이비드 칼라베라, 로렌초 폰타나&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791158391959&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;&amp;lt;마스터링 분산 추적&amp;gt;&lt;/a&gt;
+
+ | 유리 슈쿠로&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192987576&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;&amp;lt;모니터링의 새로운 미래 관측 가능성&amp;gt;&lt;/a&gt;
+
+ | 정현석, 진미란&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791162243053&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;&amp;lt;BPF로 리눅스 관측 가능성 향상하기&amp;gt;&lt;/a&gt;
+
+ | 데이비드 칼라베라, 로렌초 폰타나&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Software_metric&#34;&gt;Metric&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Logging_(software)&#34;&gt;Logging&lt;/a&gt; | Wikipedia
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Software_metric?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Metric&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Logging_%28software%29?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Logging&lt;/a&gt;
+
+ | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_management&#34;&gt;Log management&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_analysis&#34;&gt;Log analysis&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_management?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Log management&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_analysis?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Log analysis&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Tracing_(software)&#34;&gt;Tracing&lt;/a&gt; | Wikipedia
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Tracing_%28software%29?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Tracing&lt;/a&gt;
+
+ | Wikipedia
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Audit_trail&#34;&gt;Audit trail&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://opentracing.io/docs/overview/what-is-tracing/&#34;&gt;What is Distributed Tracing? - OpenTracing&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Audit_trail?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Audit trail&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://opentracing.io/docs/overview/what-is-tracing/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;What is Distributed Tracing? - OpenTracing&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.betterevaluation.org/methods-approaches/themes/monitoring&#34;&gt;Monitoring&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.betterevaluation.org/methods-approaches/themes/monitoring?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Monitoring&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Application_performance_management&#34;&gt;Application performance management&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/System_monitor&#34;&gt;System monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Event_monitoring&#34;&gt;Event monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Network_monitoring&#34;&gt;Network monitoring&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_monitor&#34;&gt;Log monitor&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Application_performance_management?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Application performance management&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/System_monitor?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;System monitoring&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Event_monitoring?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Event monitoring&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Network_monitoring?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Network monitoring&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Log_monitor?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Log monitor&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Profiling_(computer_programming)&#34;&gt;Profiling&lt;/a&gt; | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Profiling_%28computer_programming%29?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Profiling&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
@@ -1632,13 +1868,17 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;한국어로는 다양하게 번역되는데 &lt;strong&gt;관측 가능성&lt;/strong&gt;이 가장 많이 쓰이는 것 같습니다. (이 외에 관측성, 관찰성, 관찰 가능성, 가관측성)&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.crowdstrike.com/en-us/cybersecurity-101/observability/three-pillars-of-observability/&#34;&gt;The Three Pillars of Observability: Logs, Metrics, and Traces&lt;/a&gt; | CrowdStrike&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.crowdstrike.com/en-us/cybersecurity-101/observability/three-pillars-of-observability/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;The Three Pillars of Observability: Logs, Metrics, and Traces&lt;/a&gt;
+
+ | CrowdStrike&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
 &lt;p&gt;&amp;lt;마스터링 분산 추적&amp;gt; 58쪽 | 유리 슈쿠로&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace&#34;&gt;Difference between Tracking and Tracing&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ell.stackexchange.com/questions/34391/difference-between-track-and-trace?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Difference between Tracking and Tracing&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -1655,7 +1895,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
         <guid>https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/</guid>
         <description>임창수 https://markruler.github.io/posts/nfv/the-misunderstood-facts-about-compute-domain-in-nfv/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/&#34;&gt;Faisal Khan의 The Misunderstood Facts about Compute Domain in NFV!&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Faisal Khan의 The Misunderstood Facts about Compute Domain in NFV!&lt;/a&gt;
+
+를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
@@ -1666,7 +1908,11 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;p&gt;뿐만 아니라 끝까지 읽으신다면 COTs, NIC, 하드웨어 가속기와 같이 매일 듣는 서버의 필수 용어가 명확해질 것입니다.&lt;/p&gt;
 &lt;h1 id=&#34;우선-etsi의-용어로-compute-domain과-compute-node는-무엇일까요&#34;&gt;우선 ETSI의 용어로 &amp;ldquo;Compute Domain&amp;quot;과 &amp;ldquo;Compute Node&amp;quot;는 무엇일까요?&lt;/h1&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/nfv/computer-domain-in-nfv.png&#34; alt=&#34;computer-domain-in-nfv&#34;&gt;&lt;/p&gt;
-&lt;p&gt;(NFV 아키텍처에 대한 자세한 내용을 보려면 &lt;a href=&#34;../beginners-guide-to-nfv-mano/&#34;&gt;NFV 아키텍처&lt;/a&gt; 또는 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture&#34;&gt;NFV MANO 치트 시트&lt;/a&gt;에 대한 글을 읽는 것이 좋습니다.)&lt;/p&gt;
+&lt;p&gt;(NFV 아키텍처에 대한 자세한 내용을 보려면 &lt;a href=&#34;../beginners-guide-to-nfv-mano/&#34;&gt;NFV 아키텍처&lt;/a&gt;
+
+ 또는 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture&#34;&gt;NFV MANO 치트 시트&lt;/a&gt;
+
+에 대한 글을 읽는 것이 좋습니다.)&lt;/p&gt;
 &lt;p&gt;위의 NFV Infrastructure (NFVI) 블록에 명확히 나와 있듯이 컴퓨팅 도메인에는 컴퓨팅 하드웨어와 스토리지 하드웨어가 포함됩니다. 컴퓨팅 도메인은 상위 집합이며, 그 중 컴퓨팅 하드에어와 노드는 한 부분에 불과합니다.&lt;/p&gt;
 &lt;p&gt;놀랍죠? 스토리지를 컴퓨팅 도메인의 일부로 생각하는 사람이 얼마나 되겠습니까?&lt;/p&gt;
 &lt;p&gt;이제 컴퓨팅 도메인에 무엇이 포함되는지 자세히 살펴보겠습니다.&lt;/p&gt;
@@ -1685,7 +1931,9 @@ VNF1이 Virtual CPE라고 하고, VNF2가 Virtual Firewall이라고 가정해 �
 &lt;h2 id=&#34;2-네트워크-인터페이스-카드-nic-및-io-가속기&#34;&gt;2. 네트워크 인터페이스 카드 (NIC) 및 I/O 가속기&lt;/h2&gt;
 &lt;p&gt;이전 섹션에서 컴퓨팅 노드의 일부로 NIC를 언급했습니다. 이건 사실입니다.
 위의 경우 NIC 기능이 서버에 있기 때문입니다.
-그러나 최근 세분화된 모델(예: &lt;a href=&#34;http://www.opencompute.org/about/&#34;&gt;Open Compute Project, OCP&lt;/a&gt;) 트렌드가 있습니다.
+그러나 최근 세분화된 모델(예: &lt;a href=&#34;http://www.opencompute.org/about/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Open Compute Project, OCP&lt;/a&gt;
+
+) 트렌드가 있습니다.
 이 폼-팩터(form-factor)에서 CPU 블레이드/섀시는 NIC/가속기 섀시 및 스토리지 섀시와 분리됩니다.
 이 블레이드/섀시들 간의 상호 연결은 광섬유를 통해 이루어질 수 있습니다.
 이러한 이유로 NIC가 중요하기 때문에 별도로 설명합니다.&lt;/p&gt;
@@ -1731,31 +1979,61 @@ HDD를 영구 스토리지에 사용한다는 것이 장점입니다.&lt;/p&gt;
         <guid>https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/</guid>
         <description>임창수 https://markruler.github.io/posts/nfv/beginners-guide-to-nfv-mano/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to NFV Management &amp;amp; Orchestration (MANO)&lt;/a&gt;을 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Faisal Khan의 A Beginner&amp;rsquo;s Guide to NFV Management &amp;amp; Orchestration (MANO)&lt;/a&gt;
+
+을 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#nfv%EC%97%90%EC%84%9C-mano%EB%9E%80&#34;&gt;NFV에서 MANO란?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#1-virtualized-infrastructure-manager-vim&#34;&gt;1. Virtualized Infrastructure Manager (VIM)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-virtual-network-function-manager-vnfm&#34;&gt;2. Virtual Network Function Manager (VNFM)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#nfv%ec%97%90%ec%84%9c-mano%eb%9e%80&#34;&gt;NFV에서 MANO란?&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#1-virtualized-infrastructure-manager-vim&#34;&gt;1. Virtualized Infrastructure Manager (VIM)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-virtual-network-function-manager-vnfm&#34;&gt;2. Virtual Network Function Manager (VNFM)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#3-nfv-orchestrator-nfvo&#34;&gt;3. NFV Orchestrator (NFVO)&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#resource-orchestration&#34;&gt;Resource Orchestration&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#service-orchestration&#34;&gt;Service Orchestration&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#resource-orchestration&#34;&gt;Resource Orchestration&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#service-orchestration&#34;&gt;Service Orchestration&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#4-repositories&#34;&gt;4. Repositories&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#vnf-catalog&#34;&gt;VNF Catalog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#network-services-ns-catalog&#34;&gt;Network Services (NS) Catalog&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#nfv-instances&#34;&gt;NFV Instances&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#nfvi-resources&#34;&gt;NFVI Resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#vnf-catalog&#34;&gt;VNF Catalog&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#network-services-ns-catalog&#34;&gt;Network Services (NS) Catalog&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#nfv-instances&#34;&gt;NFV Instances&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#nfvi-resources&#34;&gt;NFVI Resources&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#5-element-management-em&#34;&gt;5. Element Management (EM)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#6-ossbss&#34;&gt;6. OSS/BSS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#7-reference-points&#34;&gt;7. Reference Points&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5-element-management-em&#34;&gt;5. Element Management (EM)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#6-ossbss&#34;&gt;6. OSS/BSS&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#7-reference-points&#34;&gt;7. Reference Points&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;NFV가 처음이라면 NFV Management &amp;amp; Orchestration (NFV MANO)를 이해하려고 할 때 두 가지 어려운 점이 있습니다.&lt;/p&gt;
 &lt;p&gt;첫번째로 기존의 네트워크는 EMS, NMS 또는 OSS가 지원하는 것처럼 하나의 관리 시스템만 필요하지만
@@ -1778,7 +2056,9 @@ MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것�
 &lt;p&gt;두번째로 ETSI 모델을 참조하여 모든 벤더의 NFV 솔루션을 이해하고 벤치마킹하는 데 도움이 될 것입니다.&lt;/p&gt;
 &lt;p&gt;아니면 당신은 곧 RFP 작성을 끝내야하며 MANO 부분에 무엇을 포함해야 하는지 알고 싶을 수도 있습니다.&lt;/p&gt;
 &lt;p&gt;목표가 무엇이든 이 가이드로부터 무언가 얻고 가시기를 바랍니다.&lt;/p&gt;
-&lt;p&gt;(NFV 용어를 다시 상기해야 할 경우 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;NFV 아키텍처의 치트 시트&lt;/a&gt;를 참조하세요)&lt;/p&gt;
+&lt;p&gt;(NFV 용어를 다시 상기해야 할 경우 &lt;a href=&#34;../cheat-sheet-understanding-nfv-architecture/&#34;&gt;NFV 아키텍처의 치트 시트&lt;/a&gt;
+
+를 참조하세요)&lt;/p&gt;
 &lt;h1 id=&#34;nfv에서-mano란&#34;&gt;NFV에서 MANO란?&lt;/h1&gt;
 &lt;p&gt;MANO는 관리 및 오케스트레이션(Management and Orchestration)을 의미합니다.&lt;/p&gt;
 &lt;p&gt;MANO는 아래 다이어그램에서 세 가지 관리자를 포함하는 회색 블록입니다.&lt;/p&gt;
@@ -1847,7 +2127,9 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 &lt;code&gt;mult
 &lt;li&gt;서비스 오케스트레이션은 VNF와 직접 통신할 필요가 없도록 각 VNFM과 조정하여 서로 다른 VNF 간에 종단 간 서비스를 생성합니다.
 예를 들면 한 벤더의 기지국 VNF와 다른 벤더의 중심 노드 VNF 사이에 서비스를 생성하는 것입니다.&lt;/li&gt;
 &lt;li&gt;서비스 오케스트레이션은 해당되는 VNFM을 인스턴스화할 수 있습니다.&lt;/li&gt;
-&lt;li&gt;네트워크 서비스 인스턴스의 토폴로지(&lt;a href=&#34;https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html&#34;&gt;VNF Forwarding Graph&lt;/a&gt;, &lt;code&gt;VNFFG&lt;/code&gt;라고도 함)도 관리합니다.&lt;/li&gt;
+&lt;li&gt;네트워크 서비스 인스턴스의 토폴로지(&lt;a href=&#34;https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;VNF Forwarding Graph&lt;/a&gt;
+
+, &lt;code&gt;VNFFG&lt;/code&gt;라고도 함)도 관리합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;NFVO가 서로 다른 기능을 결합하고 서로 다른 방법으로 분산된 NFV 환경에서 종단 간 서비스를 생성하며 자원을 조정하는,
 NFV의 접착제와 같다는 점을 알 수 있습니다.&lt;/p&gt;
@@ -1862,8 +2144,12 @@ VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상�
 &lt;blockquote&gt;
 &lt;p&gt;[역주] 예시&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf&#34;&gt;VNF Descriptor (VNFD) Overview | ETSI&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html&#34;&gt;VNF Descriptor Template Guide | Openstack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;VNF Descriptor (VNFD) Overview | ETSI&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;VNF Descriptor Template Guide | Openstack&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;network-services-ns-catalog&#34;&gt;Network Services (NS) Catalog&lt;/h2&gt;
@@ -1901,7 +2187,9 @@ VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행합니�
 NFV는 오픈 플랫폼(open platform)이기 때문에 MANO처럼 오픈 인터페이스(open interfaces)를 통해 NFV 엔터티를 관리하는 것이 더 타당합니다.&lt;/p&gt;
 &lt;p&gt;그러나 기존의 OSS/BBS는 NFV MANO의 특정 구현으로 인해 지원되지 않는 경우,
 추가 기능을 제공함으로써 NFV MANO에 부가 가치를 만들 수 있습니다.
-이는 NFV MANO와 기존 OSS/BSS 사이의 &lt;a href=&#34;https://telcocloudbridge.com/blog/open-ran-tutorial/&#34;&gt;오픈 참조점(open reference point)&lt;/a&gt;(Or-Ma-NFVO)을 통해 이루어집니다.&lt;/p&gt;
+이는 NFV MANO와 기존 OSS/BSS 사이의 &lt;a href=&#34;https://telcocloudbridge.com/blog/open-ran-tutorial/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;오픈 참조점(open reference point)&lt;/a&gt;
+
+(Or-Ma-NFVO)을 통해 이루어집니다.&lt;/p&gt;
 &lt;h1 id=&#34;7-reference-points&#34;&gt;7. Reference Points&lt;/h1&gt;
 &lt;p&gt;마지막으로 &lt;code&gt;참조점&lt;/code&gt;에 대해 언급할 가치가 있습니다.&lt;/p&gt;
 &lt;p&gt;MANO에는 그림과 같이 기능 블록 간의 연결 포인트(interconnection point)로 표시되는 여러 참조점이 있습니다.
@@ -1933,7 +2221,9 @@ Or-Vi, NF-Vi, Or-Vnfm 등입니다.&lt;/p&gt;
         <guid>https://markruler.github.io/posts/nfv/cheat-sheet-understanding-nfv-architecture/</guid>
         <description>임창수 https://markruler.github.io/posts/nfv/cheat-sheet-understanding-nfv-architecture/ -&lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;Faisal Khan의 A Cheat Sheet for Understanding &amp;ldquo;NFV Architecture&amp;rdquo;&lt;/a&gt;를 번역한 글입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Faisal Khan의 A Cheat Sheet for Understanding &amp;ldquo;NFV Architecture&amp;rdquo;&lt;/a&gt;
+
+를 번역한 글입니다.&lt;/li&gt;
 &lt;li&gt;저자의 허락을 받고 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
@@ -2002,7 +2292,9 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
 &lt;p&gt;이게 전부입니다!&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/&#34;&gt;원문 링크&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.telcocloudbridge.com/blog/a-cheat-sheet-for-understanding-nfv-architecture/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;원문 링크&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;사용 사례 및 SDN과의 관계를 포함한 NFV에 대한 자세한 내용을 보려면
@@ -2021,14 +2313,18 @@ BSS는 고객, 제품, 주문 등을 관리합니다.&lt;/p&gt;
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/kubernetes/controlling-access-api/</guid>
         <description>임창수 https://markruler.github.io/posts/kubernetes/controlling-access-api/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/&#34;&gt;쿠버네티스 공식 문서&lt;/a&gt;를 번역했습니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;쿠버네티스 공식 문서&lt;/a&gt;
+
+를 번역했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;!-- overview --&gt;
 &lt;p&gt;이 페이지는 쿠버네티스 API에 대한 접근 제어의 개요를 제공한다.&lt;/p&gt;
 &lt;!-- body --&gt;
 &lt;p&gt;사용자는&lt;code&gt;kubectl&lt;/code&gt;, 클라이언트 라이브러리
 또는 REST 요청을 통해
-&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/&#34;&gt;API에 접근한다&lt;/a&gt;.
+&lt;a href=&#34;https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;API에 접근한다&lt;/a&gt;
+
+.
 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
 요청이 API에 도달하면,
 다음 다이어그램에 설명된 몇 가지 단계를 거친다.&lt;/p&gt;
@@ -2047,7 +2343,9 @@ API 서버의 인증서에 대한 루트 인증서를 포함하며,
 이는 다이어그램에 &lt;strong&gt;1&lt;/strong&gt;단계로 표시되어 있다.
 클러스터 생성 스크립트 또는 클러스터 관리자는
 API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
-인증기는 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/authentication/&#34;&gt;여기&lt;/a&gt;에서 더 자세히 서술한다.&lt;/p&gt;
+인증기는 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/authentication/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;여기&lt;/a&gt;
+
+에서 더 자세히 서술한다.&lt;/p&gt;
 &lt;p&gt;인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
 일반적으로 헤더 그리고/또는 클라이언트 인증서만 검사한다.&lt;/p&gt;
 &lt;p&gt;인증 모듈은 클라이언트 인증서, 암호 및 일반 토큰, 부트스트랩 토큰,
@@ -2093,7 +2391,9 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Bob이 &lt;code&gt;projectCaribou&lt;/code&gt; 네임스페이스에 있는 오브젝트에 쓰기(&lt;code&gt;create&lt;/code&gt; 또는 &lt;code&gt;update&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 &lt;code&gt;projectFish&lt;/code&gt;처럼 다른 네임스페이스의 오브젝트 읽기(&lt;code&gt;get&lt;/code&gt;) 요청을 하면 그의 인가는 거부된다.&lt;/p&gt;
 &lt;p&gt;쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.&lt;/p&gt;
 &lt;p&gt;쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).&lt;/p&gt;
-&lt;p&gt;인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz//authorization/&#34;&gt;인가 개요&lt;/a&gt;를 참조하십시오.&lt;/p&gt;
+&lt;p&gt;인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz//authorization/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;인가 개요&lt;/a&gt;
+
+를 참조하십시오.&lt;/p&gt;
 &lt;h2 id=&#34;승인-제어&#34;&gt;승인 제어&lt;/h2&gt;
 &lt;p&gt;승인 제어 모듈은 요청을 수정하거나 거부할 수 있는 소프트웨어 모듈이다.
 인가 모듈에서 사용할 수 있는 속성 외에도
@@ -2106,7 +2406,9 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.&lt;/p&gt;
 승인 제어 모듈이 거부되면 요청은 즉시 거부된다.&lt;/p&gt;
 &lt;p&gt;승인 제어 모듈은 오브젝트를 거부하는 것 외에도
 필드의 복잡한 기본값을 설정할 수 있다.&lt;/p&gt;
-&lt;p&gt;사용 가능한 승인 제어 모듈은 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/&#34;&gt;여기&lt;/a&gt;에 서술되어 있다.&lt;/p&gt;
+&lt;p&gt;사용 가능한 승인 제어 모듈은 &lt;a href=&#34;https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;여기&lt;/a&gt;
+
+에 서술되어 있다.&lt;/p&gt;
 &lt;p&gt;요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후
 오브젝트 저장소에 기록(&lt;strong&gt;4단계&lt;/strong&gt;)된다.&lt;/p&gt;
 &lt;h2 id=&#34;api-서버-포트와-ip&#34;&gt;API 서버 포트와 IP&lt;/h2&gt;

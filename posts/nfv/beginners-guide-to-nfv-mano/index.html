@@ -528,31 +528,61 @@
                 
                     <blockquote>
 <ul>
-<li><a href="https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/">Faisal Khan의 A Beginner&rsquo;s Guide to NFV Management &amp; Orchestration (MANO)</a>을 번역한 글입니다.</li>
+<li><a href="https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Faisal Khan의 A Beginner&rsquo;s Guide to NFV Management &amp; Orchestration (MANO)</a>
+
+을 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
 </ul>
 </blockquote>
 <ul>
-<li><a href="#nfv%EC%97%90%EC%84%9C-mano%EB%9E%80">NFV에서 MANO란?</a></li>
-<li><a href="#1-virtualized-infrastructure-manager-vim">1. Virtualized Infrastructure Manager (VIM)</a></li>
-<li><a href="#2-virtual-network-function-manager-vnfm">2. Virtual Network Function Manager (VNFM)</a></li>
+<li><a href="#nfv%ec%97%90%ec%84%9c-mano%eb%9e%80">NFV에서 MANO란?</a>
+
+</li>
+<li><a href="#1-virtualized-infrastructure-manager-vim">1. Virtualized Infrastructure Manager (VIM)</a>
+
+</li>
+<li><a href="#2-virtual-network-function-manager-vnfm">2. Virtual Network Function Manager (VNFM)</a>
+
+</li>
 <li><a href="#3-nfv-orchestrator-nfvo">3. NFV Orchestrator (NFVO)</a>
+
+
 <ul>
-<li><a href="#resource-orchestration">Resource Orchestration</a></li>
-<li><a href="#service-orchestration">Service Orchestration</a></li>
+<li><a href="#resource-orchestration">Resource Orchestration</a>
+
+</li>
+<li><a href="#service-orchestration">Service Orchestration</a>
+
+</li>
 </ul>
 </li>
 <li><a href="#4-repositories">4. Repositories</a>
+
+
 <ul>
-<li><a href="#vnf-catalog">VNF Catalog</a></li>
-<li><a href="#network-services-ns-catalog">Network Services (NS) Catalog</a></li>
-<li><a href="#nfv-instances">NFV Instances</a></li>
-<li><a href="#nfvi-resources">NFVI Resources</a></li>
+<li><a href="#vnf-catalog">VNF Catalog</a>
+
+</li>
+<li><a href="#network-services-ns-catalog">Network Services (NS) Catalog</a>
+
+</li>
+<li><a href="#nfv-instances">NFV Instances</a>
+
+</li>
+<li><a href="#nfvi-resources">NFVI Resources</a>
+
+</li>
 </ul>
 </li>
-<li><a href="#5-element-management-em">5. Element Management (EM)</a></li>
-<li><a href="#6-ossbss">6. OSS/BSS</a></li>
-<li><a href="#7-reference-points">7. Reference Points</a></li>
+<li><a href="#5-element-management-em">5. Element Management (EM)</a>
+
+</li>
+<li><a href="#6-ossbss">6. OSS/BSS</a>
+
+</li>
+<li><a href="#7-reference-points">7. Reference Points</a>
+
+</li>
 </ul>
 <p>NFV가 처음이라면 NFV Management &amp; Orchestration (NFV MANO)를 이해하려고 할 때 두 가지 어려운 점이 있습니다.</p>
 <p>첫번째로 기존의 네트워크는 EMS, NMS 또는 OSS가 지원하는 것처럼 하나의 관리 시스템만 필요하지만
@@ -575,7 +605,9 @@ MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것�
 <p>두번째로 ETSI 모델을 참조하여 모든 벤더의 NFV 솔루션을 이해하고 벤치마킹하는 데 도움이 될 것입니다.</p>
 <p>아니면 당신은 곧 RFP 작성을 끝내야하며 MANO 부분에 무엇을 포함해야 하는지 알고 싶을 수도 있습니다.</p>
 <p>목표가 무엇이든 이 가이드로부터 무언가 얻고 가시기를 바랍니다.</p>
-<p>(NFV 용어를 다시 상기해야 할 경우 <a href="../cheat-sheet-understanding-nfv-architecture/">NFV 아키텍처의 치트 시트</a>를 참조하세요)</p>
+<p>(NFV 용어를 다시 상기해야 할 경우 <a href="../cheat-sheet-understanding-nfv-architecture/">NFV 아키텍처의 치트 시트</a>
+
+를 참조하세요)</p>
 <h1 id="nfv에서-mano란">NFV에서 MANO란?</h1>
 <p>MANO는 관리 및 오케스트레이션(Management and Orchestration)을 의미합니다.</p>
 <p>MANO는 아래 다이어그램에서 세 가지 관리자를 포함하는 회색 블록입니다.</p>
@@ -644,7 +676,9 @@ NFV 아키텍처에는 각각의 NFVI 도메인을 관리하는 <code>multiple V
 <li>서비스 오케스트레이션은 VNF와 직접 통신할 필요가 없도록 각 VNFM과 조정하여 서로 다른 VNF 간에 종단 간 서비스를 생성합니다.
 예를 들면 한 벤더의 기지국 VNF와 다른 벤더의 중심 노드 VNF 사이에 서비스를 생성하는 것입니다.</li>
 <li>서비스 오케스트레이션은 해당되는 VNFM을 인스턴스화할 수 있습니다.</li>
-<li>네트워크 서비스 인스턴스의 토폴로지(<a href="https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html">VNF Forwarding Graph</a>, <code>VNFFG</code>라고도 함)도 관리합니다.</li>
+<li>네트워크 서비스 인스턴스의 토폴로지(<a href="https://docs.openstack.org/tacker/queens/user/vnffg_usage_guide.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">VNF Forwarding Graph</a>
+
+, <code>VNFFG</code>라고도 함)도 관리합니다.</li>
 </ul>
 <p>NFVO가 서로 다른 기능을 결합하고 서로 다른 방법으로 분산된 NFV 환경에서 종단 간 서비스를 생성하며 자원을 조정하는,
 NFV의 접착제와 같다는 점을 알 수 있습니다.</p>
@@ -659,8 +693,12 @@ VNFD에서 제공된 정보는 NFVO가 NFVI의 네트워크 서비스와 가상�
 <blockquote>
 <p>[역주] 예시</p>
 <ul>
-<li><a href="https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf">VNF Descriptor (VNFD) Overview | ETSI</a></li>
-<li><a href="https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html">VNF Descriptor Template Guide | Openstack</a></li>
+<li><a href="https://docbox.etsi.org/ISG/NFV/Open/other/Tutorials/201810-Tutorials-SDN_NFV_World_Congress-The_Haque/ETSI_NFV_Layer123_SDN_NFV_WC_2018_VNFD_RX15002.pdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">VNF Descriptor (VNFD) Overview | ETSI</a>
+
+</li>
+<li><a href="https://docs.openstack.org/tacker/newton/devref/vnfd_template_description.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">VNF Descriptor Template Guide | Openstack</a>
+
+</li>
 </ul>
 </blockquote>
 <h2 id="network-services-ns-catalog">Network Services (NS) Catalog</h2>
@@ -698,7 +736,9 @@ VNFM을 예로 들면 VNF의 라이프사이클 관리와 FCAPS를 수행합니�
 NFV는 오픈 플랫폼(open platform)이기 때문에 MANO처럼 오픈 인터페이스(open interfaces)를 통해 NFV 엔터티를 관리하는 것이 더 타당합니다.</p>
 <p>그러나 기존의 OSS/BBS는 NFV MANO의 특정 구현으로 인해 지원되지 않는 경우,
 추가 기능을 제공함으로써 NFV MANO에 부가 가치를 만들 수 있습니다.
-이는 NFV MANO와 기존 OSS/BSS 사이의 <a href="https://telcocloudbridge.com/blog/open-ran-tutorial/">오픈 참조점(open reference point)</a>(Or-Ma-NFVO)을 통해 이루어집니다.</p>
+이는 NFV MANO와 기존 OSS/BSS 사이의 <a href="https://telcocloudbridge.com/blog/open-ran-tutorial/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">오픈 참조점(open reference point)</a>
+
+(Or-Ma-NFVO)을 통해 이루어집니다.</p>
 <h1 id="7-reference-points">7. Reference Points</h1>
 <p>마지막으로 <code>참조점</code>에 대해 언급할 가치가 있습니다.</p>
 <p>MANO에는 그림과 같이 기능 블록 간의 연결 포인트(interconnection point)로 표시되는 여러 참조점이 있습니다.

@@ -629,28 +629,42 @@
 <strong>안정성을 위해</strong> 스왑 메모리를 비활성화하는 것이 좋습니다.
 스왑이 자주 발생하면 디스크 입출력이 증가하면서 성능이 저하되는 문제도 있습니다.</p>
 <h1 id="prometheus-node-exporter를-이용한-모니터링">Prometheus node-exporter를 이용한 모니터링</h1>
-<p><a href="https://github.com/markruler/node-monitoring">이 리포지터리</a>를 클론해서
+<p><a href="https://github.com/markruler/node-monitoring?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이 리포지터리</a>
+
+를 클론해서
 Prometheus와 Grafana를 실행해서 모니터링 할 수 있습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo docker compose up -d
 </span></span></code></pre></div><p><img src="/images/os/swap-memory/grafana-prometheus-swap-memory.png" alt="Node Monitoring with Prometheus and Grafana"></p>
 <p>본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있습니다.</p>
 <h1 id="더-읽을거리">더 읽을거리</h1>
 <ul>
-<li><a href="https://www.kernel.org/doc/gorman/html/understand/understand014.html">Swap Management | kernel.org</a></li>
-<li><a href="https://velog.io/@sjuhwan/Virtualization-101-3-1-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%98%A4%EB%B2%84%EC%BB%A4%EB%B0%8B%EA%B3%BC-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EC%97%AC%EC%9C%A0%EA%B3%B5%EA%B0%84-%ED%99%95%EB%B3%B4-%EB%B0%A9%EB%B2%95">Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환</a></li>
-<li><a href="https://github.com/kubernetes/kubernetes/pull/31996">kubelet swap on 체크 PR#31996</a></li>
+<li><a href="https://www.kernel.org/doc/gorman/html/understand/understand014.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Swap Management | kernel.org</a>
+
+</li>
+<li><a href="https://velog.io/@sjuhwan/Virtualization-101-3-1-%eb%a9%94%eb%aa%a8%eb%a6%ac-%ec%98%a4%eb%b2%84%ec%bb%a4%eb%b0%8b%ea%b3%bc-%eb%a9%94%eb%aa%a8%eb%a6%ac-%ec%97%ac%ec%9c%a0%ea%b3%b5%ea%b0%84-%ed%99%95%eb%b3%b4-%eb%b0%a9%eb%b2%95?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Virtualization 101 - (3.1) 메모리 오버커밋과 메모리 여유공간 확보 방법 | 송주환</a>
+
+</li>
+<li><a href="https://github.com/kubernetes/kubernetes/pull/31996?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">kubelet swap on 체크 PR#31996</a>
+
+</li>
 </ul>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
-<p><a href="https://man7.org/linux/man-pages/man8/swapon.8.html#NOTES">swapon(8) | Linux manual page</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://man7.org/linux/man-pages/man8/swapon.8.html?utm_source=markruler.github.io#NOTES" target="_blank" rel="noopener noreferrer">swapon(8) | Linux manual page</a>
+
+&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal">fallocatte vs. dd | StackExchange</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://askubuntu.com/questions/927854/how-do-i-increase-the-size-of-swapfile-without-removing-it-in-the-terminal?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">fallocatte vs. dd | StackExchange</a>
+
+&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://github.com/kubernetes/kubernetes/issues/31676">최초 이슈 kuberenetes#31676</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://github.com/kubernetes/kubernetes/issues/31676?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">최초 이슈 kuberenetes#31676</a>
+
+&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>

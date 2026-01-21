@@ -22,7 +22,9 @@
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/</guid>
         <description>임창수 https://markruler.github.io/posts/mec/beginners-guide-to-mec-architecture/ -&lt;blockquote&gt;
-&lt;p&gt;Faisal Khan의 &lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/&#34;&gt;Beginners Guide to MEC Architecture (Multi-access Edge Computing)&lt;/a&gt;을 번역한 글입니다.
+&lt;p&gt;Faisal Khan의 &lt;a href=&#34;https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Beginners Guide to MEC Architecture (Multi-access Edge Computing)&lt;/a&gt;
+
+을 번역한 글입니다.
 저자의 허락을 받아 번역했습니다.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;MEC&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; 아키텍처 가이드에 오신 것을 환영합니다!&lt;/p&gt;
@@ -41,33 +43,63 @@ MEC 아키텍처를 처음부터 단계적으로 설명하며, 사전 지식이 
 &lt;/ul&gt;
 &lt;p&gt;그럼 바로 시작해 보겠습니다!&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#1-mec%EC%9D%98-%EC%A0%95%EC%9D%98&#34;&gt;1. MEC의 정의&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-etsi%EC%97%90-%EB%94%B0%EB%A5%B8-mec-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#1-mec%ec%9d%98-%ec%a0%95%ec%9d%98&#34;&gt;1. MEC의 정의&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-etsi%ec%97%90-%eb%94%b0%eb%a5%b8-mec-%ec%95%84%ed%82%a4%ed%85%8d%ec%b2%98&#34;&gt;2. ETSI에 따른 MEC 아키텍처&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-0-%EA%B0%80%EC%83%81%ED%99%94-%EC%9D%B8%ED%94%84%EB%9D%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-0-%ea%b0%80%ec%83%81%ed%99%94-%ec%9d%b8%ed%94%84%eb%9d%bc-%eb%a7%a4%eb%8b%88%ec%a0%80-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#2-1-mec-host&#34;&gt;2-1. MEC Host&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-1-mec-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98&#34;&gt;2-1-1. MEC 애플리케이션&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC&#34;&gt;2-1-2. MEC 플랫폼&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#2-1-1-mec-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98&#34;&gt;2-1-1. MEC 애플리케이션&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-1-2-mec-%ed%94%8c%eb%9e%ab%ed%8f%bc&#34;&gt;2-1-2. MEC 플랫폼&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-1-mec-%EC%84%9C%EB%B9%84%EC%8A%A4&#34;&gt;2-1-2-1. MEC 서비스&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-2-%ED%8A%B8%EB%9E%98%ED%94%BD-%EA%B7%9C%EC%B9%99-%EC%A0%9C%EC%96%B4-traffic-rules-control&#34;&gt;2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-1-2-3-dns-%ED%95%B8%EB%93%A4%EB%A7%81&#34;&gt;2-1-2-3. DNS 핸들링&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;a href=&#34;#2-1-2-1-mec-%ec%84%9c%eb%b9%84%ec%8a%a4&#34;&gt;2-1-2-1. MEC 서비스&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-1-2-2-%ed%8a%b8%eb%9e%98%ed%94%bd-%ea%b7%9c%ec%b9%99-%ec%a0%9c%ec%96%b4-traffic-rules-control&#34;&gt;2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-1-2-3-dns-%ed%95%b8%eb%93%a4%eb%a7%81&#34;&gt;2-1-2-3. DNS 핸들링&lt;/a&gt;
+
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-mec-platform-manager&#34;&gt;2-2. MEC 플랫폼 매니저 (MEC Platform Manager)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#2-3-%EB%A9%80%ED%8B%B0-%EC%95%A1%EC%84%B8%EC%8A%A4-%EC%97%90%EC%A7%80-%EC%98%A4%EC%BC%80%EC%8A%A4%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%84%B0-multi-access-edge-orchestrator&#34;&gt;2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#cfs-portal&#34;&gt;CFS Portal&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%88%98%EB%AA%85-%EC%A3%BC%EA%B8%B0-%EA%B4%80%EB%A6%AC-%ED%94%84%EB%A1%9D%EC%8B%9C-user-app-lcm-proxy&#34;&gt;사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%B0%B8%EC%A1%B0&#34;&gt;참조&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-2-mec-%ed%94%8c%eb%9e%ab%ed%8f%bc-%eb%a7%a4%eb%8b%88%ec%a0%80-mec-platform-manager&#34;&gt;2-2. MEC 플랫폼 매니저 (MEC Platform Manager)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-3-%eb%a9%80%ed%8b%b0-%ec%95%a1%ec%84%b8%ec%8a%a4-%ec%97%90%ec%a7%80-%ec%98%a4%ec%bc%80%ec%8a%a4%ed%8a%b8%eb%a0%88%ec%9d%b4%ed%84%b0-multi-access-edge-orchestrator&#34;&gt;2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#cfs-portal&#34;&gt;CFS Portal&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%82%ac%ec%9a%a9%ec%9e%90-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98-%ec%88%98%eb%aa%85-%ec%a3%bc%ea%b8%b0-%ea%b4%80%eb%a6%ac-%ed%94%84%eb%a1%9d%ec%8b%9c-user-app-lcm-proxy&#34;&gt;사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%b0%b8%ec%a1%b0&#34;&gt;참조&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;우리는 밑바닥부터 블록 단위로 MEC 아키텍처를 구축할 것입니다. 🙂&lt;/p&gt;
 &lt;h1 id=&#34;1-mec의-정의&#34;&gt;1. MEC의 정의&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.etsi.org/technologies/multi-access-edge-computing&#34;&gt;ETSI&lt;/a&gt;에 따르면 MEC는 다음과 같이 정의됩니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.etsi.org/technologies/multi-access-edge-computing?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ETSI&lt;/a&gt;
+
+에 따르면 MEC는 다음과 같이 정의됩니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Multi-access Edge Computing (MEC) offers application developers and content providers
 cloud-computing capabilities and an IT service environment at the edge of the network.
@@ -88,7 +120,9 @@ as well as real-time access to radio network information that can be leveraged b
 &lt;p&gt;가상 네트워크에서는 항상 서버가 필요하며, 이 서버 위에서 가상 머신(VM)을 구동할 수 있어야 합니다.
 그리고 이러한 VM에는 관리 계층이 필요합니다.&lt;/p&gt;
 &lt;h2 id=&#34;2-0-가상화-인프라-매니저-vim-virtualization-infrastructure-manager&#34;&gt;2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)&lt;/h2&gt;
-&lt;p&gt;VIM은 &lt;a href=&#34;../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager&#34;&gt;NFV의 VIM&lt;/a&gt;과 유사한 기능을 합니다.
+&lt;p&gt;VIM은 &lt;a href=&#34;../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager&#34;&gt;NFV의 VIM&lt;/a&gt;
+
+과 유사한 기능을 합니다.
 물리적 인프라(컴퓨팅, 스토리지, 네트워킹) 위에 VM을 관리하는 것이 목적입니다.
 &amp;lsquo;가상화 인프라&amp;rsquo;의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다.
 왼쪽에는 가상화된 인프라로 전환된 서버가 있고, 오른쪽에는 이러한 서버 위의 가상 자원을 관리하는 VIM이 있습니다.&lt;/p&gt;
@@ -180,20 +214,30 @@ CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 �
 이제 이 아키텍처에 대해 궁금한 것이 있으면 언제든 질문해 주세요.&lt;/p&gt;
 &lt;h2 id=&#34;참조&#34;&gt;참조&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;ETSI GS MEC 002 V1.1.1 (2016-03)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;ETSI GS MEC 003 V2.1.1 (2019-01)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ETSI GS MEC 002 V1.1.1 (2016-03)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ETSI GS MEC 003 V2.1.1 (2019-01)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf&#34;&gt;Mobile Edge Computing&lt;/a&gt; 의 줄임말이었지만 현재는 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf&#34;&gt;Multi-access Edge Computing&lt;/a&gt;입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;처음에는 MEC가 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Mobile Edge Computing&lt;/a&gt;
+
+ 의 줄임말이었지만 현재는 &lt;a href=&#34;https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Multi-access Edge Computing&lt;/a&gt;
+
+입니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;사용자 장비(UE, User Equipment)는 휴대폰을 의미할 수 있습니다. 모바일 동글이 있는 노트북을 의미하기도 합니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/FCAPS&#34;&gt;FCAPS&lt;/a&gt;: &lt;strong&gt;F&lt;/strong&gt;ault(장애), &lt;strong&gt;C&lt;/strong&gt;onfiguration(구성), &lt;strong&gt;A&lt;/strong&gt;ccounting(계정), &lt;strong&gt;P&lt;/strong&gt;erformance(성능), &lt;strong&gt;S&lt;/strong&gt;ecurity(보안)&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://ko.wikipedia.org/wiki/FCAPS?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;FCAPS&lt;/a&gt;
+
+: &lt;strong&gt;F&lt;/strong&gt;ault(장애), &lt;strong&gt;C&lt;/strong&gt;onfiguration(구성), &lt;strong&gt;A&lt;/strong&gt;ccounting(계정), &lt;strong&gt;P&lt;/strong&gt;erformance(성능), &lt;strong&gt;S&lt;/strong&gt;ecurity(보안)&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -227,8 +271,12 @@ CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 �
 &lt;ul&gt;
 &lt;li&gt;제가 공부한 내용을 정리한 IT 기술 블로그입니다. 그래서 블로그와 위키가 섞여 있습니다.
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/categories/wiki/&#34;&gt;Wiki&lt;/a&gt;: 위키는 기술 문서로, 기술을 정리한 것입니다.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/categories/blog/&#34;&gt;Blog&lt;/a&gt;: 블로그 포스트는 개인적인 생각과 경험을 바탕으로 작성했습니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/categories/wiki/&#34;&gt;Wiki&lt;/a&gt;
+
+: 위키는 기술 문서로, 기술을 정리한 것입니다.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/categories/blog/&#34;&gt;Blog&lt;/a&gt;
+
+: 블로그 포스트는 개인적인 생각과 경험을 바탕으로 작성했습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;완벽한 글을 지향하진 않습니다.&lt;/li&gt;
@@ -236,8 +284,12 @@ CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 �
 &lt;/ul&gt;
 &lt;h1 id=&#34;링크&#34;&gt;링크&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;Email: &lt;a href=&#34;mailto:imcxsu@gmail.com&#34;&gt;imcxsu@gmail.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;GitHub: &lt;a href=&#34;https://github.com/markruler&#34;&gt;markruler&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Email: &lt;a href=&#34;mailto:imcxsu@gmail.com&#34;&gt;imcxsu@gmail.com&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;GitHub: &lt;a href=&#34;https://github.com/markruler?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;markruler&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 - https://markruler.github.io/about/ - Im Changsu | Since 2020</description>
         </item>

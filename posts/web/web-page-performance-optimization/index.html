@@ -440,58 +440,102 @@
                 <div class="post-body" v-pre>
                 
                     <ul>
-<li><a href="#%EC%84%B1%EB%8A%A5-%EC%A7%80%ED%91%9C">성능 지표</a></li>
-<li><a href="#%EC%84%B1%EB%8A%A5-%EC%B8%A1%EC%A0%95">성능 측정</a></li>
-<li><a href="#%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0">성능 개선</a>
+<li><a href="#%ec%84%b1%eb%8a%a5-%ec%a7%80%ed%91%9c">성능 지표</a>
+
+</li>
+<li><a href="#%ec%84%b1%eb%8a%a5-%ec%b8%a1%ec%a0%95">성능 측정</a>
+
+</li>
+<li><a href="#%ec%84%b1%eb%8a%a5-%ea%b0%9c%ec%84%a0">성능 개선</a>
+
+
 <ul>
-<li><a href="#html-css-js-%EC%B5%9C%EC%A0%81%ED%99%94">HTML, CSS, JS 최적화</a></li>
-<li><a href="#%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4-%EC%B5%9C%EC%A0%81%ED%99%94">멀티미디어 최적화</a></li>
-<li><a href="#%EC%BA%90%EC%8B%9C-%ED%99%9C%EC%9A%A9">캐시 활용</a>
+<li><a href="#html-css-js-%ec%b5%9c%ec%a0%81%ed%99%94">HTML, CSS, JS 최적화</a>
+
+</li>
+<li><a href="#%eb%a9%80%ed%8b%b0%eb%af%b8%eb%94%94%ec%96%b4-%ec%b5%9c%ec%a0%81%ed%99%94">멀티미디어 최적화</a>
+
+</li>
+<li><a href="#%ec%ba%90%ec%8b%9c-%ed%99%9c%ec%9a%a9">캐시 활용</a>
+
+
 <ul>
-<li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a></li>
-<li><a href="#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EC%BA%90%EC%8B%9C">브라우저 캐시</a></li>
-</ul>
+<li><a href="#cdn-content-delivery-network">CDN (Content Delivery Network)</a>
+
+</li>
+<li><a href="#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80-%ec%ba%90%ec%8b%9c">브라우저 캐시</a>
+
 </li>
 </ul>
 </li>
-<li><a href="#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC">더 읽을거리</a></li>
+</ul>
+</li>
+<li><a href="#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac">더 읽을거리</a>
+
+</li>
 </ul>
 <h1 id="성능-지표">성능 지표</h1>
 <p>먼저 웹 페이지의 성능을 개선하려면 어떤 지표를 기준으로 삼을 것인지 정해야 합니다.</p>
 <p>Google이 제공하는 <strong>Web Vitals</strong>는 사용자 경험을 측정하는 지표입니다.
 이 중 가장 중요한 측정 항목 3개를 모아서 Core Web Vitals이라고 합니다.</p>
 <ul>
-<li><a href="https://web.dev/articles/lcp">LCP (Largest Contentful Paint)</a>: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 <strong>로드 성능</strong>을 측정.</li>
-<li><a href="https://web.dev/articles/inp">INP (Interaction to Next Paint)</a>: 사용자 입력에 대한 응답 시간으로 <strong>상호작용</strong>을 측정. (<a href="https://web.dev/articles/fid">FID, First Input Delay</a>에서 대체)</li>
-<li><a href="https://web.dev/articles/cls">CLS (Cumulative Layout Shift)</a>: <strong>시각적 안정성</strong>을 측정.</li>
+<li><a href="https://web.dev/articles/lcp?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">LCP (Largest Contentful Paint)</a>
+
+: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 <strong>로드 성능</strong>을 측정.</li>
+<li><a href="https://web.dev/articles/inp?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">INP (Interaction to Next Paint)</a>
+
+: 사용자 입력에 대한 응답 시간으로 <strong>상호작용</strong>을 측정. (<a href="https://web.dev/articles/fid?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">FID, First Input Delay</a>
+
+에서 대체)</li>
+<li><a href="https://web.dev/articles/cls?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CLS (Cumulative Layout Shift)</a>
+
+: <strong>시각적 안정성</strong>을 측정.</li>
 </ul>
 <p>이 외에도 웹 접근성(Web Accessibility)<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, SEO, PWA 등을 고려하여 웹 페이지의 품질을 측정할 수 있습니다.</p>
 <p><strong>이 외 성능(Performance) 지표</strong>로
-리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 <a href="https://web.dev/articles/ttfb">Time to First Byte (TTFB)</a>,
-사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 <a href="https://web.dev/articles/fcp">First Contentful Paint (FCP)</a>가 있습니다.</p>
+리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 <a href="https://web.dev/articles/ttfb?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Time to First Byte (TTFB)</a>
+
+,
+사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 <a href="https://web.dev/articles/fcp?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">First Contentful Paint (FCP)</a>
+
+가 있습니다.</p>
 <h1 id="성능-측정">성능 측정</h1>
 <p>앞서 언급한 성능 지표들은 모두
-<a href="https://developer.chrome.com/docs/devtools/performance/overview">Google Chrome의 Performance 패널</a>에서
+<a href="https://developer.chrome.com/docs/devtools/performance/overview?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Google Chrome의 Performance 패널</a>
+
+에서
 측정할 수 있습니다.
 이 방법으로 로컬에서 간단히 측정하는 것도 중요하긴 하지만,
 캐시 없이 첫 방문하는 유저나 다른 지역의 유저들을 고려하여
 서버에서 측정하는 것도 중요합니다.</p>
-<p>Google Chrome의 <a href="https://github.com/GoogleChrome/lighthouse">Lighthouse</a>는
+<p>Google Chrome의 <a href="https://github.com/GoogleChrome/lighthouse?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Lighthouse</a>
+
+는
 대표적인 웹 페이지 성능 측정 CLI 도구입니다.
 성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
 Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
-<a href="https://github.com/GoogleChrome/lighthouse-ci">CI 도구</a>로도 제공되기 때문에
+<a href="https://github.com/GoogleChrome/lighthouse-ci?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CI 도구</a>
+
+로도 제공되기 때문에
 CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
-<a href="https://pagespeed.web.dev/">Google PageSpeed Insights</a>와 같은 온라인 서비스에서도
+<a href="https://pagespeed.web.dev/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Google PageSpeed Insights</a>
+
+와 같은 온라인 서비스에서도
 Lighthouse 기능을 무료로 제공합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># npm install -g lighthouse</span>
 </span></span><span style="display:flex;"><span>lighthouse http://example.com --output=json --output-path=./report.json
-</span></span></code></pre></div><p>Catchpoint의 <a href="https://github.com/catchpoint/WebPageTest">WebPageTest</a>는
+</span></span></code></pre></div><p>Catchpoint의 <a href="https://github.com/catchpoint/WebPageTest?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">WebPageTest</a>
+
+는
 오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
 Waterfall 방식의 시각화와 다양한 성능 지표를 제공하고
 Lighthouse가 포함되어 있어<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> Web Vitals도 측정할 수 있습니다.
-<a href="https://www.webpagetest.org/">온라인 서비스</a>를 무료로 이용할 수도 있습니다.</p>
-<p>Datadog의 Synthetic Testing 중 <a href="https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions">Browser Testing</a> 기능을
+<a href="https://www.webpagetest.org/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">온라인 서비스</a>
+
+를 무료로 이용할 수도 있습니다.</p>
+<p>Datadog의 Synthetic Testing 중 <a href="https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Browser Testing</a>
+
+ 기능을
 사용하면 주기적으로 국가별<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> 성능 측정을 할 수 있습니다.
 글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,
 서비스 지역이 제한적이라면 직접 클라우드 서비스의 컴퓨팅 리소스를 사용해서 성능 측정하는 것도 좋은 방법입니다.</p>
@@ -506,7 +550,9 @@ CSS 파일을 파싱해서 CSSOM 트리를 만들고,
 레이아웃을 기반으로 픽셀을 그리는 과정(Painting)을 거칩니다.</p>
 <p>HTML 파서(parser)는 기본적으로 위에서부터 아래로 읽는데
 Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 및 실행이 끝날 때까지 기다리게 됩니다.
-이를 <a href="https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources">렌더 블로킹(Render Blocking)</a>이라고 합니다.
+이를 <a href="https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">렌더 블로킹(Render Blocking)</a>
+
+이라고 합니다.
 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
 <code>defer</code>, <code>async</code> 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>
 다만 CSS 파일을 <code>defer</code>로 불러오거나
@@ -517,10 +563,14 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 <strong>Reflow</stro
 <p><strong>Font</strong>의 경우 <code>preload</code>를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.</p>
 <h2 id="멀티미디어-최적화">멀티미디어 최적화</h2>
 <ul>
-<li><a href="/posts/multimedia/image-in-web/">웹과 멀티미디어: 이미지</a></li>
+<li><a href="/posts/multimedia/image-in-web/">웹과 멀티미디어: 이미지</a>
+
+</li>
 <li>비디오
 <ul>
-<li><strong>HLS 프로토콜</strong>(<a href="https://datatracker.ietf.org/doc/html/rfc8216">RFC 8216</a>)을 사용하기 위해
+<li><strong>HLS 프로토콜</strong>(<a href="https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RFC 8216</a>
+
+)을 사용하기 위해
 비디오는 HEVC 코덱으로 트랜스코딩하고 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
 예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.</li>
 </ul>
@@ -536,7 +586,9 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 <strong>Reflow</stro
 대표적으로 <strong>메모리 캐시</strong>(Memory Cache), <strong>디스크 캐시</strong>(Disk Cache)가 있습니다.
 메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.</p>
 <p>대표적으로
-<a href="https://developer.mozilla.org/en-US/docs/Glossary/bfcache">Back-forward cache(bfcache)</a>는
+<a href="https://developer.mozilla.org/en-US/docs/Glossary/bfcache?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Back-forward cache(bfcache)</a>
+
+는
 뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
 Google Chrome Dev tools의 Application 패널 &gt; Background services &gt; Back-forward cache에서 확인할 수 있습니다.
 이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
@@ -551,46 +603,86 @@ WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
 반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.</p>
 <h1 id="더-읽을거리">더 읽을거리</h1>
 <ul>
-<li><a href="https://markruler.github.io/posts/web/google-chrome/">유용한 구글 크롬(Google Chrome)의 기능</a></li>
-<li><a href="../respond-web-page/">웹 페이지 응답 방법과 프레임워크</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/Performance">Web performance</a> | MDN Web Docs</li>
-<li><a href="https://web.dev/articles/vitals">Core Web Vitals</a> | web.dev
+<li><a href="https://markruler.github.io/posts/web/google-chrome/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">유용한 구글 크롬(Google Chrome)의 기능</a>
+
+</li>
+<li><a href="../respond-web-page/">웹 페이지 응답 방법과 프레임워크</a>
+
+</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Performance?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web performance</a>
+
+ | MDN Web Docs</li>
+<li><a href="https://web.dev/articles/vitals?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Core Web Vitals</a>
+
+ | web.dev
 <ul>
-<li><a href="https://googlechrome.github.io/lighthouse/scorecalc/">Lighthouse Scoring Calculator</a> | Google Chrome</li>
-<li><a href="https://web.dev/articles/optimize-cls">Optimize CLS</a> | web.dev</li>
-<li><a href="https://web.dev/articles/optimize-ttfb">Optimize TTFB</a> | web.dev</li>
-<li><a href="https://web.dev/articles/optimize-lcp">Optimize LCP</a> | web.dev</li>
-<li><a href="https://web.dev/articles/tti">Time to Interactive (TTI)</a></li>
-<li><a href="https://web.dev/articles/browser-level-image-lazy-loading">Browser-level image lazy loading for the web</a> | web.dev</li>
-<li><a href="https://web.dev/articles/font-best-practices">Best Practices for fonts</a> | web.dev</li>
-<li><a href="https://web.dev/articles/bfcache">Back/forward cache</a> | web.dev</li>
+<li><a href="https://googlechrome.github.io/lighthouse/scorecalc/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Lighthouse Scoring Calculator</a>
+
+ | Google Chrome</li>
+<li><a href="https://web.dev/articles/optimize-cls?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Optimize CLS</a>
+
+ | web.dev</li>
+<li><a href="https://web.dev/articles/optimize-ttfb?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Optimize TTFB</a>
+
+ | web.dev</li>
+<li><a href="https://web.dev/articles/optimize-lcp?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Optimize LCP</a>
+
+ | web.dev</li>
+<li><a href="https://web.dev/articles/tti?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Time to Interactive (TTI)</a>
+
+</li>
+<li><a href="https://web.dev/articles/browser-level-image-lazy-loading?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Browser-level image lazy loading for the web</a>
+
+ | web.dev</li>
+<li><a href="https://web.dev/articles/font-best-practices?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Best Practices for fonts</a>
+
+ | web.dev</li>
+<li><a href="https://web.dev/articles/bfcache?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Back/forward cache</a>
+
+ | web.dev</li>
 </ul>
 </li>
-<li><a href="https://toss.tech/article/smart-web-service-cache">웹 서비스 캐시 똑똑하게 다루기</a> | toss tech</li>
+<li><a href="https://toss.tech/article/smart-web-service-cache?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">웹 서비스 캐시 똑똑하게 다루기</a>
+
+ | toss tech</li>
 </ul>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
 <p>웹 사이트, 도구, 기술이 장애를 가진 사용자들이 사용할 수 있도록 설계 및 개발된 것을 말합니다.
-(<a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/">W3C</a>)
-<a href="https://nuli.navercorp.com/education/tools">다양한 진단 도구</a>가 있습니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+(<a href="https://www.w3.org/WAI/fundamentals/accessibility-intro/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">W3C</a>
+
+)
+<a href="https://nuli.navercorp.com/education/tools?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">다양한 진단 도구</a>
+
+가 있습니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/">Kakao Entertainment의 사례</a>,
-<a href="https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/">ChungJungSoo님의 사례</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Kakao Entertainment의 사례</a>
+
+,
+<a href="https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ChungJungSoo님의 사례</a>
+
+&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1#L329">GoogleChrome/lighthouse/README</a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1&amp;utm_source=markruler.github.io#L329" target="_blank" rel="noopener noreferrer">GoogleChrome/lighthouse/README</a>
+
+&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
 <p>AWS와 같은 클라우드 서비스를 사용하기 때문에 리전에 종속적입니다.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
-<p><a href="https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html">async vs defer attributes</a>&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">async vs defer attributes</a>
+
+&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:6">
-<p><a href="https://web.dev/articles/defer-non-critical-css">Defer non-critical CSS</a> | web.dev&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://web.dev/articles/defer-non-critical-css?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Defer non-critical CSS</a>
+
+ | web.dev&#160;<a href="#fnref:6" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>

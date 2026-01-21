@@ -540,29 +540,57 @@
                     <p>원격지의 셸에 접속하기 위해 사용되는 네트워크 프로토콜로
 이 글에서는 업무에서 자주 사용하는 SSH 설정을 정리합니다.</p>
 <ul>
-<li><a href="#ssh-key-%EC%83%9D%EC%84%B1">SSH key 생성</a></li>
+<li><a href="#ssh-key-%ec%83%9d%ec%84%b1">SSH key 생성</a>
+
+</li>
 <li><a href="#ssh-server">SSH Server</a>
+
+
 <ul>
-<li><a href="#authoized_keys">authoized_keys</a></li>
-<li><a href="#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-server-%EC%84%A4%EC%A0%95">주로 사용하는 Server 설정</a></li>
+<li><a href="#authoized_keys">authoized_keys</a>
+
+</li>
+<li><a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-server-%ec%84%a4%ec%a0%95">주로 사용하는 Server 설정</a>
+
+</li>
 </ul>
 </li>
 <li><a href="#ssh-client">SSH Client</a>
+
+
 <ul>
-<li><a href="#%EC%84%A4%EC%A0%95-%ED%8C%8C%EC%9D%BC-%EC%9A%B0%EC%84%A0-%EC%88%9C%EC%9C%84">설정 파일 우선 순위</a></li>
-<li><a href="#known_hosts">known_hosts</a></li>
-<li><a href="#%EC%A3%BC%EB%A1%9C-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-host-%EC%84%A4%EC%A0%95">주로 사용하는 Host 설정</a></li>
-<li><a href="#git">Git</a></li>
-<li><a href="#local-forward">Local Forward</a></li>
+<li><a href="#%ec%84%a4%ec%a0%95-%ed%8c%8c%ec%9d%bc-%ec%9a%b0%ec%84%a0-%ec%88%9c%ec%9c%84">설정 파일 우선 순위</a>
+
+</li>
+<li><a href="#known_hosts">known_hosts</a>
+
+</li>
+<li><a href="#%ec%a3%bc%eb%a1%9c-%ec%82%ac%ec%9a%a9%ed%95%98%eb%8a%94-host-%ec%84%a4%ec%a0%95">주로 사용하는 Host 설정</a>
+
+</li>
+<li><a href="#git">Git</a>
+
+</li>
+<li><a href="#local-forward">Local Forward</a>
+
+</li>
 </ul>
 </li>
-<li><a href="#password-%EC%9E%85%EB%A0%A5-%EC%97%86%EC%9D%B4-ssh-key%EB%A1%9C-client%EC%97%90%EC%84%9C-server%EB%A1%9C-%EC%A0%91%EC%86%8D%ED%95%98%EA%B8%B0">Password 입력 없이 SSH Key로 Client에서 Server로 접속하기</a>
+<li><a href="#password-%ec%9e%85%eb%a0%a5-%ec%97%86%ec%9d%b4-ssh-key%eb%a1%9c-client%ec%97%90%ec%84%9c-server%eb%a1%9c-%ec%a0%91%ec%86%8d%ed%95%98%ea%b8%b0">Password 입력 없이 SSH Key로 Client에서 Server로 접속하기</a>
+
+
 <ul>
-<li><a href="#%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EC%97%90%EC%84%9C-%EC%84%A4%EC%A0%95">클라이언트에서 설정</a></li>
-<li><a href="#%EC%84%9C%EB%B2%84%EC%97%90%EC%84%9C-%EC%84%A4%EC%A0%95">서버에서 설정</a></li>
+<li><a href="#%ed%81%b4%eb%9d%bc%ec%9d%b4%ec%96%b8%ed%8a%b8%ec%97%90%ec%84%9c-%ec%84%a4%ec%a0%95">클라이언트에서 설정</a>
+
+</li>
+<li><a href="#%ec%84%9c%eb%b2%84%ec%97%90%ec%84%9c-%ec%84%a4%ec%a0%95">서버에서 설정</a>
+
+</li>
 </ul>
 </li>
-<li><a href="#%EC%B0%B8%EC%A1%B0">참조</a></li>
+<li><a href="#%ec%b0%b8%ec%a1%b0">참조</a>
+
+</li>
 </ul>
 <h1 id="ssh-key-생성">SSH key 생성</h1>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># RSA</span>
@@ -695,7 +723,9 @@ Password 인증 방식도 한번 인증하고나면 client 측에 <code>known_ho
 </span></span><span style="display:flex;"><span>  <span style="color:#eedd82">HostKeyAlgorithms</span> = +ssh-rsa,ssh-dss
 </span></span><span style="display:flex;"><span>  LogLevel VERBOSE
 </span></span></code></pre></div><ul>
-<li><a href="https://cloud.ibm.com/docs/hp-virtual-servers?topic=hp-virtual-servers-generate_ssh">HostKeyAlgorithms</a>
+<li><a href="https://cloud.ibm.com/docs/hp-virtual-servers?topic=hp-virtual-servers-generate_ssh&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">HostKeyAlgorithms</a>
+
+
 <ul>
 <li>ssh-ed25519</li>
 <li>ssh-rsa</li>
@@ -797,24 +827,38 @@ Client에서 개인키를 사용하여 접속합니다.
 <li>ChatGPT</li>
 <li>Client
 <ul>
-<li><a href="https://www.ssh.com/academy/ssh/config">SSH config file for OpenSSH client</a> - SSH Academy</li>
-<li><a href="https://linux.die.net/man/5/ssh_config">ssh_config(5)</a> - Linux man page</li>
+<li><a href="https://www.ssh.com/academy/ssh/config?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">SSH config file for OpenSSH client</a>
+
+ - SSH Academy</li>
+<li><a href="https://linux.die.net/man/5/ssh_config?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ssh_config(5)</a>
+
+ - Linux man page</li>
 </ul>
 </li>
 <li>Server
 <ul>
-<li><a href="https://linux.die.net/man/5/sshd_config">sshd_config(5)</a> - Linux man page</li>
+<li><a href="https://linux.die.net/man/5/sshd_config?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">sshd_config(5)</a>
+
+ - Linux man page</li>
 </ul>
 </li>
 <li>원리
 <ul>
-<li><a href="https://naleejang.tistory.com/218">보안 그리고 암호화 알고리즘</a> - 장현정(naleejang)</li>
-<li><a href="https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596">SSH 동작원리 및 EC2 SSH 접속</a> - redwood</li>
+<li><a href="https://naleejang.tistory.com/218?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">보안 그리고 암호화 알고리즘</a>
+
+ - 장현정(naleejang)</li>
+<li><a href="https://medium.com/@labcloud/ssh-%EC%95%94%ED%98%B8%ED%99%94-%EC%9B%90%EB%A6%AC-%EB%B0%8F-aws-ssh-%EC%A0%91%EC%86%8D-%EC%8B%A4%EC%8A%B5-33a08fa76596?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">SSH 동작원리 및 EC2 SSH 접속</a>
+
+ - redwood</li>
 </ul>
 </li>
-<li><a href="https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/">Managing multiple Bitbucket user SSH keys on one device</a> - Bitbucket
+<li><a href="https://support.atlassian.com/bitbucket-cloud/docs/managing-multiple-bitbucket-user-ssh-keys-on-one-device/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Managing multiple Bitbucket user SSH keys on one device</a>
+
+ - Bitbucket
 <ul>
-<li><a href="https://blog.outsider.ne.kr/1448">Git 계정 여러 개 동시 사용하기</a> - Outsider&rsquo;s Dev Story</li>
+<li><a href="https://blog.outsider.ne.kr/1448?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git 계정 여러 개 동시 사용하기</a>
+
+ - Outsider&rsquo;s Dev Story</li>
 </ul>
 </li>
 </ul>

@@ -399,16 +399,30 @@
 <strong>엘라스틱서치는</strong> 책 뒷부분에 있는 색인(index)을 보고 <strong>필요한 페이지만 찾으면 됩니다</strong>.
 이 글에서는 e커머스 서비스에서 검색 성능을 개선하기 위해 도입한 엘라스틱서치와 인덱싱 전략에 대해 소개합니다.</p>
 <ul>
-<li><a href="#%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-%EB%8F%84%EC%9E%85-%EB%B0%B0%EA%B2%BD">엘라스틱서치 도입 배경</a></li>
-<li><a href="#rdb-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%9D%B8%EB%8D%B1%EC%8B%B1%ED%95%98%EB%8A%94-%EC%A0%84%EB%9E%B5">RDB 데이터를 인덱싱하는 전략</a>
+<li><a href="#%ec%97%98%eb%9d%bc%ec%8a%a4%ed%8b%b1%ec%84%9c%ec%b9%98-%eb%8f%84%ec%9e%85-%eb%b0%b0%ea%b2%bd">엘라스틱서치 도입 배경</a>
+
+</li>
+<li><a href="#rdb-%eb%8d%b0%ec%9d%b4%ed%84%b0%eb%a5%bc-%ec%9d%b8%eb%8d%b1%ec%8b%b1%ed%95%98%eb%8a%94-%ec%a0%84%eb%9e%b5">RDB 데이터를 인덱싱하는 전략</a>
+
+
 <ul>
-<li><a href="#1-%EA%B0%80%EC%9E%A5-%EC%89%AC%EC%9A%B4-%EB%B0%A9%EB%B2%95-batch">1. 가장 쉬운 방법 Batch</a></li>
-<li><a href="#2-update-%EB%8D%B0%EC%9D%B4%ED%84%B0">2. UPDATE 데이터</a></li>
-<li><a href="#3-hard-delete-%EB%8D%B0%EC%9D%B4%ED%84%B0">3. HARD DELETE 데이터</a></li>
+<li><a href="#1-%ea%b0%80%ec%9e%a5-%ec%89%ac%ec%9a%b4-%eb%b0%a9%eb%b2%95-batch">1. 가장 쉬운 방법 Batch</a>
+
+</li>
+<li><a href="#2-update-%eb%8d%b0%ec%9d%b4%ed%84%b0">2. UPDATE 데이터</a>
+
+</li>
+<li><a href="#3-hard-delete-%eb%8d%b0%ec%9d%b4%ed%84%b0">3. HARD DELETE 데이터</a>
+
+</li>
 </ul>
 </li>
-<li><a href="#%EB%8D%94-%EA%B0%9C%EC%84%A0%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EB%B6%80%EB%B6%84">더 개선할 수 있는 부분</a></li>
-<li><a href="#%EC%9D%B4-%EA%B3%A0%EB%AF%BC%EC%9D%84-%EC%A0%80%EB%A7%8C-%ED%96%88%EB%8D%98-%EA%B2%8C-%EC%95%84%EB%8B%88%EC%97%88%EC%8A%B5%EB%8B%88%EB%8B%A4">이 고민을 저만 했던 게 아니었습니다</a></li>
+<li><a href="#%eb%8d%94-%ea%b0%9c%ec%84%a0%ed%95%a0-%ec%88%98-%ec%9e%88%eb%8a%94-%eb%b6%80%eb%b6%84">더 개선할 수 있는 부분</a>
+
+</li>
+<li><a href="#%ec%9d%b4-%ea%b3%a0%eb%af%bc%ec%9d%84-%ec%a0%80%eb%a7%8c-%ed%96%88%eb%8d%98-%ea%b2%8c-%ec%95%84%eb%8b%88%ec%97%88%ec%8a%b5%eb%8b%88%eb%8b%a4">이 고민을 저만 했던 게 아니었습니다</a>
+
+</li>
 </ul>
 <h1 id="엘라스틱서치-도입-배경">엘라스틱서치 도입 배경</h1>
 <p><strong>매일 새벽에 장애가 발생하기 시작했습니다</strong>.
@@ -444,7 +458,9 @@ MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지�
 </ul>
 <h1 id="rdb-데이터를-인덱싱하는-전략">RDB 데이터를 인덱싱하는 전략</h1>
 <h2 id="1-가장-쉬운-방법-batch">1. 가장 쉬운 방법 Batch</h2>
-<p>처음엔 <a href="https://www.elastic.co/kr/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash">Elastic 공식 문서</a>를 참조해서
+<p>처음엔 <a href="https://www.elastic.co/kr/blog/how-to-keep-elasticsearch-synchronized-with-a-relational-database-using-logstash?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Elastic 공식 문서</a>
+
+를 참조해서
 <strong>로그스태시(Logstash)</strong><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>로 시작했지만 원하는 로그와 커스텀 동작을 추가하기 힘들었습니다.
 그래서 성능 개선 후 바로 <strong>파이썬(Python)</strong> 스크립트로 전환했습니다.
 대략적인 ETL 과정은 다음과 같습니다.</p>
@@ -492,13 +508,25 @@ Spring Batch로 전환하면 <strong>배치 작업을 병럴 처리해서 처리
 RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것입니다.</p>
 <h1 id="이-고민을-저만-했던-게-아니었습니다">이 고민을 저만 했던 게 아니었습니다</h1>
 <ul>
-<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html">Tune for indexing speed</a> | Elastic</li>
-<li><a href="https://youtu.be/fBfUr_8Pq8A">엘라스틱서치를 이용한 상품 검색 엔진 개발 일지</a> | NHN FORWARD 22</li>
-<li><a href="https://youtu.be/1hpfNvcEbYQ">샵바이 주문 검색 성능 개선기</a> | NHN FORWARD 22</li>
-<li><a href="https://www.redhat.com/topics/integration/what-is-change-data-capture">What is change data capture (CDC)?</a> | Red Hat
+<li><a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/tune-for-indexing-speed.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Tune for indexing speed</a>
+
+ | Elastic</li>
+<li><a href="https://youtu.be/fBfUr_8Pq8A?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">엘라스틱서치를 이용한 상품 검색 엔진 개발 일지</a>
+
+ | NHN FORWARD 22</li>
+<li><a href="https://youtu.be/1hpfNvcEbYQ?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">샵바이 주문 검색 성능 개선기</a>
+
+ | NHN FORWARD 22</li>
+<li><a href="https://www.redhat.com/topics/integration/what-is-change-data-capture?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">What is change data capture (CDC)?</a>
+
+ | Red Hat
 <ul>
-<li><a href="https://tech.kakaopay.com/post/kakaopaysec-mongodb-cdc/">Oracle에서 MongoDB로의 CDC Pipeline 구축</a> | 카카오페이</li>
-<li><a href="https://hyperconnect.github.io/2021/01/11/cdc-platform.html">CDC &amp; CDC Sink Platform 개발 1편 - CDC Platform 개발</a> | 하이퍼커넥트</li>
+<li><a href="https://tech.kakaopay.com/post/kakaopaysec-mongodb-cdc/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Oracle에서 MongoDB로의 CDC Pipeline 구축</a>
+
+ | 카카오페이</li>
+<li><a href="https://hyperconnect.github.io/2021/01/11/cdc-platform.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CDC &amp; CDC Sink Platform 개발 1편 - CDC Platform 개발</a>
+
+ | 하이퍼커넥트</li>
 </ul>
 </li>
 </ul>
@@ -506,11 +534,17 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 <hr>
 <ol>
 <li id="fn:1">
-<p>Logstash 사용 시 고려했던 성능 관련 <a href="https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html">문서1</a>,
-<a href="https://www.elastic.co/guide/en/logstash/7.17/resiliency.html">문서2</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Logstash 사용 시 고려했던 성능 관련 <a href="https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">문서1</a>
+
+,
+<a href="https://www.elastic.co/guide/en/logstash/7.17/resiliency.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">문서2</a>
+
+&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://youtu.be/1hpfNvcEbYQ?t=862">동일한 사례</a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://youtu.be/1hpfNvcEbYQ?t=862&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">동일한 사례</a>
+
+&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
 <p><strong>Hard Delete</strong>란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 <code>DELETE</code>.
@@ -519,7 +553,9 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 <li id="fn:4">
 <p>Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
 또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었습니다.
-<a href="https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/">Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&hellip;</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<a href="https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해&hellip;</a>
+
+&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5">
 <p>Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>

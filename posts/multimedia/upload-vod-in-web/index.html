@@ -408,7 +408,9 @@
 이후 이 파일에 대해 <strong>트랜스코딩(인코딩)</strong>, <strong>썸네일 생성</strong>, <strong>HLS/DASH 세그멘테이션</strong> 등의 후처리가 진행됩니다.</p>
 <p>대용량 비디오 파일을 업로드할 경우에는 위에서 언급한 <strong>청크 단위 업로드와 이어받기(resumable upload)</strong> 기능이 특히 중요합니다.
 업로드 중 일시적 네트워크 불안정이 있더라도 처음부터 다시 하지 않고 중단된 부분부터 이어서 전송할 수 있어 업로드 효율과 사용자 경험이 크게 향상됩니다.
-이러한 기능을 구현하기 위해 <a href="https://tus.io/">Tus 프로토콜</a>이 활용되기도 합니다.</p>
+이러한 기능을 구현하기 위해 <a href="https://tus.io/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Tus 프로토콜</a>
+
+이 활용되기도 합니다.</p>
 <h1 id="http와-파일-업로드">HTTP와 파일 업로드</h1>
 <p>일반적으로 웹 사이트에서 VOD 업로드하기에는 <strong>HTTP</strong>를 사용합니다.
 HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
@@ -417,7 +419,9 @@ HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
 다중 요청을 병렬로 보내기 위해 브라우저는 도메인당 여러 TCP 커넥션을 여는 식으로 우회했으나,
 근본적으로는 커넥션마다 순차 처리로 인해 <strong>HOL(Head-of-Line) Blocking</strong> 문제가 있습니다.
 파일 업로드의 경우 클라이언트가 하나의 파일을 보내면 <strong>TCP</strong> 상에서 데이터를 스트리밍하며 전송합니다.
-HTTP/1.1은 <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding">Chunked Transfer Encoding</a>을 통해
+HTTP/1.1은 <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Chunked Transfer Encoding</a>
+
+을 통해
 콘텐츠 길이를 모른 채 스트리밍 전송할 수 있지만 결국 순차적으로 전달됩니다.
 장점은 구현이 단순하고 광범위한 호환성을 지니며 모든 시스템이 HTTP/1.1을 이해한다는 점입니다.
 다만 대용량 업로드 시 하나의 TCP 커넥션에 의존하기 때문에 한 패킷이라도 손실되면 해당 패킷이 재전송될 때까지 전송이 정체될 수 있습니다.</p>
@@ -429,12 +433,16 @@ HTTP/1.1은 <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding">Ch
 하나의 패킷 손실로 인해 해당 TCP 연결에 매핑된 모든 스트림 전송이 지연될 수 있기 때문입니다.
 특히 HTTP/2는 TCP에 의존하면서도 <strong>스트림별 흐름 제어(Window)</strong> 를 추가로 도입했는데, 기본 설정으로 스트림당 초기 윈도우 크기가 65,535바이트로 제한됩니다.
 이러한 추가 흐름 제어는 네트워크 <strong>대역폭-지연 곱(BDP)</strong> 이 큰 환경에서 병목을 일으킬 수 있습니다.
-<a href="https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/">Cloudflare의 실험</a>을 보면
+<a href="https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cloudflare의 실험</a>
+
+을 보면
 HTTP/1.1에서는 단일 버퍼를 사용하고 TCP 소켓 버퍼가 흐름 제어를 합니다.
 TCP 소켓 버퍼는 최근 OS에서 자동으로 조정됩니다.
 HTTP/2에서도 애플리케이션 계층에서 수신 흐름 제어를 하지만,
 NGINX를 사용하면 수신 버퍼에 고정 크기를 사용합니다.
-이는 현재 네트워크의 <a href="https://en.wikipedia.org/wiki/Bandwidth-delay_product">BDP(Bandwidth-delay product)</a>
+이는 현재 네트워크의 <a href="https://en.wikipedia.org/wiki/Bandwidth-delay_product?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">BDP(Bandwidth-delay product)</a>
+
+
 가 정해진 수신 버퍼 크기보다 큰 경우 업로드 속도를 제약하고,
 버퍼 크기가 너무 작은 경우에 HTTP/2 흐름 제어에서 병목이 발생합니다.
 그래서 버퍼 크기를 조정하거나 자동 조정(autotune) 설정을 고려해야 합니다.</p>
@@ -517,7 +525,9 @@ Tus는 <strong>HTTP 기반의 오픈 프로토콜</strong>로 파일 업로드�
 또한 동시 업로드 연결 수가 많을 때 소켓이 TIME_WAIT이나 CLOSE_WAIT 상태로 지나치게 쌓여 있지는 않은지도 살펴봐야 합니다 (커널 튜닝으로 개선 가능).
 최신 리눅스에서는 <code>ss -s</code> 명령으로 유사한 통계를 볼 수 있으며, <code>ss -tuna</code>로 소켓 상태를 더 빠르게 조회할 수 있습니다.</li>
 </ul>
-<p>이 밖에도 <a href="/posts/network/wireshark/">tcpdump</a>,
+<p>이 밖에도 <a href="/posts/network/wireshark/">tcpdump</a>
+
+,
 <strong>dstat</strong>, <strong>vmstat</strong>, <strong>sar</strong>, <strong>nload</strong>, <strong>NetHogs</strong> 등의 도구를 활용하여 시스템 전반의 자원 사용률을 모니터링할 수 있습니다.</p>
 <p>핵심은 업로드 성능을 종합적으로 살펴보는 것입니다.
 <strong>네트워크 대역폭, 디스크 쓰기 속도, CPU, 메모리 버퍼</strong> 등이 모두 원활한지 확인하고,
@@ -533,11 +543,21 @@ Tus는 <strong>HTTP 기반의 오픈 프로토콜</strong>로 파일 업로드�
 <li>시스템 성능 분석과 최적화 | 브렌던 그레그</li>
 <li>속도 체크
 <ul>
-<li><a href="https://speed.cloudflare.com/">Cloudflare Speed Test</a></li>
-<li><a href="https://fast.com/">Netflix Fast.com</a></li>
-<li><a href="https://www.google.com/search?q=speed+test">Google Speed Test</a></li>
-<li><a href="https://fast.com/">Netflix Fast.com</a></li>
-<li><a href="https://www.speedtest.net/">Speedtest by Ookla</a></li>
+<li><a href="https://speed.cloudflare.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cloudflare Speed Test</a>
+
+</li>
+<li><a href="https://fast.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Netflix Fast.com</a>
+
+</li>
+<li><a href="https://www.google.com/search?q=speed&#43;test&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Google Speed Test</a>
+
+</li>
+<li><a href="https://fast.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Netflix Fast.com</a>
+
+</li>
+<li><a href="https://www.speedtest.net/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Speedtest by Ookla</a>
+
+</li>
 </ul>
 </li>
 </ul>
@@ -545,7 +565,9 @@ Tus는 <strong>HTTP 기반의 오픈 프로토콜</strong>로 파일 업로드�
 <hr>
 <ol>
 <li id="fn:1">
-<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html">원문</a>:
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">원문</a>
+
+:
 It&rsquo;s a best practice to use multipart upload for objects that are 100 MB or larger instead of uploading them in a single operation.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>

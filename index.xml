@@ -37,10 +37,14 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 &lt;p&gt;&lt;strong&gt;MOV&lt;/strong&gt;는 애플의 QuickTime용 컨테이너로, MP4와 구조는 유사하지만 &lt;strong&gt;품질 우선 포맷&lt;/strong&gt;입니다. 고품질의 동영상과 음향을 담을 수 있어 전문 영상 편집에 선호되며, 다양한 코덱을 지원하지만 주로 Apple 생태계에서 최적화되어 있습니다. 다만 &lt;strong&gt;파일 크기가 크고&lt;/strong&gt; 다른 플랫폼과의 호환성은 MP4보다 떨어집니다. &lt;strong&gt;동영상 스트리밍에는 비효율적&lt;/strong&gt;이어서, 일반적인 VOD 배포보다는 제작 단계나 특수 목적에 쓰입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;M3U&lt;/strong&gt;는 정확히 말하면 비디오 컨테이너가 아니라 &lt;strong&gt;HLS 플레이리스트&lt;/strong&gt;입니다. &lt;strong&gt;텍스트 기반 재생 목록 파일&lt;/strong&gt;로 영상 데이터를 담지는 않습니다. 텍스트 인코딩이 &lt;code&gt;UTF-8&lt;/code&gt;인 &lt;code&gt;.m3u8&lt;/code&gt;이 널리 쓰입니다. &lt;strong&gt;HLS(HTTP Live Streaming)&lt;/strong&gt; 프로토콜에서 쓰이는 포맷으로 여러 &lt;strong&gt;품질별 스트림 경로&lt;/strong&gt;와 &lt;strong&gt;세그먼트&lt;/strong&gt; 파일 목록을 포함합니다. 예를 들어 하나의 HLS 마스터 플레이리스트(&lt;code&gt;.m3u8&lt;/code&gt;)에 240p, 480p, 720p 등 각 해상도 스트림의 경로가 정의되고, 각각 또 다른 M3U에 잘게 쪼개진 TS 또는 MP4 &lt;strong&gt;조각 파일&lt;/strong&gt;들의 URL이 나열되는 식입니다. 플레이어는 이용자의 &lt;strong&gt;네트워크 속도에 따라&lt;/strong&gt; 적절한 화질의 세그먼트를 순차적으로 다운받아 재생하므로, 끊김 없이 &lt;strong&gt;적응형 스트리밍&lt;/strong&gt;이 가능합니다. 과거처럼 영상 전체를 받지 않고도 원하는 시점의 조각만 불러올 수 있어 건너뛰기(Seek) 기능도 효율적으로 만들 수 있습니다. 다만 M3U는 &lt;strong&gt;스트리밍 전용 포맷&lt;/strong&gt;이므로 사용자에게 하나의 파일로 내려받게 하려면 MP4 등으로 다시 합치거나 순차적으로 받아 클라이언트 측에서 합치는 기능을 추가해야 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/download-vod-in-web/m3u8file.png&#34; alt=&#34;M3U Playlist&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://publit.io/community/blog/hls-video-streaming-encryption&#34;&gt;이미지 출처&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://publit.io/community/blog/hls-video-streaming-encryption?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;위 그림은 M3U 플레이리스트 구조를 간략히 보여줍니다. 왼쪽의 &lt;strong&gt;마스터 플레이리스트&lt;/strong&gt;(.m3u8)가 &lt;strong&gt;여러 화질의 플레이리스트&lt;/strong&gt;를 가리키고, 각 플레이리스트는 일정 길이로 분할된 &lt;strong&gt;TS 세그먼트&lt;/strong&gt;들의 URL 목록을 담고 있습니다.&lt;/p&gt;
 &lt;p&gt;플레이어는 먼저 마스터 파일을 받아 현재 네트워크 상황에 맞는 화질을 선택한 뒤, 해당 화질의 세그먼트들을 순서대로 다운로드하여 재생합니다. 이러한 구조 덕분에 클라이언트는 동영상 전체를 다운로드하지 않고도 원하는 구간을 바로 재생할 수 있고, 네트워크 속도 변화에 따라 화질을 자동으로 조정할 수 있습니다. 서버 입장에서는 동영상을 CDN 서버에 효율적으로 캐싱할 수 있습니다.&lt;/p&gt;
-&lt;p&gt;M3U 구조를 좀 더 자세히 살펴보겠습니다. &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC-8216: HLS (HTTP Live Streaming)&lt;/a&gt; 문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 &lt;code&gt;EXTM3U&lt;/code&gt; 태그로 시작해야 합니다. 마스터 플레이리스트는 &lt;code&gt;EXT-X-STREAM-INF&lt;/code&gt; 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 &lt;code&gt;EXTINF&lt;/code&gt; 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.&lt;/p&gt;
+&lt;p&gt;M3U 구조를 좀 더 자세히 살펴보겠습니다. &lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC-8216: HLS (HTTP Live Streaming)&lt;/a&gt;
+
+ 문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 &lt;code&gt;EXTM3U&lt;/code&gt; 태그로 시작해야 합니다. 마스터 플레이리스트는 &lt;code&gt;EXT-X-STREAM-INF&lt;/code&gt; 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 &lt;code&gt;EXTINF&lt;/code&gt; 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.&lt;/p&gt;
 &lt;p&gt;Master Playlist: &lt;code&gt;x36xhzz.m3u8&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTM3U&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2149280,CODECS=&amp;#34;mp4a.40.2,avc1.64001f&amp;#34;,RESOLUTION=1280x720,NAME=&amp;#34;720&amp;#34;&lt;/span&gt;
@@ -73,7 +77,11 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXTINF:4.567,&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;url_653/193039199_mp4_h264_aac_fhd_7.ts
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;#EXT-X-ENDLIST&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://hlsjs.video-dev.org/demo/&#34;&gt;hls.js 데모 페이지&lt;/a&gt;에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 &lt;a href=&#34;https://demo.unified-streaming.com/k8s/features/stable/#!/hls&#34;&gt;Unified Streaming&lt;/a&gt;에서 확인할 수 있습니다.&lt;/p&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://hlsjs.video-dev.org/demo/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;hls.js 데모 페이지&lt;/a&gt;
+
+에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 &lt;a href=&#34;https://demo.unified-streaming.com/k8s/features/stable/?utm_source=markruler.github.io#!/hls&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Unified Streaming&lt;/a&gt;
+
+에서 확인할 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;트랜스코딩&#34;&gt;트랜스코딩&lt;/h1&gt;
 &lt;blockquote&gt;
 &lt;p&gt;이용자가 업로드하는 대부분의 모바일 촬영 동영상은 안드로이드 기종(삼성, 구글 등)은 MP4, 애플 기종일 경우 MOV(HEVC) 포맷입니다.
@@ -131,7 +139,9 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
 비디오 인코딩이 목적이니 비디오 스트림이 없는 경우는 제외하고 오디오 스트림이 없는 경우만 상정하겠습니다.
 보통 동영상은 비디오 스트림과 오디오 스트림이 함께 담긴 컨테이너입니다.
-이를 &lt;a href=&#34;https://ffmpeg.org/ffmpeg.html#Transcoding&#34;&gt;트랜스코딩&lt;/a&gt;하려면 입력 소스와 출력을 매핑시킵니다.&lt;/p&gt;
+이를 &lt;a href=&#34;https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Transcoding&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;트랜스코딩&lt;/a&gt;
+
+하려면 입력 소스와 출력을 매핑시킵니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;┌──────────┬─────────────────────┐
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;│ demuxer  │                     │       audio packets
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;╞══════════╡ stream 0 (audio)    ├─────────────────────────────────────╮
@@ -160,7 +170,9 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 입력 소스가 하나라면 0을 입력합니다.
 스트림 인덱스는 입력 소스 안에 여러 스트림이 있다면 스트림 인덱스를 지정합니다.
 스트림이 하나라면 0을 입력합니다.
-&lt;a href=&#34;https://ffmpeg.org/ffmpeg.html#Stream-specifiers-1&#34;&gt;스트림 타입&lt;/a&gt;은 5가지가 있습니다.&lt;/p&gt;
+&lt;a href=&#34;https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Stream-specifiers-1&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;스트림 타입&lt;/a&gt;
+
+은 5가지가 있습니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;v&lt;/code&gt; video (비디오)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;a&lt;/code&gt; audio (오디오)&lt;/li&gt;
@@ -180,7 +192,9 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 &lt;h1 id=&#34;다운로드&#34;&gt;다운로드&lt;/h1&gt;
 &lt;p&gt;사용자 기기나 서버 모두 저장 공간은 한정되어 있습니다. 다운로드 기능을 제공한다면 &lt;strong&gt;해상도/품질 옵션&lt;/strong&gt;을 두어 사용자가 기기 용량에 맞게 선택하도록 합니다.
 서버 측에서는 &lt;strong&gt;스토리지 비용&lt;/strong&gt;을 고려해 자주 쓰이지 않는 품질의 파일은 저장하지 않거나, &lt;strong&gt;스토리지 계층화(storage tiering)&lt;/strong&gt; 로 보관 비용을 줄일 수 있습니다.
-예를 들어 &lt;a href=&#34;https://www.tencentcloud.com/products/vod&#34;&gt;Tencent Cloud VOD&lt;/a&gt;는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 &lt;strong&gt;콘텐츠 수명주기 관리&lt;/strong&gt;를 통해 저장 공간을 효율화할 수 있습니다.
+예를 들어 &lt;a href=&#34;https://www.tencentcloud.com/products/vod?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Tencent Cloud VOD&lt;/a&gt;
+
+는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 &lt;strong&gt;콘텐츠 수명주기 관리&lt;/strong&gt;를 통해 저장 공간을 효율화할 수 있습니다.
 또한 H.265/AV1 같은 고효율 코덱을 도입하면 같은 품질이라도 파일 크기를 크게 줄여 저장 공간 부담을 낮출 수 있습니다.&lt;/p&gt;
 &lt;p&gt;대용량 동영상 전송에서는 네트워크 최적화가 필수입니다. &lt;strong&gt;CDN&lt;/strong&gt;(콘텐츠 전송 네트워크)을 활용하면 사용자와 가까운 엣지 서버에서 동영상을 제공하여 지연을 줄이고 원본 서버 부하를 낮출 수 있습니다.
 이는 특히 동시 시청자가 많을 때 효과적입니다.
@@ -192,9 +206,13 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 이러한 &lt;strong&gt;미디어 파이프라인 자동화&lt;/strong&gt;를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/&#34;&gt;IVS Core team&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;IVS Core team&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/&#34;&gt;Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -209,12 +227,18 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 &lt;code&gt;chrome://gpu&lt;/code&gt;에서 현재 활성화중인지 확인 후 비활성화 상태라면 &lt;code&gt;chrome://settings/system&lt;/code&gt;에서 &lt;code&gt;Use graphics acceleration when available&lt;/code&gt; 옵션을 활성화하면 됩니다.
 지원 여부는 다음 페이지들에서 확인할 수 있습니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html&#34;&gt;Intel CPU 지원 여부 확인&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Intel CPU 지원 여부 확인&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html&#34;&gt;Media Capabilities Supported by Intel Hardware&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Media Capabilities Supported by Intel Hardware&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/NVDEC#GPU_support&#34;&gt;NVIDIA 그래픽 카드 지원 여부 확인&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/NVDEC?utm_source=markruler.github.io#GPU_support&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;NVIDIA 그래픽 카드 지원 여부 확인&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -249,7 +273,9 @@ VOD 서비스에서는 하나의 동영상에 대해 &lt;strong&gt;여러 해상
 이후 이 파일에 대해 &lt;strong&gt;트랜스코딩(인코딩)&lt;/strong&gt;, &lt;strong&gt;썸네일 생성&lt;/strong&gt;, &lt;strong&gt;HLS/DASH 세그멘테이션&lt;/strong&gt; 등의 후처리가 진행됩니다.&lt;/p&gt;
 &lt;p&gt;대용량 비디오 파일을 업로드할 경우에는 위에서 언급한 &lt;strong&gt;청크 단위 업로드와 이어받기(resumable upload)&lt;/strong&gt; 기능이 특히 중요합니다.
 업로드 중 일시적 네트워크 불안정이 있더라도 처음부터 다시 하지 않고 중단된 부분부터 이어서 전송할 수 있어 업로드 효율과 사용자 경험이 크게 향상됩니다.
-이러한 기능을 구현하기 위해 &lt;a href=&#34;https://tus.io/&#34;&gt;Tus 프로토콜&lt;/a&gt;이 활용되기도 합니다.&lt;/p&gt;
+이러한 기능을 구현하기 위해 &lt;a href=&#34;https://tus.io/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Tus 프로토콜&lt;/a&gt;
+
+이 활용되기도 합니다.&lt;/p&gt;
 &lt;h1 id=&#34;http와-파일-업로드&#34;&gt;HTTP와 파일 업로드&lt;/h1&gt;
 &lt;p&gt;일반적으로 웹 사이트에서 VOD 업로드하기에는 &lt;strong&gt;HTTP&lt;/strong&gt;를 사용합니다.
 HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
@@ -258,7 +284,9 @@ HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
 다중 요청을 병렬로 보내기 위해 브라우저는 도메인당 여러 TCP 커넥션을 여는 식으로 우회했으나,
 근본적으로는 커넥션마다 순차 처리로 인해 &lt;strong&gt;HOL(Head-of-Line) Blocking&lt;/strong&gt; 문제가 있습니다.
 파일 업로드의 경우 클라이언트가 하나의 파일을 보내면 &lt;strong&gt;TCP&lt;/strong&gt; 상에서 데이터를 스트리밍하며 전송합니다.
-HTTP/1.1은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Chunked_transfer_encoding&#34;&gt;Chunked Transfer Encoding&lt;/a&gt;을 통해
+HTTP/1.1은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Chunked_transfer_encoding?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Chunked Transfer Encoding&lt;/a&gt;
+
+을 통해
 콘텐츠 길이를 모른 채 스트리밍 전송할 수 있지만 결국 순차적으로 전달됩니다.
 장점은 구현이 단순하고 광범위한 호환성을 지니며 모든 시스템이 HTTP/1.1을 이해한다는 점입니다.
 다만 대용량 업로드 시 하나의 TCP 커넥션에 의존하기 때문에 한 패킷이라도 손실되면 해당 패킷이 재전송될 때까지 전송이 정체될 수 있습니다.&lt;/p&gt;
@@ -270,12 +298,16 @@ HTTP/1.1은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Chunked_transfer_encod
 하나의 패킷 손실로 인해 해당 TCP 연결에 매핑된 모든 스트림 전송이 지연될 수 있기 때문입니다.
 특히 HTTP/2는 TCP에 의존하면서도 &lt;strong&gt;스트림별 흐름 제어(Window)&lt;/strong&gt; 를 추가로 도입했는데, 기본 설정으로 스트림당 초기 윈도우 크기가 65,535바이트로 제한됩니다.
 이러한 추가 흐름 제어는 네트워크 &lt;strong&gt;대역폭-지연 곱(BDP)&lt;/strong&gt; 이 큰 환경에서 병목을 일으킬 수 있습니다.
-&lt;a href=&#34;https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/&#34;&gt;Cloudflare의 실험&lt;/a&gt;을 보면
+&lt;a href=&#34;https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Cloudflare의 실험&lt;/a&gt;
+
+을 보면
 HTTP/1.1에서는 단일 버퍼를 사용하고 TCP 소켓 버퍼가 흐름 제어를 합니다.
 TCP 소켓 버퍼는 최근 OS에서 자동으로 조정됩니다.
 HTTP/2에서도 애플리케이션 계층에서 수신 흐름 제어를 하지만,
 NGINX를 사용하면 수신 버퍼에 고정 크기를 사용합니다.
-이는 현재 네트워크의 &lt;a href=&#34;https://en.wikipedia.org/wiki/Bandwidth-delay_product&#34;&gt;BDP(Bandwidth-delay product)&lt;/a&gt;
+이는 현재 네트워크의 &lt;a href=&#34;https://en.wikipedia.org/wiki/Bandwidth-delay_product?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;BDP(Bandwidth-delay product)&lt;/a&gt;
+
+
 가 정해진 수신 버퍼 크기보다 큰 경우 업로드 속도를 제약하고,
 버퍼 크기가 너무 작은 경우에 HTTP/2 흐름 제어에서 병목이 발생합니다.
 그래서 버퍼 크기를 조정하거나 자동 조정(autotune) 설정을 고려해야 합니다.&lt;/p&gt;
@@ -358,7 +390,9 @@ Tus는 &lt;strong&gt;HTTP 기반의 오픈 프로토콜&lt;/strong&gt;로 파일
 또한 동시 업로드 연결 수가 많을 때 소켓이 TIME_WAIT이나 CLOSE_WAIT 상태로 지나치게 쌓여 있지는 않은지도 살펴봐야 합니다 (커널 튜닝으로 개선 가능).
 최신 리눅스에서는 &lt;code&gt;ss -s&lt;/code&gt; 명령으로 유사한 통계를 볼 수 있으며, &lt;code&gt;ss -tuna&lt;/code&gt;로 소켓 상태를 더 빠르게 조회할 수 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;이 밖에도 &lt;a href=&#34;https://markruler.github.io/posts/network/wireshark/&#34;&gt;tcpdump&lt;/a&gt;,
+&lt;p&gt;이 밖에도 &lt;a href=&#34;https://markruler.github.io/posts/network/wireshark/&#34;&gt;tcpdump&lt;/a&gt;
+
+,
 &lt;strong&gt;dstat&lt;/strong&gt;, &lt;strong&gt;vmstat&lt;/strong&gt;, &lt;strong&gt;sar&lt;/strong&gt;, &lt;strong&gt;nload&lt;/strong&gt;, &lt;strong&gt;NetHogs&lt;/strong&gt; 등의 도구를 활용하여 시스템 전반의 자원 사용률을 모니터링할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;핵심은 업로드 성능을 종합적으로 살펴보는 것입니다.
 &lt;strong&gt;네트워크 대역폭, 디스크 쓰기 속도, CPU, 메모리 버퍼&lt;/strong&gt; 등이 모두 원활한지 확인하고,
@@ -374,11 +408,21 @@ Tus는 &lt;strong&gt;HTTP 기반의 오픈 프로토콜&lt;/strong&gt;로 파일
 &lt;li&gt;시스템 성능 분석과 최적화 | 브렌던 그레그&lt;/li&gt;
 &lt;li&gt;속도 체크
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://speed.cloudflare.com/&#34;&gt;Cloudflare Speed Test&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://fast.com/&#34;&gt;Netflix Fast.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.google.com/search?q=speed+test&#34;&gt;Google Speed Test&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://fast.com/&#34;&gt;Netflix Fast.com&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.speedtest.net/&#34;&gt;Speedtest by Ookla&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://speed.cloudflare.com/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Cloudflare Speed Test&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://fast.com/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Netflix Fast.com&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.google.com/search?q=speed&amp;#43;test&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Google Speed Test&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://fast.com/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Netflix Fast.com&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.speedtest.net/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Speedtest by Ookla&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -386,7 +430,9 @@ Tus는 &lt;strong&gt;HTTP 기반의 오픈 프로토콜&lt;/strong&gt;로 파일
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html&#34;&gt;원문&lt;/a&gt;:
+&lt;p&gt;&lt;a href=&#34;https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;원문&lt;/a&gt;
+
+:
 It&amp;rsquo;s a best practice to use multipart upload for objects that are 100 MB or larger instead of uploading them in a single operation.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
@@ -403,35 +449,69 @@ It&amp;rsquo;s a best practice to use multipart upload for objects that are 100 
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/multimedia/audio-in-web/</guid>
         <description>임창수 https://markruler.github.io/posts/multimedia/audio-in-web/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%8B%A0%ED%98%B8-%EC%B2%98%EB%A6%AC&#34;&gt;오디오 신호 처리&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%A3%BC%EC%9A%94-%EC%98%A4%EB%94%94%EC%98%A4-%EC%BD%94%EB%8D%B1%EA%B3%BC-%ED%8F%AC%EB%A7%B7&#34;&gt;주요 오디오 코덱과 포맷&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b0%9c%ec%9a%94&#34;&gt;개요&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%98%a4%eb%94%94%ec%98%a4-%ec%8b%a0%ed%98%b8-%ec%b2%98%eb%a6%ac&#34;&gt;오디오 신호 처리&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%a3%bc%ec%9a%94-%ec%98%a4%eb%94%94%ec%98%a4-%ec%bd%94%eb%8d%b1%ea%b3%bc-%ed%8f%ac%eb%a7%b7&#34;&gt;주요 오디오 코덱과 포맷&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%BD%94%EB%8D%B1&#34;&gt;손실 압축 코덱&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%AC%B4%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%BD%94%EB%8D%B1&#34;&gt;무손실 압축 코덱&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%86%90%ec%8b%a4-%ec%95%95%ec%b6%95-%ec%bd%94%eb%8d%b1&#34;&gt;손실 압축 코덱&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%ac%b4%ec%86%90%ec%8b%a4-%ec%95%95%ec%b6%95-%ec%bd%94%eb%8d%b1&#34;&gt;무손실 압축 코덱&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-html5-audio-mse-api-web-audio-api&#34;&gt;오디오 재생: HTML5 audio, MSE API, Web Audio API&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A7%88%EC%9D%B4%ED%81%AC-%EC%9E%85%EB%A0%A5%EA%B3%BC-%EB%85%B9%EC%9D%8C-mediadevices-%EB%B0%8F-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%ac%ec%83%9d-html5-audio-mse-api-web-audio-api&#34;&gt;오디오 재생: HTML5 audio, MSE API, Web Audio API&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%a7%88%ec%9d%b4%ed%81%ac-%ec%9e%85%eb%a0%a5%ea%b3%bc-%eb%85%b9%ec%9d%8c-mediadevices-%eb%b0%8f-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#mediadevices-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%85%EB%A0%A5-%EB%B0%9B%EA%B8%B0&#34;&gt;MediaDevices 오디오 입력 받기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#web-audio-api%EB%A1%9C-%EC%9E%85%EB%A0%A5-%EC%8A%A4%ED%8A%B8%EB%A6%BC-%EC%B2%98%EB%A6%AC%ED%95%98%EA%B8%B0&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#mediarecorder%EB%A5%BC-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%98%A4%EB%94%94%EC%98%A4-%EB%85%B9%EC%9D%8C&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#web-audio%EC%99%80-mediarecorder%EC%9D%98-%EC%A1%B0%ED%95%A9&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mediadevices-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%85%eb%a0%a5-%eb%b0%9b%ea%b8%b0&#34;&gt;MediaDevices 오디오 입력 받기&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#web-audio-api%eb%a1%9c-%ec%9e%85%eb%a0%a5-%ec%8a%a4%ed%8a%b8%eb%a6%bc-%ec%b2%98%eb%a6%ac%ed%95%98%ea%b8%b0&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#mediarecorder%eb%a5%bc-%ec%82%ac%ec%9a%a9%ed%95%9c-%ec%98%a4%eb%94%94%ec%98%a4-%eb%85%b9%ec%9d%8c&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#web-audio%ec%99%80-mediarecorder%ec%9d%98-%ec%a1%b0%ed%95%a9&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%9D%98-%EC%98%A4%EB%94%94%EC%98%A4-%EC%9E%AC%EC%83%9D-%EC%A0%95%EC%B1%85&#34;&gt;브라우저의 오디오 재생 정책&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%98%A4%EB%94%94%EC%98%A4-%EC%84%B1%EB%8A%A5&#34;&gt;오디오 성능&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B2%B0%EB%A1%A0&#34;&gt;결론&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80%ec%9d%98-%ec%98%a4%eb%94%94%ec%98%a4-%ec%9e%ac%ec%83%9d-%ec%a0%95%ec%b1%85&#34;&gt;브라우저의 오디오 재생 정책&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%98%a4%eb%94%94%ec%98%a4-%ec%84%b1%eb%8a%a5&#34;&gt;오디오 성능&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b2%b0%eb%a1%a0&#34;&gt;결론&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;물리적으로&lt;/strong&gt; 매질을 통해 전달된 모든 음파를 &lt;strong&gt;사운드(sound)&lt;/strong&gt; 라고 합니다.
 한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 &lt;strong&gt;기술적으로&lt;/strong&gt; &lt;strong&gt;오디오(audio)&lt;/strong&gt; 라고 합니다.&lt;/p&gt;
 &lt;p&gt;이 글에서는 오디오의 &lt;strong&gt;입력(녹음)부터 처리, 출력(재생)까지&lt;/strong&gt;의 전체 흐름을 다룹니다.
 주요 오디오 포맷의 특성과 브라우저 호환성,
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API&#34;&gt;Web Audio API&lt;/a&gt;를 통한 &lt;strong&gt;실시간 처리&lt;/strong&gt;와
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API&#34;&gt;MediaStream Recording API&lt;/a&gt;를 통한
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web Audio API&lt;/a&gt;
+
+를 통한 &lt;strong&gt;실시간 처리&lt;/strong&gt;와
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;MediaStream Recording API&lt;/a&gt;
+
+를 통한
 &lt;strong&gt;녹음(Recording)&lt;/strong&gt;, 그리고 &lt;strong&gt;브라우저 정책&lt;/strong&gt;까지 다뤄보겠습니다.&lt;/p&gt;
 &lt;h1 id=&#34;오디오-신호-처리&#34;&gt;오디오 신호 처리&lt;/h1&gt;
 &lt;p&gt;마이크를 통해 음원(audio source)으로부터 수집한 &lt;strong&gt;아날로그 신호&lt;/strong&gt;는
@@ -439,12 +519,16 @@ It&amp;rsquo;s a best practice to use multipart upload for objects that are 100 
 파동의 &lt;strong&gt;진폭(amplitude)이 클수록&lt;/strong&gt; 그 순간 &lt;strong&gt;소리의 크기는 커집니다&lt;/strong&gt;.
 &lt;strong&gt;파장(wavelength)이 짧을수록&lt;/strong&gt;(파동의 간격이 좁을수록) 생성되는 소리의 &lt;strong&gt;주파수(음높이)는 높아집니다&lt;/strong&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-waveform.svg&#34; alt=&#34;오디오 파형&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처: MDN&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;하지만 컴퓨터는 디지털입니다.
 컴퓨터가 처리할 수 있는 방식으로 표현하려면 소리를 디지털 형태로 변환해야 합니다.
 이것을 수행하는 것이 &lt;strong&gt;아날로그-디지털 변환기(analog to digital converter)&lt;/strong&gt; 입니다&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
 줄여서 ADC 혹은 A/D 변환기라고 합니다.&lt;/p&gt;
-&lt;p&gt;대표적인 ADC 방식으로 &lt;a href=&#34;https://en.wikipedia.org/wiki/Pulse-code_modulation&#34;&gt;펄스 부호 변조(PCM, Pulse Code Modulation)&lt;/a&gt;가 있습니다.
+&lt;p&gt;대표적인 ADC 방식으로 &lt;a href=&#34;https://en.wikipedia.org/wiki/Pulse-code_modulation?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;펄스 부호 변조(PCM, Pulse Code Modulation)&lt;/a&gt;
+
+가 있습니다.
 PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격으로 &lt;strong&gt;표본화&lt;/strong&gt;(&lt;strong&gt;Sampling&lt;/strong&gt;)합니다.
 이것을 &lt;strong&gt;펄스 진폭 변조&lt;/strong&gt;(&lt;strong&gt;PAM, Pulse Amplitude Modulation&lt;/strong&gt;)라고 합니다.
 이렇게 표현된 각각의 진폭을 &lt;strong&gt;샘플&lt;/strong&gt;(&lt;strong&gt;sample&lt;/strong&gt;)이라고 부릅니다.
@@ -452,9 +536,13 @@ PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격�
 이를 &lt;strong&gt;샘플 레이트&lt;/strong&gt;(&lt;strong&gt;sample rate&lt;/strong&gt;)라고 합니다.
 예를 들어, 44,100 Hz(44.1 kHz)는 1초에 44,100개(1개에 1/44.1 ms)의 샘플을 수집한 것입니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-waveform-samples1.svg&#34; alt=&#34;오디오 파형 샘플링&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처: MDN&lt;/a&gt;
+
+&lt;/p&gt;
 &lt;p&gt;ADC가 아날로그 신호를 전압으로 변환하면
-이때 각 샘플의 진폭을 &lt;a href=&#34;https://en.wikipedia.org/wiki/Quantization_(signal_processing)&#34;&gt;양자화(Quantization)&lt;/a&gt;하여
+이때 각 샘플의 진폭을 &lt;a href=&#34;https://en.wikipedia.org/wiki/Quantization_%28signal_processing%29?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;양자화(Quantization)&lt;/a&gt;
+
+하여
 이산적인 수치로 표현합니다.
 여기서 양자화란 진폭을 일정한 간격으로 나누어 그 구간에 해당하는 정수값으로 반올림하여 표현하는 것입니다.
 샘플별 양자화 값의 범위는 &lt;strong&gt;양자화 레벨(quantization level)&lt;/strong&gt; 이라고 하며
@@ -468,7 +556,9 @@ PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격�
 1초에 약 172.3 KiB의 대역폭을 차지합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;2(Stereo) * 2 Bytes(16 bit) * 44100(sample rate) = 176,400 Bytes
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;3분(180초)의 음원을 다운로드한다면 약 30.3 MiB의 용량이 필요합니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Codec&#34;&gt;코덱(codec)&lt;/a&gt;은
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Codec?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;코덱(codec)&lt;/a&gt;
+
+은
 coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하거나 디코딩하는 요소입니다.
 &lt;strong&gt;포맷&lt;/strong&gt;은 그 데이터를 담는 &lt;strong&gt;컨테이너&lt;/strong&gt;라 할 수 있습니다.
 예를 들어 MP3라는 용어는 &lt;strong&gt;MPEG-1 Audio Layer III&lt;/strong&gt;라는 압축 코덱을 가리키면서,
@@ -491,7 +581,9 @@ coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하�
 &lt;strong&gt;Ogg&lt;/strong&gt;는 Vorbis나 Opus같은 오디오 코덱을 담을 수 있는 오픈 컨테이너이고,
 &lt;strong&gt;WebM&lt;/strong&gt;은 웹용 미디어 컨테이너로 똑같이 Vorbis나 Opus를 담습니다.
 이러한 이유로 웹에서는 동일한 음원을 여러 포맷으로 제공하여
-&lt;a href=&#34;https://caniuse.com/?search=audio%20format&#34;&gt;브라우저 호환성&lt;/a&gt;을 확보하기도 합니다.&lt;/p&gt;
+&lt;a href=&#34;https://caniuse.com/?search=audio%20format&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;브라우저 호환성&lt;/a&gt;
+
+을 확보하기도 합니다.&lt;/p&gt;
 &lt;h1 id=&#34;주요-오디오-코덱과-포맷&#34;&gt;주요 오디오 코덱과 포맷&lt;/h1&gt;
 &lt;p&gt;웹에서 주로 쓰이는 몇 가지 코덱으로 범위를 좁혀볼 수 있습니다&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
 각 코덱마다 압축 효율, 음질, 지연(latency), 라이센스 조건 등이 다르며 브라우저 지원 여부도 상이합니다.&lt;/p&gt;
@@ -562,10 +654,18 @@ Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3
 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그에 MP3 등의 URL을 지정하면 브라우저가 파일을 점진적으로 다운로드하고 &lt;strong&gt;버퍼를 채우면서 곧바로 재생&lt;/strong&gt;합니다.
 사용자는 전체 파일이 다운로드되기 전에 중간부터 듣기 시작할 수 있고, 탐색(seek)하면 해당 위치의 데이터를 요청합니다.
 이 방식은 구현이 간단하지만, 네트워크 상태에 따라 재생 도중 버퍼가 소진되면 &lt;strong&gt;일시 정지/버퍼링&lt;/strong&gt;이 발생할 수 있습니다.
-&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소에서는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState&#34;&gt;readyState&lt;/a&gt;나
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/progress_event&#34;&gt;progress&lt;/a&gt;
+&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소에서는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;readyState&lt;/a&gt;
+
+나
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/progress_event?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;progress&lt;/a&gt;
+
+
 이벤트 등을 통해 버퍼링 상태를 파악할 수 있고,
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplay_event&#34;&gt;canplay&lt;/a&gt;/&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event&#34;&gt;canplaythrough&lt;/a&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplay_event?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;canplay&lt;/a&gt;
+
+/&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;canplaythrough&lt;/a&gt;
+
+
 이벤트로 얼마나 로드되었는지 알 수 있습니다.
 일반적인 짧은 음원이나 배경음악 등은 이 방식으로 충분합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;audio id=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;player&amp;#34;&lt;/span&gt; src=&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;music.mp3&amp;#34;&lt;/span&gt; controls autoplay&amp;gt;&amp;lt;/audio&amp;gt;
@@ -594,7 +694,9 @@ DASH는 MPEG에서 표준화한 비슷한 개념의 스트리밍입니다.
 다만 &lt;strong&gt;브라우저 지원&lt;/strong&gt;에 차이가 있는데,
 Safari는 HLS를 네이티브로 지원하지만 다른 브라우저는 기본적으로는 지원하지 않아서
 자바스크립트 라이브러리(&lt;code&gt;hls.js&lt;/code&gt; 등)나
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API&#34;&gt;Media Source Extensions(MSE) API&lt;/a&gt;를 통해 구현합니다.
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Media Source Extensions(MSE) API&lt;/a&gt;
+
+를 통해 구현합니다.
 MSE를 사용하면 분할된 미디어 데이터를 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt;/&lt;code&gt;&amp;lt;video&amp;gt;&lt;/code&gt; 요소에 공급할 수 있어 스트리밍을 직접 구현할 수 있습니다.
 예를 들어 MSE로 MPEG-DASH 스트리밍을 파싱하여 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소에 추가하면 브라우저가 이를 하나의 연속된 미디어로 취급해 재생합니다.&lt;/p&gt;
 &lt;p&gt;사용자가 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소를 통해 오디오를 재생하면
@@ -603,7 +705,9 @@ MSE를 사용하면 분할된 미디어 데이터를 &lt;code&gt;&amp;lt;audio&a
 이 과정은 개발자가 신경쓰지 않아도 자동 처리됩니다.
 그러나 개발자가 &lt;strong&gt;오디오 데이터를 직접 조작하거나 시각화&lt;/strong&gt;하려는 경우,
 &lt;strong&gt;Web Audio API&lt;/strong&gt;의
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData&#34;&gt;AudioContext.decodeAudioData()&lt;/a&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioContext.decodeAudioData()&lt;/a&gt;
+
+
 등을 통해 ArrayBuffer 형태의 압축 오디오 데이터를 &lt;strong&gt;수동으로 디코딩&lt;/strong&gt;할 수 있습니다.
 아래 코드는 Fetch API로 가져온 오디오 파일을 Web Audio API로 디코딩한 후 재생하는 간단한 예시입니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; audioContext = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; AudioContext();
@@ -618,7 +722,9 @@ MSE를 사용하면 분할된 미디어 데이터를 &lt;code&gt;&amp;lt;audio&a
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  })
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  .&lt;span style=&#34;color:#f00&#34;&gt;catch&lt;/span&gt;(error =&amp;gt; console.error(error));
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드는 &lt;code&gt;sound.mp3&lt;/code&gt;를 가져와 &lt;code&gt;AudioContext&lt;/code&gt;로 디코딩한 뒤
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode&#34;&gt;AudioBufferSourceNode&lt;/a&gt;로 재생합니다.
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioBufferSourceNode&lt;/a&gt;
+
+로 재생합니다.
 이렇게 디코딩하면 &lt;strong&gt;PCM 샘플 데이터에 직접 접근&lt;/strong&gt;할 수 있으므로,
 오디오를 재생하기 전에 파형 데이터를 얻어 시각화하거나 이펙트를 적용하는 등 &lt;strong&gt;세밀한 제어&lt;/strong&gt;가 가능합니다.
 &lt;code&gt;decodeAudioData()&lt;/code&gt;는 &lt;strong&gt;Promise&lt;/strong&gt;를 반환하며,
@@ -626,11 +732,17 @@ MSE를 사용하면 분할된 미디어 데이터를 &lt;code&gt;&amp;lt;audio&a
 &lt;p&gt;Web Audio API는 실시간 오디오 처리를 위해 별도의 스트리밍 메커니즘을 가지고 있습니다.
 예를 들어 &lt;strong&gt;마이크 입력&lt;/strong&gt;이나 기타 &lt;strong&gt;MediaStream&lt;/strong&gt;을
 Web Audio로 받아올 때
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource&#34;&gt;AudioContext.createMediaStreamSource(stream)&lt;/a&gt;를 사용하면
-스트림이 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioNode&#34;&gt;AudioNode&lt;/a&gt;
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioContext.createMediaStreamSource(stream)&lt;/a&gt;
+
+를 사용하면
+스트림이 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioNode&lt;/a&gt;
+
+
 체인으로 실시간으로 흘러들어오게 됩니다.
 개발자는 일일이 버퍼를 관리하지 않아도 되며, Web Audio 엔진이 내부 버퍼링과 스트리밍을 처리해 줍니다.
-따라서 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia&#34;&gt;getUserMedia&lt;/a&gt;로 받은 실시간 오디오나
+따라서 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;getUserMedia&lt;/a&gt;
+
+로 받은 실시간 오디오나
 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 재생 음원을 Web Audio로 입력받아 &lt;strong&gt;이펙트 처리 후 출력&lt;/strong&gt;하거나 &lt;strong&gt;분석&lt;/strong&gt;할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;요약하면, &lt;strong&gt;짧은 파일 재생&lt;/strong&gt;은 그냥 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그로 링크하는 것만으로 충분하고,
 &lt;strong&gt;긴 시간 재생&lt;/strong&gt;이나 &lt;strong&gt;실시간/적응형 스트리밍&lt;/strong&gt;은 HLS/DASH + MSE 같은 방법을 사용합니다.
@@ -656,25 +768,33 @@ Web Audio로 받아올 때
 &lt;li&gt;&lt;strong&gt;시각화 (AnalyserNode)&lt;/strong&gt;: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
 &lt;code&gt;AnalyserNode&lt;/code&gt;는 입력 신호의 &lt;strong&gt;주파수 스펙트럼&lt;/strong&gt; 또는 &lt;strong&gt;파형(time-domain) 데이터&lt;/strong&gt;를 실시간으로 제공합니다.
 &lt;code&gt;analyser.getByteFrequencyData()&lt;/code&gt;로
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Fast_Fourier_transform&#34;&gt;FFT(Fast Fourier transform)&lt;/a&gt; 기반 주파수 데이터를,
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Fast_Fourier_transform?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;FFT(Fast Fourier transform)&lt;/a&gt;
+
+ 기반 주파수 데이터를,
 &lt;code&gt;analyser.getByteTimeDomainData()&lt;/code&gt;로 파형 샘플 데이터를 받으면,
 이를 Canvas나 WebGL로 그려서 &lt;strong&gt;스펙트럼 애니메이션&lt;/strong&gt;, &lt;strong&gt;오실로스코프 형태 파형 시각화&lt;/strong&gt; 등을 구현할 수 있습니다.
 이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
 Web Audio 기반으로 &lt;strong&gt;주파수 분석&lt;/strong&gt;을 하면, 예를 들어 저음/고음의 세기를 측정해 조명 효과를 조절하거나 하는 &lt;strong&gt;인터랙티브 비주얼&lt;/strong&gt;도 가능해집니다.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;정밀 타이밍&lt;/strong&gt;: Web Audio API는 &lt;strong&gt;고해상도 시계&lt;/strong&gt;를 사용하여 오디오 이벤트의 타이밍 정확도를 보장합니다.
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/currentTime&#34;&gt;AudioContext.currentTime&lt;/a&gt;을
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/currentTime?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioContext.currentTime&lt;/a&gt;
+
+을
 기준으로 노드의 &lt;code&gt;start()&lt;/code&gt;를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
 이는 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 JavaScript 타이밍 제어보다 정확도가 높아, 음악 애플리케이션이나 리듬 게임 등에서 유용합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Web Audio API의 유연성 덕분에, &lt;strong&gt;게임 오디오&lt;/strong&gt;, &lt;strong&gt;DAW 웹앱&lt;/strong&gt;, &lt;strong&gt;오디오 시각화 데모&lt;/strong&gt; 등 수많은 응용이 웹에서 가능해졌습니다.
 다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다.
-즉, &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData&#34;&gt;decodeAudioData&lt;/a&gt;로 디코딩 가능해야 합니다.
+즉, &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;decodeAudioData&lt;/a&gt;
+
+로 디코딩 가능해야 합니다.
 그리고 Web Audio는 &lt;strong&gt;사용자 승인 없이 임의로 소리를 재생하지 못하도록&lt;/strong&gt; 브라우저의 &lt;strong&gt;autoplay 정책&lt;/strong&gt; 영향을 받습니다.
 따라서 AudioContext를 만들어 소스를 &lt;code&gt;start()&lt;/code&gt;하는 것도 사용자가 클릭 등 &lt;strong&gt;인터랙션한 맥락 내&lt;/strong&gt;에서 이루어져야 합니다.
 이에 대해서는 아래 &lt;strong&gt;브라우저의 미디어 정책&lt;/strong&gt;에서 추가로 다룹니다.&lt;/p&gt;
 &lt;h1 id=&#34;마이크-입력과-녹음-mediadevices-및-mediarecorder&#34;&gt;마이크 입력과 녹음: MediaDevices 및 MediaRecorder&lt;/h1&gt;
 &lt;p&gt;이제 오디오의 &lt;strong&gt;입력&lt;/strong&gt; 측면을 살펴보겠습니다.
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia&#34;&gt;getUserMedia API&lt;/a&gt;를 통해
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;getUserMedia API&lt;/a&gt;
+
+를 통해
 사용자의 오디오 입력을 웹 애플리케이션으로 가져올 수 있고,
 이렇게 입력된 오디오를 실시간 처리하거나 녹음하여 파일로 저장할 수 있습니다.
 웹에서 오디오 입력/녹음의 기본 흐름은 다음과 같습니다.&lt;/p&gt;
@@ -696,7 +816,9 @@ Web Audio 기반으로 &lt;strong&gt;주파수 분석&lt;/strong&gt;을 하면, 
 또한 &lt;strong&gt;보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)&lt;/strong&gt; 에서만 동작합니다.
 (로컬 개발에서는 &lt;code&gt;localhost&lt;/code&gt;나 &lt;code&gt;file://&lt;/code&gt;도 허용됩니다.)
 사용자가 허용했다면 &lt;code&gt;MediaStream&lt;/code&gt;에는
-하나 이상의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack&#34;&gt;MediaStreamTrack&lt;/a&gt;이 포함되는데,
+하나 이상의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;MediaStreamTrack&lt;/a&gt;
+
+이 포함되는데,
 오디오만 요청한 경우 보통 하나의 오디오 트랙이 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;web-audio-api로-입력-스트림-처리하기&#34;&gt;Web Audio API로 입력 스트림 처리하기&lt;/h2&gt;
 &lt;p&gt;얻은 &lt;code&gt;MediaStream&lt;/code&gt;은 다양한 용도로 활용할 수 있습니다.
@@ -720,7 +842,9 @@ Web Audio API는 &lt;code&gt;MediaStreamAudioSourceNode&lt;/code&gt;를 통해 �
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  console.log(&lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;AudioContext 종료&amp;#34;&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;});
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;위 코드에서 마이크 스트림으로부터 &lt;code&gt;sourceNode&lt;/code&gt;를 만들고,
-오디오 출력 노드(&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode&#34;&gt;AudioDestinationNode&lt;/a&gt;)에 연결했습니다.
+오디오 출력 노드(&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AudioDestinationNode&lt;/a&gt;
+
+)에 연결했습니다.
 이렇게 하면 사용자가 말하는 소리가 곧바로 스피커로 출력됩니다.
 &lt;code&gt;audioCtx.destination&lt;/code&gt;은 기본 출력 장치, 즉 스피커를 의미합니다.&lt;/p&gt;
 &lt;blockquote&gt;
@@ -733,17 +857,25 @@ Web Audio API는 &lt;code&gt;MediaStreamAudioSourceNode&lt;/code&gt;를 통해 �
 모니터링 없이 무음으로 입력 처리를 할 수 있습니다.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;Web Audio를 사용하면 입력 신호에 대해
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode&#34;&gt;AnalyserNode&lt;/a&gt;를 활용해서 &lt;strong&gt;실시간 분석&lt;/strong&gt;하거나
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;AnalyserNode&lt;/a&gt;
+
+를 활용해서 &lt;strong&gt;실시간 분석&lt;/strong&gt;하거나
 &lt;strong&gt;이펙트&lt;/strong&gt;도 적용할 수 있습니다.
-예를 들면 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/GainNode&#34;&gt;GainNode&lt;/a&gt;로 증폭/감쇠,
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode&#34;&gt;BiquadFilterNode&lt;/a&gt;로 노이즈를 제거할 수 있습니다.&lt;/p&gt;
+예를 들면 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/GainNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;GainNode&lt;/a&gt;
+
+로 증폭/감쇠,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;BiquadFilterNode&lt;/a&gt;
+
+로 노이즈를 제거할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;또한 간단한 &lt;strong&gt;VU 미터(Volume Unit Meter)&lt;/strong&gt; 를 구현하려면
 각 애니메이션 프레임마다
 &lt;code&gt;AnalyserNode&lt;/code&gt;의 &lt;code&gt;getByteTimeDomainData()&lt;/code&gt;로 파형(waveform) 데이터를 가져와
 &lt;strong&gt;평균 진폭&lt;/strong&gt;이나 &lt;strong&gt;최대치&lt;/strong&gt;를 계산해서 그래프로 그리면 됩니다.&lt;/p&gt;
 &lt;h2 id=&#34;mediarecorder를-사용한-오디오-녹음&#34;&gt;MediaRecorder를 사용한 오디오 녹음&lt;/h2&gt;
 &lt;p&gt;마이크에서 들어온 &lt;code&gt;MediaStream&lt;/code&gt;을 파일로 저장하려면 &lt;strong&gt;MediaStream Recording API&lt;/strong&gt;,
-즉 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder&#34;&gt;MediaRecorder&lt;/a&gt;를 사용하면 됩니다.
+즉 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;MediaRecorder&lt;/a&gt;
+
+를 사용하면 됩니다.
 MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정한 코덱으로 실시간 인코딩&lt;/strong&gt;하여 &lt;strong&gt;Blob&lt;/strong&gt;으로 축적해 줍니다.
 스트림에는 비디오가 포함될 수도 있지만 여기서는 오디오 스트림으로 한정해 설명합니다.&lt;/p&gt;
 &lt;p&gt;MediaRecorder 사용 방법은 간단합니다.&lt;/p&gt;
@@ -785,9 +917,15 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정�
 &lt;li&gt;앞서 본 코드처럼 객체 URL을 만들어서 &lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 요소의 &lt;code&gt;src&lt;/code&gt;로 설정하면 녹음한 내용을 &lt;strong&gt;즉시 재생&lt;/strong&gt;해볼 수 있습니다.&lt;/li&gt;
 &lt;li&gt;서버로 Blob을 업로드하여 저장하거나
 &lt;code&gt;&amp;lt;a&amp;gt;&lt;/code&gt; 태그의 &lt;code&gt;href&lt;/code&gt;에 객체 URL을 넣고 &lt;code&gt;download&lt;/code&gt; 속성을 주어 &lt;strong&gt;파일 다운로드&lt;/strong&gt; 링크를 제공할 수도 있습니다.&lt;/li&gt;
-&lt;li&gt;Blob을 &lt;code&gt;File&lt;/code&gt; 객체로 변환하거나 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader&#34;&gt;FileReader&lt;/a&gt;로 읽어
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer&#34;&gt;ArrayBuffer&lt;/a&gt;
-혹은 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL&#34;&gt;Data URL로 변환&lt;/a&gt;해 처리할 수도 있습니다.&lt;/li&gt;
+&lt;li&gt;Blob을 &lt;code&gt;File&lt;/code&gt; 객체로 변환하거나 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;FileReader&lt;/a&gt;
+
+로 읽어
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ArrayBuffer&lt;/a&gt;
+
+
+혹은 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Data URL로 변환&lt;/a&gt;
+
+해 처리할 수도 있습니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-javascript&#34; data-lang=&#34;javascript&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; stream = &lt;span style=&#34;color:#f00&#34;&gt;await&lt;/span&gt; navigator.mediaDevices.getUserMedia({ audio: &lt;span style=&#34;color:#f00&#34;&gt;true&lt;/span&gt; });
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;const&lt;/span&gt; recorder = &lt;span style=&#34;color:#f00&#34;&gt;new&lt;/span&gt; MediaRecorder(stream, { mimeType: &lt;span style=&#34;color:#87ceeb&#34;&gt;&amp;#34;audio/webm;codecs=opus&amp;#34;&lt;/span&gt; });
@@ -815,11 +953,17 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 &lt;strong&gt;지정�
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  stream.getTracks().forEach(track =&amp;gt; track.stop());
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}, &lt;span style=&#34;color:#f60&#34;&gt;5000&lt;/span&gt;);
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;이를 활용하면 웹에서 간단한 &lt;strong&gt;음성 녹음기(Voice Recorder)&lt;/strong&gt; 를 만들 수 있습니다.
-MDN의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API&#34;&gt;Web Dictaphone&lt;/a&gt;
+MDN의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web Dictaphone&lt;/a&gt;
+
+
 예제를 따라해보세요.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://mdn.github.io/dom-examples/media/web-dictaphone/&#34;&gt;demo&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone&#34;&gt;source code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://mdn.github.io/dom-examples/media/web-dictaphone/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;demo&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;source code&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/web-dictaphone.png&#34; alt=&#34;Web Dictaphone 화면&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;web-audio와-mediarecorder의-조합&#34;&gt;Web Audio와 MediaRecorder의 조합&lt;/h2&gt;
@@ -827,7 +971,9 @@ MDN의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaStr
 실제로는 이 둘을 &lt;strong&gt;조합&lt;/strong&gt;하여, &lt;strong&gt;실시간 처리된 오디오를 녹음&lt;/strong&gt;하거나 하는 것도 가능합니다.
 예를 들어 &lt;strong&gt;노이즈 필터&lt;/strong&gt;를 Web Audio로 적용한 뒤 깨끗해진 신호를 녹음하거나, 여러 오디오 소스를 믹싱한 결과를 하나의 스트림으로 녹음하는 경우입니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/audio-in-web/audio-context.png&#34; alt=&#34;Audio Context&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API&#34;&gt;이미지 출처: MDN&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처: MDN&lt;/a&gt;
+
+&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;이를 위해 Web Audio API는 &lt;code&gt;AudioContext.createMediaStreamDestination()&lt;/code&gt; 노드를 제공합니다.
 이 노드는 AudioNode 그래프의 출력을 &lt;strong&gt;MediaStream으로 변환&lt;/strong&gt;해줍니다.
 &lt;code&gt;const dest = audioCtx.createMediaStreamDestination();&lt;/code&gt;를 호출하면 얻어지는 &lt;code&gt;dest.stream&lt;/code&gt;은
@@ -913,16 +1059,22 @@ iframe 등에서는 추가적인 &lt;code&gt;allow&lt;/code&gt; 속성 설정(&l
 음성 녹음 데이터를 서버로 전송할 경우에도 &lt;strong&gt;사용자 프라이버시&lt;/strong&gt;에 대한 고지와 정책 준수가 필요합니다.&lt;/p&gt;
 &lt;p&gt;또 다른 권한 이슈로 &lt;strong&gt;AudioContext의 출력 장치 선택&lt;/strong&gt;이 있습니다.
 기본적으로 오디오는 시스템 기본 출력(스피커 등)으로 나가지만,
-Chrome 등의 일부 브라우저는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput&#34;&gt;selectAudioOutput() API&lt;/a&gt;로
+Chrome 등의 일부 브라우저는 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;selectAudioOutput() API&lt;/a&gt;
+
+로
 출력 디바이스를 지정할 수 있게 합니다.
-이것도 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput#security_requirements&#34;&gt;사용자 권한&lt;/a&gt;이 필요합니다.&lt;/p&gt;
+이것도 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.github.io#security_requirements&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;사용자 권한&lt;/a&gt;
+
+이 필요합니다.&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;&amp;lt;audio&amp;gt;&lt;/code&gt; 태그로 외부 도메인 리소스를 가져올 때 &lt;strong&gt;CORS&lt;/strong&gt; 이슈는 일반적으로 없지만,
 Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;code&gt;decodeAudioData&lt;/code&gt;로 디코딩하려면 &lt;strong&gt;CORS 허용 헤더&lt;/strong&gt;가 필요합니다.
 이것은 다른 이미지/JS 불러오는 것과 비슷합니다.&lt;/p&gt;
 &lt;h1 id=&#34;오디오-성능&#34;&gt;오디오 성능&lt;/h1&gt;
 &lt;p&gt;Web Audio API는 &lt;code&gt;AudioContext&lt;/code&gt; 생성 시
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext#latencyhint&#34;&gt;{ latencyHint: &amp;lsquo;interactive&amp;rsquo; }&lt;/a&gt; 등으로 힌트를 줄 수 있지만,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext?utm_source=markruler.github.io#latencyhint&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;{ latencyHint: &amp;lsquo;interactive&amp;rsquo; }&lt;/a&gt;
+
+ 등으로 힌트를 줄 수 있지만,
 실제 지연은 기기와 브라우저에 따라 달라집니다.
 일반적으로 20~50ms 정도 출력 지연은 감안해야 하며,
 &lt;code&gt;MediaRecorder&lt;/code&gt;로 녹음할 때도 수십 ms 단위 버퍼링이 있습니다.
@@ -949,27 +1101,45 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;ul&gt;
 &lt;li&gt;Codec
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/&#34;&gt;A Guide for Choosing the Right Codec&lt;/a&gt; | Audiokinetic&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;A Guide for Choosing the Right Codec&lt;/a&gt;
+
+ | Audiokinetic&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;Web API
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/webaudio-examples&#34;&gt;Web Audio API - code examples&lt;/a&gt; | MDN GitHub&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-intro&#34;&gt;Getting started with Web Audio API&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-games&#34;&gt;Developing game audio with the Web Audio API&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming&#34;&gt;Streaming audio and video&lt;/a&gt; | MDN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://roseline.oopy.io/dev/threejs-asmr-room&#34;&gt;Web Audio API &amp;amp; Threejs로 공간음향 인터랙티브 웹 만들기 - ASMR Room&lt;/a&gt; | Roseline&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/mdn/webaudio-examples?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web Audio API - code examples&lt;/a&gt;
+
+ | MDN GitHub&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-intro?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Getting started with Web Audio API&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/webaudio-games?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Developing game audio with the Web Audio API&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Streaming audio and video&lt;/a&gt;
+
+ | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://roseline.oopy.io/dev/threejs-asmr-room?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web Audio API &amp;amp; Threejs로 공간음향 인터랙티브 웹 만들기 - ASMR Room&lt;/a&gt;
+
+ | Roseline&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;음향
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661&#34;&gt;음향시스템 핸드북&lt;/a&gt; | 장호준&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108&#34;&gt;장인석의 음향입문&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;음향시스템 핸드북&lt;/a&gt;
+
+ | 장호준&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;장인석의 음향입문&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;신호 처리
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155&#34;&gt;기초 신호 및 시스템&lt;/a&gt; | 이철희&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;기초 신호 및 시스템&lt;/a&gt;
+
+ | 이철희&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -977,16 +1147,24 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts&#34;&gt;Digital audio concepts&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Digital audio concepts&lt;/a&gt;
+
+ | MDN&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs&#34;&gt;Web audio codec guide&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web audio codec guide&lt;/a&gt;
+
+ | MDN&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Audio_and_video_delivery/Cross-browser_audio_basics&#34;&gt;Cross-browser audio basics&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Audio_and_video_delivery/Cross-browser_audio_basics?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Cross-browser audio basics&lt;/a&gt;
+
+ | MDN&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay&#34;&gt;Autoplay guide for media and Web Audio APIs&lt;/a&gt; | MDN&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Autoplay guide for media and Web Audio APIs&lt;/a&gt;
+
+ | MDN&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -1002,56 +1180,114 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/multimedia/image-in-web/</guid>
         <description>임창수 https://markruler.github.io/posts/multimedia/image-in-web/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B0%9C%EC%9A%94&#34;&gt;개요&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#image%EB%9D%BC%EB%8A%94-%EB%8B%A8%EC%96%B4&#34;&gt;image라는 단어&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%99%94%EC%A7%88-image-quality&#34;&gt;화질 (Image Quality)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b0%9c%ec%9a%94&#34;&gt;개요&lt;/a&gt;
+
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8C%8C%EC%9D%B4%ED%94%84%EB%9D%BC%EC%9D%B8-image-pipeline&#34;&gt;이미지 파이프라인 (Image Pipeline)&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#image%eb%9d%bc%eb%8a%94-%eb%8b%a8%ec%96%b4&#34;&gt;image라는 단어&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%B9%B4%EB%A9%94%EB%9D%BC-%ED%95%84%EB%A6%84-vs-%EB%94%94%EC%A7%80%ED%84%B8-%EC%84%BC%EC%84%9C&#34;&gt;카메라: 필름 vs 디지털 센서&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#isp-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%8B%A0%ED%98%B8-%EC%B2%98%EB%A6%AC&#34;&gt;ISP: 이미지 신호 처리&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8F%AC%EB%A7%B7&#34;&gt;이미지 포맷&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%9E%98%EC%8A%A4%ED%84%B0-%EC%9D%B4%EB%AF%B8%EC%A7%80&#34;&gt;래스터 이미지&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#jpg-%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8F%AC%EB%A7%B7&#34;&gt;JPG: 손실 압축 이미지 포맷&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#gif-%ED%8C%94%EB%A0%88%ED%8A%B8-%EA%B8%B0%EB%B0%98-%EC%95%A0%EB%8B%88%EB%A9%94%EC%9D%B4%EC%85%98-%ED%8F%AC%EB%A7%B7&#34;&gt;GIF: 팔레트 기반 애니메이션 포맷&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#png-%EB%AC%B4%EC%86%90%EC%8B%A4-%EC%95%95%EC%B6%95-%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8F%AC%EB%A7%B7&#34;&gt;PNG: 무손실 압축 이미지 포맷&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#webp&#34;&gt;WebP&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#avif-av1-%EA%B8%B0%EB%B0%98-%EC%9D%B4%EB%AF%B8%EC%A7%80-%ED%8F%AC%EB%A7%B7&#34;&gt;AVIF: AV1 기반 이미지 포맷&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B2%A1%ED%84%B0-%EC%9D%B4%EB%AF%B8%EC%A7%80&#34;&gt;벡터 이미지&lt;/a&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#svg&#34;&gt;SVG&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%99%94%ec%a7%88-image-quality&#34;&gt;화질 (Image Quality)&lt;/a&gt;
+
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9B%B9-%ED%8E%98%EC%9D%B4%EC%A7%80%EC%97%90%EC%84%9C-%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%B5%9C%EC%A0%81%ED%99%94&#34;&gt;웹 페이지에서 이미지 최적화&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%8c%8c%ec%9d%b4%ed%94%84%eb%9d%bc%ec%9d%b8-image-pipeline&#34;&gt;이미지 파이프라인 (Image Pipeline)&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B0%98%EC%9D%91%ED%98%95-%EC%9D%B4%EB%AF%B8%EC%A7%80-responsive-images&#34;&gt;반응형 이미지 (Responsive Images)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%A7%80%EC%97%B0-%EB%A1%9C%EB%94%A9-lazy-loading&#34;&gt;지연 로딩 (Lazy Loading)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%82%AC%EC%A0%84-%EB%A1%9C%EB%94%A9-preload&#34;&gt;사전 로딩 (Preload)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EC%8A%A4%ED%94%84%EB%9D%BC%EC%9D%B4%ED%8A%B8-image-sprite&#34;&gt;이미지 스프라이트 (Image Sprite)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EC%BA%90%EC%8B%B1&#34;&gt;브라우저 캐싱&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%95%95%EC%B6%95-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%B5%9C%EC%A0%81%ED%99%94&#34;&gt;압축 알고리즘 최적화&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8B%A8%EC%88%9C-%EC%9E%A5%EC%8B%9D%EC%9A%A9-%EC%9D%B4%EB%AF%B8%EC%A7%80%EB%8A%94-css%EB%A1%9C&#34;&gt;단순 장식용 이미지는 CSS로&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%b9%b4%eb%a9%94%eb%9d%bc-%ed%95%84%eb%a6%84-vs-%eb%94%94%ec%a7%80%ed%84%b8-%ec%84%bc%ec%84%9c&#34;&gt;카메라: 필름 vs 디지털 센서&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#isp-%ec%9d%b4%eb%af%b8%ec%a7%80-%ec%8b%a0%ed%98%b8-%ec%b2%98%eb%a6%ac&#34;&gt;ISP: 이미지 신호 처리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9B%B9-%EC%A0%91%EA%B7%BC%EC%84%B1-alt-%EC%86%8D%EC%84%B1&#34;&gt;웹 접근성: alt 속성&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%8f%ac%eb%a7%b7&#34;&gt;이미지 포맷&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%99%9C-alt-%EC%86%8D%EC%84%B1%EC%9D%B4-%EC%A4%91%EC%9A%94%ED%95%9C%EA%B0%80&#34;&gt;왜 &lt;code&gt;alt&lt;/code&gt; 속성이 중요한가&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%A2%8B%EC%9D%80-alt-%ED%85%8D%EC%8A%A4%ED%8A%B8%EB%A5%BC-%EC%9E%91%EC%84%B1%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95&#34;&gt;좋은 &lt;code&gt;alt&lt;/code&gt; 텍스트를 작성하는 방법&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%9e%98%ec%8a%a4%ed%84%b0-%ec%9d%b4%eb%af%b8%ec%a7%80&#34;&gt;래스터 이미지&lt;/a&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#jpg-%ec%86%90%ec%8b%a4-%ec%95%95%ec%b6%95-%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%8f%ac%eb%a7%b7&#34;&gt;JPG: 손실 압축 이미지 포맷&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#gif-%ed%8c%94%eb%a0%88%ed%8a%b8-%ea%b8%b0%eb%b0%98-%ec%95%a0%eb%8b%88%eb%a9%94%ec%9d%b4%ec%85%98-%ed%8f%ac%eb%a7%b7&#34;&gt;GIF: 팔레트 기반 애니메이션 포맷&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#png-%eb%ac%b4%ec%86%90%ec%8b%a4-%ec%95%95%ec%b6%95-%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%8f%ac%eb%a7%b7&#34;&gt;PNG: 무손실 압축 이미지 포맷&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#webp&#34;&gt;WebP&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#avif-av1-%ea%b8%b0%eb%b0%98-%ec%9d%b4%eb%af%b8%ec%a7%80-%ed%8f%ac%eb%a7%b7&#34;&gt;AVIF: AV1 기반 이미지 포맷&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9D%B4%EB%AF%B8%EC%A7%80-%EB%B3%B4%EC%95%88&#34;&gt;이미지 보안&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EA%B2%B0%EB%A1%A0&#34;&gt;결론&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b2%a1%ed%84%b0-%ec%9d%b4%eb%af%b8%ec%a7%80&#34;&gt;벡터 이미지&lt;/a&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#svg&#34;&gt;SVG&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9b%b9-%ed%8e%98%ec%9d%b4%ec%a7%80%ec%97%90%ec%84%9c-%ec%9d%b4%eb%af%b8%ec%a7%80-%ec%b5%9c%ec%a0%81%ed%99%94&#34;&gt;웹 페이지에서 이미지 최적화&lt;/a&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b0%98%ec%9d%91%ed%98%95-%ec%9d%b4%eb%af%b8%ec%a7%80-responsive-images&#34;&gt;반응형 이미지 (Responsive Images)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%a7%80%ec%97%b0-%eb%a1%9c%eb%94%a9-lazy-loading&#34;&gt;지연 로딩 (Lazy Loading)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%82%ac%ec%a0%84-%eb%a1%9c%eb%94%a9-preload&#34;&gt;사전 로딩 (Preload)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9d%b4%eb%af%b8%ec%a7%80-%ec%8a%a4%ed%94%84%eb%9d%bc%ec%9d%b4%ed%8a%b8-image-sprite&#34;&gt;이미지 스프라이트 (Image Sprite)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80-%ec%ba%90%ec%8b%b1&#34;&gt;브라우저 캐싱&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%95%95%ec%b6%95-%ec%95%8c%ea%b3%a0%eb%a6%ac%ec%a6%98-%ec%b5%9c%ec%a0%81%ed%99%94&#34;&gt;압축 알고리즘 최적화&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8b%a8%ec%88%9c-%ec%9e%a5%ec%8b%9d%ec%9a%a9-%ec%9d%b4%eb%af%b8%ec%a7%80%eb%8a%94-css%eb%a1%9c&#34;&gt;단순 장식용 이미지는 CSS로&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9b%b9-%ec%a0%91%ea%b7%bc%ec%84%b1-alt-%ec%86%8d%ec%84%b1&#34;&gt;웹 접근성: alt 속성&lt;/a&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%99%9c-alt-%ec%86%8d%ec%84%b1%ec%9d%b4-%ec%a4%91%ec%9a%94%ed%95%9c%ea%b0%80&#34;&gt;왜 &lt;code&gt;alt&lt;/code&gt; 속성이 중요한가&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%a2%8b%ec%9d%80-alt-%ed%85%8d%ec%8a%a4%ed%8a%b8%eb%a5%bc-%ec%9e%91%ec%84%b1%ed%95%98%eb%8a%94-%eb%b0%a9%eb%b2%95&#34;&gt;좋은 &lt;code&gt;alt&lt;/code&gt; 텍스트를 작성하는 방법&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9d%b4%eb%af%b8%ec%a7%80-%eb%b3%b4%ec%95%88&#34;&gt;이미지 보안&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ea%b2%b0%eb%a1%a0&#34;&gt;결론&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;
 &lt;p&gt;이미지는 인터넷에서 매우 큰 비중을 차지합니다.
@@ -1112,10 +1348,14 @@ IT에서는 특정 시점의 상태를 저장한 것을 말합니다.&lt;/p&gt;
 해상도가 높을수록 더 많은 픽셀로 구성되어 있어 이미지의 디테일이 풍부해지고 선명해집니다.
 인쇄나 스캔 맥락에서의 해상도는 단위 길이당 &lt;strong&gt;픽셀(점) 밀도&lt;/strong&gt;로 정의되며
 주로 PPI(Pixels Per Inch) 또는 DPI(Dots Per Inch)로 측정합니다.&lt;/p&gt;
-&lt;p&gt;사진에 사용되는 색상 모델(color model)은 빛의 삼원색을 기반으로 한 &lt;a href=&#34;https://en.wikipedia.org/wiki/RGB_color_model&#34;&gt;RGB 모델&lt;/a&gt;이 사용됩니다.
+&lt;p&gt;사진에 사용되는 색상 모델(color model)은 빛의 삼원색을 기반으로 한 &lt;a href=&#34;https://en.wikipedia.org/wiki/RGB_color_model?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RGB 모델&lt;/a&gt;
+
+이 사용됩니다.
 반면 물체의 색은 빛의 반사에 의해 결정되므로, 물체의 색을 표현하기 위해서는 빛의 삼원색의 2차색을 색의 삼원색(CMY)으로 사용합니다.
 색의 삼원색은 혼합할수록 어두워지지만 완전한 검정은 만들기 어려워서 검정(Black)색을 추가하여
-&lt;a href=&#34;https://en.wikipedia.org/wiki/CMYK_color_model&#34;&gt;CMYK 모델&lt;/a&gt;이 주로 사용됩니다.
+&lt;a href=&#34;https://en.wikipedia.org/wiki/CMYK_color_model?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CMYK 모델&lt;/a&gt;
+
+이 주로 사용됩니다.
 다시 말하면 RGB 모델은 빛의 삼원색을 조합하여 색을 표현하는 &lt;strong&gt;가산혼합 방식&lt;/strong&gt;을 사용합니다.
 반면 CMYK 모델은 흰 빛에서 RGB 색을 빼는 &lt;strong&gt;감산혼합 방식&lt;/strong&gt;을 사용합니다.
 흰 배경(종이) 위에 잉크를 덧칠하여 빛을 흡수시키는 방식으로 색이 만들어집니다.
@@ -1133,22 +1373,32 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 &lt;h1 id=&#34;이미지-파이프라인-image-pipeline&#34;&gt;이미지 파이프라인 (Image Pipeline)&lt;/h1&gt;
 &lt;p&gt;&lt;strong&gt;이미지 소스&lt;/strong&gt;(카메라, 스캐너, 컴퓨터 게임의 렌더링 엔진)와
 &lt;strong&gt;이미지 렌더러&lt;/strong&gt;(모니터, 프린터, 시네마 스크린) &lt;strong&gt;사이의 모든 과정&lt;/strong&gt;을
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Color_image_pipeline&#34;&gt;이미지 파이프라인&lt;/a&gt;이라고 합니다.&lt;/p&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Color_image_pipeline?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 파이프라인&lt;/a&gt;
+
+이라고 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/image-in-web/image-pipeline-v2.png&#34; alt=&#34;이미지 파이프라인&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;카메라-필름-vs-디지털-센서&#34;&gt;카메라: 필름 vs 디지털 센서&lt;/h2&gt;
 &lt;p&gt;이미지는 사진이나 컴퓨터 그래픽으로부터 시작됩니다.
 그 중 &lt;strong&gt;사진&lt;/strong&gt;은 촬영 장비의 특성에 따라 이미지 품질과 후처리 방식이 달라집니다.
 &lt;strong&gt;필름 카메라&lt;/strong&gt;는 물리적 필름에 빛을 감광시켜 현상(Photographic Development) 과정을 거칩니다.
 인터넷에 업로드하기 위해서는 이미지 스캐너(Image Scanner)를 통해 디지털 이미지로 만들어야 합니다.
-&lt;strong&gt;디지털 카메라&lt;/strong&gt;는 이미지 센서(&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/&#34;&gt;CCD&lt;/a&gt;,
-&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/&#34;&gt;CMOS&lt;/a&gt;)가
+&lt;strong&gt;디지털 카메라&lt;/strong&gt;는 이미지 센서(&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-ccd-image-sensor/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CCD&lt;/a&gt;
+
+,
+&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-cmos-image-sensor-cis/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CMOS&lt;/a&gt;
+
+)가
 빛을 받아 RAW 데이터&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;(RGB)로 저장합니다.
 이 RAW 데이터는 노출, 색온도, 선명도 등의 조정 여지가 많아 전문 편집에서 자주 사용됩니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/image-in-web/image-processing.avif&#34; alt=&#34;이미지 센서&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-image-sensor/&#34;&gt;이미지 출처: 삼성전자&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://semiconductor.samsung.com/kr/support/tools-resources/dictionary/semiconductor-glossary-image-sensor/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처: 삼성전자&lt;/a&gt;
+
+&lt;/em&gt;&lt;/p&gt;
 &lt;h2 id=&#34;isp-이미지-신호-처리&#34;&gt;ISP: 이미지 신호 처리&lt;/h2&gt;
 &lt;p&gt;디지털 촬영 후에는 일반적으로 카메라에 내장된
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Image_processor&#34;&gt;이미지 신호 처리장치(ISP, Image Signal Processor)&lt;/a&gt;가
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Image_processor?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 신호 처리장치(ISP, Image Signal Processor)&lt;/a&gt;
+
+가
 이미지를 압축-보정해 저장합니다.&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; (RAW → JPEG, PNG 등)
 여기서 압축(손실/무손실), 보정(화이트 밸런스, 노출 보정, 색상 보정 등), 인코딩(포맷 변환) 등의 과정을 거칩니다.&lt;/p&gt;
 &lt;h1 id=&#34;이미지-포맷&#34;&gt;이미지 포맷&lt;/h1&gt;
@@ -1159,12 +1409,16 @@ RGB 모니터에서 보는 색과 인쇄물에서 보이는 색이 다를 수 �
 &lt;h3 id=&#34;jpg-손실-압축-이미지-포맷&#34;&gt;JPG: 손실 압축 이미지 포맷&lt;/h3&gt;
 &lt;p&gt;JPEG(Joint Photographic Experts Group)는 사진 이미지를 효율적으로 저장하기 위해 설계된 &lt;strong&gt;손실 압축&lt;/strong&gt; 포맷입니다.
 줄여서 JPG라고도 부릅니다.
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Discrete_cosine_transform&#34;&gt;이산 코사인 변환(DCT)&lt;/a&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Discrete_cosine_transform?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이산 코사인 변환(DCT)&lt;/a&gt;
+
+
 기반의 손실 압축을 사용하여 인간 시각에 덜 중요하게 여겨지는 정보는 버리고 용량을 줄입니다.
 압축률(퀄리티)을 조절할 수 있어 고품질부터 고압축 저품질까지 선택할 수 있으며,
 일반적으로 동일 화질 대비 PNG보다 파일 크기가 훨씬 작게 저장됩니다.
 다만 압축률이 높을수록 블록 노이즈 등의 압축 아티팩트(손실로 인한 왜곡)가 생길 수 있습니다.&lt;/p&gt;
-&lt;p&gt;JPEG 포맷은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Alpha_compositing&#34;&gt;알파 채널&lt;/a&gt;을 지원하지 않으므로
+&lt;p&gt;JPEG 포맷은 &lt;a href=&#34;https://en.wikipedia.org/wiki/Alpha_compositing?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;알파 채널&lt;/a&gt;
+
+을 지원하지 않으므로
 &lt;strong&gt;투명도(Transparency)를 표현할 수 없습니다&lt;/strong&gt;.
 또한 프레임 기반 애니메이션(멀티프레임)은 지원하지 않는 정적 이미지 포맷입니다.&lt;/p&gt;
 &lt;h3 id=&#34;gif-팔레트-기반-애니메이션-포맷&#34;&gt;GIF: 팔레트 기반 애니메이션 포맷&lt;/h3&gt;
@@ -1203,7 +1457,9 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 복잡한 그래픽을 표현할 수 있습니다.
 웹에서 로고, 아이콘, 단순한 그래픽을 표현하는 데 적합합니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/multimedia/image-in-web/svg-vs-png.png&#34; alt=&#34;SVG와 PNG 비교&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://stackoverflow.com/questions/2336522/what-are-the-different-usecases-of-png-vs-gif-vs-jpeg-vs-svg&#34;&gt;이미지 출처: Stack Overflow&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&lt;a href=&#34;https://stackoverflow.com/questions/2336522/what-are-the-different-usecases-of-png-vs-gif-vs-jpeg-vs-svg?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;이미지 출처: Stack Overflow&lt;/a&gt;
+
+&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;결론적으로
 &lt;strong&gt;사진&lt;/strong&gt;에는 JPEG 또는 WebP/AVIF,
 &lt;strong&gt;로고나 아이콘&lt;/strong&gt;에는 SVG 또는 PNG,
@@ -1217,8 +1473,12 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 &lt;code&gt;WebP&lt;/code&gt;, &lt;code&gt;AVIF&lt;/code&gt;와 같은 평균 이미지 압축률이 높은 포맷을 사용합니다&lt;sup id=&#34;fnref:7&#34;&gt;&lt;a href=&#34;#fn:7&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 &lt;h2 id=&#34;반응형-이미지-responsive-images&#34;&gt;반응형 이미지 (Responsive Images)&lt;/h2&gt;
 &lt;p&gt;데스크톱, 태블릿, 모바일 등 다양한 디바이스 환경에 맞춰 최적화된 크기 또는 해상도의 이미지를 제공하는 기술입니다.
-&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img#srcset&#34;&gt;srcset&lt;/a&gt;,
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img#sizes&#34;&gt;sizes&lt;/a&gt;
+&lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그의 &lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img?utm_source=markruler.github.io#srcset&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;srcset&lt;/a&gt;
+
+,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/img?utm_source=markruler.github.io#sizes&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;sizes&lt;/a&gt;
+
+
 속성을 사용해서 브라우저가 현재 뷰포트 크기와
 디바이스 해상도에 가장 적합한 이미지를 선택하도록 여러 이미지 후보를 제공합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;img
@@ -1260,7 +1520,9 @@ HTML &lt;code&gt;&amp;lt;img&amp;gt;&lt;/code&gt; 태그에 &lt;code&gt;loading=
 &lt;p&gt;이미지 스프라이트나 inlining (작은 아이콘 데이터 URI를 인라인) 기법도 상황에 따라 고려합니다.
 &lt;strong&gt;이미지 스프라이트&lt;/strong&gt;를 사용해서 여러 이미지를 하나의 이미지로 합치면
 한 번의 요청으로 여러 이미지를 불러올 수 있습니다.
-크롬 브라우저는 다음 &lt;a href=&#34;https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546&#34;&gt;3가지 이유로 대기&lt;/a&gt;할 수 있습니다.&lt;/p&gt;
+크롬 브라우저는 다음 &lt;a href=&#34;https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1&amp;amp;utm_source=markruler.github.io#L541-L546&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;3가지 이유로 대기&lt;/a&gt;
+
+할 수 있습니다.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;There are higher priority requests.&lt;/li&gt;
 &lt;li&gt;There are already six TCP connections open for this origin, which is the limit. Applies to HTTP/1.0 and HTTP/1.1 only.&lt;/li&gt;
@@ -1313,7 +1575,9 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;code&gt;alt&lt;/code&gt; 속성을 빈 값(&lt;code&gt;alt=&amp;quot;&amp;quot;&lt;/code&gt;)으로 설정해야 스크린 리더가 그것을 무시할 수 있습니다.
 시각적으로만 의미 있는 요소까지 읽게 되면 오히려 사용자에게 혼란을 줄 수 있기 때문입니다.&lt;/p&gt;
 &lt;h1 id=&#34;이미지-보안&#34;&gt;이미지 보안&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.invicti.com/web-vulnerability-scanner/vulnerabilities/cross-site-scripting-via-file-upload/&#34;&gt;XSS(Cross-Site Scripting)&lt;/a&gt;는
+&lt;p&gt;&lt;a href=&#34;https://www.invicti.com/web-vulnerability-scanner/vulnerabilities/cross-site-scripting-via-file-upload/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;XSS(Cross-Site Scripting)&lt;/a&gt;
+
+는
 악성 스크립트를 삽입해 사용자 브라우저에서 실행시키는 공격입니다.
 일반적으로는 텍스트 입력에 &lt;code&gt;&amp;lt;script&amp;gt;&lt;/code&gt; 태그 등을 넣어 발생하지만, 이미지를 통해서도 XSS가 발생할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;이미지 XSS를 막으려면 입력 검증과 출력 인코딩 원칙을 지키는 것이 중요합니다.
@@ -1326,8 +1590,12 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 해시나 UUID를 쓰는 것이 일반적입니다.
 또한 업로드 폴더를 공개 디렉토리로 둘 경우 디렉토리 listing이 막혀있는지 확인해야 합니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Content Security Policy&lt;/strong&gt; (&lt;strong&gt;CSP&lt;/strong&gt;)를 설정하여, 이미지 내 스크립트 실행 등을 방지할 수 있습니다.
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/img-src&#34;&gt;img-src&lt;/a&gt; 지시어로 허용 도메인을 제한하고,
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/object-src&#34;&gt;object-src &amp;rsquo;none&amp;rsquo;&lt;/a&gt; 등으로
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/img-src?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;img-src&lt;/a&gt;
+
+ 지시어로 허용 도메인을 제한하고,
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/object-src?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;object-src &amp;rsquo;none&amp;rsquo;&lt;/a&gt;
+
+ 등으로
 플러그인이나 &lt;code&gt;&amp;lt;object&amp;gt;&lt;/code&gt;를 통한 이미지 악용을 막습니다.
 &lt;code&gt;&amp;lt;meta http-equiv=&amp;quot;Content-Security-Policy: ...&amp;quot;&amp;gt;&lt;/code&gt;를 SVG 내부에 넣어두어 SVG 스크립트를 억제할 수도 있습니다.&lt;/p&gt;
 &lt;p&gt;프라이버시 문제도 고려해야 합니다.
@@ -1344,10 +1612,18 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/web-page-performance-optimization/&#34;&gt;웹 페이지 성능 측정과 최적화&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types&#34;&gt;Image file type and format guide&lt;/a&gt; | MDN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Digital_image_processing&#34;&gt;Digital Image Processing&lt;/a&gt; | Wikipedia&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/learn/performance/image-performance&#34;&gt;Image performance&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Image file type and format guide&lt;/a&gt;
+
+ | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Digital_image_processing?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Digital Image Processing&lt;/a&gt;
+
+ | Wikipedia&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/learn/performance/image-performance?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Image performance&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;How Digital Photography Works-Que | Ron White, Timothy Edward Downs (2007)&lt;/li&gt;
@@ -1356,31 +1632,49 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.cloudflare.com/optimizing-images/&#34;&gt;Optimizing images on the web&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.cloudflare.com/optimizing-images/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Optimizing images on the web&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;사실 기술적으로 명확한 구분인지 모르겠습니다. 다음 글을 참조해주세요.
-&lt;a href=&#34;https://www.smartdeploy.com/blog/what-is-computer-imaging/&#34;&gt;SmartDeploy&lt;/a&gt;에서는
+&lt;a href=&#34;https://www.smartdeploy.com/blog/what-is-computer-imaging/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;SmartDeploy&lt;/a&gt;
+
+에서는
 컴퓨터를 이미징하는 방식을 섹터 기반과 파일 기반으로 나누고,
 이 중 섹터 기반 이미징을 cloning이라고 합니다.
-&lt;a href=&#34;https://www.macrium.com/blog/techie-tuesday-image-or-clone-e6be74abb089&#34;&gt;Macrium Software&lt;/a&gt;에서는
+&lt;a href=&#34;https://www.macrium.com/blog/techie-tuesday-image-or-clone-e6be74abb089?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Macrium Software&lt;/a&gt;
+
+에서는
 복제본이 생성되었을 당시의 상태로 완전히 복원하는 데 필요한 모든 정보를 저장해서 일관된 백업을 보장하는 것을 disk imaging이라고 하고,
 압축없이 빠르게 복제하기 위해 사용하는 것을 disk cloning이라고 합니다.&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Raw_image_format&#34;&gt;RAW 이미지 포맷&lt;/a&gt;이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Raw_image_format?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RAW 이미지 포맷&lt;/a&gt;
+
+이란 이미지 센서에서 처리되지 않았거나 최소한으로 처리된 이미지 데이터 | Wikipedia&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Digital_signal_processor&#34;&gt;디지털 신호 처리장치(DSP, Digital Signal Processor)&lt;/a&gt;의 일종.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Digital_signal_processor?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;디지털 신호 처리장치(DSP, Digital Signal Processor)&lt;/a&gt;
+
+의 일종.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://news.hada.io/topic?id=12375&#34;&gt;WebP 기술의 장단점 분석 (2021)&lt;/a&gt; — &lt;a href=&#34;https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/&#34;&gt;원본: WebP is so great… except it&amp;rsquo;s not&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://news.hada.io/topic?id=12375&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;WebP 기술의 장단점 분석 (2021)&lt;/a&gt;
+
+ — &lt;a href=&#34;https://eng.aurelienpierre.com/2021/10/webp-is-so-great-except-its-not/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;원본: WebP is so great… except it&amp;rsquo;s not&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developers.google.com/speed/webp/faq&#34;&gt;WebP FAQ&lt;/a&gt; | Google&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developers.google.com/speed/webp/faq?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;WebP FAQ&lt;/a&gt;
+
+ | Google&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:7&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images&#34;&gt;Serve images in modern formats&lt;/a&gt; | web.dev&amp;#160;&lt;a href=&#34;#fnref:7&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/uses-webp-images?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Serve images in modern formats&lt;/a&gt;
+
+ | web.dev&amp;#160;&lt;a href=&#34;#fnref:7&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -1396,58 +1690,102 @@ PNG의 팔레트 최적화, GIF의 디더링 수준 조정 등 세부 설정으�
         <author>imcxsu@gmail.com (Im Changsu)</author>
         <guid>https://markruler.github.io/posts/web/web-page-performance-optimization/</guid>
         <description>임창수 https://markruler.github.io/posts/web/web-page-performance-optimization/ -&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%B1%EB%8A%A5-%EC%A7%80%ED%91%9C&#34;&gt;성능 지표&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%B1%EB%8A%A5-%EC%B8%A1%EC%A0%95&#34;&gt;성능 측정&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0&#34;&gt;성능 개선&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%84%b1%eb%8a%a5-%ec%a7%80%ed%91%9c&#34;&gt;성능 지표&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%84%b1%eb%8a%a5-%ec%b8%a1%ec%a0%95&#34;&gt;성능 측정&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%84%b1%eb%8a%a5-%ea%b0%9c%ec%84%a0&#34;&gt;성능 개선&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#html-css-js-%EC%B5%9C%EC%A0%81%ED%99%94&#34;&gt;HTML, CSS, JS 최적화&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%A9%80%ED%8B%B0%EB%AF%B8%EB%94%94%EC%96%B4-%EC%B5%9C%EC%A0%81%ED%99%94&#34;&gt;멀티미디어 최적화&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%BA%90%EC%8B%9C-%ED%99%9C%EC%9A%A9&#34;&gt;캐시 활용&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#html-css-js-%ec%b5%9c%ec%a0%81%ed%99%94&#34;&gt;HTML, CSS, JS 최적화&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%a9%80%ed%8b%b0%eb%af%b8%eb%94%94%ec%96%b4-%ec%b5%9c%ec%a0%81%ed%99%94&#34;&gt;멀티미디어 최적화&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%ba%90%ec%8b%9c-%ed%99%9c%ec%9a%a9&#34;&gt;캐시 활용&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80-%EC%BA%90%EC%8B%9C&#34;&gt;브라우저 캐시&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+&lt;li&gt;&lt;a href=&#34;#cdn-content-delivery-network&#34;&gt;CDN (Content Delivery Network)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%b8%8c%eb%9d%bc%ec%9a%b0%ec%a0%80-%ec%ba%90%ec%8b%9c&#34;&gt;브라우저 캐시&lt;/a&gt;
+
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;성능-지표&#34;&gt;성능 지표&lt;/h1&gt;
 &lt;p&gt;먼저 웹 페이지의 성능을 개선하려면 어떤 지표를 기준으로 삼을 것인지 정해야 합니다.&lt;/p&gt;
 &lt;p&gt;Google이 제공하는 &lt;strong&gt;Web Vitals&lt;/strong&gt;는 사용자 경험을 측정하는 지표입니다.
 이 중 가장 중요한 측정 항목 3개를 모아서 Core Web Vitals이라고 합니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/lcp&#34;&gt;LCP (Largest Contentful Paint)&lt;/a&gt;: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 &lt;strong&gt;로드 성능&lt;/strong&gt;을 측정.&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/inp&#34;&gt;INP (Interaction to Next Paint)&lt;/a&gt;: 사용자 입력에 대한 응답 시간으로 &lt;strong&gt;상호작용&lt;/strong&gt;을 측정. (&lt;a href=&#34;https://web.dev/articles/fid&#34;&gt;FID, First Input Delay&lt;/a&gt;에서 대체)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/cls&#34;&gt;CLS (Cumulative Layout Shift)&lt;/a&gt;: &lt;strong&gt;시각적 안정성&lt;/strong&gt;을 측정.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/lcp?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;LCP (Largest Contentful Paint)&lt;/a&gt;
+
+: 가장 큰 콘텐츠가 화면에 표시되는 시간으로 &lt;strong&gt;로드 성능&lt;/strong&gt;을 측정.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/inp?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;INP (Interaction to Next Paint)&lt;/a&gt;
+
+: 사용자 입력에 대한 응답 시간으로 &lt;strong&gt;상호작용&lt;/strong&gt;을 측정. (&lt;a href=&#34;https://web.dev/articles/fid?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;FID, First Input Delay&lt;/a&gt;
+
+에서 대체)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/cls?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CLS (Cumulative Layout Shift)&lt;/a&gt;
+
+: &lt;strong&gt;시각적 안정성&lt;/strong&gt;을 측정.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;이 외에도 웹 접근성(Web Accessibility)&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, SEO, PWA 등을 고려하여 웹 페이지의 품질을 측정할 수 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;이 외 성능(Performance) 지표&lt;/strong&gt;로
-리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 &lt;a href=&#34;https://web.dev/articles/ttfb&#34;&gt;Time to First Byte (TTFB)&lt;/a&gt;,
-사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 &lt;a href=&#34;https://web.dev/articles/fcp&#34;&gt;First Contentful Paint (FCP)&lt;/a&gt;가 있습니다.&lt;/p&gt;
+리소스에 대한 요청과 응답의 첫 바이트가 도착하는 사이의 시간인 &lt;a href=&#34;https://web.dev/articles/ttfb?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Time to First Byte (TTFB)&lt;/a&gt;
+
+,
+사용자가 처음으로 페이지로 이동한 시간부터 페이지 콘텐츠의 일부가 화면에 렌더링되는 시간까지의 시간인 &lt;a href=&#34;https://web.dev/articles/fcp?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;First Contentful Paint (FCP)&lt;/a&gt;
+
+가 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;성능-측정&#34;&gt;성능 측정&lt;/h1&gt;
 &lt;p&gt;앞서 언급한 성능 지표들은 모두
-&lt;a href=&#34;https://developer.chrome.com/docs/devtools/performance/overview&#34;&gt;Google Chrome의 Performance 패널&lt;/a&gt;에서
+&lt;a href=&#34;https://developer.chrome.com/docs/devtools/performance/overview?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Google Chrome의 Performance 패널&lt;/a&gt;
+
+에서
 측정할 수 있습니다.
 이 방법으로 로컬에서 간단히 측정하는 것도 중요하긴 하지만,
 캐시 없이 첫 방문하는 유저나 다른 지역의 유저들을 고려하여
 서버에서 측정하는 것도 중요합니다.&lt;/p&gt;
-&lt;p&gt;Google Chrome의 &lt;a href=&#34;https://github.com/GoogleChrome/lighthouse&#34;&gt;Lighthouse&lt;/a&gt;는
+&lt;p&gt;Google Chrome의 &lt;a href=&#34;https://github.com/GoogleChrome/lighthouse?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Lighthouse&lt;/a&gt;
+
+는
 대표적인 웹 페이지 성능 측정 CLI 도구입니다.
 성능 측정 외에도 웹 접근성, SEO, PWA 등을 평가할 수 있습니다.
 Google Chrome의 dev tools에도 내장되어 있어서 웹 브라우저에서도 성능 측정할 수 있고,
-&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse-ci&#34;&gt;CI 도구&lt;/a&gt;로도 제공되기 때문에
+&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse-ci?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;CI 도구&lt;/a&gt;
+
+로도 제공되기 때문에
 CI/CD 파이프라인에 통합하여 성능 테스트를 자동화할 수 있습니다.&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-&lt;a href=&#34;https://pagespeed.web.dev/&#34;&gt;Google PageSpeed Insights&lt;/a&gt;와 같은 온라인 서비스에서도
+&lt;a href=&#34;https://pagespeed.web.dev/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Google PageSpeed Insights&lt;/a&gt;
+
+와 같은 온라인 서비스에서도
 Lighthouse 기능을 무료로 제공합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# npm install -g lighthouse&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;lighthouse http://example.com --output=json --output-path=./report.json
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Catchpoint의 &lt;a href=&#34;https://github.com/catchpoint/WebPageTest&#34;&gt;WebPageTest&lt;/a&gt;는
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Catchpoint의 &lt;a href=&#34;https://github.com/catchpoint/WebPageTest?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;WebPageTest&lt;/a&gt;
+
+는
 오픈 소스로 제공되는 웹 페이지 성능 측정 도구입니다.
 Waterfall 방식의 시각화와 다양한 성능 지표를 제공하고
 Lighthouse가 포함되어 있어&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt; Web Vitals도 측정할 수 있습니다.
-&lt;a href=&#34;https://www.webpagetest.org/&#34;&gt;온라인 서비스&lt;/a&gt;를 무료로 이용할 수도 있습니다.&lt;/p&gt;
-&lt;p&gt;Datadog의 Synthetic Testing 중 &lt;a href=&#34;https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions&#34;&gt;Browser Testing&lt;/a&gt; 기능을
+&lt;a href=&#34;https://www.webpagetest.org/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;온라인 서비스&lt;/a&gt;
+
+를 무료로 이용할 수도 있습니다.&lt;/p&gt;
+&lt;p&gt;Datadog의 Synthetic Testing 중 &lt;a href=&#34;https://docs.datadoghq.com/synthetics/browser_tests/?tab=requestoptions&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Browser Testing&lt;/a&gt;
+
+ 기능을
 사용하면 주기적으로 국가별&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; 성능 측정을 할 수 있습니다.
 글로벌 서비스를 제공하는 경우 유용할 수 있지만 유료 기능이기 때문에,
 서비스 지역이 제한적이라면 직접 클라우드 서비스의 컴퓨팅 리소스를 사용해서 성능 측정하는 것도 좋은 방법입니다.&lt;/p&gt;
@@ -1462,7 +1800,9 @@ CSS 파일을 파싱해서 CSSOM 트리를 만들고,
 레이아웃을 기반으로 픽셀을 그리는 과정(Painting)을 거칩니다.&lt;/p&gt;
 &lt;p&gt;HTML 파서(parser)는 기본적으로 위에서부터 아래로 읽는데
 Javascript가 중간에 있을 경우 혹은 리소스가 많을 경우 로딩 및 실행이 끝날 때까지 기다리게 됩니다.
-이를 &lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources&#34;&gt;렌더 블로킹(Render Blocking)&lt;/a&gt;이라고 합니다.
+이를 &lt;a href=&#34;https://developer.chrome.com/docs/lighthouse/performance/render-blocking-resources?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;렌더 블로킹(Render Blocking)&lt;/a&gt;
+
+이라고 합니다.
 렌더 블로킹을 줄이기 위해 CSS, JS 파일을 압축하고
 &lt;code&gt;defer&lt;/code&gt;, &lt;code&gt;async&lt;/code&gt; 속성을 사용해서 지연 로딩(Lazy Loading)하면 불러오는 타이밍을 조절할 수 있습니다.&lt;sup id=&#34;fnref:5&#34;&gt;&lt;a href=&#34;#fn:5&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;
 다만 CSS 파일을 &lt;code&gt;defer&lt;/code&gt;로 불러오거나
@@ -1473,10 +1813,14 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 &lt;strong&gt;Reflow
 &lt;p&gt;&lt;strong&gt;Font&lt;/strong&gt;의 경우 &lt;code&gt;preload&lt;/code&gt;를 사용해서 이미 연결된 호스트(ex: CDN)에서 미리 불러오면 성능을 개선할 수 있습니다.&lt;/p&gt;
 &lt;h2 id=&#34;멀티미디어-최적화&#34;&gt;멀티미디어 최적화&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/multimedia/image-in-web/&#34;&gt;웹과 멀티미디어: 이미지&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/multimedia/image-in-web/&#34;&gt;웹과 멀티미디어: 이미지&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;li&gt;비디오
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;HLS 프로토콜&lt;/strong&gt;(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216&#34;&gt;RFC 8216&lt;/a&gt;)을 사용하기 위해
+&lt;li&gt;&lt;strong&gt;HLS 프로토콜&lt;/strong&gt;(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC 8216&lt;/a&gt;
+
+)을 사용하기 위해
 비디오는 HEVC 코덱으로 트랜스코딩하고 사용자의 환경(네트워크, 디바이스)에 맞게 최적화합니다.
 예를 들어, Youtube의 경우 기본적으로 낮은 화질을 제공하고 사용자의 환경에 맞게 화질을 조정합니다.&lt;/li&gt;
 &lt;/ul&gt;
@@ -1492,7 +1836,9 @@ Javascript에서 직접 DOM이나 CSSOM을 조작할 경우 &lt;strong&gt;Reflow
 대표적으로 &lt;strong&gt;메모리 캐시&lt;/strong&gt;(Memory Cache), &lt;strong&gt;디스크 캐시&lt;/strong&gt;(Disk Cache)가 있습니다.
 메모리 캐시는 브라우저를 종료하면 사라지고, 디스크 캐시는 브라우저가 종료되어도 유지됩니다.&lt;/p&gt;
 &lt;p&gt;대표적으로
-&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Glossary/bfcache&#34;&gt;Back-forward cache(bfcache)&lt;/a&gt;는
+&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Glossary/bfcache?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Back-forward cache(bfcache)&lt;/a&gt;
+
+는
 뒤로가기, 앞으로가기 버튼을 눌렀을 때 사용자 경험을 개선하기 위해 사용되는 메모리 캐시입니다.
 Google Chrome Dev tools의 Application 패널 &amp;gt; Background services &amp;gt; Back-forward cache에서 확인할 수 있습니다.
 이를 활용하면 뒤로가기, 앞으로가기 시 서버에 요청하지 않고 캐시된 리소스를 즉시 로딩할 수 있습니다.
@@ -1507,46 +1853,86 @@ WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
 반드시 최신 데이터를 요청해야 하는 경우가 아니라면 캐시를 활용하는 것이 좋다고 생각합니다.&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/google-chrome/&#34;&gt;유용한 구글 크롬(Google Chrome)의 기능&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;../respond-web-page/&#34;&gt;웹 페이지 응답 방법과 프레임워크&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Performance&#34;&gt;Web performance&lt;/a&gt; | MDN Web Docs&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/vitals&#34;&gt;Core Web Vitals&lt;/a&gt; | web.dev
+&lt;li&gt;&lt;a href=&#34;https://markruler.github.io/posts/web/google-chrome/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;유용한 구글 크롬(Google Chrome)의 기능&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;../respond-web-page/&#34;&gt;웹 페이지 응답 방법과 프레임워크&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/en-US/docs/Web/Performance?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Web performance&lt;/a&gt;
+
+ | MDN Web Docs&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/vitals?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Core Web Vitals&lt;/a&gt;
+
+ | web.dev
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://googlechrome.github.io/lighthouse/scorecalc/&#34;&gt;Lighthouse Scoring Calculator&lt;/a&gt; | Google Chrome&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-cls&#34;&gt;Optimize CLS&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-ttfb&#34;&gt;Optimize TTFB&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-lcp&#34;&gt;Optimize LCP&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/tti&#34;&gt;Time to Interactive (TTI)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/browser-level-image-lazy-loading&#34;&gt;Browser-level image lazy loading for the web&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/font-best-practices&#34;&gt;Best Practices for fonts&lt;/a&gt; | web.dev&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/bfcache&#34;&gt;Back/forward cache&lt;/a&gt; | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://googlechrome.github.io/lighthouse/scorecalc/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Lighthouse Scoring Calculator&lt;/a&gt;
+
+ | Google Chrome&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-cls?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Optimize CLS&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-ttfb?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Optimize TTFB&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/optimize-lcp?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Optimize LCP&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/tti?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Time to Interactive (TTI)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/browser-level-image-lazy-loading?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Browser-level image lazy loading for the web&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/font-best-practices?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Best Practices for fonts&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://web.dev/articles/bfcache?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Back/forward cache&lt;/a&gt;
+
+ | web.dev&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://toss.tech/article/smart-web-service-cache&#34;&gt;웹 서비스 캐시 똑똑하게 다루기&lt;/a&gt; | toss tech&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://toss.tech/article/smart-web-service-cache?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;웹 서비스 캐시 똑똑하게 다루기&lt;/a&gt;
+
+ | toss tech&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
 &lt;p&gt;웹 사이트, 도구, 기술이 장애를 가진 사용자들이 사용할 수 있도록 설계 및 개발된 것을 말합니다.
-(&lt;a href=&#34;https://www.w3.org/WAI/fundamentals/accessibility-intro/&#34;&gt;W3C&lt;/a&gt;)
-&lt;a href=&#34;https://nuli.navercorp.com/education/tools&#34;&gt;다양한 진단 도구&lt;/a&gt;가 있습니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+(&lt;a href=&#34;https://www.w3.org/WAI/fundamentals/accessibility-intro/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;W3C&lt;/a&gt;
+
+)
+&lt;a href=&#34;https://nuli.navercorp.com/education/tools?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;다양한 진단 도구&lt;/a&gt;
+
+가 있습니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/&#34;&gt;Kakao Entertainment의 사례&lt;/a&gt;,
-&lt;a href=&#34;https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/&#34;&gt;ChungJungSoo님의 사례&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://fe-developers.kakaoent.com/2022/220602-lighthouse-with-github-actions/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Kakao Entertainment의 사례&lt;/a&gt;
+
+,
+&lt;a href=&#34;https://blog.chungjungsoo.dev/dev-posts/lighthouse-ci-server/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ChungJungSoo님의 사례&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1#L329&#34;&gt;GoogleChrome/lighthouse/README&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/lighthouse/blob/main/readme.md?plain=1&amp;amp;utm_source=markruler.github.io#L329&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;GoogleChrome/lighthouse/README&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
 &lt;p&gt;AWS와 같은 클라우드 서비스를 사용하기 때문에 리전에 종속적입니다.&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html&#34;&gt;async vs defer attributes&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;async vs defer attributes&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:5&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:6&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://web.dev/articles/defer-non-critical-css&#34;&gt;Defer non-critical CSS&lt;/a&gt; | web.dev&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://web.dev/articles/defer-non-critical-css?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Defer non-critical CSS&lt;/a&gt;
+
+ | web.dev&amp;#160;&lt;a href=&#34;#fnref:6&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -1582,7 +1968,9 @@ Spring Boot 애플리케이션이라면 간단하게 &lt;code&gt;application.yam
 &lt;h1 id=&#34;결과&#34;&gt;결과&lt;/h1&gt;
 &lt;p&gt;Akamai CDN을 통해서 확인해보니
 (Edge Server에서 캐시되어 Origin에서 더 이상 불러오지 않는)
-&lt;a href=&#34;https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule#caching&#34;&gt;offload&lt;/a&gt;
+&lt;a href=&#34;https://techdocs.akamai.com/ion/docs/configure-the-origin-offload-rule?utm_source=markruler.github.io#caching&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;offload&lt;/a&gt;
+
+
 트래픽 양이 확연히 늘었고,
 Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/akamai-load-compression.png&#34; alt=&#34;Akamai CDN load compression&#34;&gt;&lt;/p&gt;
@@ -1591,20 +1979,30 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/network/http-response-compression/before-after-http-response-compression.png&#34; alt=&#34;before and after http response compression&#34;&gt;&lt;/p&gt;
 &lt;h1 id=&#34;더-읽을거리&#34;&gt;더 읽을거리&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression&#34;&gt;Compression in HTTP&lt;/a&gt; | MDN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding&#34;&gt;Content-Encoding&lt;/a&gt; | MDN&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Transfer-Encoding&#34;&gt;Transfer-Encoding&lt;/a&gt; | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Guides/Compression?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Compression in HTTP&lt;/a&gt;
+
+ | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Content-Encoding?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Content-Encoding&lt;/a&gt;
+
+ | MDN&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://developer.mozilla.org/docs/Web/HTTP/Reference/Headers/Transfer-Encoding?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Transfer-Encoding&lt;/a&gt;
+
+ | MDN&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1#L541-L546&#34;&gt;Chrome Docs&lt;/a&gt; 참조.
+&lt;p&gt;&lt;a href=&#34;https://github.com/GoogleChrome/developer.chrome.com/blob/e262dd234c039ab14e4ad7c3451153d7636ac12d/site/en/docs/devtools/network/reference/index.md?plain=1&amp;amp;utm_source=markruler.github.io#L541-L546&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Chrome Docs&lt;/a&gt;
+
+ 참조.
 최신 브라우저나 프록시 서버는 대부분 HTTP/2 혹은 HTTP/3를 지원하지만,
 여러 개의 요청으로 나눈다해도 그만큼의 네트워크 트래픽이 발생합니다.&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://jongmin4943.tistory.com/entry/Spring-%ED%8A%B9%EC%A0%95-API%EC%9D%98-Response-%EC%95%95%EC%B6%95%ED%95%98%EA%B8%B0&#34;&gt;Spring 특정 API의 Response 압축하기&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://jongmin4943.tistory.com/entry/Spring-%ed%8a%b9%ec%a0%95-API%ec%9d%98-Response-%ec%95%95%ec%b6%95%ed%95%98%ea%b8%b0?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Spring 특정 API의 Response 압축하기&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -1629,45 +2027,81 @@ Origin 응답 트래픽 양이 줄어들었습니다.&lt;/p&gt;
 &lt;p&gt;이 글에서는 각 계층의 주요 기능과 특징을 살펴보기 위해
 일반적으로 사용되는 &lt;strong&gt;OSI 모델을 따르지만 5~7계층은 TCP/IP 모델처럼 합쳐진 5계층 모델&lt;/strong&gt;을 설명합니다.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%EC%9A%A9%EC%96%B4&#34;&gt;용어&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ec%9a%a9%ec%96%b4&#34;&gt;용어&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#layer-1---physical-layer&#34;&gt;Layer 1 - Physical Layer&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#l1-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L1 주요 기기&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l1-%ec%a3%bc%ec%9a%94-%ea%b8%b0%ea%b8%b0&#34;&gt;L1 주요 기기&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#layer-2---data-link-layer&#34;&gt;Layer 2 - Data Link Layer&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#l2-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L2 주요 기기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#l2-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L2 주요 프로토콜&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l2-%ec%a3%bc%ec%9a%94-%ea%b8%b0%ea%b8%b0&#34;&gt;L2 주요 기기&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l2-%ec%a3%bc%ec%9a%94-%ed%94%84%eb%a1%9c%ed%86%a0%ec%bd%9c&#34;&gt;L2 주요 프로토콜&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#layer-3---network-layer&#34;&gt;Layer 3 - Network Layer&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#l3-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L3 주요 기기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#l3-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L3 주요 프로토콜&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#l3-%ec%a3%bc%ec%9a%94-%ea%b8%b0%ea%b8%b0&#34;&gt;L3 주요 기기&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l3-%ec%a3%bc%ec%9a%94-%ed%94%84%eb%a1%9c%ed%86%a0%ec%bd%9c&#34;&gt;L3 주요 프로토콜&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#ip-%EC%A3%BC%EC%86%8C-%EC%B2%B4%EA%B3%84&#34;&gt;IP 주소 체계&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#ip-%EB%9D%BC%EC%9A%B0%ED%8C%85&#34;&gt;IP 라우팅&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ip-%ec%a3%bc%ec%86%8c-%ec%b2%b4%ea%b3%84&#34;&gt;IP 주소 체계&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#ip-%eb%9d%bc%ec%9a%b0%ed%8c%85&#34;&gt;IP 라우팅&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#layer-4---transport-layer&#34;&gt;Layer 4 - Transport Layer&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#l4-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EA%B8%B0&#34;&gt;L4 주요 기기&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#l4-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L4 주요 프로토콜&lt;/a&gt;
+&lt;li&gt;&lt;a href=&#34;#l4-%ec%a3%bc%ec%9a%94-%ea%b8%b0%ea%b8%b0&#34;&gt;L4 주요 기기&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l4-%ec%a3%bc%ec%9a%94-%ed%94%84%eb%a1%9c%ed%86%a0%ec%bd%9c&#34;&gt;L4 주요 프로토콜&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#%ED%8F%AC%ED%8A%B8-%EB%B2%88%ED%98%B8&#34;&gt;포트 번호&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%ed%8f%ac%ed%8a%b8-%eb%b2%88%ed%98%b8&#34;&gt;포트 번호&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#layer-7---application-layer&#34;&gt;Layer 7 - Application Layer&lt;/a&gt;
+
+
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;#l7-%EC%A3%BC%EC%9A%94-%ED%94%84%EB%A1%9C%ED%86%A0%EC%BD%9C&#34;&gt;L7 주요 프로토콜&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#l7-%ec%a3%bc%ec%9a%94-%ed%94%84%eb%a1%9c%ed%86%a0%ec%bd%9c&#34;&gt;L7 주요 프로토콜&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#%EB%8D%94-%EC%9D%BD%EC%9D%84%EA%B1%B0%EB%A6%AC&#34;&gt;더 읽을거리&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#%eb%8d%94-%ec%9d%bd%ec%9d%84%ea%b1%b0%eb%a6%ac&#34;&gt;더 읽을거리&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;용어&#34;&gt;용어&lt;/h1&gt;
 &lt;p&gt;먼저 공통 용어를 정리하며 시작하겠습니다.&lt;/p&gt;
@@ -1750,7 +2184,9 @@ L2는 &lt;strong&gt;MAC 주소&lt;/strong&gt;를 이용해 통신하며, &lt;str
 이 전송 처리를 브리징(bridging)이라고 합니다.
 최근에는 L2 스위치가 브리지의 기능을 포함하고 있어서 단일 기기를 이용하지는 않습니다.&lt;/p&gt;
 &lt;h2 id=&#34;l2-주요-프로토콜&#34;&gt;L2 주요 프로토콜&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/IEEE_802&#34;&gt;IEEE 802&lt;/a&gt;는 LAN(Local Area Network)과
+&lt;p&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/IEEE_802?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;IEEE 802&lt;/a&gt;
+
+는 LAN(Local Area Network)과
 MAN(Metropolitan Area Network)을 위한 표준을 정의하는 국제 표준화 기구입니다.
 하위 워킹 그룹(working group)에 따라 다양한 프로토콜이 정의되어 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;유선 LAN 프로토콜&lt;/strong&gt;(&lt;strong&gt;IEEE 802.3&lt;/strong&gt;)은 이더넷(Ethernet)에 대한 표준입니다.&lt;/p&gt;
@@ -1783,13 +2219,21 @@ BLE는 주기적으로 신호를 송신하는 소형 무선 장치인 &lt;strong
 이더넷 네트워크에서도 사용할 수 있도록 확장한 PPPoE(PPP over Ethernet)도 있습니다.&lt;/p&gt;
 &lt;!-- https://youtu.be/LnGHcfcC-nE --&gt;
 &lt;p&gt;PPTP(Point-to-Point Tunneling Protocol)는 인터넷상에 가상 전용선(터널)을 만드는 &lt;strong&gt;VPN&lt;/strong&gt; 프로토콜입니다.
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2637&#34;&gt;RFC2637&lt;/a&gt;에 정의되어 있습니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2637?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC2637&lt;/a&gt;
+
+에 정의되어 있습니다.
 인증 메커니즘이 취약하고 암호화 방식이 약하여 보안적으로 약점이 많아서 현재는 사용하지 않는 추세입니다.
-macOS도 &lt;a href=&#34;https://support.apple.com/HT206844&#34;&gt;Sierra(10.12)&lt;/a&gt;부터 대응을 중단했습니다.&lt;/p&gt;
+macOS도 &lt;a href=&#34;https://support.apple.com/HT206844?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Sierra(10.12)&lt;/a&gt;
+
+부터 대응을 중단했습니다.&lt;/p&gt;
 &lt;p&gt;L2TP(Layer 2 Tunneling Protocol)도 PPTP와 마찬가지로 인터넷상에 가상 전용선을 만드는 프로토콜입니다.
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2661&#34;&gt;RFC2661&lt;/a&gt;에 정의되어 있습니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc2661?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC2661&lt;/a&gt;
+
+에 정의되어 있습니다.
 보안 기능을 가진 IPsec을 함께 사용해
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc3193&#34;&gt;L2TP over IPsec(RFC3193)&lt;/a&gt;으로 사용하는 경우가 대부분입니다.&lt;/p&gt;
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc3193?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;L2TP over IPsec(RFC3193)&lt;/a&gt;
+
+으로 사용하는 경우가 대부분입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;ARP&lt;/strong&gt;(&lt;strong&gt;Address Resolution Protocol&lt;/strong&gt;)는 MAC 주소와 L3에 해당되는 IP 주소를 매핑하는 프로토콜입니다.
 L2와 L3 사이에 있다고 볼 수 있습니다.&lt;/p&gt;
 &lt;h1 id=&#34;layer-3---network-layer&#34;&gt;Layer 3 - Network Layer&lt;/h1&gt;
@@ -1807,7 +2251,9 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 &lt;p&gt;&lt;strong&gt;L3 스위치&lt;/strong&gt;(&lt;strong&gt;Layer 3 Switch&lt;/strong&gt;)는 라우터에 L2 스위치(포트가 많은 브리지)를 추가한 기기입니다.&lt;/p&gt;
 &lt;h2 id=&#34;l3-주요-프로토콜&#34;&gt;L3 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;IP&lt;/strong&gt;(&lt;strong&gt;Internet Protocol&lt;/strong&gt;)는
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791&#34;&gt;RFC791&lt;/a&gt;에 정의된 프로토콜로, &lt;strong&gt;패킷&lt;/strong&gt;을 전송하는 역할을 합니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC791&lt;/a&gt;
+
+에 정의된 프로토콜로, &lt;strong&gt;패킷&lt;/strong&gt;을 전송하는 역할을 합니다.
 패킷을 전송하기 위해 송신지 IP 주소와 수적지 IP 주소가 IP 헤더에 포함됩니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0               1               2               3
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -1828,7 +2274,9 @@ L3는 &lt;strong&gt;IP 주소&lt;/strong&gt;를 이용해 데이터를 라우팅
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+...
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;MTU&lt;/strong&gt;는 &lt;strong&gt;Maximum Transmission Unit&lt;/strong&gt;의 약자로,
 &lt;strong&gt;L2에서 네트워크를 통해 한 번에 전송할 수 있는 최대 데이터 크기&lt;/strong&gt;(바이트 단위)를 의미합니다.
-(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791&#34;&gt;RFC 791&lt;/a&gt;)
+(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc791?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC 791&lt;/a&gt;
+
+)
 이더넷 환경에서 MTU를 1500 바이트라고 하면,
 이더넷 프레임을 제외한 최대 IP 페이로드의 크기는 1500 - 20(IP 헤더) - 20(TCP 헤더) = 1460 바이트입니다.
 IP 헤더에는 Total Length라는 16비트(2바이트) 필드가 있기 때문에 이론상 최대 MTU는 65535 바이트입니다.
@@ -1857,10 +2305,14 @@ IPv4는 32비트 주소체계를 사용하고, IPv6는 128비트 주소체계를
 CIDR(Classless Inter-Domain Routing) 표기로는 IPv4 주소 뒤에 서브넷 마스크의 &amp;lsquo;1&amp;rsquo;의 비트 수를 표기합니다.&lt;/p&gt;
 &lt;p&gt;IPv4 주소에는 예외적인 주소들이 있습니다.
 루프백(Loopback) 주소인 &lt;code&gt;127.0.0.1/8&lt;/code&gt;은 호스트 자기 자신을 가리키는 주소입니다.
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1122&#34;&gt;RFC1122&lt;/a&gt;에 정의되어 있습니다.
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1122?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC1122&lt;/a&gt;
+
+에 정의되어 있습니다.
 Private IP 주소는 특정 범위의 IP 주소로, 인터넷에 공개되지 않습니다.
 내부 네트워크에서만 사용할 수 있으며, 인터넷에 접속하기 위해서는 NAT와 같은 기술을 사용해야 합니다.
-&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1918&#34;&gt;RFC1918&lt;/a&gt;에 정의되어 있습니다.&lt;/p&gt;
+&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc1918?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC1918&lt;/a&gt;
+
+에 정의되어 있습니다.&lt;/p&gt;
 &lt;table&gt;
   &lt;thead&gt;
       &lt;tr&gt;
@@ -1943,7 +2395,9 @@ IP 혹은 Port 기반으로 헬스 체크(HC, Health Check)해서 서버의 상�
 &lt;h2 id=&#34;l4-주요-프로토콜&#34;&gt;L4 주요 프로토콜&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;TCP&lt;/strong&gt;(&lt;strong&gt;Transmission Control Protocol&lt;/strong&gt;)는
 데이터 전송의 신뢰성을 요구하는 통신에서 사용합니다.
-(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793&#34;&gt;RFC793&lt;/a&gt;)&lt;/p&gt;
+(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc793?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC793&lt;/a&gt;
+
+)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2007,7 +2461,9 @@ Unreliable 통신에선 네트워크가 &lt;strong&gt;혼잡&lt;/strong&gt;(&lt;
 &lt;strong&gt;혼잡 제어&lt;/strong&gt;(&lt;strong&gt;Congestion Control&lt;/strong&gt;)는 네트워크의 혼잡 상태를 감지하고 송신자의 흐름양을 조정합니다.
 대표적으로 AIMD(Additive Increase/Multiplicative Decrease), 저속 시작(Slow Start), 혼잡 회피(congestion avoidance), 빠른 재전송(Fast Retransmit), 빠른 회복(Fast Recovery) 등이 있습니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;UDP&lt;/strong&gt;(&lt;strong&gt;User Datagram Protocol&lt;/strong&gt;)는 실시간성을 요하는 애플리케이션에 사용되는
-&lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768&#34;&gt;RFC768&lt;/a&gt;)&lt;/p&gt;
+&lt;strong&gt;비연결&lt;/strong&gt;(Connectionless) 지향 프로토콜입니다.(&lt;a href=&#34;https://datatracker.ietf.org/doc/html/rfc768?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;RFC768&lt;/a&gt;
+
+)&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-plaintext&#34; data-lang=&#34;plaintext&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0                   1                   2                   3
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -2059,14 +2515,20 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 파일 전송을 위한 프로토콜입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;SMTP&lt;/strong&gt;(&lt;strong&gt;Simple Mail Transfer Protocol&lt;/strong&gt;)는
 이메일을 전송하는 프로토콜입니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/network/ssh/&#34;&gt;SSH(Secure Shell)&lt;/a&gt;는 원격 로그인을 위한 프로토콜입니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP(Simple Network Management Protocol)&lt;/a&gt;는
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/network/ssh/&#34;&gt;SSH(Secure Shell)&lt;/a&gt;
+
+는 원격 로그인을 위한 프로토콜입니다.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/network/snmp/&#34;&gt;SNMP(Simple Network Management Protocol)&lt;/a&gt;
+
+는
 네트워크 장비의 상태를 모니터링하고 관리하기 위한 프로토콜입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;DHCP&lt;/strong&gt;(&lt;strong&gt;Dynamic Host Configuration Protocol&lt;/strong&gt;)는
 단말에 대해 자동으로 IP 주소를 설정하는 방법입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;LDAP&lt;/strong&gt;(&lt;strong&gt;Lightweight Directory Access Protocol&lt;/strong&gt;)는
 디렉터리 서비스를 위한 프로토콜입니다.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/go/building-bittorrent-client/&#34;&gt;BitTorrent&lt;/a&gt;는
+&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/go/building-bittorrent-client/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;BitTorrent&lt;/a&gt;
+
+는
 파일 공유를 위한 P2P(Peer-to-Peer) 프로토콜입니다.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;MQTT&lt;/strong&gt;(&lt;strong&gt;Message Queuing Telemetry Transport&lt;/strong&gt;)는
 경량 발행-구독 메시징 프로토콜로 IoT 기기 간 메시지 전달에 적합합니다.&lt;/p&gt;
@@ -2077,39 +2539,73 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 &lt;ul&gt;
 &lt;li&gt;네트워크 일반
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt; | 미야타 히로시&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183&#34;&gt;IT 엔지니어를 위한 네트워크 입문&lt;/a&gt; | 고재성, 이상훈&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/K9L9YZhEjC0&#34;&gt;(Youtube) TCP 송/수신 원리&lt;/a&gt; | 널널한 개발자&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/X73Jl2nsqiE&#34;&gt;(Youtube) TCP Connection 이론편&lt;/a&gt; | 쉬운코드&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/WwseO8l8rZc&#34;&gt;(Youtube) TCP Connection 실제편&lt;/a&gt; | 쉬운코드&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://youtu.be/lLb2lMQpKbY&#34;&gt;(Youtube) byte-stream protocol vs message-oriented protocol&lt;/a&gt; | 쉬운코드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600414&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;그림으로 공부하는 TCP/IP 구조&lt;/a&gt;
+
+ | 미야타 히로시&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791165213183&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;IT 엔지니어를 위한 네트워크 입문&lt;/a&gt;
+
+ | 고재성, 이상훈&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/K9L9YZhEjC0?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;(Youtube) TCP 송/수신 원리&lt;/a&gt;
+
+ | 널널한 개발자&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/X73Jl2nsqiE?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;(Youtube) TCP Connection 이론편&lt;/a&gt;
+
+ | 쉬운코드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/WwseO8l8rZc?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;(Youtube) TCP Connection 실제편&lt;/a&gt;
+
+ | 쉬운코드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://youtu.be/lLb2lMQpKbY?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;(Youtube) byte-stream protocol vs message-oriented protocol&lt;/a&gt;
+
+ | 쉬운코드&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;네트워크 심화
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318&#34;&gt;컴퓨터 네트워킹 하향식 접근&lt;/a&gt; | James F. Kurose, Keith W. Ross&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908&#34;&gt;TCP/IP 완벽 가이드&lt;/a&gt; | Charles M. Kozierok&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632&#34;&gt;TCP/IP Illustrated, Volume 1&lt;/a&gt; | 케빈 폴,리차드 스티븐스&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890&#34;&gt;데이터 통신과 네트워킹&lt;/a&gt; | Behrouz A. Forouzan&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791185475318&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;컴퓨터 네트워킹 하향식 접근&lt;/a&gt;
+
+ | James F. Kurose, Keith W. Ross&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788989975908&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;TCP/IP 완벽 가이드&lt;/a&gt;
+
+ | Charles M. Kozierok&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161755632&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;TCP/IP Illustrated, Volume 1&lt;/a&gt;
+
+ | 케빈 폴,리차드 스티븐스&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960552890&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;데이터 통신과 네트워킹&lt;/a&gt;
+
+ | Behrouz A. Forouzan&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;DNS
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600445&#34;&gt;DNS 실전 교과서&lt;/a&gt; | 와타나베 유이, 사토 신타, 후지와라 가즈노리&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791191600445&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;DNS 실전 교과서&lt;/a&gt;
+
+ | 와타나베 유이, 사토 신타, 후지와라 가즈노리&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;HTTP
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788966261208&#34;&gt;HTTP 완벽 가이드&lt;/a&gt; | 데이빗 고울리, 브라이언 토티, 마조리 세이어, 세일루 레디, 안슈 아가왈&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161754475&#34;&gt;HTTP/2 in Action&lt;/a&gt; | 배리 폴라드&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788966261208&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;HTTP 완벽 가이드&lt;/a&gt;
+
+ | 데이빗 고울리, 브라이언 토티, 마조리 세이어, 세일루 레디, 안슈 아가왈&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791161754475&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;HTTP/2 in Action&lt;/a&gt;
+
+ | 배리 폴라드&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;BitTorrent
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://skerritt.blog/bit-torrent/&#34;&gt;How Does BitTorrent Work? A Plain English Guide&lt;/a&gt; | Skerritt.blog&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://wiki.theory.org/BitTorrentSpecification&#34;&gt;Unofficial BitTorrent specification&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.bittorrent.org/beps/bep_0003.html&#34;&gt;BEP 3 (v1)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.bittorrent.org/beps/bep_0052.html&#34;&gt;BEP 52 (v2)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://skerritt.blog/bit-torrent/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;How Does BitTorrent Work? A Plain English Guide&lt;/a&gt;
+
+ | Skerritt.blog&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://wiki.theory.org/BitTorrentSpecification?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Unofficial BitTorrent specification&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.bittorrent.org/beps/bep_0003.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;BEP 3 (v1)&lt;/a&gt;
+
+&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.bittorrent.org/beps/bep_0052.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;BEP 52 (v2)&lt;/a&gt;
+
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -2117,16 +2613,22 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/&#34;&gt;OSI 모델이란&lt;/a&gt; | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;OSI 모델이란&lt;/a&gt;
+
+ | Cloudflare&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;Packet Capture, Packet Sniffing, Packet Loss, Packet Analyzer 등&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.submarinecablemap.com/?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;전세계 해저 케이블 지도&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q&#34;&gt;실제 테스트하는 영상&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtu.be/WMOr3WSsu6Q?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;실제 테스트하는 영상&lt;/a&gt;
+
+&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:5&#34;&gt;
 &lt;p&gt;오버헤드는 데이터를 전송하기 위해 추가로 붙는 정보입니다.
@@ -2166,14 +2668,20 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;p&gt;먼저 저작권에 대해 확인해야 할 부분이 있습니다.
 과연 책을 스캔해서 PDF로 만드는 것이 합법일까요?
 인터넷에 검색해보면 도서관에서 빌린 책을 스캔하는 건 불법이라고 하는 경우가 많은 것 같습니다.
-&lt;a href=&#34;https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95/(20240828,20358,20240227)/%EC%A0%9C30%EC%A1%B0&#34;&gt;저작권법 제30조&lt;/a&gt;를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;
+&lt;a href=&#34;https://www.law.go.kr/%eb%b2%95%eb%a0%b9/%ec%a0%80%ec%9e%91%ea%b6%8c%eb%b2%95/%2820240828,20358,20240227%29/%ec%a0%9c30%ec%a1%b0?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;저작권법 제30조&lt;/a&gt;
+
+를 보면 다음과 같이 명시되어 있습니다.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;제30조(사적이용을 위한 복제) 공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있다.
 다만, 공중의 사용에 제공하기 위하여 설치된 복사기기, 스캐너, 사진기 등 문화체육관광부령으로 정하는 복제기기에 의한 복제는 그러하지 아니하다. &amp;lt;개정 2020. 2. 4.&amp;gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;이 조항에 대해서도 인터넷 커뮤니티에서는 &amp;ldquo;개인이 구매한 서적만 가능한 것이다&amp;quot;라고 해석하는 경우가 많은 것 같습니다.
-유명한 테크 유튜브 채널인 &lt;a href=&#34;https://youtu.be/NUfQGNMfwis?t=491&#34;&gt;테크몽&lt;/a&gt;에서도 &lt;strong&gt;한국저작권위원회&lt;/strong&gt;에 직접 문의한 결과 문제가 없다고 합니다.
-&lt;strong&gt;한국저작권보호원&lt;/strong&gt;의 &lt;a href=&#34;https://www.youtube.com/watch?v=9fSDhWAP7A0&#34;&gt;영상 댓글&lt;/a&gt;에서도 이 경우에는 문제없다고 하죠.&lt;/p&gt;
+유명한 테크 유튜브 채널인 &lt;a href=&#34;https://youtu.be/NUfQGNMfwis?t=491&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;테크몽&lt;/a&gt;
+
+에서도 &lt;strong&gt;한국저작권위원회&lt;/strong&gt;에 직접 문의한 결과 문제가 없다고 합니다.
+&lt;strong&gt;한국저작권보호원&lt;/strong&gt;의 &lt;a href=&#34;https://www.youtube.com/watch?v=9fSDhWAP7A0&amp;amp;utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;영상 댓글&lt;/a&gt;
+
+에서도 이 경우에는 문제없다고 하죠.&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;공표된 저작물을 영리를 목적으로 하지 아니하고 개인적으로 이용하거나 가정 및 이에 준하는 한정된 범위 안에서 이용하는 경우에는 그 이용자는 이를 복제할 수 있습니다(저작권법 제30조).
 이를 &amp;lsquo;사적이용을 위한 복제&amp;rsquo; 통칭 사적 복제라고 하며, 구입한 CD를 핸드폰에 넣어 듣기 위하여 mp3파일로 변환하는 행위, 다운로드받은 영화를 TV에서 보기 위하여 usb에 옮기는 행위, 구입한 책에 필기를 하기 위하여 복사하는 행위 등이 해당할 수 있습니다.
@@ -2190,8 +2698,12 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;p&gt;OCR은 광학 문자 인식(Optical Character Recognition)의 약자로, 이미지나 문서를 스캔해서 텍스트로 변환하는 기술입니다.
 스캐너로 스캔한 책은 이미지로 저장이 되는데요.
 이 이미지를 텍스트로 변환해서 PDF outline을 만들어보겠습니다.&lt;/p&gt;
-&lt;p&gt;먼저 오픈 소스 도구인 &lt;a href=&#34;https://tesseract-ocr.github.io/tessdoc/Installation.html&#34;&gt;Tesseract OCR&lt;/a&gt;를 설치해야 합니다.
-이후 Tesseract OCR 설치 경로의 &lt;code&gt;tessdata&lt;/code&gt; 디렉토리에 훈련 모델(&lt;a href=&#34;https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata&#34;&gt;kor.tessdata&lt;/a&gt;)을 다운로드합니다.&lt;/p&gt;
+&lt;p&gt;먼저 오픈 소스 도구인 &lt;a href=&#34;https://tesseract-ocr.github.io/tessdoc/Installation.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Tesseract OCR&lt;/a&gt;
+
+를 설치해야 합니다.
+이후 Tesseract OCR 설치 경로의 &lt;code&gt;tessdata&lt;/code&gt; 디렉토리에 훈련 모델(&lt;a href=&#34;https://github.com/tesseract-ocr/tessdata/blob/main/kor.traineddata?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;kor.tessdata&lt;/a&gt;
+
+)을 다운로드합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;page = pdf_file[&lt;span style=&#34;color:#f60&#34;&gt;0&lt;/span&gt;]
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;images = page.get_images()
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f00&#34;&gt;for&lt;/span&gt; img in images:
@@ -2216,7 +2728,9 @@ ALB(Application Load Balancer)는 L7을 지원합니다.&amp;#160;&lt;a href=&#3
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f00&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#ff0&#34;&gt;run&lt;/span&gt;(self):
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#0f0&#34;&gt;# ...&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다음 화면은 &lt;a href=&#34;https://github.com/markruler/pdf-editor&#34;&gt;개인적으로 사용하기 위해 만든 프로그램&lt;/a&gt;입니다.
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;다음 화면은 &lt;a href=&#34;https://github.com/markruler/pdf-editor?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;개인적으로 사용하기 위해 만든 프로그램&lt;/a&gt;
+
+입니다.
 목차 부분을 OCR로 추출해서 편집할 수 있습니다.
 편집된 목차를 두고 Write outline 버튼을 누르면 목차가 포함된 새 파일이 저장됩니다.
 페이지는 직접 PDF에서 입력해야 하지만 귀찮은 일을 많이 줄일 수 있습니다.&lt;/p&gt;
@@ -2287,9 +2801,13 @@ DB 트랜잭션 타임아웃 설정과 함께 DB 백업 경로를 수정해서 �
 GUI와 CLI 환경 모두에서 사용할 수 있으며, 네트워크 문제를 분석할 때 많이 사용됩니다.
 플랫폼 또한 Windows, macOS, Linux 등 다양한 운영체제에서 사용할 수 있습니다.
 GUI가 꽤 편하기 때문에 Windows나 macOS에서는
-&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/wireshark.html&#34;&gt;Wireshark&lt;/a&gt;를 사용하는 경우가 많습니다.
+&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/wireshark.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Wireshark&lt;/a&gt;
+
+를 사용하는 경우가 많습니다.
 여기서는 CLI 환경에서도 사용할 수 있는
-&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/tshark.html&#34;&gt;TShark&lt;/a&gt;를 소개합니다.&lt;/p&gt;
+&lt;a href=&#34;https://www.wireshark.org/docs/man-pages/tshark.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;TShark&lt;/a&gt;
+
+를 소개합니다.&lt;/p&gt;
 &lt;h1 id=&#34;설치&#34;&gt;설치&lt;/h1&gt;
 &lt;p&gt;Ubuntu 22.04에서 설치하는 방법을 소개합니다.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;# CLI&lt;/span&gt;
@@ -2357,13 +2875,17 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;/ul&gt;
 &lt;h2 id=&#34;processing&#34;&gt;Processing&lt;/h2&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;-f&lt;/code&gt; &lt;a href=&#34;https://www.tcpdump.org/manpages/pcap-filter.7.html&#34;&gt;pcap-filter syntax&lt;/a&gt;를 사용하여 패킷을 필터링합니다.
+&lt;li&gt;&lt;code&gt;-f&lt;/code&gt; &lt;a href=&#34;https://www.tcpdump.org/manpages/pcap-filter.7.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;pcap-filter syntax&lt;/a&gt;
+
+를 사용하여 패킷을 필터링합니다.
 &lt;ul&gt;
 &lt;li&gt;패킷을 캡처할 때 사용됩니다.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-f &amp;quot;tcp port 80&amp;quot;&lt;/code&gt; TCP port 80 패킷 필터링합니다.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
-&lt;li&gt;&lt;code&gt;-Y&lt;/code&gt;, &lt;code&gt;--display-filter&lt;/code&gt; &lt;a href=&#34;https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html&#34;&gt;Wireshark displa&lt;strong&gt;Y&lt;/strong&gt; filter syntax&lt;/a&gt; 사용하여 보고싶은 패킷만 표시합니다.
+&lt;li&gt;&lt;code&gt;-Y&lt;/code&gt;, &lt;code&gt;--display-filter&lt;/code&gt; &lt;a href=&#34;https://www.wireshark.org/docs/wsug_html_chunked/ChWorkBuildDisplayFilterSection.html?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;Wireshark displa&lt;strong&gt;Y&lt;/strong&gt; filter syntax&lt;/a&gt;
+
+ 사용하여 보고싶은 패킷만 표시합니다.
 &lt;ul&gt;
 &lt;li&gt;패킷을 읽을 때 사용됩니다.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;-Y &amp;quot;http.request&amp;quot;&lt;/code&gt; HTTP request 패킷 표시합니다.&lt;/li&gt;
@@ -2415,7 +2937,9 @@ GUI가 꽤 편하기 때문에 Windows나 macOS에서는
 &lt;li&gt;&lt;code&gt;-t a|ad|adoy|d|dd|e|r|u|ud|udoy&lt;/code&gt; 타임스탬프 형식을 지정합니다.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;--color&lt;/code&gt; Wireshark GUI와 유사하게 텍스트를 색상으로 출력하며, 24비트 색상을 지원하는 터미널이 필요합니다. 또한 PDML 및 PSML 형식에 색상 속성을 제공합니다(이 속성은 비표준임).
 &lt;ul&gt;
-&lt;li&gt;색상 설정을 변경하려면 &lt;a href=&#34;https://gitlab.com/wireshark/wireshark/-/wikis/ColoringRules&#34;&gt;ColoringRules&lt;/a&gt;를 확인해보세요.&lt;/li&gt;
+&lt;li&gt;색상 설정을 변경하려면 &lt;a href=&#34;https://gitlab.com/wireshark/wireshark/-/wikis/ColoringRules?utm_source=markruler.github.io&#34; target=&#34;_blank&#34; rel=&#34;noopener noreferrer&#34;&gt;ColoringRules&lt;/a&gt;
+
+를 확인해보세요.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;

@@ -536,7 +536,9 @@
                 <div class="post-body" v-pre>
                 
                     <blockquote>
-<p>Faisal Khan의 <a href="https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/">Beginners Guide to MEC Architecture (Multi-access Edge Computing)</a>을 번역한 글입니다.
+<p>Faisal Khan의 <a href="https://www.telcocloudbridge.com/blog/beginners-guide-to-mec-architecture-multi-access-edge-computing/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Beginners Guide to MEC Architecture (Multi-access Edge Computing)</a>
+
+을 번역한 글입니다.
 저자의 허락을 받아 번역했습니다.</p>
 </blockquote>
 <p>MEC<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 아키텍처 가이드에 오신 것을 환영합니다!</p>
@@ -555,33 +557,63 @@ MEC 아키텍처를 처음부터 단계적으로 설명하며, 사전 지식이 
 </ul>
 <p>그럼 바로 시작해 보겠습니다!</p>
 <ul>
-<li><a href="#1-mec%EC%9D%98-%EC%A0%95%EC%9D%98">1. MEC의 정의</a></li>
-<li><a href="#2-etsi%EC%97%90-%EB%94%B0%EB%A5%B8-mec-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98">2. ETSI에 따른 MEC 아키텍처</a>
+<li><a href="#1-mec%ec%9d%98-%ec%a0%95%ec%9d%98">1. MEC의 정의</a>
+
+</li>
+<li><a href="#2-etsi%ec%97%90-%eb%94%b0%eb%a5%b8-mec-%ec%95%84%ed%82%a4%ed%85%8d%ec%b2%98">2. ETSI에 따른 MEC 아키텍처</a>
+
+
 <ul>
-<li><a href="#2-0-%EA%B0%80%EC%83%81%ED%99%94-%EC%9D%B8%ED%94%84%EB%9D%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-vim-virtualization-infrastructure-manager">2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)</a></li>
+<li><a href="#2-0-%ea%b0%80%ec%83%81%ed%99%94-%ec%9d%b8%ed%94%84%eb%9d%bc-%eb%a7%a4%eb%8b%88%ec%a0%80-vim-virtualization-infrastructure-manager">2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)</a>
+
+</li>
 <li><a href="#2-1-mec-host">2-1. MEC Host</a>
+
+
 <ul>
-<li><a href="#2-1-1-mec-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98">2-1-1. MEC 애플리케이션</a></li>
-<li><a href="#2-1-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC">2-1-2. MEC 플랫폼</a>
+<li><a href="#2-1-1-mec-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98">2-1-1. MEC 애플리케이션</a>
+
+</li>
+<li><a href="#2-1-2-mec-%ed%94%8c%eb%9e%ab%ed%8f%bc">2-1-2. MEC 플랫폼</a>
+
+
 <ul>
-<li><a href="#2-1-2-1-mec-%EC%84%9C%EB%B9%84%EC%8A%A4">2-1-2-1. MEC 서비스</a></li>
-<li><a href="#2-1-2-2-%ED%8A%B8%EB%9E%98%ED%94%BD-%EA%B7%9C%EC%B9%99-%EC%A0%9C%EC%96%B4-traffic-rules-control">2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)</a></li>
-<li><a href="#2-1-2-3-dns-%ED%95%B8%EB%93%A4%EB%A7%81">2-1-2-3. DNS 핸들링</a></li>
-</ul>
+<li><a href="#2-1-2-1-mec-%ec%84%9c%eb%b9%84%ec%8a%a4">2-1-2-1. MEC 서비스</a>
+
+</li>
+<li><a href="#2-1-2-2-%ed%8a%b8%eb%9e%98%ed%94%bd-%ea%b7%9c%ec%b9%99-%ec%a0%9c%ec%96%b4-traffic-rules-control">2-1-2-2. 트래픽 규칙 제어 (Traffic Rules Control)</a>
+
+</li>
+<li><a href="#2-1-2-3-dns-%ed%95%b8%eb%93%a4%eb%a7%81">2-1-2-3. DNS 핸들링</a>
+
 </li>
 </ul>
 </li>
-<li><a href="#2-2-mec-%ED%94%8C%EB%9E%AB%ED%8F%BC-%EB%A7%A4%EB%8B%88%EC%A0%80-mec-platform-manager">2-2. MEC 플랫폼 매니저 (MEC Platform Manager)</a></li>
-<li><a href="#2-3-%EB%A9%80%ED%8B%B0-%EC%95%A1%EC%84%B8%EC%8A%A4-%EC%97%90%EC%A7%80-%EC%98%A4%EC%BC%80%EC%8A%A4%ED%8A%B8%EB%A0%88%EC%9D%B4%ED%84%B0-multi-access-edge-orchestrator">2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)</a></li>
-<li><a href="#cfs-portal">CFS Portal</a></li>
-<li><a href="#%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%88%98%EB%AA%85-%EC%A3%BC%EA%B8%B0-%EA%B4%80%EB%A6%AC-%ED%94%84%EB%A1%9D%EC%8B%9C-user-app-lcm-proxy">사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)</a></li>
-<li><a href="#%EC%B0%B8%EC%A1%B0">참조</a></li>
+</ul>
+</li>
+<li><a href="#2-2-mec-%ed%94%8c%eb%9e%ab%ed%8f%bc-%eb%a7%a4%eb%8b%88%ec%a0%80-mec-platform-manager">2-2. MEC 플랫폼 매니저 (MEC Platform Manager)</a>
+
+</li>
+<li><a href="#2-3-%eb%a9%80%ed%8b%b0-%ec%95%a1%ec%84%b8%ec%8a%a4-%ec%97%90%ec%a7%80-%ec%98%a4%ec%bc%80%ec%8a%a4%ed%8a%b8%eb%a0%88%ec%9d%b4%ed%84%b0-multi-access-edge-orchestrator">2-3. 멀티 액세스 에지 오케스트레이터 (Multi-access Edge Orchestrator)</a>
+
+</li>
+<li><a href="#cfs-portal">CFS Portal</a>
+
+</li>
+<li><a href="#%ec%82%ac%ec%9a%a9%ec%9e%90-%ec%95%a0%ed%94%8c%eb%a6%ac%ec%bc%80%ec%9d%b4%ec%85%98-%ec%88%98%eb%aa%85-%ec%a3%bc%ea%b8%b0-%ea%b4%80%eb%a6%ac-%ed%94%84%eb%a1%9d%ec%8b%9c-user-app-lcm-proxy">사용자 애플리케이션 수명 주기 관리 프록시 (User App LCM Proxy)</a>
+
+</li>
+<li><a href="#%ec%b0%b8%ec%a1%b0">참조</a>
+
+</li>
 </ul>
 </li>
 </ul>
 <p>우리는 밑바닥부터 블록 단위로 MEC 아키텍처를 구축할 것입니다. 🙂</p>
 <h1 id="1-mec의-정의">1. MEC의 정의</h1>
-<p><a href="https://www.etsi.org/technologies/multi-access-edge-computing">ETSI</a>에 따르면 MEC는 다음과 같이 정의됩니다.</p>
+<p><a href="https://www.etsi.org/technologies/multi-access-edge-computing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ETSI</a>
+
+에 따르면 MEC는 다음과 같이 정의됩니다.</p>
 <blockquote>
 <p>Multi-access Edge Computing (MEC) offers application developers and content providers
 cloud-computing capabilities and an IT service environment at the edge of the network.
@@ -602,7 +634,9 @@ as well as real-time access to radio network information that can be leveraged b
 <p>가상 네트워크에서는 항상 서버가 필요하며, 이 서버 위에서 가상 머신(VM)을 구동할 수 있어야 합니다.
 그리고 이러한 VM에는 관리 계층이 필요합니다.</p>
 <h2 id="2-0-가상화-인프라-매니저-vim-virtualization-infrastructure-manager">2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)</h2>
-<p>VIM은 <a href="../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager">NFV의 VIM</a>과 유사한 기능을 합니다.
+<p>VIM은 <a href="../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager">NFV의 VIM</a>
+
+과 유사한 기능을 합니다.
 물리적 인프라(컴퓨팅, 스토리지, 네트워킹) 위에 VM을 관리하는 것이 목적입니다.
 &lsquo;가상화 인프라&rsquo;의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다.
 왼쪽에는 가상화된 인프라로 전환된 서버가 있고, 오른쪽에는 이러한 서버 위의 가상 자원을 관리하는 VIM이 있습니다.</p>
@@ -694,20 +728,30 @@ CFS를 통해 이동통신사의 고객은 새로운 MEC 애플리케이션을 �
 이제 이 아키텍처에 대해 궁금한 것이 있으면 언제든 질문해 주세요.</p>
 <h2 id="참조">참조</h2>
 <ul>
-<li><a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf">ETSI GS MEC 002 V1.1.1 (2016-03)</a></li>
-<li><a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf">ETSI GS MEC 003 V2.1.1 (2019-01)</a></li>
+<li><a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ETSI GS MEC 002 V1.1.1 (2016-03)</a>
+
+</li>
+<li><a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ETSI GS MEC 003 V2.1.1 (2019-01)</a>
+
+</li>
 </ul>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
-<p>처음에는 MEC가 <a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf">Mobile Edge Computing</a> 의 줄임말이었지만 현재는 <a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf">Multi-access Edge Computing</a>입니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>처음에는 MEC가 <a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/01.01.01_60/gs_MEC003v010101p.pdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Mobile Edge Computing</a>
+
+ 의 줄임말이었지만 현재는 <a href="https://www.etsi.org/deliver/etsi_gs/MEC/001_099/003/02.01.01_60/gs_MEC003v020101p.pdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Multi-access Edge Computing</a>
+
+입니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
 <p>사용자 장비(UE, User Equipment)는 휴대폰을 의미할 수 있습니다. 모바일 동글이 있는 노트북을 의미하기도 합니다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://ko.wikipedia.org/wiki/FCAPS">FCAPS</a>: <strong>F</strong>ault(장애), <strong>C</strong>onfiguration(구성), <strong>A</strong>ccounting(계정), <strong>P</strong>erformance(성능), <strong>S</strong>ecurity(보안)&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://ko.wikipedia.org/wiki/FCAPS?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">FCAPS</a>
+
+: <strong>F</strong>ault(장애), <strong>C</strong>onfiguration(구성), <strong>A</strong>ccounting(계정), <strong>P</strong>erformance(성능), <strong>S</strong>ecurity(보안)&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
