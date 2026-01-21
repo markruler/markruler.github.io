@@ -52,32 +52,32 @@
 <p>Git의 모든 기능을 지원하는 것은 CLI 뿐이다.
 GUI 프로그램의 대부분은 Git 기능 중 일부만 구현하기 때문에 비교적 단순하다.
 CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하지 않는다. -
-&lt;<a href="https://git-scm.com/book/en/v2?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Pro Git</a>
+&lt;<a href="https://git-scm.com/book/en/v2?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Pro Git</a>
 
 &gt; Scott Chacon, Ben Straub</p>
 </blockquote>
 <h1 id="git-internal">Git Internal</h1>
 <h2 id="차이가-아니라-스냅샷">차이가 아니라 스냅샷</h2>
 <ul>
-<li><a href="https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Commits are snapshots, not diffs</a>
+<li><a href="https://github.blog/2020-12-17-commits-are-snapshots-not-diffs/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Commits are snapshots, not diffs</a>
 
 </li>
 </ul>
 <p>CVS, Subversion, Perforce, Bazaar 등의 시스템은 각 파일의 변화를 시간순으로 관리하면서 파일들의 집합을 관리합니다.</p>
 <p><img src="/images/shell/git/storing-data-as-changes.png" alt="Storing data as changes to a base version of each file"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Storing data as changes to a base version of each file</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Storing data as changes to a base version of each file</a>
 
 </em></p>
 <p>Git은 데이터를 스냅샷의 스트림처럼 취급합니다.
 파일이 달라지지 않았으면 이전 상태의 파일에 대한 링크만 저장합니다.</p>
 <p><img src="/images/shell/git/storing-data-as-snapshots.png" alt="Storing data as snapshots of the project over time"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Storing data as snapshots of the project over time</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Storing data as snapshots of the project over time</a>
 
 </em></p>
 <h2 id="데이터의-무결성">데이터의 무결성</h2>
 <p>Git에서 데이터를 저장하기 전에 가장 먼저 하는 작업은 Hash function을 사용해서 체크섬을 계산하는 것입니다.
 그리고 이 체크섬으로 데이터를 관리합니다.</p>
-<p>이것은 <a href="https://www.youtube.com/watch?v=4XpnKHJAok8&amp;t=56m25s&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">데이터를 신뢰하기 위해</a>
+<p>이것은 <a href="https://www.youtube.com/watch?v=4XpnKHJAok8&amp;t=56m25s&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">데이터를 신뢰하기 위해</a>
 
  무결성을 검사하는 과정입니다.
 예를 들어 제가 오늘 작성한 파일이 내일 혹은 10년 뒤에도 같다고 믿을 수 있게 되는 것이죠.</p>
@@ -96,7 +96,7 @@ CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하�
 체크섬은 40자 길이의 16진수 문자열입니다.
 파일의 내용이나 디렉터리 구조를 이용하여 체크섬을 구합니다.</p>
 <blockquote>
-<p><em><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
+<p><em><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git을 쓰는 사람들은 언젠가 SHA-1 값이 중복될까 봐 걱정한다.
 정말 그렇게 되면 어떤 일이 벌어질까?</a>
 
 </em></p>
@@ -107,7 +107,7 @@ CLI를 사용할 줄 알면 GUI도 사용할 수 있지만 반대는 성립하�
 SHA-1 값의 크기는 20 Bytes(160 Bits)입니다.
 해시 값이 중복될 확률이 50%가 되는 데 필요한 객체의 수는 2^80입니다.</p>
 <ul>
-<li><a href="https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">2018년부터 SHA-256으로 전환하고 있고</a>
+<li><a href="https://lore.kernel.org/git/20180609224913.GC38834@genre.crustytoothpaste.net/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">2018년부터 SHA-256으로 전환하고 있고</a>
 
 , Git 2.29부터 지원하고 있습니다.</li>
 </ul>
@@ -125,7 +125,7 @@ SHA-1 값의 크기는 20 Bytes(160 Bits)입니다.
 </span></span></code></pre></div><h2 id="git-프로젝트의-세-가지-단계">Git 프로젝트의 세 가지 단계</h2>
 <p>Git은 파일을 세 가지 상태로 관리합니다.</p>
 <p><img src="/images/shell/git/lifecycle-file-status.png" alt="The lifecycle of the status of your files"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The lifecycle of the status of your files</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The lifecycle of the status of your files</a>
 
 </em></p>
 <ul>
@@ -140,19 +140,19 @@ SHA-1 값의 크기는 20 Bytes(160 Bits)입니다.
 <li>아래는 커밋의 객체들을 나타냅니다.</li>
 </ul>
 <p><img src="/images/shell/git/commit-and-its-tree.png" alt="A commit and its tree"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A commit and its tree</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A commit and its tree</a>
 
 </em></p>
 <ul>
 <li>아래는 커밋과 이전 커밋들을 나타냅니다.</li>
 </ul>
 <p><img src="/images/shell/git/commit-and-its-parent.png" alt="Commits and their parents"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Commits and their parents</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Commits and their parents</a>
 
 </em></p>
 <p>파일의 세 가지 상태는 Git 프로젝트의 세 가지 단계와 연결됩니다.</p>
 <p><img src="/images/shell/git/git-three-step.png" alt="Working tree, staging area, and Git directory"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.github.io#_the_three_states" target="_blank" rel="noopener noreferrer">Working tree, staging area, and Git directory</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Getting-Started-What-is-Git%3F?utm_source=markruler.com&amp;utm_medium=blog#_the_three_states" target="_blank" rel="noopener noreferrer">Working tree, staging area, and Git directory</a>
 
 </em></p>
 <ul>
@@ -261,7 +261,7 @@ description 파일은 기본적으로 GitWeb 프로그램에서만 사용하기 
 <p>Git은 유입되는 모든 것을 Object로 간주합니다.
 대표적으로 blob, tree, commit, tag가 있습니다.</p>
 <p><img src="/images/shell/git/simple-git-data-model.png" alt="Simple version of the Git data model"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Simple version of the Git data model</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Simple version of the Git data model</a>
 
 </em></p>
 <h3 id="tree">tree</h3>
@@ -284,7 +284,7 @@ tree 객체 하나는 항목을 여러 개 가질 수 있습니다.
 메타 데이터는 스냅샷을 누가, 언제, 왜 저장했는지에 대한 정보를 포함합니다.
 <code>commit-tree</code> 명령으로 생성합니다.</p>
 <p><img src="/images/shell/git/reachable-objects.png" alt="All the reachable objects in your Git directory"></p>
-<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">All the reachable objects in your Git directory</a>
+<p><em><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">All the reachable objects in your Git directory</a>
 
 </em></p>
 <h3 id="tag">tag</h3>
@@ -336,13 +336,13 @@ config 파일은 INI file(<code>.ini</code>) 형식입니다.</p>
 </span></span><span style="display:flex;"><span>git config --list --global
 </span></span></code></pre></div><h1 id="scm-source-code-management">SCM: Source Code Management</h1>
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/source-code-management?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Source code management</a>
+<li><a href="https://www.atlassian.com/git/tutorials/source-code-management?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Source code management</a>
 
  - Atlassian</li>
 <li>What? 코드 변경 사항을 추적하고 관리하는 방법입니다. &lsquo;Version Control System&rsquo;으로도 불립니다.</li>
 <li>Why? 팀의 커뮤니케이션 오버헤드를 줄이고 릴리스 속도를 높일 수 있습니다.
 <ul>
-<li>개인적인 사례를 들면, 저는 첫 회사에서 <a href="https://en.wikipedia.org/wiki/PVCS?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">PVCS</a>
+<li>개인적인 사례를 들면, 저는 첫 회사에서 <a href="https://en.wikipedia.org/wiki/PVCS?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">PVCS</a>
 
 라는 SCM을 사용했는데 Local에서만 사용할 수 있었습니다.
 그래서 PVCS에서 수정할 파일을 동료들에게 알리고 잠금(<code>Lock</code>) 상태로 만듭니다.
@@ -408,17 +408,17 @@ submodule을 추가하면 <code>.gitmodules</code> 파일이 생성됩니다.</p
 <ul>
 <li>왜 submodule 대신 subtree를 사용해야 할까?
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git subtree: the alternative to Git submodule</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git subtree: the alternative to Git submodule</a>
 
  - Atlassian</li>
-<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Why your company shouldn&rsquo;t use Git submodules</a>
+<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Why your company shouldn&rsquo;t use Git submodules</a>
 
  - Amber</li>
 </ul>
 </li>
 </ul>
 <p><img src="/images/shell/git/tree-subtree-concept.png" alt="tree-subtree-concept"></p>
-<p><em><a href="https://opensource.com/article/20/5/git-submodules-subtrees?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">일반적인 Tree 개념</a>
+<p><em><a href="https://opensource.com/article/20/5/git-submodules-subtrees?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">일반적인 Tree 개념</a>
 
 </em></p>
 <h2 id="branch">branch</h2>
@@ -437,7 +437,7 @@ Git의 브랜치는 커밋 사이를 가볍게 이동할 수 있는 포인터 �
 </span></span></code></pre></div><h3 id="xargs">xargs</h3>
 <p>eXtended ARGuments, Git 명령어는 아니지만 함께 사용하면 유용합니다.</p>
 <ul>
-<li><a href="https://www.baeldung.com/linux/xargs?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">When to Use xargs</a>
+<li><a href="https://www.baeldung.com/linux/xargs?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">When to Use xargs</a>
 
  - Baeldung</li>
 </ul>
@@ -493,15 +493,15 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 <h2 id="switch">switch</h2>
 <p>브랜치를 변경합니다.</p>
 <ul>
-<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt?utm_source=markruler.github.io#L61" target="_blank" rel="noopener noreferrer">git@v2.23.0</a>
+<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt?utm_source=markruler.com&amp;utm_medium=blog#L61" target="_blank" rel="noopener noreferrer">git@v2.23.0</a>
 
  부터 <code>checkout</code> 명령어는 <code>git-switch</code>와 <code>git-restore</code>로 분리되었습니다.
 이유는 checkout이 하는 기능이 많기 때문입니다.
 <ul>
-<li><a href="https://github.blog/2019-08-16-highlights-from-git-2-23/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Highlights from Git 2.23</a>
+<li><a href="https://github.blog/2019-08-16-highlights-from-git-2-23/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Highlights from Git 2.23</a>
 
  - GitHub Blog</li>
-<li><a href="https://www.infoq.com/news/2019/08/git-2-23-switch-restore/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git 2.23 Adds Switch and Restore Commands</a>
+<li><a href="https://www.infoq.com/news/2019/08/git-2-23-switch-restore/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git 2.23 Adds Switch and Restore Commands</a>
 
  - Sergio De Simone</li>
 </ul>
@@ -526,7 +526,7 @@ GPG(GNU Privacy Guard)로 서명할 수도 있다.
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>git push origin master:develop --force-with-lease
 </span></span></code></pre></div><h3 id="upstream">upstream</h3>
 <p><img src="/images/shell/git/triangular-workflow.png" alt="Triangular Workflow"></p>
-<p><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Triangular Workflow</a>
+<p><a href="https://github.blog/2015-07-29-git-2-5-including-multiple-worktrees-and-triangular-workflows/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Triangular Workflow</a>
 
 </p>
 <p>upstream이라는 용어는 헷갈릴 수 있습니다.
@@ -618,7 +618,7 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># merge 과정에서 충돌이 발생했다면 --abort 옵션으로 취소할 수 있다.</span>
 </span></span><span style="display:flex;"><span>git merge --abort
 </span></span></code></pre></div><p><img src="/images/shell/git/merging-main-into-the-feature-branch.png" alt="Merging main into the feature branch"></p>
-<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Merging main into the feature branch</a>
+<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Merging main into the feature branch</a>
 
 </em></p>
 <p>병합은 두 가지 방식이 있습니다.</p>
@@ -629,7 +629,7 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 별도의 Merge 과정 없이 그저 최신 커밋(1st commit ← 2nd commit)으로 이동합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># no-fast-forward</span>
 </span></span><span style="display:flex;"><span>git merge --no-ff
-</span></span></code></pre></div><p>두 번째는 <a href="https://en.wikipedia.org/wiki/Merge_%28version_control%29?utm_source=markruler.github.io#Three-way_merge" target="_blank" rel="noopener noreferrer">3-way-merge</a>
+</span></span></code></pre></div><p>두 번째는 <a href="https://en.wikipedia.org/wiki/Merge_%28version_control%29?utm_source=markruler.com&amp;utm_medium=blog#Three-way_merge" target="_blank" rel="noopener noreferrer">3-way-merge</a>
 
  방식을 사용한 No Fast Forward 방식입니다.
 현재 브랜치의 커밋(2nd commit)이 병합하려는 커밋(1st commit)을 조상으로 두지 않는다면 공통 조상 하나를 사용하여 병합합니다.
@@ -697,7 +697,7 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 <p>Git 서버의 Pull Request는 협업 과정에서 &ldquo;제가 이런 작업들을 origin 저장소에 병합하니까 pull 부탁드려요~&ldquo;라고 하는 것과 같습니다.</p>
 <h2 id="rebase">rebase</h2>
 <blockquote>
-<p><a href="https://www.facebook.com/photo?fbid=4291246567585200&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">rebase는 Git의 꽃이다.</a>
+<p><a href="https://www.facebook.com/photo?fbid=4291246567585200&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">rebase는 Git의 꽃이다.</a>
 
 </p>
 </blockquote>
@@ -720,7 +720,7 @@ index를 갱신하고 다음 커밋에 대한 내용을 준비합니다.
 </span></span><span style="display:flex;"><span>              /
 </span></span><span style="display:flex;"><span> D---E---F---G main
 </span></span></code></pre></div><p><img src="/images/shell/git/rebasing-the-feature-branch-onto-main.png" alt="Rebasing the feature branch onto main"></p>
-<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Rebasing the feature branch onto main</a>
+<p><em><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Rebasing the feature branch onto main</a>
 
 </em></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>o---o---o---o---o  main
@@ -847,7 +847,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># stash@{0}: On master: haha</span>
 </span></span></code></pre></div><p>기본적으로 untracked 파일이나 ignored 파일은 stash하지 않지만 옵션을 주면 stash 할 수 있습니다. (각각 <code>--include-untracked</code>, <code>--all</code>)</p>
 <p><img src="/images/shell/git/git-stash-options.png" alt="git stash options"></p>
-<p><em><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git stash options</a>
+<p><em><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git stash options</a>
 
 </em></p>
 <h3 id="how-git-stash-works">How git stash works</h3>
@@ -899,7 +899,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 <p>워킹 트리를 복구합니다.
 <code>--staged</code> 옵션을 지정하면 스테이징된 스냅샷도 되돌릴 수 있습니다.</p>
 <ul>
-<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt?utm_source=markruler.github.io#L61" target="_blank" rel="noopener noreferrer">git@v2.23.0</a>
+<li><a href="https://github.com/git/git/blob/v2.23.0/Documentation/RelNotes/2.23.0.txt?utm_source=markruler.com&amp;utm_medium=blog#L61" target="_blank" rel="noopener noreferrer">git@v2.23.0</a>
 
  부터 <code>checkout</code> 명령어에서 분리되었습니다.</li>
 </ul>
@@ -928,7 +928,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 </span></span><span style="display:flex;"><span>git blame -L 69,82 README.md
 </span></span></code></pre></div><h3 id="bisect">bisect</h3>
 <ul>
-<li><a href="https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A beginner&rsquo;s guide to GIT BISECT</a>
+<li><a href="https://www.metaltoad.com/blog/beginners-guide-git-bisect-process-elimination?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A beginner&rsquo;s guide to GIT BISECT</a>
 
  - Tony Rost</li>
 </ul>
@@ -992,7 +992,7 @@ stash에 저장한 데이터는 브랜치 별로 관리되기 때문에 작업 �
 </span></span><span style="display:flex;"><span>[759ea6356258b687ad8b12178b2934ab5ad830bf] Adding the word <span style="color:#87ceeb">&#39;gently&#39;</span>
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p><img src="/images/shell/git/git-bisect.png" alt="git-bisect"></p>
-<p><em><a href="https://www.datree.io/resources/git-bisect-debugging-with-git?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git bisect - debugging with git, Noaa Barki</a>
+<p><em><a href="https://www.datree.io/resources/git-bisect-debugging-with-git?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git bisect - debugging with git, Noaa Barki</a>
 
 </em></p>
 <p>이제부터 버그를 찾아나섭니다.
@@ -1103,7 +1103,7 @@ Git은 bad 커밋과 good 커밋의 중간 커밋(이진 탐색)을 자동으로
 </span></span></code></pre></div><h2 id="log">log</h2>
 <p>커밋 이력을 조회합니다.</p>
 <ul>
-<li><a href="https://git-scm.com/docs/git-log?utm_source=markruler.github.io#_pretty_formats" target="_blank" rel="noopener noreferrer">pretty formats</a>
+<li><a href="https://git-scm.com/docs/git-log?utm_source=markruler.com&amp;utm_medium=blog#_pretty_formats" target="_blank" rel="noopener noreferrer">pretty formats</a>
 
 을 사용해서 출력 형식을 정할 수 있습니다.</li>
 <li><code>--abbrev-commit</code> 짧고 중복되지 않는 해시 값을 보여줍니다. 앞 7자를 보여주고 해시 값이 중복되는 경우 더 긴 해시 값을 보여줍니다.</li>
@@ -1343,7 +1343,7 @@ Git의 내부 데이터 구조를 조작하거나 확인하는 <strong>저수준
 <p>Git 저장소에서 특정 이벤트가 발생할 때마다 자동으로 실행되는 스크립트입니다.
 스크립트들은 기본적으로 <code>.git/hooks/*</code>에 위치합니다.</p>
 <p><img src="/images/shell/git/hook-symlink-script.png" alt="Maintaining a hook using a symlink to version-controlled script"></p>
-<p><em><a href="https://www.atlassian.com/git/tutorials/git-hooks?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Maintaining a hook using a symlink to version-controlled script</a>
+<p><em><a href="https://www.atlassian.com/git/tutorials/git-hooks?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Maintaining a hook using a symlink to version-controlled script</a>
 
 </em></p>
 <p>예를 들어, 아래와 같은 <code>pre-push</code> hook은 <code>git push</code> 명령어를 실행시켰을 때 <code>push</code> 가 실행되기 전 <code>gradle test</code> 명령어가 먼저 실행됩니다.</p>
@@ -1362,7 +1362,7 @@ Git의 내부 데이터 구조를 조작하거나 확인하는 <strong>저수준
 <p>Git이 처음 객체를 저장하는 형식은 loose objects라고 부릅니다.
 여러 개의 loose objects를 Packfile(<code>./git/objects/pack/*</code>)이라 불리는 단일 바이너리 내에 압축(pack)합니다.
 <code>git gc</code> 명령을 실행하면 <code>git repack</code>을 실행하고 <code>git pack-objects</code> 명령을 실행합니다.
-<a href="https://git-scm.com/docs/git-pack-objects?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">pack-objects 명령</a>
+<a href="https://git-scm.com/docs/git-pack-objects?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pack-objects 명령</a>
 
 은 default로
 zlib을 사용해서 packfile(<code>.pack</code>)과 pack의 index 파일(<code>.idx</code>)을 생성합니다.
@@ -1517,7 +1517,7 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)입니다.
 <h2 id="fork">Fork</h2>
 <p>Fork는 서버에 저장소의 복사본을 만듭니다.</p>
 <p><img src="/images/shell/git/fork-repository.svg" alt="fork-repository"></p>
-<p><em><a href="https://flatironinstitute.github.io/sciware-git-collaborative/03-distributed/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Distributed version control and forking workflow</a>
+<p><em><a href="https://flatironinstitute.github.io/sciware-git-collaborative/03-distributed/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Distributed version control and forking workflow</a>
 
 </em></p>
 <ul>
@@ -1589,16 +1589,16 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)입니다.
 <ul>
 <li>Books
 <ul>
-<li><a href="https://git-scm.com/book/en/v2?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Pro Git</a>
+<li><a href="https://git-scm.com/book/en/v2?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Pro Git</a>
 
  (2/e) - Scott Chacon, Ben Straub</li>
-<li><a href="https://www.atlassian.com/git/tutorials?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git Tutorials</a>
+<li><a href="https://www.atlassian.com/git/tutorials?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git Tutorials</a>
 
  - Atlassian</li>
-<li><a href="https://github.com/git-guides/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git Guide</a>
+<li><a href="https://github.com/git-guides/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git Guide</a>
 
  - GitHub</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960775473&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git을 이용한 버전 관리</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960775473&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git을 이용한 버전 관리</a>
 
  - 라비산카 소마순다람</li>
 </ul>
@@ -1608,272 +1608,272 @@ Git에서 말하는 garbage는 접근할 수 없는 객체(orphan)입니다.
 <li><a href="/posts/shell/cs-visualized-useful-git-commands/">CS Visualized: 유용한 깃(Git) 명령어</a>
 
  - Lydia Hallie</li>
-<li><a href="https://www.udemy.com/course/git-and-github-complete-guide/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The Complete Git Guide: Understand and master Git and GitHub</a>
+<li><a href="https://www.udemy.com/course/git-and-github-complete-guide/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The Complete Git Guide: Understand and master Git and GitHub</a>
 
  - Bogdan Stashchuk</li>
-<li><a href="https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A Visualized Intro to Git Internals — Objects and Branches</a>
+<li><a href="https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A Visualized Intro to Git Internals — Objects and Branches</a>
 
  - Omer Rosenbaum</li>
-<li><a href="https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Getting Hardcore — Creating a Repo From Scratch</a>
+<li><a href="https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Getting Hardcore — Creating a Repo From Scratch</a>
 
  - Omer Rosenbaum</li>
-<li><a href="https://swimm.io/blog/a-hands-on-intro-to-git-internals-creating-a-repo-from-scratch/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A Hands-On Intro to Git Internals: Creating a Repo From Scratch</a>
+<li><a href="https://swimm.io/blog/a-hands-on-intro-to-git-internals-creating-a-repo-from-scratch/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A Hands-On Intro to Git Internals: Creating a Repo From Scratch</a>
 
  - swimm</li>
-<li><a href="https://git-scm.com/docs/hash-function-transition/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Hash Function</a>
+<li><a href="https://git-scm.com/docs/hash-function-transition/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Hash Function</a>
 
  - git-scm</li>
-<li><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">objects</a>
+<li><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EB%82%B4%EB%B6%80-Git-%EA%B0%9C%EC%B2%B4?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">objects</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>refs
 <ul>
-<li><a href="https://git-scm.com/docs/gitrevisions?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">gitrevisions</a>
+<li><a href="https://git-scm.com/docs/gitrevisions?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">gitrevisions</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/refs-and-the-reflog?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Refs and the Reflog</a>
+<li><a href="https://www.atlassian.com/git/tutorials/refs-and-the-reflog?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Refs and the Reflog</a>
 
  - Atlassian</li>
 </ul>
 </li>
 <li>index
 <ul>
-<li><a href="https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Make your monorepo feel small with Git&rsquo;s sparse index</a>
+<li><a href="https://github.blog/2021-11-10-make-your-monorepo-feel-small-with-gits-sparse-index/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Make your monorepo feel small with Git&rsquo;s sparse index</a>
 
  - Derrick Stolee</li>
-<li><a href="https://mincong.io/2018/04/28/git-index/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git: Understanding the Index File</a>
+<li><a href="https://mincong.io/2018/04/28/git-index/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git: Understanding the Index File</a>
 
  - Mincong Huang</li>
-<li><a href="https://shafiul.github.io//gitbook/7_the_git_index.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The Git Index</a>
+<li><a href="https://shafiul.github.io//gitbook/7_the_git_index.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The Git Index</a>
 
 </li>
 </ul>
 </li>
 <li>config
 <ul>
-<li><a href="https://git-scm.com/docs/git-config?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-scm</a>
+<li><a href="https://git-scm.com/docs/git-config?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-scm</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>tag
 <ul>
-<li><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">tag</a>
+<li><a href="https://git-scm.com/book/ko/v2/Git%EC%9D%98-%EA%B8%B0%EC%B4%88-%ED%83%9C%EA%B7%B8?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">tag</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>Commands
 <ul>
-<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/git.c?utm_source=markruler.github.io#L487" target="_blank" rel="noopener noreferrer">struct cmd_struct commands[]</a>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/git.c?utm_source=markruler.com&amp;utm_medium=blog#L487" target="_blank" rel="noopener noreferrer">struct cmd_struct commands[]</a>
 
 </li>
 </ul>
 </li>
 <li>submodule &amp; subtree
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/git-submodule?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">submodule</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-submodule?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">submodule</a>
 
  - Atlassian</li>
-<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">subtree</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">subtree</a>
 
  - Atlassian</li>
-<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-submodule</a>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EC%84%9C%EB%B8%8C%EB%AA%A8%EB%93%88?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-submodule</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git subtree: the alternative to Git submodule</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-subtree?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git subtree: the alternative to Git submodule</a>
 
  - Atlassian</li>
-<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Why your company shouldn&rsquo;t use Git submodules</a>
+<li><a href="https://codingkilledthecat.wordpress.com/2012/04/28/why-your-company-shouldnt-use-git-submodules/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Why your company shouldn&rsquo;t use Git submodules</a>
 
  - Amber</li>
-<li><a href="https://openclassrooms.com/en/courses/5671626-manage-your-code-project-with-git-github/6152286-use-subtrees-and-submodules-to-add-a-public-repo-to-your-project?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Use subtrees and submodules to add a public repo to your project</a>
+<li><a href="https://openclassrooms.com/en/courses/5671626-manage-your-code-project-with-git-github/6152286-use-subtrees-and-submodules-to-add-a-public-repo-to-your-project?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Use subtrees and submodules to add a public repo to your project</a>
 
  - OpenClassrooms</li>
-<li><a href="https://blog.developer.atlassian.com/the-power-of-git-subtree/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The power of Git subtree</a>
+<li><a href="https://blog.developer.atlassian.com/the-power-of-git-subtree/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The power of Git subtree</a>
 
  - Atlassian</li>
-<li><a href="https://blog.rhostem.com/posts/2020-01-03-code-sharing-with-git-subtree?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git subtree를 활용한 코드 공유</a>
+<li><a href="https://blog.rhostem.com/posts/2020-01-03-code-sharing-with-git-subtree?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git subtree를 활용한 코드 공유</a>
 
  - rhostem</li>
-<li><a href="https://www.three-snakes.com/git/git-subtree?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Subtree 사용법</a>
+<li><a href="https://www.three-snakes.com/git/git-subtree?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Subtree 사용법</a>
 
  - ThreeSnakes</li>
-<li><a href="https://homoefficio.github.io/2015/07/18/git-subtree/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git subtree - 프로젝트 안의 또 다른 프로젝트</a>
+<li><a href="https://homoefficio.github.io/2015/07/18/git-subtree/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git subtree - 프로젝트 안의 또 다른 프로젝트</a>
 
  - HomoEfficio</li>
 </ul>
 </li>
 <li>status
 <ul>
-<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/commit.c?utm_source=markruler.github.io#L1475" target="_blank" rel="noopener noreferrer">int cmd_status(int argc, const char **argv, const char *prefix)</a>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/commit.c?utm_source=markruler.com&amp;utm_medium=blog#L1475" target="_blank" rel="noopener noreferrer">int cmd_status(int argc, const char **argv, const char *prefix)</a>
 
 </li>
-<li><a href="https://github.com/git/git/blob/master/wt-status.c?utm_source=markruler.github.io#L807" target="_blank" rel="noopener noreferrer">wt_status_collect(struct wt_status *s)</a>
+<li><a href="https://github.com/git/git/blob/master/wt-status.c?utm_source=markruler.com&amp;utm_medium=blog#L807" target="_blank" rel="noopener noreferrer">wt_status_collect(struct wt_status *s)</a>
 
 </li>
-<li><a href="https://kwoncheol.me/posts/git-rename-inference?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git은 폴더경로가 변경된 것을 어떻게 알 수 있을까?</a>
+<li><a href="https://kwoncheol.me/posts/git-rename-inference?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git은 폴더경로가 변경된 것을 어떻게 알 수 있을까?</a>
 
  - kwoncheol</li>
 </ul>
 </li>
 <li>fetch
 <ul>
-<li><a href="https://git-scm.com/docs/git-fetch?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-fetch</a>
+<li><a href="https://git-scm.com/docs/git-fetch?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-fetch</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-fetch?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git fetch</a>
+<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-fetch?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git fetch</a>
 
  - Atlassian</li>
 </ul>
 </li>
 <li>add
 <ul>
-<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/add.c?utm_source=markruler.github.io#L491" target="_blank" rel="noopener noreferrer">int cmd_add(int argc, const char **argv, const char *prefix)</a>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/add.c?utm_source=markruler.com&amp;utm_medium=blog#L491" target="_blank" rel="noopener noreferrer">int cmd_add(int argc, const char **argv, const char *prefix)</a>
 
 </li>
 </ul>
 </li>
 <li>merge
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Basic Branching and Merging</a>
+<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Basic Branching and Merging</a>
 
  - git-scm</li>
-<li><a href="https://youtu.be/J0W-WA0aYJI?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">3 way merge - 지옥에서 온 Git</a>
+<li><a href="https://youtu.be/J0W-WA0aYJI?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">3 way merge - 지옥에서 온 Git</a>
 
  - 생활코딩</li>
-<li><a href="https://blog.plasticscm.com/2016/02/three-way-merging-look-under-hood.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Three-way merging: A look under the hood</a>
+<li><a href="https://blog.plasticscm.com/2016/02/three-way-merging-look-under-hood.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Three-way merging: A look under the hood</a>
 
  - Plastic SCM</li>
-<li><a href="https://blog.npcode.com/2012/09/29/3-way-merge-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EC%97%90-%EB%8C%80%ED%95%B4/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">3-way merge 알고리즘에 대해</a>
+<li><a href="https://blog.npcode.com/2012/09/29/3-way-merge-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98%EC%97%90-%EB%8C%80%ED%95%B4/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">3-way merge 알고리즘에 대해</a>
 
  - 이응준</li>
 </ul>
 </li>
 <li>rebase
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Rebasing</a>
+<li><a href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Rebasing</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Merging vs. Rebasing</a>
+<li><a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Merging vs. Rebasing</a>
 
  - Atlassian</li>
 </ul>
 </li>
 <li>stash
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash?utm_source=markruler.github.io#how-git-stash-works" target="_blank" rel="noopener noreferrer">git stash</a>
+<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-stash?utm_source=markruler.com&amp;utm_medium=blog#how-git-stash-works" target="_blank" rel="noopener noreferrer">git stash</a>
 
  - Atlassian</li>
-<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c?utm_source=markruler.github.io#L1769" target="_blank" rel="noopener noreferrer">int cmd_stash(int argc, const char **argv, const char *prefix)</a>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c?utm_source=markruler.com&amp;utm_medium=blog#L1769" target="_blank" rel="noopener noreferrer">int cmd_stash(int argc, const char **argv, const char *prefix)</a>
 
 </li>
-<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c?utm_source=markruler.github.io#L1082" target="_blank" rel="noopener noreferrer">static int check_changes(const struct pathspec *ps, int include_untracked, struct strbuf *untracked_files)</a>
+<li><a href="https://github.com/git/git/blob/90d242d36e248acfae0033274b524bfa55a947fd/builtin/stash.c?utm_source=markruler.com&amp;utm_medium=blog#L1082" target="_blank" rel="noopener noreferrer">static int check_changes(const struct pathspec *ps, int include_untracked, struct strbuf *untracked_files)</a>
 
 </li>
 </ul>
 </li>
 <li>reset
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Undoing Things</a>
+<li><a href="https://git-scm.com/book/en/v2/Git-Basics-Undoing-Things?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Undoing Things</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Resetting, Checking Out &amp; Reverting</a>
+<li><a href="https://www.atlassian.com/git/tutorials/resetting-checking-out-and-reverting?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Resetting, Checking Out &amp; Reverting</a>
 
  - Atlassian</li>
 </ul>
 </li>
-<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git으로 버그 찾기</a>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-Git%EC%9C%BC%EB%A1%9C-%EB%B2%84%EA%B7%B8-%EC%B0%BE%EA%B8%B0?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git으로 버그 찾기</a>
 
 </li>
 <li>reflog
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git reflog</a>
+<li><a href="https://www.atlassian.com/git/tutorials/rewriting-history/git-reflog?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git reflog</a>
 
  - Atlassian</li>
-<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0?utm_source=markruler.github.io#_git_reflog" target="_blank" rel="noopener noreferrer">Revision Selection</a>
+<li><a href="https://git-scm.com/book/ko/v2/Git-%EB%8F%84%EA%B5%AC-%EB%A6%AC%EB%B9%84%EC%A0%84-%EC%A1%B0%ED%9A%8C%ED%95%98%EA%B8%B0?utm_source=markruler.com&amp;utm_medium=blog#_git_reflog" target="_blank" rel="noopener noreferrer">Revision Selection</a>
 
 </li>
 </ul>
 </li>
 <li>diff
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-diff?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git diff</a>
+<li><a href="https://www.atlassian.com/git/tutorials/saving-changes/git-diff?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git diff</a>
 
  - Atlassian</li>
-<li><a href="https://git-scm.com/docs/git-diff?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-diff</a>
+<li><a href="https://git-scm.com/docs/git-diff?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-diff</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>cherry-pick
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/cherry-pick?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git Cherry Pick</a>
+<li><a href="https://www.atlassian.com/git/tutorials/cherry-pick?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git Cherry Pick</a>
 
  - Atlassian</li>
-<li><a href="https://git-scm.com/docs/git-cherry-pick?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-cherry-pick</a>
+<li><a href="https://git-scm.com/docs/git-cherry-pick?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-cherry-pick</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>push
 <ul>
-<li><a href="https://git-scm.com/docs/git-push?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git-push</a>
+<li><a href="https://git-scm.com/docs/git-push?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git-push</a>
 
  - git-scm</li>
-<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-push?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git push</a>
+<li><a href="https://www.atlassian.com/git/tutorials/syncing/git-push?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git push</a>
 
  - Atlassian</li>
 </ul>
 </li>
 <li>hooks
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/git-hooks?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git Hooks</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-hooks?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git Hooks</a>
 
  - Atlassian</li>
-<li><a href="https://git-scm.com/docs/githooks?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">githooks</a>
+<li><a href="https://git-scm.com/docs/githooks?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">githooks</a>
 
  - git-scm</li>
 </ul>
 </li>
 <li>packfile
 <ul>
-<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Packfiles</a>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Packfiles</a>
 
  - Pro Git</li>
-<li><a href="http://shafiul.github.io/gitbook/7_the_packfile.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The Packfile</a>
+<li><a href="http://shafiul.github.io/gitbook/7_the_packfile.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The Packfile</a>
 
  - Git Community Book</li>
 </ul>
 </li>
 <li>gc
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/git-gc?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git gc</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-gc?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git gc</a>
 
  - Atlassian</li>
-<li><a href="https://www.atlassian.com/git/tutorials/git-prune?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">git prune</a>
+<li><a href="https://www.atlassian.com/git/tutorials/git-prune?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">git prune</a>
 
  - Atlassian</li>
 </ul>
 </li>
 <li>orphan
 <ul>
-<li><a href="https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Git 저장소에서 빈 고아 브랜치를 만드는 방법</a>
+<li><a href="https://www.lainyzine.com/ko/article/how-to-create-git-orphan-branch/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Git 저장소에서 빈 고아 브랜치를 만드는 방법</a>
 
  - LainyZine</li>
 </ul>
 </li>
 <li>fork
 <ul>
-<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Forking Workflow</a>
+<li><a href="https://www.atlassian.com/git/tutorials/comparing-workflows/forking-workflow?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Forking Workflow</a>
 
 </li>
-<li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">About forks</a>
+<li><a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/about-forks?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">About forks</a>
 
 </li>
-<li><a href="https://blog.outsider.ne.kr/865?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Github를 이용하는 전체 흐름 이해하기 #1</a>
+<li><a href="https://blog.outsider.ne.kr/865?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Github를 이용하는 전체 흐름 이해하기 #1</a>
 
  - 아웃사이더</li>
 </ul>

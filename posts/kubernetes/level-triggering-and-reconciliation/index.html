@@ -49,10 +49,10 @@
 <h1>쿠버네티스 레벨 트리거링 및 조정</h1>
 
 <ul>
-<li>James Bowes(<a href="https://twitter.com/jrbowes?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">@jrbowes</a>
+<li>James Bowes(<a href="https://twitter.com/jrbowes?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">@jrbowes</a>
 
 )의
-<a href="https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Level Triggering and Reconciliation in Kubernetes</a>
+<a href="https://hackernoon.com/level-triggering-and-reconciliation-in-kubernetes-1f17fe30333d?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Level Triggering and Reconciliation in Kubernetes</a>
 
 를
 번역한 글입니다.</li>
@@ -63,10 +63,10 @@
     </div>
 
 <h1 id="시스템-프로그래밍-개념으로-보는-쿠버네티스가-클러스터를-관리하는-방법">시스템 프로그래밍 개념으로 보는 쿠버네티스가 클러스터를 관리하는 방법</h1>
-<p><a href="https://kubernetes.io/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">쿠버네티스</a>
+<p><a href="https://kubernetes.io/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">쿠버네티스</a>
 
 는 현재
-<a href="https://techcrunch.com/2017/12/18/as-kubernetes-surged-in-popularity-in-2017-it-created-a-vibrant-ecosystem/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">가장 있기 있는</a>
+<a href="https://techcrunch.com/2017/12/18/as-kubernetes-surged-in-popularity-in-2017-it-created-a-vibrant-ecosystem/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">가장 있기 있는</a>
 
 
 컨테이너 오케스트레이터입니다.
@@ -75,7 +75,7 @@
 그러나 컨테이너를 실행하는 데 있어서 쿠버네티스는 다른 소프트웨어보다 버그가 적습니다.</p>
 <p>쿠버네티스는 원하는 수의 컨테이너를 제때에 실행합니다.
 그리고 그 숫자를 계속해서 유지하죠.
-<a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">공식 문서</a>
+<a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">공식 문서</a>
 
 에
 따르면 쿠버네티스가 <strong>자가 치유(self-healing)</strong> 하는 것이라고 말합니다.
@@ -90,13 +90,13 @@
 레벨 트리거링은 굉장히 포용적이고, 교정되어야 할 컴포넌트가 그렇지
 못할 경우 다시 교정될 수 있도록 여지를 줍니다. 이것이 쿠버네티스가 잘 동작하는 이유입니다.&rdquo;<br>
 <br>
-― Joe Beda<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, Heptio CTO (<a href="http://shop.oreilly.com/product/0636920075837.do?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cloud Native Infrastructure</a>
+― Joe Beda<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>, Heptio CTO (<a href="http://shop.oreilly.com/product/0636920075837.do?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Cloud Native Infrastructure</a>
 
 에서 발췌)</p>
 </blockquote>
 <p><strong>잠깐: 다음은 동일한 신호에 대한 에지 및 레벨 트리거링입니다.</strong></p>
 <p><img src="/images/kubernetes/edge-and-level-triggering-for-the-same-signal.png" alt="edge-and-level-triggering-for-the-same-signal"></p>
-<p>에지 및 레벨 트리거링은 전자 공학 및 <a href="https://en.wikipedia.org/wiki/Interrupt?utm_source=markruler.github.io#Types_of_interrupts" target="_blank" rel="noopener noreferrer">시스템 프로그래밍</a>
+<p>에지 및 레벨 트리거링은 전자 공학 및 <a href="https://en.wikipedia.org/wiki/Interrupt?utm_source=markruler.com&amp;utm_medium=blog#Types_of_interrupts" target="_blank" rel="noopener noreferrer">시스템 프로그래밍</a>
 
 에서 나온 개념입니다.
 이것은 시스템이 시간에 따라 전기 신호(또는 디지털 논리) 형태에
@@ -116,22 +116,22 @@
 <h2 id="분산-시스템에서-에지-트리거링과-레벨-트리거링">분산 시스템에서 에지 트리거링과 레벨 트리거링</h2>
 <p>추상적으로는 에지 트리거링과 레벨 트리거링 사이에 명확한 차이가 없습니다.
 하지만 현실에서는 시스템 프로그래밍 수준에서도 실질적인 한계에 대처해야 합니다.
-흔히 만날 수 있는 한계는 <a href="https://en.wikipedia.org/wiki/Sampling_%28signal_processing%29?utm_source=markruler.github.io#Sampling_rate" target="_blank" rel="noopener noreferrer">샘플링 레이트(sampling rate)</a>
+흔히 만날 수 있는 한계는 <a href="https://en.wikipedia.org/wiki/Sampling_%28signal_processing%29?utm_source=markruler.com&amp;utm_medium=blog#Sampling_rate" target="_blank" rel="noopener noreferrer">샘플링 레이트(sampling rate)</a>
 
 입니다.
 시스템이 신호를 충분히 자주 샘플링하지 않으면 에지 트리거링에서 신호가 변할 때나
 레벨 트리거링에서 짧은 변화가 일어났을 때 신호를 놓칠 수 있습니다.</p>
 <p>대규모 컴퓨팅, 대규모 네트워킹에서는 다루어야 할
-<a href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">문제들이 더 많습니다</a>
+<a href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">문제들이 더 많습니다</a>
 
 .
-<a href="http://www.cbc.ca/news/canada/nova-scotia/cellular-service-outage-bell-mobility-tellus-1.4235624?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">네트워크</a>
+<a href="http://www.cbc.ca/news/canada/nova-scotia/cellular-service-outage-bell-mobility-tellus-1.4235624?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">네트워크</a>
 
 는 신뢰할 수 없고요.
-사람들은 <a href="https://hothardware.com/news/dont-trip-over-the-power-cord-human-error-caused-massive-time-warner-network-outage?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">실수를 저지릅니다</a>
+사람들은 <a href="https://hothardware.com/news/dont-trip-over-the-power-cord-human-error-caused-massive-time-warner-network-outage?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">실수를 저지릅니다</a>
 
 .
-다람쥐는 <a href="http://cybersquirrel1.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">말을 듣지 않고요</a>
+다람쥐는 <a href="http://cybersquirrel1.com/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">말을 듣지 않고요</a>
 
 .
 어떤 면에선 이러한 문제들은 정확하지 않거나 일관되지 않은 샘플링 레이트와 같습니다.
@@ -208,20 +208,20 @@
 <p>분산 컴퓨팅 고유의 문제에도 불구하고 쿠버네티스는 위 문제를
 레벨 트리거 시스템 관점으로 바라봄으로써 간명하고
 사용자가 원하는 것을 수행하는 아키텍처가 되었습니다.</p>
-<p>이 글에 포함된 다이어그램을 그려준 <a href="https://medium.com/@megthesmith?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Meg Smith</a>
+<p>이 글에 포함된 다이어그램을 그려준 <a href="https://medium.com/@megthesmith?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Meg Smith</a>
 
 에게 특별히 감사드립니다.</p>
 <hr>
 <blockquote>
-<p>역주: 쿠버네티스의 조정(Reconciliation)과 관련하여 <a href="https://kubernetes.io/docs/concepts/architecture/controller/?utm_source=markruler.github.io#controller-pattern" target="_blank" rel="noopener noreferrer">컨트롤러 패턴</a>
+<p>역주: 쿠버네티스의 조정(Reconciliation)과 관련하여 <a href="https://kubernetes.io/docs/concepts/architecture/controller/?utm_source=markruler.com&amp;utm_medium=blog#controller-pattern" target="_blank" rel="noopener noreferrer">컨트롤러 패턴</a>
 
 ,
 파드 실행 흐름 등을 같이 익히는 것이 좋다고 생각합니다.
 추천하는 텍스트로
-책(<a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909123&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">쿠버네티스 패턴</a>
+책(<a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909123&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">쿠버네티스 패턴</a>
 
 )과
-조 베다(Joe Beda)가 작성한 글(<a href="https://blog.heptio.com/core-kubernetes-jazz-improv-over-orchestration-a7903ea92ca?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Core Kubernetes: Jazz Improv over Orchestration</a>
+조 베다(Joe Beda)가 작성한 글(<a href="https://blog.heptio.com/core-kubernetes-jazz-improv-over-orchestration-a7903ea92ca?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Core Kubernetes: Jazz Improv over Orchestration</a>
 
 )이 있습니다.</p>
 </blockquote>
@@ -234,7 +234,7 @@
 </li>
 <li id="fn:2">
 <p>조정(reconciliation)이란 실제 클러스터 상태를 사용자가 정의한 상태로 제어하는 것을 말합니다. 이에 대한 자세한 내용은
-<a href="https://github.com/kubernetes-sigs/controller-runtime/blob/v0.7.0/pkg/reconcile/reconcile.go?utm_source=markruler.github.io#L53-L87" target="_blank" rel="noopener noreferrer">소스 코드에 달린 주석</a>
+<a href="https://github.com/kubernetes-sigs/controller-runtime/blob/v0.7.0/pkg/reconcile/reconcile.go?utm_source=markruler.com&amp;utm_medium=blog#L53-L87" target="_blank" rel="noopener noreferrer">소스 코드에 달린 주석</a>
 
 을 읽어보세요.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>

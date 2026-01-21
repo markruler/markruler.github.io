@@ -106,10 +106,10 @@
 한편 전기적인 신호(아날로그 또는 디지털)로 처리하는 기술 및 그 신호 자체를 <strong>기술적으로</strong> <strong>오디오(audio)</strong> 라고 합니다.</p>
 <p>이 글에서는 오디오의 <strong>입력(녹음)부터 처리, 출력(재생)까지</strong>의 전체 흐름을 다룹니다.
 주요 오디오 포맷의 특성과 브라우저 호환성,
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web Audio API</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Web Audio API</a>
 
 를 통한 <strong>실시간 처리</strong>와
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">MediaStream Recording API</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">MediaStream Recording API</a>
 
 를 통한
 <strong>녹음(Recording)</strong>, 그리고 <strong>브라우저 정책</strong>까지 다뤄보겠습니다.</p>
@@ -119,14 +119,14 @@
 파동의 <strong>진폭(amplitude)이 클수록</strong> 그 순간 <strong>소리의 크기는 커집니다</strong>.
 <strong>파장(wavelength)이 짧을수록</strong>(파동의 간격이 좁을수록) 생성되는 소리의 <strong>주파수(음높이)는 높아집니다</strong>.</p>
 <p><img src="/images/multimedia/audio-in-web/audio-waveform.svg" alt="오디오 파형"></p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
 
 </p>
 <p>하지만 컴퓨터는 디지털입니다.
 컴퓨터가 처리할 수 있는 방식으로 표현하려면 소리를 디지털 형태로 변환해야 합니다.
 이것을 수행하는 것이 <strong>아날로그-디지털 변환기(analog to digital converter)</strong> 입니다<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.
 줄여서 ADC 혹은 A/D 변환기라고 합니다.</p>
-<p>대표적인 ADC 방식으로 <a href="https://en.wikipedia.org/wiki/Pulse-code_modulation?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">펄스 부호 변조(PCM, Pulse Code Modulation)</a>
+<p>대표적인 ADC 방식으로 <a href="https://en.wikipedia.org/wiki/Pulse-code_modulation?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">펄스 부호 변조(PCM, Pulse Code Modulation)</a>
 
 가 있습니다.
 PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격으로 <strong>표본화</strong>(<strong>Sampling</strong>)합니다.
@@ -136,11 +136,11 @@ PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격�
 이를 <strong>샘플 레이트</strong>(<strong>sample rate</strong>)라고 합니다.
 예를 들어, 44,100 Hz(44.1 kHz)는 1초에 44,100개(1개에 1/44.1 ms)의 샘플을 수집한 것입니다.</p>
 <p><img src="/images/multimedia/audio-in-web/audio-waveform-samples1.svg" alt="오디오 파형 샘플링"></p>
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
 
 </p>
 <p>ADC가 아날로그 신호를 전압으로 변환하면
-이때 각 샘플의 진폭을 <a href="https://en.wikipedia.org/wiki/Quantization_%28signal_processing%29?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">양자화(Quantization)</a>
+이때 각 샘플의 진폭을 <a href="https://en.wikipedia.org/wiki/Quantization_%28signal_processing%29?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">양자화(Quantization)</a>
 
 하여
 이산적인 수치로 표현합니다.
@@ -156,7 +156,7 @@ PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격�
 1초에 약 172.3 KiB의 대역폭을 차지합니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>2(Stereo) * 2 Bytes(16 bit) * 44100(sample rate) = 176,400 Bytes
 </span></span></code></pre></div><p>3분(180초)의 음원을 다운로드한다면 약 30.3 MiB의 용량이 필요합니다.</p>
-<p><a href="https://en.wikipedia.org/wiki/Codec?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">코덱(codec)</a>
+<p><a href="https://en.wikipedia.org/wiki/Codec?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">코덱(codec)</a>
 
 은
 coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하거나 디코딩하는 요소입니다.
@@ -181,7 +181,7 @@ coder/decoder의 합성어로 데이터 스트림이나 신호를 인코딩하�
 <strong>Ogg</strong>는 Vorbis나 Opus같은 오디오 코덱을 담을 수 있는 오픈 컨테이너이고,
 <strong>WebM</strong>은 웹용 미디어 컨테이너로 똑같이 Vorbis나 Opus를 담습니다.
 이러한 이유로 웹에서는 동일한 음원을 여러 포맷으로 제공하여
-<a href="https://caniuse.com/?search=audio%20format&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">브라우저 호환성</a>
+<a href="https://caniuse.com/?search=audio%20format&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">브라우저 호환성</a>
 
 을 확보하기도 합니다.</p>
 <h1 id="주요-오디오-코덱과-포맷">주요 오디오 코덱과 포맷</h1>
@@ -254,16 +254,16 @@ Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3
 <code>&lt;audio&gt;</code> 태그에 MP3 등의 URL을 지정하면 브라우저가 파일을 점진적으로 다운로드하고 <strong>버퍼를 채우면서 곧바로 재생</strong>합니다.
 사용자는 전체 파일이 다운로드되기 전에 중간부터 듣기 시작할 수 있고, 탐색(seek)하면 해당 위치의 데이터를 요청합니다.
 이 방식은 구현이 간단하지만, 네트워크 상태에 따라 재생 도중 버퍼가 소진되면 <strong>일시 정지/버퍼링</strong>이 발생할 수 있습니다.
-<code>&lt;audio&gt;</code> 요소에서는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">readyState</a>
+<code>&lt;audio&gt;</code> 요소에서는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/readyState?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">readyState</a>
 
 나
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/progress_event?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">progress</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/progress_event?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">progress</a>
 
 
 이벤트 등을 통해 버퍼링 상태를 파악할 수 있고,
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplay_event?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">canplay</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplay_event?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">canplay</a>
 
-/<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">canplaythrough</a>
+/<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/canplaythrough_event?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">canplaythrough</a>
 
 
 이벤트로 얼마나 로드되었는지 알 수 있습니다.
@@ -294,7 +294,7 @@ DASH는 MPEG에서 표준화한 비슷한 개념의 스트리밍입니다.
 다만 <strong>브라우저 지원</strong>에 차이가 있는데,
 Safari는 HLS를 네이티브로 지원하지만 다른 브라우저는 기본적으로는 지원하지 않아서
 자바스크립트 라이브러리(<code>hls.js</code> 등)나
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Media Source Extensions(MSE) API</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/Media_Source_Extensions_API?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Media Source Extensions(MSE) API</a>
 
 를 통해 구현합니다.
 MSE를 사용하면 분할된 미디어 데이터를 <code>&lt;audio&gt;</code>/<code>&lt;video&gt;</code> 요소에 공급할 수 있어 스트리밍을 직접 구현할 수 있습니다.
@@ -305,7 +305,7 @@ MSE를 사용하면 분할된 미디어 데이터를 <code>&lt;audio&gt;</code>/
 이 과정은 개발자가 신경쓰지 않아도 자동 처리됩니다.
 그러나 개발자가 <strong>오디오 데이터를 직접 조작하거나 시각화</strong>하려는 경우,
 <strong>Web Audio API</strong>의
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioContext.decodeAudioData()</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioContext.decodeAudioData()</a>
 
 
 등을 통해 ArrayBuffer 형태의 압축 오디오 데이터를 <strong>수동으로 디코딩</strong>할 수 있습니다.
@@ -322,7 +322,7 @@ MSE를 사용하면 분할된 미디어 데이터를 <code>&lt;audio&gt;</code>/
 </span></span><span style="display:flex;"><span>  })
 </span></span><span style="display:flex;"><span>  .<span style="color:#f00">catch</span>(error =&gt; console.error(error));
 </span></span></code></pre></div><p>위 코드는 <code>sound.mp3</code>를 가져와 <code>AudioContext</code>로 디코딩한 뒤
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioBufferSourceNode</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioBufferSourceNode</a>
 
 로 재생합니다.
 이렇게 디코딩하면 <strong>PCM 샘플 데이터에 직접 접근</strong>할 수 있으므로,
@@ -332,15 +332,15 @@ MSE를 사용하면 분할된 미디어 데이터를 <code>&lt;audio&gt;</code>/
 <p>Web Audio API는 실시간 오디오 처리를 위해 별도의 스트리밍 메커니즘을 가지고 있습니다.
 예를 들어 <strong>마이크 입력</strong>이나 기타 <strong>MediaStream</strong>을
 Web Audio로 받아올 때
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioContext.createMediaStreamSource(stream)</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/createMediaStreamSource?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioContext.createMediaStreamSource(stream)</a>
 
 를 사용하면
-스트림이 <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioNode</a>
+스트림이 <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioNode</a>
 
 
 체인으로 실시간으로 흘러들어오게 됩니다.
 개발자는 일일이 버퍼를 관리하지 않아도 되며, Web Audio 엔진이 내부 버퍼링과 스트리밍을 처리해 줍니다.
-따라서 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">getUserMedia</a>
+따라서 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">getUserMedia</a>
 
 로 받은 실시간 오디오나
 <code>&lt;audio&gt;</code> 요소의 재생 음원을 Web Audio로 입력받아 <strong>이펙트 처리 후 출력</strong>하거나 <strong>분석</strong>할 수 있습니다.</p>
@@ -368,7 +368,7 @@ Web Audio로 받아올 때
 <li><strong>시각화 (AnalyserNode)</strong>: 오디오 시각화는 Web Audio의 하이라이트 기능 중 하나입니다.
 <code>AnalyserNode</code>는 입력 신호의 <strong>주파수 스펙트럼</strong> 또는 <strong>파형(time-domain) 데이터</strong>를 실시간으로 제공합니다.
 <code>analyser.getByteFrequencyData()</code>로
-<a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">FFT(Fast Fourier transform)</a>
+<a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">FFT(Fast Fourier transform)</a>
 
  기반 주파수 데이터를,
 <code>analyser.getByteTimeDomainData()</code>로 파형 샘플 데이터를 받으면,
@@ -376,7 +376,7 @@ Web Audio로 받아올 때
 이는 음악 플레이어의 이퀄라이저 비주얼이나, 마이크 음성 입력 레벨을 막대 그래프로 보여주는 등의 사례에 활용됩니다.
 Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들어 저음/고음의 세기를 측정해 조명 효과를 조절하거나 하는 <strong>인터랙티브 비주얼</strong>도 가능해집니다.</li>
 <li><strong>정밀 타이밍</strong>: Web Audio API는 <strong>고해상도 시계</strong>를 사용하여 오디오 이벤트의 타이밍 정확도를 보장합니다.
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/currentTime?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioContext.currentTime</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/currentTime?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioContext.currentTime</a>
 
 을
 기준으로 노드의 <code>start()</code>를 미리 예약하면, 여러 소리를 밀리초 단위로 정밀하게 동기화할 수 있습니다.
@@ -384,7 +384,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 </ul>
 <p>Web Audio API의 유연성 덕분에, <strong>게임 오디오</strong>, <strong>DAW 웹앱</strong>, <strong>오디오 시각화 데모</strong> 등 수많은 응용이 웹에서 가능해졌습니다.
 다만 Web Audio API를 사용할 때에도, 브라우저의 미디어 코덱 지원 범위 내에서 소스를 가져와야 함은 동일합니다.
-즉, <a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">decodeAudioData</a>
+즉, <a href="https://developer.mozilla.org/en-US/docs/Web/API/BaseAudioContext/decodeAudioData?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">decodeAudioData</a>
 
 로 디코딩 가능해야 합니다.
 그리고 Web Audio는 <strong>사용자 승인 없이 임의로 소리를 재생하지 못하도록</strong> 브라우저의 <strong>autoplay 정책</strong> 영향을 받습니다.
@@ -392,7 +392,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 이에 대해서는 아래 <strong>브라우저의 미디어 정책</strong>에서 추가로 다룹니다.</p>
 <h1 id="마이크-입력과-녹음-mediadevices-및-mediarecorder">마이크 입력과 녹음: MediaDevices 및 MediaRecorder</h1>
 <p>이제 오디오의 <strong>입력</strong> 측면을 살펴보겠습니다.
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">getUserMedia API</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">getUserMedia API</a>
 
 를 통해
 사용자의 오디오 입력을 웹 애플리케이션으로 가져올 수 있고,
@@ -416,7 +416,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 또한 <strong>보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)</strong> 에서만 동작합니다.
 (로컬 개발에서는 <code>localhost</code>나 <code>file://</code>도 허용됩니다.)
 사용자가 허용했다면 <code>MediaStream</code>에는
-하나 이상의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">MediaStreamTrack</a>
+하나 이상의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStreamTrack?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">MediaStreamTrack</a>
 
 이 포함되는데,
 오디오만 요청한 경우 보통 하나의 오디오 트랙이 있습니다.</p>
@@ -442,7 +442,7 @@ Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트
 </span></span><span style="display:flex;"><span>  console.log(<span style="color:#87ceeb">&#34;AudioContext 종료&#34;</span>);
 </span></span><span style="display:flex;"><span>});
 </span></span></code></pre></div><p>위 코드에서 마이크 스트림으로부터 <code>sourceNode</code>를 만들고,
-오디오 출력 노드(<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AudioDestinationNode</a>
+오디오 출력 노드(<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioDestinationNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AudioDestinationNode</a>
 
 )에 연결했습니다.
 이렇게 하면 사용자가 말하는 소리가 곧바로 스피커로 출력됩니다.
@@ -457,14 +457,14 @@ Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트
 모니터링 없이 무음으로 입력 처리를 할 수 있습니다.</p>
 </blockquote>
 <p>Web Audio를 사용하면 입력 신호에 대해
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">AnalyserNode</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">AnalyserNode</a>
 
 를 활용해서 <strong>실시간 분석</strong>하거나
 <strong>이펙트</strong>도 적용할 수 있습니다.
-예를 들면 <a href="https://developer.mozilla.org/en-US/docs/Web/API/GainNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">GainNode</a>
+예를 들면 <a href="https://developer.mozilla.org/en-US/docs/Web/API/GainNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">GainNode</a>
 
 로 증폭/감쇠,
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">BiquadFilterNode</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/BiquadFilterNode?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">BiquadFilterNode</a>
 
 로 노이즈를 제거할 수 있습니다.</p>
 <p>또한 간단한 <strong>VU 미터(Volume Unit Meter)</strong> 를 구현하려면
@@ -473,7 +473,7 @@ Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트
 <strong>평균 진폭</strong>이나 <strong>최대치</strong>를 계산해서 그래프로 그리면 됩니다.</p>
 <h2 id="mediarecorder를-사용한-오디오-녹음">MediaRecorder를 사용한 오디오 녹음</h2>
 <p>마이크에서 들어온 <code>MediaStream</code>을 파일로 저장하려면 <strong>MediaStream Recording API</strong>,
-즉 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">MediaRecorder</a>
+즉 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaRecorder?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">MediaRecorder</a>
 
 를 사용하면 됩니다.
 MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코덱으로 실시간 인코딩</strong>하여 <strong>Blob</strong>으로 축적해 줍니다.
@@ -517,13 +517,13 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 <li>앞서 본 코드처럼 객체 URL을 만들어서 <code>&lt;audio&gt;</code> 요소의 <code>src</code>로 설정하면 녹음한 내용을 <strong>즉시 재생</strong>해볼 수 있습니다.</li>
 <li>서버로 Blob을 업로드하여 저장하거나
 <code>&lt;a&gt;</code> 태그의 <code>href</code>에 객체 URL을 넣고 <code>download</code> 속성을 주어 <strong>파일 다운로드</strong> 링크를 제공할 수도 있습니다.</li>
-<li>Blob을 <code>File</code> 객체로 변환하거나 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">FileReader</a>
+<li>Blob을 <code>File</code> 객체로 변환하거나 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">FileReader</a>
 
 로 읽어
-<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ArrayBuffer</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ArrayBuffer</a>
 
 
-혹은 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Data URL로 변환</a>
+혹은 <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Data URL로 변환</a>
 
 해 처리할 수도 있습니다.</li>
 </ul>
@@ -553,15 +553,15 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 </span></span><span style="display:flex;"><span>  stream.getTracks().forEach(track =&gt; track.stop());
 </span></span><span style="display:flex;"><span>}, <span style="color:#f60">5000</span>);
 </span></span></code></pre></div><p>이를 활용하면 웹에서 간단한 <strong>음성 녹음기(Voice Recorder)</strong> 를 만들 수 있습니다.
-MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web Dictaphone</a>
+MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Recording_API/Using_the_MediaStream_Recording_API?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Web Dictaphone</a>
 
 
 예제를 따라해보세요.</p>
 <ul>
-<li><a href="https://mdn.github.io/dom-examples/media/web-dictaphone/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">demo</a>
+<li><a href="https://mdn.github.io/dom-examples/media/web-dictaphone/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">demo</a>
 
 </li>
-<li><a href="https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">source code</a>
+<li><a href="https://github.com/mdn/dom-examples/tree/main/media/web-dictaphone?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">source code</a>
 
 </li>
 </ul>
@@ -571,7 +571,7 @@ MDN의 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_Rec
 실제로는 이 둘을 <strong>조합</strong>하여, <strong>실시간 처리된 오디오를 녹음</strong>하거나 하는 것도 가능합니다.
 예를 들어 <strong>노이즈 필터</strong>를 Web Audio로 적용한 뒤 깨끗해진 신호를 녹음하거나, 여러 오디오 소스를 믹싱한 결과를 하나의 스트림으로 녹음하는 경우입니다.</p>
 <p><img src="/images/multimedia/audio-in-web/audio-context.png" alt="Audio Context"></p>
-<p><em><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
+<p><em><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">이미지 출처: MDN</a>
 
 </em></p>
 <p>이를 위해 Web Audio API는 <code>AudioContext.createMediaStreamDestination()</code> 노드를 제공합니다.
@@ -659,11 +659,11 @@ iframe 등에서는 추가적인 <code>allow</code> 속성 설정(<code>allow=&q
 음성 녹음 데이터를 서버로 전송할 경우에도 <strong>사용자 프라이버시</strong>에 대한 고지와 정책 준수가 필요합니다.</p>
 <p>또 다른 권한 이슈로 <strong>AudioContext의 출력 장치 선택</strong>이 있습니다.
 기본적으로 오디오는 시스템 기본 출력(스피커 등)으로 나가지만,
-Chrome 등의 일부 브라우저는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">selectAudioOutput() API</a>
+Chrome 등의 일부 브라우저는 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">selectAudioOutput() API</a>
 
 로
 출력 디바이스를 지정할 수 있게 합니다.
-이것도 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.github.io#security_requirements" target="_blank" rel="noopener noreferrer">사용자 권한</a>
+이것도 <a href="https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/selectAudioOutput?utm_source=markruler.com&amp;utm_medium=blog#security_requirements" target="_blank" rel="noopener noreferrer">사용자 권한</a>
 
 이 필요합니다.</p>
 <p><code>&lt;audio&gt;</code> 태그로 외부 도메인 리소스를 가져올 때 <strong>CORS</strong> 이슈는 일반적으로 없지만,
@@ -672,7 +672,7 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 이것은 다른 이미지/JS 불러오는 것과 비슷합니다.</p>
 <h1 id="오디오-성능">오디오 성능</h1>
 <p>Web Audio API는 <code>AudioContext</code> 생성 시
-<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext?utm_source=markruler.github.io#latencyhint" target="_blank" rel="noopener noreferrer">{ latencyHint: &lsquo;interactive&rsquo; }</a>
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/AudioContext?utm_source=markruler.com&amp;utm_medium=blog#latencyhint" target="_blank" rel="noopener noreferrer">{ latencyHint: &lsquo;interactive&rsquo; }</a>
 
  등으로 힌트를 줄 수 있지만,
 실제 지연은 기기와 브라우저에 따라 달라집니다.
@@ -701,43 +701,43 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 <ul>
 <li>Codec
 <ul>
-<li><a href="https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A Guide for Choosing the Right Codec</a>
+<li><a href="https://www.audiokinetic.com/en/blog/a-guide-for-choosing-the-right-codec/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A Guide for Choosing the Right Codec</a>
 
  | Audiokinetic</li>
 </ul>
 </li>
 <li>Web API
 <ul>
-<li><a href="https://github.com/mdn/webaudio-examples?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web Audio API - code examples</a>
+<li><a href="https://github.com/mdn/webaudio-examples?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Web Audio API - code examples</a>
 
  | MDN GitHub</li>
-<li><a href="https://web.dev/articles/webaudio-intro?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Getting started with Web Audio API</a>
+<li><a href="https://web.dev/articles/webaudio-intro?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Getting started with Web Audio API</a>
 
  | web.dev</li>
-<li><a href="https://web.dev/articles/webaudio-games?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Developing game audio with the Web Audio API</a>
+<li><a href="https://web.dev/articles/webaudio-games?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Developing game audio with the Web Audio API</a>
 
  | web.dev</li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Streaming audio and video</a>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Streaming?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Streaming audio and video</a>
 
  | MDN</li>
-<li><a href="https://roseline.oopy.io/dev/threejs-asmr-room?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web Audio API &amp; Threejs로 공간음향 인터랙티브 웹 만들기 - ASMR Room</a>
+<li><a href="https://roseline.oopy.io/dev/threejs-asmr-room?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Web Audio API &amp; Threejs로 공간음향 인터랙티브 웹 만들기 - ASMR Room</a>
 
  | Roseline</li>
 </ul>
 </li>
 <li>음향
 <ul>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">음향시스템 핸드북</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788996250661&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">음향시스템 핸드북</a>
 
  | 장호준</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">장인석의 음향입문</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788997185108&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">장인석의 음향입문</a>
 
 </li>
 </ul>
 </li>
 <li>신호 처리
 <ul>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">기초 신호 및 시스템</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791173400155&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">기초 신호 및 시스템</a>
 
  | 이철희</li>
 </ul>
@@ -747,22 +747,22 @@ Web Audio API로 XHR/Fetch를 통해 오디오 파일을 가져와
 <hr>
 <ol>
 <li id="fn:1">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Digital audio concepts</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_concepts?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Digital audio concepts</a>
 
  | MDN&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Web audio codec guide</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Audio_codecs?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Web audio codec guide</a>
 
  | MDN&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Audio_and_video_delivery/Cross-browser_audio_basics?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cross-browser audio basics</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Audio_and_video_delivery/Cross-browser_audio_basics?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Cross-browser audio basics</a>
 
  | MDN&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
-<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Autoplay guide for media and Web Audio APIs</a>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Autoplay guide for media and Web Audio APIs</a>
 
  | MDN&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>

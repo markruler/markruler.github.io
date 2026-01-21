@@ -64,12 +64,12 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 <p><strong>MOV</strong>는 애플의 QuickTime용 컨테이너로, MP4와 구조는 유사하지만 <strong>품질 우선 포맷</strong>입니다. 고품질의 동영상과 음향을 담을 수 있어 전문 영상 편집에 선호되며, 다양한 코덱을 지원하지만 주로 Apple 생태계에서 최적화되어 있습니다. 다만 <strong>파일 크기가 크고</strong> 다른 플랫폼과의 호환성은 MP4보다 떨어집니다. <strong>동영상 스트리밍에는 비효율적</strong>이어서, 일반적인 VOD 배포보다는 제작 단계나 특수 목적에 쓰입니다.</p>
 <p><strong>M3U</strong>는 정확히 말하면 비디오 컨테이너가 아니라 <strong>HLS 플레이리스트</strong>입니다. <strong>텍스트 기반 재생 목록 파일</strong>로 영상 데이터를 담지는 않습니다. 텍스트 인코딩이 <code>UTF-8</code>인 <code>.m3u8</code>이 널리 쓰입니다. <strong>HLS(HTTP Live Streaming)</strong> 프로토콜에서 쓰이는 포맷으로 여러 <strong>품질별 스트림 경로</strong>와 <strong>세그먼트</strong> 파일 목록을 포함합니다. 예를 들어 하나의 HLS 마스터 플레이리스트(<code>.m3u8</code>)에 240p, 480p, 720p 등 각 해상도 스트림의 경로가 정의되고, 각각 또 다른 M3U에 잘게 쪼개진 TS 또는 MP4 <strong>조각 파일</strong>들의 URL이 나열되는 식입니다. 플레이어는 이용자의 <strong>네트워크 속도에 따라</strong> 적절한 화질의 세그먼트를 순차적으로 다운받아 재생하므로, 끊김 없이 <strong>적응형 스트리밍</strong>이 가능합니다. 과거처럼 영상 전체를 받지 않고도 원하는 시점의 조각만 불러올 수 있어 건너뛰기(Seek) 기능도 효율적으로 만들 수 있습니다. 다만 M3U는 <strong>스트리밍 전용 포맷</strong>이므로 사용자에게 하나의 파일로 내려받게 하려면 MP4 등으로 다시 합치거나 순차적으로 받아 클라이언트 측에서 합치는 기능을 추가해야 합니다.</p>
 <p><img src="/images/multimedia/download-vod-in-web/m3u8file.png" alt="M3U Playlist"></p>
-<p><a href="https://publit.io/community/blog/hls-video-streaming-encryption?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이미지 출처</a>
+<p><a href="https://publit.io/community/blog/hls-video-streaming-encryption?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">이미지 출처</a>
 
 </p>
 <p>위 그림은 M3U 플레이리스트 구조를 간략히 보여줍니다. 왼쪽의 <strong>마스터 플레이리스트</strong>(.m3u8)가 <strong>여러 화질의 플레이리스트</strong>를 가리키고, 각 플레이리스트는 일정 길이로 분할된 <strong>TS 세그먼트</strong>들의 URL 목록을 담고 있습니다.</p>
 <p>플레이어는 먼저 마스터 파일을 받아 현재 네트워크 상황에 맞는 화질을 선택한 뒤, 해당 화질의 세그먼트들을 순서대로 다운로드하여 재생합니다. 이러한 구조 덕분에 클라이언트는 동영상 전체를 다운로드하지 않고도 원하는 구간을 바로 재생할 수 있고, 네트워크 속도 변화에 따라 화질을 자동으로 조정할 수 있습니다. 서버 입장에서는 동영상을 CDN 서버에 효율적으로 캐싱할 수 있습니다.</p>
-<p>M3U 구조를 좀 더 자세히 살펴보겠습니다. <a href="https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RFC-8216: HLS (HTTP Live Streaming)</a>
+<p>M3U 구조를 좀 더 자세히 살펴보겠습니다. <a href="https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">RFC-8216: HLS (HTTP Live Streaming)</a>
 
  문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 <code>EXTM3U</code> 태그로 시작해야 합니다. 마스터 플레이리스트는 <code>EXT-X-STREAM-INF</code> 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 <code>EXTINF</code> 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.</p>
 <p>Master Playlist: <code>x36xhzz.m3u8</code></p>
@@ -103,9 +103,9 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:4.567,</span>
 </span></span><span style="display:flex;"><span>url_653/193039199_mp4_h264_aac_fhd_7.ts
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-ENDLIST</span>
-</span></span></code></pre></div><p><a href="https://hlsjs.video-dev.org/demo/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">hls.js 데모 페이지</a>
+</span></span></code></pre></div><p><a href="https://hlsjs.video-dev.org/demo/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">hls.js 데모 페이지</a>
 
-에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 <a href="https://demo.unified-streaming.com/k8s/features/stable/?utm_source=markruler.github.io#!/hls" target="_blank" rel="noopener noreferrer">Unified Streaming</a>
+에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 <a href="https://demo.unified-streaming.com/k8s/features/stable/?utm_source=markruler.com&amp;utm_medium=blog#!/hls" target="_blank" rel="noopener noreferrer">Unified Streaming</a>
 
 에서 확인할 수 있습니다.</p>
 <h1 id="트랜스코딩">트랜스코딩</h1>
@@ -165,7 +165,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
 비디오 인코딩이 목적이니 비디오 스트림이 없는 경우는 제외하고 오디오 스트림이 없는 경우만 상정하겠습니다.
 보통 동영상은 비디오 스트림과 오디오 스트림이 함께 담긴 컨테이너입니다.
-이를 <a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Transcoding" target="_blank" rel="noopener noreferrer">트랜스코딩</a>
+이를 <a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.com&amp;utm_medium=blog#Transcoding" target="_blank" rel="noopener noreferrer">트랜스코딩</a>
 
 하려면 입력 소스와 출력을 매핑시킵니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>┌──────────┬─────────────────────┐
@@ -196,7 +196,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 입력 소스가 하나라면 0을 입력합니다.
 스트림 인덱스는 입력 소스 안에 여러 스트림이 있다면 스트림 인덱스를 지정합니다.
 스트림이 하나라면 0을 입력합니다.
-<a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Stream-specifiers-1" target="_blank" rel="noopener noreferrer">스트림 타입</a>
+<a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.com&amp;utm_medium=blog#Stream-specifiers-1" target="_blank" rel="noopener noreferrer">스트림 타입</a>
 
 은 5가지가 있습니다.</p>
 <ul>
@@ -218,7 +218,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 <h1 id="다운로드">다운로드</h1>
 <p>사용자 기기나 서버 모두 저장 공간은 한정되어 있습니다. 다운로드 기능을 제공한다면 <strong>해상도/품질 옵션</strong>을 두어 사용자가 기기 용량에 맞게 선택하도록 합니다.
 서버 측에서는 <strong>스토리지 비용</strong>을 고려해 자주 쓰이지 않는 품질의 파일은 저장하지 않거나, <strong>스토리지 계층화(storage tiering)</strong> 로 보관 비용을 줄일 수 있습니다.
-예를 들어 <a href="https://www.tencentcloud.com/products/vod?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Tencent Cloud VOD</a>
+예를 들어 <a href="https://www.tencentcloud.com/products/vod?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Tencent Cloud VOD</a>
 
 는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 <strong>콘텐츠 수명주기 관리</strong>를 통해 저장 공간을 효율화할 수 있습니다.
 또한 H.265/AV1 같은 고효율 코덱을 도입하면 같은 품질이라도 파일 크기를 크게 줄여 저장 공간 부담을 낮출 수 있습니다.</p>
@@ -232,11 +232,11 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 이러한 <strong>미디어 파이프라인 자동화</strong>를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.</p>
 <h1 id="더-읽을거리">더 읽을거리</h1>
 <ul>
-<li><a href="https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">IVS Core team</a>
+<li><a href="https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">IVS Core team</a>
 
 
 <ul>
-<li><a href="https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명</a>
+<li><a href="https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명</a>
 
 </li>
 </ul>
@@ -253,16 +253,16 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 <code>chrome://gpu</code>에서 현재 활성화중인지 확인 후 비활성화 상태라면 <code>chrome://settings/system</code>에서 <code>Use graphics acceleration when available</code> 옵션을 활성화하면 됩니다.
 지원 여부는 다음 페이지들에서 확인할 수 있습니다.</p>
 <ul>
-<li><a href="https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Intel CPU 지원 여부 확인</a>
+<li><a href="https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Intel CPU 지원 여부 확인</a>
 
 
 <ul>
-<li><a href="https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Media Capabilities Supported by Intel Hardware</a>
+<li><a href="https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Media Capabilities Supported by Intel Hardware</a>
 
 </li>
 </ul>
 </li>
-<li><a href="https://en.wikipedia.org/wiki/NVDEC?utm_source=markruler.github.io#GPU_support" target="_blank" rel="noopener noreferrer">NVIDIA 그래픽 카드 지원 여부 확인</a>
+<li><a href="https://en.wikipedia.org/wiki/NVDEC?utm_source=markruler.com&amp;utm_medium=blog#GPU_support" target="_blank" rel="noopener noreferrer">NVIDIA 그래픽 카드 지원 여부 확인</a>
 
 </li>
 </ul>

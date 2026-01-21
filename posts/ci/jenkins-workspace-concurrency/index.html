@@ -50,7 +50,7 @@
 
 <h1 id="개요">개요</h1>
 <p>Jenkins Pipeline을 사용해서 잡 스케줄러를 실행하기 위해
-<a href="https://www.jenkins.io/doc/book/pipeline/syntax/?utm_source=markruler.github.io#triggers" target="_blank" rel="noopener noreferrer">triggers</a>
+<a href="https://www.jenkins.io/doc/book/pipeline/syntax/?utm_source=markruler.com&amp;utm_medium=blog#triggers" target="_blank" rel="noopener noreferrer">triggers</a>
 
  directive를 사용했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
@@ -78,7 +78,7 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>해당 Job은 빌드 간 메타데이터(<code>.meta/</code>)를 공유해야 했기 때문에
-<a href="https://plugins.jenkins.io/ws-cleanup/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">cleanWs</a>
+<a href="https://plugins.jenkins.io/ws-cleanup/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cleanWs</a>
 
  플러그인에서도
 <code>.git</code> 디렉토리와 함께 삭제되지 않도록 설정했습니다.</p>
@@ -98,7 +98,7 @@ Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성됩니다.
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Jenkins는 Workspace 목록을 별도의 메타데이터 파일에 저장해서 관리하지 않습니다.
-Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">WorkspaceList 객체</a>
+Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-2.374/core/src/main/java/hudson/slaves/WorkspaceList.java?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">WorkspaceList 객체</a>
 
 에
 전체 Workspace 목록을 저장합니다.</p>
@@ -131,7 +131,7 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 <h2 id="해결">해결</h2>
 <p><strong>Jenkins Master 프로세스를 재시작</strong>해서 <code>WorkspaceList</code>를 초기화하거나
 <strong>새로운 이름의 Job을 생성</strong>하면 새로운 이름의 workspace에서 빌드할 수 있습니다.
-이후 <a href="https://en.wikipedia.org/wiki/Thread_safety?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">스레드 안전성</a>
+이후 <a href="https://en.wikipedia.org/wiki/Thread_safety?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">스레드 안전성</a>
 
 을 보장하기 위해
 <code>Concurrent Build</code> 옵션을 허용하지 않은 채 빌드합니다.</p>

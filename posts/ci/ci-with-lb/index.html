@@ -195,7 +195,7 @@
 <li><del>마지막으로 반영 사항을 갈무리해서 업무 메신저에 공유한다.</del>
 <ul>
 <li>업무 메신저가 Slack에서 NAVER Works로 변경되고 연동을 못하고 있었는데
-<a href="https://github.com/markruler/naver-works-plugin?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Jenkins 플러그인</a>
+<a href="https://github.com/markruler/naver-works-plugin?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Jenkins 플러그인</a>
 
 을 직접 만들어서 알림 메시지가 가도록 만들었다.</li>
 </ul>
@@ -204,11 +204,11 @@
 <h1 id="도입-과정에서-발생한-문제들">도입 과정에서 발생한 문제들</h1>
 <h2 id="active-health-check가-필요하다">Active Health Check가 필요하다</h2>
 <blockquote>
-<p><a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/active-health-checks/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Active Health Check</a>
+<p><a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/active-health-checks/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Active Health Check</a>
 
 란
 주기적으로 서버에 연결을 시도하거나 HTTP 요청을 보내서 서버 상태를 확인한다.
-반면 <a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/passive-health-checks/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Passive Health Check</a>
+반면 <a href="https://www.haproxy.com/documentation/hapee/2-5r1/load-balancing/health-checking/passive-health-checks/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Passive Health Check</a>
 
 는
 오류가 있는지 활성 트래픽(active traffic)만 검사한다.</p>
@@ -287,14 +287,14 @@ IDC 매니저가 우리 회사 측 요청으로 iptables 규칙을 변경하고 
 </span></span><span style="display:flex;"><span>&gt; iptables -nvL
 </span></span></code></pre></div><p>추가로 컨테이너에서 각 서비스로 트래픽을 보내기 위해 iptables 규칙을 추가한다.
 Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워크 인터페이스를 사용하는데 IP address range를
-<a href="https://github.com/moby/moby/blob/a77317882d010b884a9101c6ad0b2d7db141082f/libnetwork/docs/network.md?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">172.17.0.1/16</a>
+<a href="https://github.com/moby/moby/blob/a77317882d010b884a9101c6ad0b2d7db141082f/libnetwork/docs/network.md?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">172.17.0.1/16</a>
 
  으로 설정한다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt; ip -br -c a
 </span></span><span style="display:flex;"><span>lo               UNKNOWN        127.0.0.1/8 ::1/128
 </span></span><span style="display:flex;"><span>docker0          DOWN           172.17.0.1/16 <span style="color:#0f0"># HERE!</span>
 </span></span></code></pre></div><p>iptables 규칙을 추가하기 위해 해당 네트워크를 고정시켰다.
-<a href="https://docs.docker.com/network/bridge/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">bip</a>
+<a href="https://docs.docker.com/network/bridge/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">bip</a>
 
 는 Docker 데몬이 사용할 bridge network IP address range를 지정하는 옵션이다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 기본 설정</span>
@@ -343,7 +343,7 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 </span></span><span style="display:flex;"><span>    panic(<span style="color:#87ceeb">&#34;failed to initialize the local scope default address pool: &#34;</span> + err.<span style="color:#ff0">Error</span>())
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>만약 범위를 변경하고 싶다면 <a href="https://docs.mirantis.com/mke/3.4/install/plan-deployment/mcr-considerations/default-address-pools.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Mirantis 문서</a>
+</span></span></code></pre></div><p>만약 범위를 변경하고 싶다면 <a href="https://docs.mirantis.com/mke/3.4/install/plan-deployment/mcr-considerations/default-address-pools.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Mirantis 문서</a>
 
 처럼 <code>default-address-pools</code> 옵션을 직접 추가할 수 있다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>{
@@ -440,7 +440,7 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Reference <span style="color:#0f0">#15.6f4bc817.1651592357.1872133</span>
 </span></span></code></pre></div><p>2번 서버로 갔던 패킷이 갑자기 유실되면 CDN에서 받는 응답 데이터가 없어서 발생하는 것으로 추측하고 있다. 🤯
-<a href="https://techdocs.akamai.com/edge-diagnostics/docs/error-codes?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Akamai Reference</a>
+<a href="https://techdocs.akamai.com/edge-diagnostics/docs/error-codes?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Akamai Reference</a>
 
 에 따르면 <code>#15.x.x.x</code>는 <code>ERR_ZERO_SIZE_OBJECT</code> 에러다.</p>
 <blockquote>
@@ -450,25 +450,25 @@ Docker 데몬은 기본적으로 <code>docker0</code> 라는 브릿지 네트워
 버려지는 요청들을 어떻게 처리할지 고민이 필요하다.</p>
 <h2 id="haproxy-전환">HAProxy 전환</h2>
 <p>이미 부분적으로 HAProxy를 사용해서 서비스를 이중화하고 있었다.
-HAProxy를 선택한 이유는 기본적으로 <a href="https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">statistics 기능이 Web UI로 제공</a>
+HAProxy를 선택한 이유는 기본적으로 <a href="https://www.haproxy.com/blog/exploring-the-haproxy-stats-page/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">statistics 기능이 Web UI로 제공</a>
 
 되면서
 Layer 4, Layer 7 스위치로도 사용할 수 있다는 점이었다.</p>
 <p><img src="/images/web/haproxy-statistics-report.webp" alt="HAProxy"></p>
 <p><strong>무엇보다도 XML 형식인 httpd 설정 파일에 비해 HAProxy의 설정 파일은 정말 간소하게 느껴졌기 때문에 전환하고 싶었다.</strong>
 또한 가장 흔히 쓰는 것 같은 NGINX를 사용하지 않았던 이유는 가장 원했던 기능인
-<a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Active Healthcheck가 유료(NGINX Plus) 기능</a>
+<a href="https://docs.nginx.com/nginx/admin-guide/load-balancer/http-health-check/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Active Healthcheck가 유료(NGINX Plus) 기능</a>
 
 이기 때문이다.</p>
 <h2 id="선언형-배포-gitops">선언형 배포 (GitOps?)</h2>
-<p>Bamboo에서는 <a href="https://confluence.atlassian.com/bamboo/bamboo-specs-894743906.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Bamboo Specs</a>
+<p>Bamboo에서는 <a href="https://confluence.atlassian.com/bamboo/bamboo-specs-894743906.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Bamboo Specs</a>
 
 라는 명칭으로 Infrastructure as Code(IaC)를 구현한다.
-— <a href="https://confluence.atlassian.com/bamboo/bamboo-yaml-specs-938844479.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">YAML Specs</a>
+— <a href="https://confluence.atlassian.com/bamboo/bamboo-yaml-specs-938844479.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">YAML Specs</a>
 
 의
 설정 파일에서는 SCP, SSH 등 주요 플러그인들을 지원하지 않기 때문에
-<a href="https://confluence.atlassian.com/bamboo/bamboo-java-specs-941616821.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Java Specs</a>
+<a href="https://confluence.atlassian.com/bamboo/bamboo-java-specs-941616821.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Java Specs</a>
 
 를 사용하는 것이 좋다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#0f0"># Task com.atlassian.bamboo.plugins.bamboo-scp-plugin:scptask is not supported yet</span>
@@ -485,30 +485,30 @@ Jenkins Pipeline을 활용하면 <code>Jenkinsfile</code> 을 사용해서 선�
 <ul>
 <li>CI/CD
 <ul>
-<li><a href="https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CI/CD 정리</a>
+<li><a href="https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/ci-cd.md?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">CI/CD 정리</a>
 
  - markruler</li>
-<li><a href="https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/continuous-integration.md?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">&lt;지속적인 통합&gt; 요약</a>
+<li><a href="https://github.com/xpdojo/docs/blob/da871cd8fc4e59736a5f5ab5a44908534505b29f/reference/agile/continuous-integration.md?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">&lt;지속적인 통합&gt; 요약</a>
 
  - markruler</li>
-<li><a href="https://blog.banksalad.com/tech/become-an-organization-that-deploys-1000-times-a-day/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">하루에 1000번 배포하는 조직 되기</a>
+<li><a href="https://blog.banksalad.com/tech/become-an-organization-that-deploys-1000-times-a-day/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">하루에 1000번 배포하는 조직 되기</a>
 
  - Banksalad</li>
-<li><a href="https://tech.kakaoenterprise.com/113?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Release Note 톺아보기</a>
+<li><a href="https://tech.kakaoenterprise.com/113?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Release Note 톺아보기</a>
 
  - kakao enterprise</li>
 </ul>
 </li>
 <li>Proxy Server
 <ul>
-<li><a href="https://www.lesstif.com/system-admin/forward-proxy-reverse-proxy-21430345.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">포워드 프록시(forward proxy) 리버스 프록시(reverse proxy)의 차이</a>
+<li><a href="https://www.lesstif.com/system-admin/forward-proxy-reverse-proxy-21430345.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">포워드 프록시(forward proxy) 리버스 프록시(reverse proxy)의 차이</a>
 
  - lesstif
 <ul>
-<li><a href="https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Proxy servers explained</a>
+<li><a href="https://www.cloudflare.com/learning/cdn/glossary/reverse-proxy/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Proxy servers explained</a>
 
  - Cloudflare</li>
-<li><a href="https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Reverse Proxy vs. Forward Proxy: The Differences</a>
+<li><a href="https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Reverse Proxy vs. Forward Proxy: The Differences</a>
 
  - Oxylabs</li>
 </ul>
@@ -517,23 +517,23 @@ Jenkins Pipeline을 활용하면 <code>Jenkinsfile</code> 을 사용해서 선�
 </li>
 <li>SLB: Server Load Balancing
 <ul>
-<li><a href="https://www.nginx.com/resources/glossary/layer-7-load-balancing/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Differences Between Layer 4 and Layer 7 Load Balancing</a>
+<li><a href="https://www.nginx.com/resources/glossary/layer-7-load-balancing/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Differences Between Layer 4 and Layer 7 Load Balancing</a>
 
  - NGINX
 <ul>
-<li><a href="https://blog.cloudflare.com/high-availability-load-balancers-with-maglev/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">High Availability Load Balancers with Maglev</a>
+<li><a href="https://blog.cloudflare.com/high-availability-load-balancers-with-maglev/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">High Availability Load Balancers with Maglev</a>
 
  - Cloudflare</li>
-<li><a href="https://vincent.bernat.ch/en/blog/2018-multi-tier-loadbalancer?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Multi-tier load-balancing with Linux</a>
+<li><a href="https://vincent.bernat.ch/en/blog/2018-multi-tier-loadbalancer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Multi-tier load-balancing with Linux</a>
 
  - Vincent Bernat</li>
-<li><a href="https://blog.cloudflare.com/a-primer-on-proxies/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">A Primer on Proxies</a>
+<li><a href="https://blog.cloudflare.com/a-primer-on-proxies/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">A Primer on Proxies</a>
 
  - Cloudflare</li>
-<li><a href="https://levelup.gitconnected.com/l4-vs-l7-load-balancing-d2012e271f56?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">L4 vs L7 Load Balancing</a>
+<li><a href="https://levelup.gitconnected.com/l4-vs-l7-load-balancing-d2012e271f56?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">L4 vs L7 Load Balancing</a>
 
  - Mohak Puri</li>
-<li><a href="https://www.nowwatersblog.com/backend/serverLoad/L4L7?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">L4 &amp; L7</a>
+<li><a href="https://www.nowwatersblog.com/backend/serverLoad/L4L7?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">L4 &amp; L7</a>
 
  - nowwater</li>
 </ul>
@@ -541,26 +541,26 @@ Jenkins Pipeline을 활용하면 <code>Jenkinsfile</code> 을 사용해서 선�
 <li>&lt;인프라/네트워크 엔지니어를 위한 네트워크 이해 및 설계 가이드&gt; - 미야타 히로시</li>
 <li>&lt;인프라 엔지니어의 교과서: 네트워크 관리편&gt; - 기술평론사 엮음</li>
 <li>&lt;웹 엔지니어가 알아야 할 인프라의 기본&gt; - 바바 토시아키</li>
-<li><a href="https://tech.kakao.com/2014/05/30/l4/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">L4 장비의 동작과 서비스 배포시 유의점</a>
+<li><a href="https://tech.kakao.com/2014/05/30/l4/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">L4 장비의 동작과 서비스 배포시 유의점</a>
 
  - Kakao</li>
-<li><a href="https://elky84.github.io/2018/08/19/network_issue/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">L4 스위치 도입시 생겼던 이야기</a>
+<li><a href="https://elky84.github.io/2018/08/19/network_issue/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">L4 스위치 도입시 생겼던 이야기</a>
 
  - elky84</li>
-<li><a href="https://meetup.toast.com/posts/189?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Safe Deploy - 안전하게 L4 에서 제외하는 방법</a>
+<li><a href="https://meetup.toast.com/posts/189?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Safe Deploy - 안전하게 L4 에서 제외하는 방법</a>
 
  - NHN</li>
-<li><a href="https://d2.naver.com/helloworld/284659?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">L4/L7 스위치의 대안, 오픈 소스 로드 밸런서 HAProxy</a>
+<li><a href="https://d2.naver.com/helloworld/284659?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">L4/L7 스위치의 대안, 오픈 소스 로드 밸런서 HAProxy</a>
 
  - NAVER D2</li>
 </ul>
 </li>
 <li>Docker
 <ul>
-<li><a href="https://subicura.com/2016/06/07/zero-downtime-docker-deployment.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">도커를 이용한 웹서비스 무중단 배포하기</a>
+<li><a href="https://subicura.com/2016/06/07/zero-downtime-docker-deployment.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">도커를 이용한 웹서비스 무중단 배포하기</a>
 
  - subicura</li>
-<li><a href="https://straz.to/2021-09-08-docker-address-pools/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The definitive guide to docker&rsquo;s default-address-pools option</a>
+<li><a href="https://straz.to/2021-09-08-docker-address-pools/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The definitive guide to docker&rsquo;s default-address-pools option</a>
 
 </li>
 </ul>

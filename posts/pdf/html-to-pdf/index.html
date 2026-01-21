@@ -49,15 +49,15 @@
 <h1>Playwright를 사용해서 HTML 페이지를 PDF로 만들기</h1>
 
 <blockquote>
-<p>데모 서버는 <a href="https://github.com/markruler/htmltopdf?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">markruler/htmltopdf</a>
+<p>데모 서버는 <a href="https://github.com/markruler/htmltopdf?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">markruler/htmltopdf</a>
 
  저장소를 사용해주세요.</p>
 </blockquote>
 <h1 id="개요">개요</h1>
-<p>팀내에서 문서 생성 도구로 <a href="https://pdfmyurl.com/html-to-pdf-api?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">PDFmyURL</a>
+<p>팀내에서 문서 생성 도구로 <a href="https://pdfmyurl.com/html-to-pdf-api?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">PDFmyURL</a>
 
 과
-<a href="https://www.forcs.com/kr/oz-e-form/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">OZ e-Form</a>
+<a href="https://www.forcs.com/kr/oz-e-form/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">OZ e-Form</a>
 
 을 사용하고 있습니다.
 보통 이런 외부 솔루션은 테스트 할 때 매우 불편합니다.</p>
@@ -79,13 +79,13 @@ URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할
 <p>내부에서 관리 가능한 HTML to PDF 변환 도구가 간절하다고 느낀 시기였습니다.</p>
 <h1 id="1차-시도-wkhtmltopdf">1차 시도: wkhtmltopdf</h1>
 <p>이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤습니다.
-가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">wkhtmltopdf</a>
+가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">wkhtmltopdf</a>
 
 였습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.</span>
 </span></span><span style="display:flex;"><span>apt-get -y install fonts-nanum wkhtmltopdf
 </span></span></code></pre></div><p>빠르게 시작하기 위해 Python의 <code>pdfkit</code>과 오픈 소스 PDF 변환 툴인 <code>wkhtmltopdf</code>를 사용해서 Flask 앱을 만들었습니다.
-하지만 기존 출력물(크롬에서 <a href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html?utm_source=markruler.github.io#printing" target="_blank" rel="noopener noreferrer">window.print()</a>
+하지만 기존 출력물(크롬에서 <a href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html?utm_source=markruler.com&amp;utm_medium=blog#printing" target="_blank" rel="noopener noreferrer">window.print()</a>
 
 )과
 달리 PDF 출력물을 보면 CSS가 틀어지는 부분이 너무 많았습니다.</p>
@@ -93,15 +93,15 @@ URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할
 해당 홈페이지 첫 문장부터 <code>Qt WebKit rendering engine</code> 이라고 설명합니다.
 <code>wk</code>는 WebKit의 약자였고, Qt WebKit을 기반으로 변환하다보니 Chromium 기반으로 작성되어 있는 HTML이 그대로 보일 리 없었습니다.</p>
 <blockquote>
-<p><strong><a href="https://en.wikipedia.org/wiki/Comparison_of_browser_engines?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Comparison of browser engines</a>
+<p><strong><a href="https://en.wikipedia.org/wiki/Comparison_of_browser_engines?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Comparison of browser engines</a>
 
 </strong> | Wikipedia</p>
 </blockquote>
 <h1 id="2차-시도-pyppeteer">2차 시도: pyppeteer</h1>
-<p>기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 <a href="https://github.com/puppeteer/puppeteer?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">puppeteer</a>
+<p>기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 <a href="https://github.com/puppeteer/puppeteer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">puppeteer</a>
 
 
-대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">pyppeteer</a>
+대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pyppeteer</a>
 
 을 사용했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
@@ -127,21 +127,21 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 <ul>
 <li><code>setContent()</code> 시 <code>waitUntil</code> 옵션을 p<strong>u</strong>ppeteer만 지원하고 있습니다.
 <ul>
-<li><a href="https://github.com/puppeteer/puppeteer/issues/907?utm_source=markruler.github.io#issuecomment-472334126" target="_blank" rel="noopener noreferrer">page.setContent(html, {waitUntil: &rsquo;networkidle&rsquo;}); · Issue #907 · puppeteer/puppeteer</a>
+<li><a href="https://github.com/puppeteer/puppeteer/issues/907?utm_source=markruler.com&amp;utm_medium=blog#issuecomment-472334126" target="_blank" rel="noopener noreferrer">page.setContent(html, {waitUntil: &rsquo;networkidle&rsquo;}); · Issue #907 · puppeteer/puppeteer</a>
 
 </li>
-<li><a href="https://github.com/miyakogi/pyppeteer/issues/211?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">setContent extra options · Issue #211 · miyakogi/pyppeteer</a>
+<li><a href="https://github.com/miyakogi/pyppeteer/issues/211?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">setContent extra options · Issue #211 · miyakogi/pyppeteer</a>
 
 </li>
 </ul>
 </li>
 </ul>
-<p>반면 <a href="https://github.com/microsoft/playwright-python?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Microsoft의 playwright</a>
+<p>반면 <a href="https://github.com/microsoft/playwright-python?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Microsoft의 playwright</a>
 
 는 해당 기능들을
 모두 지원하면서, Javascript는 물론 Python도 지원했습니다.
 결국 Content로 PDF를 출력하는 기능도 지원하기 위해 playwright로 변경했습니다.
-<a href="https://playwright.dev/docs/puppeteer?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">puppeteer와 인터페이스를 유사하게 만들었기</a>
+<a href="https://playwright.dev/docs/puppeteer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">puppeteer와 인터페이스를 유사하게 만들었기</a>
 
 
 때문에 변경하는 데에 많은 리소스가 들지 않았습니다.</p>
@@ -242,7 +242,7 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 </ul>
 </li>
 <li>Server to Server로 요청 시 Spring Boot에서 FeignClient로
-<a href="https://wildeveloperetrain.tistory.com/304?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">x-www-form-urlencoded</a>
+<a href="https://wildeveloperetrain.tistory.com/304?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">x-www-form-urlencoded</a>
 
 
 데이터를 보내려면 <code>MultiValueMap&lt;String, String&gt;</code>을 사용해야 합니다.</li>
@@ -250,25 +250,25 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 <h1 id="참조">참조</h1>
 <h2 id="playwright"><strong>Playwright</strong></h2>
 <ul>
-<li><a href="https://playwright.dev/python/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">공식 문서</a>
+<li><a href="https://playwright.dev/python/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">공식 문서</a>
 
 </li>
-<li><a href="https://github.com/microsoft/playwright-python?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">GitHub</a>
+<li><a href="https://github.com/microsoft/playwright-python?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">GitHub</a>
 
 </li>
-<li><a href="https://devocean.sk.com/blog/techBoardDetail.do?ID=165090&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">웹 테스트 자동화</a>
+<li><a href="https://devocean.sk.com/blog/techBoardDetail.do?ID=165090&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">웹 테스트 자동화</a>
 
 가 목적인 라이브러리입니다.</li>
 </ul>
 <h2 id="webkit"><strong>WebKit</strong></h2>
 <ul>
-<li><a href="https://wkhtmltopdf.org/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">wkhtmltopdf</a>
+<li><a href="https://wkhtmltopdf.org/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">wkhtmltopdf</a>
 
 </li>
 </ul>
 <h2 id="chromium"><strong>Chromium</strong></h2>
 <ul>
-<li><a href="https://developer.chrome.com/articles/new-headless/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Chrome’s Headless mode gets an upgrade: introducing &ndash;headless=new | Chromium | Chrome for Developers</a>
+<li><a href="https://developer.chrome.com/articles/new-headless/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Chrome’s Headless mode gets an upgrade: introducing &ndash;headless=new | Chromium | Chrome for Developers</a>
 
 </li>
 </ul>

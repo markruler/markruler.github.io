@@ -49,10 +49,10 @@
 <h1>Facebook은 경쟁사의 암호화된 모바일 앱 트래픽을 어떻게 가로챘을까?</h1>
 
 <ul>
-<li><a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">How did Facebook intercept their competitor&rsquo;s encrypted mobile app traffic?</a>
+<li><a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">How did Facebook intercept their competitor&rsquo;s encrypted mobile app traffic?</a>
 
 
-| <a href="https://x.com/haxrob?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">HaxRob</a>
+| <a href="https://x.com/haxrob?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">HaxRob</a>
 
 , 2024년 4월 14일</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
@@ -62,43 +62,43 @@
 <p>이 글은 페이스북(Facebook) 집단 소송에서 밝혀진 정보를 바탕으로 한 기술 조사입니다.
 페이스북은 경쟁사의 정보를 얻기 위해 Onavo Protect 앱이 실행 중인 사용자 기기에서 암호화된 트래픽을 도청했었다는 이유로 재판이 진행 중입니다.</p>
 <p><img src="/images/network/onavo-facebook-ssl-mitm-technical-analysis/fbdark-1.webp" alt="How did Facebook intercept their competitor&rsquo;s encrypted mobile app traffic?"></p>
-<p><em>2024년 7월 28일 - 👋Hello <a href="https://news.ycombinator.com/item?id=41090304&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Hackernews</a>
+<p><em>2024년 7월 28일 - 👋Hello <a href="https://news.ycombinator.com/item?id=41090304&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Hackernews</a>
 
 !</em></p>
 <p>현재 메타(Meta)를 상대로 한 집단 소송이 진행 중이며,
-법원 문서에 따르면* 메타가 <a href="https://en.wikipedia.org/wiki/Electronic_Communications_Privacy_Act?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">도청법(Wiretap Act)</a>
+법원 문서에 따르면* 메타가 <a href="https://en.wikipedia.org/wiki/Electronic_Communications_Privacy_Act?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">도청법(Wiretap Act)</a>
 
 을 위반했을 가능성이 있다고 언급되어 있습니다.
-이 글에서의 분석은 <a href="https://www.documentcloud.org/documents/24520332-merged-fb?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">법원 문서</a>
+이 글에서의 분석은 <a href="https://www.documentcloud.org/documents/24520332-merged-fb?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">법원 문서</a>
 
  내용과
 안드로이드(Android) 용 Onavo Protect 앱 패키지의 아카이브된 버전을 리버스 엔지니어링한 결과를 바탕으로 하고 있습니다.</p>
 <p>법원 문서에 따르면, 페이스북이 사용자의 암호화된 HTTPS 트래픽을 가로채기 위해
-<a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">중간자 공격(MITM)</a>
+<a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">중간자 공격(MITM)</a>
 
 으로 간주될 수 있는 방법을 사용했다고 합니다.
 페이스북은 이 기술을 &ldquo;ssl bump&quot;라고 불렀으며,
-이는 <a href="https://www.squid-cache.org/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Squid 캐싱</a>
+이는 <a href="https://www.squid-cache.org/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Squid 캐싱</a>
 
- 프록시 소프트웨어의 transparent proxy <a href="https://www.squid-cache.org/Doc/config/ssl_bump/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">기능 (ssl_bump)</a>
+ 프록시 소프트웨어의 transparent proxy <a href="https://www.squid-cache.org/Doc/config/ssl_bump/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">기능 (ssl_bump)</a>
 
 에서 유래된 이름입니다.
 해당 기술은 스냅챗(Snapchat), 유튜브(YouTube), 아마존(Amazon)의 특정 도메인을 (추정컨대) 복호화하는 데 사용되었다고 합니다.
-이 사건에 대한 추가 배경 정보는 최근 <a href="https://techcrunch.com/2024/03/26/facebook-secret-project-snooped-snapchat-user-traffic/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">TechCrunch</a>
+이 사건에 대한 추가 배경 정보는 최근 <a href="https://techcrunch.com/2024/03/26/facebook-secret-project-snooped-snapchat-user-traffic/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">TechCrunch</a>
 
  기사를 읽어볼 것을 권장합니다.</p>
 <blockquote>
-<p>[2024-07-28] - 이는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">2019년에 TechCrunch가 공개한</a>
+<p>[2024-07-28] - 이는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">2019년에 TechCrunch가 공개한</a>
 
  내용과 다릅니다.
 당시 페이스북은 10대 청소년들에게 사용 습관 데이터를 수집하기 위해 돈을 지불했고,
-그 결과 Onavo 앱은 앱 스토어에서 삭제되고 <a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">벌금이 부과되었습니다</a>
+그 결과 Onavo 앱은 앱 스토어에서 삭제되고 <a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">벌금이 부과되었습니다</a>
 
 .
 이번에 새롭게 밝혀진 중간자 공격(MITM) 정보와 관련하여, 현재 명확하지 않은 점은 모든 앱 사용자의 트래픽이 &ldquo;가로채기&rdquo; 되었는지, 아니면 일부 사용자만 해당되었는지입니다.</p>
 </blockquote>
 <blockquote>
-<p>*한 HN 사용자는 다음과 같이 <a href="https://news.ycombinator.com/item?id=41091505&amp;ref=doubleagent.net&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">명확히 합니다</a>
+<p>*한 HN 사용자는 다음과 같이 <a href="https://news.ycombinator.com/item?id=41091505&amp;ref=doubleagent.net&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">명확히 합니다</a>
 
 .<br>
 <br>
@@ -110,10 +110,10 @@
 <blockquote>
 <p>이 글은 제한적이고 부분적인 정보로 인해 일부 사실이 부정확하거나 불완전할 수 있습니다.
 따라서 수정이 필요하거나 새로운 사실이 발견될 경우 이 글은 업데이트될 수 있습니다.
-새로운 콘텐츠를 받아보고 싶으시면 <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">저자의 블로그</a>
+새로운 콘텐츠를 받아보고 싶으시면 <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">저자의 블로그</a>
 
 를 구독하시거나
-<a href="https://twitter.com/haxrob?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">저자의 X</a>
+<a href="https://twitter.com/haxrob?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">저자의 X</a>
 
 를 팔로우하세요.</p>
 </blockquote>
@@ -145,10 +145,10 @@
 </ul>
 <h1 id="개요">개요</h1>
 <ul>
-<li><a href="https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">1,000만 건</a>
+<li><a href="https://www.androidrank.org/application/onavo_protect_from_facebook/com.onavo.spaceship?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">1,000만 건</a>
 
 이 넘는
-안드로이드 설치를 기록한 <a href="https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Onavo Protect 안드로이드 앱</a>
+안드로이드 설치를 기록한 <a href="https://apkpure.com/onavo-protect-from-facebook/com.onavo.spaceship?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Onavo Protect 안드로이드 앱</a>
 
 에는
 기기의 사용자 신뢰 저장소(user trust store)에 &ldquo;Facebook Research&quot;에서 발급한 CA(인증 기관) 인증서를 설치하도록 유도하는 코드가 포함되어 있었습니다.
@@ -161,7 +161,7 @@
 <li>이전 스냅챗 앱을 검토한 결과, 해당 앱의 분석 도메인(analytics domain)은 인증서 고정<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>을 적용하지 않았음을 알 수 있었습니다.
 이는 중간자 공격(MITM) 또는 &ldquo;ssl bumping&quot;이 앞서 설명한 대로 작동했을 가능성이 있음을 의미합니다.</li>
 <li>사용자가 부여한 권한을 악용하여 다른 앱의 사용 통계를 수집하는 핵심 기능 외에도,
-모바일 가입자 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">IMSI</a>
+모바일 가입자 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">IMSI</a>
 
 와 같은
 민감한 데이터를 수집하는 의심스러운 기능이 추가로 있는 것으로 보입니다.</li>
@@ -187,7 +187,7 @@
 </blockquote>
 <p>장애가 있는 사람들을 지원하기 위해 설계된 기능을 경쟁 우위를 위해 악용하려는 기업이 있다는 것을 짐작할 수 있습니다.
 Android 접근성 기능의 남용은 주로
-<a href="https://blog.pradeo.com/accessibility-services-mobile-analysis-malware?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">뱅킹 멀웨어</a>
+<a href="https://blog.pradeo.com/accessibility-services-mobile-analysis-malware?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">뱅킹 멀웨어</a>
 
 와 같은 악성 애플리케이션에 의해 발생하는 것으로 알려져 있습니다.</p>
 <h1 id="동기">동기</h1>
@@ -197,12 +197,12 @@ Android 접근성 기능의 남용은 주로
 <p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-6.png" alt="Danny Ferrante"></p>
 <p>제 생각에는 특정 도메인의 트래픽을 가로채기 위해 Onavo Protect VPN 앱을 활용하는 것 외에도
 핵심 기술을 리브랜딩하여 다른 애플리케이션에 배포하려는 의도가 있었습니다.
-페이스북은 2013년에 약 1억 2천만 달러에 Onavo를 <a href="https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">인수했으며</a>
+페이스북은 2013년에 약 1억 2천만 달러에 Onavo를 <a href="https://techcrunch.com/2013/10/13/facebook-buys-mobile-analytics-company-onavo-and-finally-gets-its-office-in-israel/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">인수했으며</a>
 
 
 이 기술을 잘 활용할 필요가 있었습니다.
 이 가격은 사람들이 사용하는 휴대폰과 태블릿에서 경쟁사 정보를 얻는 능력에 대해 그들이 얼마나 높은 가치를 두었는지 명확하게 보여줍니다.</p>
-<p>iOS 버전에 대한 <a href="https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이전 연구</a>
+<p>iOS 버전에 대한 <a href="https://medium.com/@chronic_9612/notes-on-analytics-and-tracking-in-onavo-protect-for-ios-904bdff346c0?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">이전 연구</a>
 
 에서는
 Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 있었음을 지적하고 있습니다.
@@ -215,17 +215,17 @@ Onavo VPN 앱이 아이폰(iPhone)에서 일부 사용 정보를 수집하고 �
 <blockquote>
 <p>도청 정보는 새로운 것이며, 이전에 발생한 사건과 혼동해서는 안 됩니다.<br>
 <br>
-<a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">ACCC</a>
+<a href="https://www.accc.gov.au/media-release/20m-penalty-for-meta-companies-for-conduct-liable-to-mislead-consumers-about-use-of-their-data?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ACCC</a>
 
 에 따르면,
 2023년에 페이스북의 두 자회사는 호주 연방법원으로부터
 &ldquo;호주 소비자법을 위반하여 오해를 일으킬 수 있는 행위를 한&rdquo; 혐의로 총 2천만 호주달러의 벌금이 부과되었습니다.<br>
 <br>
 페이스북은 2019년에 Onavo를 폐쇄했는데, 이는 청소년들이 앱을 사용하도록 유도하여
-그들의 활동을 추적하고 있었다는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">조사</a>
+그들의 활동을 추적하고 있었다는 <a href="https://techcrunch.com/2019/01/29/facebook-project-atlas/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">조사</a>
 
 가 밝혀졌기 때문입니다.
-또한 그해 애플(Apple)은 <a href="https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">페이스북의 개발자 프로그램 인증서를 철회하는</a>
+또한 그해 애플(Apple)은 <a href="https://web.archive.org/web/20220609072355/https://www.vox.com/2019/1/30/18203231/apple-banning-facebook-research-app?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">페이스북의 개발자 프로그램 인증서를 철회하는</a>
 
 
 강력한 조치를 취해 분명한 메시지를 전달했습니다.<br>
@@ -296,12 +296,12 @@ controls></video></p>
 다음 이미지에서 하이라이트된 메서드는 <code>KeyChain.createInstallIntent()</code>를 호출하여 인증서를 설치합니다.
 여기서 &ldquo;Facebook Research&quot;라는 이름으로 사용자에게 권한을 요청하는 팝업이 나타날 것입니다.</p>
 <p><img src="https://doubleagent.net/content/images/2024/04/GJpP7rmaAAAQDKI.png" alt="KeyChain.createInstallIntent"></p>
-<p><code>KeyChain.createInstallIntent()</code>는 Android 7(Nougat)에서 <a href="https://commonsware.com/R/pages/chap-security-004.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">더 이상 작동하지 않게 되었습니다</a>
+<p><code>KeyChain.createInstallIntent()</code>는 Android 7(Nougat)에서 <a href="https://commonsware.com/R/pages/chap-security-004.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">더 이상 작동하지 않게 되었습니다</a>
 
 .
 사용자가 인증서를 수동으로 설치해야 합니다.
 이제 Facebook의 CA 인증서를 앱 내에서 직접 설치하는 것은 불가능해졌습니다.</p>
-<p>Android 7에서 주목할 만한 또 다른 변경 사항은 <a href="https://developer.android.com/privacy-and-security/security-config?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Android 문서</a>
+<p>Android 7에서 주목할 만한 또 다른 변경 사항은 <a href="https://developer.android.com/privacy-and-security/security-config?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Android 문서</a>
 
 에 따르면 다음과 같습니다(강조는 필자).</p>
 <blockquote>
@@ -362,7 +362,7 @@ controls></video></p>
 <p><em>인증서 고정이 최신 기기에서 기본적으로 적용되면서, 안드로이드에서 장기적으로 SSL bump가 적용될 수 있는지 일반적인 의문이 제기되고 있습니다.</em></p>
 </blockquote>
 <h1 id="또-무엇이-있을까요">또 무엇이 있을까요?</h1>
-<p>제 눈에 띈 것은 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">모바일 가입자 IMSI</a>
+<p>제 눈에 띈 것은 <a href="https://en.wikipedia.org/wiki/International_mobile_subscriber_identity?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">모바일 가입자 IMSI</a>
 
 를 얻으려는 요청이었습니다.
 이는 매우 민감한 데이터입니다.</p>
@@ -371,7 +371,7 @@ controls></video></p>
 <p><img src="https://pbs.twimg.com/media/GJqOvKmbwAAmL_p?format=png&amp;name=medium" alt="Device Identifiers"></p>
 <p>물론 이는 앱의 매니페스트에 정의되어 있었습니다.</p>
 <p><img src="https://doubleagent.net/content/images/size/w1000/2024/04/image-10.png" alt="app&rsquo;s manifest"></p>
-<p><em><a href="https://source.android.com/docs/core/connect/device-identifiers?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Device identifiers | Android</a>
+<p><em><a href="https://source.android.com/docs/core/connect/device-identifiers?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Device identifiers | Android</a>
 
 </em></p>
 <p>이걸 보면 아마도 조사할 것이 더 있을 겁니다.</p>
@@ -383,36 +383,36 @@ controls></video></p>
 <p>그리고 CA 설치 절차를 트리거하는 루틴, 2017년 이후에 인증서가 추가되는 방법, Onavo 애플리케이션이 수집하는 다른 항목 등 더 알아봐야 할 것이 분명히 있습니다.
 또한 사본을 어디서 찾을 수 있는지 아는 사람이 있다면 아이폰 버전의 애플리케이션을 찾는 것도 좋을 것입니다.</p>
 <p>집단 소송이 흥미로운 방향으로 진행된다면, 이는 조사를 계속할 동기가 될 수 있을 것입니다.</p>
-<p>추가 업데이트를 받고 싶으시다면, <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">원본 사이트에서 이메일 구독</a>
+<p>추가 업데이트를 받고 싶으시다면, <a href="https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">원본 사이트에서 이메일 구독</a>
 
 을 등록하거나
-<a href="https://x.com/haxrob?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">원저자의 X</a>
+<a href="https://x.com/haxrob?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">원저자의 X</a>
 
 를 팔로우하세요.</p>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
-<p><a href="https://en.wikipedia.org/wiki/Sherman_Antitrust_Act?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">셔먼법(Sherman Antitrust Act)</a>
+<p><a href="https://en.wikipedia.org/wiki/Sherman_Antitrust_Act?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">셔먼법(Sherman Antitrust Act)</a>
 
 은 미국의 반독점법이다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">인증서 고정(Certificate Pinning)</a>
+<p><a href="https://learn.microsoft.com/ko-kr/azure/security/fundamentals/certificate-pinning?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">인증서 고정(Certificate Pinning)</a>
 
 은 애플리케이션이 서버와 통신할 때 사용하는 SSL/TLS 인증서의 공인된 목록을 미리 지정해 두는 보안 기법이다.
 이를 통해 애플리케이션이 특정 인증서로만 서버에 연결하도록 제한한다.
 이 방식은 중간자 공격(MITM)을 방지하는 데 효과적이다.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://www.haproxy.com/glossary/what-is-a-transparent-proxy?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">투명 프록시(transparent proxy)</a>
+<p><a href="https://www.haproxy.com/glossary/what-is-a-transparent-proxy?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">투명 프록시(transparent proxy)</a>
 
 는 클라이언트와 서버 사이에 위치해서 요청과 응답을 중계하는 프록시 서버다.
 뒤의 두 프록시와 달리 클라이언트의 요청을 수정하지 않고, 클라이언트 IP 주소를 HTTP 요청 헤더에 그대로 노출시키기 때문에 투명하다고 부른다.
-<a href="https://docs.trafficserver.apache.org/en/latest/admin-guide/configuration/transparent-forward-proxying.en.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">포워드 프록시(forward proxy)</a>
+<a href="https://docs.trafficserver.apache.org/en/latest/admin-guide/configuration/transparent-forward-proxying.en.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">포워드 프록시(forward proxy)</a>
 
 는 클라이언트 측에서,
-<a href="https://www.haproxy.com/glossary/what-is-a-reverse-proxy?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">리버스 프록시(reverse proxy)</a>
+<a href="https://www.haproxy.com/glossary/what-is-a-reverse-proxy?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">리버스 프록시(reverse proxy)</a>
 
 는 서버 측에서 중계하는 프록시 서버다.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>

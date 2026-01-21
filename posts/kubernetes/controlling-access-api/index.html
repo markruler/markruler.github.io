@@ -49,7 +49,7 @@
 <h1>쿠버네티스 API 접근 제어</h1>
 
 <ul>
-<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">쿠버네티스 공식 문서</a>
+<li><a href="https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">쿠버네티스 공식 문서</a>
 
 를 번역했습니다.</li>
 </ul>
@@ -58,7 +58,7 @@
 <!-- body -->
 <p>사용자는<code>kubectl</code>, 클라이언트 라이브러리
 또는 REST 요청을 통해
-<a href="https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">API에 접근한다</a>
+<a href="https://kubernetes.io/docs/tasks/access-application-cluster/access-cluster/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">API에 접근한다</a>
 
 .
 사용자와 쿠버네티스 서비스 어카운트 모두 API에 접근할 수 있다.
@@ -79,7 +79,7 @@ API 서버의 인증서에 대한 루트 인증서를 포함하며,
 이는 다이어그램에 <strong>1</strong>단계로 표시되어 있다.
 클러스터 생성 스크립트 또는 클러스터 관리자는
 API 서버가 하나 이상의 인증기 모듈을 실행하도록 구성하십시오.
-인증기는 <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">여기</a>
+인증기는 <a href="https://kubernetes.io/docs/reference/access-authn-authz/authentication/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">여기</a>
 
 에서 더 자세히 서술한다.</p>
 <p>인증 단계로 들어가는 것은 온전한 HTTP 요청이지만
@@ -127,7 +127,7 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
 </span></span></code></pre></div><p>Bob이 <code>projectCaribou</code> 네임스페이스에 있는 오브젝트에 쓰기(<code>create</code> 또는 <code>update</code>) 요청을 하면 그의 인가는 거부된다. 만약 Bob이 <code>projectFish</code>처럼 다른 네임스페이스의 오브젝트 읽기(<code>get</code>) 요청을 하면 그의 인가는 거부된다.</p>
 <p>쿠버네티스 인가는 공통 REST 속성을 사용하여 기존 조직 전체 또는 클라우드 제공자 전체의 접근 제어 시스템과 상호 작용할 것을 요구한다. 이러한 제어 시스템은 쿠버네티스 API 이외의 다른 API와 상호작용할 수 있으므로 REST 형식을 사용하는 것이 중요하다.</p>
 <p>쿠버네티스는 ABAC 모드, RBAC 모드, 웹훅 모드와 같은 여러 개의 인가 모듈을 지원한다. 관리자가 클러스터를 생성할 때 API 서버에서 사용해야 하는 인가 모듈을 구성했다. 인가 모듈이 2개 이상 구성되면 쿠버네티스가 각 모듈을 확인하고, 어느 모듈이 요청을 승인하면 요청을 진행할 수 있다. 모든 모듈이 요청을 거부하면 요청이 거부된다(HTTP 상태 코드 403).</p>
-<p>인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 <a href="https://kubernetes.io/docs/reference/access-authn-authz//authorization/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">인가 개요</a>
+<p>인가 모듈을 사용한 정책 생성을 포함해 쿠버네티스 인가에 대해 더 배우려면 <a href="https://kubernetes.io/docs/reference/access-authn-authz//authorization/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">인가 개요</a>
 
 를 참조하십시오.</p>
 <h2 id="승인-제어">승인 제어</h2>
@@ -142,7 +142,7 @@ JWT 토큰(서비스 어카운트에 사용됨)을 포함한다.</p>
 승인 제어 모듈이 거부되면 요청은 즉시 거부된다.</p>
 <p>승인 제어 모듈은 오브젝트를 거부하는 것 외에도
 필드의 복잡한 기본값을 설정할 수 있다.</p>
-<p>사용 가능한 승인 제어 모듈은 <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">여기</a>
+<p>사용 가능한 승인 제어 모듈은 <a href="https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">여기</a>
 
 에 서술되어 있다.</p>
 <p>요청이 모든 승인 제어 모듈을 통과하면 유효성 검사 루틴을 사용하여 해당 API 오브젝트를 검증한 후

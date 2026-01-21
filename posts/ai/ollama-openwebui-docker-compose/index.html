@@ -136,19 +136,19 @@
 </span></span></code></pre></div><p>질문에 답변 시 GPU를 사용하는 것도 확인할 수 있습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu.webp" alt="GPU 사용하는 프로그램"></p>
 <h1 id="docker-compose-사용하기">Docker Compose 사용하기</h1>
-<p>처음에는 Open WebUI 레포지토리에 있는 <a href="https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">docker-compose.yaml</a>
+<p>처음에는 Open WebUI 레포지토리에 있는 <a href="https://github.com/open-webui/open-webui/blob/main/docker-compose.yaml?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">docker-compose.yaml</a>
 
 
 파일로 실행해봤지만 답변 시 <strong>CPU만 사용</strong>하는 것을 확인할 수 있었습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-cpu-docker.webp" alt="CPU를 사용하는 Docker Ollama"></p>
 <p>확인해보니 기본적으로 Docker로 실행할 경우 CPU를 사용합니다.
-<a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Ollama 문서</a>
+<a href="https://ollama.com/blog/ollama-is-now-available-as-an-official-docker-image?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Ollama 문서</a>
 
 를
 참조해서 GPU를 사용하도록 설정해보겠습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># Docker로 실행할 경우</span>
 </span></span><span style="display:flex;"><span>docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-</span></span></code></pre></div><p>Docker Compose로 실행할 때도 <a href="https://docs.docker.com/compose/gpu-support/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">공식 문서</a>
+</span></span></code></pre></div><p>Docker Compose로 실행할 때도 <a href="https://docs.docker.com/compose/gpu-support/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">공식 문서</a>
 
 를 참조해서 옵션을 추가할 수 있었습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#0f0"># Docker Compose로 실행할 경우</span>
@@ -199,7 +199,7 @@
 <p>GPU를 사용하는 것도 확인할 수 있습니다.</p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/ollama-gpu-docker.webp" alt="GPU 사용하는 Ollama Docker Container"></p>
 <h1 id="더-나은-결과물을-위해-추가로-고려해야-할-사항">더 나은 결과물을 위해 추가로 고려해야 할 사항</h1>
-<p><em><a href="https://platform.openai.com/docs/guides/optimizing-llm-accuracy?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Optimizing LLMs for accuracy</a>
+<p><em><a href="https://platform.openai.com/docs/guides/optimizing-llm-accuracy?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Optimizing LLMs for accuracy</a>
 
  - OpenAI Platform</em></p>
 <p><img src="/images/ai/ollama-openwebui-docker-compose/llm-optimizing-accuracy.webp" alt="LLM optimization context"></p>
@@ -212,64 +212,64 @@
 <ul>
 <li>입문 (전체적인 그림 그리기)
 <ul>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791140708598&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">(Book) 랭체인으로 LLM 기반의 AI 서비스 개발하기 - 서지영</a>
 
  - 입문</li>
-<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준</a>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791189909703&amp;utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">(Book) LLM을 활용한 실전 AI 애플리케이션 개발 - 허정준</a>
 
  - 입문 + 측정</li>
-<li><a href="https://youtu.be/cto0f7prJXs?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)</a>
+<li><a href="https://youtu.be/cto0f7prJXs?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">(Youtube) LLM 발전 동향과 LLM 기업 활용 이슈와 대안 - 신정규 대표 (래블업)</a>
 
 </li>
-<li><a href="https://youtu.be/cto0f7prJXs?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트</a>
+<li><a href="https://youtu.be/cto0f7prJXs?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">(Youtube) 프롬프트 엔지니어링보다 RAG를 못하면 AI에게 제대로된 답변 받을 수 없습니다 - 테디노트</a>
 
 </li>
 </ul>
 </li>
 <li>RAG
 <ul>
-<li><a href="https://www.elastic.co/kr/what-is/retrieval-augmented-generation/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">검색 증강 생성(RAG)이란?</a>
+<li><a href="https://www.elastic.co/kr/what-is/retrieval-augmented-generation/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">검색 증강 생성(RAG)이란?</a>
 
  - Elastic</li>
-<li><a href="https://youtu.be/T-D1OfcDW1M?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">What is Retrieval-Augmented Generation (RAG)?</a>
+<li><a href="https://youtu.be/T-D1OfcDW1M?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">What is Retrieval-Augmented Generation (RAG)?</a>
 
  - IBM Techonology</li>
-<li><a href="https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Retrieval augmented generation using Elasticsearch and OpenAI</a>
+<li><a href="https://cookbook.openai.com/examples/vector_databases/elasticsearch/elasticsearch-retrieval-augmented-generation?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Retrieval augmented generation using Elasticsearch and OpenAI</a>
 
  - OpenAI Cookbook</li>
-<li><a href="https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Elasticsearch Relevance Engine(ESRE)</a>
+<li><a href="https://www.elastic.co/kr/elasticsearch/elasticsearch-relevance-engine?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Elasticsearch Relevance Engine(ESRE)</a>
 
  - Elastic</li>
 </ul>
 </li>
 <li>파인 튜닝
 <ul>
-<li><a href="https://platform.openai.com/docs/guides/fine-tuning?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Fine-tuning</a>
+<li><a href="https://platform.openai.com/docs/guides/fine-tuning?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Fine-tuning</a>
 
  - OpenAI Platform</li>
 </ul>
 </li>
 <li>가드레일
 <ul>
-<li><a href="https://youtu.be/4zRc-k2KNKQ?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)</a>
+<li><a href="https://youtu.be/4zRc-k2KNKQ?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">LLM 생성 모델 - 챗봇 구축 전략 (HelpNow)</a>
 
 </li>
-<li><a href="https://www.ml6.eu/blogpost/the-landscape-of-llm-guardrails-intervention-levels-and-techniques?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">The landscape of LLM guardrails: intervention levels and techniques</a>
+<li><a href="https://www.ml6.eu/blogpost/the-landscape-of-llm-guardrails-intervention-levels-and-techniques?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">The landscape of LLM guardrails: intervention levels and techniques</a>
 
  - ML6</li>
-<li><a href="https://cookbook.openai.com/examples/how_to_use_guardrails?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">How to implement LLM guardrails</a>
+<li><a href="https://cookbook.openai.com/examples/how_to_use_guardrails?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">How to implement LLM guardrails</a>
 
  - OpenAI Cookbook</li>
-<li><a href="https://youtu.be/SwqusllMCnE?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">NVIDIA NeMo Guardrails: Full Walkthrough for Chatbots / AI</a>
+<li><a href="https://youtu.be/SwqusllMCnE?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">NVIDIA NeMo Guardrails: Full Walkthrough for Chatbots / AI</a>
 
 
 <ul>
-<li><a href="https://github.com/NVIDIA/NeMo-Guardrails?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">NVIDIA/NeMo-Guardrails</a>
+<li><a href="https://github.com/NVIDIA/NeMo-Guardrails?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">NVIDIA/NeMo-Guardrails</a>
 
  - GitHub repository</li>
 </ul>
 </li>
-<li><a href="https://www.guardrailsai.com/docs/examples/response_is_on_topic?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">On Topic Validation</a>
+<li><a href="https://www.guardrailsai.com/docs/examples/response_is_on_topic?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">On Topic Validation</a>
 
  - Guardrails AI</li>
 </ul>
@@ -279,22 +279,22 @@
 <hr>
 <ol>
 <li id="fn:1">
-<p><a href="https://aws.amazon.com/ko/what-is/large-language-model/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">대규모 언어 모델(LLM)이란 무엇인가요?</a>
+<p><a href="https://aws.amazon.com/ko/what-is/large-language-model/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">대규모 언어 모델(LLM)이란 무엇인가요?</a>
 
  - AWS&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2">
-<p><a href="https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">검색 증강 생성(RAG)이란 무엇인가요?</a>
+<p><a href="https://aws.amazon.com/ko/what-is/retrieval-augmented-generation/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">검색 증강 생성(RAG)이란 무엇인가요?</a>
 
  - AWS&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3">
-<p><a href="https://www.skelterlabs.com/blog/rag-vs-finetuning?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드</a>
+<p><a href="https://www.skelterlabs.com/blog/rag-vs-finetuning?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">RAG vs. 파인튜닝 :: 기업용 맞춤 LLM을 위한 선택 가이드</a>
 
  - 스켈터 랩스 Skelter Labs&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4">
-<p><a href="https://developer.nvidia.com/ko-kr/blog/nvidia-enables-trustworthy-safe-and-secure-large-language-model-conversational-systems/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">신뢰할 수 있고 안전하며 보안이 뛰어난 대규모 언어 모델 대화 시스템을 구현하는 NVIDIA</a>
+<p><a href="https://developer.nvidia.com/ko-kr/blog/nvidia-enables-trustworthy-safe-and-secure-large-language-model-conversational-systems/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">신뢰할 수 있고 안전하며 보안이 뛰어난 대규모 언어 모델 대화 시스템을 구현하는 NVIDIA</a>
 
  - NVIDIA&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>

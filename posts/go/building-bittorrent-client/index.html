@@ -50,7 +50,7 @@
 
 <blockquote>
 <ul>
-<li><a href="https://blog.jse.li/posts/torrent/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)</a>
+<li><a href="https://blog.jse.li/posts/torrent/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">Jesse Li의 Building a BitTorrent client from the ground up in Go (2020-01-04)</a>
 
 를 번역한 글입니다.</li>
 <li>저자의 허락을 받고 번역했습니다.</li>
@@ -58,7 +58,7 @@
 </blockquote>
 <p><strong>거두절미(tl;dr):</strong> The Pirate Bay를 방문하고 mp3 파일이 나타나기까지 무슨 일이 일어나는 것일까요?
 이 글에서는 데비안(Debian)을 다운로드할 수 있을 정도의 비트토렌트 프로토콜을 구현할 것입니다.
-바로 <a href="https://github.com/veggiedefender/torrent-client/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">소스 코드</a>
+바로 <a href="https://github.com/veggiedefender/torrent-client/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">소스 코드</a>
 
 를 보거나 <a href="#%eb%aa%a8%eb%91%90-%ed%95%a9%ec%b9%98%ea%b8%b0">마지막 부분</a>
 
@@ -71,10 +71,10 @@
 <p><img src="/images/go/bit-torrent/client-server-p2p.png" alt="client-server-p2p"></p>
 <p>이 프로토콜은 지난 20년 동안 진화했으며, 다양한 사람들과 조직들이 암호화(encryption),
 비공개 토렌트(private torrent), 새로운 피어 탐색법과 같은 기능들을 추가했습니다.
-우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 <a href="https://www.bittorrent.org/beps/bep_0003.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">2001년 규격</a>
+우리는 주말에 구현할 수 있을 정도의 프로젝트 사이즈로 만들기 위해 <a href="https://www.bittorrent.org/beps/bep_0003.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">2001년 규격</a>
 
 을 구현할 것입니다.</p>
-<p>저의 실험 재료로 적당한 350MB의 <a href="https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/?utm_source=markruler.github.io#indexlist" target="_blank" rel="noopener noreferrer">데비안 ISO</a>
+<p>저의 실험 재료로 적당한 350MB의 <a href="https://cdimage.debian.org/debian-cd/current/amd64/bt-cd/?utm_source=markruler.com&amp;utm_medium=blog#indexlist" target="_blank" rel="noopener noreferrer">데비안 ISO</a>
 
  파일을 사용하겠습니다.
 널리 사용되는 리눅스 배포판은 빠르고 협력적인 피어들이 많이 연결될 것입니다.
@@ -83,7 +83,7 @@
 <p>다음과 같은 문제가 있습니다. 우리는 비트토렌트로 파일을 다운로드하려고 하지만 P2P 프로토콜이고 파일을 다운로드할 피어를 찾을 수 없습니다.
 이것은 마치 새로운 도시로 이사해서 친구를 사귀는 것과 같습니다. 어쩌면 우리가 동네 술집이나 밋업 그룹에 가는 것처럼요!
 중앙 집중식 서버는 피어들이 서로를 알 수 있도록 알려주는 <strong>트래커(tracker)</strong> 의 핵심입니다.
-이들은 HTTP<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 웹 서버일 뿐이며, 데비안의 서버는 <a href="http://bttracker.debian.org:6969/stat?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">http://bttracker.debian.org:6969/stat</a>
+이들은 HTTP<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> 웹 서버일 뿐이며, 데비안의 서버는 <a href="http://bttracker.debian.org:6969/stat?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">http://bttracker.debian.org:6969/stat</a>
 
 에서 찾을 수 있습니다.</p>
 <p><img src="/images/go/bit-torrent/trackers.png" alt="trackers"></p>
@@ -129,17 +129,17 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 피어들에게서 이 조각들을 다운로드해서 토렌트 파일에 있는 해시와 대조해 보고, 조립해 보고, 파일을 가지게 되는 겁니다!</p>
 <p><img src="/images/go/bit-torrent/pieces.png" alt="pieces"></p>
 <p>이 메커니즘을 통해 각 조각의 무결성을 검증할 수 있습니다.
-비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 <strong>토렌트 포이즈닝</strong>(<a href="https://en.wikipedia.org/wiki/Torrent_poisoning?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">torrent poisoning</a>
+비트토렌트는 이를 통해 우발적인 데이터 손상이나 의도적인 <strong>토렌트 포이즈닝</strong>(<a href="https://en.wikipedia.org/wiki/Torrent_poisoning?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">torrent poisoning</a>
 
 ) 을 막을 수 있습니다.
-공격자가 역상 공격(<a href="https://en.wikipedia.org/wiki/Preimage_attack?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">preimage attack</a>
+공격자가 역상 공격(<a href="https://en.wikipedia.org/wiki/Preimage_attack?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">preimage attack</a>
 
 )을 통해 SHA-1을 해독할 수 없다면, 우리는 요청한 컨텐츠를 정확하게 받을 수 있습니다.</p>
 <p>B인코드 파서를 만드는 것은 정말 재미있겠지만, 파싱은 이 글의 목적이 아닙니다.
-이해하기 쉬운 Fredrik Lundh의 <a href="https://effbot.org/zone/bencode.htm?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">50줄짜리 파서</a>
+이해하기 쉬운 Fredrik Lundh의 <a href="https://effbot.org/zone/bencode.htm?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">50줄짜리 파서</a>
 
 를 찾았지만,
-이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/jackpal/bencode-go</a>
+이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/jackpal/bencode-go</a>
 
  을 사용했습니다.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">import</span> (
@@ -167,7 +167,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> &amp;bto, <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go</a>
 
 </p>
 <p>저는 구조체를 상대적으로 평평하게 유지하는 것을 좋아하고
@@ -191,7 +191,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> (bto bencodeTorrent) <span style="color:#ff0">toTorrentFile</span>() (TorrentFile, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// …</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.github.io#L120-L138" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/torrentfile.go?utm_source=markruler.com&amp;utm_medium=blog#L120-L138" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/torrentfile.go#L120-L138</a>
 
 </p>
 <h2 id="트래커로부터-피어-찾기">트래커로부터 피어 찾기</h2>
@@ -214,13 +214,13 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  base.RawQuery = params.<span style="color:#ff0">Encode</span>()
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> base.<span style="color:#ff0">String</span>(), <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go?utm_source=markruler.github.io#L19-L35" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/torrentfile/tracker.go?utm_source=markruler.com&amp;utm_medium=blog#L19-L35" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/torrentfile/tracker.go#L19-L35</a>
 
 </p>
 <p>여기서 중요한 것은 다음과 같습니다.</p>
 <ul>
 <li><strong>info_hash</strong>: 다운로드하려는 파일을 식별합니다. 이것은 우리가 B인코딩된 <code>info</code> 딕셔너리에서 계산한 infohash입니다. 트래커는 이를 사용하여 어떤 피어를 보여줄지 결정합니다.</li>
-<li><strong>peer_id</strong>: 트래커와 피어들에게 <code>우리</code>를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 <code>-TR2940-k8hj0wgej6ch</code>와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다. <a href="https://www.bittorrent.org/beps/bep_0020.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">(Peer ID Conventions)</a>
+<li><strong>peer_id</strong>: 트래커와 피어들에게 <code>우리</code>를 식별시키기 위한 20바이트 이름입니다. 이를 위해 20개의 랜덤 바이트를 생성합니다. 실제 비트토렌트 클라이언트는 클라이언트 소프트웨어와 버전을 식별하는 <code>-TR2940-k8hj0wgej6ch</code>와 같은 ID를 가지고 있습니다. 여기서 TR2940은 전송 클라이언트 2.94를 의미합니다. <a href="https://www.bittorrent.org/beps/bep_0020.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">(Peer ID Conventions)</a>
 
 </li>
 </ul>
@@ -264,7 +264,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> peers, <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/peers/peers.go</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/peers/peers.go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/peers/peers.go</a>
 
 </p>
 <h1 id="피어로부터-다운로드하기">피어로부터 다운로드하기</h1>
@@ -282,7 +282,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> <span style="color:#f00">nil</span>, err
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go?utm_source=markruler.github.io#L65-L69" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/client/client.go#L65-L69</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/client/client.go?utm_source=markruler.com&amp;utm_medium=blog#L65-L69" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/client/client.go#L65-L69</a>
 
 </p>
 <p>연결할 수 없는 피어에 너무 많은 시간을 낭비하지 않도록 시간 제한을 설정했습니다.
@@ -300,7 +300,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <ol>
 <li>항상 19로 지정된 프로토콜 식별자의 길이. (16진수로는 0x13)</li>
 <li><strong>pstr</strong>이라 불리는 프로토콜 식별자는 항상 <code>BitTorrent protocol</code>.</li>
-<li>모두 0으로 지정된 <strong>8개의 예약된 바이트</strong>. 그 중 일부를 1로 뒤집어서 특정 <a href="http://www.bittorrent.org/beps/bep_0010.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">확장 기능</a>
+<li>모두 0으로 지정된 <strong>8개의 예약된 바이트</strong>. 그 중 일부를 1로 뒤집어서 특정 <a href="http://www.bittorrent.org/beps/bep_0010.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">확장 기능</a>
 
 을 지원한다는 것을 나타냅니다. 하지만 지금은 그렇지 않으니 0으로 유지하겠습니다.</li>
 <li>우리가 원하는 파일을 식별할 앞서 계산한 <strong>infohash</strong>.</li>
@@ -338,7 +338,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// 역직렬화 수행</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">// ...</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/handshake/handshake.go</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/a83013d250dd9b4268cceace28e4cd82b07f2cbd/handshake/handshake.go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/handshake/handshake.go</a>
 
 </p>
 <h2 id="메시지-주고-받기">메시지 주고 받기</h2>
@@ -393,7 +393,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  copy(buf[<span style="color:#f60">5</span>:], m.Payload)
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> buf
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.github.io#L90-L103" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/message/message.go#L90-L103</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.com&amp;utm_medium=blog#L90-L103" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/message/message.go#L90-L103</a>
 
 </p>
 <p>스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
@@ -426,7 +426,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> &amp;m, <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.github.io#L105-L131" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/message/message.go#L105-L131</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/message/message.go?utm_source=markruler.com&amp;utm_medium=blog#L105-L131" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/message/message.go#L105-L131</a>
 
 </p>
 <h3 id="비트-필드-bitfields">비트 필드 (Bitfields)</h3>
@@ -457,7 +457,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 </span></span><span style="display:flex;"><span>  offset := index % <span style="color:#f60">8</span>
 </span></span><span style="display:flex;"><span>  bf[byteIndex] |= <span style="color:#f60">1</span> &lt;&lt; (<span style="color:#f60">7</span> - offset)
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/bitfield/bitfield.go</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/bitfield/bitfield.go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/bitfield/bitfield.go</a>
 
 </p>
 <h2 id="모두-합치기">모두 합치기</h2>
@@ -468,7 +468,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 상호 작용하는 피어들의 <strong>상태</strong>를 관리하는 것입니다.
 둘 다 고전적으로 어려운 문제입니다.</p>
 <h3 id="동시성-관리-채널channel을-큐queue로">동시성 관리: 채널(channel)을 큐(queue)로</h3>
-<p>Go에서는 <a href="https://blog.golang.org/share-memory-by-communicating?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">통신을 통해 메모리를 공유</a>
+<p>Go에서는 <a href="https://blog.golang.org/share-memory-by-communicating?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">통신을 통해 메모리를 공유</a>
 
 하며
 Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습니다.</p>
@@ -500,7 +500,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>  donePieces++
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>close(workQueue)
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L188-L214" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.com&amp;utm_medium=blog#L188-L214" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L188-L214</a>
 
 </p>
 <p>트래커에서 받은 피어마다 작업자 고루틴을 생성합니다.
@@ -544,7 +544,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>    results &lt;- &amp;pieceResult{pw.index, buf}
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L133-L169" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.com&amp;utm_medium=blog#L133-L169" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L133-L169</a>
 
 </p>
 <h3 id="상태-관리">상태 관리</h3>
@@ -578,7 +578,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L53-L83" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.com&amp;utm_medium=blog#L53-L83" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L53-L83</a>
 
 </p>
 <h3 id="요청을-보낼-시간입니다">요청을 보낼 시간입니다!</h3>
@@ -598,7 +598,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 <p><img src="/images/go/bit-torrent/pipelining.png" alt="pipelining"></p>
 <p>일반적으로 비트토렌트 클라이언트는 5개의 파이프라인 요청 큐를 유지했으며, 이것이 제가 사용할 값입니다.
 파이프라인을 늘리면 다운로드 속도가 최대 두 배까지 빨라진다는 것을 알았습니다.</p>
-<p>최신 클라이언트는 <a href="https://luminarys.com/posts/writing-a-bittorrent-client.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">적응형(adaptive)</a>
+<p>최신 클라이언트는 <a href="https://luminarys.com/posts/writing-a-bittorrent-client.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">적응형(adaptive)</a>
 
  큐 크기를
 사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
@@ -648,7 +648,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> state.buf, <span style="color:#f00">nil</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.github.io#L85-L123" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/p2p/p2p.go?utm_source=markruler.com&amp;utm_medium=blog#L85-L123" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/p2p/p2p.go#L85-L123</a>
 
 </p>
 <h3 id="maingo">main.go</h3>
@@ -676,16 +676,16 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </span></span><span style="display:flex;"><span>      log.<span style="color:#ff0">Fatal</span>(err)
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/main.go</a>
+</span></span></code></pre></div><p><a href="https://github.com/veggiedefender/torrent-client/blob/2bde944888e1195e81cc5d5b686f6ec3a9f08c25/main.go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/veggiedefender/torrent-client/main.go</a>
 
 </p>
-<p><a href="https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">데모 영상</a>
+<p><a href="https://asciinema.org/a/xqRSB0Jec8RN91Zt89rbb9PcL?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">데모 영상</a>
 
 </p>
 <h1 id="이것이-전부가-아닙니다">이것이 전부가 아닙니다</h1>
 <p>간결함을 위해 몇 가지 중요한 부분 코드만 포함시켰습니다.
 특히 글루 코드, 파싱, 유닛 테스트, 글자를 만드는 지루한 부분은 생략했습니다.
-관심 있으시다면 <a href="https://github.com/veggiedefender/torrent-client?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">전체 소스 코드</a>
+관심 있으시다면 <a href="https://github.com/veggiedefender/torrent-client?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">전체 소스 코드</a>
 
 를 확인하세요.</p>
 <hr>
@@ -704,7 +704,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 <hr>
 <ol>
 <li id="fn:1">
-<p>일부 트래커는 대역폭을 절약하기 위해 <a href="http://bittorrent.org/beps/bep_0015.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">[UDP]</a>
+<p>일부 트래커는 대역폭을 절약하기 위해 <a href="http://bittorrent.org/beps/bep_0015.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">[UDP]</a>
 
  바이너리 프로토콜을 사용합니다&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
