@@ -9,8 +9,9 @@ tags:
   - network
   - security
   - mitm
-categories:
   - translate
+categories:
+  - wiki
 ---
 
 - [How did Facebook intercept their competitor's encrypted mobile app traffic?](https://doubleagent.net/onavo-facebook-ssl-mitm-technical-analysis/)

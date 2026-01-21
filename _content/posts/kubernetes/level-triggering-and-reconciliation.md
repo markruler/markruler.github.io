@@ -9,8 +9,9 @@ socialshare: true
 tags:
   - kubernetes
   - cloud
-Categories:
   - translate
+Categories:
+  - wiki
 ---
 
 - James Bowes([@jrbowes](https://twitter.com/jrbowes))의

@@ -111,7 +111,7 @@ New status:     enabled
 1. 운영 환경에 반영하기 위해 배포 버튼을 누른다.
    - 쉘 스크립트를 활용해 자동으로 새로운 버전의 애플리케이션을 배포하고 헬스체크한다.
 
-      ```bash
+      ```shell
       #!/usr/bin/env bash
 
       while ! curl --silent --output /dev/null --head --fail --max-time 3 --location ${1}; do
@@ -136,7 +136,7 @@ New status:     enabled
 `s1` 과 `s2` 서버에는 CentOS 7이 설치되어있다.
 해당 OS에서는 httpd를 **2.4.6 버전**까지만 업데이트 할 수 있다.
 
-```bash
+```shell
 > yum info httpd
 ...
 Available Packages
@@ -155,7 +155,7 @@ IDC 물리 서버를 사용하고 있었기 때문에 OS 교체는 상당히 큰
 설정 파일(`httpd.conf`)은 기존 설정을 최대한 그대로 사용하기로 했다.
 `volumes` 경로는 어느 환경에서든 동일하도록 가급적 절대 경로를 사용했다.
 
-```bash
+```shell
 > cd ${HOME}/httpd
 > ls
 docker-compose.yaml  httpd.conf
@@ -202,20 +202,20 @@ networks:
 
 `httpd -t` 명령어로 서버 실행 전 설정 파일을 검증할 수 있다.
 
-```bash
+```shell
 sudo docker compose run --rm slb httpd -t
 ```
 
 `up` 명령어로 서버를 실행한다.
 
-```bash
+```shell
 # sudo docker compose up --detach
 sudo docker compose -f ${HOME}/httpd/docker-compose.yaml up -d
 ```
 
 `docker inspect` 명령어로 실제 실행된 컨테이너의 정보를 확인할 수 있다.
 
-```bash
+```shell
 sudo docker inspect slb
 ```
 
@@ -224,7 +224,7 @@ sudo docker inspect slb
 iptables 서비스를 다시 시작하면 `/etc/sysconfig/iptables` 파일에
 있는 규칙들만 적용되기 때문에 Docker에서 설정하는 iptables 규칙이 사라진다.
 
-```bash
+```shell
 > systemctl restart iptables
 ```
 
@@ -233,7 +233,7 @@ IDC 매니저가 우리 회사 측 요청으로 iptables 규칙을 변경하고 
 해당 서버의 Docker 네트워크 규칙들이 사라져서 컨테이너가 실행되지 못하고 있었다.
 현재는 iptables를 재실행할 때 Docker도 같이 재실행한다.
 
-```bash
+```shell
 > systemctl restart docker
 > iptables -nvL
 ```
@@ -242,7 +242,7 @@ IDC 매니저가 우리 회사 측 요청으로 iptables 규칙을 변경하고 
 Docker 데몬은 기본적으로 `docker0` 라는 브릿지 네트워크 인터페이스를 사용하는데 IP address range를
 [172.17.0.1/16](https://github.com/moby/moby/blob/a77317882d010b884a9101c6ad0b2d7db141082f/libnetwork/docs/network.md) 으로 설정한다.
 
-```bash
+```shell
 > ip -br -c a
 lo               UNKNOWN        127.0.0.1/8 ::1/128
 docker0          DOWN           172.17.0.1/16 # HERE!
@@ -263,7 +263,7 @@ EOF
 Docker 데몬을 재시작하면 `docker0` 네트워크 인터페이스가 변경되어 있을 것이다.
 이제 컨테이너에서 웹 애플리케이션으로 패킷을 전달할 수 있도록 iptables 규칙을 추가한다.
 
-```bash
+```shell
 > vi /etc/sysconfig/iptables
 
 -A INPUT -m state --state NEW -s 172.16.0.0/12 -m tcp -p tcp --dport 38888 -j ACCEPT
@@ -274,7 +274,7 @@ Docker 데몬을 재시작하면 `docker0` 네트워크 인터페이스가 변�
 이미 있는 인터페이스가 아닌 추가 인터페이스를 생성하기 때문이다.
 만약 `docker0` 와 동일한 `172.17.0.1/16` 으로 생성하려고 시도하면 아래와 같은 에러가 발생한다.
 
-```bash
+```shell
 failed to create network httpd_default: Error response from daemon: Pool overlaps with other one on this address space
 ```
 
@@ -428,7 +428,7 @@ Layer 4 Switch에서 1번 서버와 2번 서버 상태를 동시에 교체할 �
 1번 서버를 `enable`, 2번 서버를 `disable` 상태로 변경한 후 `apply` 하면
 다음과 같은 에러가 발생할 수 있다.
 
-```bash
+```shell
 Service Unavailable - Zero size object
 
 The server is temporarily unable to service your request. Please try again later.

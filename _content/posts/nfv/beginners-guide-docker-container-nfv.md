@@ -9,8 +9,9 @@ tags:
   - nfv
   - virtualization
   - container
-categories:
   - translate
+categories:
+  - wiki
 ---
 
 > - [Faisal Khan의 A Beginner's Guide to Docker Container in NFV](https://telcocloudbridge.com/blog/beginners-guide-docker-container-nfv/)를 번역한 글입니다.

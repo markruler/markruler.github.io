@@ -25,7 +25,7 @@ Categories:
 설명하는 데에 책의 대부분을 차지합니다.
 다만 200 페이지에 많은 내용을 압축한 만큼 도해는 많지 않습니다.
 
-먼저 저자의 [katacoda (An Introduction to Containers for Go programmers)](https://www.katacoda.com/lizrice/courses/containers-and-go)로
+먼저 저자의 [katacoda(An Introduction to Containers for Go programmers)](https://www.katacoda.com/lizrice/courses/containers-and-go)로
 실습해보시거나 [발표(What is a container, really? Let's write one in Go from scratch)](https://youtu.be/HPuvDm8IC-4)를 보시길 추천드립니다.
 
 # 저자 리즈 라이스에 대해
@@ -35,7 +35,7 @@ Categories:
 저자는 수년 전부터 꾸준히 `컨테이너`와 `보안`에 관련된 좋은 글을 내고 발표를 하고 있습니다.
 저는 한빛미디어의 <나는 리뷰어다 2021> 리뷰어로 선정되어 책의 리뷰를 쓰게 되었지만
 이전부터 저자의 [블로그](https://www.lizrice.com/)나
-[트위터](https://twitter.com/lizrice)를 챙겨볼 정도로 팬이 되었습니다.
+[트위터](https://twitter.com/lizrice)를 챙겨볼 정도로 팬입니다.
 
 # 대상 독자
 

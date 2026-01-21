@@ -9,9 +9,9 @@ tags:
   - kubernetes
   - nfv
   - virtualization
-  - cloud
-categories:
   - translate
+categories:
+  - wiki
 ---
 
 - [쿠버네티스 공식 문서](https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/)를 번역했습니다.

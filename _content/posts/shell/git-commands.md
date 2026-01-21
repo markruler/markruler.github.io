@@ -1221,7 +1221,7 @@ This reverts commit 4ea42dbe6580e4f064091cd50b3c7cb2ab8b0e9b.
 git blame README.md
 # 0f6d7dc1 (Changsu Im 2021-12-01 23:47:58 +0900 32) ### Bash
 # dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 33)
-# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```bash
+# dd2a98b2 (cxsu       2020-12-28 14:27:42 +0900 34) ```shell
 ```
 
 ```sh

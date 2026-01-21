@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Upload VOD" /><link rel="icon" href="/images/favicon.ico" /><title>웹과 멀티미디어: VOD 업로드 | 임창수</title>
+
+	
+	<link rel="stylesheet" href="/scss/style.css" type="text/css" media="all" />
+
+	</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="site-nav">
+      <ul class="main-menu">
+        <li>
+          <a href="https://markruler.github.io/">Home</a>
+        </li>
+        
+        <li>
+          <a href="/about">About</a>
+        </li>
+        
+        <li>
+          <a href="/posts">Posts</a>
+        </li>
+        
+        <li>
+          <a href="/categories">Categories</a>
+        </li>
+        
+        <li>
+          <a href="/tags">Tags</a>
+        </li>
+        
+        <li>
+          <a href="/index.xml">RSS Feed</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </header>
+  
+
+<main class="content">
+
+
+<h1>웹과 멀티미디어: VOD 업로드</h1>
+
+<h1 id="개요">개요</h1>
+<p><strong>VOD</strong>(Video on Demand) 업로드란 사용자가 사전에 녹화된 비디오 콘텐츠를 VOD 플랫폼이나 미디어 서버에 <strong>파일 형태로 전송</strong>하는 과정을 말합니다.
+라이브 스트리밍이 실시간으로 영상을 전송하는 것과 달리, VOD는 영상을 <strong>서버에 먼저 저장</strong>하고 <strong>처리</strong>한 후에 사용자들이 원하는 시간에 재생할 수 있도록 제공합니다.
+이 글에서는 라이브 스트리밍이 아닌 VOD 업로드에 초점을 맞추어, 웹에서의 VOD 업로드 프로세스와 관련 기술을 살펴보겠습니다.</p>
+<h1 id="vod-업로드-워크플로우">VOD 업로드 워크플로우</h1>
+<p>클라이언트는 HTTP를 통해 서버로 파일을 전송할 수 있습니다.
+파일 업로드 API를 통해 업로드하거나 서버로부터 업로드에 필요한 URL(presigned URL)을 요청합니다.
+그럼 서버는 업로드를 식별할 수 있는 고유 ID 혹은 업로드 전용 URL을 반환합니다.</p>
+<p>클라이언트는 선택한 비디오 파일을 서버로 전송합니다.
+이때 파일이 매우 클 경우 <strong>청크(chunk)로 나누어</strong> 전송하는 기법이 활용됩니다.
+청크 단위로 업로드하면 전송 중 연결이 끊어지더라도 중단된 지점부터 업로드를 <strong>재개</strong>할 수 있다는 이점이 있습니다.
+예를 들어 5 MiB 청크 단위로 나눠서 전송하는 순차적으로 또는 병렬로 업로드하고,
+각 청크에는 미리 받은 업로드 ID와 청크 번호, ETag, 바이트 범위 등의 메타데이터를 함께 전송합니다.
+업로드 도중 네트워크 문제가 발생하면 마지막으로 전송한 청크 이후부터 이어서 전송하면 됩니다.</p>
+<p>모든 청크가 전송되면 클라이언트는 <strong>업로드 완료</strong> 신호를 서버에 보냅니다.
+서버는 받은 청크를 올바른 순서로 <strong>조립하여 하나의 파일로 완성</strong>하고, 업로드가 성공적으로 끝났음을 응답합니다.
+이후 이 파일에 대해 <strong>트랜스코딩(인코딩)</strong>, <strong>썸네일 생성</strong>, <strong>HLS/DASH 세그멘테이션</strong> 등의 후처리가 진행됩니다.</p>
+<p>대용량 비디오 파일을 업로드할 경우에는 위에서 언급한 <strong>청크 단위 업로드와 이어받기(resumable upload)</strong> 기능이 특히 중요합니다.
+업로드 중 일시적 네트워크 불안정이 있더라도 처음부터 다시 하지 않고 중단된 부분부터 이어서 전송할 수 있어 업로드 효율과 사용자 경험이 크게 향상됩니다.
+이러한 기능을 구현하기 위해 <a href="https://tus.io/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Tus 프로토콜</a>
+
+이 활용되기도 합니다.</p>
+<h1 id="http와-파일-업로드">HTTP와 파일 업로드</h1>
+<p>일반적으로 웹 사이트에서 VOD 업로드하기에는 <strong>HTTP</strong>를 사용합니다.
+HTTP는 HTTP/1.1, HTTP/2, HTTP/3 버전이 있으며,
+각 버전은 전송 방식과 성능 특성에 차이가 있습니다.</p>
+<p>기존의 <strong>HTTP/1.1은 텍스트 기반</strong> 프로토콜로서 하나의 커넥션에서 한 번에 하나의 요청/응답만 처리합니다.
+다중 요청을 병렬로 보내기 위해 브라우저는 도메인당 여러 TCP 커넥션을 여는 식으로 우회했으나,
+근본적으로는 커넥션마다 순차 처리로 인해 <strong>HOL(Head-of-Line) Blocking</strong> 문제가 있습니다.
+파일 업로드의 경우 클라이언트가 하나의 파일을 보내면 <strong>TCP</strong> 상에서 데이터를 스트리밍하며 전송합니다.
+HTTP/1.1은 <a href="https://en.wikipedia.org/wiki/Chunked_transfer_encoding?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Chunked Transfer Encoding</a>
+
+을 통해
+콘텐츠 길이를 모른 채 스트리밍 전송할 수 있지만 결국 순차적으로 전달됩니다.
+장점은 구현이 단순하고 광범위한 호환성을 지니며 모든 시스템이 HTTP/1.1을 이해한다는 점입니다.
+다만 대용량 업로드 시 하나의 TCP 커넥션에 의존하기 때문에 한 패킷이라도 손실되면 해당 패킷이 재전송될 때까지 전송이 정체될 수 있습니다.</p>
+<p><strong>HTTP/2(SPDY)는 이진 프레이밍 기반</strong> 프로토콜로, 하나의 TCP 연결 위에서 <strong>다중 스트림</strong>을 동시 전송할 수 있는 <strong>멀티플렉싱(Multiplexing)</strong> 을 지원합니다.
+이를 통해 여러 개의 요청/응답을 병렬로 주고받을 수 있고, 헤더도 HPACK으로 압축하여 효율을 높입니다.
+단일 파일을 업로드하는 경우 눈에 띄는 속도 향상이 발생하지 않을 수도 있지만,
+여러 개의 업로드나 요청이 동시에 있을 때는 하나의 연결로 모두 처리하므로 연결 설정 오버헤드가 감소하고 효율적인 대역폭 활용이 가능합니다.
+하지만 HTTP/2는 여전히 기본 전송으로 TCP를 사용하므로, <strong>TCP 레벨의 HOL 블로킹</strong> 문제에서 완전히 자유롭진 않습니다.
+하나의 패킷 손실로 인해 해당 TCP 연결에 매핑된 모든 스트림 전송이 지연될 수 있기 때문입니다.
+특히 HTTP/2는 TCP에 의존하면서도 <strong>스트림별 흐름 제어(Window)</strong> 를 추가로 도입했는데, 기본 설정으로 스트림당 초기 윈도우 크기가 65,535바이트로 제한됩니다.
+이러한 추가 흐름 제어는 네트워크 <strong>대역폭-지연 곱(BDP)</strong> 이 큰 환경에서 병목을 일으킬 수 있습니다.
+<a href="https://blog.cloudflare.com/ko-kr/delivering-http-2-upload-speed-improvements/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cloudflare의 실험</a>
+
+을 보면
+HTTP/1.1에서는 단일 버퍼를 사용하고 TCP 소켓 버퍼가 흐름 제어를 합니다.
+TCP 소켓 버퍼는 최근 OS에서 자동으로 조정됩니다.
+HTTP/2에서도 애플리케이션 계층에서 수신 흐름 제어를 하지만,
+NGINX를 사용하면 수신 버퍼에 고정 크기를 사용합니다.
+이는 현재 네트워크의 <a href="https://en.wikipedia.org/wiki/Bandwidth-delay_product?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">BDP(Bandwidth-delay product)</a>
+
+
+가 정해진 수신 버퍼 크기보다 큰 경우 업로드 속도를 제약하고,
+버퍼 크기가 너무 작은 경우에 HTTP/2 흐름 제어에서 병목이 발생합니다.
+그래서 버퍼 크기를 조정하거나 자동 조정(autotune) 설정을 고려해야 합니다.</p>
+<p><strong>HTTP/3(QUIC)는 UDP 기반</strong>으로 구현된 전송 프로토콜로, TCP의 단점을 개선하기 위해 등장했습니다.
+HTTP/3에서는 TCP 대신 <strong>UDP를 사용</strong>하므로, 패킷 손실 시에도 스트림 간 간섭이 줄어듭니다.
+즉, 하나의 스트림에서 패킷이 손실되더라도 그 패킷만 재전송하면 되고, 다른 스트림의 전송에는 <strong>HOL 블로킹이 발생하지 않습니다</strong>.
+또한 QUIC은 TCP+TLS 핸드셰이크 과정을 통합하여 초기 연결 설정을 빠르게 수행하므로, <strong>0-RTT</strong>로 연결을 설정해 <strong>왕복 지연(RTT)을 줄이는</strong> 기능도 제공합니다.
+이러한 특성 덕분에 HTTP/3는 대역폭이 크거나 지연이 큰 네트워크 환경에서 더 나은 업로드 성능을 기대할 수 있습니다.
+다만, 개별 스트림 내의 전송은 여전히 순서를 보장하므로 손실 패킷이 있을 경우 해당 스트림만 일시 정지되는 것은 TCP와 유사합니다.
+HTTP/3의 또 다른 특징은 <strong>TLS 1.3 암호화가 의무화</strong>되어 보안이 기본적으로 강화되었다는 점입니다.
+현재 HTTP/3는 최신 브라우저들(Chrome, Firefox, Edge, Safari 등)에서 지원되고 있으며,
+서버도 별도 설정으로 QUIC을 활성화해 둘 경우 클라이언트가 자동으로 HTTP/3를 시도합니다.
+다만 완벽한 지원을 위해서는 양쪽이 모두 HTTP/3를 사용 가능해야 하고,
+아직까지는 HTTP/1.1이나 HTTP/2에 비해 <strong>지원 범위가 제한적</strong>이므로
+호환성을 위해 HTTP/3와 이전 버전을 <strong>병행 지원</strong>하는 형태로 운영하는 경우가 많습니다.</p>
+<blockquote>
+<p>이것을 살펴본 이유는 유튜브 때문이었습니다.
+제가 업로드 기능을 구현하기 위해 살펴본 웹 서비스는 유튜브(Youtube), 드롭박스(Dropbox), 틱톡(Tiktok), 네이버 TV(NAVER TV)가 있습니다.
+모두 청크 업로드 기반으로 구현되었으며, HTTP 버전은 제각각이었습니다.
+신기했던 점은 모바일 웹 브라우저(Google Chrome)에서 HTTP/3를 사용하는 유튜브만 PC 웹과 거의 비슷한 업로드 속도를 보장했습니다.
+아직까지도 유튜브가 어떤 마법을 부렸는지 모르겠습니다.</p>
+</blockquote>
+<h1 id="vod-업로드-서버-구현">VOD 업로드 서버 구현</h1>
+<p>대규모 미디어 서비스를 개발할 때 저장 공간을 <strong>클라우드 스토리지</strong> 혹은 <strong>온프레미스 서버</strong>를 선택할 수 있습니다.
+다만 어디에 저장하든 업로드 구현 방식은 유사합니다.</p>
+<p><strong>Amazon S3</strong>는 대용량 객체 업로드를 위해 <strong>Multipart Upload API</strong>를 제공합니다.
+멀티파트 업로드를 사용하면 하나의 파일을 여러 &ldquo;파트(part)&ldquo;로 나누어 <strong>병렬로 업로드</strong>한 후 최종 조립하여 하나의 객체로 만들 수 있습니다.
+업로드 절차는 (1) <strong>업로드 초기화</strong> 요청을 보내 고유한 Upload ID를 발급받고,
+(2) 파일을 청크 단위로 여러 번 나눠 각 부분을 <strong>업로드</strong>하며,
+(3) 모든 파트가 업로드되면 <strong>완료(Complete)</strong> 요청으로 각 파트의 정보를 보내 객체 생성을 마무리하는 3단계로 이뤄집니다.</p>
+<p>멀티파트 업로드의 가장 큰 장점은 <strong>신뢰성과 속도의 향상</strong>입니다.
+네트워크 문제로 일부 파트 전송이 실패해도 전체 업로드에 영향 없이 해당 부분만 재전송하면 되고,
+여러 파트를 동시에 올릴 수 있어 <strong>가용한 네트워크 대역폭을 최대한 활용</strong>할 수 있습니다.
+또한 파일 크기를 미리 몰라도 업로드를 시작할 수 있고, 필요에 따라 업로드를 일시 중지했다가 재개할 수도 있습니다.
+AWS에서는 <strong>100MB 이상의 파일</strong>에 대해서는 멀티파트 업로드 사용을 권장하고 있고<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>,
+특히 수 GB에 달하는 영상 파일의 경우 멀티파트 업로드는 사실상 필수적인 기능입니다.
+S3 멀티파트 업로드는 AWS SDK가 이러한 절차를 내부적으로 처리해주므로 개발자가 일일이 HTTP 요청을 관리하지 않아도 쉽게 사용할 수 있습니다.
+클라이언트 측에서는 AWS의 사전 서명 URL 기능을 이용해 각 파트를 <strong>브라우저에서 바로 S3로 업로드</strong>하도록 할 수도 있습니다.
+단, S3에 업로드된 후에 영상 처리가 필요하다면 AWS Lambda 등을 연계하거나, 업로드 완료 신호를 애플리케이션 서버로 받아 후처리를 진행해야 합니다.</p>
+<p><strong>자체적으로 제어하는 미디어 서버나 스토리지로 파일을 업로드할 경우</strong>에도 구현 방식은 동일합니다.
+가장 단순히는 클라이언트가 HTTP POST/PUT으로 <strong>전체 파일을 한 번에 전송</strong>하고 서버가 이를 받아 저장하는 방법이 있습니다.
+이 경우 구현은 쉽지만, 전송 도중 실패하면 <strong>처음부터 다시 업로드</strong>해야 한다는 문제가 있습니다.
+따라서 앞서 언급한 청크 업로드/재개 기능을 자체 서버에서도 구현하는 것이 좋습니다.</p>
+<p>일반적인 접근은 S3 멀티파트와 유사하게 <strong>업로드 세션 관리</strong>를 하는 것입니다.
+예를 들어 <code>/upload/init</code> 엔드포인트를 만들어 클라이언트가 호출하면 고유 Upload ID를 응답하고,
+클라이언트는 파일을 나눈 각 조각을 <code>/upload/&lt;ID&gt;</code>로 번호와 함께 보내도록 합니다.
+서버는 각 조각을 일시적으로 저장하거나 최종 파일에 <strong>바이트 범위로 직접 기록</strong>하고, 모든 조각을 다 받으면 완료시켜 저장을 마칩니다.
+이때 HTTP/1.1의 <strong>Range 헤더</strong>나 <code>Content-Range</code> 헤더를 활용하여 <strong>임의 위치 쓰기</strong>를 구현할 수도 있지만,
+별도의 경로로 조각 번호를 전송하는 식으로 많이 구현합니다.
+표준 방식은 없습니다.</p>
+<p>이러한 기능을 직접 구축할 경우 앞서 언급했듯 <strong>Tus 프로토콜</strong> 같은 표준화된 솔루션을 채택할 수도 있습니다.
+Tus는 <strong>HTTP 기반의 오픈 프로토콜</strong>로 파일 업로드를 구간별로 수행하고 중단 시 이어받기를 할 수 있게 해주며,
+서버 구현(tusd 등)과 클라이언트 구현이 여러 언어로 공개되어 있습니다.
+자체 서버에 Tus를 구축하면 클라이언트는 마치 S3 멀티파트처럼 안정적인 업로드를 할 수 있습니다.</p>
+<p>자체 서버 업로드의 장점은 <strong>선택의 자유도</strong>입니다.
+예를 들어 업로드와 동시에 데이터베이스에 메타데이터를 기록하거나, 전송 중간에 실시간으로 썸네일을 생성하는 등 서비스를 특화시킬 수 있습니다.
+반면 단점은 멀티파트 처리, 오류 복구, 보안 등을 모두 책임져야 한다는 것입니다.
+서비스 규모가 커지면 이러한 업로드 전용 모듈을 별도로 구성하고 로드밸런싱, 분산 파일 시스템과 연계하는 등의 추가 설계도 필요합니다.</p>
+<p>요약하면 <strong>AWS S3와 같은 클라우드 스토리지의 멀티파트 업로드</strong>는 이미 <strong>검증된 대용량 업로드 메커니즘</strong>을 제공하므로 편리하고 신뢰할 만하며,
+자체 서버를 구축하는 경우 <strong>더 큰 유연성</strong>과 <strong>통합성</strong>을 얻는 대신 그 복잡도를 직접 관리해야 합니다.
+어떤 방식을 선택하든, 핵심은 대용량 업로드 시 <strong>전송 단위를 나누고 병렬화</strong>하며 <strong>오류 발생 시 재개</strong>할 수 있게 하는 것입니다.</p>
+<h1 id="linux-서버에서-업로드-성능-분석과-병목-지점-진단하기">Linux 서버에서 업로드 성능 분석과 병목 지점 진단하기</h1>
+<p>큰 사이즈의 데이터를 전송하는 미디어 서버 개발자에게는 업로드 기능을 구현한 뒤 실제 <strong>성능을 측정</strong>하고 <strong>병목(Bottleneck)을 찾아내는</strong> 일이 중요합니다.
+업로드 속도는 네트워크, 디스크 I/O, CPU 등 다양한 요소의 영향을 받으므로, 전체 시스템을 살펴보아야 최적화 지점을 파악할 수 있습니다.
+리눅스 환경에서 유용한 성능 지표 확인 도구와 그 활용 방법은 다음과 같습니다:</p>
+<ul>
+<li><strong><code>iostat</code></strong> – <strong>디스크 I/O 성능</strong>을 모니터링하는 도구입니다.
+업로드된 파일을 디스크에 기록하는 경우, 디스크 쓰기 속도가 업로드의 병목이 될 수 있습니다.
+<code>iostat -mx 1</code> 등의 명령을 통해 CPU 사용률과 함께 디스크별 IOPS, 처리량, <code>await</code>(평균 대기 시간), <code>%util</code>(디바이스 사용률) 등을 실시간으로 확인할 수 있습니다.
+만약 업로드 중 디스크 <code>%util</code>이 100%에 가깝게 나오고 대기 시간이 크다면, 저장 장치의 한계로 인해 업로드가 느려지고 있음을 의미합니다.
+이 경우 SSD로의 교체나 레이드 구성, 비동기 I/O 도입 등을 고려해야 합니다.</li>
+<li><strong><code>iftop</code></strong> – <strong>네트워크 대역폭 사용량</strong>을 실시간으로 보여주는 툴입니다.
+업로드 시 초당 몇 Mb/s의 트래픽이 발생하는지, 어떤 소스/목적지 IP와 포트에 얼마만큼의 대역을 쓰고 있는지를 확인할 수 있습니다.
+예를 들어 <code>iftop -P</code> 옵션을 주면 포트 번호까지 포함하여 각 연결별 송수신 속도를 볼 수 있습니다.
+이를 통해 클라이언트-서버 간 <strong>업로드 트래픽이 네트워크 회선의 한계를 가까이 사용하고 있는지</strong>, 아니면 네트워크에는 여유가 있는데 다른 요인으로 느린 것인지를 판단할 수 있습니다.
+또한 업로드 중 <strong>예상치 못한 다른 트래픽이 발생</strong>하여 대역을 잠식하고 있지는 않은지도 파악할 수 있습니다.</li>
+<li><strong><code>netstat</code> (또는 <code>ss</code>)</strong> – <strong>네트워크 상태와 통계</strong>를 확인하는데 쓰입니다.
+<code>netstat -anp</code>로 현재 열려 있는 소켓 연결들의 상태를 확인하고, <code>netstat -s</code>로 TCP/UDP의 상세 통계를 볼 수 있습니다.
+예를 들어 <code>netstat -s</code> 출력 중 재전송 횟수나 패킷 손실 관련 카운터가 비정상적으로 높다면 업로드 지연이 <strong>패킷 재전송/손실</strong> 때문에 발생하는 것일 수 있습니다.
+또한 동시 업로드 연결 수가 많을 때 소켓이 TIME_WAIT이나 CLOSE_WAIT 상태로 지나치게 쌓여 있지는 않은지도 살펴봐야 합니다 (커널 튜닝으로 개선 가능).
+최신 리눅스에서는 <code>ss -s</code> 명령으로 유사한 통계를 볼 수 있으며, <code>ss -tuna</code>로 소켓 상태를 더 빠르게 조회할 수 있습니다.</li>
+</ul>
+<p>이 밖에도 <a href="/posts/network/wireshark/">tcpdump</a>
+
+,
+<strong>dstat</strong>, <strong>vmstat</strong>, <strong>sar</strong>, <strong>nload</strong>, <strong>NetHogs</strong> 등의 도구를 활용하여 시스템 전반의 자원 사용률을 모니터링할 수 있습니다.</p>
+<p>핵심은 업로드 성능을 종합적으로 살펴보는 것입니다.
+<strong>네트워크 대역폭, 디스크 쓰기 속도, CPU, 메모리 버퍼</strong> 등이 모두 원활한지 확인하고,
+가장 <strong>높은 지연이나 사용률</strong>을 보이는 자원이 병목일 가능성이 큽니다.
+이를 근거로 하드웨어를 증설하거나, 코드/설정을 최적화하여 업로드 성능을 향상시킬 수 있습니다.</p>
+<hr>
+<h1 id="결론">결론</h1>
+<p>사용자들에게 끊김없고 효율적인 VOD 업로드 경험을 제공하기 위해서는 단순히 파일을 보내는 일을 넘어,
+프로토콜에 대한 이해, 대용량 파일을 위한 기술 (청크 분할, 멀티파트), 그리고 모니터링과 성능 최적화까지 폭넓은 고려가 필요합니다.</p>
+<h1 id="더-읽을거리">더 읽을거리</h1>
+<ul>
+<li>가상 면접 사례로 배우는 대규모 시스템 설계 기초 (유튜브 설계 챕터) | 알렉스 쉬</li>
+<li>시스템 성능 분석과 최적화 | 브렌던 그레그</li>
+<li>속도 체크
+<ul>
+<li><a href="https://speed.cloudflare.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Cloudflare Speed Test</a>
+
+</li>
+<li><a href="https://fast.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Netflix Fast.com</a>
+
+</li>
+<li><a href="https://www.google.com/search?q=speed&#43;test&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Google Speed Test</a>
+
+</li>
+<li><a href="https://fast.com/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Netflix Fast.com</a>
+
+</li>
+<li><a href="https://www.speedtest.net/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Speedtest by Ookla</a>
+
+</li>
+</ul>
+</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/mpuoverview.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">원문</a>
+
+:
+It&rsquo;s a best practice to use multipart upload for objects that are 100 MB or larger instead of uploading them in a single operation.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+</main>
+	
+<footer>
+	<p>&copy; 임창수, Since 2020.</p>
+</footer>
+
+</body>
+</html>

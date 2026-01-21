@@ -46,7 +46,7 @@ OZ e-Form의 클라이언트 프로그램(OZ e-Form Designer)은 Windows만 지�
 이런 프로그램을 제작해 본 경험자가 없어서 막연히 ChatGPT에게 물어봤습니다.
 가장 먼저 답변해준 방법은 [wkhtmltopdf](https://wkhtmltopdf.org/)였습니다.
 
-```bash
+```shell
 # 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.
 apt-get -y install fonts-nanum wkhtmltopdf
 ```
@@ -66,7 +66,7 @@ apt-get -y install fonts-nanum wkhtmltopdf
 기존에 Python으로 작성된 코드를 재사용하려고 Javascript 기반의 [puppeteer](https://github.com/puppeteer/puppeteer)
 대신 python 기반의 [pyppeteer](https://github.com/pyppeteer/pyppeteer)을 사용했습니다.
 
-```bash
+```shell
 # Ubuntu 22.04에서 google-chrome 명령어 설치
 apt-get update \
     && apt-get install -y wget gnupg \

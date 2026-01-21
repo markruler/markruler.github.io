@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Simple Network Management Protocol" /><link rel="icon" href="/images/favicon.ico" /><title>네트워크 장비 모니터링을 위한 SNMP | 임창수</title>
+
+	
+	<link rel="stylesheet" href="/scss/style.css" type="text/css" media="all" />
+
+	</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="site-nav">
+      <ul class="main-menu">
+        <li>
+          <a href="https://markruler.github.io/">Home</a>
+        </li>
+        
+        <li>
+          <a href="/about">About</a>
+        </li>
+        
+        <li>
+          <a href="/posts">Posts</a>
+        </li>
+        
+        <li>
+          <a href="/categories">Categories</a>
+        </li>
+        
+        <li>
+          <a href="/tags">Tags</a>
+        </li>
+        
+        <li>
+          <a href="/index.xml">RSS Feed</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </header>
+  
+
+<main class="content">
+
+
+<h1>네트워크 장비 모니터링을 위한 SNMP</h1>
+
+<p>주로 네트워크 장비의 Metric을 확인하는 모니터링 용도로 사용하지만,
+SNMP를 지원하는 컴퓨팅 머신이라면 모두 활용할 수 있습니다.</p>
+<ul>
+<li><a href="#%ec%a0%84%ec%a0%9c-%ec%a1%b0%ea%b1%b4">전제 조건</a>
+
+</li>
+<li><a href="#%ea%b5%ac%ec%84%b1-%ec%9a%94%ec%86%8c">구성 요소</a>
+
+
+<ul>
+<li><a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ec%97%ad%ed%95%a0">매니저-에이전트 역할</a>
+
+</li>
+<li><a href="#%eb%a7%a4%eb%8b%88%ec%a0%80-%ec%97%90%ec%9d%b4%ec%a0%84%ed%8a%b8-%ed%86%b5%ec%8b%a0-%eb%b0%a9%ec%8b%9d">매니저-에이전트 통신 방식</a>
+
+</li>
+<li><a href="#%ec%bb%a4%eb%ae%a4%eb%8b%88%ed%8b%b0-%ec%9d%b4%eb%a6%84">커뮤니티 이름</a>
+
+</li>
+</ul>
+</li>
+<li><a href="#%eb%b2%84%ec%a0%84%eb%b3%84-%ec%b0%a8%ec%9d%b4">버전별 차이</a>
+
+
+<ul>
+<li><a href="#v1">v1</a>
+
+</li>
+<li><a href="#v2">v2</a>
+
+</li>
+<li><a href="#v2c">v2c</a>
+
+</li>
+<li><a href="#v3">v3</a>
+
+</li>
+</ul>
+</li>
+<li><a href="#%ea%b4%80%eb%a0%a8-%eb%aa%85%eb%a0%b9%ec%96%b4-%eb%8f%84%ea%b5%ac">관련 명령어 도구</a>
+
+
+<ul>
+<li><a href="#snmpget">snmpget</a>
+
+</li>
+<li><a href="#snmpwalk">snmpwalk</a>
+
+</li>
+</ul>
+</li>
+<li><a href="#mib-2-oid-object-id">MIB-2 OID (Object ID)</a>
+
+
+<ul>
+<li><a href="#ex-136121-%eb%b6%84%ed%95%b4">ex: 1.3.6.1.2.1 분해</a>
+
+</li>
+<li><a href="#1361211-system">1.3.6.1.2.1.1 system</a>
+
+</li>
+<li><a href="#1361212-interfaces">1.3.6.1.2.1.2 interfaces</a>
+
+</li>
+<li><a href="#1361213-at---address-translation">1.3.6.1.2.1.3 at - Address Translation</a>
+
+</li>
+<li><a href="#1361214-ip---internet-protocol">1.3.6.1.2.1.4 ip - Internet Protocol</a>
+
+</li>
+<li><a href="#13612131-ifmib">1.3.6.1.2.1.31 ifMIB</a>
+
+</li>
+</ul>
+</li>
+<li><a href="#%ec%b0%b8%ec%a1%b0">참조</a>
+
+</li>
+</ul>
+<h1 id="전제-조건">전제 조건</h1>
+<ul>
+<li>IP 네트워크 환경이 있다.</li>
+<li>관리용 서버(SNMP 서버)가 있다.</li>
+<li>SNMP 프로토콜을 지원하는 기기다.</li>
+</ul>
+<h1 id="구성-요소">구성 요소</h1>
+<ul>
+<li>매니저 (SNMP 서버)
+<ul>
+<li>네트워크 감시 장치(서버)에 설치해서 사용하는 소프트웨어</li>
+</ul>
+</li>
+<li>에이전트 (네트워크 기기/서버)
+<ul>
+<li>네트워크 기기나 서버가 가진 기기의 상태 정보를 통보하는 기능</li>
+</ul>
+</li>
+<li>SNMP 프로토콜 (TCP/IP)
+<ul>
+<li>UDP 패킷에 실어서 주고받으며, 포트 번호는 161(SNMP), 162(TRAP)를 사용합니다.</li>
+</ul>
+</li>
+<li>MIB (Management Information Base)
+<ul>
+<li>SNMP로 관리되는 네트워크 기기나 서버가 자신의 상태를 외부에 알리기 위해서 공개하는 관리 정보.</li>
+<li><a href="https://datatracker.ietf.org/doc/html/rfc1156?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RFC 1156</a>
+
+으로 규정된 MIB1,
+<a href="https://datatracker.ietf.org/doc/html/rfc1213?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RFC 1213</a>
+
+으로 규정된 MIB2</li>
+<li>MIB를 지원하는 기기에 일반적으로 포함된 표준 MIB와 기기 제조사마다 사양이 다른 사설(Private) MIB가 있습니다.</li>
+<li>MIB의 구조는 트리 구조이며, 트리 구조의 마디(노드)는 번호를 붙여서 나타냅니다. 이 번호열을 OID(Object ID)라고 합니다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="매니저-에이전트-역할">매니저-에이전트 역할</h2>
+<ul>
+<li>정보의 요청과 응답
+<ul>
+<li>매니저가 에이전트에게 대상 기기의 정보를 요청 → 에이전트는 정보를 매니저에게 응답</li>
+</ul>
+</li>
+<li>설정의 요청과 응답
+<ul>
+<li>매니저가 에이전트에게 대상 기기의 설정 변경을 요청 → 에이전트는 설정을 변경하며 그 결과를 매니저에게 응답</li>
+</ul>
+</li>
+<li>상태 변화의 통보
+<ul>
+<li>에이전트가 매니저에게 대상 기기의 상태 변화를 통보</li>
+</ul>
+</li>
+</ul>
+<h2 id="매니저-에이전트-통신-방식">매니저-에이전트 통신 방식</h2>
+<ul>
+<li>폴링 (Polling)
+<ul>
+<li>매니저가 정기적으로 에이전트로부터 관리 정보를 추출합니다.</li>
+</ul>
+</li>
+<li>트랩 (Trap)
+<ul>
+<li>에이전트인 라우터나 스위치가 자신의 상태에 어떤 변화가 발생했을 때(장애 발생 등) 자발적으로 매니저인 SNMP 서버에게 정보를 통보합니다.</li>
+</ul>
+</li>
+</ul>
+<h2 id="커뮤니티-이름">커뮤니티 이름</h2>
+<ul>
+<li>매니저와 에이전트는 커뮤니티 이름으로 그룹화합니다.</li>
+<li>매니저와 에이전트는 커뮤니티 이름이 같을 때만 통신합니다.</li>
+</ul>
+<h1 id="버전별-차이">버전별 차이</h1>
+<h2 id="v1">v1</h2>
+<ul>
+<li>커뮤니티 이름이 포함된 패킷을 평문으로 전달합니다.</li>
+<li>기본적인 관리 정보 베이스(MIB)와 트랩 메시지를 사용합니다.</li>
+</ul>
+<h2 id="v2">v2</h2>
+<ul>
+<li>커뮤니티 이름이 포함된 패킷을 암호화해서 전달합니다.</li>
+<li>추가된 PDU 타입(예: <a href="http://www.ktword.co.kr/test/view/view.php?m_temp1=5270&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">GetBulkRequest</a>
+
+)을 통해 대량의 데이터를 한 번에 전송할 수 있습니다.</li>
+</ul>
+<h2 id="v2c">v2c</h2>
+<ul>
+<li>커뮤니티 값을 암호화하여 전달하는 것이 복잡해서 v1처럼 평문으로 전달할 수 있도록 원복되었습니다.</li>
+</ul>
+<h2 id="v3">v3</h2>
+<ul>
+<li>(username, password) 인증 기능이 추가되었습니다.</li>
+<li>이 외 다양한 보안 기능 추가되었습니다.</li>
+</ul>
+<h1 id="관련-명령어-도구">관련 명령어 도구</h1>
+<h2 id="snmpget">snmpget</h2>
+<p>정확한 OID를 입력해야 합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpget -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1.1.0 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># output</span>
+</span></span><span style="display:flex;"><span>iso.3.6.1.2.1.1.1.0 = STRING: <span style="color:#87ceeb">&#34;Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 12.2(58)SE2, RELEASE SOFTWARE (fc1)
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Technical Support: http://www.cisco.com/techsupport
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Copyright (c) 1986-2011 by Cisco Systems, Inc.
+</span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">Compiled Thu 21-Jul-11 02:13 by prod_rel_team&#34;</span>
+</span></span></code></pre></div><h2 id="snmpwalk">snmpwalk</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpwalk -v2c -l NoAuthNoPriv -c public &lt;ip_address&gt;:&lt;port&gt; [OID]
+</span></span></code></pre></div><ul>
+<li>도움말
+<ul>
+<li><code>-h</code> : help</li>
+<li><code>-H</code> : 사용 가능한 옵션</li>
+</ul>
+</li>
+<li><code>-v</code> : SNMP 버전 (<code>1</code> | <code>2c</code> | <code>3</code>)</li>
+<li><code>-l</code> : security level (<code>noAuthNoPriv</code> | <code>authNoPriv</code> | <code>authPriv</code>)</li>
+<li><code>-c</code> : the community string</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>snmpwalk -v2c -l NoAuthNoPriv -c Auto_Wini3 61.111.18.165:161 1.3.6.1.2.1.1
+</span></span></code></pre></div><h1 id="mib-2-oid-object-id">MIB-2 OID (Object ID)</h1>
+<p><img src="/images/network/snmp/oid-tree.png" alt="OID Tree"></p>
+<p><em><a href="https://www.linkedin.com/pulse/snmp-explained-what-you-must-know-monitoring-via-mib-oids-kumari?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">SNMP Explained: What You Must Know About Monitoring via MIB and OIDs</a>
+
+</em></p>
+<h2 id="ex-136121-분해">ex: 1.3.6.1.2.1 분해</h2>
+<ul>
+<li>첫번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">1: ISO assigned</a>
+
+</li>
+</ul>
+</li>
+<li>두번째 자리
+<ul>
+<li>0: ISO Standard</li>
+<li><a href="https://www.alvestrand.no/objectid/1.3.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">3: Identified Organization (org)</a>
+
+</li>
+</ul>
+</li>
+<li>세번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">6: US Department of Defense (dod)</a>
+
+</li>
+</ul>
+</li>
+<li>네번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">1: Internet</a>
+
+</li>
+</ul>
+</li>
+<li>다섯번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.2.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">2: Management (mgmt)</a>
+
+</li>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.4.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">4: Private</a>
+
+
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.4.1.9.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">1.3.6.1.4.1.9: Cisco</a>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>여섯번째 자리
+<ul>
+<li><a href="https://www.alvestrand.no/objectid/1.3.6.1.2.1.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">1: SNMP MIB-2</a>
+
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="1361211-system">1.3.6.1.2.1.1 system</h2>
+<table>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.1</code></td>
+          <td>sysDescr</td>
+          <td>System Description</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.1?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.2</code></td>
+          <td>sysObjectID</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.3</code></td>
+          <td>sysUpTime</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.4</code></td>
+          <td>sysContact</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.5</code></td>
+          <td>sysName</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.5?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.6</code></td>
+          <td>sysLocation</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.1.7</code></td>
+          <td>sysServices</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.1.7?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="1361212-interfaces">1.3.6.1.2.1.2 interfaces</h2>
+<table>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.2</code></td>
+          <td>ifDescr</td>
+          <td>Interface Description</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.2?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.4</code></td>
+          <td>ifMtu</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.4?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.5</code></td>
+          <td>ifSpeed</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.5?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.2.2.1.10</code></td>
+          <td>ifInOctets</td>
+          <td></td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.2.2.1.10?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="1361213-at---address-translation">1.3.6.1.2.1.3 at - Address Translation</h2>
+<table>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.3</code></td>
+          <td>at</td>
+          <td>Address translation</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.3?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="1361214-ip---internet-protocol">1.3.6.1.2.1.4 ip - Internet Protocol</h2>
+<table>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.4.22</code></td>
+          <td>ipNetToMediaTable</td>
+          <td>SEQUENCE OF IpNetToMediaEntry</td>
+          <td><a href="https://oidref.com/1.3.6.1.2.1.4.22?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">oidref</a>
+
+</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="13612131-ifmib">1.3.6.1.2.1.31 ifMIB</h2>
+<table>
+  <thead>
+      <tr>
+          <th>ID</th>
+          <th>Object</th>
+          <th>Description</th>
+          <th>Link</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1</code></td>
+          <td>ifMIBObjects</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1</code></td>
+          <td>ifXTable</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1</code></td>
+          <td>ifXEntry</td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1.6</code></td>
+          <td>ifHCInOctets</td>
+          <td>인터페이스의 입력 바이트 수</td>
+          <td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.6&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CNRS</a>
+
+. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py?utm_source=markruler.github.io#L505" target="_blank" rel="noopener noreferrer">ifBandwidthInUsage</a>
+
+라는 별칭을 씀.</td>
+      </tr>
+      <tr>
+          <td><code>1.3.6.1.2.1.31.1.1.1.10</code></td>
+          <td>ifHCOutOctets</td>
+          <td>인터페이스의 출력 바이트 수</td>
+          <td><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1.3.6.1.2.1.31.1.1.1.10&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CNRS</a>
+
+. 데이터독에선 <a href="https://github.com/DataDog/integrations-core/blame/df2bc0d17af490491651d7578e67d9928941df62/snmp/datadog_checks/snmp/snmp.py?utm_source=markruler.github.io#L506" target="_blank" rel="noopener noreferrer">ifBandwidthOutUsage</a>
+
+라는 별칭을 씀.</td>
+      </tr>
+  </tbody>
+</table>
+<h1 id="참조">참조</h1>
+<ul>
+<li><a href="https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9791192469287&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">&lt;네트워크 운용 및 유지 보수의 모든 것&gt;</a>
+
+ - 오카노 신</li>
+<li><a href="https://aws-hyoh.tistory.com/179?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">SNMP 쉽게 이해하기 #1</a>
+
+ - 네트워크 엔지니어 환경</li>
+<li>OID
+<ul>
+<li><a href="https://cric.grenoble.cnrs.fr/Administrateurs/Outils/MIBS/?oid=1&amp;utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CNRS</a>
+
+</li>
+<li><a href="https://www.alvestrand.no/objectid/top.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Alvestrand Data</a>
+
+</li>
+<li><a href="https://www.circitor.fr/Mibs/Html/C/CISCO-STACK-MIB.php?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">CISCO-STACK-MIB</a>
+
+</li>
+<li><a href="https://oidref.com/1.3.6.1.2.1?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Reference record for OID 1.3.6.1.2.1</a>
+
+</li>
+</ul>
+</li>
+</ul>
+
+
+</main>
+	
+<footer>
+	<p>&copy; 임창수, Since 2020.</p>
+</footer>
+
+</body>
+</html>

@@ -51,7 +51,7 @@ M3U 구조를 좀 더 자세히 살펴보겠습니다. [RFC-8216: HLS (HTTP Live
 
 Master Playlist: `x36xhzz.m3u8`
 
-```bash
+```shell
 #EXTM3U
 #EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2149280,CODECS="mp4a.40.2,avc1.64001f",RESOLUTION=1280x720,NAME="720"
 url_0/193039199_mp4_h264_aac_hd_7.m3u8
@@ -67,8 +67,7 @@ url_8/193039199_mp4_h264_aac_fhd_7.m3u8
 
 Media Playlist: `url_8/193039199_mp4_h264_aac_fhd_7.m3u8`
 
-```bash
-
+```shell
 #EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-PLAYLIST-TYPE:VOD
@@ -132,7 +131,7 @@ VOD 서비스에서는 하나의 동영상에 대해 **여러 해상도 버전**
 
 위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 **FFmpeg**을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.
 
-```bash
+```shell
 ffmpeg -i input.mp4 \
   -c:v libx264 -b:v 1000k -s 1280x720 \
   -c:a aac -b:a 128k \
@@ -145,7 +144,7 @@ ffmpeg -i input.mp4 \
 
 H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.
 
-```bash
+```shell
 ffmpeg -y \
   -i input.mp4 \
   -map 0:v:0 -map 0:a:0 \

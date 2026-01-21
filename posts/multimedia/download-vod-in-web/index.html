@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Download VOD" /><link rel="icon" href="/images/favicon.ico" /><title>웹과 멀티미디어: VOD 트랜스코딩과 다운로드 | 임창수</title>
+
+	
+	<link rel="stylesheet" href="/scss/style.css" type="text/css" media="all" />
+
+	</head>
+
+<body>
+
+<header class="site-header">
+    <nav class="site-nav">
+      <ul class="main-menu">
+        <li>
+          <a href="https://markruler.github.io/">Home</a>
+        </li>
+        
+        <li>
+          <a href="/about">About</a>
+        </li>
+        
+        <li>
+          <a href="/posts">Posts</a>
+        </li>
+        
+        <li>
+          <a href="/categories">Categories</a>
+        </li>
+        
+        <li>
+          <a href="/tags">Tags</a>
+        </li>
+        
+        <li>
+          <a href="/index.xml">RSS Feed</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </header>
+  
+
+<main class="content">
+
+
+<h1>웹과 멀티미디어: VOD 트랜스코딩과 다운로드</h1>
+
+<p><strong>VOD</strong>(Video on Demand)는 원하는 동영상을 보고 싶은 시간에 바로 시청할 수 있는 주문형 비디오 서비스를 말합니다.
+넷플릭스나 유튜브처럼 사용자 요청 시 콘텐츠를 제공하는 플랫폼들이 모두 VOD 시스템입니다.
+VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로, VOD를 통해 이용자는 &lsquo;보고 싶을 때 바로 재생&rsquo;하는 편리함을 얻습니다.</p>
+<p>보고 싶을 때 바로 재생하기 위해서는 우선 서비스가 제공하는 VOD를 다운로드해야 합니다. 여기서 다운로드는 사용자가 동영상을 <strong>스트리밍</strong>(실시간 전송)하거나 <strong>파일로 저장</strong>하여 시청하는 것을 모두 포함합니다.
+초창기 인터넷 동영상은 재생과 동시에 파일을 처음부터 끝까지 순차적으로 <strong>프로그레시브 다운로드</strong>하는 형태였기 때문에 중간 건너뛰기가 어렵고 버퍼링이 잦았습니다.
+반면 오늘날 VOD는 HLS 등의 스트리밍 기술을 통해 네트워크 상황에 맞춰 동영상을 조각 전송하여 버퍼링 없이 시청이 가능합니다.
+필요에 따라 사용자가 동영상을 <strong>오프라인 환경에서도 재생할 수 있도록 저장</strong>할 수 있는데, 이 경우 적절한 포맷과 품질로 파일을 내려받아 기기에 보관하게 됩니다.</p>
+<p>좀 더 효율적으로 VOD를 다운로드하려면 동영상을 <strong>트랜스코딩</strong>(Transcoding)해야 합니다. 트랜스코딩은 <strong>동영상을 다른 형식으로 변환</strong>하는 과정입니다. 예를 들어 고용량의 원본 동영상을 인터넷 전송에 적합한 형식으로 바꾸는 것을 말합니다.
+이미 한 차례 인코딩된(압축된) 비디오 파일을 다시 <strong>코덱</strong>, <strong>해상도</strong>, <strong>비트레이트</strong> 등을 변경하여 새로운 파일로 만드는 작업이며, VOD 시스템에서는 업로드된 동영상을 다양한 조건에 맞게 변환하는 데 필수적입니다.
+특히 VOD 서비스에서는 라이브 스트리밍보다 훨씬 다양한 포맷과 품질 요건을 다루게 됩니다.</p>
+<h1 id="주요-vod-포맷">주요 VOD 포맷</h1>
+<p>VOD에서 콘텐츠를 전달하거나 저장할 때는 다양한 포맷이 활용됩니다. 그중 <strong>MP4</strong>, <strong>MOV</strong>, <strong>M3U</strong>(HLS)는 대표적인 VOD 인코딩 포맷입니다.</p>
+<p><strong>MP4</strong>는 가장 널리 쓰이는 표준 <strong>컨테이너 포맷</strong>입니다. 동영상과 오디오, 자막을 한 파일에 담을 수 있고, MPEG-4 표준을 기반으로 거의 모든 플레이어와 디바이스에서 재생 가능합니다. 효율적인 손실 압축으로 파일 용량이 비교적 작아 네트워크 대역폭 부담이 낮고, 온라인 스트리밍과 공유에 적합합니다. 유튜브, Vimeo 등 대부분의 스트리밍 서비스가 배포 포맷으로 MP4(H.264)를 사용할 만큼 범용성이 뛰어납니다.</p>
+<p><strong>MOV</strong>는 애플의 QuickTime용 컨테이너로, MP4와 구조는 유사하지만 <strong>품질 우선 포맷</strong>입니다. 고품질의 동영상과 음향을 담을 수 있어 전문 영상 편집에 선호되며, 다양한 코덱을 지원하지만 주로 Apple 생태계에서 최적화되어 있습니다. 다만 <strong>파일 크기가 크고</strong> 다른 플랫폼과의 호환성은 MP4보다 떨어집니다. <strong>동영상 스트리밍에는 비효율적</strong>이어서, 일반적인 VOD 배포보다는 제작 단계나 특수 목적에 쓰입니다.</p>
+<p><strong>M3U</strong>는 정확히 말하면 비디오 컨테이너가 아니라 <strong>HLS 플레이리스트</strong>입니다. <strong>텍스트 기반 재생 목록 파일</strong>로 영상 데이터를 담지는 않습니다. 텍스트 인코딩이 <code>UTF-8</code>인 <code>.m3u8</code>이 널리 쓰입니다. <strong>HLS(HTTP Live Streaming)</strong> 프로토콜에서 쓰이는 포맷으로 여러 <strong>품질별 스트림 경로</strong>와 <strong>세그먼트</strong> 파일 목록을 포함합니다. 예를 들어 하나의 HLS 마스터 플레이리스트(<code>.m3u8</code>)에 240p, 480p, 720p 등 각 해상도 스트림의 경로가 정의되고, 각각 또 다른 M3U에 잘게 쪼개진 TS 또는 MP4 <strong>조각 파일</strong>들의 URL이 나열되는 식입니다. 플레이어는 이용자의 <strong>네트워크 속도에 따라</strong> 적절한 화질의 세그먼트를 순차적으로 다운받아 재생하므로, 끊김 없이 <strong>적응형 스트리밍</strong>이 가능합니다. 과거처럼 영상 전체를 받지 않고도 원하는 시점의 조각만 불러올 수 있어 건너뛰기(Seek) 기능도 효율적으로 만들 수 있습니다. 다만 M3U는 <strong>스트리밍 전용 포맷</strong>이므로 사용자에게 하나의 파일로 내려받게 하려면 MP4 등으로 다시 합치거나 순차적으로 받아 클라이언트 측에서 합치는 기능을 추가해야 합니다.</p>
+<p><img src="/images/multimedia/download-vod-in-web/m3u8file.png" alt="M3U Playlist"></p>
+<p><a href="https://publit.io/community/blog/hls-video-streaming-encryption?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">이미지 출처</a>
+
+</p>
+<p>위 그림은 M3U 플레이리스트 구조를 간략히 보여줍니다. 왼쪽의 <strong>마스터 플레이리스트</strong>(.m3u8)가 <strong>여러 화질의 플레이리스트</strong>를 가리키고, 각 플레이리스트는 일정 길이로 분할된 <strong>TS 세그먼트</strong>들의 URL 목록을 담고 있습니다.</p>
+<p>플레이어는 먼저 마스터 파일을 받아 현재 네트워크 상황에 맞는 화질을 선택한 뒤, 해당 화질의 세그먼트들을 순서대로 다운로드하여 재생합니다. 이러한 구조 덕분에 클라이언트는 동영상 전체를 다운로드하지 않고도 원하는 구간을 바로 재생할 수 있고, 네트워크 속도 변화에 따라 화질을 자동으로 조정할 수 있습니다. 서버 입장에서는 동영상을 CDN 서버에 효율적으로 캐싱할 수 있습니다.</p>
+<p>M3U 구조를 좀 더 자세히 살펴보겠습니다. <a href="https://datatracker.ietf.org/doc/html/rfc8216?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">RFC-8216: HLS (HTTP Live Streaming)</a>
+
+ 문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 <code>EXTM3U</code> 태그로 시작해야 합니다. 마스터 플레이리스트는 <code>EXT-X-STREAM-INF</code> 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 <code>EXTINF</code> 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.</p>
+<p>Master Playlist: <code>x36xhzz.m3u8</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2149280,CODECS=&#34;mp4a.40.2,avc1.64001f&#34;,RESOLUTION=1280x720,NAME=&#34;720&#34;</span>
+</span></span><span style="display:flex;"><span>url_0/193039199_mp4_h264_aac_hd_7.m3u8
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=246440,CODECS=&#34;mp4a.40.5,avc1.42000d&#34;,RESOLUTION=320x184,NAME=&#34;240&#34;</span>
+</span></span><span style="display:flex;"><span>url_2/193039199_mp4_h264_aac_ld_7.m3u8
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=460560,CODECS=&#34;mp4a.40.5,avc1.420016&#34;,RESOLUTION=512x288,NAME=&#34;380&#34;</span>
+</span></span><span style="display:flex;"><span>url_4/193039199_mp4_h264_aac_7.m3u8
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=836280,CODECS=&#34;mp4a.40.2,avc1.64001f&#34;,RESOLUTION=848x480,NAME=&#34;480&#34;</span>
+</span></span><span style="display:flex;"><span>url_6/193039199_mp4_h264_aac_hq_7.m3u8
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6221600,CODECS=&#34;mp4a.40.2,avc1.640028&#34;,RESOLUTION=1920x1080,NAME=&#34;1080&#34;</span>
+</span></span><span style="display:flex;"><span>url_8/193039199_mp4_h264_aac_fhd_7.m3u8
+</span></span></code></pre></div><p>Media Playlist: <code>url_8/193039199_mp4_h264_aac_fhd_7.m3u8</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-VERSION:3</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-PLAYLIST-TYPE:VOD</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-TARGETDURATION:11</span>
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:10.000,</span>
+</span></span><span style="display:flex;"><span>url_590/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:10.000,</span>
+</span></span><span style="display:flex;"><span>url_591/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:10.000,</span>
+</span></span><span style="display:flex;"><span>url_592/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:10.000,</span>
+</span></span><span style="display:flex;"><span>url_593/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:9.933,</span>
+</span></span><span style="display:flex;"><span>url_597/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXTINF:4.567,</span>
+</span></span><span style="display:flex;"><span>url_653/193039199_mp4_h264_aac_fhd_7.ts
+</span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-ENDLIST</span>
+</span></span></code></pre></div><p><a href="https://hlsjs.video-dev.org/demo/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">hls.js 데모 페이지</a>
+
+에서 데모 동영상으로 직접 확인할 수 있습니다. 다양한 포맷의 M3U 파일은 <a href="https://demo.unified-streaming.com/k8s/features/stable/?utm_source=markruler.github.io#!/hls" target="_blank" rel="noopener noreferrer">Unified Streaming</a>
+
+에서 확인할 수 있습니다.</p>
+<h1 id="트랜스코딩">트랜스코딩</h1>
+<blockquote>
+<p>이용자가 업로드하는 대부분의 모바일 촬영 동영상은 안드로이드 기종(삼성, 구글 등)은 MP4, 애플 기종일 경우 MOV(HEVC) 포맷입니다.
+설정에서 변경할 수도 있습니다.
+전문 캠코더로 촬영되는 경우에도 여러 포맷을 선택할 수 있지만 대부분 MP4와 AAC 오디오 코덱을 지원합니다.</p>
+</blockquote>
+<p>효과적인 트랜스코딩을 위해서는 동영상을 구성하는 요소들을 이해하고 최적화하는 것이 중요합니다. 트랜스코딩 설정을 어떻게 하느냐에 따라 동영상 품질과 파일 크기, 그리고 다양한 기기에서의 호환성이 결정됩니다.</p>
+<p><strong>비트레이트</strong>(Bitrate)는 영상/음성 데이터를 1초간 얼마나 전송할지 나타내는 지표(kbps, Mbps 등)로, <strong>품질과 파일 크기에 직접적인 영향</strong>을 미칩니다. 트랜스코딩 시 목표 비트레이트를 정해야 하는데, 너무 낮으면 블록 노이즈 등 품질 저하가 생기고 너무 높으면 저장공간과 대역폭 낭비가 발생합니다.
+일반적으로 해상도별로 적정 비트레이트 <strong>비트레이트 레더</strong>(ladder)를 설계합니다. 예를 들어 1080p 영상은 5~8Mbps, 720p는 2~4Mbps, 480p는 1Mbps 정도로 설정해 단계별로 품질을 조정합니다.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
+최근에는 고정 비트레이트(CBR)보다 <strong>가변 비트레이트</strong>(VBR)나 <strong>CQ/CRF</strong> 방식(정해진 화질 수준을 유지하면서 복잡도에 따라 비트레이트를 가변 조절)이 선호되어 <strong>화질 대비 용량 효율</strong>을 높입니다.
+또한 HLS 같은 적응 스트리밍에서는 여러 비트레이트 스트림을 제공하여 재생 중 실시간으로 전환하므로, 각 해상도마다 <strong>다중 비트레이트 프로파일</strong>을 준비하기도 합니다.
+궁극적으로 트랜스코딩의 목표는 <strong>필요한 품질을 만족하는 최저 비트레이트</strong>를 찾는 것입니다.</p>
+<p><strong>코덱</strong>(Codec)은 <strong>압축 및 압축 해제 알고리즘</strong>으로, 영상/음성 데이터를 특정 방식으로 압축 저장하고 재생 시 복원합니다.
+현재 VOD에서 가장 흔한 비디오 코덱은 <strong>H.264(AVC)</strong> 입니다. 비교적 <strong>작은 용량으로 양호한 화질</strong>을 제공하면서도 디코딩에 높은 성능을 요구하지 않기 때문에 널리 사용됩니다.
+<strong>H.265</strong>(HEVC)는 H.264 대비 약 <strong>30~50% 낮은 비트레이트로 동일 품질을 구현</strong>할 수 있는 차세대 코덱입니다.
+고화질 영상을 더 작은 파일로 만들 수 있습니다. 단, H.265는 인코딩/디코딩 시 연산량이 훨씬 높아 <strong>최신 하드웨어 지원</strong>이 필요하고 옛 디바이스에서는 호환성이 떨어질 수 있습니다.<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>
+이 밖에도 <strong>VP9</strong>, <strong>AV1</strong> 등의 코덱이 있으며, AV1은 압축 효율이 뛰어나지만 현재는 소프트웨어 디코딩 위주로 <strong>보급 단계</strong>에 있습니다.
+음성 코덱으로는 <strong>AAC</strong>가 스트리밍과 기기 호환성 면에서 표준처럼 쓰이며, Dolby Digital(AC-3)이나 Opus 등이 상황에 따라 사용됩니다. 트랜스코딩 시에는 대상 플랫폼과 품질 요구에 맞춰 <strong>적절한 코덱 선택</strong>이 선행되어야 합니다.</p>
+<p><strong>해상도</strong>(Resolution)는 영상의 픽셀 크기를 말하며, <strong>1920x1080(1080p)</strong>, <strong>1280x720(720p)</strong>, <strong>640x360(360p)</strong> 등으로 표현합니다.
+높은 해상도일수록 선명하지만 그만큼 비트레이트와 용량이 커집니다.
+VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 버전</strong>을 만들어 두는 것이 일반적입니다. 예를 들어 PC나 TV 시청자를 위해 1080p, 모바일 데이터 사용자를 위해 480p 등을 준비합니다.
+이렇게 다중 해상도를 제공하면 네트워크 대역폭이나 화면 크기에 따라 가장 적합한 해상도로 재생할 수 있어 <strong>사용자 경험을 최적화</strong>할 수 있습니다. 트랜스코딩 단계에서 <strong>영상 다운스케일링</strong>(예: 4K 원본을 1080p/720p로 생성) 기술을 활용하며, 해상도별 <strong>화면비 유지</strong>와 세부 튜닝(예: 샤프닝 필터 등)도 고려할 수 있습니다.</p>
+<p><strong>프레임레이트</strong>(Frame Rate)는 1초당 재생되는 프레임 수로, 일반적으로 24fps(영화), 30fps(일반 동영상), 60fps(게임 또는 고품질 동영상) 등으로 설정됩니다.
+트랜스코딩 시 프레임레이트를 낮추면 용량을 줄일 수 있지만, 모션이 부자연스럽거나 끊겨 보일 수 있어 주의가 필요합니다.
+특히 움직임이 많은 콘텐츠(예: 스포츠, 액션 등)는 낮은 프레임레이트에서 품질 저하가 더 두드러집니다. 반대로 프레임레이트를 인위적으로 높이는 업샘플링은 잔상이나 블러가 생길 수 있어 원본과 동일하거나 호환 범위 내에서만 조정하는 것이 안전합니다.</p>
+<p>위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 <strong>FFmpeg</strong>을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -i input.mp4 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -c:v libx264 -b:v 1000k -s 1280x720 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -c:a aac -b:a 128k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  output_720p.mp4
+</span></span></code></pre></div><p>위 명령은 <code>input.mp4</code> 파일을 입력 받아, 비디오 코덱을 H.264(libx264)로, 비디오 비트레이트를 1000kbps(1Mbps)로 설정하고, 해상도를 1280x720으로 다운스케일합니다.
+오디오도 AAC 코덱에 128kbps 비트레이트로 변환하며, 이렇게 압축된 스트림들을 MP4 컨테이너로 묶어 <code>output_720p.mp4</code>로 출력합니다.
+실제 트랜스코딩 환경에서는 영상 내용에 따라 최적 비트레이트를 달리 설정하거나, <code>-crf</code> 옵션으로 목표 화질 중심의 인코딩을 하기도 합니다. 또한 H.265/AV1 인코딩, 2패스 인코딩 등 고급 최적화 기법을 적용해 파일 크기를 더 줄이면서 품질을 확보할 수도 있습니다.</p>
+<p>H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -y <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -i input.mp4 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -c:v libx264 -crf <span style="color:#f60">22</span> -c:a aac -ar <span style="color:#f60">44100</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:0 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">360</span> -maxrate:v:0 600k  -b:a:0 500k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:1 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">480</span> -maxrate:v:1 1500k -b:a:1 1000k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -filter:v:2 <span style="color:#eedd82">scale</span>=<span style="color:#eedd82">w</span>=-2:h=<span style="color:#f60">720</span> -maxrate:v:2 3000k -b:a:2 2000k <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -var_stream_map <span style="color:#87ceeb">&#34;v:0,a:0,name:360p v:1,a:1,name:480p v:2,a:2,name:720p&#34;</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -preset faster <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -threads <span style="color:#f60">0</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -f hls <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_time <span style="color:#f60">10</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_list_size <span style="color:#f60">0</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -hls_flags independent_segments <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  -master_pl_name <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">.m3u8&#34;</span> <span style="color:#87ceeb">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#87ceeb">&#34;</span><span style="color:#eedd82">$playlist_name</span><span style="color:#87ceeb">-%v.m3u8&#34;</span>
+</span></span></code></pre></div><h2 id="오디오-스트림이-없는-경우-발생한-에러-트러블슈팅">오디오 스트림이 없는 경우 발생한 에러 트러블슈팅</h2>
+<p>위 명령을 그대로 사용할 경우 문제가 되는 상황이 있습니다.
+비디오 스트림이 없거나 오디오 스트림이 없는 경우인데요.
+비디오 인코딩이 목적이니 비디오 스트림이 없는 경우는 제외하고 오디오 스트림이 없는 경우만 상정하겠습니다.
+보통 동영상은 비디오 스트림과 오디오 스트림이 함께 담긴 컨테이너입니다.
+이를 <a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Transcoding" target="_blank" rel="noopener noreferrer">트랜스코딩</a>
+
+하려면 입력 소스와 출력을 매핑시킵니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>┌──────────┬─────────────────────┐
+</span></span><span style="display:flex;"><span>│ demuxer  │                     │       audio packets
+</span></span><span style="display:flex;"><span>╞══════════╡ stream 0 (audio)    ├─────────────────────────────────────╮
+</span></span><span style="display:flex;"><span>│          │                     │                                     │
+</span></span><span style="display:flex;"><span>│INPUT.mkv ├─────────────────────┤ video    ┌─────────┐     raw        │
+</span></span><span style="display:flex;"><span>│          │                     │ packets  │  video  │ video frames   │
+</span></span><span style="display:flex;"><span>│          │ stream 1 (video)    ├─────────►│ decoder ├──────────────╮ │
+</span></span><span style="display:flex;"><span>│          │                     │          │         │              │ │
+</span></span><span style="display:flex;"><span>└──────────┴─────────────────────┘          └─────────┘              │ │
+</span></span><span style="display:flex;"><span>                                                                     ▼ ▼
+</span></span><span style="display:flex;"><span>                                                                     │ │
+</span></span><span style="display:flex;"><span>┌──────────┬─────────────────────┐ video    ┌─────────┐              │ │
+</span></span><span style="display:flex;"><span>│ muxer    │                     │ packets  │  video  │              │ │
+</span></span><span style="display:flex;"><span>╞══════════╡ stream 0 (video)    │◄─────────┤ encoder ├──────────────╯ │
+</span></span><span style="display:flex;"><span>│          │                     │          │(libx264)│                │
+</span></span><span style="display:flex;"><span>│OUTPUT.mp4├─────────────────────┤          └─────────┘                │
+</span></span><span style="display:flex;"><span>│          │                     │                                     │
+</span></span><span style="display:flex;"><span>│          │ stream 1 (audio)    │◄────────────────────────────────────╯
+</span></span><span style="display:flex;"><span>│          │                     │
+</span></span><span style="display:flex;"><span>└──────────┴─────────────────────┘
+</span></span></code></pre></div><p>다음 명령 옵션은 입력 스트림을 어떤 순서로 출력 파일에 매핑할지를 지정하는 FFmpeg의 핵심 옵션입니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># -map [입력_번호]:[스트림_타입]:[스트림_인덱스]</span>
+</span></span><span style="display:flex;"><span>-map 0:v:0
+</span></span><span style="display:flex;"><span>-map 0:a:0
+</span></span></code></pre></div><p>첫번째 &lsquo;입력 번호&rsquo;는 <code>-i</code>로 지정된 여러 입력 소스 중 매핑할 소스의 인덱스를 지정합니다.
+입력 소스가 하나라면 0을 입력합니다.
+스트림 인덱스는 입력 소스 안에 여러 스트림이 있다면 스트림 인덱스를 지정합니다.
+스트림이 하나라면 0을 입력합니다.
+<a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.github.io#Stream-specifiers-1" target="_blank" rel="noopener noreferrer">스트림 타입</a>
+
+은 5가지가 있습니다.</p>
+<ul>
+<li><code>v</code> video (비디오)</li>
+<li><code>a</code> audio (오디오)</li>
+<li><code>s</code> subtitle (자막)</li>
+<li><code>d</code> data (메타데이터)</li>
+<li><code>t</code> attachment (font, cover art:썸네일)</li>
+</ul>
+<p>이 때 오디오 스트림이 없다면 Invalid argument 에러가 발생합니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Stream map <span style="color:#87ceeb">&#39;0:a:0&#39;</span> matches no streams.
+</span></span><span style="display:flex;"><span>Failed to set value <span style="color:#87ceeb">&#39;0:a:0&#39;</span> <span style="color:#f00">for</span> option <span style="color:#87ceeb">&#39;map&#39;</span>: Invalid argument
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>FFmpeg process failed with exit code <span style="color:#f60">234</span>
+</span></span></code></pre></div><p>그래서 트랜스코딩 전 <code>ffprobe</code>를 사용해서 오디오 트랙이 있는지 먼저 확인하는 방법도 있습니다.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ffprobe -v error -select_streams a:0 -show_entries <span style="color:#eedd82">stream</span>=index -of <span style="color:#eedd82">csv</span>=<span style="color:#eedd82">p</span>=<span style="color:#f60">0</span> noaudio.mp4
+</span></span><span style="display:flex;"><span><span style="color:#0f0"># 있으면 1, 없으면 출력 없음.</span>
+</span></span></code></pre></div><p>저의 경우 운영 중인 서비스에서 오디오는 반드시 포함되어야 한다는 정책이 추가되어 예외 처리만 추가했습니다.</p>
+<h1 id="다운로드">다운로드</h1>
+<p>사용자 기기나 서버 모두 저장 공간은 한정되어 있습니다. 다운로드 기능을 제공한다면 <strong>해상도/품질 옵션</strong>을 두어 사용자가 기기 용량에 맞게 선택하도록 합니다.
+서버 측에서는 <strong>스토리지 비용</strong>을 고려해 자주 쓰이지 않는 품질의 파일은 저장하지 않거나, <strong>스토리지 계층화(storage tiering)</strong> 로 보관 비용을 줄일 수 있습니다.
+예를 들어 <a href="https://www.tencentcloud.com/products/vod?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Tencent Cloud VOD</a>
+
+는 시청 빈도에 따라 자동으로 저장 전략을 조정하여 비용을 절감하는 기능을 제공하는데, 이처럼 <strong>콘텐츠 수명주기 관리</strong>를 통해 저장 공간을 효율화할 수 있습니다.
+또한 H.265/AV1 같은 고효율 코덱을 도입하면 같은 품질이라도 파일 크기를 크게 줄여 저장 공간 부담을 낮출 수 있습니다.</p>
+<p>대용량 동영상 전송에서는 네트워크 최적화가 필수입니다. <strong>CDN</strong>(콘텐츠 전송 네트워크)을 활용하면 사용자와 가까운 엣지 서버에서 동영상을 제공하여 지연을 줄이고 원본 서버 부하를 낮출 수 있습니다.
+이는 특히 동시 시청자가 많을 때 효과적입니다.
+또한 HLS와 같은 프로토콜을 활용해 적응형 스트리밍으로 <strong>필요한 품질만 전송</strong>하면 불필요한 대역폭 소모를 막고, 사용자의 네트워크 환경에 맞춰 동영상을 전송하면 <strong>버퍼링을 최소화</strong>할 수 있습니다.
+만약 사용자가 전체 파일을 다운로드받는 시나리오라면, <strong>HTTP Range 요청</strong>을 통한 이어받기(resume)나 <strong>병렬 다운로드</strong> 등을 지원해 네트워크 불안정 시에도 중단 없이 받을 수 있게 해야 합니다.
+모바일 앱의 경우 <strong>Wi-Fi에서만 다운로드</strong> 옵션이나 <strong>백그라운드 다운로드</strong>를 구현하여 사용자의 데이터 요금과 편의를 배려하는 것도 중요합니다.</p>
+<p>VOD 시스템에서 콘텐츠 준비와 전달은 대개 <strong>자동화된 파이프라인</strong>으로 처리됩니다.
+예를 들어 사용자가 동영상을 업로드하면 <strong>이벤트 트리거</strong>로 트랜스코딩 작업이 자동 실행되고, 완료 후 결과 파일들이 CDN에 배포되며, 최종으로 재생용 URL이 발급되는 흐름을 스크립트나 서버 프로그램이 관리합니다.
+이러한 <strong>미디어 파이프라인 자동화</strong>를 통해 수많은 동영상을 효율적으로 처리할 수 있습니다.</p>
+<h1 id="더-읽을거리">더 읽을거리</h1>
+<ul>
+<li><a href="https://blog.twitch.tv/en/2021/10/25/so-you-want-to-work-at-twitch-meet-the-ivs-core-team-with-song-king/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">IVS Core team</a>
+
+
+<ul>
+<li><a href="https://blog.twitch.tv/en/2021/10/25/low-latency-high-reach-creating-an-unparalleled-live-video-streaming-network-at-twitch/?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Twitch의 Low Latency 트랜스코딩 방식에 대한 IVS(Interactive Video Service) 설명</a>
+
+</li>
+</ul>
+</li>
+</ul>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>동영상이 무엇인지에 따라 다릅니다. 예를 들어 스포츠 중계는 움직임이 많아 더 높은 비트레이트가 필요할 수 있고, 정적인 강의 동영상은 낮은 비트레이트로도 충분할 수 있습니다. 따라서 <strong>콘텐츠 특성에 맞는 비트레이트 설정</strong>이 중요합니다.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p>HEVC는 프로세서에 따라 호환성이 떨어지고 크롬 브라우저를 사용한다면 Hardware Accelerator가 필수적인 옵션이 됩니다.
+<code>chrome://gpu</code>에서 현재 활성화중인지 확인 후 비활성화 상태라면 <code>chrome://settings/system</code>에서 <code>Use graphics acceleration when available</code> 옵션을 활성화하면 됩니다.
+지원 여부는 다음 페이지들에서 확인할 수 있습니다.</p>
+<ul>
+<li><a href="https://www.intel.com/content/www/us/en/support/articles/000037112/graphics.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Intel CPU 지원 여부 확인</a>
+
+
+<ul>
+<li><a href="https://www.intel.com/content/www/us/en/docs/onevpl/developer-reference-media-intel-hardware/1-1/overview.html?utm_source=markruler.github.io" target="_blank" rel="noopener noreferrer">Media Capabilities Supported by Intel Hardware</a>
+
+</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/NVDEC?utm_source=markruler.github.io#GPU_support" target="_blank" rel="noopener noreferrer">NVIDIA 그래픽 카드 지원 여부 확인</a>
+
+</li>
+</ul>
+&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></li>
+</ol>
+</div>
+
+
+</main>
+	
+<footer>
+	<p>&copy; 임창수, Since 2020.</p>
+</footer>
+
+</body>
+</html>

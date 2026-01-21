@@ -19,7 +19,7 @@ categories:
 
 ## 사용할 명령어
 
-```bash
+```shell
 # master 브랜치
 git clone --depth 1 https://github.com/kubernetes/kubernetes.git
 # 특정 브랜치
@@ -39,7 +39,7 @@ go build -o k cmd/kubectl
 
 - make 명령을 내릴 루트 디렉터리 Makefile을 보면 아래와 같이 다른 Makefile을 가리킨다.
 
-```bash
+```shell
 build/root/Makefile
 ```
 
@@ -84,7 +84,7 @@ endif
 
 > [hack/make-rules/build.sh](https://github.com/kubernetes/kubernetes/blob/release-1.19/hack/make-rules/build.sh)
 
-```bash
+```shell
 #!/usr/bin/env bash
 
 # This script sets up a go workspace locally and builds all go components.
@@ -108,7 +108,7 @@ kube::golang::place_bins
 
 - 참고로 쉘 스크립트의 function 키워드는 생략할 수 있으며, double colon(::)은 쿠버네티스의 Naming Convection으로 보인다.
 
-```bash
+```shell
 # Build binaries targets specified
 #
 # Input:

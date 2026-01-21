@@ -185,7 +185,7 @@ _출처: [educative](https://www.educative.io/edpresso/what-are-kernel-namespace
 - cgroupfs
 - systemd
 
-```bash
+```shell
 sudo docker info -f '{{json .}}' | jq '. | .CgroupDriver'
 # "cgroupfs"
 ```

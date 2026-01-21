@@ -37,7 +37,7 @@ Go 프로그램을 사용하는 [`gcr.io`](https://gcr.io) 같은 레지스트�
 
 [모듈](https://pkg.go.dev/github.com/google/go-containerregistry)을 다운로드합니다.
 
-```bash
+```shell
 go get -u github.com/google/go-containerregistry
 ```
 
@@ -80,7 +80,7 @@ if err != nil {
 [tarball.FromReader](https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/tarball#LayerFromReader)로
 전달할 수도 있습니다. 명령어는 다음과 같습니다.
 
-```bash
+```shell
 tar -cf- DIR \
     --transform 's,^,usr/share/nginx/,'
     --owner=0 --group=0
@@ -155,7 +155,7 @@ if err := crane.Push(newImg, tag.String()); err != nil {
 
 > 실행 결과 맛보기 (역자)
 
-```bash
+```shell
 mkdir create-oci-image
 cd create-oci-image
 curl -O https://gist.githubusercontent.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6/raw/1431150eb52c2ecf81ea469ca685d4be3a30f895/demo.go

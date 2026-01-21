@@ -59,7 +59,7 @@ Python, Ruby, fish 또는 다른 인터프리터가 어디에서나 사용할 �
 
 거두절미하고 템플릿은 다음과 같습니다.
 
-```bash
+```shell
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
@@ -163,7 +163,7 @@ msg "- arguments: ${args[*]-}"
 
 ## Bash 선택하기
 
-```bash
+```shell
 #!/usr/bin/env bash
 ```
 
@@ -177,7 +177,7 @@ msg "- arguments: ${args[*]-}"
 
 ## 빠르게 실패하기
 
-```bash
+```shell
 set -Eeuo pipefail
 ```
 
@@ -186,7 +186,7 @@ set -Eeuo pipefail
 0 외의 종료 상태 코드를 반환합니다. 다음 단계로 잘 넘어갑니다.
 이제 다음과 같이 짧은 스크립트를 살펴보겠습니다.
 
-```bash
+```shell
 #!/usr/bin/env bash
 cp important_file ./backups/
 rm important_file
@@ -204,7 +204,7 @@ rm important_file
 
 ## 위치 가져오기
 
-```bash
+```shell
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 ```
 
@@ -216,14 +216,14 @@ script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
 하지만 CI 구성에서 다음과 같은 스크립트를 실행한다면
 
-```bash
+```shell
 /opt/ci/project/script.sh
 ```
 
 이 스크립트는 프로젝트 디렉토리가 아니라 CI 도구의 다른 작업 디렉토리에서 동작합니다.
 스크립트를 실행하기 전에 해당 디렉토리로 이동함으로써 고칠 수 있습니다.
 
-```bash
+```shell
 cd /opt/ci/project && ./script.sh
 ```
 
@@ -231,7 +231,7 @@ cd /opt/ci/project && ./script.sh
 스크립트가 일부 파일을 읽거나 동일한 디렉터리에서
 다른 프로그램을 실행하려는 경우 아래처럼 호출합니다.
 
-```bash
+```shell
 cat "$script_dir/my_file"
 ```
 
@@ -241,7 +241,7 @@ cat "$script_dir/my_file"
 
 ## 정리하기
 
-```bash
+```shell
 trap cleanup SIGINT SIGTERM ERR EXIT
 
 cleanup() {
@@ -259,7 +259,7 @@ cleanup() {
 
 ## 도움되는 도움말 표시하기
 
-```bash
+```shell
 usage() {
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-v] [-f] -p param_value arg1 [arg2...]
@@ -282,7 +282,7 @@ EOF
 
 ## 적절한 메시지 출력하기
 
-```bash
+```shell
 setup_colors() {
   if [[ -t 2 ]] && [[ -z "${NO_COLOR-}" ]] && [[ "${TERM-}" != "dumb" ]]; then
     NOFORMAT='\033[0m' RED='\033[0;31m' GREEN='\033[0;32m' ORANGE='\033[0;33m' BLUE='\033[0;34m' PURPLE='\033[0;35m' CYAN='\033[0;36m' YELLOW='\033[1;33m'
@@ -317,7 +317,7 @@ msg() {
 
 사용법:
 
-```bash
+```shell
 msg "This is a ${RED}very important${NOFORMAT} message, but not a script output value!"
 ```
 
@@ -326,14 +326,14 @@ msg "This is a ${RED}very important${NOFORMAT} message, but not a script output 
 파이프가 동작하면 출력이 더 이상 터미널로 직접 전송되지 않고 다음 명령으로
 전송되므로 이제 색상을 사용하지 않도록 설정해야 합니다.
 
-```bash
+```shell
 $ ./test.sh 2>&1 | cat
 This is a very important message, but not a script output value!
 ```
 
 ## 모든 파라미터 파싱
 
-```bash
+```shell
 parse_params() {
   # default values of variables set from params
   flag=0

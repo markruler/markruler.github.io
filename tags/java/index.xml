@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on 컴퓨터로 할 수 있는 것</title>
+    <link>https://markruler.github.io/tags/java/</link>
+    <description>Recent content in Java on 컴퓨터로 할 수 있는 것</description>
+    <generator>Hugo</generator>
+    <language>ko-kr</language>
+    <managingEditor>imcxsu@gmail.com (임창수)</managingEditor>
+    <webMaster>imcxsu@gmail.com (임창수)</webMaster>
+    <lastBuildDate>Tue, 08 Apr 2025 22:00:00 +0900</lastBuildDate>
+    <atom:link href="https://markruler.github.io/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Tomcat 이해하기</title>
+      <link>https://markruler.github.io/posts/java/tomcat/</link>
+      <pubDate>Tue, 23 Aug 2022 02:45:00 +0900</pubDate><author>imcxsu@gmail.com (임창수)</author>
+      <guid>https://markruler.github.io/posts/java/tomcat/</guid>
+      <description>&lt;p&gt;Java Servlet, JavaServer Pages(JSP), 그리고 WebSocket과 같은&#xA;&lt;strong&gt;Java 웹 애플리케이션을 실행할 수 있도록 지원&lt;/strong&gt;하는&#xA;오픈 소스 &lt;strong&gt;웹 애플리케이션 서버&lt;/strong&gt;(&lt;strong&gt;서블릿 컨테이너&lt;/strong&gt;)입니다.&lt;/p&gt;&#xA;&lt;p&gt;일반적인 웹 서버(Apache HTTP Server, Nginx 등)는&#xA;정적 파일(HTML, CSS, JavaScript 등)을 클라이언트에게 제공하지만,&#xA;Tomcat은 &lt;strong&gt;동적인 Java 웹 애플리케이션&lt;/strong&gt;을 실행할 수 있는 환경을 제공합니다.&lt;/p&gt;&#xA;&lt;h1 id=&#34;역할&#34;&gt;역할&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Servlet 컨테이너&lt;/strong&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Java Servlet을 실행하고 클라이언트의 요청을 처리하여 응답을 반환합니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;JSP 엔진&lt;/strong&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;JSP(JavaServer Pages)를 컴파일하고 실행합니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;웹 애플리케이션 실행&lt;/strong&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;web.xml&lt;/code&gt; 설정 파일을 기반으로 웹 애플리케이션을 관리합니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;HTTP 요청 처리&lt;/strong&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;HTTP/HTTPS 프로토콜을 사용하여 클라이언트와 서버 간의 요청-응답을 처리합니다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h1 id=&#34;구조&#34;&gt;구조&lt;/h1&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/java/tomcat-architecture.png&#34; alt=&#34;Tomcat Architecture&#34;&gt;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>JVM 모니터링</title>
+      <link>https://markruler.github.io/posts/java/jvm-monitoring/</link>
+      <pubDate>Mon, 23 May 2022 00:09:00 +0900</pubDate><author>imcxsu@gmail.com (임창수)</author>
+      <guid>https://markruler.github.io/posts/java/jvm-monitoring/</guid>
+      <description>&lt;h1 id=&#34;개요&#34;&gt;개요&lt;/h1&gt;&#xA;&lt;p&gt;&lt;a href=&#34;https://markruler.github.io/posts/java/java-timeout-monitoring/&#34;&gt;모니터링과 타임아웃의 중요성&lt;/a&gt;&#xA;&#xA;은 아무리 강조해도 지나치지 않습니다.&#xA;회사에서 아주 느린 API(약 15초)를 발견했는데 분명 매일 요청이 있는 데도 2년 동안 방치되고 있었습니다.&#xA;이런 API는 사용자가 말해주길 기대하는 것보다 모니터링 도구를 통해 파악하는 것이 좋습니다.&#xA;만약 모니터링 설정을 하지 않았다면 API를 수정할 일이 생긴다거나 에러가 발생하지 않는다면 계속 방치되고 있었을 겁니다.&#xA;심지어 굉장히 간단한 문제여서 파악하고 수정하는 데에 1시간도 걸리지 않았습니다.&#xA;결국 15초 걸리던 API를 100ms까지 줄였죠.&lt;/p&gt;&#xA;&lt;p&gt;이 글에서는 JVM 모니터링을 위한 도구와 방법에 대해 알아보겠습니다.&#xA;가장 먼저 JVM 모니터링을 위한 표준 사양인 JMX부터 알아보겠습니다.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>모니터링과 타임아웃의 중요성</title>
+      <link>https://markruler.github.io/posts/java/java-timeout-monitoring/</link>
+      <pubDate>Wed, 11 May 2022 02:19:00 +0900</pubDate><author>imcxsu@gmail.com (임창수)</author>
+      <guid>https://markruler.github.io/posts/java/java-timeout-monitoring/</guid>
+      <description>&lt;h1 id=&#34;상황&#34;&gt;상황&lt;/h1&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;현재팀에서 만들고 있는 애플리케이션은 Spring Framework로 작성하고 있다.&lt;/li&gt;&#xA;&lt;li&gt;계속 특정 애플리케이션과 함께 여러 애플리케이션에서 후속 장애가 발생했다.&lt;/li&gt;&#xA;&lt;li&gt;장애가 발생할 때마다 특정 API의 커넥션이 끊기지 않고 오랜 시간 유지되고 있었다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;p&gt;&lt;img src=&#34;https://markruler.github.io/images/datadog/transaction-deadlock.png&#34; alt=&#34;transaction-deadlock&#34;&gt;&lt;/p&gt;&#xA;&lt;p&gt;&lt;em&gt;&lt;code&gt;RedisSystemException&lt;/code&gt;은 해당 서버를 죽이면서 Redis와 커넥션이 끊어졌기 때문에 발생한 예외다.&#xA;만약 서버를 죽이지 않았다면 끝까지 물고 있었을 것이다.&lt;/em&gt;&lt;/p&gt;&#xA;&lt;h2 id=&#34;분석&#34;&gt;분석&lt;/h2&gt;&#xA;&lt;p&gt;시간만 보고도 Timeout이 설정되어 있지 않다는 것을 확인할 수 있다.&#xA;설정하지 않으면 &lt;strong&gt;default 값은 -1&lt;/strong&gt; 로 타임아웃이 발생하지 않는다.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#0f0&#34;&gt;// org.springframework.transaction.support.AbstractPlatformTransactionManager&lt;/span&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;TransactionDefinition.TIMEOUT_DEFAULT = -1;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;하지만 트랜잭션이 왜 저렇게 오래 유지되는지 알 수 없었다.&#xA;그래도 서버 장애가 발생하는 이유는 알 수 있었다.&#xA;TImeout이 발생하지 않다보니 해당 트랜잭션들 사이에 데드락(Deadlock)이 발생했고&#xA;하나의 서비스 뿐만 아니라 해당 테이블을 사용하는 모든 서비스에 장애가 발생했다.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

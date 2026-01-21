@@ -9,8 +9,9 @@ tags:
   - nfv
   - virtualization
   - cloud
-categories:
   - translate
+categories:
+  - wiki
 ---
 
 > - [Faisal Khan의 The Misunderstood Facts about Compute Domain in NFV!](https://telcocloudbridge.com/blog/the-misunderstood-facts-about-compute-domain-in-nfv/)를 번역한 글입니다.

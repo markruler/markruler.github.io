@@ -741,7 +741,7 @@ func main() {
 
 > 역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.
 
-```bash
+```shell
 # Go는 설치되어 있다고 가정합니다.
 git clone https://github.com/veggiedefender/torrent-client.git
 cd torrent-client

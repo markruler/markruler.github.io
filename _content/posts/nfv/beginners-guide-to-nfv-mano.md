@@ -9,8 +9,9 @@ tags:
   - nfv
   - virtualization
   - cloud
-categories:
   - translate
+categories:
+  - wiki
 ---
 
 > - [Faisal Khan의 A Beginner's Guide to NFV Management & Orchestration (MANO)](https://www.telcocloudbridge.com/blog/a-beginners-guide-to-nfv-management-orchestration-mano/)을 번역한 글입니다.

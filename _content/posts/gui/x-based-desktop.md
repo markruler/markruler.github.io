@@ -49,7 +49,7 @@ XDG는 `X Desktop Group`의 약자로, [freedesktop.org](https://freedesktop.org
   - well known 디렉토리? Downloads, Documents, Music, Pictures, Videos 등 사용자 홈 디렉터리에 자주 사용되는 디렉토리를 말합니다.
   - [XDG user directories](https://wiki.archlinux.org/title/XDG_user_directories) - archilinux
 
-```bash
+```shell
 printenv | grep XDG_
 # XDG_SESSION_ID=57404
 # XDG_RUNTIME_DIR=/run/user/1000
@@ -285,7 +285,7 @@ xterm
 
 아래 명령어들은 제가 데스크탑을 사용할 때 macOS처럼 독을 하단에 두기 위해 사용한 설정입니다.
 
-```bash
+```shell
 gnome-shell --version
 # GNOME Shell 41.8.1
 

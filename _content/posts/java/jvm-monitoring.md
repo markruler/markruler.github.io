@@ -59,7 +59,7 @@ Remote Management Level은 커넥터와 어댑터를 통해 MBean Server에 원�
 
 *IntelliJ에서 디버깅하면 볼 수 있는 스택 프레임*
 
-```bash
+```shell
 Thread1   Thread2   Thread3
 +-------+ +-------+ +-------+
 |       | |       | |       |
@@ -149,7 +149,7 @@ Full GC 전후의 메모리 상태를 간략히 덤프할 수도 있습니다.
 
 `OutOfMemoryError`가 발생한 게 아니라면 `jmap`을 사용해서 힙 덤프를 확인할 수 있습니다.
 
-```bash
+```shell
 # jmap -dump:format=b,file=/path/app.hprof ${PID}
 jmap -dump:file=/path/app.hprof ${PID}
 Dumping heap to /path/app.hprof ...
@@ -165,7 +165,7 @@ app.hprof: Java HPROF dump, created Tue May 17 01:15:39 2022
 
 - JDK를 찾지 못하는 경우 경로를 직접 설정해야 합니다.
 
-```bash
+```shell
 # ${MAT_HOME}/MemoryAnalyzer.ini
 -vm
 ${JAVA_HOME}/bin
@@ -296,12 +296,12 @@ jps -v
 HotSpot JVM에 있는 모니터링 도구입니다.
 데몬 형태인 [jstatd](https://docs.oracle.com/en/java/javase/17/troubleshoot/diagnostic-tools.html#GUID-469DA1E0-66B6-47F7-A937-18826B3BBE67)도 있습니다.
 
-```bash
+```shell
 # 1초마다 gc 확인
 jstat -gc <PID> 1000
 ```
 
-```bash
+```shell
 jstat -options
 ```
 
@@ -417,7 +417,7 @@ jhat -J-Xmx6g -port 7000 /path/app.hprof
 
 - [Enabling the Java Profiler](https://docs.datadoghq.com/tracing/profiler/enabling/java/)
 
-```bash
+```shell
 -Ddd.profiling.enabled=true \
 -XX:FlightRecorderOptions=stackdepth=256
 ```
