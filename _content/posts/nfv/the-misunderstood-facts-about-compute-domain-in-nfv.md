@@ -31,7 +31,8 @@ NFV의 "Compute Domain"과 "Compute Node"는 ETSI 정의에 따르면 동일한 
 
 ![computer-domain-in-nfv](/images/nfv/computer-domain-in-nfv.png)
 
-(NFV 아키텍처에 대한 자세한 내용을 보려면 [NFV 아키텍처](../beginners-guide-to-nfv-mano/) 또는 [NFV MANO 치트 시트](../cheat-sheet-understanding-nfv-architecture)에 대한 글을 읽는 것이 좋습니다.)
+(NFV 아키텍처에 대한 자세한 내용을 보려면 [NFV 아키텍처](/posts/nfv/beginners-guide-to-nfv-mano/)
+또는 [NFV MANO 치트 시트](/posts/nfv/cheat-sheet-understanding-nfv-architecture/)에 대한 글을 읽는 것이 좋습니다.)
 
 위의 NFV Infrastructure (NFVI) 블록에 명확히 나와 있듯이 컴퓨팅 도메인에는 컴퓨팅 하드웨어와 스토리지 하드웨어가 포함됩니다. 컴퓨팅 도메인은 상위 집합이며, 그 중 컴퓨팅 하드에어와 노드는 한 부분에 불과합니다.
 

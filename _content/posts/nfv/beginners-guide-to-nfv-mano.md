@@ -65,7 +65,7 @@ MANO를 이해하는 것은 전체 NFV 아키텍처를 명확하게 해줄 것�
 
 목표가 무엇이든 이 가이드로부터 무언가 얻고 가시기를 바랍니다.
 
-(NFV 용어를 다시 상기해야 할 경우 [NFV 아키텍처의 치트 시트](../cheat-sheet-understanding-nfv-architecture/)를 참조하세요)
+(NFV 용어를 다시 상기해야 할 경우 [NFV 아키텍처의 치트 시트](/posts/nfv/cheat-sheet-understanding-nfv-architecture/)를 참조하세요)
 
 # NFV에서 MANO란?
 

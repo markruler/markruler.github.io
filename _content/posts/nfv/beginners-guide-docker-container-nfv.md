@@ -69,7 +69,7 @@ LXC와 도커 모두 리눅스에 뿌리를 두고 있습니다.
 ## 1단계: NFV 아키텍처에서 하이퍼바이저 살펴보기
 
 아래 다이어그램은 여러분이 여러 번 봤을 법한 NFV 아키텍처를 보여줍니다.
-(모르시는 분은 [여기를 확인해주세요](../cheat-sheet-understanding-nfv-architecture/))
+(자세한 내용은 [치트 시트](/posts/nfv/cheat-sheet-understanding-nfv-architecture/)를 확인해주세요.)
 
 ![hypervisor-in-nfv](/images/nfv/hypervisor-in-nfv.png)
 

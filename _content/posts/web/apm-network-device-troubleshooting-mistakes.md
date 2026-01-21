@@ -25,7 +25,7 @@ APM은 애플리케이션 성능 모니터링(Application Performance Monitoring
 
 # 분석: 쉽게 간과했던 문제
 
-[Oracle Session 히스토리](https://markruler.github.io/posts/db/oracle-dbms-session-diagnosis/)를 남겨서 확인했을 때
+[Oracle Session 히스토리](/posts/db/oracle-dbms-session-diagnosis/)를 남겨서 확인했을 때
 DB에 부하를 일으키면서 반복적으로 보이는 느린 쿼리가 없었습니다.
 DB 문제는 아니었습니다.
 

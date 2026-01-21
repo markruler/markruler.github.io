@@ -94,7 +94,7 @@ categories:
 - Gatsby(Javascript), Hugo(Go), Jekyll(Ruby)
 - 주로 템플릿을 활용해서 정적 웹 페이지를 생성 후 웹 서버로 서빙합니다.
 - DB가 필요없는 경우 사용합니다.
-- [블로그](https://markruler.github.io/)나 [웹진](https://beott.kr/), 혹은 회사 소개 페이지 등에 사용할 수 있습니다.
+- [블로그](https://markruler.com/)나 [웹진](https://beott.kr/), 혹은 회사 소개 페이지 등에 사용할 수 있습니다.
 
 # CMS (Content Management System)
 

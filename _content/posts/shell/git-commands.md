@@ -355,7 +355,7 @@ git config --list --global
 Git을 관리하는 **상위 수준의 인터페이스**입니다.
 명령어 사용 시 시스템 내부의 복잡한 동작은 숨겨지고 직관적인 결과만 보여줍니다.
 
-['CS Visualized: 유용한 깃(Git) 명령어'](../cs-visualized-useful-git-commands/)를 함께 읽으면 도움됩니다.
+['CS Visualized: 유용한 깃(Git) 명령어'](/posts/shell/cs-visualized-useful-git-commands/)를 함께 읽으면 도움됩니다.
 
 ## init
 
@@ -2191,7 +2191,7 @@ Completed with errors, see above
   - [Git Guide](https://github.com/git-guides/) - GitHub
   - [Git을 이용한 버전 관리](https://www.aladin.co.kr/shop/wproduct.aspx?ISBN=9788960775473) - 라비산카 소마순다람
 - Git Internal
-  - [CS Visualized: 유용한 깃(Git) 명령어](https://markruler.github.io/posts/shell/cs-visualized-useful-git-commands/) - Lydia Hallie
+  - [CS Visualized: 유용한 깃(Git) 명령어](/posts/shell/cs-visualized-useful-git-commands/) - Lydia Hallie
   - [The Complete Git Guide: Understand and master Git and GitHub](https://www.udemy.com/course/git-and-github-complete-guide/) - Bogdan Stashchuk
   - [A Visualized Intro to Git Internals — Objects and Branches](https://medium.com/swimm/a-visualized-intro-to-git-internals-objects-and-branches-68df85864037) - Omer Rosenbaum
   - [Getting Hardcore — Creating a Repo From Scratch](https://medium.com/swimm/getting-hardcore-creating-a-repo-from-scratch-cc747edbb11c) - Omer Rosenbaum

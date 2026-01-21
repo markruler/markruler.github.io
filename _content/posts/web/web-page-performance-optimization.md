@@ -155,8 +155,8 @@ WebSocket, WebRTC와 같은 실시간 연결 중인 페이지
 
 # 더 읽을거리
 
-- [유용한 구글 크롬(Google Chrome)의 기능](https://markruler.github.io/posts/web/google-chrome/)
-- [웹 페이지 응답 방법과 프레임워크](../respond-web-page/)
+- [유용한 구글 크롬(Google Chrome)의 기능](/posts/web/google-chrome/)
+- [웹 페이지 응답 방법과 프레임워크](/posts/web/respond-web-page/)
 - [Web performance](https://developer.mozilla.org/en-US/docs/Web/Performance) | MDN Web Docs
 - [Core Web Vitals](https://web.dev/articles/vitals) | web.dev
   - [Lighthouse Scoring Calculator](https://googlechrome.github.io/lighthouse/scorecalc/) | Google Chrome

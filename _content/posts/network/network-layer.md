@@ -517,7 +517,7 @@ L7은 사용자 수준의 네트워크로 시스템에서 제공되는 인터페
 **LDAP**(**Lightweight Directory Access Protocol**)는
 디렉터리 서비스를 위한 프로토콜입니다.
 
-[BitTorrent](https://markruler.github.io/posts/go/building-bittorrent-client/)는
+[BitTorrent](/posts/go/building-bittorrent-client/)는
 파일 공유를 위한 P2P(Peer-to-Peer) 프로토콜입니다.
 
 **MQTT**(**Message Queuing Telemetry Transport**)는

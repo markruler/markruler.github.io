@@ -164,7 +164,7 @@ GDRE에서 `PCK` > `Create PCK archive from folder...`로 패키징하면 됩니
 ## 리버스 엔지니어링 (Reverse Engineering)
 
 만약 적절한 언팩 도구가 없는 경우 직접 파일을 추출해야 합니다.
-이때 기드라(Ghidra)와 같은 툴을 이용해서 [파일 시그니처](../file-signature/#파일-시그니처)나 암호키를 찾아야 할 수도 있습니다.
+이때 기드라(Ghidra)와 같은 툴을 이용해서 [파일 시그니처](/posts/reverse-engineering/file-signature/)나 암호키를 찾아야 할 수도 있습니다.
 
 ### Love2D
 

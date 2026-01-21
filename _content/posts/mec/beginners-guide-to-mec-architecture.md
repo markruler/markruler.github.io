@@ -86,7 +86,7 @@ MEC 호스트, MEC 플랫폼 매니저, MEC 오케스트레이터라는 세 가�
 
 ## 2-0. 가상화 인프라 매니저 (VIM, Virtualization Infrastructure Manager)
 
-VIM은 [NFV의 VIM](../../nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager)과 유사한 기능을 합니다.
+VIM은 [NFV의 VIM](/posts/nfv/cheat-sheet-understanding-nfv-architecture/#5-vim-virtualized-infrastructure-manager)과 유사한 기능을 합니다.
 물리적 인프라(컴퓨팅, 스토리지, 네트워킹) 위에 VM을 관리하는 것이 목적입니다.
 '가상화 인프라'의 가상 자원을 할당, 유지, 해제하는 역할을 담당합니다.
 왼쪽에는 가상화된 인프라로 전환된 서버가 있고, 오른쪽에는 이러한 서버 위의 가상 자원을 관리하는 VIM이 있습니다.

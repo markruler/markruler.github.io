@@ -114,7 +114,7 @@ VisualVM을 사용하면 실시간으로 스레드 스택의 상태를 확인할
 
 ![visualvm-tomcat-threads](/images/java/jvm-monitoring/visualvm-tomcat-threads.png)
 
-*VisualVM에서 확인한 Thread Stack. [OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생](../too-many-open-files/)했었습니다.*
+*VisualVM에서 확인한 Thread Stack. [OkHttp ConnectionPool이 여러 개 생긴 것으로 문제가 발생](/posts/java/too-many-open-files/)했었습니다.*
 
 공식 홈페이지에서 다운로드한 후 `bin` 디렉토리의 실행 파일을 실행합니다.
 실행하면 로컬 환경의 모든 JVM 프로세스를 확인할 수 있습니다.
