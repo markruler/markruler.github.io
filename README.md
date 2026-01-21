@@ -1,6 +1,6 @@
 # README
 
 ```shell
-git switch v2
+git switch $VERSION
 ```
 
