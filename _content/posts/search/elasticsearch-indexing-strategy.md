@@ -76,10 +76,12 @@ MSP(Managed Service Provider)를 통해 계약되어 있던 상태라 기술지�
 이러한 이유로 **엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식**을 사용했습니다.
 
 Python의 `deepdiff` 모듈을 사용해서 RDB와 엘라스틱서치 데이터 전체를 비교해봤습니다.
-특정 패턴을 분석해보니 내가 파악하지 못한 레거시 시스템이나 스케줄러에서 `updated_at`을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었습니다.
-추가로 트랜잭션 문제로 인해 데이터에 차이가 발생하는 경우도 있었습니다.[^2]
-간략히 설명하면 **데이터 UPDATE를 위한 트랜잭션 시작 후 COMMIT 전에 배치 작업이 SELECT를 실행하면 업데이트 이벤트가 누락될 수 있습니다.**
-`updated_at` 기준이 아닌 전체 인덱싱도 고려해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했습니다.
+특정 패턴을 분석해보니 **파악하지 못한 레거시 시스템**에서 `updated_at`을 업데이트 하지 않고 데이터를 수정한다는 것을 알게 되었습니다.
+그리고 **트랜잭션 문제**로 인해 데이터에 차이가 발생하는 경우도 있었습니다.
+`UPDATE` 트랜잭션이 시작된 후 `COMMIT` 전에 배치 작업이 `SELECT`를 실행하면 `UPDATE` 커밋이 누락되고 있던 것입니다.
+[NHN Commerce의 사례](https://youtu.be/1hpfNvcEbYQ?t=862)에서는 `READ UNCOMMITTED`로 해결했지만,
+Oracle은 해당 격리 수준을 지원하지 않습니다.
+누락된 부분을 다시 인덱싱해야 한다는 것을 느끼고 2가지 배치를 동시에 실행하기 시작했습니다.
 
 - 실시간 배치 — `updated_at`을 기준으로 5초 Fixed Delay
 - 전체 배치 — 최근 데이터까지 인덱싱하면 다시 처음부터 반복 (약 3시간 소요)
@@ -88,11 +90,11 @@ Python의 `deepdiff` 모듈을 사용해서 RDB와 엘라스틱서치 데이터 
 
 수정 후 데이터 차이가 많이 줄었습니다. (평균 약 2개/1d)
 하지만 남은 건 어디서 발생하는지 한참 찾아야 했습니다.
-운영상 상품을 HARD DELETE[^3] 해야 하는 상황이 있었고, 이 정보가 팀원 간에 공유되지 않았습니다.
+운영상 상품을 HARD DELETE[^2] 해야 하는 상황이 있었고, 이 정책이 팀원 간 공유되지 않았습니다.
 지금까지 설명한 배치 방식은 Hard Delete에 대응하지 못합니다.
 
 다른 대안이 있을까 찾아봤더니 **CDC(Change Data Capture)와 같은 스트림(Stream) 방식**을 사용할 수 있습니다.
-하지만 Oracle CDC[^4], Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았습니다.
+하지만 Oracle CDC[^3], Apache Kafka Streams 혹은 Apache Flink 등의 시스템을 추가로 학습하고 도입해서 관리해야 한다는 점 때문에 선택하지 않았습니다.
 
 그럼 또 다른 대안이 있을까요? **상품 인덱스에 alias를 지정하고, 1일 1번 새로운 인덱스를 생성해서 변경하기로 했습니다**.
 예를 들어 `product-20220102` 인덱스를 생성하고,
@@ -112,10 +114,10 @@ Spring Batch로 전환하면 **배치 작업을 병럴 처리해서 처리 속�
 하지만 Elastic Cloud를 사용한다면 **비용(Credit)도 고려**해야 합니다.
 데이터 인덱싱을 더 많이, 더 자주 해보니 데이터 노드의 CPU 사용량이 높아지는 것을 확인했습니다.
 
-검색 기능의 서버 응답 속도는 평균 85.2ms/1w 입니다[^5].
+검색 기능의 서버 응답 속도는 평균 85.2ms/1w 입니다[^4].
 데이터에 차이가 발생하는 문제 때문에 **엘라스틱서치에서 조회 후 RDB에서 한번 더 조회하는 방식**을 사용했는데,
 배치 처리 속도를 개선하면 RDB를 조회하는 부분을 제거할 수 있습니다.
-게다가 현재 서비스의 주요 이용자들은 **아프리카, 중남미, 중앙아시아** 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 입니다[^6].
+게다가 현재 서비스의 주요 이용자들은 **아프리카, 중남미, 중앙아시아** 지역인데 여기서 검색 시 평균 응답 속도가 2.26s/1w 입니다[^5].
 RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까운 지역에 검색 서버를 두어서 응답 속도를 개선할 수 있을 것입니다.
 
 # 이 고민을 저만 했던 게 아니었습니다
@@ -129,11 +131,10 @@ RDB를 조회할 필요가 없어지면 마케팅 집중 국가와 가장 가까
 
 [^1]: Logstash 사용 시 고려했던 성능 관련 [문서1](https://www.elastic.co/guide/en/logstash/7.17/performance-tuning.html),
 [문서2](https://www.elastic.co/guide/en/logstash/7.17/resiliency.html)
-[^2]: [동일한 사례](https://youtu.be/1hpfNvcEbYQ?t=862)
-[^3]: **Hard Delete**란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 `DELETE`.
-이와 반대로 **Soft Delete**는 삭제 플래그(ex: `is_deleted`)만 수정하고 데이터를 삭제하지 않습니다.
-[^4]: Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
+[^2]: **Hard Delete**란 데이터를 삭제할 때 실제 데이터를 삭제하는 것을 말합니다. SQL에서는 `DELETE`.
+이와 반대로 **Soft Delete**는 삭제 여부 컬럼(ex: `is_deleted`)만 수정하고 데이터를 삭제하지 않습니다.
+[^3]: Oracle Streams는 Oracle DBMS에 무료로 제공된 Oracle의 기본 CDC 도구였지만 12c 버전부터 Deprecated 되었습니다.
 또 Debezium과 같은 오픈 소스 CDC 도구들은 Oracle LogMiner에서 redo log를 읽는 방식이었지만 19c부터 LogMiner는 Deprecated 되었습니다.
 [Oracle GoldenGate라는 유료 CDC 도구를 만들고 이를 사용하도록 유도하기 위해...](https://bryteflow.com/oracle-cdc-change-data-capture-13-things-to-know/)
-[^5]: Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)
-[^6]: Datadog RUM 측정 기준
+[^4]: Avg: 85.2ms, P50:87.7ms, P75:106ms, P95:140ms (Datadog APM 최근 1주일 집계)
+[^5]: Datadog RUM 측정 기준
