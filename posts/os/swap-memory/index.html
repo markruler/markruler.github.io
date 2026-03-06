@@ -52,17 +52,17 @@
 고사양 작업 중 메모리가 부족해서 컴퓨터가 자주 멈춘다면 스왑 메모리를 늘려보는 것도 하나의 방법입니다.
 이 글은 <strong>Ubuntu</strong>에서 <strong>스왑 메모리를 file로 설정</strong>하고, 나의 환경에 맞게 조정하기 위해 <strong>모니터링 하는 방법</strong>을 설명합니다.</p>
 <p>먼저 스왑 메모리 설정을 확인합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon --show
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon --show
 </span></span></code></pre></div><p>설정되어 있지 않다면 아무것도 출력되지 않습니다.
 <em>Ubuntu 24.04 기준</em>으로는 기본적으로 다음과 같이 <code>/swap.img</code>가 설정되어 있습니다.
 하지만 이 글은 설정되어 있지 않다는 전제로 진행합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE USED PRIO
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE USED PRIO
 </span></span><span style="display:flex;"><span>/swap.img file   8G   0B   -2
 </span></span></code></pre></div><h1 id="스왑-설정-file">스왑 설정: file</h1>
 <h2 id="스왑-파일-생성">스왑 파일 생성</h2>
 <p><code>dd</code> 명령으로 16 GiB 크기의 <code>/swapfile</code> 이라는 파일을 생성합니다.
 (파일명은 뭘로 해도 상관없습니다.)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo dd <span style="color:#f00">if</span>=/dev/zero <span style="color:#eedd82">of</span>=/swapfile <span style="color:#eedd82">bs</span>=1M <span style="color:#eedd82">count</span>=16K
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo dd <span style="color:#f00">if</span>=/dev/zero <span style="color:#eedd82">of</span>=/swapfile <span style="color:#eedd82">bs</span>=1M <span style="color:#eedd82">count</span>=16K
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 16384+0 records in</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 16384+0 records out</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 17179869184 bytes (17 GB, 16 GiB) copied, 11.2337 s, 1.5 GB/s</span>
@@ -76,28 +76,28 @@
 </blockquote>
 <h2 id="권한-설정">권한 설정</h2>
 <p>Swap 파일을 root만 읽고 쓰도록 권한을 설정합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo chmod <span style="color:#f60">600</span> /swapfile
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo ls -hal /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo chmod <span style="color:#f60">600</span> /swapfile
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo ls -hal /swapfile
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># -rw------- 1 root root 16.0G  3월  9 16:43 /swapfile</span>
 </span></span></code></pre></div><h2 id="파일-형태-변경">파일 형태 변경</h2>
 <p>파일 형태를 확인해보면 <code>data</code> 파일입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo file /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo file /swapfile
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># /swapfile: data</span>
 </span></span></code></pre></div><p>Swap 파일을 Linux swap file로 설정합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo mkswap /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo mkswap /swapfile
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Setting up swapspace version 1, size = 16 GiB (17179865088 bytes)</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo file /swapfile
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo file /swapfile
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># /swapfile: Linux swap file, 4k page size, little endian, version 1, size 4194303 pages, 0 bad pages, no label, UUID=ec298bfb-0c82-4cd1-98aa-5466773f8a09</span>
 </span></span></code></pre></div><h2 id="swap-영역-설정">Swap 영역 설정</h2>
 <p>만든 Swap 파일을 swap 영역으로 설정합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon /swapfile
 </span></span></code></pre></div><h2 id="설정-확인">설정 확인</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon --show
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE USED PRIO
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon --show
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE USED PRIO
 </span></span><span style="display:flex;"><span>/swapfile file  16G   0B   -2
 </span></span></code></pre></div><p>사용되는 부분이 생기면 아래처럼 <code>USED</code> 부분에 사이즈가 커집니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE   USED PRIO
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>NAME      TYPE SIZE   USED PRIO
 </span></span><span style="display:flex;"><span>/swapfile file  16G 153.3M   -2
 </span></span></code></pre></div><ul>
 <li><code>TYPE</code> : Swap 메모리의 종류
@@ -112,7 +112,7 @@
 </ul>
 <h1 id="부팅-시-자동-마운트-설정">부팅 시 자동 마운트 설정</h1>
 <p>Ubuntu 24.04 기준 기본 설정값에는 <code>/swap.img</code> 파일이 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/fstab: static file system information.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/fstab: static file system information.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Use &#39;blkid&#39; to print the universally unique identifier for a</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># device; this may be used with UUID= as a more robust way to name devices</span>
@@ -122,49 +122,49 @@
 </span></span><span style="display:flex;"><span>/swap.img       none            swap    sw              <span style="color:#f60">0</span>       <span style="color:#f60">0</span>
 </span></span></code></pre></div><p>(위 설정이 없다는 전제 하에)
 새로 추가한 스왑 영역을 추가합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo <span style="color:#87ceeb">&#39;/swapfile none swap sw 0 0&#39;</span> | sudo tee -a /etc/fstab
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>echo <span style="color:#87ceeb">&#39;/swapfile none swap sw 0 0&#39;</span> | sudo tee -a /etc/fstab
 </span></span></code></pre></div><h1 id="용량-늘리기">용량 늘리기</h1>
 <p>스왑 메모리 크기는 시스템의 물리 메모리 용량과 사용 용도에 따라 결정됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>free -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>free -h
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#                total        used        free      shared  buff/cache   available</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Mem:            31Gi        24Gi       490Mi       3.9Gi       5.8Gi       2.0Gi</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Swap:          2.0Gi       1.3Gi       677Mi</span>
 </span></span></code></pre></div><p>사이즈를 늘리기 전 swap에서 파일을 제거합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
 </span></span></code></pre></div><p>사이즈를 늘립니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 4GiB 추가</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 4GiB 추가</span>
 </span></span><span style="display:flex;"><span>sudo dd <span style="color:#f00">if</span>=/dev/zero <span style="color:#eedd82">of</span>=/swapfile <span style="color:#eedd82">bs</span>=1M <span style="color:#eedd82">count</span>=4K <span style="color:#eedd82">oflag</span>=append <span style="color:#eedd82">conv</span>=notrunc
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 4096+0 records in</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 4096+0 records out</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 4294967296 bytes (4.3 GB, 4.0 GiB) copied, 4.60434 s, 933 MB/s</span>
 </span></span></code></pre></div><p>사이즈 늘린 것을 적용하려면 <code>swapon -v</code> 명령어로 다시 설정해야 합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo mkswap /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo mkswap /swapfile
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># mkswap: /swapfile: warning: wiping old swap signature.</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Setting up swapspace version 1, size = 8 GiB (8589930496 bytes)</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># no label, UUID=1516c52d-9ed8-4a52-939f-30a892aff73f</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon -v /swapfile                                                                                                 ✭ ✱
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon -v /swapfile                                                                                                 ✭ ✱
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># swapon: /swapfile: found signature [pagesize=4096, signature=swap]</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># swapon: /swapfile: pagesize=4096, swapsize=8589934592, devsize=8589934592</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># swapon /swapfile</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>free -h
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>free -h
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#                total        used        free      shared  buff/cache   available</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Mem:            31Gi        24Gi       433Mi       4.0Gi       5.8Gi       1.5Gi</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># Swap:          8.0Gi       1.3Gi       6.7Gi</span>
 </span></span></code></pre></div><h1 id="비활성화">비활성화</h1>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
 </span></span></code></pre></div><p><code>/etc/fstab</code> 파일에서 Swap 파일 설정을 제거합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/fstab</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># /etc/fstab</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># /swapfile none swap sw 0 0</span>
 </span></span></code></pre></div><h2 id="swap-file-교체">swap file 교체</h2>
 <p>만약 기존 swap file을 교체하고 싶다면 새로 생성한 파일로 swapon 후 기존 swap 파일을 swapoff 하면 swap에 올라가있던 데이터들은 자동으로 옮겨집니다.
 물론 애플리케이션에 따라 유실될 수도 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon /swap2file
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapon /swap2file
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
 </span></span><span style="display:flex;"><span>NAME       TYPE SIZE USED PRIO
 </span></span><span style="display:flex;"><span>/swapfile  file  16G   2G   -2
 </span></span><span style="display:flex;"><span>/swap2file file  32G   0B   -3
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo swapoff /swapfile
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># sudo swapon --show</span>
 </span></span><span style="display:flex;"><span>NAME       TYPE SIZE USED PRIO
 </span></span><span style="display:flex;"><span>/swap2file file  32G 1.5G   -2
 </span></span></code></pre></div><h1 id="kubernetes에서-swap-기능을-비활성화해야-하는-이유">Kubernetes에서 Swap 기능을 비활성화해야 하는 이유</h1>
@@ -176,7 +176,7 @@
 
 를 클론해서
 Prometheus와 Grafana를 실행해서 모니터링 할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo docker compose up -d
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>sudo docker compose up -d
 </span></span></code></pre></div><p><img src="/images/os/swap-memory/grafana-prometheus-swap-memory.png" alt="Node Monitoring with Prometheus and Grafana"></p>
 <p>본인의 컴퓨팅 작업 시 사용량을 확인하면서 메모리 사용량이 항상 90% 이상이면 스왑 메모리를 늘리는 것을 고려해볼 수 있습니다.</p>
 <h1 id="더-읽을거리">더 읽을거리</h1>

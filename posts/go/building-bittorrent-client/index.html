@@ -103,7 +103,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 정수는 마커로 시작하고 끝나기 때문에 <code>7</code>의 경우 <code>i7e</code>로 인코딩됩니다.
 리스트와 딕셔너리는 비슷한 방식으로 인코딩됩니다. <code>l4:spami7ee</code>는 <code>['spam', 7]</code>을, <code>d4:spami7ee</code>는 <code>{spam: 7}</code>을 나타냅니다.</p>
 <p>.torrent 파일을 보기 쉽게 다듬으면 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
 </span></span><span style="display:flex;"><span>  <span style="color:#f60">8</span>:announce
 </span></span><span style="display:flex;"><span>    <span style="color:#f60">41</span>:http:<span style="color:#0f0">//bttracker.debian.org:6969/announce
 </span></span></span><span style="display:flex;"><span>  <span style="color:#f60">7</span>:comment
@@ -142,7 +142,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 이 프로젝트에서는 <a href="https://github.com/jackpal/bencode-go?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">github.com/jackpal/bencode-go</a>
 
  을 사용했습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">import</span> (
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">import</span> (
 </span></span><span style="display:flex;"><span>  <span style="color:#87ceeb">&#34;github.com/jackpal/bencode-go&#34;</span>
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>
@@ -179,7 +179,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 이것을 <strong>infohash</strong>라고 하며 트래커 및 피어와 통신할 때 파일 식별자 역할을 합니다.
 이에 대해서는 나중에 더 살펴보겠습니다.</p>
 <p><img src="/images/go/bit-torrent/info-hash.png" alt="info-hash"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> TorrentFile <span style="color:#f00">struct</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> TorrentFile <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  Announce    <span style="color:#ee82ee">string</span>
 </span></span><span style="display:flex;"><span>  InfoHash    [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>  PieceHashes [][<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>
@@ -197,7 +197,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <h2 id="트래커로부터-피어-찾기">트래커로부터 피어 찾기</h2>
 <p>이제 파일과 트래커에 대해 알았으니 트래커와 통신하여 피어로서의 존재를 <strong>알리고</strong> 다른 피어들의 목록을 검색해 보겠습니다.
 .torrent 파일에 제공된 &lsquo;announce&rsquo; URL에 몇 가지 쿼리 파라미터와 함께 GET 요청을 하면 됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">func</span> (t *TorrentFile) <span style="color:#ff0">buildTrackerURL</span>(peerID [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>, port <span style="color:#ee82ee">uint16</span>) (<span style="color:#ee82ee">string</span>, <span style="color:#ee82ee">error</span>) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">func</span> (t *TorrentFile) <span style="color:#ff0">buildTrackerURL</span>(peerID [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>, port <span style="color:#ee82ee">uint16</span>) (<span style="color:#ee82ee">string</span>, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  base, err := url.<span style="color:#ff0">Parse</span>(t.Announce)
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">return</span> <span style="color:#87ceeb">&#34;&#34;</span>, err
@@ -227,7 +227,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <p><img src="/images/go/bit-torrent/info-hash-peer-id.png" alt="info-hash-peer-id"></p>
 <h2 id="트래커-응답-분석">트래커 응답 분석</h2>
 <p>다음과 같이 B인코딩된 응답을 받았습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>d
 </span></span><span style="display:flex;"><span>  <span style="color:#f60">8</span>:interval
 </span></span><span style="display:flex;"><span>    i900e
 </span></span><span style="display:flex;"><span>  <span style="color:#f60">5</span>:peers
@@ -242,7 +242,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <strong>빅-엔디안</strong> 또는 <strong>네트워크 바이트 순서</strong><sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>는 바이트 그룹을 왼쪽부터 담아 정수로 해석하는 것을 말합니다.
 예를 들어 <code>0x1A</code>, <code>0xE1</code> 바이트는 <code>0x1AE1</code> 또는 십진수로 6881을 만듭니다.<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup></p>
 <p><img src="/images/go/bit-torrent/address.png" alt="address"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Peer 피어의 연결 정보를 인코딩합니다</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Peer 피어의 연결 정보를 인코딩합니다</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Peer <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  IP   net.IP
 </span></span><span style="display:flex;"><span>  Port <span style="color:#ee82ee">uint16</span>
@@ -278,7 +278,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <li><strong>조각</strong>을 다운로드 하기 위해 <strong>메시지</strong>를 교환합니다. <em>&ldquo;231번 조각 주세요.&rdquo;</em></li>
 </ol>
 <h2 id="tcp-연결">TCP 연결</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>conn, err := net.<span style="color:#ff0">DialTimeout</span>(<span style="color:#87ceeb">&#34;tcp&#34;</span>, peer.<span style="color:#ff0">String</span>(), <span style="color:#f60">3</span>*time.Second)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>conn, err := net.<span style="color:#ff0">DialTimeout</span>(<span style="color:#87ceeb">&#34;tcp&#34;</span>, peer.<span style="color:#ff0">String</span>(), <span style="color:#f60">3</span>*time.Second)
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">return</span> <span style="color:#f00">nil</span>, err
 </span></span><span style="display:flex;"><span>}
@@ -314,7 +314,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 그렇지 않다면 뭔가 잘못되었기 때문에 연결을 끊을 수 있습니다.
 <em>&ldquo;안녕?&rdquo; &ldquo;这是谁？ 你想要什么？&rdquo; &ldquo;알았어요, 와&hellip;잘못 걸었어요..&rdquo;</em></p>
 <p>코드에서 핸드셰이크를 나타내는 구조체를 만들고, 이것을 직렬화하고 읽는 몇 가지 메소드를 작성하겠습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Handshake 피어가 자신을 식별하는 데 사용하는 특별한 메시지입니다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Handshake <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  Pstr     <span style="color:#ee82ee">string</span>
 </span></span><span style="display:flex;"><span>  InfoHash [<span style="color:#f60">20</span>]<span style="color:#ee82ee">byte</span>
@@ -359,7 +359,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 다음 바이트인 <strong>ID</strong>는 어떤 유형의 메시지를 수신하는지 알려줍니다.
 예를 들어 <code>2</code>바이트는 &ldquo;관심있음(interested)&ldquo;을 의미합니다.
 마지막으로 선택값인 <strong>페이로드(payload)</strong> 는 메시지의 남은 길이를 채웁니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> messageID <span style="color:#ee82ee">uint8</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> messageID <span style="color:#ee82ee">uint8</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> (
 </span></span><span style="display:flex;"><span>  MsgChoke         messageID = <span style="color:#f60">0</span>
@@ -399,7 +399,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 <p>스트림에서 메시지를 읽으려면 해당 메시지 형식을 따릅니다.
 우리는 4바이트를 읽고 메시지의 <strong>길이</strong>를 얻기 위해 <code>uint32</code>로 해석합니다.
 그런 다음 <strong>ID</strong>(처음 1바이트) 및 <strong>payload</strong>(나머지 바이트)를 얻습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Read 스트림에서 메시지를 파싱합니다. keep-alive 메시지는 `nil`을 반환합니다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">func</span> <span style="color:#ff0">Read</span>(r io.Reader) (*Message, <span style="color:#ee82ee">error</span>) {
 </span></span><span style="display:flex;"><span>  lengthBuf := make([]<span style="color:#ee82ee">byte</span>, <span style="color:#f60">4</span>)
 </span></span><span style="display:flex;"><span>  _, err := io.<span style="color:#ff0">ReadFull</span>(r, lengthBuf)
@@ -441,7 +441,7 @@ B인코딩된 데이터는 JSON만큼 사람이 쉽게 읽고 쓸 수 있는 것
 단점은 값에 접근하는 것이 좀 더 까다로워진다는 것입니다.
 컴퓨터가 처리할 수 있는 가장 작은 메모리 단위는 바이트입니다.
 따라서 비트에 접근하려면 몇 가지 비트 조작(bitwise manipulation)을 수행해야 합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// Bitfield 피어가 가지고 있는 조각들을 나타냅니다</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">type</span> Bitfield []<span style="color:#ee82ee">byte</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// HasPiece 특정 인덱스를 가진 비트 필드가 설정되어 있는지 알려줍니다</span>
@@ -477,7 +477,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 다른 하나는 다운로드한 조각들을 모으기 위한 채널입니다.
 다운로드된 조각들이 결과 채널을 통해 들어올 때,
 우리는 그것들을 버퍼에 복사해서 완전한 파일로 조립할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 작업자가 작업을 찾고 결과를 보낼 수 있도록 큐를 초기화합니다</span>
 </span></span><span style="display:flex;"><span>workQueue := make(<span style="color:#f00">chan</span> *pieceWork, len(t.PieceHashes))
 </span></span><span style="display:flex;"><span>results := make(<span style="color:#f00">chan</span> *pieceResult)
 </span></span><span style="display:flex;"><span><span style="color:#f00">for</span> index, hash := <span style="color:#f00">range</span> t.PieceHashes {
@@ -507,7 +507,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 피어와 연결하고 핸드셰이크한 다음 <code>workQueue</code>에서 작업을 검색하여 다운로드를 시도하고,
 <code>results</code> 채널을 통해 다운로드한 조각들을 다시 보냅니다.</p>
 <p><img src="/images/go/bit-torrent/download.png" alt="download"></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">func</span> (t *Torrent) <span style="color:#ff0">startDownloadWorker</span>(peer peers.Peer, workQueue <span style="color:#f00">chan</span> *pieceWork, results <span style="color:#f00">chan</span> *pieceResult) {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">func</span> (t *Torrent) <span style="color:#ff0">startDownloadWorker</span>(peer peers.Peer, workQueue <span style="color:#f00">chan</span> *pieceWork, results <span style="color:#f00">chan</span> *pieceResult) {
 </span></span><span style="display:flex;"><span>  c, err := client.<span style="color:#ff0">New</span>(peer, t.PeerID, t.InfoHash)
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>    log.<span style="color:#ff0">Printf</span>(<span style="color:#87ceeb">&#34;Could not handshake with %s. Disconnecting\n&#34;</span>, peer.IP)
@@ -552,7 +552,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 피어에서 다운로드한 용량, 요청한 용량, 중단(choked) 여부 등의 데이터가 포함됩니다.
 만약 더 확장하기를 원한다면 이것을 유한 상태 기계(FSM)로 형식화할 수 있습니다.
 하지만 지금은 구조체와 스위치만으로 충분합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> pieceProgress <span style="color:#f00">struct</span> {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">type</span> pieceProgress <span style="color:#f00">struct</span> {
 </span></span><span style="display:flex;"><span>  index      <span style="color:#ee82ee">int</span>
 </span></span><span style="display:flex;"><span>  client     *client.Client
 </span></span><span style="display:flex;"><span>  buf        []<span style="color:#ee82ee">byte</span>
@@ -603,7 +603,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
  큐 크기를
 사용하여 최신 네트워크 속도와 조건을 더 잘 수용합니다.
 이는 분명히 조정할 만한 가치가 있는 매개 변수이며, 향후 성능 최적화를 위한 쉬운 방법(low-hanging fruit)입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// MaxBlockSize 요청할 수 있는 최대 바이트 수</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// MaxBlockSize 요청할 수 있는 최대 바이트 수</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> MaxBlockSize = <span style="color:#f60">16384</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// MaxBacklog 클라이언트가 파이프라인에서 수행할 수 없는 요청 수입니다.</span>
@@ -653,7 +653,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 </p>
 <h3 id="maingo">main.go</h3>
 <p>아주 간단합니다. 거의 다 왔어요.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">package</span> main
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f00">package</span> main
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> (
 </span></span><span style="display:flex;"><span>    <span style="color:#87ceeb">&#34;log&#34;</span>
@@ -692,7 +692,7 @@ Go 채널을 비용이 적은 스레드-세이프 큐라고 생각할 수 있습
 <blockquote>
 <p>역자: 간단히 테스트 해보려면 아래의 명령어를 실행하세요.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># Go는 설치되어 있다고 가정합니다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># Go는 설치되어 있다고 가정합니다.</span>
 </span></span><span style="display:flex;"><span>git clone https://github.com/veggiedefender/torrent-client.git
 </span></span><span style="display:flex;"><span>cd torrent-client
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># linux, darwin</span>

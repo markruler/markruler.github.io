@@ -53,7 +53,7 @@
 <a href="https://www.jenkins.io/doc/book/pipeline/syntax/?utm_source=markruler.com&amp;utm_medium=blog#triggers" target="_blank" rel="noopener noreferrer">triggers</a>
 
  directive를 사용했습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
 </span></span><span style="display:flex;"><span>    agent any
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    triggers {
@@ -87,7 +87,7 @@
 <h1 id="workspacelist">WorkspaceList</h1>
 <p>Jenkins에서 Job을 실행할 경우 말그대로 작업 공간을 위한
 Workspace(<code>$JENKINS_HOME/workspace</code>) 디렉토리가 생성됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">public</span> <span style="color:#f00">synchronized</span> Lease <span style="color:#ff0">allocate</span>(@NonNull FilePath base, Object context) <span style="color:#f00">throws</span> InterruptedException {
 </span></span><span style="display:flex;"><span>    <span style="color:#f00">for</span> (<span style="color:#ee82ee">int</span> i = 1; ; i++) {
 </span></span><span style="display:flex;"><span>        FilePath candidate = i == 1 ? base : base.withSuffix(<span style="color:#87ceeb">&#34;@&#34;</span> + i);
@@ -102,7 +102,7 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 
 에
 전체 Workspace 목록을 저장합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#0f0">// hudson.slaves.WorkspaceList</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">/**
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"> * Used by {@link Computer} to keep track of workspaces that are actively in use.
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"> */</span>
@@ -135,7 +135,7 @@ Jenkins 런타임의 <a href="https://github.com/jenkinsci/jenkins/blob/jenkins-
 
 을 보장하기 위해
 <code>Concurrent Build</code> 옵션을 허용하지 않은 채 빌드합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline {
 </span></span><span style="display:flex;"><span>    agent any
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    triggers {
@@ -164,7 +164,7 @@ Jenkins <code>cron</code>의 최소 간격은 1분(<code>* * * * *</code>)입니
 <code>job_name@2</code> workspace 디렉토리가 생성되고 별도의 메타데이터를 갖는 Job이 실행될 수 있습니다.</p>
 <h2 id="해결-1">해결</h2>
 <p>만약 <code>cron</code> 간격을 1분으로 설정했다면 <code>timeout</code>을 50초로 설정하는 등 차이를 둡니다. (55초는 살짝 겹쳤습니다&hellip;)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>timeout(time: <span style="color:#f60">50</span>, unit: <span style="color:#87ceeb">&#39;SECONDS&#39;</span>)
 </span></span></code></pre></div>
 
 </main>

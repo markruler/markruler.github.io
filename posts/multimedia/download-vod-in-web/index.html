@@ -73,7 +73,7 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 
  문서에 따르면 M3U 형식의 모든 플레이리스트 파일은 <code>EXTM3U</code> 태그로 시작해야 합니다. 마스터 플레이리스트는 <code>EXT-X-STREAM-INF</code> 태그에 변형(Rendition of the Variant Stream) 스트림 정보를 나타내고, 다음 줄에 각 스트림 정보에 해당하는 미디어 플레이리스트의 URL을 표시합니다. 미디어 플레이리스트에서는 <code>EXTINF</code> 태그로 각 미디어 세그먼트의 길이를 표시하고, 미디어 세그먼트 태그 다음 줄에는 미디어 세그먼트 URI를 표시합니다.</p>
 <p>Master Playlist: <code>x36xhzz.m3u8</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2149280,CODECS=&#34;mp4a.40.2,avc1.64001f&#34;,RESOLUTION=1280x720,NAME=&#34;720&#34;</span>
 </span></span><span style="display:flex;"><span>url_0/193039199_mp4_h264_aac_hd_7.m3u8
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=246440,CODECS=&#34;mp4a.40.5,avc1.42000d&#34;,RESOLUTION=320x184,NAME=&#34;240&#34;</span>
@@ -85,7 +85,7 @@ VOD의 반대 개념은 정해진 방송 시간에 맞춰보는 TV 방송으로,
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=6221600,CODECS=&#34;mp4a.40.2,avc1.640028&#34;,RESOLUTION=1920x1080,NAME=&#34;1080&#34;</span>
 </span></span><span style="display:flex;"><span>url_8/193039199_mp4_h264_aac_fhd_7.m3u8
 </span></span></code></pre></div><p>Media Playlist: <code>url_8/193039199_mp4_h264_aac_fhd_7.m3u8</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0">#EXTM3U</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-VERSION:3</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-PLAYLIST-TYPE:VOD</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">#EXT-X-TARGETDURATION:11</span>
@@ -134,7 +134,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 트랜스코딩 시 프레임레이트를 낮추면 용량을 줄일 수 있지만, 모션이 부자연스럽거나 끊겨 보일 수 있어 주의가 필요합니다.
 특히 움직임이 많은 콘텐츠(예: 스포츠, 액션 등)는 낮은 프레임레이트에서 품질 저하가 더 두드러집니다. 반대로 프레임레이트를 인위적으로 높이는 업샘플링은 잔상이나 블러가 생길 수 있어 원본과 동일하거나 호환 범위 내에서만 조정하는 것이 안전합니다.</p>
 <p>위 요소들을 고려하여 트랜스코딩을 수행할 때는 일반적으로 <strong>FFmpeg</strong>을 활용합니다. 예를 들어 원본 동영상을 H.264/AAC 코덱의 720p, 1Mbps 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -i input.mp4 <span style="color:#87ceeb">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -i input.mp4 <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  -c:v libx264 -b:v 1000k -s 1280x720 <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  -c:a aac -b:a 128k <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  output_720p.mp4
@@ -142,7 +142,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 오디오도 AAC 코덱에 128kbps 비트레이트로 변환하며, 이렇게 압축된 스트림들을 MP4 컨테이너로 묶어 <code>output_720p.mp4</code>로 출력합니다.
 실제 트랜스코딩 환경에서는 영상 내용에 따라 최적 비트레이트를 달리 설정하거나, <code>-crf</code> 옵션으로 목표 화질 중심의 인코딩을 하기도 합니다. 또한 H.265/AV1 인코딩, 2패스 인코딩 등 고급 최적화 기법을 적용해 파일 크기를 더 줄이면서 품질을 확보할 수도 있습니다.</p>
 <p>H.264/AAC 코덱의 360p, 480p, 720p 동영상 세그먼트를 가진 M3U 파일로 변환하려면 다음과 같은 명령을 사용할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -y <span style="color:#87ceeb">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>ffmpeg -y <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  -i input.mp4 <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>  -map 0:v:0 -map 0:a:0 <span style="color:#87ceeb">\
@@ -168,7 +168,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 이를 <a href="https://ffmpeg.org/ffmpeg.html?utm_source=markruler.com&amp;utm_medium=blog#Transcoding" target="_blank" rel="noopener noreferrer">트랜스코딩</a>
 
 하려면 입력 소스와 출력을 매핑시킵니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>┌──────────┬─────────────────────┐
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>┌──────────┬─────────────────────┐
 </span></span><span style="display:flex;"><span>│ demuxer  │                     │       audio packets
 </span></span><span style="display:flex;"><span>╞══════════╡ stream 0 (audio)    ├─────────────────────────────────────╮
 </span></span><span style="display:flex;"><span>│          │                     │                                     │
@@ -189,7 +189,7 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 </span></span><span style="display:flex;"><span>│          │                     │
 </span></span><span style="display:flex;"><span>└──────────┴─────────────────────┘
 </span></span></code></pre></div><p>다음 명령 옵션은 입력 스트림을 어떤 순서로 출력 파일에 매핑할지를 지정하는 FFmpeg의 핵심 옵션입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># -map [입력_번호]:[스트림_타입]:[스트림_인덱스]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># -map [입력_번호]:[스트림_타입]:[스트림_인덱스]</span>
 </span></span><span style="display:flex;"><span>-map 0:v:0
 </span></span><span style="display:flex;"><span>-map 0:a:0
 </span></span></code></pre></div><p>첫번째 &lsquo;입력 번호&rsquo;는 <code>-i</code>로 지정된 여러 입력 소스 중 매핑할 소스의 인덱스를 지정합니다.
@@ -207,12 +207,12 @@ VOD 서비스에서는 하나의 동영상에 대해 <strong>여러 해상도 �
 <li><code>t</code> attachment (font, cover art:썸네일)</li>
 </ul>
 <p>이 때 오디오 스트림이 없다면 Invalid argument 에러가 발생합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Stream map <span style="color:#87ceeb">&#39;0:a:0&#39;</span> matches no streams.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Stream map <span style="color:#87ceeb">&#39;0:a:0&#39;</span> matches no streams.
 </span></span><span style="display:flex;"><span>Failed to set value <span style="color:#87ceeb">&#39;0:a:0&#39;</span> <span style="color:#f00">for</span> option <span style="color:#87ceeb">&#39;map&#39;</span>: Invalid argument
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>FFmpeg process failed with exit code <span style="color:#f60">234</span>
 </span></span></code></pre></div><p>그래서 트랜스코딩 전 <code>ffprobe</code>를 사용해서 오디오 트랙이 있는지 먼저 확인하는 방법도 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ffprobe -v error -select_streams a:0 -show_entries <span style="color:#eedd82">stream</span>=index -of <span style="color:#eedd82">csv</span>=<span style="color:#eedd82">p</span>=<span style="color:#f60">0</span> noaudio.mp4
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ffprobe -v error -select_streams a:0 -show_entries <span style="color:#eedd82">stream</span>=index -of <span style="color:#eedd82">csv</span>=<span style="color:#eedd82">p</span>=<span style="color:#f60">0</span> noaudio.mp4
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># 있으면 1, 없으면 출력 없음.</span>
 </span></span></code></pre></div><p>저의 경우 운영 중인 서비스에서 오디오는 반드시 포함되어야 한다는 정책이 추가되어 예외 처리만 추가했습니다.</p>
 <h1 id="다운로드">다운로드</h1>

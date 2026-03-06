@@ -71,7 +71,7 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 
 )에서
 세션 정보를 수집하기 위해 사용한 SQL은 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f00">SELECT</span> *
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#f00">SELECT</span> *
 </span></span><span style="display:flex;"><span><span style="color:#f00">FROM</span> (<span style="color:#f00">SELECT</span> sess.sid,
 </span></span><span style="display:flex;"><span>             sess.serial#,
 </span></span><span style="display:flex;"><span>             ROUND(sess.wait_time_micro / <span style="color:#f60">1000</span>, <span style="color:#f60">2</span>)            wait_time_millis,
@@ -115,7 +115,7 @@ Oracle DBMS의 세션 정보는 실시간으로만 조회할 수 있었기 때�
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">AND</span> dbms_lob.compare(sql_fulltext, <span style="color:#87ceeb">&#39;BEGIN :1 := sys.kupc$que_int.receive(:2); END;&#39;</span>) != <span style="color:#f60">0</span>
 </span></span></code></pre></div><p>중점적으로 수집하고 싶었던 데이터는 <strong>Wait Event</strong>와 <strong>SQL Full Text</strong>였습니다.
 이를 Elasticsearch에 저장하려면 식별자가 필요했습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>id = <span style="color:#87ceeb">f</span><span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">{</span>prev_exec_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>prev_sql_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>unix_epoch_time(prev_exec_start)<span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>id = <span style="color:#87ceeb">f</span><span style="color:#87ceeb">&#34;</span><span style="color:#87ceeb">{</span>prev_exec_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>prev_sql_id<span style="color:#87ceeb">}</span><span style="color:#87ceeb">-</span><span style="color:#87ceeb">{</span>unix_epoch_time(prev_exec_start)<span style="color:#87ceeb">}</span><span style="color:#87ceeb">&#34;</span>
 </span></span></code></pre></div><p>먼저 고려했던 식별자는 <code>sql_exec_id</code>와 <code>sql_id</code>입니다.
 하지만 대기 상태라면 <code>sql_exec_id</code>는 <code>NULL</code>이기 때문에 <code>prev_exec_id</code>와 <code>prev_sql_id</code>를 선택했습니다.
 어느 정도 데이터가 쌓이고 살펴보니 <code>prev_exec_id</code>와 <code>prev_sql_id</code> 만으로도 충분히 식별되었습니다.

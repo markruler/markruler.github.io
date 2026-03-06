@@ -350,7 +350,7 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 
 속성을 사용해서 브라우저가 현재 뷰포트 크기와
 디바이스 해상도에 가장 적합한 이미지를 선택하도록 여러 이미지 후보를 제공합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img
 </span></span><span style="display:flex;"><span>  srcset=<span style="color:#87ceeb">&#34;image-small.jpg 480w,
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">          image-medium.jpg 800w,
 </span></span></span><span style="display:flex;"><span><span style="color:#87ceeb">          image-large.jpg 1200w&#34;</span>
@@ -362,7 +362,7 @@ CSS와 JavaScript로 스타일링 및 애니메이션을 적용할 수 있습니
 </span></span></code></pre></div><p><strong><code>&lt;picture&gt;</code> 요소</strong>는 특정 조건(화면 크기, 지원 포맷)에 따라
 다른 이미지를 명시적으로 보여주고 싶을 때 사용합니다.
 WebP/AVIF 같은 최신 포맷을 지원하지 않는 브라우저를 위한 대체(fallback) 이미지를 제공하는 데 유용합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;picture&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;picture&gt;
 </span></span><span style="display:flex;"><span>  &lt;source srcset=<span style="color:#87ceeb">&#34;image.avif&#34;</span> type=<span style="color:#87ceeb">&#34;image/avif&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>  &lt;source srcset=<span style="color:#87ceeb">&#34;image.webp&#34;</span> type=<span style="color:#87ceeb">&#34;image/webp&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>  &lt;img src=<span style="color:#87ceeb">&#34;image.jpg&#34;</span> alt=<span style="color:#87ceeb">&#34;대체 이미지&#34;</span>&gt;
@@ -371,13 +371,13 @@ WebP/AVIF 같은 최신 포맷을 지원하지 않는 브라우저를 위한 대
 <p><strong>지연 로딩</strong>은 사용자가 스크롤하여 이미지가 화면에 실제로 보여지기 직전까지 이미지 로딩을 지연시키는 기술입니다.
 페이지 초기 로딩 시 불필요한 이미지 다운로드를 막아 초기 로딩 속도(LCP 등)를 크게 개선하고 데이터 사용량을 절약합니다.
 HTML <code>&lt;img&gt;</code> 태그에 <code>loading=&quot;lazy&quot;</code> 속성을 추가하는 것만으로 간단하게 구현할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img src=<span style="color:#87ceeb">&#34;image.jpg&#34;</span> loading=<span style="color:#87ceeb">&#34;lazy&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img src=<span style="color:#87ceeb">&#34;image.jpg&#34;</span> loading=<span style="color:#87ceeb">&#34;lazy&#34;</span>&gt;
 </span></span></code></pre></div><p><code>decoding=&quot;async&quot;</code> 속성을 추가하면 브라우저가 이미지를 비동기적으로 디코딩하여
 메인 스레드 블로킹을 줄일 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img src=<span style="color:#87ceeb">&#34;image.jpg&#34;</span> decoding=<span style="color:#87ceeb">&#34;async&#34;</span>&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;img src=<span style="color:#87ceeb">&#34;image.jpg&#34;</span> decoding=<span style="color:#87ceeb">&#34;async&#34;</span>&gt;
 </span></span></code></pre></div><h2 id="사전-로딩-preload">사전 로딩 (Preload)</h2>
 <p>초기 화면에 꼭 보여야 하는 중요한 이미지는 최우선으로 가져오도록(<strong>preloading</strong>) 브라우저에 힌트 줄 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;head&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;head&gt;
 </span></span><span style="display:flex;"><span>  &lt;link rel=<span style="color:#87ceeb">&#34;preload&#34;</span> as=<span style="color:#87ceeb">&#34;image&#34;</span>&gt;
 </span></span><span style="display:flex;"><span>&lt;/head&gt;
 </span></span></code></pre></div><p>이때 <code>fetchpriority=&quot;high&quot;</code>와 함께 쓰면 더욱 확실하게 우선순위를 높일 수 있습니다.

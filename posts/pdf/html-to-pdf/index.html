@@ -82,7 +82,7 @@ URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할
 가장 먼저 답변해준 방법은 <a href="https://wkhtmltopdf.org/?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">wkhtmltopdf</a>
 
 였습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># 해당 도구는 한글을 출력하기 위해 한글 폰트를 별도 설치해야 했습니다.</span>
 </span></span><span style="display:flex;"><span>apt-get -y install fonts-nanum wkhtmltopdf
 </span></span></code></pre></div><p>빠르게 시작하기 위해 Python의 <code>pdfkit</code>과 오픈 소스 PDF 변환 툴인 <code>wkhtmltopdf</code>를 사용해서 Flask 앱을 만들었습니다.
 하지만 기존 출력물(크롬에서 <a href="https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html?utm_source=markruler.com&amp;utm_medium=blog#printing" target="_blank" rel="noopener noreferrer">window.print()</a>
@@ -104,7 +104,7 @@ URL 방식은 PDFmyURL 측 서버(서비스 외부)에서 페이지를 조회할
 대신 python 기반의 <a href="https://github.com/pyppeteer/pyppeteer?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pyppeteer</a>
 
 을 사용했습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#0f0"># Ubuntu 22.04에서 google-chrome 명령어 설치</span>
 </span></span><span style="display:flex;"><span>apt-get update <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>    &amp;&amp; apt-get install -y wget gnupg <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>    &amp;&amp; wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/googlechrome-linux-keyring.gpg <span style="color:#87ceeb">\
@@ -146,7 +146,7 @@ p<strong>y</strong>ppeteer에선 HTML Content를 렌더링 할 때 Load 되는 �
 
 때문에 변경하는 데에 많은 리소스가 들지 않았습니다.</p>
 <p>다음은 간단한 Raw Content를 PDF로 출력하는 토막 코드입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#0f0"># python3 -m pip install playwright</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#0f0"># python3 -m pip install playwright</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># python3 -m playwright install chromium  # Download to $HOME/.cache/ms-playwright/</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># python3 main.py</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> logging

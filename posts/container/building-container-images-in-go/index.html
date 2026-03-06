@@ -84,7 +84,7 @@ Go 프로그램을 사용하는 <a href="https://gcr.io?utm_source=markruler.com
 <p><a href="https://pkg.go.dev/github.com/google/go-containerregistry?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">모듈</a>
 
 을 다운로드합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>go get -u github.com/google/go-containerregistry
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>go get -u github.com/google/go-containerregistry
 </span></span></code></pre></div><p>이미지 레퍼런스를 가져옵니다.
 <code>crane.Pull</code> 메서드는 <code>nginx</code>라는 레퍼런스를 <code>index.docker.io/library/nginx:latest</code>로 바꾼 다음
 도커 허브에서 익명 자격 증명(anonymous credentials)을 처리합니다.
@@ -94,7 +94,7 @@ Go 프로그램을 사용하는 <a href="https://gcr.io?utm_source=markruler.com
 (실제로는 <a href="https://pkg.go.dev/github.com/google/go-containerregistry/pkg/v1/remote?utm_source=markruler.com&amp;utm_medium=blog#Image" target="_blank" rel="noopener noreferrer">remote.Image</a>
 
 )</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>img, err := crane.<span style="color:#ff0">Pull</span>(<span style="color:#87ceeb">&#34;nginx&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>img, err := crane.<span style="color:#ff0">Pull</span>(<span style="color:#87ceeb">&#34;nginx&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  panic(err)
 </span></span><span style="display:flex;"><span>}
@@ -104,7 +104,7 @@ Go 프로그램을 사용하는 <a href="https://gcr.io?utm_source=markruler.com
 사용하여 nginx 이미지에 딸려 있는 <code>/usr/share/nginx/html</code> 디렉터리를 제거하는 레이어를 생성하겠습니다.</p>
 <p>이를 위해 파일명 리스트와 인메모리 바이트 슬라이스로 타르볼(tarball)을 생성할 수 있는 헬퍼 메서드를 사용합니다.
 해당 레이어에서 경로를 지우기 위해 tar 파일 내부에 <code>usr/share/nginx/.wh.html</code>이라는 파일이 필요합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>deleteMap := <span style="color:#f00">map</span>[<span style="color:#ee82ee">string</span>][]<span style="color:#ee82ee">byte</span>{
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>deleteMap := <span style="color:#f00">map</span>[<span style="color:#ee82ee">string</span>][]<span style="color:#ee82ee">byte</span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#87ceeb">&#34;usr/share/nginx/.wh.html&#34;</span>: []<span style="color:#ee82ee">byte</span>{},
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>deleteLayer, err := crane.<span style="color:#ff0">Layer</span>(deleteMap)
@@ -118,7 +118,7 @@ Go 프로그램을 사용하는 <a href="https://gcr.io?utm_source=markruler.com
 
 로
 전달할 수도 있습니다. 명령어는 다음과 같습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -cf- DIR <span style="color:#87ceeb">\
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>tar -cf- DIR <span style="color:#87ceeb">\
 </span></span></span><span style="display:flex;"><span>    --transform <span style="color:#87ceeb">&#39;s,^,usr/share/nginx/,&#39;</span>
 </span></span><span style="display:flex;"><span>    --owner=<span style="color:#f60">0</span> --group=<span style="color:#f60">0</span>
 </span></span></code></pre></div><p>또는 <code>tar.Writer</code>를 사용하여 네이티브한 방식으로 타르볼을 빌드하고
@@ -131,19 +131,19 @@ tar 아카이브에 디렉터리 및 파일 엔트리를 추가합니다.
 간단하게 디렉터리와 일반 파일만 구현했습니다. (symlink 등은 독자에게 예제로 남김)
 또한 파일 엔트리에 <code>usr/share/nginx/html</code> 접두사를 추가합니다.</p>
 <p>그런 다음 이러한 레이어를 새 이미지에 추가합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>newImg, err := mutate.<span style="color:#ff0">AppendLayers</span>(img, deleteLayer, addLayer)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>newImg, err := mutate.<span style="color:#ff0">AppendLayers</span>(img, deleteLayer, addLayer)
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  panic(err)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>또한 이미지의 진입점(entrypoint)과 전달 인자(arguments)를 변경할 수 있습니다.</p>
 <p>그런 다음 이미지에 태그를 지정합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>tag, err := name.<span style="color:#ff0">NewTag</span>(<span style="color:#87ceeb">&#34;gcr.io/ahmetb-blog/blog:latest&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span>tag, err := name.<span style="color:#ff0">NewTag</span>(<span style="color:#87ceeb">&#34;gcr.io/ahmetb-blog/blog:latest&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  panic(err)
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>이 때 로컬 자격 증명 키 체인과 헬퍼를 사용하여 원격 레지스트리에 이미지를 푸시하거나
 로컬 도커 데몬에 로드하여 다음을 테스트할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 로컬 테스트를 위해 로컬 도커 엔진에 로드합니다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#0f0">// 로컬 테스트를 위해 로컬 도커 엔진에 로드합니다.</span>
 </span></span><span style="display:flex;"><span><span style="color:#f00">if</span> s, err := daemon.<span style="color:#ff0">Write</span>(tag, newImg); err != <span style="color:#f00">nil</span> {
 </span></span><span style="display:flex;"><span>  panic(err)
 </span></span><span style="display:flex;"><span>} <span style="color:#f00">else</span> {
@@ -189,7 +189,7 @@ tar 아카이브에 디렉터리 및 파일 엔트리를 추가합니다.
 <blockquote>
 <p>실행 결과 맛보기 (역자)</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir create-oci-image
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mkdir create-oci-image
 </span></span><span style="display:flex;"><span>cd create-oci-image
 </span></span><span style="display:flex;"><span>curl -O https://gist.githubusercontent.com/ahmetb/430baa4e8bb0b0f78abb1c34934cd0b6/raw/1431150eb52c2ecf81ea469ca685d4be3a30f895/demo.go
 </span></span><span style="display:flex;"><span>go mod init demo

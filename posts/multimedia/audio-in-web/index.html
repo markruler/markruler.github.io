@@ -154,7 +154,7 @@ PCM은 먼저 아날로그 신호를 디지털화하기 위해 일정한 간격�
 현실적으로 <strong>코덱</strong>을 통해 데이터량을 압축해서 전송합니다.
 예를 들어, CD 품질의 오디오는 44.1 kHz 샘플링, 16비트 PCM으로 인코딩되며,
 1초에 약 172.3 KiB의 대역폭을 차지합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>2(Stereo) * 2 Bytes(16 bit) * 44100(sample rate) = 176,400 Bytes
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-plaintext" data-lang="plaintext"><span style="display:flex;"><span>2(Stereo) * 2 Bytes(16 bit) * 44100(sample rate) = 176,400 Bytes
 </span></span></code></pre></div><p>3분(180초)의 음원을 다운로드한다면 약 30.3 MiB의 용량이 필요합니다.</p>
 <p><a href="https://en.wikipedia.org/wiki/Codec?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">코덱(codec)</a>
 
@@ -234,7 +234,7 @@ FLAC는 웹 스트리밍보다는 <strong>고음질 음원 다운로드</strong>
 <strong>요약하면, 웹에서 최대 범용성을 원한다면 AAC(MP4), MP3 두 가지를 우선 준비</strong>하고,
 가능하다면 Opus(Ogg 혹은 WebM) 버전을 추가로 제공해 현대 브라우저에서 <strong>최적 품질/용량</strong>을 활용하는 전략이 좋습니다.
 <code>&lt;audio&gt;</code> 태그를 사용할 경우 <code>&lt;source&gt;</code> 요소를 통해 여러 포맷을 제공하면 브라우저가 지원되는 것을 골라 재생합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;audio controls&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;audio controls&gt;
 </span></span><span style="display:flex;"><span>  &lt;source src=<span style="color:#87ceeb">&#34;audio.ogg&#34;</span> type=<span style="color:#87ceeb">&#34;audio/ogg; codecs=vorbis&#34;</span> /&gt;
 </span></span><span style="display:flex;"><span>  &lt;source src=<span style="color:#87ceeb">&#34;audio.mp3&#34;</span> type=<span style="color:#87ceeb">&#34;audio/mpeg&#34;</span> /&gt;
 </span></span><span style="display:flex;"><span>  해당 브라우저에서는 오디오 재생을 지원하지 않습니다.
@@ -268,7 +268,7 @@ Firefox는 특허문제로 과거 MP3 지원이 불완전했으나 현재는 MP3
 
 이벤트로 얼마나 로드되었는지 알 수 있습니다.
 일반적인 짧은 음원이나 배경음악 등은 이 방식으로 충분합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;audio id=<span style="color:#87ceeb">&#34;player&#34;</span> src=<span style="color:#87ceeb">&#34;music.mp3&#34;</span> controls autoplay&gt;&lt;/audio&gt;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;audio id=<span style="color:#87ceeb">&#34;player&#34;</span> src=<span style="color:#87ceeb">&#34;music.mp3&#34;</span> controls autoplay&gt;&lt;/audio&gt;
 </span></span></code></pre></div><ul>
 <li><strong>다중 포맷 소스</strong>: 앞서 언급한 것처럼 <code>&lt;source&gt;</code> 태그를 이용해 서로 다른 코덱/포맷의 파일을 제공하면 브라우저가 지원 가능한 것을 선택합니다.
 이를 통해 호환성을 높일 수 있습니다.
@@ -310,7 +310,7 @@ MSE를 사용하면 분할된 미디어 데이터를 <code>&lt;audio&gt;</code>/
 
 등을 통해 ArrayBuffer 형태의 압축 오디오 데이터를 <strong>수동으로 디코딩</strong>할 수 있습니다.
 아래 코드는 Fetch API로 가져온 오디오 파일을 Web Audio API로 디코딩한 후 재생하는 간단한 예시입니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> audioContext = <span style="color:#f00">new</span> AudioContext();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> audioContext = <span style="color:#f00">new</span> AudioContext();
 </span></span><span style="display:flex;"><span>fetch(<span style="color:#87ceeb">&#34;audio.mp3&#34;</span>)
 </span></span><span style="display:flex;"><span>  .then(response =&gt; response.arrayBuffer())
 </span></span><span style="display:flex;"><span>  .then(arrayBuffer =&gt; audioContext.decodeAudioData(arrayBuffer))
@@ -361,7 +361,7 @@ Web Audio로 받아올 때
 <li><strong>오디오 파라미터</strong>: Web Audio는 Gain(볼륨), Panner(좌우/3D 위치), BiquadFilter(필터 효과), Convolver(리버브) 등 다양한 <strong>AudioNode</strong>를 제공합니다.
 예를 들어 간단히 음량을 조절하려면 <code>GainNode</code>를 사용합니다. 다음과 같이 작성하면 소리 크기를 절반으로 줄여 출력할 수 있습니다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> gainNode = audioCtx.createGain();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> gainNode = audioCtx.createGain();
 </span></span><span style="display:flex;"><span>source.connect(gainNode).connect(audioCtx.destination);
 </span></span><span style="display:flex;"><span>gainNode.gain.value = <span style="color:#f60">0.5</span>;
 </span></span></code></pre></div><ul>
@@ -410,7 +410,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 승인되면 해당 <strong>MediaStream</strong> (오디오/비디오 흐름 객체)을 반환합니다.
 오디오만 필요하다면 <code>constraints</code> 파라미터로 <code>{ audio: true, video: false }</code> 또는 <code>{ audio: true }</code> 만 전달하면 됩니다.
 이 API는 <strong>프라미스(Promise)</strong> 기반이며, 성공 시 <code>MediaStream</code>을, 실패 시 에러를 줍니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span>console.log(<span style="color:#87ceeb">&#34;마이크 스트림 얻기 성공:&#34;</span>, stream);
 </span></span></code></pre></div><p>이때 브라우저는 처음 호출 시 사용자의 <strong>허용/거부</strong> 동의를 묻는 팝업을 표시합니다.
 또한 <strong>보안상의 이유로 getUserMedia는 SSL 환경(HTTPS)</strong> 에서만 동작합니다.
@@ -426,7 +426,7 @@ Web Audio 기반으로 <strong>주파수 분석</strong>을 하면, 예를 들�
 Web Audio API는 <code>MediaStreamAudioSourceNode</code>를 통해 외부 스트림을 오디오 노드 그래프로 가져올 수 있습니다.
 <code>AudioContext.createMediaStreamSource(stream)</code>을 호출하면 해당 스트림을 소스로 가지는 AudioNode를 얻습니다.
 이를 다른 노드에 연결하여 실시간 처리를 시작할 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0">// AudioContext 생성
 </span></span></span><span style="display:flex;"><span><span style="color:#f00">const</span> audioCtx = <span style="color:#f00">new</span> AudioContext();
@@ -481,7 +481,7 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 <p>MediaRecorder 사용 방법은 간단합니다.</p>
 <p><audio controls id="test-audio-1"></audio></p>
 <p><em>id=&ldquo;test-audo-1&rdquo;</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> recorder = <span style="color:#f00">new</span> MediaRecorder(stream, { mimeType: <span style="color:#87ceeb">&#34;audio/webm&#34;</span> });
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> chunks = [];
 </span></span><span style="display:flex;"><span>recorder.ondataavailable = e =&gt; { chunks.push(e.data); };
@@ -507,7 +507,7 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 이어서 <code>dataavailable</code> 이벤트가 발생할 때마다 <code>chunks</code> 배열에 Blob 조각을 모읍니다.
 <code>MediaRecorder</code>는 내부적으로 일정 간격마다 데이터를 내보내는데, <code>start(timeslice)</code>에 밀리초 단위로 값을 주면 해당 간격마다 <code>dataavailable</code> 이벤트를 받을 수 있습니다.
 또는 <code>recorder.requestData()</code>를 호출해서 수동으로 현재까지의 데이터를 받을 수도 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>recorder.stop();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>recorder.stop();
 </span></span></code></pre></div><p>녹음을 중지하려면 <code>recorder.stop()</code>을 호출합니다.
 그러면 마지막 데이터 조각과 함께 <code>stop</code> 이벤트가 발생하고,
 그 시점에 우리가 모은 <code>chunks</code>들을 합쳐 하나의 Blob을 만들 수 있습니다.
@@ -527,7 +527,7 @@ MediaRecorder는 MediaStream을 받아 해당 스트림을 <strong>지정한 코
 
 해 처리할 수도 있습니다.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> recorder = <span style="color:#f00">new</span> MediaRecorder(stream, { mimeType: <span style="color:#87ceeb">&#34;audio/webm;codecs=opus&#34;</span> });
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> chunks = [];
 </span></span><span style="display:flex;"><span>recorder.ondataavailable = e =&gt; { chunks.push(e.data); };
@@ -583,7 +583,7 @@ MediaStream으로써 AudioContext에서 만들어진 모든 소리가 실시간�
 <p>예를 들어, 마이크 입력에 에코 효과를 주고 싶은 경우 다음과 같이 구현할 수 있습니다.</p>
 <p><audio controls id="test-audio-2"></audio></p>
 <p><em>id=&ldquo;test-audo-2&rdquo;</em></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#f00">const</span> stream = <span style="color:#f00">await</span> navigator.mediaDevices.getUserMedia({ audio: <span style="color:#f00">true</span> });
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> audioCtx = <span style="color:#f00">new</span> AudioContext();
 </span></span><span style="display:flex;"><span><span style="color:#f00">const</span> source = audioCtx.createMediaStreamSource(stream);
 </span></span><span style="display:flex;"><span>

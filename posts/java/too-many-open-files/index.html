@@ -58,7 +58,7 @@
 요구 사항을 위해 동시에 1,000개 이상의 요청을 보낼 때가 있는데, <code>Too many open files</code> 에러가 발생했습니다.
 작업 PC(Ubuntu 22.04)에서 문제 없이 동작하던 프로그램이
 IDC에 위치한 서버(CentOS 7)에서는 <code>OutOfMemoryError</code>가 발생하면서 동작하지 않았습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>java.lang.OutOfMemoryError: unable to create new native thread
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>java.lang.OutOfMemoryError: unable to create new native thread
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>java.util.concurrent.ExecutionException: com.markruler.RuntimeException: request error
 </span></span><span style="display:flex;"><span>...
@@ -71,37 +71,37 @@ IDC에 위치한 서버(CentOS 7)에서는 <code>OutOfMemoryError</code>가 발�
 <p>근본적인 원인이 되는 <code>Too many open files</code>는
 프로세스에서 열려 있는 파일 디스크립터의 수가 시스템 제한을 초과하면 발생합니다.
 로컬 환경(Ubuntu 22.04)에서 먼저 테스트해봤습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 우선 별도의 세션을 연다.</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#0f0"># 우선 별도의 세션을 연다.</span>
 </span></span><span style="display:flex;"><span>bash
 </span></span></code></pre></div><p><code>prlimit</code>를 이용해 현재 프로세스의 파일 디스크립터 제한을 확인합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
 </span></span></code></pre></div><p>기본적으로 <strong>4096</strong>이 설정되어 있었습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
 </span></span><span style="display:flex;"><span>NOFILE   max number of open files <span style="color:#f60">4096</span> <span style="color:#f60">1048576</span> files
 </span></span></code></pre></div><p><code>ulimit</code>를 이용해 열 수 있는 파일 디스크립터 수를 제한합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">0</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">0</span>
 </span></span></code></pre></div><p>그리고 <code>cat</code> 명령어를 실행하면 <code>Too many open files</code>가 발생합니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ls: error while loading shared libraries: libselinux.so.1: cannot open shared object file: Error 24</span>
 </span></span></code></pre></div><p>다시 나갔다가 새로운 세션을 생성합니다.
 limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
 하지만 에러가 발생했습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">4</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">4</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># bash: start_pipeline: pgrp pipe: Too many open files</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
 </span></span></code></pre></div><p>5로 설정하면 에러가 발생하지 않고 정상적으로 출력됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">5</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>ulimit -n <span style="color:#f60">5</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat /etc/os-release
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># PRETTY_NAME=&#34;Ubuntu 22.04.2 LTS&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#0f0"># ...</span>
 </span></span></code></pre></div><p>이유가 무엇일까요?</p>
 <h2 id="파일-디스크립터-file-descriptor">파일 디스크립터 (File descriptor)</h2>
 <p>리눅스에서는 파일을 열면(open) 파일 디스크립터를 반환합니다.
 반환된 파일 디스크립터는 <code>fdtable</code>의 참조값을 나타내며, 파일을 읽고 쓰는데 사용됩니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/sched.h#L1088
 </span></span></span><span style="display:flex;"><span>stuct task_struct {
 </span></span><span style="display:flex;"><span>    ...
 </span></span><span style="display:flex;"><span>  <span style="color:#0f0">/* Filesystem information: */</span>
@@ -111,7 +111,7 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
 </span></span><span style="display:flex;"><span>  <span style="color:#f00">struct</span> files_struct *files;
 </span></span><span style="display:flex;"><span>  ...
 </span></span><span style="display:flex;"><span>};
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#0f0">// https://github.com/torvalds/linux/blob/v6.2/include/linux/fdtable.h#L49
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0">/*
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"> * Open file table structure
 </span></span></span><span style="display:flex;"><span><span style="color:#0f0"> */</span>
@@ -130,9 +130,9 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
 그래서 소켓을 열 때마다 파일 디스크립터가 증가하고,
 시스템 제한을 초과하면 <code>Too many open files</code> 에러가 발생하는 것입니다.</p>
 <p>문제가 발생했던 서버의 시스템 제한을 확인해봤습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>prlimit -n
 </span></span></code></pre></div><p>SOFT 값이 1024로 1024개의 파일 디스크립터를 열 수 있습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>RESOURCE DESCRIPTION              SOFT    HARD UNITS
 </span></span><span style="display:flex;"><span>NOFILE   max number of open files <span style="color:#f60">1024</span> <span style="color:#f60">1048576</span> files
 </span></span></code></pre></div><p>이 제한을 늘리면 문제가 해결될 것 같았습니다.
 그런데 다시 생각해보면 1024 만큼의 요청이 발생할 필요 없는 서버였습니다.
@@ -141,7 +141,7 @@ limit을 4로 설정하면 파일 내용이 정상적으로 출력됩니다.
 사용하려는 인터페이스가 이미 팀 내에서 통용되어 사용되고 있다면
 해당 소스 코드를 복사해서 사용하는 경우가 많았습니다.
 <code>OkHttpClient</code>도 그대로 복사해서 사용했었습니다.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>OkHttpClient client = <span style="color:#f00">new</span> OkHttpClient();
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>OkHttpClient client = <span style="color:#f00">new</span> OkHttpClient();
 </span></span></code></pre></div><p>하지만 <code>OkHttpClient</code>를 생성자로 생성하면 OkHttp ConnectionPool 스레드가 생성됩니다.
 파일 개수 제한이 4096인 로컬 환경에서 4,000개의 요청을 보내도록 테스트 해봤습니다.</p>
 <p><a href="https://markruler.github.io/posts/java/jvm-monitoring/?utm_source=markruler.com&amp;utm_medium=blog#visualvm" target="_blank" rel="noopener noreferrer">VisualVM</a>
@@ -166,7 +166,7 @@ This is because each client holds its own connection pool and thread pools.
 Reusing connections and threads reduces latency and saves memory.
 Conversely, creating a client for each request wastes resources on idle pools.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.context.annotation.Bean;
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.context.annotation.Configuration;
 </span></span><span style="display:flex;"><span>
@@ -179,7 +179,7 @@ Conversely, creating a client for each request wastes resources on idle pools.</
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#000;-moz-tab-size:2;-o-tab-size:2;tab-size:2;-webkit-text-size-adjust:none;display:grid;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f00">import</span> okhttp3.OkHttpClient;
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.beans.factory.annotation.Autowired;
 </span></span><span style="display:flex;"><span><span style="color:#f00">import</span> org.springframework.stereotype.Component;
 </span></span><span style="display:flex;"><span>
