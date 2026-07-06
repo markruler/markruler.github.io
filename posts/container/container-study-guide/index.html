@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="컨테이너 관련 자료 모음" /><link rel="icon" href="/images/favicon.ico" /><title>컨테이너 톺아보기 | 임창수</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="컨테이너 관련 자료 모음" /><link rel="icon" href="/images/favicon.ico" /><title>컨테이너 톺아보기 | Markruler</title>
 
 	
 	<link rel="stylesheet" href="/scss/style.css" type="text/css" media="all" />
@@ -289,126 +289,126 @@
 <li>네임스페이스 유형</li>
 </ul>
 <table>
-  <thead>
-      <tr>
-          <th>네임스페이스</th>
-          <th>플래그</th>
-          <th>경로</th>
-          <th>매뉴얼</th>
-          <th>격리 대상</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Cgroup</td>
-          <td>CLONE_NEWCGROUP</td>
-          <td>/proc/[pid]/ns/cgroup</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cgroup_namespaces(7)</a>
+	<thead>
+			<tr>
+					<th>네임스페이스</th>
+					<th>플래그</th>
+					<th>경로</th>
+					<th>매뉴얼</th>
+					<th>격리 대상</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Cgroup</td>
+					<td>CLONE_NEWCGROUP</td>
+					<td>/proc/[pid]/ns/cgroup</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/cgroup_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cgroup_namespaces(7)</a>
 
 </td>
-          <td>Cgroup root directory</td>
-      </tr>
-      <tr>
-          <td>IPC</td>
-          <td>CLONE_NEWIPC</td>
-          <td>/proc/[pid]/ns/ipc</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ipc_namespaces(7)</a>
+					<td>Cgroup root directory</td>
+			</tr>
+			<tr>
+					<td>IPC</td>
+					<td>CLONE_NEWIPC</td>
+					<td>/proc/[pid]/ns/ipc</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ipc_namespaces(7)</a>
 
 </td>
-          <td>System V IPC, POSIX message queues</td>
-      </tr>
-      <tr>
-          <td>Network</td>
-          <td>CLONE_NEWNET</td>
-          <td>/proc/[pid]/ns/net</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">network_namespaces(7)</a>
+					<td>System V IPC, POSIX message queues</td>
+			</tr>
+			<tr>
+					<td>Network</td>
+					<td>CLONE_NEWNET</td>
+					<td>/proc/[pid]/ns/net</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">network_namespaces(7)</a>
 
 </td>
-          <td>Network devices, stacks, ports, etc.</td>
-      </tr>
-      <tr>
-          <td>Mount</td>
-          <td>CLONE_NEWNS</td>
-          <td>/proc/[pid]/ns/mnt</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/mount_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">mount_namespaces(7)</a>
+					<td>Network devices, stacks, ports, etc.</td>
+			</tr>
+			<tr>
+					<td>Mount</td>
+					<td>CLONE_NEWNS</td>
+					<td>/proc/[pid]/ns/mnt</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/mount_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">mount_namespaces(7)</a>
 
 </td>
-          <td>Mount points</td>
-      </tr>
-      <tr>
-          <td>PID</td>
-          <td>CLONE_NEWPID</td>
-          <td>/proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/pid_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pid_namespaces(7)</a>
+					<td>Mount points</td>
+			</tr>
+			<tr>
+					<td>PID</td>
+					<td>CLONE_NEWPID</td>
+					<td>/proc/[pid]/ns/pid, /proc/[pid]/ns/pid_for_children</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/pid_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pid_namespaces(7)</a>
 
 </td>
-          <td>Process IDs</td>
-      </tr>
-      <tr>
-          <td>Time</td>
-          <td>CLONE_NEWTIME</td>
-          <td>/proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/time_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">time_namespaces(7)</a>
+					<td>Process IDs</td>
+			</tr>
+			<tr>
+					<td>Time</td>
+					<td>CLONE_NEWTIME</td>
+					<td>/proc/[pid]/ns/time, /proc/[pid]/ns/time_for_children</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/time_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">time_namespaces(7)</a>
 
 </td>
-          <td>Boot and monotonic clocks</td>
-      </tr>
-      <tr>
-          <td>User</td>
-          <td>CLONE_NEWUSER</td>
-          <td>/proc/[pid]/ns/user</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/user_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">user_namespaces(7)</a>
+					<td>Boot and monotonic clocks</td>
+			</tr>
+			<tr>
+					<td>User</td>
+					<td>CLONE_NEWUSER</td>
+					<td>/proc/[pid]/ns/user</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/user_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">user_namespaces(7)</a>
 
 </td>
-          <td>User and group IDs</td>
-      </tr>
-      <tr>
-          <td>UTS (UNIX Time Sharing)</td>
-          <td>CLONE_NEWUTS</td>
-          <td>/proc/[pid]/ns/uts</td>
-          <td><a href="https://man7.org/linux/man-pages/man7/uts_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">uts_namespaces(7)</a>
+					<td>User and group IDs</td>
+			</tr>
+			<tr>
+					<td>UTS (UNIX Time Sharing)</td>
+					<td>CLONE_NEWUTS</td>
+					<td>/proc/[pid]/ns/uts</td>
+					<td><a href="https://man7.org/linux/man-pages/man7/uts_namespaces.7.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">uts_namespaces(7)</a>
 
 </td>
-          <td>Hostname and NIS domain name</td>
-      </tr>
-  </tbody>
+					<td>Hostname and NIS domain name</td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>네임스페이스 관련 API</li>
 </ul>
 <table>
-  <thead>
-      <tr>
-          <th>시스템 호출</th>
-          <th>설명</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><a href="https://man7.org/linux/man-pages/man2/clone.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">clone</a>
+	<thead>
+			<tr>
+					<th>시스템 호출</th>
+					<th>설명</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="https://man7.org/linux/man-pages/man2/clone.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">clone</a>
 
 </td>
-          <td>새로운 자식 프로세스를 생성합니다. 위의 표에서 <code>CLONE_NEW*</code> 플래그를 인수로 지정합니다.</td>
-      </tr>
-      <tr>
-          <td><a href="https://man7.org/linux/man-pages/man2/setns.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">setns</a>
+					<td>새로운 자식 프로세스를 생성합니다. 위의 표에서 <code>CLONE_NEW*</code> 플래그를 인수로 지정합니다.</td>
+			</tr>
+			<tr>
+					<td><a href="https://man7.org/linux/man-pages/man2/setns.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">setns</a>
 
 </td>
-          <td>시스템 호출한 프로세스가 <code>/proc/[pid]/ns</code>를 참조해 기존 네임스페이스에 할당됩니다.</td>
-      </tr>
-      <tr>
-          <td><a href="https://man7.org/linux/man-pages/man2/unshare.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">unshare</a>
+					<td>시스템 호출한 프로세스가 <code>/proc/[pid]/ns</code>를 참조해 기존 네임스페이스에 할당됩니다.</td>
+			</tr>
+			<tr>
+					<td><a href="https://man7.org/linux/man-pages/man2/unshare.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">unshare</a>
 
 </td>
-          <td>시스템 호출한 프로세스가 새로운 네임스페이스에 할당됩니다. 마찬가지로 <code>CLONE_NEW*</code> 플래그를 인수로 지정합니다.</td>
-      </tr>
-      <tr>
-          <td><a href="https://man7.org/linux/man-pages/man2/ioctl.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ioctl</a>
+					<td>시스템 호출한 프로세스가 새로운 네임스페이스에 할당됩니다. 마찬가지로 <code>CLONE_NEW*</code> 플래그를 인수로 지정합니다.</td>
+			</tr>
+			<tr>
+					<td><a href="https://man7.org/linux/man-pages/man2/ioctl.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">ioctl</a>
 
 </td>
-          <td>네임스페이스 관련 정보를 찾기 위한 다양한 기능을 제공합니다. 기본적으로 디바이스 제어 API입니다.</td>
-      </tr>
-  </tbody>
+					<td>네임스페이스 관련 정보를 찾기 위한 다양한 기능을 제공합니다. 기본적으로 디바이스 제어 API입니다.</td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>
@@ -450,132 +450,132 @@
 해봤습니다.</li>
 </ul>
 <table>
-  <thead>
-      <tr>
-          <th>tasks</th>
-          <th>attach a task(thread) and show list of threads</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>cgroup.procs</td>
-          <td>show list of processes</td>
-      </tr>
-      <tr>
-          <td>cgroup.event_control</td>
-          <td>an interface for event_fd()</td>
-      </tr>
-      <tr>
-          <td>memory.stat</td>
-          <td>show various statistics</td>
-      </tr>
-      <tr>
-          <td>memory.limit_in_bytes</td>
-          <td>set/show limit of memory usage</td>
-      </tr>
-      <tr>
-          <td>memory.usage_in_bytes</td>
-          <td>show current usage for memory (See 5.5 for details)</td>
-      </tr>
-      <tr>
-          <td>memory.max_usage_in_bytes</td>
-          <td>show max memory usage recorded</td>
-      </tr>
-      <tr>
-          <td>memory.numa_stat</td>
-          <td>show the number of memory usage per numa node</td>
-      </tr>
-      <tr>
-          <td>memory.kmem.tcp.max_usage_in_bytes</td>
-          <td>show max tcp buf memory usage recorded</td>
-      </tr>
-      <tr>
-          <td>&hellip;</td>
-          <td>&hellip;</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>tasks</th>
+					<th>attach a task(thread) and show list of threads</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>cgroup.procs</td>
+					<td>show list of processes</td>
+			</tr>
+			<tr>
+					<td>cgroup.event_control</td>
+					<td>an interface for event_fd()</td>
+			</tr>
+			<tr>
+					<td>memory.stat</td>
+					<td>show various statistics</td>
+			</tr>
+			<tr>
+					<td>memory.limit_in_bytes</td>
+					<td>set/show limit of memory usage</td>
+			</tr>
+			<tr>
+					<td>memory.usage_in_bytes</td>
+					<td>show current usage for memory (See 5.5 for details)</td>
+			</tr>
+			<tr>
+					<td>memory.max_usage_in_bytes</td>
+					<td>show max memory usage recorded</td>
+			</tr>
+			<tr>
+					<td>memory.numa_stat</td>
+					<td>show the number of memory usage per numa node</td>
+			</tr>
+			<tr>
+					<td>memory.kmem.tcp.max_usage_in_bytes</td>
+					<td>show max tcp buf memory usage recorded</td>
+			</tr>
+			<tr>
+					<td>&hellip;</td>
+					<td>&hellip;</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="control-group-v1-컨트롤러">Control Group v1 컨트롤러</h3>
 <table>
-  <thead>
-      <tr>
-          <th>컨트롤러</th>
-          <th>커널 설정 옵션</th>
-          <th>설명</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">blkio</a>
+	<thead>
+			<tr>
+					<th>컨트롤러</th>
+					<th>커널 설정 옵션</th>
+					<th>설명</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/blkio-controller.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">blkio</a>
 
 </td>
-          <td>CONFIG_BLK_CGROUP</td>
-          <td>블록 IO 제어</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cpuacct</a>
+					<td>CONFIG_BLK_CGROUP</td>
+					<td>블록 IO 제어</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpuacct.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cpuacct</a>
 
 </td>
-          <td>CONFIG_CGROUP_CPUACCT</td>
-          <td>프로세스 그룹 CPU 사용량 계산</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cpuset</a>
+					<td>CONFIG_CGROUP_CPUACCT</td>
+					<td>프로세스 그룹 CPU 사용량 계산</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/cpusets.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">cpuset</a>
 
 </td>
-          <td>CONFIG_CPUSETS</td>
-          <td>특정 CPU나 NUMA 노드 할당</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">devices</a>
+					<td>CONFIG_CPUSETS</td>
+					<td>특정 CPU나 NUMA 노드 할당</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/devices.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">devices</a>
 
 </td>
-          <td>CONFIG_CGROUP_DEVICE</td>
-          <td><a href="https://man7.org/linux/man-pages/man2/mknod.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">mknod</a>
+					<td>CONFIG_CGROUP_DEVICE</td>
+					<td><a href="https://man7.org/linux/man-pages/man2/mknod.2.html?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">mknod</a>
 
 를 통해 디바이스를 관리할 수 있는지 결정</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">freezer</a>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/freezer-subsystem.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">freezer</a>
 
 </td>
-          <td>CONFIG_CGROUP_FREEZER</td>
-          <td>프로세스 일시 정지-재개</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">memory</a>
+					<td>CONFIG_CGROUP_FREEZER</td>
+					<td>프로세스 일시 정지-재개</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/memory.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">memory</a>
 
 </td>
-          <td>CONFIG_MEMCG</td>
-          <td>사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">net_cls</a>
+					<td>CONFIG_MEMCG</td>
+					<td>사용중인 프로세스 메모리, 커널 메모리, 스왑 메모리 관리</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_cls.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">net_cls</a>
 
 </td>
-          <td>CONFIG_CGROUP_NET_CLASSID</td>
-          <td>트래픽 제어에 쓰이는 classid 관리</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">net_prio</a>
+					<td>CONFIG_CGROUP_NET_CLASSID</td>
+					<td>트래픽 제어에 쓰이는 classid 관리</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/net_prio.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">net_prio</a>
 
 </td>
-          <td>CONFIG_CGROUP_NET_PRIO</td>
-          <td>네트워크 인터페이스 우선순위(priorities) 관리</td>
-      </tr>
-      <tr>
-          <td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pids</a>
+					<td>CONFIG_CGROUP_NET_PRIO</td>
+					<td>네트워크 인터페이스 우선순위(priorities) 관리</td>
+			</tr>
+			<tr>
+					<td><a href="https://github.com/torvalds/linux/blob/v5.10/Documentation/admin-guide/cgroup-v1/pids.rst?utm_source=markruler.com&amp;utm_medium=blog" target="_blank" rel="noopener noreferrer">pids</a>
 
 </td>
-          <td>CONFIG_CGROUP_PIDS</td>
-          <td>생성할 수 있는 프로세스 수 관리</td>
-      </tr>
-      <tr>
-          <td>&hellip;</td>
-          <td>&hellip;</td>
-          <td>&hellip;</td>
-      </tr>
-  </tbody>
+					<td>CONFIG_CGROUP_PIDS</td>
+					<td>생성할 수 있는 프로세스 수 관리</td>
+			</tr>
+			<tr>
+					<td>&hellip;</td>
+					<td>&hellip;</td>
+					<td>&hellip;</td>
+			</tr>
+	</tbody>
 </table>
 <h3 id="control-group-v2">Control Group v2</h3>
 <p>cgroups v2가 Linux 커널 4.5부터 공식적으로 포함되었습니다. 자세한 내용은
@@ -650,7 +650,7 @@
 </main>
 	
 <footer>
-	<p>&copy; 임창수, Since 2020.</p>
+	<p>&copy; Markruler, Since 2020.</p>
 </footer>
 
 </body>
